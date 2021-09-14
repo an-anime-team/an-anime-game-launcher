@@ -1,0 +1,22 @@
+{
+    "name": "electron-blank-app",
+    "version": "1.0.0",
+    "description": "Electron Blank Application",
+    "keywords": [],
+    "author": "author",
+    "license": "GPL-3.0",
+    "main": "entry.js",
+    "scripts": {
+        "start": "electron .",
+        "build:all": "electron-packager . --out=dist --asar --overwrite --all --ignore=dist",
+        "build:darwin": "electron-packager . --out=dist --asar --overwrite --platform=darwin --arch=x64 --ignore=dist",
+        "build:linux": "electron-packager . --out=dist --asar --overwrite --platform=linux --arch=x64 --ignore=dist",
+        "build:win": "electron-packager . --out=dist --asar --overwrite --platform=win32 --arch=x64 --ignore=dist",
+        "pack:flatpak": "electron-installer-flatpak --src=dist/*-linux-x64 --dest=dist/installers --arch=x64"
+    },
+    "devDependencies": {
+        "electron": "^14.0.0",
+        "electron-installer-flatpak": "^0.8.0",
+        "electron-packager": "^15.4.0"
+    }
+}
