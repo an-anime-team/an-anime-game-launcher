@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "es6",
+        "strict": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        "removeComments": true,
+        "outDir": "public/js"
+    },
+    "include": ["src/ts/*"],
+    "exclude": ["node_modules", "**/*.spec.ts"]
+}

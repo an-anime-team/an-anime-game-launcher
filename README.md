@@ -32,17 +32,21 @@ In the `package.json` you should change these parameters:
 
 ## Development
 
-All your development processes will be inside the `src` directory. The default page is `src/html/index.html`
+Directory `src` stores your [TypeScript](https://typescriptlang.org) and [SASS](https://sass-lang.com) code. When you run `npm run dev` command in console - they will compile to the js and css files inside `public` directory
 
-To run your application - use `npm start` command
+In the `public` stored information about your application - images it uses, html pages and something you want to use
 
-To build it for any systems - `npm run build:all`
+Default application page is `public/html/index.html`
+
+To run your application - use `npm start` command. It will automatically run `npm run dev`
+
+To build application for any systems - `npm run build:all`
 
 * For Windows only: `npm run build:win`
 * For Linux only: `npm run build:linux`
 * For MacOS only: `npm run build:darwin`
 
-All the binaries will appear in the `dist` directory in a folder with name `[app name]-[platform]-[arch]`, for example `electron-blank-app-linux-x64`
+All binaries will appear in the `dist` directory in a folder with name `[app name]-[platform]-[arch]`, for example `electron-blank-app-linux-x64`
 
 To pack linux binary to the flatpak binary you can run `npm run pack:flatpak`. This operation requires pre-installed `flatpak` and `flatpak-build` packages
 

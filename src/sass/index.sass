@@ -1,0 +1,11 @@
+@mixin center ($width)
+    position: absolute
+
+    width: $width
+    left: calc(50% - $width / 2)
+    top: calc(50% - $width / 2)
+
+.greeting
+    @include center(200px)
+
+    text-align: center

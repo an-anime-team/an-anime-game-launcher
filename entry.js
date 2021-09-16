@@ -3,6 +3,7 @@ const path = require('path')
 
 function createWindow ()
 {
+    // https://www.electronjs.org/docs/latest/api/browser-window/#class-browserwindow
     const mainWindow = new BrowserWindow ({
         width: 800,
         height: 600,
@@ -11,12 +12,15 @@ function createWindow ()
             // Use it to have access to the node modules inside html files
             nodeIntegration: true,
             contextIsolation: false
-        }
+        },
+        icon: path.join(__dirname, 'public', 'images', 'icon.png'),
+        // autoHideMenuBar: true,
+        // resizable: false
     });
 
-    mainWindow.loadFile(path.join(__dirname, 'src', 'html', 'index.html'));
+    mainWindow.loadFile(path.join(__dirname, 'public', 'html', 'index.html'));
 
-    // mainWindow.webContents.openDevTools()
+    // mainWindow.webContents.openDevTools();
 }
 
 // This method will be called when Electron has finished
