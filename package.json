@@ -9,10 +9,10 @@
     "scripts": {
         "dev": "tsc && sass src/sass:public/css -s compressed --no-source-map",
         "start": "npm run dev && electron .",
-        "build:all": "npm run dev && electron-packager . --out=dist --asar --overwrite --all --ignore=(dist|src)",
-        "build:darwin": "npm run dev && electron-packager . --out=dist --asar --overwrite --platform=darwin --arch=x64 --ignore=(dist|src)",
-        "build:linux": "npm run dev && electron-packager . --out=dist --asar --overwrite --platform=linux --arch=x64 --ignore=(dist|src)",
-        "build:win": "npm run dev && electron-packager . --out=dist --asar --overwrite --platform=win32 --arch=x64 --ignore=(dist|src)",
+        "build:all": "npm run dev && electron-packager . --out=dist --asar --overwrite --all --ignore=\"(dist|src)\"",
+        "build:darwin": "npm run dev && electron-packager . --out=dist --asar --overwrite --platform=darwin --arch=x64 --ignore=\"(dist|src)\"",
+        "build:linux": "npm run dev && electron-packager . --out=dist --asar --overwrite --platform=linux --arch=x64 --ignore=\"(dist|src)\"",
+        "build:win": "npm run dev && electron-packager . --out=dist --asar --overwrite --platform=win32 --arch=x64 --ignore=\"(dist|src)\"",
         "pack:flatpak": "electron-installer-flatpak --src=dist/electron-blank-app-linux-x64 --dest=dist/installers --arch=x64"
     },
     "devDependencies": {
