@@ -13,7 +13,7 @@ function createWindow ()
             nodeIntegration: true,
             contextIsolation: false
         },
-        icon: path.join(__dirname, 'public', 'images', 'icon.png'),
+        icon: path.join(__dirname, 'public', 'images', 'icon64.png'),
         // autoHideMenuBar: true,
         // resizable: false
     });
