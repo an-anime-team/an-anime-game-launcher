@@ -1,7 +1,7 @@
 {
-    "name": "genshin-impact-linux-launcher",
+    "name": "an-anime-game-linux-launcher",
     "version": "0.1.0",
-    "description": "Genshin Impact Linux Launcher",
+    "description": "An Anime Game Linux Launcher",
     "author": "Nikita Podvirnyy",
     "license": "GPL-3.0",
     "main": "entry.js",
@@ -12,9 +12,9 @@
         "build:linux": "npm run dev && electron-builder --linux"
     },
     "build": {
-        "productName": "Genshin Impact Linux Launcher",
+        "productName": "An Anime Game Linux Launcher",
         "artifactName": "${productName}-${os}-${arch}-${version}.${ext}",
-        "appId": "com.krypt0nn.genshin-impact-linux-launcher",
+        "appId": "com.krypt0nn.an-anime-game-linux-launcher",
         "directories": {
             "output": "dist"
         },
