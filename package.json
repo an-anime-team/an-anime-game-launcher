@@ -1,16 +1,8 @@
 {
-    "name": "electron-blank-app",
-    "version": "1.0.0",
-    "description": "Electron Blank Application",
-    "keywords": [
-        "some",
-        "keywords"
-    ],
-    "author": {
-        "name" : "your_name",
-        "email" : "your_email",
-        "url" : "your_site"
-    },
+    "name": "genshin-impact-linux-launcher",
+    "version": "0.1.0",
+    "description": "Genshin Impact Linux Launcher",
+    "author": "Nikita Podvirnyy",
     "license": "GPL-3.0",
     "main": "entry.js",
     "scripts": {
@@ -20,9 +12,9 @@
         "build:linux": "npm run dev && electron-builder --linux"
     },
     "build": {
-        "productName": "Electron Blank Application",
+        "productName": "Genshin Impact Linux Launcher",
         "artifactName": "${productName}-${os}-${arch}-${version}.${ext}",
-        "appId": "com.electron.blank-app",
+        "appId": "com.krypt0nn.genshin-impact-linux-launcher",
         "directories": {
             "output": "dist"
         },
@@ -75,5 +67,8 @@
         "electron-builder": "^22.13.1",
         "sass": "^1.41.0",
         "typescript": "^4.4.3"
+    },
+    "dependencies": {
+        "cash-dom": "^8.1.0"
     }
 }

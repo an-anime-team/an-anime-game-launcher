@@ -9,12 +9,24 @@
         <link rel="stylesheet" href="../css/index.css">
 
         <!-- JS scripts -->
-        <script src="../js/test.js"></script>
+        <script>require('../js/index.js');</script>
 
-        <title>Hello World</title>
+        <title>Genshin Impact Linux Launcher</title>
     </head>
 
     <body>
-        <h1 class="greeting"></h1>
+        <div id="downloader-panel" style="display: none">
+            <div id="downloader-label">
+                <span id="downloaded">Downloading...</span>
+                <span id="speed"></span>
+                <span id="eta"></span>
+            </div>
+
+            <div class="progress-bar" id="downloader">
+                <div class="progress"></div>
+            </div>
+        </div>
+
+        <button class="button" id="launch">Launch</button>
     </body>
 </html>

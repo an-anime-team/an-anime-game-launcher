@@ -1,12 +1,17 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
+
+let mainWindow;
+
+ipcMain.handle('hide-window', () => mainWindow.hide());
+ipcMain.handle('show-window', () => mainWindow.show());
 
 function createWindow ()
 {
     // https://www.electronjs.org/docs/latest/api/browser-window/#class-browserwindow
-    const mainWindow = new BrowserWindow ({
-        width: 800,
-        height: 600,
+    mainWindow = new BrowserWindow ({
+        width: 1280,
+        height: 728,
         webPreferences: {
             // Is not safety
             // Use it to have access to the node modules inside html files
@@ -14,8 +19,8 @@ function createWindow ()
             contextIsolation: false
         },
         icon: path.join(__dirname, 'public', 'images', 'icon64.png'),
-        // autoHideMenuBar: true,
-        // resizable: false
+        autoHideMenuBar: true,
+        resizable: false
     });
 
     mainWindow.loadFile(path.join(__dirname, 'public', 'html', 'index.html'));
