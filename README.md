@@ -1,6 +1,11 @@
 <img src="logo.png">
 
-### Launcher is still in development and is not working properly. Please, wait for future updates
+# Status
+### Launcher is in the beta state; patch is in the testing phase
+
+| Game version | Launcher version | Patch version | Download link |
+| :---: | :---: | :---: | :---: |
+| 2.2.0 | 2.2.0-beta1 | 2.2.0-testing | [Download](https://notabug.org/nobody/an-anime-game-launcher/releases/2.2.0-beta1) |
 
 <br>
 

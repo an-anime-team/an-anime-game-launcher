@@ -9,11 +9,19 @@ type Config = {
         launcher: 'en-us' | 'ru-ru',
         voice: 'en-us' | 'ru-ru'
     },
-    version: string|null
+    version: string|null,
+    patch: {
+        version: string|null,
+        state: 'testing' | 'stable'
+    }
 };
 
 export class Genshinlib
 {
+    public static readonly patchDir: string = path.join(path.dirname(__dirname), 'patch');
+    public static readonly patchJson: string = path.join(this.patchDir, 'patch.json');
+    public static readonly patchSh = path.join(this.patchDir, 'patch.sh');
+
     public static readonly launcherDir: string = path.join(os.homedir(), 'genshin-impact-launcher');
     public static readonly launcherJson: string = path.join(this.launcherDir, 'launcher.json');
 
@@ -22,17 +30,17 @@ export class Genshinlib
 
     protected static uri: string = 'https://sdk-os-static.mihoyo.com/hk4e_global/mdk/launcher/api/resource?key=gcStgarh&launcher_id=10';
 
-    public static get version(): string|null
+    public static get version(): Config['version']
     {
-        return this.getLauncherInfo().version;
+        return this.getConfig().version;
     }
 
-    public static get lang(): { launcher: string, voice: string }
+    public static get lang(): Config['lang']
     {
-        return this.getLauncherInfo().lang;
+        return this.getConfig().lang;
     }
 
-    public static getLauncherInfo (): Config
+    public static getConfig (): Config
     {
         if (!fs.existsSync(this.launcherJson))
             fs.writeFileSync(this.launcherJson, JSON.stringify({
@@ -40,15 +48,16 @@ export class Genshinlib
                     launcher: 'en-us',
                     voice: 'en-us'
                 },
-                version: null
-            }));
+                version: null,
+                patch: null
+            }, null, 4));
         
         return JSON.parse(fs.readFileSync(this.launcherJson));
     }
 
-    public static setLauncherInfo (info: Config): Genshinlib
+    public static setConfig (info: Config): Genshinlib
     {
-        fs.writeFileSync(this.launcherJson, JSON.stringify(info));
+        fs.writeFileSync(this.launcherJson, JSON.stringify(info, null, 4));
 
         return this;
     }
@@ -76,6 +85,11 @@ export class Genshinlib
     public static getBackgroundUri (): string
     {
         return path.join(__dirname, '..', 'images', 'backgrounds', this.lang.launcher + '.png');
+    }
+
+    public static getPatchInfo (): { version: string, state: 'stable' | 'testing' }
+    {
+        return JSON.parse(fs.readFileSync(this.patchJson));
     }
 
     public static async downloadFile (uri: string, savePath: string, progress: (current: number, total: number, difference: number) => void): Promise<void|Error>
