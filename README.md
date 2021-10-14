@@ -1,4 +1,8 @@
-<img src="logo.png">
+<img src="repository-pics/logo.png">
+
+<img src="repository-pics/launcher.png">
+
+<br><br>
 
 # Status
 
