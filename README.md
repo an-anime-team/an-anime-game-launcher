@@ -8,7 +8,7 @@
 | :---: | :---: | :---: |
 | 2.2.0 | 2.2.0-beta1 | 2.2.0-testing |
 
-Download from [Releases](https://notabug.org/nobody/an-anime-game-launcher/releases/2.2.0-beta1)
+Download from [Releases](https://notabug.org/nobody/an-anime-game-launcher/releases)
 
 # Development
 
