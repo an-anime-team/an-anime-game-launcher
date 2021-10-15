@@ -10,9 +10,18 @@
 
 | Game version | Launcher version | Patch version |
 | :---: | :---: | :---: |
-| 2.2.0 | 2.2.0-beta1 | 2.2.0-testing |
+| 2.2.0 | 2.2.0-beta2 | 2.2.0-testing |
 
 Download from [Releases](https://notabug.org/nobody/an-anime-game-launcher/releases)
+
+# Requirements
+
+To work this launcher requires
+
+* wine
+* winecfg
+* winetricks
+* unzip
 
 # Development
 
@@ -27,6 +36,17 @@ npm run build:linux
 ```sh
 npm start
 ```
+
+# Roadmap
+
+To 2.2.0-release1
+
+* Fix AppImage builds
+* Make Proton-GE default compatibility tool and fix game input issues
+* Add additional telemetry checking
+* Add preferences menu
+* Add background banners for different languages
+* Add launcher updates notifications
 
 <br>
 

@@ -21,6 +21,7 @@ export class Genshinlib
     public static readonly patchDir: string = path.join(path.dirname(__dirname), 'patch');
     public static readonly patchJson: string = path.join(this.patchDir, 'patch.json');
     public static readonly patchSh = path.join(this.patchDir, 'patch.sh');
+    public static readonly patchAntiCrashSh = path.join(this.patchDir, 'patch_anti_logincrash.sh');
 
     public static readonly launcherDir: string = path.join(os.homedir(), 'genshin-impact-launcher');
     public static readonly launcherJson: string = path.join(this.launcherDir, 'launcher.json');
@@ -186,13 +187,14 @@ export class Genshinlib
             'Executing load_times',
             'Executing load_trebuchet',
             'Executing load_verdana',
-            'Executing load_webdings'
+            'Executing load_webdings',
+            'Executing load_usetakefocus n'
         ];
 
         return new Promise((resolve) => {
             let installationProgress = 0;
 
-            let installerProcess = spawn('winetricks', ['corefonts'], {
+            let installerProcess = spawn('winetricks', ['corefonts', 'usetakefocus=n'], {
                 env: {
                     ...process.env,
                     WINEPREFIX: path
@@ -220,5 +222,39 @@ export class Genshinlib
     public static isPrefixInstalled (prefixPath: string): boolean
     {
         return fs.existsSync(path.join(prefixPath, 'drive_c'));
+    }
+
+    public static applyPatch (onFinish: () => void, onData: (data: string) => void)
+    {
+        let patcherProcess = spawn('bash', [Genshinlib.patchSh], {
+            cwd: Genshinlib.gameDir,
+            env: {
+                ...process.env,
+                WINEPREFIX: Genshinlib.prefixDir
+            }
+        });
+
+        patcherProcess.stdout.on('data', (data: string) => onData(data));
+
+        patcherProcess.on('close', () => {
+            let patcherAntiCrashProcess = spawn('bash', [Genshinlib.patchAntiCrashSh], {
+                cwd: Genshinlib.gameDir,
+                env: {
+                    ...process.env,
+                    WINEPREFIX: Genshinlib.prefixDir
+                }
+            });
+    
+            patcherAntiCrashProcess.stdout.on('data', (data: string) => onData(data));
+    
+            patcherAntiCrashProcess.on('close', () => {
+                Genshinlib.setConfig({
+                    ...Genshinlib.getConfig(),
+                    patch: Genshinlib.getPatchInfo()
+                });
+    
+                onFinish();
+            });
+        });
     }
 }

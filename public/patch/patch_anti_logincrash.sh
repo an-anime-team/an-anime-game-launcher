@@ -1,10 +1,5 @@
 #!/usr/bin/env bash
 
-echo "[NOTE] This patch is not required as of 2021-10-13. However, it might become"
-echo "       necessary afterwards (Friday?). If that's the case, comment the line below."
-exit 0
-
-
 # MacOS and *BSD do not have md5sum: use md5 instead
 if [[ $(uname) == "Darwin" || $(uname) == *"BSD" ]]; then
 	md5sum() {
@@ -41,13 +36,6 @@ echo "[INFO]    Patch to fix a login and runtime crash"
 echo ""
 
 # ===========================================================
-echo "[WARNING] Hereby you are violating the game's Terms of Service!"
-echo "          Do you accept the risk and possible consequences?"
-read -p "Accept? [y/n] " choice
-
-if [[ ! "$choice" == [JjSsYy]* ]]; then
-	exit 1
-fi
 
 echo
 echo "--- Applying xLua patch"
