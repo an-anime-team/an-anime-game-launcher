@@ -29,14 +29,14 @@ $(() => {
 
         // Parse the HTML and append the HTML from the site to the div.
         let parser = new DOMParser();
-	    let converted = parser.parseFromString(body, 'text/html');
+        let converted = parser.parseFromString(body, 'text/html');
         container!.appendChild(converted.getElementById('__layout')!);
 
         // Get the home container to remove the functions that don't work currently.
         let home = container!.getElementsByClassName('home__main')[0];
         home.removeChild(home.getElementsByClassName('home-swiper-wrap')[0]);
         home.removeChild(home.getElementsByClassName('home-news')[0]);
-    })
+    });
 
     Genshinlib.getData().then(data => {
         // Update available
