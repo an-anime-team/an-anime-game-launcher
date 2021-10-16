@@ -41,12 +41,14 @@ npm start
 
 To 2.2.0-release1
 
-* Fix AppImage builds
+* <s>Fix AppImage builds</s>
+* Parse background banners from the game's API ([#1](https://notabug.org/nobody/an-anime-game-launcher/issues/1))
 * Make Proton-GE default compatibility tool and fix game input issues
 * Add additional telemetry checking
 * Add preferences menu
-* Add background banners for different languages
 * Add launcher updates notifications
+
+I've found a reason why do AppImages don't work, and I don't want to say it, but I have to rewrite half a project lmao
 
 <br>
 
