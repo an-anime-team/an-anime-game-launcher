@@ -238,7 +238,7 @@ $(() => {
                                     Genshinlib.applyPatch(() => {
                                         LauncherUI.setState('game-launch-available');
                                     }, (data) => console.log(data.toString()));
-                                    ipcRenderer.sendSync('notification', { title: document.title, content: 'Finished downloading game.' });
+                                    ipcRenderer.send('notification', { title: document.title, content: 'Finished downloading game.' });
                                 }
 
                                 // Patch is not available
