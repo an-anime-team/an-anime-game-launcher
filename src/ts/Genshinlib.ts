@@ -7,7 +7,7 @@ const { spawn } = require('child_process');
 type Config = {
     lang: {
         launcher: 'en-us' | 'ru-ru' | 'fr-fr' | 'id-id' | 'de-de' | 'es-es' | 'pt-pt' | 'th-th' | 'vi-vn' | 'ko-kr' | 'ja-jp' | 'zh-tw' | 'zh-cn',
-        voice: 'en-us' | 'ru-ru' | 'fr-fr' | 'id-id' | 'de-de' | 'es-es' | 'pt-pt' | 'th-th' | 'vi-vn' | 'ko-kr' | 'ja-jp' | 'zh-tw' | 'zh-cn'
+        voice: 'en-us' | 'ko-kr' | 'ja-jp' | 'zh-cn'
     },
     version: string|null,
     patch: {
