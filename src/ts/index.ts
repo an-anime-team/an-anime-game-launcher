@@ -15,11 +15,7 @@ $(() => {
     if (Genshinlib.version !== null)
         document.title = 'Genshin Impact Linux Launcher - ' + Genshinlib.version;
 
-    fetch(`https://sdk-os-static.mihoyo.com/hk4e_global/mdk/launcher/api/content?filter_adv=true&launcher_id=10&language=${ Genshinlib.getConfig().lang.launcher }`)
-    .then((res) => res.json())
-    .then((resdata) => {
-        $('body').css('background-image', `url(${ resdata.data.adv.background })`);
-    });
+    Genshinlib.getBackgroundUri().then( uri => $('body').css('background-image', `url(${ uri })`) );
 
     fetch(`https://genshin.mihoyo.com/launcher/10/${ Genshinlib.getConfig().lang.launcher }?api_url=https%3A%2F%2Fapi-os-takumi.mihoyo.com%2Fhk4e_global&prev=false`)
     .then((res) => res.text())
