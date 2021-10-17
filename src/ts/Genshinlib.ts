@@ -231,17 +231,18 @@ export class Genshinlib
     public static patchGame (version: string, onFinish: () => void, onData: (data: string) => void) {
         this.downloadFile('https://notabug.org/Krock/GI-on-Linux/archive/master.zip', path.join(this.launcherDir, 'krock.zip'), (current: number, total: number, difference: number) => null).then(() => {
             this.unzip(path.join(this.launcherDir, 'krock.zip'), this.launcherDir, (current: number, total: number, difference: number) => null).then(() => {
-                // Delete zip file.
+                // Delete zip file and assign patch directory.
                 fs.unlinkSync(path.join(this.launcherDir, 'krock.zip'));
+                let patchdir: string = path.join(this.TMPpatchDir, version.replace(/\./g, ''));
 
                 // Patch out the testing phase content from the shell files if active and make sure the shell files are executable.
-                exec(`cd ${path.join(this.TMPpatchDir, version.replace(/\./g, ''))} && sed -i '/^echo "If you would like to test this patch, modify this script and remove the line below this one."/,+5d' patch.sh`);
-                exec(`cd ${path.join(this.TMPpatchDir, version.replace(/\./g, ''))} && sed -i '/^echo "       necessary afterwards (Friday?). If that's the case, comment the line below."/,+2d' patch_anti_logincrash.sh`);
-                exec(`chmod +x ${path.join(this.TMPpatchDir, version.replace(/\./g, ''), 'patch.sh')}`);
-                exec(`chmod +x ${path.join(this.TMPpatchDir, version.replace(/\./g, ''), 'patch_anti_logincrash.sh')}`);
+                exec(`cd ${patchdir} && sed -i '/^echo "If you would like to test this patch, modify this script and remove the line below this one."/,+5d' patch.sh`);
+                exec(`cd ${patchdir} && sed -i '/^echo "       necessary afterwards (Friday?). If that's the case, comment the line below."/,+2d' patch_anti_logincrash.sh`);
+                exec(`chmod +x ${path.join(patchdir, 'patch.sh')}`);
+                exec(`chmod +x ${path.join(patchdir, 'patch_anti_logincrash.sh')}`);
 
                 // Execute the patch file with "yes yes" in the beginning to agree to the choices.
-                let patcherProcess = exec(`yes yes | ${path.join(this.TMPpatchDir, version.replace(/\./g, ''), 'patch.sh')}`, {
+                let patcherProcess = exec(`yes yes | ${path.join(patchdir, 'patch.sh')}`, {
                     cwd: this.gameDir,
                     env: {
                         ...process.env,
@@ -253,7 +254,7 @@ export class Genshinlib
 
                 patcherProcess.on('close', () => {
                     // Execute the patch file with "yes" in the beginning to agree to the choice.
-                    let patcherAntiCrashProcess = exec(`yes | ${path.join(this.TMPpatchDir, version.replace(/\./g, ''), 'patch_anti_logincrash.sh')}`, {
+                    let patcherAntiCrashProcess = exec(`yes | ${path.join(patchdir, 'patch_anti_logincrash.sh')}`, {
                         cwd: this.gameDir,
                         env: {
                             ...process.env,
