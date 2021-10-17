@@ -6,13 +6,13 @@
 
 # Status
 
-### Launcher is in the beta state; patch is currently stable.
-
-| Game version | Launcher version | Patch version |
-| :---: | :---: | :---: |
-| 2.2.0 | 2.2.0-beta2 | 2.2.0-stable |
+| Game version | Launcher version |
+| :---: | :---: |
+| 2.2.0 | 2.2.0-beta3 ⚠️ |
 
 Download from [Releases](https://notabug.org/nobody/an-anime-game-launcher/releases)
+
+> ⚠️ Launcher is currently in development
 
 # Requirements
 
@@ -28,7 +28,7 @@ To work this launcher requires
 ## Build from source
 
 ```sh
-npm run build:linux
+npm run build
 ```
 
 ## Run from source
@@ -41,12 +41,13 @@ npm start
 
 To 2.2.0-release1
 
-* Fix AppImage builds
+* <s>Fix AppImage builds</s>
+* <s>Parse background banners from the game's API</s>
 * Make Proton-GE default compatibility tool and fix game input issues
 * Add additional telemetry checking
 * Add preferences menu
-* Add background banners for different languages
 * Add launcher updates notifications
+* Cache launcher background picture
 
 <br>
 
