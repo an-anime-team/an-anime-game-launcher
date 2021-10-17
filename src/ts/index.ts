@@ -56,7 +56,7 @@ $(() => {
 
                     LauncherUI.setState('patch-applying');
 
-                    Genshinlib.applyPatch(() => {
+                    Genshinlib.patchGame(data.game.latest.version, () => {
                         LauncherUI.setState('game-launch-available');
                     }, (data) => console.log(data.toString()));
                 }
@@ -74,7 +74,7 @@ $(() => {
 
             LauncherUI.setState('patch-applying');
 
-            Genshinlib.applyPatch(() => {
+            Genshinlib.patchGame(data.game.latest.version, () => {
                 LauncherUI.setState('game-launch-available');
             }, (data) => console.log(data.toString()));
         }
@@ -134,7 +134,7 @@ $(() => {
 
                 LauncherUI.setState('patch-applying');
 
-                Genshinlib.applyPatch(() => {
+                Genshinlib.patchGame(data.game.latest.version, () => {
                     LauncherUI.setState('game-launch-available');
                 }, (data) => console.log(data.toString()));
             }
