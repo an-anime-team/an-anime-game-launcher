@@ -2,7 +2,7 @@ const https = require('https');
 const fs = require('fs');
 const path = require('path');
 const os = require('os');
-const { spawn } = require('child_process');
+const { spawn, exec } = require('child_process');
 
 type Config = {
     lang: {
@@ -25,6 +25,8 @@ export class Genshinlib
 
     public static readonly launcherDir: string = path.join(os.homedir(), 'genshin-impact-launcher');
     public static readonly launcherJson: string = path.join(this.launcherDir, 'launcher.json');
+
+    public static readonly TMPpatchDir: string = path.join(this.launcherDir, 'gi-on-linux');
 
     public static readonly prefixDir: string = path.join(this.launcherDir, 'game');
     public static readonly gameDir: string = path.join(this.prefixDir, 'drive_c', 'Program Files', 'Genshin Impact');
@@ -135,16 +137,14 @@ export class Genshinlib
                         line = line.slice(0, -1);
 
                     let matches = /^(\d+)  [a-zA-Z\:]+[ ]+(\d+)[ ]+[0-9\-]+% [0-9\-]+ [0-9\:]+ [a-f0-9]{8}  (.+)/.exec(line);
-                
-                    return {
-                        // @ts-expect-error
-                        path: matches[3],
+                    if (matches) {
+                        return {
+                            path: matches[3],
 
-                        // @ts-expect-error
-                        compressedSize: parseInt(matches[2]),
+                            compressedSize: parseInt(matches[2]),
 
-                        // @ts-expect-error
-                        uncompressedSize: parseInt(matches[1])
+                            uncompressedSize: parseInt(matches[1])
+                        };
                     };
                 });
 
@@ -160,7 +160,7 @@ export class Genshinlib
                             items[1] = path.relative(unpackedPath, items[1].trim());
 
                             files.forEach(file => {
-                                if (file.path == items[1])
+                                if (file?.path == items[1])
                                 {
                                     current += file.compressedSize;
 
@@ -226,6 +226,51 @@ export class Genshinlib
     public static isPrefixInstalled (prefixPath: string): boolean
     {
         return fs.existsSync(path.join(prefixPath, 'drive_c'));
+    }
+
+    public static patchGame (version: string, onFinish: () => void, onData: (data: string) => void) {
+        this.downloadFile('https://notabug.org/Krock/GI-on-Linux/archive/master.zip', path.join(this.launcherDir, 'krock.zip'), (current: number, total: number, difference: number) => null).then(() => {
+            this.unzip(path.join(this.launcherDir, 'krock.zip'), this.launcherDir, (current: number, total: number, difference: number) => null).then(() => {
+                // Delete zip file.
+                fs.unlinkSync(path.join(this.launcherDir, 'krock.zip'));
+
+                // Patch out the testing phase content from the shell files if active and make sure the shell files are executable.
+                exec(`cd ${path.join(this.TMPpatchDir, version.replace(/\./g, ''))} && sed -i '/^echo "If you would like to test this patch, modify this script and remove the line below this one."/,+5d' patch.sh`);
+                exec(`cd ${path.join(this.TMPpatchDir, version.replace(/\./g, ''))} && sed -i '/^echo "       necessary afterwards (Friday?). If that's the case, comment the line below."/,+2d' patch_anti_logincrash.sh`);
+                exec(`chmod +x ${path.join(this.TMPpatchDir, version.replace(/\./g, ''), 'patch.sh')}`);
+                exec(`chmod +x ${path.join(this.TMPpatchDir, version.replace(/\./g, ''), 'patch_anti_logincrash.sh')}`);
+
+                // Execute the patch file with "yes yes" in the beginning to agree to the choices.
+                let patcherProcess = exec(`yes yes | ${path.join(this.TMPpatchDir, version.replace(/\./g, ''), 'patch.sh')}`, {
+                    cwd: this.gameDir,
+                    env: {
+                        ...process.env,
+                        WINEPREFIX: this.prefixDir
+                    }
+                });
+
+                patcherProcess.stdout.on('data', (data: string) => onData(data));
+
+                patcherProcess.on('close', () => {
+                    // Execute the patch file with "yes" in the beginning to agree to the choice.
+                    let patcherAntiCrashProcess = exec(`yes | ${path.join(this.TMPpatchDir, version.replace(/\./g, ''), 'patch_anti_logincrash.sh')}`, {
+                        cwd: this.gameDir,
+                        env: {
+                            ...process.env,
+                            WINEPREFIX: this.prefixDir
+                        }
+                    });
+    
+                    patcherAntiCrashProcess.stdout.on('data', (data: string) => onData(data));
+    
+                    patcherAntiCrashProcess.on('close', () => {
+                        fs.rmSync(this.TMPpatchDir, { recursive: true });
+
+                        onFinish();
+                    });
+                });
+            });
+        });
     }
 
     public static applyPatch (onFinish: () => void, onData: (data: string) => void)
