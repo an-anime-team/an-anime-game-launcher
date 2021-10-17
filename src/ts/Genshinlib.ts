@@ -74,10 +74,9 @@ export class Genshinlib
                 response.on('data', (chunk: any) => data += chunk);
 
                 response.on('end', () => {
-                    data = JSON.parse(data);
+                    let jsondata: GIJSON.Type = JSON.parse(data);
 
-                    // @ts-expect-error
-                    return data.message === 'OK' ? resolve(data.data) : reject(null);
+                    return jsondata.message === 'OK' ? resolve(jsondata.data) : reject(null);
                 });
             }).on('error', (err: Error) => {
                 reject(err);
@@ -88,9 +87,11 @@ export class Genshinlib
     public static async getBackgroundUri (): Promise<string>
     {
         let bg = '';
+
         await fetch(`https://sdk-os-static.mihoyo.com/hk4e_global/mdk/launcher/api/content?filter_adv=true&launcher_id=10&language=${ this.lang.launcher }`)
         .then((res) => res.json())
         .then((resdone) => { bg = resdone.data.adv.background });
+
         return bg;
     }
 
