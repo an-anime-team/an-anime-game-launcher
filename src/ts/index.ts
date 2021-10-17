@@ -15,7 +15,24 @@ $(() => {
     if (Genshinlib.version !== null)
         document.title = 'Genshin Impact Linux Launcher - ' + Genshinlib.version;
 
-    $('body').css('background-image', `url(${ Genshinlib.getBackgroundUri() })`);
+    Genshinlib.getBackgroundUri().then( uri => $('body').css('background-image', `url(${ uri })`) );
+
+    fetch(`https://genshin.mihoyo.com/launcher/10/${ Genshinlib.getConfig().lang.launcher }?api_url=https%3A%2F%2Fapi-os-takumi.mihoyo.com%2Fhk4e_global&prev=false`)
+    .then((res) => res.text())
+    .then((body) => {
+        // Get the element which should have the launchers content.
+        let container = document.getElementById('launchcontent');
+
+        // Parse the HTML and append the HTML from the site to the div.
+        let parser = new DOMParser();
+        let converted = parser.parseFromString(body, 'text/html');
+        container!.appendChild(converted.getElementById('__layout')!);
+
+        // Get the home container to remove the functions that don't work currently.
+        let home = container!.getElementsByClassName('home__main')[0];
+        home.removeChild(home.getElementsByClassName('home-swiper-wrap')[0]);
+        home.removeChild(home.getElementsByClassName('home-news')[0]);
+    });
 
     Genshinlib.getData().then(data => {
         // Update available
@@ -220,6 +237,7 @@ $(() => {
 
                                     Genshinlib.applyPatch(() => {
                                         LauncherUI.setState('game-launch-available');
+                                        ipcRenderer.send('notification', { title: document.title, content: 'Finished downloading game.' });
                                     }, (data) => console.log(data.toString()));
                                 }
 

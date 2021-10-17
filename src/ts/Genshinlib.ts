@@ -6,8 +6,8 @@ const { spawn } = require('child_process');
 
 type Config = {
     lang: {
-        launcher: 'en-us' | 'ru-ru',
-        voice: 'en-us' | 'ru-ru'
+        launcher: 'en-us' | 'ru-ru' | 'fr-fr' | 'id-id' | 'de-de' | 'es-es' | 'pt-pt' | 'th-th' | 'vi-vn' | 'ko-kr' | 'ja-jp' | 'zh-tw' | 'zh-cn',
+        voice: 'en-us' | 'ko-kr' | 'ja-jp' | 'zh-cn'
     },
     version: string|null,
     patch: {
@@ -83,9 +83,13 @@ export class Genshinlib
         });
     }
 
-    public static getBackgroundUri (): string
+    public static async getBackgroundUri (): Promise<string>
     {
-        return path.join(__dirname, '..', 'images', 'backgrounds', this.lang.launcher + '.png');
+        let bg = '';
+        await fetch(`https://sdk-os-static.mihoyo.com/hk4e_global/mdk/launcher/api/content?filter_adv=true&launcher_id=10&language=${ this.lang.launcher }`)
+        .then((res) => res.json())
+        .then((resdone) => { bg = resdone.data.adv.background });
+        return bg;
     }
 
     public static getPatchInfo (): { version: string, state: 'stable' | 'testing' }

@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, Notification } = require('electron');
 const path = require('path');
 
 let mainWindow;
@@ -50,4 +50,8 @@ app.whenReady().then(() => {
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin')
         app.quit();
+});
+
+ipcMain.on('notification', (event, args) => {
+    new Notification({ title: args.title, body: args.content }).show();
 });
