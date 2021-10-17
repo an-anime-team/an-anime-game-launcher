@@ -1,3 +1,5 @@
+import GIJSON from "./GIJSON";
+
 const https = require('https');
 const fs = require('fs');
 const path = require('path');
@@ -74,7 +76,7 @@ export class Genshinlib
                 response.on('data', (chunk: any) => data += chunk);
 
                 response.on('end', () => {
-                    let jsondata: GIJSON.Type = JSON.parse(data);
+                    let jsondata: GIJSON = JSON.parse(data);
 
                     return jsondata.message === 'OK' ? resolve(jsondata.data) : reject(null);
                 });
