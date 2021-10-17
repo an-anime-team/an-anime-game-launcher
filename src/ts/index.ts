@@ -19,18 +19,22 @@ $(() => {
 
     // Don't really think we need this, but maybe in future~~
 
-    /*fetch(`https://genshin.mihoyo.com/launcher/10/${ Genshinlib.getConfig().lang.launcher }?api_url=https%3A%2F%2Fapi-os-takumi.mihoyo.com%2Fhk4e_global&prev=false`)
+    fetch(`https://genshin.mihoyo.com/launcher/10/${ Genshinlib.getConfig().lang.launcher }?api_url=https%3A%2F%2Fapi-os-takumi.mihoyo.com%2Fhk4e_global&prev=false`)
         .then(res => res.text())
         .then(body => {
-            $(body).appendTo('#launchcontent');
+            // Get the element which should have the launchers content.
+            let container = document.getElementById('launchcontent');
 
-            // $('.home__main').detach('.home-swiper-wrap')
+            // Parse the HTML and append the HTML from the site to the div.
+            let parser = new DOMParser();
+            let converted = parser.parseFromString(body, 'text/html');
+            container!.appendChild(converted.getElementById('__layout')!);
 
             // Get the home container to remove the functions that don't work currently.
-            // let home = container!.getElementsByClassName('home__main')[0];
-            // home.removeChild(home.getElementsByClassName('home-swiper-wrap')[0]);
-            // home.removeChild(home.getElementsByClassName('home-news')[0]);
-        });*/
+            let home = container!.getElementsByClassName('home__main')[0];
+            home.removeChild(home.getElementsByClassName('home-swiper-wrap')[0]);
+            home.removeChild(home.getElementsByClassName('home-news')[0]);
+        });
 
     Genshinlib.getData().then(data => {
         // Update available
@@ -238,7 +242,7 @@ $(() => {
 
                                         ipcRenderer.send('notification', {
                                             title: document.title,
-                                            content: 'Game was succesfully installed'
+                                            content: 'Game was successfully installed'
                                         });
                                     }, (data) => console.log(data.toString()));
                                 }
