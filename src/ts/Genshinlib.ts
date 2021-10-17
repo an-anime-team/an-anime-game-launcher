@@ -272,7 +272,7 @@ export class Genshinlib
             });
         });
     }
-
+    /*
     public static applyPatch (onFinish: () => void, onData: (data: string) => void)
     {
         let patcherProcess = spawn('bash', [Genshinlib.patchSh], {
@@ -305,5 +305,5 @@ export class Genshinlib
                 onFinish();
             });
         });
-    }
+    }*/
 }
