@@ -6,9 +6,9 @@
 
 # Status
 
-| Game version | Launcher version |
-| :---: | :---: |
-| 2.2.0 | 2.2.0-beta3 ⚠️ |
+| Game version | Launcher version | Patch version |
+| :---: | :---: | :---: |
+| 2.2.0 | 2.2.0-beta3 ⚠️ | 2.2.0-stable ✅ |
 
 Download from [Releases](https://notabug.org/nobody/an-anime-game-launcher/releases)
 
@@ -42,7 +42,7 @@ npm start
 To 2.2.0-release1
 
 * <s>Fix AppImage builds</s>
-* <s>Parse background banners from the game's API</s>
+* <s>Parse background banners from the game's API ([issue #1](https://notabug.org/nobody/an-anime-game-launcher/issues/1), [pull request #2](https://notabug.org/nobody/an-anime-game-launcher/pulls/2))</s>
 * Make Proton-GE default compatibility tool and fix game input issues
 * Add additional telemetry checking
 * Add preferences menu

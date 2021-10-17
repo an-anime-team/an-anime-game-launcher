@@ -20,8 +20,6 @@ function createWindow ()
         width: 1280,
         height: 728,
         webPreferences: {
-            // Is not safety
-            // Use it to have access to the node modules inside html files
             nodeIntegration: true,
             contextIsolation: false
         },
