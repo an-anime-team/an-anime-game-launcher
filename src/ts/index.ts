@@ -237,7 +237,10 @@ $(() => {
 
                                     Genshinlib.patchGame(data.game.latest.version, () => {
                                         LauncherUI.setState('game-launch-available');
-                                        ipcRenderer.send('notification', { title: document.title, content: 'Game is ready to launch' });
+                                        ipcRenderer.send('notification', {
+                                            title: document.title,
+                                            content: 'Game is ready to be played'
+                                        });
                                     }, (data) => console.log(data.toString()));
                                 }
 
