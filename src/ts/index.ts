@@ -235,9 +235,9 @@ $(() => {
                                     // patch-applying state changes only button text
                                     $('#downloaded').text('Applying patch...');
 
-                                    Genshinlib.applyPatch(() => {
+                                    Genshinlib.patchGame(data.game.latest.version, () => {
                                         LauncherUI.setState('game-launch-available');
-                                        ipcRenderer.send('notification', { title: document.title, content: 'Finished downloading game.' });
+                                        ipcRenderer.send('notification', { title: document.title, content: 'Game is ready to launch' });
                                     }, (data) => console.log(data.toString()));
                                 }
 
