@@ -1,6 +1,6 @@
 declare module GIJSON {
 
-    export interface VoicePack {
+    interface VoicePack {
         language: string;
         name: string;
         path: string;
@@ -8,7 +8,7 @@ declare module GIJSON {
         md5: string;
     }
 
-    export interface Latest {
+    interface Latest {
         name: string;
         version: string;
         path: string;
@@ -20,7 +20,7 @@ declare module GIJSON {
         segments: any[];
     }
 
-    export interface Diff {
+    interface Diff {
         name: string;
         version: string;
         path: string;
@@ -30,12 +30,12 @@ declare module GIJSON {
         voice_packs: VoicePack[];
     }
 
-    export interface Game {
+    interface Game {
         latest: Latest;
         diffs: Diff[];
     }
 
-    export interface Plugins {
+    interface Plugins {
         name: string;
         version: string;
         path: string;
@@ -44,17 +44,17 @@ declare module GIJSON {
         entry: string;
     }
 
-    export interface Plugin {
+    interface Plugin {
         plugins: Plugins[];
         version: string;
     }
 
-    export interface DeprecatedPackage {
+    interface DeprecatedPackage {
         name: string;
         md5: string;
     }
 
-    export interface Data {
+    interface Data {
         game: Game;
         plugin: Plugin;
         web_url: string;
