@@ -86,9 +86,11 @@ export class Genshinlib
     public static async getBackgroundUri (): Promise<string>
     {
         let bg = '';
-        await fetch(`https://sdk-os-static.mihoyo.com/hk4e_global/mdk/launcher/api/content?filter_adv=true&launcher_id=10&language=${ this.lang.launcher }`)
-        .then((res) => res.json())
-        .then((resdone) => { bg = resdone.data.adv.background });
+
+        await fetch(`https://sdk-os-static.mihoyo.com/hk4e_global/mdk/launcher/api/content?filter_adv=true&launcher_id=10&language=${this.lang.launcher}`)
+            .then(res => res.json())
+            .then(resdone => bg = resdone.data.adv.background);
+        
         return bg;
     }
 

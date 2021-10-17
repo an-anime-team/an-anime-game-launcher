@@ -6,6 +6,13 @@ let mainWindow;
 ipcMain.handle('hide-window', () => mainWindow.hide());
 ipcMain.handle('show-window', () => mainWindow.show());
 
+ipcMain.on('notification', (event, args) => {
+    new Notification({
+        title: args.title,
+        body: args.content
+    }).show();
+});
+
 function createWindow ()
 {
     // https://www.electronjs.org/docs/latest/api/browser-window/#class-browserwindow
@@ -13,8 +20,6 @@ function createWindow ()
         width: 1280,
         height: 728,
         webPreferences: {
-            // Is not safety
-            // Use it to have access to the node modules inside html files
             nodeIntegration: true,
             contextIsolation: false
         },
@@ -50,8 +55,4 @@ app.whenReady().then(() => {
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin')
         app.quit();
-});
-
-ipcMain.on('notification', (event, args) => {
-    new Notification({ title: args.title, body: args.content }).show();
 });

@@ -1,6 +1,6 @@
 {
     "name": "an-anime-game-linux-launcher",
-    "version": "2.2.0-beta2",
+    "version": "2.2.0-beta3",
     "description": "An Anime Game Linux Launcher",
     "author": "Nikita Podvirnyy",
     "license": "GPL-3.0",
@@ -8,8 +8,7 @@
     "scripts": {
         "dev": "tsc && sass src/sass:public/css -s compressed --no-source-map",
         "start": "npm run dev && electron .",
-        "build:win": "npm run dev && electron-builder --win",
-        "build:linux": "npm run dev && electron-builder --linux"
+        "build": "npm run dev && electron-builder --linux"
     },
     "build": {
         "productName": "An Anime Game Linux Launcher",
@@ -22,25 +21,6 @@
             "public/**/*",
             "entry.js"
         ],
-        "win": {
-            "icon": "public/images/icon512.png",
-            "target": [
-                {
-                    "target": "nsis",
-                    "arch": [
-                        "x64",
-                        "ia32"
-                    ]
-                },
-                {
-                    "target": "portable",
-                    "arch": [
-                        "x64",
-                        "ia32"
-                    ]
-                }
-            ]
-        },
         "linux": {
             "icon": "public/images/icon512.png",
             "category": "Utility",
@@ -53,13 +33,6 @@
                     ]
                 }
             ]
-        },
-        "nsis": {
-            "oneClick": false,
-            "perMachine": true,
-            "artifactName": "${productName}-${os}-${version}-setup.${ext}",
-            "deleteAppDataOnUninstall": true,
-            "allowToChangeInstallationDirectory": true
         }
     },
     "devDependencies": {
