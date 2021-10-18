@@ -119,7 +119,6 @@ export class Genshinlib
                     {
                         this.downloadFile(resdone.data.adv.background, path.join(this.launcherDir, this.getConfig().background.name), (current: number, total: number, difference: number) => null).then(() => {
                             bg = path.join(this.launcherDir, this.getConfig().background.name);
-                            console.log(bg);
                         })
                     }
                 })
