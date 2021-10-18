@@ -97,8 +97,8 @@ export class Genshinlib
     public static async getBackgroundUri (): Promise<string>
     {
         let bg = '';
-
-        if (!this.getConfig().background.time || this.getConfig().background.time! >= new Date().setDate(new Date().getDate()).toString())
+        
+        if (!this.getConfig().background.time || new Date(new Date().setHours(0,0,0,0)).setDate(new Date(new Date().setHours(0,0,0,0)).getDate()).toString() >= this.getConfig().background.time!)
         {
             await fetch(`https://sdk-os-static.mihoyo.com/hk4e_global/mdk/launcher/api/content?filter_adv=true&launcher_id=10&language=${this.lang.launcher}`)
                 .then(res => res.json())
@@ -106,7 +106,7 @@ export class Genshinlib
                     this.setConfig({
                         ...this.getConfig(),
                         background: {
-                            time: new Date().setDate(new Date().getDate() + 7).toString(),
+                            time: new Date(new Date().setHours(0,0,0,0)).setDate(new Date(new Date().setHours(0,0,0,0)).getDate() + 7).toString(),
                             name: resdone.data.adv.background.replace(/.*\//, '')
                         }
                     });
