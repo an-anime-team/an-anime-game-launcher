@@ -98,7 +98,7 @@ export class Genshinlib
     {
         let bg = '';
 
-        if (this.getConfig().background.time == new Date().setDate(new Date().getDate()).toString() || !this.getConfig().background.time)
+        if (!this.getConfig().background.time || this.getConfig().background.time! >= new Date().setDate(new Date().getDate()).toString())
         {
             await fetch(`https://sdk-os-static.mihoyo.com/hk4e_global/mdk/launcher/api/content?filter_adv=true&launcher_id=10&language=${this.lang.launcher}`)
                 .then(res => res.json())
