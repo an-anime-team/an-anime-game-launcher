@@ -103,6 +103,8 @@ export class Genshinlib
             await fetch(`https://sdk-os-static.mihoyo.com/hk4e_global/mdk/launcher/api/content?filter_adv=true&launcher_id=10&language=${this.lang.launcher}`)
                 .then(res => res.json())
                 .then(resdone => {
+                    let oldbg = this.getConfig().background.name;
+
                     this.setConfig({
                         ...this.getConfig(),
                         background: {
@@ -118,10 +120,11 @@ export class Genshinlib
                     else
                     {
                         this.downloadFile(resdone.data.adv.background, path.join(this.launcherDir, this.getConfig().background.name), (current: number, total: number, difference: number) => null).then(() => {
+                            fs.unlinkSync(path.join(this.launcherDir, oldbg));
                             bg = path.join(this.launcherDir, this.getConfig().background.name);
                         })
-                    }
-                })
+                    };
+                });
         }
         else
         {
