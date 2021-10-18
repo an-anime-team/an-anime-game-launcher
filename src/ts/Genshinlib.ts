@@ -11,6 +11,10 @@ type Config = {
         launcher: 'en-us' | 'ru-ru' | 'fr-fr' | 'id-id' | 'de-de' | 'es-es' | 'pt-pt' | 'th-th' | 'vi-vn' | 'ko-kr' | 'ja-jp' | 'zh-tw' | 'zh-cn',
         voice: 'en-us' | 'ko-kr' | 'ja-jp' | 'zh-cn'
     },
+    background: {
+        time: string|null,
+        name: string|null
+    },
     version: string|null,
     patch: {
         version: string|null,
@@ -53,6 +57,10 @@ export class Genshinlib
                     launcher: 'en-us',
                     voice: 'en-us'
                 },
+                background: {
+                    time: null,
+                    name: null
+                },
                 version: null,
                 patch: null
             }, null, 4));
@@ -90,9 +98,36 @@ export class Genshinlib
     {
         let bg = '';
 
-        await fetch(`https://sdk-os-static.mihoyo.com/hk4e_global/mdk/launcher/api/content?filter_adv=true&launcher_id=10&language=${this.lang.launcher}`)
-            .then(res => res.json())
-            .then(resdone => bg = resdone.data.adv.background);
+        if (this.getConfig().background.time == new Date().setDate(new Date().getDate()).toString() || !this.getConfig().background.time)
+        {
+            await fetch(`https://sdk-os-static.mihoyo.com/hk4e_global/mdk/launcher/api/content?filter_adv=true&launcher_id=10&language=${this.lang.launcher}`)
+                .then(res => res.json())
+                .then(resdone => {
+                    this.setConfig({
+                        ...this.getConfig(),
+                        background: {
+                            time: new Date().setDate(new Date().getDate() + 7).toString(),
+                            name: resdone.data.adv.background.replace(/.*\//, '')
+                        }
+                    });
+
+                    if (fs.existsSync(path.join(this.launcherDir, this.getConfig().background.name)))
+                    {
+                        bg = path.join(this.launcherDir, this.getConfig().background.name);
+                    }
+                    else
+                    {
+                        this.downloadFile(resdone.data.adv.background, path.join(this.launcherDir, this.getConfig().background.name), (current: number, total: number, difference: number) => null).then(() => {
+                            bg = path.join(this.launcherDir, this.getConfig().background.name);
+                            console.log(bg);
+                        })
+                    }
+                })
+        }
+        else
+        {
+            bg = path.join(this.launcherDir, this.getConfig().background.name);
+        };
         
         return bg;
     }
