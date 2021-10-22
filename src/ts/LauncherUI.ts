@@ -111,20 +111,21 @@ export class LauncherUI
 
         if (Date.now() - this.progressBar.prevTime > 1000)
         {
+            type etaType = string | number;
+            
             let elapsed = (Date.now() - this.progressBar.beganAt) / 1000;
             let eta = Math.round(total * elapsed / current - elapsed);
+            let etaHours: etaType   = Math.floor(eta / 3600),
+                etaMinutes: etaType = Math.floor((eta - etaHours * 3600) / 60),
+                etaSeconds: etaType = eta - etaHours * 3600 - etaMinutes * 60;
 
-            let etaHours   = Math.floor(eta / 3600),
-                etaMinutes = Math.floor((eta - etaHours * 3600) / 60),
-                etaSeconds = eta - etaHours * 3600 - etaMinutes * 60;
-
-            if (etaHours < 10) // @ts-expect-error
+            if (etaHours < 10)
                 etaHours = '0' + etaHours.toString();
 
-            if (etaMinutes < 10) // @ts-expect-error
+            if (etaMinutes < 10)
                 etaMinutes = '0' + etaMinutes.toString();
 
-            if (etaSeconds < 10) // @ts-expect-error
+            if (etaSeconds < 10)
                 etaSeconds = '0' + etaSeconds.toString();
 
             $('#downloader .progress').css('width', `${ Math.round(current / total * 100) }%`);

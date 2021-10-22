@@ -1,13 +1,19 @@
+import GIJSON from "./GIJSON";
+
 const https = require('https');
 const fs = require('fs');
 const path = require('path');
 const os = require('os');
-const { spawn } = require('child_process');
+const { spawn, exec } = require('child_process');
 
 type Config = {
     lang: {
         launcher: 'en-us' | 'ru-ru' | 'fr-fr' | 'id-id' | 'de-de' | 'es-es' | 'pt-pt' | 'th-th' | 'vi-vn' | 'ko-kr' | 'ja-jp' | 'zh-tw' | 'zh-cn',
         voice: 'en-us' | 'ko-kr' | 'ja-jp' | 'zh-cn'
+    },
+    background: {
+        time: string|null,
+        name: string|null
     },
     version: string|null,
     patch: {
@@ -25,6 +31,8 @@ export class Genshinlib
 
     public static readonly launcherDir: string = path.join(os.homedir(), 'genshin-impact-launcher');
     public static readonly launcherJson: string = path.join(this.launcherDir, 'launcher.json');
+
+    public static readonly TMPpatchDir: string = path.join(this.launcherDir, 'gi-on-linux');
 
     public static readonly prefixDir: string = path.join(this.launcherDir, 'game');
     public static readonly gameDir: string = path.join(this.prefixDir, 'drive_c', 'Program Files', 'Genshin Impact');
@@ -49,6 +57,10 @@ export class Genshinlib
                     launcher: 'en-us',
                     voice: 'en-us'
                 },
+                background: {
+                    time: null,
+                    name: null
+                },
                 version: null,
                 patch: null
             }, null, 4));
@@ -72,10 +84,9 @@ export class Genshinlib
                 response.on('data', (chunk: any) => data += chunk);
 
                 response.on('end', () => {
-                    data = JSON.parse(data);
+                    let jsondata: GIJSON = JSON.parse(data);
 
-                    // @ts-expect-error
-                    return data.message === 'OK' ? resolve(data.data) : reject(null);
+                    return jsondata.message === 'OK' ? resolve(jsondata.data) : reject(null);
                 });
             }).on('error', (err: Error) => {
                 reject(err);
@@ -86,10 +97,39 @@ export class Genshinlib
     public static async getBackgroundUri (): Promise<string>
     {
         let bg = '';
+        
+        if (!this.getConfig().background.time || new Date(new Date().setHours(0,0,0,0)).setDate(new Date(new Date().setHours(0,0,0,0)).getDate()).toString() >= this.getConfig().background.time!)
+        {
+            await fetch(`https://sdk-os-static.mihoyo.com/hk4e_global/mdk/launcher/api/content?filter_adv=true&launcher_id=10&language=${this.lang.launcher}`)
+                .then(res => res.json())
+                .then(async resdone => {
+                    let oldbg = this.getConfig().background.name;
 
-        await fetch(`https://sdk-os-static.mihoyo.com/hk4e_global/mdk/launcher/api/content?filter_adv=true&launcher_id=10&language=${this.lang.launcher}`)
-            .then(res => res.json())
-            .then(resdone => bg = resdone.data.adv.background);
+                    this.setConfig({
+                        ...this.getConfig(),
+                        background: {
+                            time: new Date(new Date().setHours(0,0,0,0)).setDate(new Date(new Date().setHours(0,0,0,0)).getDate() + 7).toString(),
+                            name: resdone.data.adv.background.replace(/.*\//, '')
+                        }
+                    });
+
+                    if (fs.existsSync(path.join(this.launcherDir, this.getConfig().background.name)))
+                    {
+                        bg = path.join(this.launcherDir, this.getConfig().background.name);
+                    }
+                    else
+                    {
+                        await this.downloadFile(resdone.data.adv.background, path.join(this.launcherDir, this.getConfig().background.name), (current: number, total: number, difference: number) => null).then(() => {
+                            !oldbg ? console.log('No Old Background Found.') : fs.unlinkSync(path.join(this.launcherDir, oldbg));
+                            bg = path.join(this.launcherDir, this.getConfig().background.name);
+                        });
+                    };
+                });
+        }
+        else
+        {
+            bg = path.join(this.launcherDir, this.getConfig().background.name);
+        };
         
         return bg;
     }
@@ -137,16 +177,14 @@ export class Genshinlib
                         line = line.slice(0, -1);
 
                     let matches = /^(\d+)  [a-zA-Z\:]+[ ]+(\d+)[ ]+[0-9\-]+% [0-9\-]+ [0-9\:]+ [a-f0-9]{8}  (.+)/.exec(line);
-                
-                    return {
-                        // @ts-expect-error
-                        path: matches[3],
+                    if (matches) {
+                        return {
+                            path: matches[3],
 
-                        // @ts-expect-error
-                        compressedSize: parseInt(matches[2]),
+                            compressedSize: parseInt(matches[2]),
 
-                        // @ts-expect-error
-                        uncompressedSize: parseInt(matches[1])
+                            uncompressedSize: parseInt(matches[1])
+                        };
                     };
                 });
 
@@ -162,7 +200,7 @@ export class Genshinlib
                             items[1] = path.relative(unpackedPath, items[1].trim());
 
                             files.forEach(file => {
-                                if (file.path == items[1])
+                                if (file?.path == items[1])
                                 {
                                     current += file.compressedSize;
 
@@ -230,6 +268,52 @@ export class Genshinlib
         return fs.existsSync(path.join(prefixPath, 'drive_c'));
     }
 
+    public static patchGame (version: string, onFinish: () => void, onData: (data: string) => void) {
+        this.downloadFile('https://notabug.org/Krock/GI-on-Linux/archive/master.zip', path.join(this.launcherDir, 'krock.zip'), (current: number, total: number, difference: number) => null).then(() => {
+            this.unzip(path.join(this.launcherDir, 'krock.zip'), this.launcherDir, (current: number, total: number, difference: number) => null).then(() => {
+                // Delete zip file and assign patch directory.
+                fs.unlinkSync(path.join(this.launcherDir, 'krock.zip'));
+                let patchdir: string = path.join(this.TMPpatchDir, version.replace(/\./g, ''));
+
+                // Patch out the testing phase content from the shell files if active and make sure the shell files are executable.
+                exec(`cd ${patchdir} && sed -i '/^echo "If you would like to test this patch, modify this script and remove the line below this one."/,+5d' patch.sh`);
+                exec(`cd ${patchdir} && sed -i '/^echo "       necessary afterwards (Friday?). If that's the case, comment the line below."/,+2d' patch_anti_logincrash.sh`);
+                exec(`chmod +x ${path.join(patchdir, 'patch.sh')}`);
+                exec(`chmod +x ${path.join(patchdir, 'patch_anti_logincrash.sh')}`);
+
+                // Execute the patch file with "yes yes" in the beginning to agree to the choices.
+                let patcherProcess = exec(`yes yes | ${path.join(patchdir, 'patch.sh')}`, {
+                    cwd: this.gameDir,
+                    env: {
+                        ...process.env,
+                        WINEPREFIX: this.prefixDir
+                    }
+                });
+
+                patcherProcess.stdout.on('data', (data: string) => onData(data));
+
+                patcherProcess.on('close', () => {
+                    // Execute the patch file with "yes" in the beginning to agree to the choice.
+                    let patcherAntiCrashProcess = exec(`yes | ${path.join(patchdir, 'patch_anti_logincrash.sh')}`, {
+                        cwd: this.gameDir,
+                        env: {
+                            ...process.env,
+                            WINEPREFIX: this.prefixDir
+                        }
+                    });
+    
+                    patcherAntiCrashProcess.stdout.on('data', (data: string) => onData(data));
+    
+                    patcherAntiCrashProcess.on('close', () => {
+                        fs.rmSync(this.TMPpatchDir, { recursive: true });
+
+                        onFinish();
+                    });
+                });
+            });
+        });
+    }
+    /*
     public static applyPatch (onFinish: () => void, onData: (data: string) => void)
     {
         let patcherProcess = spawn('bash', [Genshinlib.patchSh], {
@@ -262,5 +346,5 @@ export class Genshinlib
                 onFinish();
             });
         });
-    }
+    }*/
 }

@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, Notification } = require('electron');
+const { app, BrowserWindow, ipcMain, Notification, shell } = require('electron');
 const path = require('path');
 
 let mainWindow;
@@ -29,6 +29,13 @@ function createWindow ()
     });
 
     mainWindow.loadFile(path.join(__dirname, 'public', 'html', 'index.html'));
+
+    // open URLs in Browser instead of an pop-up in electron app.
+    mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+        shell.openExternal(url);
+        return { action: 'deny' };
+    });
+    
 
     // mainWindow.webContents.openDevTools();
 }
