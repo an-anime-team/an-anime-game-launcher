@@ -3,4 +3,5 @@ dist
 package-lock.json
 wineprefix-installation.log
 public/css/index.css
+public/css/settings.css
 public/js

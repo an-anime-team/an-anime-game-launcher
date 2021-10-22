@@ -1,0 +1,170 @@
+[
+    {
+        "title": "Proton-GE",
+        "runners": [
+            {
+                "name": "Proton-6.19-GE-2",
+                "version": "6.19-GE-2",
+                "uri": "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/6.19-GE-2/Proton-6.19-GE-2.tar.gz",
+                "archive": "tar",
+                "folder": "Proton-6.19-GE-2",
+                "makeFolder": false,
+                "executable": "files/bin/wine64"
+            },
+            {
+                "name": "Proton-6.19-GE-1",
+                "version": "6.19-GE-1",
+                "uri": "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/6.19-GE-1/Proton-6.19-GE-1.tar.gz",
+                "archive": "tar",
+                "folder": "Proton-6.19-GE-1",
+                "makeFolder": false,
+                "executable": "files/bin/wine64"
+            },
+            {
+                "name": "Proton-6.18-GE-2",
+                "version": "6.18-GE-2",
+                "uri": "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/6.18-GE-2/Proton-6.18-GE-2.tar.gz",
+                "archive": "tar",
+                "folder": "Proton-6.18-GE-2",
+                "makeFolder": false,
+                "executable": "files/bin/wine64"
+            },
+            {
+                "name": "Proton-6.18-GE-1",
+                "version": "6.18-GE-1",
+                "uri": "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/6.18-GE-1/Proton-6.18-GE-1.tar.gz",
+                "archive": "tar",
+                "folder": "Proton-6.18-GE-1",
+                "makeFolder": false,
+                "executable": "files/bin/wine64"
+            },
+            {
+                "name": "Proton-6.16-GE-1",
+                "version": "6.16-GE-1",
+                "uri": "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/6.16-GE-1/Proton-6.16-GE-1.tar.gz",
+                "archive": "tar",
+                "folder": "Proton-6.16-GE-1",
+                "makeFolder": false,
+                "executable": "files/bin/wine64"
+            },
+            {
+                "name": "Proton-6.15-GE-2",
+                "version": "6.15-GE-2",
+                "uri": "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/6.15-GE-2/Proton-6.15-GE-2.tar.gz",
+                "archive": "tar",
+                "folder": "Proton-6.15-GE-2",
+                "makeFolder": false,
+                "executable": "files/bin/wine64"
+            },
+            {
+                "name": "Proton-6.15-GE-1",
+                "version": "6.15-GE-1",
+                "uri": "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/6.15-GE-1/Proton-6.15-GE-1.tar.gz",
+                "archive": "tar",
+                "folder": "Proton-6.15-GE-1",
+                "makeFolder": false,
+                "executable": "files/bin/wine64"
+            },
+            {
+                "name": "Proton-6.14-GE-2",
+                "version": "6.14-GE-2",
+                "uri": "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/6.14-GE-2/Proton-6.14-GE-2.tar.gz",
+                "archive": "tar",
+                "folder": "Proton-6.14-GE-2",
+                "makeFolder": false,
+                "executable": "files/bin/wine64"
+            },
+            {
+                "name": "Proton-6.14-GE-1",
+                "version": "6.14-GE-1",
+                "uri": "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/6.14-GE-1/Proton-6.14-GE-1.tar.gz",
+                "archive": "tar",
+                "folder": "Proton-6.14-GE-1",
+                "makeFolder": false,
+                "executable": "files/bin/wine64"
+            }
+        ]
+    },
+    {
+        "title": "Lutris",
+        "runners": [
+            {
+                "name": "Lutris 6.14-4",
+                "version": "6.14-4",
+                "uri": "https://github.com/lutris/wine/releases/download/lutris-6.14-4/wine-lutris-6.14-4-x86_64.tar.xz",
+                "archive": "tar",
+                "folder": "lutris-6.14-4-x86_64",
+                "makeFolder": false,
+                "executable": "bin/wine64"
+            },
+            {
+                "name": "Lutris 6.14-3",
+                "version": "6.14-3",
+                "uri": "https://github.com/lutris/wine/releases/download/lutris-6.14-3/wine-lutris-6.14-3-x86_64.tar.xz",
+                "archive": "tar",
+                "folder": "lutris-6.14-3-x86_64",
+                "makeFolder": false,
+                "executable": "bin/wine64"
+            },
+            {
+                "name": "Lutris 6.14-2",
+                "version": "6.14-2",
+                "uri": "https://github.com/lutris/wine/releases/download/lutris-6.14-2/wine-lutris-6.14-2-x86_64.tar.xz",
+                "archive": "tar",
+                "folder": "lutris-6.14-2-x86_64",
+                "makeFolder": false,
+                "executable": "bin/wine64"
+            },
+            {
+                "name": "Lutris 6.14",
+                "version": "6.14",
+                "uri": "https://github.com/lutris/wine/releases/download/lutris-6.14/wine-lutris-6.14-x86_64.tar.xz",
+                "archive": "tar",
+                "folder": "lutris-6.14-x86_64",
+                "makeFolder": false,
+                "executable": "bin/wine64"
+            }
+        ]
+    },
+    {
+        "title": "Lutris-fshack",
+        "runners": [
+            {
+                "name": "Lutris-fshack 6.14-4",
+                "version": "6.14-4-fshack",
+                "uri": "https://github.com/lutris/wine/releases/download/lutris-6.14-4/wine-lutris-fshack-6.14-4-x86_64.tar.xz",
+                "archive": "tar",
+                "folder": "lutris-fshack-6.14-4-x86_64",
+                "makeFolder": false,
+                "executable": "bin/wine64"
+            },
+            {
+                "name": "Lutris-fshack 6.14-3",
+                "version": "6.14-3-fshack",
+                "uri": "https://github.com/lutris/wine/releases/download/lutris-6.14-3/wine-lutris-fshack-6.14-3-x86_64.tar.xz",
+                "archive": "tar",
+                "folder": "lutris-fshack-6.14-3-x86_64",
+                "makeFolder": false,
+                "executable": "bin/wine64"
+            },
+            {
+                "name": "Lutris-fshack 6.14-2",
+                "version": "6.14-2-fshack",
+                "uri": "https://github.com/lutris/wine/releases/download/lutris-6.14-2/wine-lutris-fshack-6.14-2-x86_64.tar.xz",
+                "archive": "tar",
+                "folder": "lutris-fshack-6.14-2-x86_64",
+                "makeFolder": false,
+                "executable": "bin/wine64"
+            },
+            {
+                "name": "Lutris-fshack 6.14",
+                "version": "6.14-fshack",
+                "uri": "https://github.com/lutris/wine/releases/download/lutris-6.14/wine-lutris-fshack-6.14-x86_64.tar.xz",
+                "archive": "tar",
+                "folder": "lutris-fshack-6.14-x86_64",
+                "makeFolder": false,
+                "executable": "bin/wine64"
+            }
+        ]
+    }
+]

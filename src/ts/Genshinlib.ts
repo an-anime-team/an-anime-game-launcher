@@ -1,10 +1,21 @@
 import GIJSON from './GIJSON';
 
-const https = require('https');
+const https = require('follow-redirects').https;
+
 const fs = require('fs');
 const path = require('path');
 const os = require('os');
 const { spawn, exec } = require('child_process');
+
+type Runner = {
+    name: string,          // Runner title which will be showed in the list
+    version: string,       // Runner version
+    uri: string            // Downloading URI
+    archive: 'tar' | 'zip' // Archive type
+    folder: string,        // Folder name where it will be downloaded
+    makeFolder: boolean,   // Do we need to create folder or it is included in archive
+    executable: string     // Path to wine executable inside folder
+};
 
 type Config = {
     lang: {
@@ -19,6 +30,11 @@ type Config = {
     patch: {
         version: string|null,
         state: 'testing' | 'stable'
+    },
+    runner: null | {
+        name: string,
+        folder: string,
+        executable: string
     }
 };
 
@@ -36,9 +52,12 @@ export class Genshinlib
 
     public static readonly prefixDir: string = path.join(this.launcherDir, 'game');
     public static readonly gameDir: string = path.join(this.prefixDir, 'drive_c', 'Program Files', 'Genshin Impact');
+    public static readonly runnersDir: string = path.join(this.launcherDir, 'runners');
 
-    protected static versionsUri: string = 'https://sdk-os-static.mihoyo.com/hk4e_global/mdk/launcher/api/resource?key=gcStgarh&launcher_id=10';
-    protected static backgroundUri: string = 'https://sdk-os-static.mihoyo.com/hk4e_global/mdk/launcher/api/content?filter_adv=true&launcher_id=10&language=';
+    protected static readonly versionsUri: string = 'https://sdk-os-static.mihoyo.com/hk4e_global/mdk/launcher/api/resource?key=gcStgarh&launcher_id=10';
+    protected static readonly backgroundUri: string = 'https://sdk-os-static.mihoyo.com/hk4e_global/mdk/launcher/api/content?filter_adv=true&launcher_id=10&language=';
+    protected static readonly patchUri: string = 'https://notabug.org/Krock/GI-on-Linux/archive/master.zip';
+    protected static readonly runnersUri: string = 'https://notabug.org/nobody/an-anime-game-launcher/raw/main/runners.json';
 
     public static get version(): Config['version']
     {
@@ -48,6 +67,17 @@ export class Genshinlib
     public static get lang(): Config['lang']
     {
         return this.getConfig().lang;
+    }
+
+    public static getRunners (): Promise<[{ title: string, runners: Runner[] }]>
+    {
+        return new Promise((resolve, reject) => {
+            fetch(this.runnersUri)
+                .then(response => response.json())
+                .then(runners => resolve(runners));
+        });
+
+        // return JSON.parse(fs.readFileSync(path.join(__dirname, '..', '..', 'runners.json')));
     }
 
     public static getConfig (): Config
@@ -63,7 +93,8 @@ export class Genshinlib
                     name: null
                 },
                 version: null,
-                patch: null
+                patch: null,
+                runner: null
             }, null, 4));
         
         return JSON.parse(fs.readFileSync(this.launcherJson));
@@ -74,6 +105,14 @@ export class Genshinlib
         fs.writeFileSync(this.launcherJson, JSON.stringify(info, null, 4));
 
         return this;
+    }
+
+    public static updateConfig (config: any): Genshinlib
+    {
+        return this.setConfig({
+            ...this.getConfig(),
+            ...config
+        });
     }
 
     public static async getData (): Promise<any>
@@ -89,25 +128,22 @@ export class Genshinlib
 
                     return jsondata.message === 'OK' ? resolve(jsondata.data) : reject(null);
                 });
-            }).on('error', (err: Error) => {
-                reject(err);
-            });
+            }).on('error', (err: Error) => reject(err));
         });
     }
 
     public static async getBackgroundUri (): Promise<string>
     {
-        let bg = '';
+        let background = '';
         
         if (!this.getConfig().background.time || new Date(new Date().setHours(0,0,0,0)).setDate(new Date(new Date().setHours(0,0,0,0)).getDate()).toString() >= this.getConfig().background.time!)
         {
             await fetch(this.backgroundUri + this.lang.launcher)
                 .then(res => res.json())
                 .then(async resdone => {
-                    let oldbg = this.getConfig().background.file;
+                    let prevBackground = this.getConfig().background.file;
 
-                    this.setConfig({
-                        ...this.getConfig(),
+                    this.updateConfig({
                         background: {
                             time: new Date(new Date().setHours(0,0,0,0)).setDate(new Date(new Date().setHours(0,0,0,0)).getDate() + 7).toString(),
                             file: resdone.data.adv.background.replace(/.*\//, '')
@@ -115,24 +151,24 @@ export class Genshinlib
                     });
 
                     if (fs.existsSync(path.join(this.launcherDir, this.getConfig().background.file)))
-                        bg = path.join(this.launcherDir, this.getConfig().background.file);
+                        background = path.join(this.launcherDir, this.getConfig().background.file);
                     
                     else
                     {
                         await this.downloadFile(resdone.data.adv.background, path.join(this.launcherDir, this.getConfig().background.file), (current: number, total: number, difference: number) => null).then(() => {
-                            !oldbg ?
+                            !prevBackground ?
                                 console.log('No old background found') :
-                                fs.unlinkSync(path.join(this.launcherDir, oldbg));
+                                fs.unlinkSync(path.join(this.launcherDir, prevBackground));
 
-                            bg = path.join(this.launcherDir, this.getConfig().background.file);
+                            background = path.join(this.launcherDir, this.getConfig().background.file);
                         });
                     };
                 });
         }
 
-        else bg = path.join(this.launcherDir, this.getConfig().background.file);
+        else background = path.join(this.launcherDir, this.getConfig().background.file);
         
-        return bg;
+        return background;
     }
 
     public static getPatchInfo (): { version: string, state: 'stable' | 'testing' }
@@ -213,7 +249,59 @@ export class Genshinlib
         });
     }
 
-    // WINEPREFIX='/home/observer/genshin-impact-launcher/wineprefix' winetricks corefonts
+    public static async untar (tarPath: string, unpackedPath: string, progress: (current: number, total: number, difference: number) => void): Promise<void|Error>
+    {
+        return new Promise((resolve, reject) => {
+            let listenerProcess = spawn('tar', ['-tvf', tarPath]),
+                filesList = '', total = 0;
+
+            listenerProcess.stdout.on('data', (data: string) => filesList += data);
+
+            listenerProcess.on('close', () => {
+                let files = filesList.split(/\r\n|\r|\n/).slice(3, -3).map(line => {
+                    line = line.trim();
+
+                    if (line.slice(-1) == '/')
+                        line = line.slice(0, -1);
+
+                    let matches = /^[dwxr\-]+ [\w/]+[ ]+(\d+) [0-9\-]+ [0-9\:]+ (.+)/.exec(line);
+
+                    // TODO: compressedSize?
+                    if (matches)
+                    {
+                        total += parseInt(matches[1]);
+
+                        return {
+                            path: matches[2],
+                            uncompressedSize: parseInt(matches[1])
+                        };
+                    }
+                });
+
+                let current = 0;
+                let unpackerProcess = spawn('tar', ['-xvf', tarPath, '-C', unpackedPath]);
+
+                unpackerProcess.stdout.on('data', (data: string) => {
+                    data.toString().split(/\r\n|\r|\n/).forEach(line => {
+                        line = line.trim();
+
+                        files.forEach(file => {
+                            if (file?.path == line)
+                            {
+                                current += file.uncompressedSize; // compressedSize
+
+                                progress(current, total, file.uncompressedSize); // compressedSize
+                            }
+                        });
+                    });
+                });
+
+                unpackerProcess.on('close', () => resolve());
+            });
+        });
+    }
+
+    // WINEPREFIX='/home/observer/genshin-impact-launcher/wineprefix' winetricks corefonts usetakefocus=n
     public static async installPrefix (path: string, progress: (output: string, current: number, total: number) => void): Promise<void>
     {
         let installationSteps = [
@@ -267,7 +355,7 @@ export class Genshinlib
 
     public static patchGame (version: string, onFinish: () => void, onData: (data: string) => void)
     {
-        this.downloadFile('https://notabug.org/Krock/GI-on-Linux/archive/master.zip', path.join(this.launcherDir, 'krock.zip'), (current: number, total: number, difference: number) => null).then(() => {
+        this.downloadFile(this.patchUri, path.join(this.launcherDir, 'krock.zip'), (current: number, total: number, difference: number) => null).then(() => {
             this.unzip(path.join(this.launcherDir, 'krock.zip'), this.launcherDir, (current: number, total: number, difference: number) => null).then(() => {
                 // Delete zip file and assign patch directory.
                 fs.unlinkSync(path.join(this.launcherDir, 'krock.zip'));

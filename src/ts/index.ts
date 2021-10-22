@@ -17,7 +17,7 @@ $(() => {
 
     Genshinlib.getBackgroundUri().then(uri => $('body').css('background-image', `url(${ uri })`));
 
-    fetch(`https://genshin.mihoyo.com/launcher/10/${ Genshinlib.getConfig().lang.launcher }?api_url=https%3A%2F%2Fapi-os-takumi.mihoyo.com%2Fhk4e_global&prev=false`)
+    fetch(`https://genshin.mihoyo.com/launcher/10/${Genshinlib.lang.launcher}?api_url=https%3A%2F%2Fapi-os-takumi.mihoyo.com%2Fhk4e_global&prev=false`)
         .then(res => res.text())
         .then(body => {
             $(body).find('#__layout').appendTo('#launchcontent');
@@ -100,13 +100,35 @@ $(() => {
             {
                 console.log(`%c> Starting the game...`, 'font-size: 16px');
 
-                exec('wine launcher.bat', {
+                let wineExeutable = 'wine';
+
+                if (Genshinlib.getConfig().runner !== null)
+                {
+                    wineExeutable = path.join(
+                        Genshinlib.runnersDir,
+                        Genshinlib.getConfig().runner?.folder,
+                        Genshinlib.getConfig().runner?.executable
+                    );
+
+                    if (!fs.existsSync(wineExeutable))
+                    {
+                        wineExeutable = 'wine';
+
+                        Genshinlib.updateConfig({
+                            runner: null
+                        });
+                    }
+                }
+
+                console.log(`Wine executable: ${wineExeutable}`);
+
+                exec(`${wineExeutable} launcher.bat`, {
                     cwd: Genshinlib.gameDir,
                     env: {
                         ...process.env,
                         WINEPREFIX: Genshinlib.prefixDir
                     }
-                }, (err: any, stdout: any, stderr: any) => {
+                }/*, (err: any, stdout: any, stderr: any) => {
                     console.log(`%c> Game closed`, 'font-size: 16px');
 
                     ipcRenderer.invoke('show-window');
@@ -114,7 +136,7 @@ $(() => {
                     console.log(err);
                     console.log(stdout);
                     console.log(stderr);
-                });
+                }*/);
 
                 ipcRenderer.invoke('hide-window');
             }
@@ -212,8 +234,7 @@ $(() => {
                             }).then(() => {
                                 fs.unlinkSync(path.join(Genshinlib.launcherDir, voicePack.name));
 
-                                Genshinlib.setConfig({
-                                    ...Genshinlib.getConfig(),
+                                Genshinlib.updateConfig({
                                     version: data.game.latest.version
                                 });
 
@@ -245,5 +266,7 @@ $(() => {
                 });
             }
         });
+
+        $('#settings').on('click', () => ipcRenderer.invoke('open-settings'));
     });
 });

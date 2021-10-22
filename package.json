@@ -1,6 +1,6 @@
 {
     "name": "an-anime-game-linux-launcher",
-    "version": "2.2.0-beta4",
+    "version": "2.2.0-beta5",
     "description": "An Anime Game Linux Launcher",
     "author": "Nikita Podvirnyy <suimin.tu.mu.ga.mi@gmail.com>",
     "contributors": [
@@ -44,6 +44,7 @@
         "typescript": "^4.4.3"
     },
     "dependencies": {
-        "cash-dom": "^8.1.0"
+        "cash-dom": "^8.1.0",
+        "follow-redirects": "^1.14.4"
     }
 }

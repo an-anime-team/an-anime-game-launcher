@@ -1,6 +1,8 @@
 <img src="repository-pics/logo.png">
 
-<img src="repository-pics/launcher.png">
+<img src="repository-pics/launcher-main.png">
+
+<img src="repository-pics/launcher-settings.png">
 
 <br><br>
 
@@ -8,7 +10,7 @@
 
 | Game version | Launcher version | Patch version |
 | :---: | :---: | :---: |
-| 2.2.0 | 2.2.0-beta4 ⚠️ | 2.2.0-stable ✅ |
+| 2.2.0 | 2.2.0-beta5 ⚠️ | 2.2.0-stable ✅ |
 
 Download from [Releases](https://notabug.org/nobody/an-anime-game-launcher/releases)
 
@@ -22,6 +24,7 @@ To work this launcher requires
 * winecfg
 * winetricks
 * unzip
+* tar
 
 # Development
 
@@ -45,9 +48,9 @@ To 2.2.0-release1
 * <s>Parse background banners from the game's API ([issue #1](https://notabug.org/nobody/an-anime-game-launcher/issues/1), [pull request #2](https://notabug.org/nobody/an-anime-game-launcher/pulls/2))</s> *(beta 3)*
 * <s>Update launcher logo</s> *(beta 4)*
 * <s>Cache launcher background picture ([pull request #6](https://notabug.org/nobody/an-anime-game-launcher/pulls/6))</s> *(beta 4)*
-* Make Proton-GE default compatibility tool and fix game input issues
+* <s>Make Proton-GE default compatibility tool and fix game input issues</s> (added runners manager) *(beta 5)*
+* <s>Add preferences menu</s> *(beta 5)*
 * Add additional telemetry checking
-* Add preferences menu
 * Add launcher updates notifications
 * Make automatical patch state parsing
 

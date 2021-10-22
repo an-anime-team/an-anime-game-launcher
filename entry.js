@@ -13,12 +13,32 @@ ipcMain.on('notification', (event, args) => {
     }).show();
 });
 
+ipcMain.handle('open-settings', () => {
+    const settingsWindow = new BrowserWindow({
+        width: 900,
+        height: 600,
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false
+        },
+        icon: path.join(__dirname, 'public', 'images', 'icon64.png'),
+        autoHideMenuBar: true,
+        resizable: false,
+        parent: mainWindow,
+        modal: true,
+        show: false
+    });
+
+    settingsWindow.loadFile(path.join(__dirname, 'public', 'html', 'settings.html'));
+    settingsWindow.once('ready-to-show', () => settingsWindow.show());
+});
+
 function createWindow ()
 {
     // https://www.electronjs.org/docs/latest/api/browser-window/#class-browserwindow
     mainWindow = new BrowserWindow ({
         width: 1280,
-        height: 728,
+        height: 700,
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false
