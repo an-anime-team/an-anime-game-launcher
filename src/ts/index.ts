@@ -2,6 +2,7 @@ const path = require('path');
 const fs = require('fs');
 const { exec } = require('child_process');
 const { ipcRenderer } = require('electron');
+const i18n = new(require('./i18n'));
 
 import $ from 'cash-dom';
 
@@ -246,14 +247,14 @@ $(() => {
                                     console.log(`%c> Applying patch...`, 'font-size: 16px');
 
                                     // patch-applying state changes only button text
-                                    $('#downloaded').text('Applying patch...');
+                                    $('#downloaded').text(i18n.translate('ApplyPatch'));
 
                                     Genshinlib.patchGame(data.game.latest.version, () => {
                                         LauncherUI.setState('game-launch-available');
 
                                         ipcRenderer.send('notification', {
                                             title: document.title,
-                                            content: 'Game was successfully installed'
+                                            content: i18n.translate('GameDownloaded')
                                         });
                                     }, (data) => console.log(data.toString()));
                                 }

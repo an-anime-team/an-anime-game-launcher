@@ -1,10 +1,15 @@
 const fs = require('fs');
 const path = require('path');
+const i18n = new(require('./i18n'));
 
 import $ from 'cash-dom';
 import { Genshinlib } from './Genshinlib';
 
 $(() => {
+    $("*[i18id]").each(function (i, el) {
+        el.innerText = i18n.translate(el.getAttribute('i18id')?.toString());
+    });
+
     $('.menu-item').on('click', (e) => {
         $('.settings')[0]!.scrollTop = $(`#${e.target.getAttribute('anchor')}`).offset()!.top - $('.settings').offset()!.top - 16;
 

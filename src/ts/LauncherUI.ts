@@ -1,4 +1,5 @@
 import $ from 'cash-dom';
+const i18n = new(require('./i18n'));
 
 type LauncherState =
     'patch-unavailable' |
@@ -47,7 +48,7 @@ export class LauncherUI
                 break;
 
             case 'patch-applying':
-                $('#launch').text('Applying patch');
+                $('#launch').text(i18n.translate('ApplyPatch'));
                 $('#launch').attr('disabled', 'disabled');
 
                 break;
@@ -58,7 +59,7 @@ export class LauncherUI
                 break;
 
             case 'game-installation-available':
-                $('#launch').text('Install');
+                $('#launch').text(i18n.translate('Install'));
 
                 break;
 
@@ -71,7 +72,7 @@ export class LauncherUI
                     .removeClass('hint--medium')
                     .removeClass('hint--large');
 
-                $('#launch').text('Launch');
+                $('#launch').text(i18n.translate('Launch'));
 
                 break;
         }
