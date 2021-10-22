@@ -1,0 +1,12 @@
+{
+    "Install": "Install",
+    "Launch": "Launch",
+    "Runners": "Runners",
+    "Langs": "Languages",
+    "Voice": "Voice Pack",
+    "SettingsTitle": "Settings",
+    "GeneralSettings": "General",
+    "Downloading": "Downloading...",
+    "GameDownloaded": "Game was successfully installed",
+    "ApplyPatch": "Applying patch..."
+}
