@@ -11,23 +11,25 @@
         <!-- JS scripts -->
         <script>require('../js/settings.js');</script>
 
-        <title>Settings</title>
+        <title i18id="SettingsTitle"></title>
     </head>
 
     <body>
         <div class="menu">
-            <div class="menu-item menu-item-active" anchor="general">General</div>
-            <div class="menu-item" anchor="runners">Runners</div>
+            <div class="menu-item menu-item-active" anchor="general" i18id="GeneralSettings">General</div>
+            <div class="menu-item" anchor="runners" i18id="Runners">Runners</div>
         </div>
 
         <div class="settings">
             <div class="settings-item" id="general">
-                <h2>General</h2>
-
-                123<br>
-                123<br>
-                123<br>
-                123<br>
+                <h2 i18id="GeneralSettings">General</h2>
+                <hr>
+                <p i18id="Langs">Language</p>
+                <div class="list" id="language-list"></div>
+                <br>
+                <p i18id="Voice">Voice Pack</p>
+                <div class="list" id="voice-list"></div>
+                <br>
                 123<br>
                 123<br>
                 123<br>
@@ -42,7 +44,7 @@
                 Will be made in beta 6
                 
             </div>
-
+            <hr>
             <div class="settings-item" id="runners">
                 <h2>Runners</h2>
 
