@@ -6,16 +6,14 @@ import { Genshinlib } from './Genshinlib';
 
 $(() => {
     $('.menu-item').on('click', (e) => {
-        // @ts-expect-error
-        $('.settings')[0].scrollTop = $(`#${e.target.getAttribute('anchor')}`).offset().top - $('.settings').offset().top - 16;
+        $('.settings')[0]!.scrollTop = $(`#${e.target.getAttribute('anchor')}`).offset()!.top - $('.settings').offset()!.top - 16;
 
         $('.menu-item').removeClass('menu-item-active');
         $(e.target).addClass('menu-item-active');
     });
 
     $('.settings').on('scroll', () => {
-        // @ts-expect-error
-        let anchor = $('.settings-item').filter((index, item) => $(item).offset().top < 264).last()[0].id;
+        let anchor = $('.settings-item').filter((index, item) => $(item).offset()!.top < 264).last()[0]!.id;
 
         $('.menu-item').removeClass('menu-item-active');
         $(`.menu-item[anchor=${anchor}]`).addClass('menu-item-active');
