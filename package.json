@@ -1,9 +1,11 @@
 {
     "name": "an-anime-game-linux-launcher",
-    "version": "2.2.0-beta3",
+    "version": "2.2.0-beta4",
     "description": "An Anime Game Linux Launcher",
-    "author": "Nikita Podvirnyy (https://notabug.org/nobody)",
-    "contributors": ["Marie Piontek <marie@mxy.gg> (https://marie.omg.lol)"],
+    "author": "Nikita Podvirnyy <suimin.tu.mu.ga.mi@gmail.com>",
+    "contributors": [
+        "Marie Piontek <marie@mxy.gg> (https://marie.omg.lol)"
+    ],
     "license": "GPL-3.0",
     "main": "entry.js",
     "scripts": {
@@ -23,7 +25,7 @@
             "entry.js"
         ],
         "linux": {
-            "icon": "public/images/icon512.png",
+            "icon": "public/images/icon256.png",
             "category": "Utility",
             "target": [
                 {

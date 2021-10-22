@@ -1,4 +1,5 @@
-interface VoicePack {
+interface VoicePack
+{
     language: string;
     name: string;
     path: string;
@@ -6,7 +7,8 @@ interface VoicePack {
     md5: string;
 }
 
-interface Latest {
+interface Latest
+{
     name: string;
     version: string;
     path: string;
@@ -18,7 +20,8 @@ interface Latest {
     segments: any[];
 }
 
-interface Diff {
+interface Diff
+{
     name: string;
     version: string;
     path: string;
@@ -28,12 +31,14 @@ interface Diff {
     voice_packs: VoicePack[];
 }
 
-interface Game {
+interface Game
+{
     latest: Latest;
     diffs: Diff[];
 }
 
-interface Plugins {
+interface Plugins
+{
     name: string;
     version: string;
     path: string;
@@ -42,17 +47,20 @@ interface Plugins {
     entry: string;
 }
 
-interface Plugin {
+interface Plugin
+{
     plugins: Plugins[];
     version: string;
 }
 
-interface DeprecatedPackage {
+interface DeprecatedPackage
+{
     name: string;
     md5: string;
 }
 
-interface Data {
+interface Data
+{
     game: Game;
     plugin: Plugin;
     web_url: string;
@@ -62,7 +70,8 @@ interface Data {
     sdk?: any;
 }
 
-export default interface GIJSON {
+export default interface GIJSON
+{
     retcode: number;
     message: string;
     data: Data;

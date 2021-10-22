@@ -33,9 +33,9 @@ function createWindow ()
     // open URLs in Browser instead of an pop-up in electron app.
     mainWindow.webContents.setWindowOpenHandler(({ url }) => {
         shell.openExternal(url);
+
         return { action: 'deny' };
     });
-    
 
     // mainWindow.webContents.openDevTools();
 }
