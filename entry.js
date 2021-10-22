@@ -1,4 +1,5 @@
 const { app, BrowserWindow, ipcMain, Notification, shell } = require('electron');
+const { Genshinlib } = require('./public/js/Genshinlib');
 const path = require('path');
 
 let mainWindow;
@@ -59,6 +60,12 @@ function createWindow ()
 
     // mainWindow.webContents.openDevTools();
 }
+
+// Set language on start
+if(Genshinlib.getConfig().lang.launcher)
+    app.commandLine.appendSwitch('lang', Genshinlib.getConfig().lang.launcher);
+else
+    app.commandLine.appendSwitch('lang', 'en-us');
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
