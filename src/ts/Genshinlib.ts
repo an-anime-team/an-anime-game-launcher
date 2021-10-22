@@ -90,7 +90,7 @@ export class Genshinlib
                 },
                 background: {
                     time: null,
-                    name: null
+                    file: null
                 },
                 version: null,
                 patch: null,
