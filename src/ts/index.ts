@@ -183,7 +183,7 @@ $(() => {
                 LauncherUI.initProgressBar();
 
                 Genshinlib.downloadFile(diff.path, path.join(Genshinlib.launcherDir, diff.name), (current: number, total: number, difference: number) => {
-                    LauncherUI.updateProgressBar('Downloaded', current, total, difference);
+                    LauncherUI.updateProgressBar(i18n.translate('Downloading'), current, total, difference);
                 }).then(() => {
                     /**
                      * Unpacking downloaded game
@@ -197,7 +197,7 @@ $(() => {
                     LauncherUI.initProgressBar();
 
                     Genshinlib.unzip(path.join(Genshinlib.launcherDir, diff.name), Genshinlib.gameDir, (current: number, total: number, difference: number) => {
-                        LauncherUI.updateProgressBar('Unpacking', current, total, difference);
+                        LauncherUI.updateProgressBar(i18n.translate('Unpack'), current, total, difference);
                     }).then(() => {
                         /**
                          * Downloading voice data
@@ -220,7 +220,7 @@ $(() => {
                         LauncherUI.initProgressBar();
 
                         Genshinlib.downloadFile(voicePack.path, path.join(Genshinlib.launcherDir, voicePack.name), (current: number, total: number, difference: number) => {
-                            LauncherUI.updateProgressBar('Downloaded', current, total, difference);
+                            LauncherUI.updateProgressBar(i18n.translate('Downloading'), current, total, difference);
                         }).then(() => {
                             /**
                              * Unpacking downloaded game
@@ -231,7 +231,7 @@ $(() => {
                             LauncherUI.initProgressBar();
 
                             Genshinlib.unzip(path.join(Genshinlib.launcherDir, voicePack.name), Genshinlib.gameDir, (current: number, total: number, difference: number) => {
-                                LauncherUI.updateProgressBar('Unpacking', current, total, difference);
+                                LauncherUI.updateProgressBar(i18n.translate('Unpack'), current, total, difference);
                             }).then(() => {
                                 fs.unlinkSync(path.join(Genshinlib.launcherDir, voicePack.name));
 
