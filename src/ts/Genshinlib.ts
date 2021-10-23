@@ -302,7 +302,7 @@ export class Genshinlib
     }
 
     // WINEPREFIX='/home/observer/genshin-impact-launcher/wineprefix' winetricks corefonts usetakefocus=n
-    public static async installPrefix (path: string, progress: (output: string, current: number, total: number) => void): Promise<void>
+    public static async installPrefix (prefixpath: string, progress: (output: string, current: number, total: number) => void): Promise<void>
     {
         let installationSteps = [
             'Executing w_do_call corefonts',
@@ -317,18 +317,32 @@ export class Genshinlib
             'Executing load_trebuchet',
             'Executing load_verdana',
             'Executing load_webdings',
-            'Executing load_usetakefocus n'
+            'Executing load_usetakefocus n',
+            'Executing load_dxvk'
         ];
 
         return new Promise((resolve) => {
             let installationProgress = 0;
+            let installerProcess;
 
-            let installerProcess = spawn('winetricks', ['corefonts', 'usetakefocus=n'], {
-                env: {
-                    ...process.env,
-                    WINEPREFIX: path
-                }
-            });
+            if (this.getConfig().runner)
+            {
+                installerProcess = spawn('winetricks', ['corefonts', 'usetakefocus=n', 'dxvk191'], {
+                    env: {
+                        ...process.env,
+                        WINEPREFIX: prefixpath,
+                        WINE: path.join(this.runnersDir, this.getConfig().runner?.folder, this.getConfig().runner?.executable)
+                    }
+                });
+            }
+            else {
+                installerProcess = spawn('winetricks', ['corefonts', 'usetakefocus=n'], {
+                    env: {
+                        ...process.env,
+                        WINEPREFIX: prefixpath
+                    }
+                });
+            }
 
             installerProcess.stdout.on('data', (data: string) => {
                 let str = data.toString();
@@ -372,8 +386,7 @@ export class Genshinlib
                 let patcherProcess = exec(`yes yes | ${path.join(patchDir, 'patch.sh')}`, {
                     cwd: this.gameDir,
                     env: {
-                        ...process.env,
-                        WINEPREFIX: this.prefixDir
+                        ...process.env
                     }
                 });
 
@@ -384,8 +397,7 @@ export class Genshinlib
                     let patcherAntiCrashProcess = exec(`yes | ${path.join(patchDir, 'patch_anti_logincrash.sh')}`, {
                         cwd: this.gameDir,
                         env: {
-                            ...process.env,
-                            WINEPREFIX: this.prefixDir
+                            ...process.env
                         }
                     });
     
