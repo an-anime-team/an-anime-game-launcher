@@ -19,6 +19,7 @@ $(() => {
     if (Genshinlib.version !== null)
         document.title = 'Genshin Impact Linux Launcher - ' + Genshinlib.version;
 
+    LauncherUI.setState('game-launch-available');
     Genshinlib.getBackgroundUri().then(uri => $('body').css('background-image', `url(${ uri })`));
 
     fetch(`https://genshin.mihoyo.com/launcher/10/${Genshinlib.lang.launcher}?api_url=https%3A%2F%2Fapi-os-takumi.mihoyo.com%2Fhk4e_global&prev=false`)
@@ -100,7 +101,7 @@ $(() => {
             }
 
             // Launching game
-            if ($('#launch').text() == 'Launch')
+            if ($('#launch').text() == i18n.translate('Launch'))
             {
                 console.log(`%c> Starting the game...`, 'font-size: 16px');
 
@@ -146,7 +147,7 @@ $(() => {
             }
 
             // Apply test patch
-            else if ($('#launch').text() == 'Apply test patch')
+            else if ($('#launch').text() == i18n.translate('TestPatch'))
             {
                 console.log(`%c> Applying patch...`, 'font-size: 16px');
 
