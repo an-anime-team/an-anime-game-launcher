@@ -55,7 +55,7 @@ export class LauncherUI
                 break;
 
             case 'game-update-available':
-                $('#launch').text('Update'); // FIXME i18n.translate
+                $('#launch').text(i18n.translate('Update'));
 
                 break;
 
