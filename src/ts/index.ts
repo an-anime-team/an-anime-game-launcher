@@ -1,7 +1,9 @@
 const path = require('path');
 const fs = require('fs');
+const discordrpc = require("discord-rpc");
 const { exec } = require('child_process');
 const { ipcRenderer } = require('electron');
+let rpc: any;
 
 import $ from 'cash-dom';
 import i18n from './i18n';
@@ -19,12 +21,54 @@ $(() => {
     if (Genshinlib.version !== null)
         document.title = 'Genshin Impact Linux Launcher - ' + Genshinlib.version;
 
+    if (Genshinlib.getConfig().rpc) {
+        rpc = new discordrpc.Client({ transport: "ipc" });
+        rpc.login({ clientId: '901534333360304168' }).catch(console.error);
+
+        rpc.on('ready', () => {
+            rpc.setActivity({
+                details: `Preparing to launch`,
+                largeImageKey: `launcher`,
+                largeImageText: `An Anime Game Launcher`,
+                instance: false,
+            });
+        });
+    }
+
     LauncherUI.setState('game-launch-available');
 
     ipcRenderer.on('changelang', (event: void, data: any) => {
         Genshinlib.getBackgroundUri().then(uri => $('body').css('background-image', `url(${ uri })`));
         LauncherUI.refreshLang(data.lang);
         LauncherUI.setState(LauncherUI.launcherState);
+    });
+
+    ipcRenderer.on('rpcstate', (event: void, data: any) => {
+        if(!rpc) {
+            rpc = new discordrpc.Client({ transport: "ipc" });
+            rpc.login({ clientId: '901534333360304168' }).catch(console.error);
+
+            rpc.on('ready', () => {
+                rpc.setActivity({
+                    details: `Preparing to launch`,
+                    largeImageKey: `launcher`,
+                    largeImageText: `An Anime Game Launcher`,
+                    instance: false,
+                });
+            });
+
+            if (!Genshinlib.getConfig().rpc)
+                Genshinlib.updateConfig({
+                    rpc: true
+                });
+        } else {
+            rpc.clearActivity();
+            rpc.destroy();
+            rpc = false;
+            Genshinlib.updateConfig({
+                rpc: false
+            });
+        }
     });
 
     ipcRenderer.on('updateVP', (event: void, remotedata: any) => {
@@ -185,6 +229,15 @@ $(() => {
 
                 console.log(`Wine executable: ${wineExeutable}`);
 
+                if (rpc)
+                    rpc.setActivity({
+                        details: `In-Game`,
+                        largeImageKey: `game`,
+                        largeImageText: `An Anime Game Launcher`,
+                        startTimestamp: parseInt(new Date().setDate(new Date().getDate()).toString()),
+                        instance: false,
+                    });
+
                 exec(`${wineExeutable} launcher.bat`, {
                     cwd: Genshinlib.gameDir,
                     env: {
@@ -195,6 +248,14 @@ $(() => {
                     console.log(`%c> Game closed`, 'font-size: 16px');
 
                     ipcRenderer.invoke('show-window');
+
+                    if (rpc)
+                        rpc.setActivity({
+                            details: `Preparing to launch`,
+                            largeImageKey: `launcher`,
+                            largeImageText: `An Anime Game Launcher`,
+                            instance: false,
+                        });
 
                     console.log(err);
                     console.log(stdout);

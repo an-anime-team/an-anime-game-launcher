@@ -28,7 +28,20 @@ $(() => {
 
     // Select the saved options in launcher.json on load.
     $(`#voice-list option[value="${Genshinlib.getConfig().lang.voice}"]`).prop('selected', true);
+    if (Genshinlib.getConfig().rpc)
+        $(`#drpc`).prop('checked', true);
     $(`#language-list option[value="${Genshinlib.getConfig().lang.launcher}"]`).prop('selected', true);
+
+    $('#drpc').on('change', (e) => {
+        if ($("#drpc").is(':checked'))
+        {
+            ipcRenderer.send('rpcstate', {});
+        }
+        else
+        {
+            ipcRenderer.send('rpcstate', {});
+        }
+    })
 
     $('#voice-list').on('change', (e) => {
         let activeVP = Genshinlib.getConfig().lang.voice;

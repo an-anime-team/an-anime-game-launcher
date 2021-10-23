@@ -24,7 +24,7 @@
             <div class="settings-item" id="general">
                 <h2 i18id="GeneralSettings">General</h2>
                 <hr>
-                <p i18id="Langs">Language</p>
+                <h3 i18id="Langs">Language</h3>
                 <select class="dropdown-menu" id="language-list">
                     <option value="en-us">English (US)</option>
                     <option value="zh-cn">中文（简化）(Chinese Simplified)</option>
@@ -41,13 +41,16 @@
                     <option value="vi-vn">Tiếng Việt (Vietnamese)</option>
                 </select>
                 <br>
-                <p i18id="Voice">Voice Pack</p>
-                <select class="dropdown-menu" id="voice-list">
+                <h3 i18id="Voice">Voice Pack</h3>
+                <select class="dropdown-menu" id="voice-list" disabled>
                     <option value="en-us">English (US)</option>
                     <option value="zh-cn">汉语 (Chinese)</option>
                     <option value="ja-jp">日本語 (Japanese)</option>
                     <option value="ko-kr">한국어 (Korean)</option>
                 </select>
+                <br>
+                <h3>Discord RPC</h3>
+                <input type="checkbox" id="drpc" name="drpc">
                 <br>
             </div>
             <hr>

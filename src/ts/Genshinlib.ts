@@ -35,7 +35,8 @@ type Config = {
         name: string,
         folder: string,
         executable: string
-    }
+    },
+    rpc: boolean
 };
 
 export class Genshinlib
@@ -94,7 +95,8 @@ export class Genshinlib
                 },
                 version: null,
                 patch: null,
-                runner: null
+                runner: null,
+                rpc: false
             }, null, 4));
         
         return JSON.parse(fs.readFileSync(this.launcherJson));
