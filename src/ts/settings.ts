@@ -25,6 +25,7 @@ $(() => {
     });
 
     $(`#voice-list option[value="${Genshinlib.getConfig().lang.voice}"]`).prop('selected', true);
+    $(`#language-list option[value="${Genshinlib.getConfig().lang.launcher}"]`).prop('selected', true);
 
     $('#voice-list').on('change', (e) => {
         let activeVP = Genshinlib.getConfig().lang.voice;
