@@ -8,5 +8,9 @@
     "GeneralSettings": "Generell",
     "Downloading": "wird Heruntergeladen...",
     "GameDownloaded": "Spiel würde erfolgreich heruntergeladen",
-    "ApplyPatch": "Patch wird angewendet"
+    "ApplyPatch": "Patch wird angewendet",
+    "PatchRequired": "Patch required",
+    "PatchRequiredHint": "This game version doesn't have an anti-cheat patch. Please, wait a few days and try again.",
+    "TestPatch": "Apply test patch",
+    "TestPatchHint": "This game version has an anti-cheat patch, but it is in the testing phase. You can wait a few days until it is stable or apply it at your own risk."
 }

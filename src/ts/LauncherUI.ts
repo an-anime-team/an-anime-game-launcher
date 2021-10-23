@@ -26,24 +26,24 @@ export class LauncherUI
         switch (state)
         {
             case 'patch-unavailable':
-                $('#launch').text('Patch required');
+                $('#launch').text(i18n.translate('PatchRequired'));
                 $('#launch').attr('disabled', 'disabled');
 
                 $('#launch').addClass('hint--top')
                             .addClass('hint--medium');
 
-                $('#launch').attr('data-hint', 'This game version doesn\'t have the anti-cheat patch. Please, wait a few days before it will be created');
+                $('#launch').attr('data-hint', i18n.translate('PatchRequiredHint'));
 
                 break;
 
             case 'test-patch-available':
-                $('#launch').text('Apply test patch');
+                $('#launch').text(i18n.translate('TestPatch'));
 
                 $('#launch').addClass('button-blue')
                             .addClass('hint--top')
                             .addClass('hint--large');
 
-                $('#launch').attr('data-hint', 'This game version has the anti-cheat patch, but it is in the test phase. You can wait a few days until it will become stable or apply it on your own risc');
+                $('#launch').attr('data-hint', i18n.translate('TestPatchHint'));
 
                 break;
 
