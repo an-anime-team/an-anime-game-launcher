@@ -37,9 +37,7 @@ $(() => {
 
     ipcRenderer.on('change-lang', (event: void, data: any) => {
         LauncherUI.updateBackground();
-        LauncherUI.setState(LauncherUI.launcherState);
-
-        i18n.setLang(data.lang);
+        LauncherUI.updateLang();
     });
 
     let rpc: any;

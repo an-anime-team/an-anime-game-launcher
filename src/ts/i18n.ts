@@ -20,7 +20,7 @@ export class i18n
           // Test if the locale is the same string so if it's de-de or id-id remove -de or -id like navigator.language does.
           let samecode = new RegExp(`(${lang.replace(/-.*$/, '')}.*){2}`, 'g');
 
-          if (samecode.test(lang.toLowerCase()))
+          if (samecode.test(lang))
                lang = lang.replace(/-.*$/, '');
 
           switch (lang)

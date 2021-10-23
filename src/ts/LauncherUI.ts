@@ -55,7 +55,7 @@ export class LauncherUI
                 break;
 
             case 'game-update-available':
-                $('#launch').text('Update');
+                $('#launch').text('Update'); // FIXME i18n.translate
 
                 break;
 
@@ -154,5 +154,15 @@ export class LauncherUI
     public static updateBackground (): void
     {
         Genshinlib.getBackgroundUri().then(uri => $('body').css('background-image', `url(${uri})`));
+    }
+
+    public static updateLang (lang: string|null = null): void
+    {
+        if (lang !== null)
+            i18n.setLang(lang);
+
+        $('*[i18id]').each((i, element) => {
+            element.innerText = i18n.translate(element.getAttribute('i18id')?.toString()!);
+        });
     }
 }

@@ -6,6 +6,7 @@ const { exec } = require('child_process');
 import $ from 'cash-dom';
 import { i18n } from './i18n';
 import { Genshinlib } from './Genshinlib';
+import { LauncherUI } from './LauncherUI';
 
 $(() => {
 
@@ -37,13 +38,13 @@ $(() => {
     $('#drpc').on('change', () => ipcRenderer.send('rpcstate', {}));
 
     $('#voice-list').on('change', (e) => {
-        let activeVP = Genshinlib.getConfig().lang.voice;
+        let activeVP = Genshinlib.lang.voice;
 
         if (activeVP != e.target.value)
         {
             Genshinlib.updateConfig({
                 lang: {
-                    launcher: Genshinlib.getConfig().lang.launcher,
+                    launcher: Genshinlib.lang.launcher,
                     voice: e.target.value
                 }
             });
@@ -79,12 +80,12 @@ $(() => {
             });
 
             // Send language updates
-            i18n.setLang(e.target.value);
+            LauncherUI.updateLang(e.target.value);
             ipcRenderer.send('change-lang', { 'lang': e.target.value });
 
-            $('*[i18id]').each((i, element) => {
+            /*$('*[i18id]').each((i, element) => {
                 element.innerText = i18n.translate(element.getAttribute('i18id')?.toString()!);
-            });
+            });*/
 
             $(`#language-list option[value="${activeLang}"]`).removeProp('selected');
             $(`#language-list option[value="${e.target.value}"]`).prop('selected', true);
