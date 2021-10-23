@@ -132,7 +132,7 @@ $(() => {
                         ...process.env,
                         WINEPREFIX: Genshinlib.prefixDir
                     }
-                }/*, (err: any, stdout: any, stderr: any) => {
+                }, (err: any, stdout: any, stderr: any) => {
                     console.log(`%c> Game closed`, 'font-size: 16px');
 
                     ipcRenderer.invoke('show-window');
@@ -140,7 +140,7 @@ $(() => {
                     console.log(err);
                     console.log(stdout);
                     console.log(stderr);
-                }*/);
+                });
 
                 ipcRenderer.invoke('hide-window');
             }
