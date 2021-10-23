@@ -1,5 +1,6 @@
 import $ from 'cash-dom';
-import i18n from './i18n';
+import { Genshinlib } from './Genshinlib';
+import { i18n } from './i18n';
 
 type LauncherState =
     'patch-unavailable' |
@@ -16,11 +17,6 @@ export class LauncherUI
     public static get launcherState(): LauncherState
     {
         return this._launcherState;
-    }
-
-    public static refreshLang (langcode: string)
-    {
-        i18n.updatelang(langcode);
     }
 
     public static setState (state: LauncherState)
@@ -153,5 +149,10 @@ export class LauncherUI
         $('#eta').text('');
 
         $('#downloader .progress').css('width', '0');
+    }
+
+    public static updateBackground (): void
+    {
+        Genshinlib.getBackgroundUri().then(uri => $('body').css('background-image', `url(${uri})`));
     }
 }

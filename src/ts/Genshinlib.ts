@@ -93,9 +93,9 @@ export class Genshinlib
     public static getDXVKs (): Promise<DXVK[]>
     {
         return new Promise((resolve, reject) => {
-            fetch(this.runnersUri)
+            fetch(this.dxvksUri)
                 .then(response => response.json())
-                .then(runners => resolve(runners));
+                .then(dxvks => resolve(dxvks));
         });
 
         // return new Promise(resolve => resolve(JSON.parse(fs.readFileSync(path.join(__dirname, '..', '..', 'dxvks.json')))));

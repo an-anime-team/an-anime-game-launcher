@@ -3,10 +3,9 @@ const fs = require('fs');
 const discordrpc = require("discord-rpc");
 const { exec } = require('child_process');
 const { ipcRenderer } = require('electron');
-let rpc: any;
 
 import $ from 'cash-dom';
-import i18n from './i18n';
+import { i18n } from './i18n';
 
 import { Genshinlib } from './Genshinlib';
 import { LauncherUI } from './LauncherUI';
@@ -17,32 +16,51 @@ if (!fs.existsSync(Genshinlib.prefixDir))
 if (!fs.existsSync(Genshinlib.runnersDir))
     fs.mkdirSync(Genshinlib.runnersDir, { recursive: true });
 
+if (!fs.existsSync(Genshinlib.dxvksDir))
+    fs.mkdirSync(Genshinlib.dxvksDir, { recursive: true });
+
 $(() => {
     if (Genshinlib.version !== null)
         document.title = 'Genshin Impact Linux Launcher - ' + Genshinlib.version;
 
-    if (Genshinlib.getConfig().rpc) {
-        rpc = new discordrpc.Client({ transport: "ipc" });
+    LauncherUI.setState('game-launch-available');
+    LauncherUI.updateBackground();
+
+    fetch(`https://genshin.mihoyo.com/launcher/10/${Genshinlib.lang.launcher}?api_url=https%3A%2F%2Fapi-os-takumi.mihoyo.com%2Fhk4e_global&prev=false`)
+        .then(res => res.text())
+        .then(body => {
+            $(body).find('#__layout').appendTo('#launchcontent');
+
+            $('#launchcontent .home__main .home-swiper-wrap').remove();
+            $('#launchcontent .home__main .home-news').remove();
+        });
+
+    ipcRenderer.on('change-lang', (event: void, data: any) => {
+        LauncherUI.updateBackground();
+        LauncherUI.setState(LauncherUI.launcherState);
+
+        i18n.setLang(data.lang);
+    });
+
+    let rpc: any;
+
+    // FIXME
+    if (Genshinlib.getConfig().rpc)
+    {
+        rpc = new discordrpc.Client({ transport: 'ipc' });
         rpc.login({ clientId: '901534333360304168' }).catch(console.error);
 
         rpc.on('ready', () => {
             rpc.setActivity({
-                details: `Preparing to launch`,
-                largeImageKey: `launcher`,
-                largeImageText: `An Anime Game Launcher`,
+                details: 'Preparing to launch',
+                largeImageKey: 'launcher',
+                largeImageText: 'An Anime Game Launcher',
                 instance: false,
             });
         });
     }
 
-    LauncherUI.setState('game-launch-available');
-
-    ipcRenderer.on('changelang', (event: void, data: any) => {
-        Genshinlib.getBackgroundUri().then(uri => $('body').css('background-image', `url(${ uri })`));
-        LauncherUI.refreshLang(data.lang);
-        LauncherUI.setState(LauncherUI.launcherState);
-    });
-
+    // FIXME
     ipcRenderer.on('rpcstate', (event: void, data: any) => {
         if(!rpc) {
             rpc = new discordrpc.Client({ transport: "ipc" });
@@ -71,6 +89,7 @@ $(() => {
         }
     });
 
+    // FIXME
     ipcRenderer.on('updateVP', (event: void, remotedata: any) => {
         Genshinlib.getData().then(data => {
             LauncherUI.initProgressBar();
@@ -121,17 +140,6 @@ $(() => {
             });
         });
     });
-
-    Genshinlib.getBackgroundUri().then(uri => $('body').css('background-image', `url(${ uri })`));
-
-    fetch(`https://genshin.mihoyo.com/launcher/10/${Genshinlib.lang.launcher}?api_url=https%3A%2F%2Fapi-os-takumi.mihoyo.com%2Fhk4e_global&prev=false`)
-        .then(res => res.text())
-        .then(body => {
-            $(body).find('#__layout').appendTo('#launchcontent');
-
-            $('#launchcontent .home__main .home-swiper-wrap').remove();
-            $('#launchcontent .home__main .home-news').remove();
-        });
 
     Genshinlib.getData().then(data => {
         // Update available
@@ -242,38 +250,44 @@ $(() => {
 
                     console.log(`Wine executable: ${wineExeutable}`);
 
-                if (rpc)
-                    rpc.setActivity({
-                        details: `In-Game`,
-                        largeImageKey: `game`,
-                        largeImageText: `An Anime Game Launcher`,
-                        startTimestamp: parseInt(new Date().setDate(new Date().getDate()).toString()),
-                        instance: false,
-                    });
-
-                exec(`${wineExeutable} launcher.bat`, {
-                    cwd: Genshinlib.gameDir,
-                    env: {
-                        ...process.env,
-                        WINEPREFIX: Genshinlib.prefixDir
+                    // FIXME
+                    if (rpc)
+                    {
+                        rpc.setActivity({
+                            details: `In-Game`,
+                            largeImageKey: `game`,
+                            largeImageText: `An Anime Game Launcher`,
+                            startTimestamp: parseInt(new Date().setDate(new Date().getDate()).toString()),
+                            instance: false,
+                        });
                     }
-                }, (err: any, stdout: any, stderr: any) => {
-                    console.log(`%c> Game closed`, 'font-size: 16px');
+
+                    exec(`${wineExeutable} launcher.bat`, {
+                        cwd: Genshinlib.gameDir,
+                        env: {
+                            ...process.env,
+                            WINEPREFIX: Genshinlib.prefixDir
+                        }
+                    }, (err: any, stdout: any, stderr: any) => {
+                        console.log(`%c> Game closed`, 'font-size: 16px');
 
                         ipcRenderer.invoke('show-window');
 
-                    if (rpc)
-                        rpc.setActivity({
-                            details: `Preparing to launch`,
-                            largeImageKey: `launcher`,
-                            largeImageText: `An Anime Game Launcher`,
-                            instance: false,
-                        });
+                        // FIXME
+                        if (rpc)
+                        {
+                            rpc.setActivity({
+                                details: `Preparing to launch`,
+                                largeImageKey: `launcher`,
+                                largeImageText: `An Anime Game Launcher`,
+                                instance: false,
+                            });
+                        }
 
-                    console.log(err);
-                    console.log(stdout);
-                    console.log(stderr);
-                });
+                        console.log(err);
+                        console.log(stdout);
+                        console.log(stderr);
+                    });
 
                     ipcRenderer.invoke('hide-window');
                 }

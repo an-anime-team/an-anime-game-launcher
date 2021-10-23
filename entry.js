@@ -9,6 +9,8 @@ const {
 
 const path = require('path');
 
+const { Genshinlib } = require('./public/js/Genshinlib');
+
 let mainWindow;
 
 ipcMain.handle('hide-window', () => mainWindow.hide());
@@ -69,10 +71,7 @@ function createWindow ()
 }
 
 // Set language on start
-if(Genshinlib.getConfig().lang.launcher)
-    app.commandLine.appendSwitch('lang', Genshinlib.getConfig().lang.launcher);
-else
-    app.commandLine.appendSwitch('lang', 'en-us');
+app.commandLine.appendSwitch('lang', Genshinlib.lang.launcher ?? 'en-us');
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -88,10 +87,11 @@ app.whenReady().then(() => {
             createWindow();
     });
 
-    // This has to be here otherwise webContents is invalid.
-    ipcMain.on('changelang', (event, args) => {
-        app.commandLine.appendSwitch('lang', Genshinlib.getConfig().lang.launcher);
-        mainWindow.webContents.send('changelang', { 'lang': args.lang });
+    // This has to be here otherwise webContents is invalid
+    ipcMain.on('change-lang', (event, args) => {
+        app.commandLine.appendSwitch('lang', Genshinlib.lang.launcher);
+
+        mainWindow.webContents.send('change-lang', { 'lang': args.lang });
     });
 
     ipcMain.on('updateVP', (event, args) => {
