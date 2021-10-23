@@ -1,0 +1,17 @@
+{
+    "Install": "インストール",
+    "Launch": "打ち上げ",
+    "Runners": "Runners",
+    "Langs": "言語",
+    "Voice": "ボイスパック",
+    "SettingsTitle": "設定",
+    "GeneralSettings": "一般",
+    "Downloading": "ダウンロード中",
+    "Unpack": "開梱",
+    "GameDownloaded": "ゲームのインストールに成功しました",
+    "ApplyPatch": "パッチの適用...",
+    "PatchRequired": "要パッチ",
+    "PatchRequiredHint": "このゲームバージョンにはアンチチートパッチがありません。数日待ってから再度お試しください。",
+    "TestPatch": "テストパッチの適用",
+    "TestPatchHint": "このゲームバージョンにはアンチチートパッチがありますが、テスト段階にあります。安定するまで数日お待ちいただくか、ご自身の責任で適用してください。"
+}

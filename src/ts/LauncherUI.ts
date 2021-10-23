@@ -1,4 +1,5 @@
 import $ from 'cash-dom';
+import i18n from './i18n';
 
 type LauncherState =
     'patch-unavailable' |
@@ -17,6 +18,11 @@ export class LauncherUI
         return this._launcherState;
     }
 
+    public static refreshLang (langcode: string)
+    {
+        i18n.updatelang(langcode);
+    }
+
     public static setState (state: LauncherState)
     {
         $('#downloader-panel').css('display', 'none');
@@ -25,29 +31,29 @@ export class LauncherUI
         switch (state)
         {
             case 'patch-unavailable':
-                $('#launch').text('Patch required');
+                $('#launch').text(i18n.translate('PatchRequired'));
                 $('#launch').attr('disabled', 'disabled');
 
                 $('#launch').addClass('hint--top')
                             .addClass('hint--medium');
 
-                $('#launch').attr('data-hint', 'This game version doesn\'t have the anti-cheat patch. Please, wait a few days before it will be created');
+                $('#launch').attr('data-hint', i18n.translate('PatchRequiredHint'));
 
                 break;
 
             case 'test-patch-available':
-                $('#launch').text('Apply test patch');
+                $('#launch').text(i18n.translate('TestPatch'));
 
                 $('#launch').addClass('button-blue')
                             .addClass('hint--top')
                             .addClass('hint--large');
 
-                $('#launch').attr('data-hint', 'This game version has the anti-cheat patch, but it is in the test phase. You can wait a few days until it will become stable or apply it on your own risc');
+                $('#launch').attr('data-hint', i18n.translate('TestPatchHint'));
 
                 break;
 
             case 'patch-applying':
-                $('#launch').text('Applying patch');
+                $('#launch').text(i18n.translate('ApplyPatch'));
                 $('#launch').attr('disabled', 'disabled');
 
                 break;
@@ -58,7 +64,7 @@ export class LauncherUI
                 break;
 
             case 'game-installation-available':
-                $('#launch').text('Install');
+                $('#launch').text(i18n.translate('Install'));
 
                 break;
 
@@ -71,7 +77,7 @@ export class LauncherUI
                     .removeClass('hint--medium')
                     .removeClass('hint--large');
 
-                $('#launch').text('Launch');
+                $('#launch').text(i18n.translate('Launch'));
 
                 break;
         }

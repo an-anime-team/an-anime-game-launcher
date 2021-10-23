@@ -1,0 +1,17 @@
+{
+    "Install": "安裝",
+    "Launch": "發射",
+    "Runners": "Runners",
+    "Langs": "語言",
+    "Voice": "語音包",
+    "SettingsTitle": "設置",
+    "GeneralSettings": "一般的",
+    "Downloading": "下載",
+    "Unpack": "Unpacking",
+    "GameDownloaded": "遊戲安裝成功",
+    "ApplyPatch": "Applying patch...",
+    "PatchRequired": "需要補丁",
+    "PatchRequiredHint": "此遊戲版本沒有防作弊補丁。請等待幾天，然後重試。",
+    "TestPatch": "應用測試補丁",
+    "TestPatchHint": "該遊戲版本有一個反作弊補丁，但處於測試階段。您可以等待幾天直到它穩定或自擔風險應用它。"
+}

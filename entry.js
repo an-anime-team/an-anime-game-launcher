@@ -68,6 +68,12 @@ function createWindow ()
     // mainWindow.webContents.openDevTools();
 }
 
+// Set language on start
+if(Genshinlib.getConfig().lang.launcher)
+    app.commandLine.appendSwitch('lang', Genshinlib.getConfig().lang.launcher);
+else
+    app.commandLine.appendSwitch('lang', 'en-us');
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
@@ -80,6 +86,20 @@ app.whenReady().then(() => {
         // dock icon is clicked and there are no other windows open.
         if (BrowserWindow.getAllWindows().length === 0)
             createWindow();
+    });
+
+    // This has to be here otherwise webContents is invalid.
+    ipcMain.on('changelang', (event, args) => {
+        app.commandLine.appendSwitch('lang', Genshinlib.getConfig().lang.launcher);
+        mainWindow.webContents.send('changelang', { 'lang': args.lang });
+    });
+
+    ipcMain.on('updateVP', (event, args) => {
+        mainWindow.webContents.send('updateVP', { 'oldvp': args.oldvp });
+    });
+
+    ipcMain.on('rpcstate', (event, args) => {
+        mainWindow.webContents.send('rpcstate', {});
     });
 });
 

@@ -150,6 +150,15 @@
                 "folder": "Proton-6.14-GE-1",
                 "makeFolder": false,
                 "executable": "files/bin/wine64"
+            },
+            {
+                "name": "Proton-5.21-GE-1",
+                "version": "5.21-GE-1",
+                "uri": "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/5.21-GE-1/Proton-5.21-GE-1.tar.gz",
+                "archive": "tar",
+                "folder": "Proton-5.21-GE-1",
+                "makeFolder": false,
+                "executable": "files/bin/wine64"
             }
         ]
     }

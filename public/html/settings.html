@@ -11,39 +11,50 @@
         <!-- JS scripts -->
         <script>require('../js/settings.js');</script>
 
-        <title>Settings</title>
+        <title i18id="SettingsTitle"></title>
     </head>
 
     <body>
         <div class="menu">
-            <div class="menu-item menu-item-active" anchor="general">General</div>
-            <div class="menu-item" anchor="runners">Runners</div>
+            <div class="menu-item menu-item-active" anchor="general" i18id="GeneralSettings">General</div>
+            <div class="menu-item" anchor="runners" i18id="Runners">Runners</div>
             <div class="menu-item" anchor="dxvks">DXVK</div>
         </div>
 
         <div class="settings">
             <div class="settings-item" id="general">
-                <h2>General</h2>
-
-                123<br>
-                123<br>
-                123<br>
-                123<br>
-                123<br>
-                123<br>
-                123<br>
-                123<br>
-                123<br>
-                123<br>
-                123<br>
-                123<br>
-                123<br>
-                123<br><br>
-
-                Will be made in beta 7
-                
+                <h2 i18id="GeneralSettings">General</h2>
+                <hr>
+                <h3 i18id="Langs">Language</h3>
+                <select class="dropdown-menu" id="language-list">
+                    <option value="en-us">English (US)</option>
+                    <option value="zh-cn">中文（简化）(Chinese Simplified)</option>
+                    <option value="de-de">Deutsch (German)</option>
+                    <option value="fr-fr">Français (French)</option>
+                    <option value="id-id">Indonesia (Indonesian)</option>
+                    <option value="ja-jp">日本語 (Japanese)</option>
+                    <option value="ko-kr">한국어 (Korean)</option>
+                    <option value="pt-pt">Português (Portuguese)</option>
+                    <option value="ru-ru">Pусский (Russian)</option>
+                    <option value="es-es">Español (Spanish)</option>
+                    <option value="th-th">ภาษาไทย (Thai)</option>
+                    <option value="zh-tw">中文（繁體）(Chinese Traditional)</option>
+                    <option value="vi-vn">Tiếng Việt (Vietnamese)</option>
+                </select>
+                <br>
+                <h3 i18id="Voice">Voice Pack</h3>
+                <select class="dropdown-menu" id="voice-list" disabled>
+                    <option value="en-us">English (US)</option>
+                    <option value="zh-cn">汉语 (Chinese)</option>
+                    <option value="ja-jp">日本語 (Japanese)</option>
+                    <option value="ko-kr">한국어 (Korean)</option>
+                </select>
+                <br>
+                <h3>Discord RPC</h3>
+                <input type="checkbox" id="drpc" name="drpc">
+                <br>
             </div>
-
+            <hr>
             <div class="settings-item" id="runners">
                 <h2>Runners</h2>
 
