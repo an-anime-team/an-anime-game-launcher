@@ -1,8 +1,8 @@
 const fs = require('fs');
 const path = require('path');
-const i18n = new(require('./i18n'));
 
 import $ from 'cash-dom';
+import i18n from './i18n';
 import { Genshinlib } from './Genshinlib';
 
 $(() => {

@@ -21,4 +21,4 @@ i18n.prototype.translate = function(phrase: any) {
     return translation
 }
 
-module.exports = i18n;
+export default new (i18n as any);

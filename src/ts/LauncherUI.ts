@@ -1,5 +1,5 @@
 import $ from 'cash-dom';
-const i18n = new(require('./i18n'));
+import i18n from './i18n';
 
 type LauncherState =
     'patch-unavailable' |

@@ -2,9 +2,9 @@ const path = require('path');
 const fs = require('fs');
 const { exec } = require('child_process');
 const { ipcRenderer } = require('electron');
-const i18n = new(require('./i18n'));
 
 import $ from 'cash-dom';
+import i18n from './i18n';
 
 import { Genshinlib } from './Genshinlib';
 import { LauncherUI } from './LauncherUI';
