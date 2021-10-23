@@ -100,45 +100,59 @@ $(() => {
             {
                 console.log(`%c> Starting the game...`, 'font-size: 16px');
 
-                let wineExeutable = 'wine';
-
-                if (Genshinlib.getConfig().runner !== null)
+                if (!await Genshinlib.isTelemetryDisabled())
                 {
-                    wineExeutable = path.join(
-                        Genshinlib.runnersDir,
-                        Genshinlib.getConfig().runner?.folder,
-                        Genshinlib.getConfig().runner?.executable
-                    );
+                    console.log('miHoYo\'s telemetry servers doesn\'t disabled!');
 
-                    if (!fs.existsSync(wineExeutable))
-                    {
-                        wineExeutable = 'wine';
-
-                        Genshinlib.updateConfig({
-                            runner: null
-                        });
-                    }
+                    ipcRenderer.send('notification', {
+                        title: document.title,
+                        body: 'miHoYo\'s telemetry servers doesn\'t disabled!',
+                        icon: path.join(__dirname, '..', 'images', 'baal64-transparent.png')
+                    });
                 }
 
-                console.log(`Wine executable: ${wineExeutable}`);
+                else
+                {
+                    let wineExeutable = 'wine';
 
-                exec(`${wineExeutable} launcher.bat`, {
-                    cwd: Genshinlib.gameDir,
-                    env: {
-                        ...process.env,
-                        WINEPREFIX: Genshinlib.prefixDir
+                    if (Genshinlib.getConfig().runner !== null)
+                    {
+                        wineExeutable = path.join(
+                            Genshinlib.runnersDir,
+                            Genshinlib.getConfig().runner?.folder,
+                            Genshinlib.getConfig().runner?.executable
+                        );
+
+                        if (!fs.existsSync(wineExeutable))
+                        {
+                            wineExeutable = 'wine';
+
+                            Genshinlib.updateConfig({
+                                runner: null
+                            });
+                        }
                     }
-                }/*, (err: any, stdout: any, stderr: any) => {
-                    console.log(`%c> Game closed`, 'font-size: 16px');
 
-                    ipcRenderer.invoke('show-window');
+                    console.log(`Wine executable: ${wineExeutable}`);
 
-                    console.log(err);
-                    console.log(stdout);
-                    console.log(stderr);
-                }*/);
+                    exec(`${wineExeutable} launcher.bat`, {
+                        cwd: Genshinlib.gameDir,
+                        env: {
+                            ...process.env,
+                            WINEPREFIX: Genshinlib.prefixDir
+                        }
+                    }/*, (err: any, stdout: any, stderr: any) => {
+                        console.log(`%c> Game closed`, 'font-size: 16px');
 
-                ipcRenderer.invoke('hide-window');
+                        ipcRenderer.invoke('show-window');
+
+                        console.log(err);
+                        console.log(stdout);
+                        console.log(stderr);
+                    }*/);
+
+                    ipcRenderer.invoke('hide-window');
+                }
             }
 
             // Apply test patch
@@ -253,7 +267,7 @@ $(() => {
 
                                         ipcRenderer.send('notification', {
                                             title: document.title,
-                                            content: 'Game was successfully installed'
+                                            body: 'Game was successfully installed'
                                         });
                                     }, (data) => console.log(data.toString()));
                                 }

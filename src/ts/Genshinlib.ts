@@ -6,6 +6,7 @@ const fs = require('fs');
 const path = require('path');
 const os = require('os');
 const { spawn, exec } = require('child_process');
+const dns = require('dns');
 
 type Runner = {
     name: string,          // Runner title which will be showed in the list
@@ -15,6 +16,11 @@ type Runner = {
     folder: string,        // Folder name where it will be downloaded
     makeFolder: boolean,   // Do we need to create folder or it is included in archive
     executable: string     // Path to wine executable inside folder
+};
+
+type DXVK = {
+    version: string,
+    uri: string
 };
 
 type Config = {
@@ -35,7 +41,8 @@ type Config = {
         name: string,
         folder: string,
         executable: string
-    }
+    },
+    dxvk: string|null
 };
 
 export class Genshinlib
@@ -53,11 +60,13 @@ export class Genshinlib
     public static readonly prefixDir: string = path.join(this.launcherDir, 'game');
     public static readonly gameDir: string = path.join(this.prefixDir, 'drive_c', 'Program Files', 'Genshin Impact');
     public static readonly runnersDir: string = path.join(this.launcherDir, 'runners');
+    public static readonly dxvksDir: string = path.join(this.launcherDir, 'dxvks');
 
     protected static readonly versionsUri: string = 'https://sdk-os-static.mihoyo.com/hk4e_global/mdk/launcher/api/resource?key=gcStgarh&launcher_id=10';
     protected static readonly backgroundUri: string = 'https://sdk-os-static.mihoyo.com/hk4e_global/mdk/launcher/api/content?filter_adv=true&launcher_id=10&language=';
     protected static readonly patchUri: string = 'https://notabug.org/Krock/GI-on-Linux/archive/master.zip';
     protected static readonly runnersUri: string = 'https://notabug.org/nobody/an-anime-game-launcher/raw/main/runners.json';
+    protected static readonly dxvksUri: string = 'https://notabug.org/nobody/an-anime-game-launcher/raw/main/dxvks.json';
 
     public static get version(): Config['version']
     {
@@ -78,6 +87,17 @@ export class Genshinlib
         });
 
         // return JSON.parse(fs.readFileSync(path.join(__dirname, '..', '..', 'runners.json')));
+    }
+
+    public static getDXVKs (): Promise<DXVK[]>
+    {
+        return new Promise((resolve, reject) => {
+            fetch(this.runnersUri)
+                .then(response => response.json())
+                .then(runners => resolve(runners));
+        });
+
+        // return new Promise(resolve => resolve(JSON.parse(fs.readFileSync(path.join(__dirname, '..', '..', 'dxvks.json')))));
     }
 
     public static getConfig (): Config
@@ -174,6 +194,36 @@ export class Genshinlib
     public static getPatchInfo (): { version: string, state: 'stable' | 'testing' }
     {
         return JSON.parse(fs.readFileSync(this.patchJson));
+    }
+
+    /**
+     * 0.0.0.0 log-upload-os.mihoyo.com
+     * 0.0.0.0 overseauspider.yuanshen.com
+     */
+    public static isTelemetryDisabled (): Promise<boolean>
+    {
+        return new Promise((resolve, reject) => {
+            dns.lookup('log-upload-os.mihoyo.com', (error: any, address: string, family: any) => {
+                if (error)
+                    reject(error);
+                
+                else
+                {
+                    if (address != '0.0.0.0')
+                        resolve(false);
+
+                    else
+                    {
+                        dns.lookup('log-upload-os.mihoyo.com', (error: any, address: string, family: any) => {
+                            if (error)
+                                reject(error);
+                            
+                            else resolve(address == '0.0.0.0');
+                        });
+                    }
+                }
+            });
+        });
     }
 
     public static async downloadFile (uri: string, savePath: string, progress: (current: number, total: number, difference: number) => void): Promise<void|Error>
