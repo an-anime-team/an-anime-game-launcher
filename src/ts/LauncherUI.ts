@@ -18,6 +18,11 @@ export class LauncherUI
         return this._launcherState;
     }
 
+    public static refreshLang (langcode: string)
+    {
+        i18n.updatelang(langcode);
+    }
+
     public static setState (state: LauncherState)
     {
         $('#downloader-panel').css('display', 'none');

@@ -80,6 +80,12 @@ app.whenReady().then(() => {
         if (BrowserWindow.getAllWindows().length === 0)
             createWindow();
     });
+
+    // This has to be here otherwise webContents is invalid.
+    ipcMain.on('changelang', (event, args) => {
+        app.commandLine.appendSwitch('lang', Genshinlib.getConfig().lang.launcher);
+        mainWindow.webContents.send('changelang', { 'lang': args.lang });
+    });
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common

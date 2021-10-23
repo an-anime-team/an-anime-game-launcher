@@ -1,11 +1,13 @@
 const fs = require('fs');
 const path = require('path');
+const { ipcRenderer } = require('electron');
 
 import $ from 'cash-dom';
 import i18n from './i18n';
 import { Genshinlib } from './Genshinlib';
 
 $(() => {
+
     $("*[i18id]").each((i, el) => {
         el.innerText = i18n.translate(el.getAttribute('i18id')?.toString());
     });
@@ -24,6 +26,7 @@ $(() => {
         $(`.menu-item[anchor=${anchor}]`).addClass('menu-item-active');
     });
 
+    // Select the saved options in launcher.json on load.
     $(`#voice-list option[value="${Genshinlib.getConfig().lang.voice}"]`).prop('selected', true);
     $(`#language-list option[value="${Genshinlib.getConfig().lang.launcher}"]`).prop('selected', true);
 
@@ -44,6 +47,42 @@ $(() => {
         else
         {
             console.log('VP can\' be changed to the already set language');
+        }
+    });
+
+    $('#language-list').on('change', (e) => {
+        let activeLNG = Genshinlib.getConfig().lang.launcher;
+
+        if (activeLNG != e.target.value)
+        {
+            Genshinlib.updateConfig({
+                lang: {
+                    launcher: e.target.value,
+                    voice: Genshinlib.getConfig().lang.voice
+                }
+            });
+
+            // This is required as the file name changes on the API but since we don't call the API before checking if the time is null or expired we set time to null here.
+            Genshinlib.updateConfig({
+                background: {
+                    time: null,
+                    file: Genshinlib.getConfig().background.file
+                }
+            });
+
+            // Send language updates
+            i18n.updatelang(e.target.value);
+            ipcRenderer.send('changelang', { 'lang': e.target.value });
+            $("*[i18id]").each((i, el) => {
+                el.innerText = i18n.translate(el.getAttribute('i18id')?.toString());
+            });
+
+            $(`#language-list option[value="${activeLNG}"]`).removeProp('selected');
+            $(`#language-list option[value="${e.target.value}"]`).prop('selected', true);
+        }
+        else
+        {
+            console.log('New language can\' be changed to the already set language');
         }
     });
 

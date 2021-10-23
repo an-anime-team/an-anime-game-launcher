@@ -20,6 +20,13 @@ $(() => {
         document.title = 'Genshin Impact Linux Launcher - ' + Genshinlib.version;
 
     LauncherUI.setState('game-launch-available');
+
+    ipcRenderer.on('changelang', (event: void, data: any) => {
+        Genshinlib.getBackgroundUri().then(uri => $('body').css('background-image', `url(${ uri })`));
+        LauncherUI.refreshLang(data.lang);
+        LauncherUI.setState(LauncherUI.launcherState);
+    });
+
     Genshinlib.getBackgroundUri().then(uri => $('body').css('background-image', `url(${ uri })`));
 
     fetch(`https://genshin.mihoyo.com/launcher/10/${Genshinlib.lang.launcher}?api_url=https%3A%2F%2Fapi-os-takumi.mihoyo.com%2Fhk4e_global&prev=false`)
