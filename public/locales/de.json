@@ -12,5 +12,5 @@
     "PatchRequired": "Patch nicht verfügbar",
     "PatchRequiredHint": "Diese Spielversion hat noch kein anti-cheat patch, Bitte warten sie ein paar Tage bevor sie es erneut versuchen.",
     "TestPatch": "Test Patch anwenden",
-    "TestPatchHint": "Diese Spielversion hat ein anti-cheat patch aber es ist noch in der Testphase. Sie können noch ein paar Tage warten bis es Stabil ist oder auf eigenen Risiko den Testpatch anwenden."
+    "TestPatchHint": "Diese Spielversion hat ein anti-cheat patch aber es befindet sich noch in der Testphase. Sie können noch ein paar Tage warten bis es Stabil ist oder auf eigenen Risiko den Testpatch anwenden."
 }
