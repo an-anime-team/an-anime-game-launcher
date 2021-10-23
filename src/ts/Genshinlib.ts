@@ -386,7 +386,8 @@ export class Genshinlib
                 let patcherProcess = exec(`yes yes | ${path.join(patchDir, 'patch.sh')}`, {
                     cwd: this.gameDir,
                     env: {
-                        ...process.env
+                        ...process.env,
+                        WINEPREFIX: this.prefixDir
                     }
                 });
 
@@ -397,7 +398,8 @@ export class Genshinlib
                     let patcherAntiCrashProcess = exec(`yes | ${path.join(patchDir, 'patch_anti_logincrash.sh')}`, {
                         cwd: this.gameDir,
                         env: {
-                            ...process.env
+                            ...process.env,
+                            WINEPREFIX: this.prefixDir
                         }
                     });
     
