@@ -86,6 +86,10 @@ app.whenReady().then(() => {
         app.commandLine.appendSwitch('lang', Genshinlib.getConfig().lang.launcher);
         mainWindow.webContents.send('changelang', { 'lang': args.lang });
     });
+
+    ipcMain.on('updateVP', (event, args) => {
+        mainWindow.webContents.send('updateVP', { 'oldvp': args.oldvp });
+    });
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common

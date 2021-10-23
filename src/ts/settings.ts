@@ -41,6 +41,9 @@ $(() => {
                     voice: e.target.value
                 }
             });
+            
+            ipcRenderer.send('updateVP', { 'oldvp': activeVP });
+
             $(`#voice-list option[value="${activeVP}"]`).removeProp('selected');
             $(`#voice-list option[value="${e.target.value}"]`).prop('selected', true);
         }

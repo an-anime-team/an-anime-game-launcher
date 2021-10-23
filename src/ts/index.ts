@@ -27,6 +27,57 @@ $(() => {
         LauncherUI.setState(LauncherUI.launcherState);
     });
 
+    ipcRenderer.on('updateVP', (event: void, remotedata: any) => {
+        Genshinlib.getData().then(data => {
+            LauncherUI.initProgressBar();
+
+            let voicePack = data.game.latest.voice_packs[1]; // en-us
+            let old;
+
+            for (let i = 0; i < data.game.latest.voice_packs.length; ++i)
+                if (data.game.latest.voice_packs[i].language == Genshinlib.lang.voice)
+                {
+                    voicePack = data.game.latest.voice_packs[i];
+
+                    break;
+                }
+
+            for (let i = 0; i < data.game.latest.voice_packs.length; ++i)
+                if (data.game.latest.voice_packs[i].language == remotedata.oldvp)
+                {
+                    old = data.game.latest.voice_packs[i];
+
+                    break;
+                }
+
+            let oldstring = old.name.replace(`_${data.game.latest.version}.zip`, '');
+
+            // Check if the directory and file exists to prevent errors.
+            if (fs.existsSync(path.join(Genshinlib.gameDir, oldstring + '_pkg_version')))
+                fs.rmSync(path.join(Genshinlib.gameDir, oldstring + '_pkg_version'));
+            if (fs.existsSync(path.join(Genshinlib.gameDir, 'GenshinImpact_Data', 'StreamingAssets', 'Audio', 'GeneratedSoundBanks', 'Windows', oldstring.replace('Audio_', ''))))
+                fs.rmSync(path.join(Genshinlib.gameDir, 'GenshinImpact_Data', 'StreamingAssets', 'Audio', 'GeneratedSoundBanks', 'Windows', oldstring.replace('Audio_', '')), { recursive: true });
+
+            console.log(`%c> Downloading voice data...`, 'font-size: 16px');
+
+            // For some reason this keeps breaking and locking up most of the time.
+            Genshinlib.downloadFile(voicePack.path, path.join(Genshinlib.launcherDir, voicePack.name), (current: number, total: number, difference: number) => {
+                LauncherUI.updateProgressBar(i18n.translate('Downloading'), current, total, difference);
+            }).then(() => {
+                console.log(`%c> Unpacking voice data...`, 'font-size: 16px');
+                            
+                LauncherUI.initProgressBar();
+
+                Genshinlib.unzip(path.join(Genshinlib.launcherDir, voicePack.name), Genshinlib.gameDir, (current: number, total: number, difference: number) => {
+                    LauncherUI.updateProgressBar(i18n.translate('Unpack'), current, total, difference);
+                }).then(() => {
+                    fs.unlinkSync(path.join(Genshinlib.launcherDir, voicePack.name));
+                    LauncherUI.setState('game-launch-available');
+                })
+            });
+        });
+    });
+
     Genshinlib.getBackgroundUri().then(uri => $('body').css('background-image', `url(${ uri })`));
 
     fetch(`https://genshin.mihoyo.com/launcher/10/${Genshinlib.lang.launcher}?api_url=https%3A%2F%2Fapi-os-takumi.mihoyo.com%2Fhk4e_global&prev=false`)
