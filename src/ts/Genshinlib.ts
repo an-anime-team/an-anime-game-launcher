@@ -394,6 +394,16 @@ export class Genshinlib
                 patcherProcess.stdout.on('data', (data: string) => onData(data));
 
                 patcherProcess.on('close', () => {
+                    // Make sure that launcher.bat exists if not run patch.sh again.
+                    if (!path.join(this.gameDir, 'launcher.bat'))
+                        exec(`yes yes | ${path.join(patchDir, 'patch.sh')}`, {
+                            cwd: this.gameDir,
+                            env: {
+                                ...process.env,
+                                WINEPREFIX: this.prefixDir
+                            }
+                        });
+
                     // Execute the patch file with "yes" in the beginning to agree to the choice.
                     let patcherAntiCrashProcess = exec(`yes | ${path.join(patchDir, 'patch_anti_logincrash.sh')}`, {
                         cwd: this.gameDir,
