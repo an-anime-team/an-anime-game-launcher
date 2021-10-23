@@ -42,7 +42,7 @@ $(() => {
         }
         else
         {
-            console.log('VP can\' be changed to the already set language')
+            console.log('VP can\' be changed to the already set language');
         }
     });
 
