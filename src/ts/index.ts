@@ -12,6 +12,9 @@ import { LauncherUI } from './LauncherUI';
 if (!fs.existsSync(Genshinlib.prefixDir))
     fs.mkdirSync(Genshinlib.prefixDir, { recursive: true });
 
+if (!fs.existsSync(Genshinlib.runnersDir))
+    fs.mkdirSync(Genshinlib.runnersDir, { recursive: true });
+
 $(() => {
     if (Genshinlib.version !== null)
         document.title = 'Genshin Impact Linux Launcher - ' + Genshinlib.version;
