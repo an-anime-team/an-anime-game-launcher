@@ -25,6 +25,8 @@ i18n.prototype.updatelang = function(newlang: string) {
      // Test if the locale is the same string so if it's de-de or id-id remove -de or -id like navigator.language does.
      let samecode = new RegExp(`(${newlang.toLowerCase().replace(/-.*$/, '')}.*){2}`, 'g');
      samecode.test(newlang.toLowerCase()) ? newlang = newlang.toLowerCase().replace(/-.*$/, '') : newlang = newlang.toLowerCase();
+     if (newlang == 'ja-jp') newlang = 'ja';
+     if (newlang == 'vi-vn') newlang = 'vi';
 
      if(fs.existsSync(path.join(path.dirname(__dirname), 'locales', newlang + '.json'))) {
           loadedLanguage = JSON.parse(fs.readFileSync(path.join(path.dirname(__dirname), 'locales', newlang + '.json'), 'utf8'));
