@@ -6,6 +6,7 @@ const {
     shell,
     nativeImage
 } = require('electron');
+const { Genshinlib } = require('./public/js/Genshinlib');
 
 const path = require('path');
 
