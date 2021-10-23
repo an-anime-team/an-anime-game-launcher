@@ -207,27 +207,40 @@ $(() => {
             {
                 console.log(`%c> Starting the game...`, 'font-size: 16px');
 
-                let wineExeutable = 'wine';
-
-                if (Genshinlib.getConfig().runner !== null)
+                if (!await Genshinlib.isTelemetryDisabled())
                 {
-                    wineExeutable = path.join(
-                        Genshinlib.runnersDir,
-                        Genshinlib.getConfig().runner?.folder,
-                        Genshinlib.getConfig().runner?.executable
-                    );
+                    console.log('miHoYo\'s telemetry servers doesn\'t disabled!');
 
-                    if (!fs.existsSync(wineExeutable))
-                    {
-                        wineExeutable = 'wine';
-
-                        Genshinlib.updateConfig({
-                            runner: null
-                        });
-                    }
+                    ipcRenderer.send('notification', {
+                        title: document.title,
+                        body: 'miHoYo\'s telemetry servers doesn\'t disabled!',
+                        icon: path.join(__dirname, '..', 'images', 'baal64-transparent.png')
+                    });
                 }
 
-                console.log(`Wine executable: ${wineExeutable}`);
+                else
+                {
+                    let wineExeutable = 'wine';
+
+                    if (Genshinlib.getConfig().runner !== null)
+                    {
+                        wineExeutable = path.join(
+                            Genshinlib.runnersDir,
+                            Genshinlib.getConfig().runner?.folder,
+                            Genshinlib.getConfig().runner?.executable
+                        );
+
+                        if (!fs.existsSync(wineExeutable))
+                        {
+                            wineExeutable = 'wine';
+
+                            Genshinlib.updateConfig({
+                                runner: null
+                            });
+                        }
+                    }
+
+                    console.log(`Wine executable: ${wineExeutable}`);
 
                 if (rpc)
                     rpc.setActivity({
@@ -247,7 +260,7 @@ $(() => {
                 }, (err: any, stdout: any, stderr: any) => {
                     console.log(`%c> Game closed`, 'font-size: 16px');
 
-                    ipcRenderer.invoke('show-window');
+                        ipcRenderer.invoke('show-window');
 
                     if (rpc)
                         rpc.setActivity({
@@ -262,7 +275,8 @@ $(() => {
                     console.log(stderr);
                 });
 
-                ipcRenderer.invoke('hide-window');
+                    ipcRenderer.invoke('hide-window');
+                }
             }
 
             // Apply test patch
@@ -377,7 +391,7 @@ $(() => {
 
                                         ipcRenderer.send('notification', {
                                             title: document.title,
-                                            content: i18n.translate('GameDownloaded')
+                                            body: i18n.translate('GameDownloaded')
                                         });
                                     }, (data) => console.log(data.toString()));
                                 }

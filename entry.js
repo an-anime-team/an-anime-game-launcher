@@ -1,5 +1,12 @@
-const { app, BrowserWindow, ipcMain, Notification, shell } = require('electron');
-const { Genshinlib } = require('./public/js/Genshinlib');
+const {
+    app,
+    BrowserWindow,
+    ipcMain,
+    Notification,
+    shell,
+    nativeImage
+} = require('electron');
+
 const path = require('path');
 
 let mainWindow;
@@ -8,10 +15,10 @@ ipcMain.handle('hide-window', () => mainWindow.hide());
 ipcMain.handle('show-window', () => mainWindow.show());
 
 ipcMain.on('notification', (event, args) => {
-    new Notification({
-        title: args.title,
-        body: args.content
-    }).show();
+    if (args.icon !== undefined)
+        args.icon = nativeImage.createFromPath(args.icon);
+
+    new Notification(args).show();
 });
 
 ipcMain.handle('open-settings', () => {
