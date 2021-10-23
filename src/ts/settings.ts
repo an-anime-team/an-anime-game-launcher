@@ -6,7 +6,7 @@ import i18n from './i18n';
 import { Genshinlib } from './Genshinlib';
 
 $(() => {
-    $("*[i18id]").each(function (i, el) {
+    $("*[i18id]").each((i, el) => {
         el.innerText = i18n.translate(el.getAttribute('i18id')?.toString());
     });
 
@@ -22,6 +22,28 @@ $(() => {
 
         $('.menu-item').removeClass('menu-item-active');
         $(`.menu-item[anchor=${anchor}]`).addClass('menu-item-active');
+    });
+
+    $(`#voice-list option[value="${Genshinlib.getConfig().lang.voice}"]`).prop('selected', true);
+
+    $('#voice-list').on('change', (e) => {
+        let activeVP = Genshinlib.getConfig().lang.voice;
+
+        if (activeVP != e.target.value)
+        {
+            Genshinlib.updateConfig({
+                lang: {
+                    launcher: Genshinlib.getConfig().lang.launcher,
+                    voice: e.target.value
+                }
+            });
+            $(`#voice-list option[value="${activeVP}"]`).removeProp('selected');
+            $(`#voice-list option[value="${e.target.value}"]`).prop('selected', true);
+        }
+        else
+        {
+            console.log('VP can\' be changed to the already set language')
+        }
     });
 
     let activeRunner = Genshinlib.getConfig().runner;
