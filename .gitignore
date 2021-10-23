@@ -1,6 +1,7 @@
 node_modules 
 dist
 package-lock.json
+yarn.lock
 wineprefix-installation.log
 public/css/index.css
 public/css/settings.css

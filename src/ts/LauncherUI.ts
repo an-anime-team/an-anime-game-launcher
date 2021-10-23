@@ -1,5 +1,6 @@
 import $ from 'cash-dom';
-import i18n from './i18n';
+import { Genshinlib } from './Genshinlib';
+import { i18n } from './i18n';
 
 type LauncherState =
     'patch-unavailable' |
@@ -16,11 +17,6 @@ export class LauncherUI
     public static get launcherState(): LauncherState
     {
         return this._launcherState;
-    }
-
-    public static refreshLang (langcode: string)
-    {
-        i18n.updatelang(langcode);
     }
 
     public static setState (state: LauncherState)
@@ -59,7 +55,7 @@ export class LauncherUI
                 break;
 
             case 'game-update-available':
-                $('#launch').text('Update');
+                $('#launch').text('Update'); // FIXME i18n.translate
 
                 break;
 
@@ -153,5 +149,20 @@ export class LauncherUI
         $('#eta').text('');
 
         $('#downloader .progress').css('width', '0');
+    }
+
+    public static updateBackground (): void
+    {
+        Genshinlib.getBackgroundUri().then(uri => $('body').css('background-image', `url(${uri})`));
+    }
+
+    public static updateLang (lang: string|null = null): void
+    {
+        if (lang !== null)
+            i18n.setLang(lang);
+
+        $('*[i18id]').each((i, element) => {
+            element.innerText = i18n.translate(element.getAttribute('i18id')?.toString()!);
+        });
     }
 }
