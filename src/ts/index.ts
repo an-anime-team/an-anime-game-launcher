@@ -33,7 +33,7 @@ $(() => {
             LauncherUI.setState(Genshinlib.version === null ? 'game-installation-available' : 'game-update-available');
 
         // Patch version is incorrect
-        else if (Genshinlib.getConfig().patch.version != Genshinlib.getPatchInfo().version)
+        else if (Genshinlib.getConfig().patch && Genshinlib.getConfig().patch.version != Genshinlib.getPatchInfo().version)
         {
             // Patch is not available
             if (Genshinlib.getPatchInfo().version !== data.game.latest.version)
@@ -61,7 +61,7 @@ $(() => {
 
         // Current patch is in testing phase,
         // but stable is available
-        else if (Genshinlib.getConfig().patch.version == Genshinlib.getPatchInfo().version && Genshinlib.getConfig().patch.state == 'testing' && Genshinlib.getPatchInfo().state == 'stable')
+        else if (Genshinlib.getConfig().patch && Genshinlib.getConfig().patch.version == Genshinlib.getPatchInfo().version && Genshinlib.getConfig().patch.state == 'testing' && Genshinlib.getPatchInfo().state == 'stable')
         {
             console.log(`%c> Applying patch...`, 'font-size: 16px');
 
