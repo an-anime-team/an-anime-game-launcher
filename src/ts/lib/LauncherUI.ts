@@ -182,8 +182,6 @@ export class LauncherUI
         if (lang !== null)
             this.i18n.setLang(lang);
 
-        console.log(this.i18n.loadedLanguage);
-
         $('*[i18id]').each((i, element) => {
             element.innerText = this.i18n.translate(element.getAttribute('i18id')!);
         });

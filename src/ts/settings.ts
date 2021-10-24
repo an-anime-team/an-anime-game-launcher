@@ -4,7 +4,6 @@ const { ipcRenderer } = require('electron');
 const { exec } = require('child_process');
 
 import $ from 'cash-dom';
-import { i18n } from './lib/i18n';
 import { Genshinlib } from './lib/Genshinlib';
 import { LauncherUI } from './lib/LauncherUI';
 import { Tools } from './lib/Tools';
