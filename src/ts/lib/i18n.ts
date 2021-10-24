@@ -3,6 +3,8 @@ const fs = require('fs');
 
 export class i18n
 {
+     public static readonly localesDir = path.join(path.dirname(__dirname), '..', 'locales');
+
      public static loadedLanguage: any;
 
      public static translate (phrase: string)
@@ -36,8 +38,8 @@ export class i18n
                     break;
           }
 
-          i18n.loadedLanguage = JSON.parse(fs.readFileSync(path.join(path.dirname(__dirname), 'locales', 
-               fs.existsSync(path.join(path.dirname(__dirname), 'locales', lang + '.json')) ?
+          i18n.loadedLanguage = JSON.parse(fs.readFileSync(path.join(this.localesDir, 
+               fs.existsSync(path.join(this.localesDir, lang + '.json')) ?
                     lang + '.json' : 'en.json'
           )));
      }

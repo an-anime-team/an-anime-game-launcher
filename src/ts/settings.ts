@@ -4,9 +4,10 @@ const { ipcRenderer } = require('electron');
 const { exec } = require('child_process');
 
 import $ from 'cash-dom';
-import { i18n } from './i18n';
-import { Genshinlib } from './Genshinlib';
-import { LauncherUI } from './LauncherUI';
+import { i18n } from './lib/i18n';
+import { Genshinlib } from './lib/Genshinlib';
+import { LauncherUI } from './lib/LauncherUI';
+import { Tools } from './lib/Tools';
 
 $(() => {
 
@@ -117,11 +118,11 @@ $(() => {
 
                         let div = item.find('div');
 
-                        Genshinlib.downloadFile(runner.uri, path.join(Genshinlib.launcherDir, runner.name), (current: number, total: number, difference: number) => {
+                        Tools.downloadFile(runner.uri, path.join(Genshinlib.launcherDir, runner.name), (current: number, total: number, difference: number) => {
                             div.text(`${ Math.round(current / total * 100) }%`);
                         }).then(() => {
                             let unpacker = runner.archive === 'tar' ?
-                                Genshinlib.untar : Genshinlib.unzip;
+                                Tools.untar : Tools.unzip;
 
                             unpacker(
                                 path.join(Genshinlib.launcherDir, runner.name),
@@ -188,10 +189,10 @@ $(() => {
 
                     let div = item.find('div');
 
-                    Genshinlib.downloadFile(dxvk.uri, path.join(Genshinlib.launcherDir, 'dxvk-' + dxvk.version), (current: number, total: number, difference: number) => {
+                    Tools.downloadFile(dxvk.uri, path.join(Genshinlib.launcherDir, 'dxvk-' + dxvk.version), (current: number, total: number, difference: number) => {
                         div.text(`${ Math.round(current / total * 100) }%`);
                     }).then(() => {
-                        Genshinlib.untar(
+                        Tools.untar(
                             path.join(Genshinlib.launcherDir, 'dxvk-' + dxvk.version),
                             Genshinlib.dxvksDir,
                             (current: number, total: number, difference: number) => {
