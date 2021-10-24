@@ -2,6 +2,7 @@ const path = require('path');
 const fs = require('fs');
 const { exec } = require('child_process');
 const { ipcRenderer } = require('electron');
+
 import $ from 'cash-dom';
 
 import { Genshinlib } from './lib/Genshinlib';
