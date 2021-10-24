@@ -10,6 +10,8 @@ import { Tools } from './lib/Tools';
 
 $(() => {
 
+    LauncherUI.updateLang(Genshinlib.getConfig('lang.launcher') ?? 'en-us');
+
     $('*[i18id]').each((i, element) => {
         element.innerText = LauncherUI.i18n.translate(element.getAttribute('i18id')?.toString()!);
     });
@@ -29,31 +31,24 @@ $(() => {
     });
 
     // Select the saved options in launcher.json on load
-    $(`#voice-list option[value="${Genshinlib.lang.voice}"]`).prop('selected', true);
-    $(`#language-list option[value="${Genshinlib.lang.launcher}"]`).prop('selected', true);
+    $(`#voice-list option[value="${Genshinlib.getConfig('lang.voice')}"]`).prop('selected', true);
+    $(`#language-list option[value="${Genshinlib.getConfig('lang.launcher')}"]`).prop('selected', true);
 
     if (Genshinlib.getConfig('rpc'))
         $('#drpc').prop('checked', true);
 
     $('#drpc').on('change', () => {
-        Genshinlib.updateConfig({
-            rpc: $('#drpc').prop('checked')
-        });
+        Genshinlib.updateConfig('rpc', $('#drpc').prop('checked'));
 
         ipcRenderer.send('rpc-toggle');
     });
 
     $('#voice-list').on('change', (e) => {
-        let activeVP = Genshinlib.lang.voice;
+        let activeVP = Genshinlib.getConfig('voice');
 
         if (activeVP != e.target.value)
         {
-            Genshinlib.updateConfig({
-                lang: {
-                    launcher: Genshinlib.lang.launcher,
-                    voice: e.target.value
-                }
-            });
+            Genshinlib.updateConfig('lang.voice', e.target.value);
             
             ipcRenderer.send('updateVP', { 'oldvp': activeVP });
 
@@ -65,23 +60,12 @@ $(() => {
     });
 
     $('#language-list').on('change', (e) => {
-        let activeLang = Genshinlib.lang.launcher;
+        let activeLang = Genshinlib.getConfig('lang.launcher');
 
         if (activeLang != e.target.value)
         {
-            Genshinlib.updateConfig({
-                lang: {
-                    launcher: e.target.value,
-                    voice: Genshinlib.lang.voice
-                },
-
-                // This is required as the file name changes on the API but since we don't call the API before checking
-                // if the time is null or expired we set time to null here.
-                background: {
-                    time: null,
-                    file: Genshinlib.getConfig('background.file')
-                }
-            });
+            Genshinlib.updateConfig('lang.launcher', e.target.value);
+            Genshinlib.updateConfig('background.time', null);
 
             LauncherUI.updateLang(e.target.value);
 
@@ -150,13 +134,9 @@ $(() => {
 
                         if (item.find('div').css('display') === 'none')
                         {
-                            Genshinlib.updateConfig({
-                                runner: {
-                                    name: runner.name,
-                                    folder: runner.folder,
-                                    executable: runner.executable
-                                }
-                            });
+                            Genshinlib.updateConfig('runner.name', runner.name);
+                            Genshinlib.updateConfig('runner.folder', runner.folder);
+                            Genshinlib.updateConfig('runner.executable', runner.executable);
 
                             $('#runners-list > .list-item').removeClass('list-item-active');
                             item.addClass('list-item-active');
@@ -229,9 +209,7 @@ $(() => {
                         });
 
                         installer.on('close', () => {
-                            Genshinlib.updateConfig({
-                                dxvk: dxvk.version
-                            });
+                            Genshinlib.updateConfig('dxvk', dxvk.version);
     
                             $('#dxvk-list > .list-item').removeClass('list-item-active');
                             item.addClass('list-item-active');

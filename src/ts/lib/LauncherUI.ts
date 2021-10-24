@@ -166,7 +166,7 @@ export class LauncherUI
 
     public static updateSocial (): void
     {
-        fetch(`https://genshin.mihoyo.com/launcher/10/${Genshinlib.lang.launcher}?api_url=https%3A%2F%2Fapi-os-takumi.mihoyo.com%2Fhk4e_global&prev=false`)
+        fetch(`https://genshin.mihoyo.com/launcher/10/${Genshinlib.getConfig('lang.launcher')}?api_url=https%3A%2F%2Fapi-os-takumi.mihoyo.com%2Fhk4e_global&prev=false`)
             .then(res => res.text())
             .then(body => {
                 $('#__layout').remove();

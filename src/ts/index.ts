@@ -22,8 +22,8 @@ $(() => {
     if (Genshinlib.version !== null)
         document.title = 'Genshin Impact Linux Launcher - ' + Genshinlib.version;
 
+    LauncherUI.updateLang(Genshinlib.getConfig('lang.launcher') ?? 'en-us');
     LauncherUI.setState('game-launch-available');
-
     LauncherUI.updateBackground();
     LauncherUI.updateSocial();
 
@@ -51,7 +51,7 @@ $(() => {
             let old;
 
             for (let i = 0; i < data.game.latest.voice_packs.length; ++i)
-                if (data.game.latest.voice_packs[i].language == Genshinlib.lang.voice)
+                if (data.game.latest.voice_packs[i].language == Genshinlib.getConfig('lang.voice'))
                 {
                     voicePack = data.game.latest.voice_packs[i];
 
@@ -195,9 +195,7 @@ $(() => {
                         {
                             wineExeutable = 'wine';
 
-                            Genshinlib.updateConfig({
-                                runner: null
-                            });
+                            Genshinlib.updateConfig('runner', null);
                         }
                     }
 
@@ -309,7 +307,7 @@ $(() => {
                         let voicePack = diff.voice_packs[1]; // en-us
 
                         for (let i = 0; i < diff.voice_packs.length; ++i)
-                            if (diff.voice_packs[i].language == Genshinlib.lang.voice)
+                            if (diff.voice_packs[i].language == Genshinlib.getConfig('voice'))
                             {
                                 voicePack = diff.voice_packs[i];
 
@@ -334,9 +332,7 @@ $(() => {
                             }).then(() => {
                                 fs.unlinkSync(path.join(Genshinlib.launcherDir, voicePack.name));
 
-                                Genshinlib.updateConfig({
-                                    version: data.game.latest.version
-                                });
+                                Genshinlib.updateConfig('version', data.game.latest.version);
 
                                 // Patch available
                                 if (Genshinlib.getPatchInfo().version === data.game.latest.version)

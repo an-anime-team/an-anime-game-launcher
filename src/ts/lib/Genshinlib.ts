@@ -1,5 +1,6 @@
 import GIJSON from '../types/GIJSON';
 import { Tools } from './Tools';
+const Store = require('electron-store');
 
 const https = require('follow-redirects').https;
 
@@ -8,6 +9,23 @@ const path = require('path');
 const os = require('os');
 const { spawn, exec } = require('child_process');
 const dns = require('dns');
+
+const config = new Store({
+    defaults: {
+        lang: {
+            launcher: 'en-us',
+            voice: 'en-us'
+        },
+        background: {
+            time: null,
+            file: null
+        },
+        version: null,
+        patch: null,
+        runner: null,
+        rpc: false,
+    },
+});
 
 type Runner = {
     name: string,          // Runner title which will be showed in the list
@@ -75,11 +93,6 @@ export class Genshinlib
         return this.getConfig('version');
     }
 
-    public static get lang(): Config['lang']
-    {
-        return this.getConfig('lang');
-    }
-
     public static getRunners (): Promise<[{ title: string, runners: Runner[] }]>
     {
         return new Promise((resolve, reject) => {
@@ -104,6 +117,12 @@ export class Genshinlib
 
     public static getConfig (property: string|null = null, splitProperty: boolean = true): any
     {
+        if (property === null)
+            return config;
+
+        return config.get(property)
+
+        /*
         if (!fs.existsSync(this.launcherJson))
             fs.writeFileSync(this.launcherJson, JSON.stringify({
                 lang: {
@@ -133,7 +152,7 @@ export class Genshinlib
             property.split('.').forEach(prop => config = config[prop]);
 
             return config;
-        }
+        }*/
     }
 
     public static setConfig (info: Config): Genshinlib
@@ -143,12 +162,13 @@ export class Genshinlib
         return this;
     }
 
-    public static updateConfig (config: any): Genshinlib
+    public static updateConfig (cname: string, value: string|boolean|null|number): Genshinlib
     {
-        return this.setConfig({
-            ...this.getConfig(),
-            ...config
-        });
+        return config.set(cname, value);
+        //return this.setConfig({
+        //    ...this.getConfig(),
+        //    ...config
+        //});
     }
 
     public static async getData (): Promise<any>
@@ -174,17 +194,13 @@ export class Genshinlib
         
         if (!this.getConfig('background.time') || new Date(new Date().setHours(0,0,0,0)).setDate(new Date(new Date().setHours(0,0,0,0)).getDate()).toString() >= this.getConfig('background.time')!)
         {
-            await fetch(this.backgroundUri + this.lang.launcher)
+            await fetch(this.backgroundUri + this.getConfig('lang.launcher'))
                 .then(res => res.json())
                 .then(async resdone => {
                     let prevBackground = this.getConfig('background.file');
 
-                    this.updateConfig({
-                        background: {
-                            time: new Date(new Date().setHours(0,0,0,0)).setDate(new Date(new Date().setHours(0,0,0,0)).getDate() + 7).toString(),
-                            file: resdone.data.adv.background.replace(/.*\//, '')
-                        }
-                    });
+                    this.updateConfig('background.time', new Date(new Date().setHours(0,0,0,0)).setDate(new Date(new Date().setHours(0,0,0,0)).getDate() + 7).toString());
+                    this.updateConfig('background.file', resdone.data.adv.background.replace(/.*\//, ''));
 
                     if (fs.existsSync(path.join(this.launcherDir, this.getConfig('background.file'))))
                         background = path.join(this.launcherDir, this.getConfig('background.file'));
