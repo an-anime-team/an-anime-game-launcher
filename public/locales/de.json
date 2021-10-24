@@ -1,11 +1,13 @@
 {
     "Install": "Installieren",
+    "Update": "Updaten",
     "Launch": "Starten",
     "Runners": "Runners",
     "Langs": "Sprachen",
     "Voice": "Sprachpaket",
     "SettingsTitle": "Einstellungen",
     "GeneralSettings": "Generell",
+    "WineVersion": "Wine Version",
     "Downloading": "wird Heruntergeladen",
     "Unpack": "wird Entpackt",
     "GameDownloaded": "Spiel würde erfolgreich heruntergeladen",

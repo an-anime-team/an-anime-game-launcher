@@ -1,5 +1,6 @@
 {
     "Install": "安装",
+    "Update": "更新",
     "Launch": "发射",
     "Runners": "Runners",
     "Langs": "语言",
@@ -7,6 +8,7 @@
     "SettingsTitle": "设置",
     "GeneralSettings": "一般的",
     "Downloading": "下载",
+    "WineVersion": "葡萄酒版",
     "Unpack": "开箱",
     "GameDownloaded": "游戏安装成功",
     "ApplyPatch": "应用补丁...",

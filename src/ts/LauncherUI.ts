@@ -55,7 +55,7 @@ export class LauncherUI
                 break;
 
             case 'game-update-available':
-                $('#launch').text('Update'); // FIXME i18n.translate
+                $('#launch').text(i18n.translate('Update'));
 
                 break;
 
@@ -156,13 +156,26 @@ export class LauncherUI
         Genshinlib.getBackgroundUri().then(uri => $('body').css('background-image', `url(${uri})`));
     }
 
+    public static updateSocial (): void
+    {
+        fetch(`https://genshin.mihoyo.com/launcher/10/${Genshinlib.lang.launcher}?api_url=https%3A%2F%2Fapi-os-takumi.mihoyo.com%2Fhk4e_global&prev=false`)
+        .then(res => res.text())
+        .then(body => {
+            $('#__layout').remove();
+            $(body).find('#__layout').appendTo('#launchcontent');
+
+            $('#launchcontent .home__main .home-swiper-wrap').remove();
+            $('#launchcontent .home__main .home-news').remove();
+        });
+    }
+
     public static updateLang (lang: string|null = null): void
     {
         if (lang !== null)
             i18n.setLang(lang);
 
         $('*[i18id]').each((i, element) => {
-            element.innerText = i18n.translate(element.getAttribute('i18id')?.toString()!);
+            element.innerText = i18n.translate(element.getAttribute('i18id')!);
         });
     }
 }
