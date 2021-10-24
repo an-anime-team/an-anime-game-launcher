@@ -38,6 +38,7 @@ export class DiscordRPC
 
     public static close (): void
     {
+        this.rpc.clearActivity();
         this.rpc.destroy();
 
         this.rpc = null as any;
