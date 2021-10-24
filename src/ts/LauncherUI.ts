@@ -162,7 +162,7 @@ export class LauncherUI
             i18n.setLang(lang);
 
         $('*[i18id]').each((i, element) => {
-            element.innerText = i18n.translate(element.getAttribute('i18id')?.toString()!);
+            element.innerText = i18n.translate(element.getAttribute('i18id')!);
         });
     }
 }
