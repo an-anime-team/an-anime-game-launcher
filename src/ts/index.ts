@@ -40,8 +40,8 @@ $(() => {
 
     ipcRenderer.on('rpc-toggle', () => {
         DiscordRPC.isActive() ?
-            DiscordRPC.init() :
-            DiscordRPC.close();
+            DiscordRPC.close() :
+            DiscordRPC.init();
     });
 
     // FIXME
