@@ -12,8 +12,6 @@ const path = require('path');
 const Store = require('electron-store');
 Store.initRenderer();
 
-const { Genshinlib } = require('./public/js/Genshinlib');
-
 let mainWindow;
 
 ipcMain.handle('hide-window', () => mainWindow.hide());
