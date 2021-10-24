@@ -69,24 +69,24 @@ export class Genshinlib
 
     public static getRunners (): Promise<[{ title: string, runners: Runner[] }]>
     {
-        return new Promise((resolve, reject) => {
+        /*return new Promise((resolve, reject) => {
             fetch(this.runnersUri)
                 .then(response => response.json())
                 .then(runners => resolve(runners));
-        });
+        });*/
 
-        // return JSON.parse(fs.readFileSync(path.join(__dirname, '..', '..', 'runners.json')));
+        return new Promise(resolve => resolve(JSON.parse(fs.readFileSync(path.join(path.dirname(__dirname), '..', '..', 'runners.json')))));
     }
 
     public static getDXVKs (): Promise<DXVK[]>
     {
-        return new Promise((resolve, reject) => {
+        /*return new Promise((resolve, reject) => {
             fetch(this.dxvksUri)
                 .then(response => response.json())
                 .then(dxvks => resolve(dxvks));
-        });
+        });*/
 
-        // return new Promise(resolve => resolve(JSON.parse(fs.readFileSync(path.join(__dirname, '..', '..', 'dxvks.json')))));
+        return new Promise(resolve => resolve(JSON.parse(fs.readFileSync(path.join(path.dirname(__dirname), '..', '..', 'dxvks.json')))));
     }
 
     public static getConfig (property: string|null = null): any

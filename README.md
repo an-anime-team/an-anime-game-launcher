@@ -2,7 +2,9 @@
 
 <img src="repository-pics/launcher-main.png">
 
-<img src="repository-pics/launcher-settings.png">
+<img src="repository-pics/launcher-settings-1.png">
+
+<img src="repository-pics/launcher-settings-2.png">
 
 <br><br>
 
@@ -10,7 +12,7 @@
 
 | Game version | Launcher version | Patch version |
 | :---: | :---: | :---: |
-| 2.2.0 | 2.2.0-beta6 ⚠️ | 2.2.0-stable ✅ |
+| 2.2.0 | 2.2.0-beta7 ⚠️ | 2.2.0-stable ✅ |
 
 Download from [Releases](https://notabug.org/nobody/an-anime-game-launcher/releases)
 
