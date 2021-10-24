@@ -72,12 +72,12 @@ export class Genshinlib
 
     public static get version(): Config['version']
     {
-        return this.getConfig().version;
+        return this.getConfig('version');
     }
 
     public static get lang(): Config['lang']
     {
-        return this.getConfig().lang;
+        return this.getConfig('lang');
     }
 
     public static getRunners (): Promise<[{ title: string, runners: Runner[] }]>
@@ -102,7 +102,7 @@ export class Genshinlib
         // return new Promise(resolve => resolve(JSON.parse(fs.readFileSync(path.join(__dirname, '..', '..', 'dxvks.json')))));
     }
 
-    public static getConfig (): Config
+    public static getConfig (property: string|null = null, splitProperty: boolean = true): any
     {
         if (!fs.existsSync(this.launcherJson))
             fs.writeFileSync(this.launcherJson, JSON.stringify({
@@ -120,7 +120,20 @@ export class Genshinlib
                 rpc: false
             }, null, 4));
         
-        return JSON.parse(fs.readFileSync(this.launcherJson));
+        let config = JSON.parse(fs.readFileSync(this.launcherJson));
+
+        if (property === null)
+            return config;
+
+        else
+        {
+            if (!splitProperty)
+                return config[property];
+
+            property.split('.').forEach(prop => config = config[prop]);
+
+            return config;
+        }
     }
 
     public static setConfig (info: Config): Genshinlib
@@ -159,12 +172,12 @@ export class Genshinlib
     {
         let background = '';
         
-        if (!this.getConfig().background.time || new Date(new Date().setHours(0,0,0,0)).setDate(new Date(new Date().setHours(0,0,0,0)).getDate()).toString() >= this.getConfig().background.time!)
+        if (!this.getConfig('background.time') || new Date(new Date().setHours(0,0,0,0)).setDate(new Date(new Date().setHours(0,0,0,0)).getDate()).toString() >= this.getConfig('background.time')!)
         {
             await fetch(this.backgroundUri + this.lang.launcher)
                 .then(res => res.json())
                 .then(async resdone => {
-                    let prevBackground = this.getConfig().background.file;
+                    let prevBackground = this.getConfig('background.file');
 
                     this.updateConfig({
                         background: {
@@ -173,23 +186,23 @@ export class Genshinlib
                         }
                     });
 
-                    if (fs.existsSync(path.join(this.launcherDir, this.getConfig().background.file)))
-                        background = path.join(this.launcherDir, this.getConfig().background.file);
+                    if (fs.existsSync(path.join(this.launcherDir, this.getConfig('background.file'))))
+                        background = path.join(this.launcherDir, this.getConfig('background.file'));
                     
                     else
                     {
-                        await Tools.downloadFile(resdone.data.adv.background, path.join(this.launcherDir, this.getConfig().background.file), (current: number, total: number, difference: number) => null).then(() => {
+                        await Tools.downloadFile(resdone.data.adv.background, path.join(this.launcherDir, this.getConfig('background.file')), (current: number, total: number, difference: number) => null).then(() => {
                             !prevBackground ?
                                 console.log('No old background found') :
                                 fs.unlinkSync(path.join(this.launcherDir, prevBackground));
 
-                            background = path.join(this.launcherDir, this.getConfig().background.file);
+                            background = path.join(this.launcherDir, this.getConfig('background.file'));
                         });
                     };
                 });
         }
 
-        else background = path.join(this.launcherDir, this.getConfig().background.file);
+        else background = path.join(this.launcherDir, this.getConfig('background.file'));
         
         return background;
     }
@@ -253,13 +266,13 @@ export class Genshinlib
             let installationProgress = 0;
             let installerProcess;
 
-            if (this.getConfig().runner)
+            if (this.getConfig('runner'))
             {
                 installerProcess = spawn('winetricks', ['corefonts', 'usetakefocus=n', 'dxvk191'], {
                     env: {
                         ...process.env,
                         WINEPREFIX: prefixpath,
-                        WINE: path.join(this.runnersDir, this.getConfig().runner?.folder, this.getConfig().runner?.executable)
+                        WINE: path.join(this.runnersDir, this.getConfig('runner.folder'), this.getConfig('runner.executable'))
                     }
                 });
             }

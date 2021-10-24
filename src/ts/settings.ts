@@ -33,7 +33,7 @@ $(() => {
     $(`#voice-list option[value="${Genshinlib.lang.voice}"]`).prop('selected', true);
     $(`#language-list option[value="${Genshinlib.lang.launcher}"]`).prop('selected', true);
 
-    if (Genshinlib.getConfig().rpc)
+    if (Genshinlib.getConfig('rpc'))
         $('#drpc').prop('checked', true);
 
     $('#drpc').on('change', () => {
@@ -74,32 +74,27 @@ $(() => {
                 lang: {
                     launcher: e.target.value,
                     voice: Genshinlib.lang.voice
-                }
-            });
+                },
 
-            // This is required as the file name changes on the API but since we don't call the API before checking
-            // if the time is null or expired we set time to null here.
-            Genshinlib.updateConfig({
+                // This is required as the file name changes on the API but since we don't call the API before checking
+                // if the time is null or expired we set time to null here.
                 background: {
                     time: null,
-                    file: Genshinlib.getConfig().background.file
+                    file: Genshinlib.getConfig('background.file')
                 }
             });
 
-            // Send language updates
             LauncherUI.updateLang(e.target.value);
-            ipcRenderer.send('change-lang', { 'lang': e.target.value });
 
-            /*$('*[i18id]').each((i, element) => {
-                element.innerText = i18n.translate(element.getAttribute('i18id')?.toString()!);
-            });*/
+            // Send language updates
+            ipcRenderer.send('change-lang', { 'lang': e.target.value });
 
             $(`#language-list option[value="${activeLang}"]`).removeProp('selected');
             $(`#language-list option[value="${e.target.value}"]`).prop('selected', true);
         }
     });
 
-    let activeRunner = Genshinlib.getConfig().runner;
+    let activeRunner = Genshinlib.getConfig('runner');
 
     Genshinlib.getRunners().then(runners => {
         runners.forEach(category => {
@@ -173,7 +168,7 @@ $(() => {
         });
     });
 
-    let activeDXVK = Genshinlib.getConfig().dxvk;
+    let activeDXVK = Genshinlib.getConfig('dxvk');
 
     Genshinlib.getDXVKs().then(dxvks => {
         dxvks.forEach(dxvk => {
