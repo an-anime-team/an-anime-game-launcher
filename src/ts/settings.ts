@@ -10,6 +10,7 @@ import { Tools } from './lib/Tools';
 
 $(() => {
 
+    // Make sure settings is shown in correct language.
     LauncherUI.updateLang(Genshinlib.getConfig('lang.launcher') ?? 'en-us');
 
     $('*[i18id]').each((i, element) => {

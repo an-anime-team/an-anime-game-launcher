@@ -22,6 +22,7 @@ $(() => {
     if (Genshinlib.version !== null)
         document.title = 'Genshin Impact Linux Launcher - ' + Genshinlib.version;
 
+    // On Start configuration of LauncherUI
     LauncherUI.updateLang(Genshinlib.getConfig('lang.launcher') ?? 'en-us');
     LauncherUI.setState('game-launch-available');
     LauncherUI.updateBackground();
