@@ -25,18 +25,11 @@ $(() => {
 
     LauncherUI.setState('game-launch-available');
     LauncherUI.updateBackground();
-
-    fetch(`https://genshin.mihoyo.com/launcher/10/${Genshinlib.lang.launcher}?api_url=https%3A%2F%2Fapi-os-takumi.mihoyo.com%2Fhk4e_global&prev=false`)
-        .then(res => res.text())
-        .then(body => {
-            $(body).find('#__layout').appendTo('#launchcontent');
-
-            $('#launchcontent .home__main .home-swiper-wrap').remove();
-            $('#launchcontent .home__main .home-news').remove();
-        });
+    LauncherUI.updateSocial();
 
     ipcRenderer.on('change-lang', (event: void, data: any) => {
         LauncherUI.updateBackground();
+        LauncherUI.updateSocial();
         // Needs data.lang in the arguments since the button doesn't get updated otherwise.
         LauncherUI.updateLang(data.lang);
     });
