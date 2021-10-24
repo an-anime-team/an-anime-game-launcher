@@ -54,7 +54,17 @@ To 2.2.0-release1
 * <s>Add DXVK downloading in settings</s> *(beta 6)*
 * Add launcher updates notifications
 * Make automatical patch state parsing
+* Make participation in the anonymous analytics request
+
+To 2.2.0-release2
+
 * Add outdated files deletion when new game's update releases
+* Add voice packs support
+* Add Patch category in settings menu with
+  - Always participate in patches testing
+  - Applying anti login crash patch
+  - Remove patch
+* Playing statistics
 
 And don't forget to change the patch's URI when it will be changed
 
