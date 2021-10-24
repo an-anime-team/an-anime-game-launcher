@@ -1,4 +1,4 @@
-import GIJSON from './GIJSON';
+import GIJSON from '../types/GIJSON';
 import { Tools } from './Tools';
 
 const https = require('follow-redirects').https;
