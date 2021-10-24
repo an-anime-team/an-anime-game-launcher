@@ -2,9 +2,7 @@
 
 <img src="repository-pics/launcher-main.png">
 
-<img src="repository-pics/launcher-settings-1.png">
-
-<img src="repository-pics/launcher-settings-2.png">
+<img src="repository-pics/launcher-settings.png">
 
 <br><br>
 
