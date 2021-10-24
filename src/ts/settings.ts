@@ -31,7 +31,7 @@ $(() => {
         $(`.menu-item[anchor=${anchor}]`).addClass('menu-item-active');
     });
 
-    $('.checkbox').on('click', (e) => {
+    $('.checkbox-mark').on('click', (e) => {
         let item = $(e.target);
 
         while (!item.hasClass('checkbox'))
