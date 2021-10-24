@@ -13,7 +13,7 @@
     "GameDownloaded": "游戏安装成功",
     "ApplyPatch": "应用补丁...",
     "PatchRequired": "需要补丁",
-    "PatchRequiredHint": "此游戏版本没有防作弊补丁。请等待几天，然后重试。",
+    "PatchRequiredHint": "此游戏版本没有防作弊补丁。请等待几天，然后重试",
     "TestPatch": "应用测试补丁",
-    "TestPatchHint": "此游戏版本有防作弊补丁，但处于测试阶段。您可以等待几天直到它稳定或自担风险应用它。"
+    "TestPatchHint": "此游戏版本有防作弊补丁，但处于测试阶段。您可以等待几天直到它稳定或自担风险应用它"
 }
