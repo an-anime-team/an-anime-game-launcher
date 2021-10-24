@@ -1,4 +1,4 @@
-<img src="repository-pics/logo.png">
+<img src="repository-pics/logo.jpg">
 
 <img src="repository-pics/launcher-main.png">
 
