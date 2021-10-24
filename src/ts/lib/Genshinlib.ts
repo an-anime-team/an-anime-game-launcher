@@ -1,5 +1,6 @@
-import GIJSON from './GIJSON';
+import GIJSON from '../types/GIJSON';
 import { Tools } from './Tools';
+const Store = require('electron-store');
 
 const https = require('follow-redirects').https;
 
@@ -8,6 +9,23 @@ const path = require('path');
 const os = require('os');
 const { spawn, exec } = require('child_process');
 const dns = require('dns');
+
+const config = new Store({
+    defaults: {
+        lang: {
+            launcher: 'en-us',
+            voice: 'en-us'
+        },
+        background: {
+            time: null,
+            file: null
+        },
+        version: null,
+        patch: null,
+        runner: null,
+        rpc: false,
+    },
+});
 
 type Runner = {
     name: string,          // Runner title which will be showed in the list
@@ -24,38 +42,12 @@ type DXVK = {
     uri: string
 };
 
-type Config = {
-    lang: {
-        launcher: 'en-us' | 'ru-ru' | 'fr-fr' | 'id-id' | 'de-de' | 'es-es' | 'pt-pt' | 'th-th' | 'vi-vn' | 'ko-kr' | 'ja-jp' | 'zh-tw' | 'zh-cn',
-        voice: 'en-us' | 'ko-kr' | 'ja-jp' | 'zh-cn'
-    },
-    background: {
-        time: string|null,
-        file: string|null
-    },
-    version: string|null,
-    patch: {
-        version: string|null,
-        state: 'testing' | 'stable'
-    },
-    runner: null | {
-        name: string,
-        folder: string,
-        executable: string
-    },
-    dxvk: string|null,
-    rpc: boolean
-};
-
 export class Genshinlib
 {
     public static readonly patchDir: string = path.join(path.dirname(__dirname), '..', 'patch');
     public static readonly patchJson: string = path.join(this.patchDir, 'patch.json');
-    public static readonly patchSh = path.join(this.patchDir, 'patch.sh');
-    public static readonly patchAntiCrashSh = path.join(this.patchDir, 'patch_anti_logincrash.sh');
 
     public static readonly launcherDir: string = path.join(os.homedir(), 'genshin-impact-launcher');
-    public static readonly launcherJson: string = path.join(this.launcherDir, 'launcher.json');
 
     public static readonly tmpPatchDir: string = path.join(this.launcherDir, 'gi-on-linux');
 
@@ -70,14 +62,9 @@ export class Genshinlib
     protected static readonly runnersUri: string = 'https://notabug.org/nobody/an-anime-game-launcher/raw/main/runners.json';
     protected static readonly dxvksUri: string = 'https://notabug.org/nobody/an-anime-game-launcher/raw/main/dxvks.json';
 
-    public static get version(): Config['version']
+    public static get version(): string|null
     {
         return this.getConfig('version');
-    }
-
-    public static get lang(): Config['lang']
-    {
-        return this.getConfig('lang');
     }
 
     public static getRunners (): Promise<[{ title: string, runners: Runner[] }]>
@@ -104,51 +91,15 @@ export class Genshinlib
 
     public static getConfig (property: string|null = null, splitProperty: boolean = true): any
     {
-        if (!fs.existsSync(this.launcherJson))
-            fs.writeFileSync(this.launcherJson, JSON.stringify({
-                lang: {
-                    launcher: 'en-us',
-                    voice: 'en-us'
-                },
-                background: {
-                    time: null,
-                    file: null
-                },
-                version: null,
-                patch: null,
-                runner: null,
-                rpc: false
-            }, null, 4));
-        
-        let config = JSON.parse(fs.readFileSync(this.launcherJson));
-
         if (property === null)
             return config;
 
-        else
-        {
-            if (!splitProperty)
-                return config[property];
-
-            property.split('.').forEach(prop => config = config[prop]);
-
-            return config;
-        }
+        return config.get(property)
     }
 
-    public static setConfig (info: Config): Genshinlib
+    public static updateConfig (cname: string, value: string|boolean|null|number): Genshinlib
     {
-        fs.writeFileSync(this.launcherJson, JSON.stringify(info, null, 4));
-
-        return this;
-    }
-
-    public static updateConfig (config: any): Genshinlib
-    {
-        return this.setConfig({
-            ...this.getConfig(),
-            ...config
-        });
+        return config.set(cname, value);
     }
 
     public static async getData (): Promise<any>
@@ -174,17 +125,13 @@ export class Genshinlib
         
         if (!this.getConfig('background.time') || new Date(new Date().setHours(0,0,0,0)).setDate(new Date(new Date().setHours(0,0,0,0)).getDate()).toString() >= this.getConfig('background.time')!)
         {
-            await fetch(this.backgroundUri + this.lang.launcher)
+            await fetch(this.backgroundUri + this.getConfig('lang.launcher'))
                 .then(res => res.json())
                 .then(async resdone => {
                     let prevBackground = this.getConfig('background.file');
 
-                    this.updateConfig({
-                        background: {
-                            time: new Date(new Date().setHours(0,0,0,0)).setDate(new Date(new Date().setHours(0,0,0,0)).getDate() + 7).toString(),
-                            file: resdone.data.adv.background.replace(/.*\//, '')
-                        }
-                    });
+                    this.updateConfig('background.time', new Date(new Date().setHours(0,0,0,0)).setDate(new Date(new Date().setHours(0,0,0,0)).getDate() + 7).toString());
+                    this.updateConfig('background.file', resdone.data.adv.background.replace(/.*\//, ''));
 
                     if (fs.existsSync(path.join(this.launcherDir, this.getConfig('background.file'))))
                         background = path.join(this.launcherDir, this.getConfig('background.file'));

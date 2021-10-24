@@ -2,9 +2,7 @@ const path = require('path');
 const fs = require('fs');
 const { exec } = require('child_process');
 const { ipcRenderer } = require('electron');
-
 import $ from 'cash-dom';
-import { i18n } from './lib/i18n';
 
 import { Genshinlib } from './lib/Genshinlib';
 import { LauncherUI } from './lib/LauncherUI';
@@ -24,8 +22,9 @@ $(() => {
     if (Genshinlib.version !== null)
         document.title = 'Genshin Impact Linux Launcher - ' + Genshinlib.version;
 
+    // On Start configuration of LauncherUI
+    LauncherUI.updateLang(Genshinlib.getConfig('lang.launcher') ?? 'en-us');
     LauncherUI.setState('game-launch-available');
-
     LauncherUI.updateBackground();
     LauncherUI.updateSocial();
 
@@ -53,7 +52,7 @@ $(() => {
             let old;
 
             for (let i = 0; i < data.game.latest.voice_packs.length; ++i)
-                if (data.game.latest.voice_packs[i].language == Genshinlib.lang.voice)
+                if (data.game.latest.voice_packs[i].language == Genshinlib.getConfig('lang.voice'))
                 {
                     voicePack = data.game.latest.voice_packs[i];
 
@@ -80,14 +79,14 @@ $(() => {
 
             // For some reason this keeps breaking and locking up most of the time.
             Tools.downloadFile(voicePack.path, path.join(Genshinlib.launcherDir, voicePack.name), (current: number, total: number, difference: number) => {
-                LauncherUI.updateProgressBar(i18n.translate('Downloading'), current, total, difference);
+                LauncherUI.updateProgressBar(LauncherUI.i18n.translate('Downloading'), current, total, difference);
             }).then(() => {
                 console.log(`%c> Unpacking voice data...`, 'font-size: 16px');
                             
                 LauncherUI.initProgressBar();
 
                 Tools.unzip(path.join(Genshinlib.launcherDir, voicePack.name), Genshinlib.gameDir, (current: number, total: number, difference: number) => {
-                    LauncherUI.updateProgressBar(i18n.translate('Unpack'), current, total, difference);
+                    LauncherUI.updateProgressBar(LauncherUI.i18n.translate('Unpack'), current, total, difference);
                 }).then(() => {
                     fs.unlinkSync(path.join(Genshinlib.launcherDir, voicePack.name));
                     LauncherUI.setState('game-launch-available');
@@ -166,7 +165,7 @@ $(() => {
             }
 
             // Launching game
-            if ($('#launch').text() == i18n.translate('Launch'))
+            if ($('#launch').text() == LauncherUI.i18n.translate('Launch'))
             {
                 console.log(`%c> Starting the game...`, 'font-size: 16px');
 
@@ -197,9 +196,7 @@ $(() => {
                         {
                             wineExeutable = 'wine';
 
-                            Genshinlib.updateConfig({
-                                runner: null
-                            });
+                            Genshinlib.updateConfig('runner', null);
                         }
                     }
 
@@ -244,7 +241,7 @@ $(() => {
             }
 
             // Apply test patch
-            else if ($('#launch').text() == i18n.translate('TestPatch'))
+            else if ($('#launch').text() == LauncherUI.i18n.translate('TestPatch'))
             {
                 console.log(`%c> Applying patch...`, 'font-size: 16px');
 
@@ -284,7 +281,7 @@ $(() => {
                 LauncherUI.initProgressBar();
 
                 Tools.downloadFile(diff.path, path.join(Genshinlib.launcherDir, diff.name), (current: number, total: number, difference: number) => {
-                    LauncherUI.updateProgressBar(i18n.translate('Downloading'), current, total, difference);
+                    LauncherUI.updateProgressBar(LauncherUI.i18n.translate('Downloading'), current, total, difference);
                 }).then(() => {
                     /**
                      * Unpacking downloaded game
@@ -298,7 +295,7 @@ $(() => {
                     LauncherUI.initProgressBar();
 
                     Tools.unzip(path.join(Genshinlib.launcherDir, diff.name), Genshinlib.gameDir, (current: number, total: number, difference: number) => {
-                        LauncherUI.updateProgressBar(i18n.translate('Unpack'), current, total, difference);
+                        LauncherUI.updateProgressBar(LauncherUI.i18n.translate('Unpack'), current, total, difference);
                     }).then(() => {
                         /**
                          * Downloading voice data
@@ -311,7 +308,7 @@ $(() => {
                         let voicePack = diff.voice_packs[1]; // en-us
 
                         for (let i = 0; i < diff.voice_packs.length; ++i)
-                            if (diff.voice_packs[i].language == Genshinlib.lang.voice)
+                            if (diff.voice_packs[i].language == Genshinlib.getConfig('lang.voice'))
                             {
                                 voicePack = diff.voice_packs[i];
 
@@ -321,7 +318,7 @@ $(() => {
                         LauncherUI.initProgressBar();
 
                         Tools.downloadFile(voicePack.path, path.join(Genshinlib.launcherDir, voicePack.name), (current: number, total: number, difference: number) => {
-                            LauncherUI.updateProgressBar(i18n.translate('Downloading'), current, total, difference);
+                            LauncherUI.updateProgressBar(LauncherUI.i18n.translate('Downloading'), current, total, difference);
                         }).then(() => {
                             /**
                              * Unpacking downloaded game
@@ -332,13 +329,11 @@ $(() => {
                             LauncherUI.initProgressBar();
 
                             Tools.unzip(path.join(Genshinlib.launcherDir, voicePack.name), Genshinlib.gameDir, (current: number, total: number, difference: number) => {
-                                LauncherUI.updateProgressBar(i18n.translate('Unpack'), current, total, difference);
+                                LauncherUI.updateProgressBar(LauncherUI.i18n.translate('Unpack'), current, total, difference);
                             }).then(() => {
                                 fs.unlinkSync(path.join(Genshinlib.launcherDir, voicePack.name));
 
-                                Genshinlib.updateConfig({
-                                    version: data.game.latest.version
-                                });
+                                Genshinlib.updateConfig('version', data.game.latest.version);
 
                                 // Patch available
                                 if (Genshinlib.getPatchInfo().version === data.game.latest.version)
@@ -348,14 +343,14 @@ $(() => {
                                     console.log(`%c> Applying patch...`, 'font-size: 16px');
 
                                     // patch-applying state changes only button text
-                                    $('#downloaded').text(i18n.translate('ApplyPatch'));
+                                    $('#downloaded').text(LauncherUI.i18n.translate('ApplyPatch'));
 
                                     Genshinlib.patchGame(data.game.latest.version, () => {
                                         LauncherUI.setState('game-launch-available');
 
                                         ipcRenderer.send('notification', {
                                             title: document.title,
-                                            body: i18n.translate('GameDownloaded')
+                                            body: LauncherUI.i18n.translate('GameDownloaded')
                                         });
                                     }, (data) => console.log(data.toString()));
                                 }

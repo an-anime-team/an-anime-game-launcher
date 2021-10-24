@@ -4,15 +4,17 @@ const { ipcRenderer } = require('electron');
 const { exec } = require('child_process');
 
 import $ from 'cash-dom';
-import { i18n } from './lib/i18n';
 import { Genshinlib } from './lib/Genshinlib';
 import { LauncherUI } from './lib/LauncherUI';
 import { Tools } from './lib/Tools';
 
 $(() => {
 
+    // Make sure settings is shown in correct language.
+    LauncherUI.updateLang(Genshinlib.getConfig('lang.launcher') ?? 'en-us');
+
     $('*[i18id]').each((i, element) => {
-        element.innerText = i18n.translate(element.getAttribute('i18id')?.toString()!);
+        element.innerText = LauncherUI.i18n.translate(element.getAttribute('i18id')?.toString()!);
     });
 
     $('.menu-item').on('click', (e) => {
@@ -29,7 +31,7 @@ $(() => {
         $(`.menu-item[anchor=${anchor}]`).addClass('menu-item-active');
     });
 
-    $('.checkbox').on('click', (e) => {
+    $('.checkbox-mark').on('click', (e) => {
         let item = $(e.target);
 
         while (!item.hasClass('checkbox'))
@@ -39,31 +41,24 @@ $(() => {
     });
 
     // Select the saved options in launcher.json on load
-    $(`#voice-list option[value="${Genshinlib.lang.voice}"]`).prop('selected', true);
-    $(`#language-list option[value="${Genshinlib.lang.launcher}"]`).prop('selected', true);
+    $(`#voice-list option[value="${Genshinlib.getConfig('lang.voice')}"]`).prop('selected', true);
+    $(`#language-list option[value="${Genshinlib.getConfig('lang.launcher')}"]`).prop('selected', true);
 
     if (Genshinlib.getConfig('rpc'))
         $('#discord-rpc').addClass('checkbox-active');
 
     $('#discord-rpc').on('classChange', () => {
-        Genshinlib.updateConfig({
-            rpc: $('#discord-rpc').hasClass('checkbox-active')
-        });
+        Genshinlib.updateConfig('rpc', $('#discord-rpc').hasClass('checkbox-active'));
 
         ipcRenderer.send('rpc-toggle');
     });
 
     $('#voice-list').on('change', (e) => {
-        let activeVP = Genshinlib.lang.voice;
+        let activeVP = Genshinlib.getConfig('voice');
 
         if (activeVP != e.target.value)
         {
-            Genshinlib.updateConfig({
-                lang: {
-                    launcher: Genshinlib.lang.launcher,
-                    voice: e.target.value
-                }
-            });
+            Genshinlib.updateConfig('lang.voice', e.target.value);
             
             ipcRenderer.send('updateVP', { 'oldvp': activeVP });
 
@@ -75,23 +70,12 @@ $(() => {
     });
 
     $('#language-list').on('change', (e) => {
-        let activeLang = Genshinlib.lang.launcher;
+        let activeLang = Genshinlib.getConfig('lang.launcher');
 
         if (activeLang != e.target.value)
         {
-            Genshinlib.updateConfig({
-                lang: {
-                    launcher: e.target.value,
-                    voice: Genshinlib.lang.voice
-                },
-
-                // This is required as the file name changes on the API but since we don't call the API before checking
-                // if the time is null or expired we set time to null here.
-                background: {
-                    time: null,
-                    file: Genshinlib.getConfig('background.file')
-                }
-            });
+            Genshinlib.updateConfig('lang.launcher', e.target.value);
+            Genshinlib.updateConfig('background.time', null);
 
             LauncherUI.updateLang(e.target.value);
 
@@ -160,13 +144,9 @@ $(() => {
 
                         if (item.find('div').css('display') === 'none')
                         {
-                            Genshinlib.updateConfig({
-                                runner: {
-                                    name: runner.name,
-                                    folder: runner.folder,
-                                    executable: runner.executable
-                                }
-                            });
+                            Genshinlib.updateConfig('runner.name', runner.name);
+                            Genshinlib.updateConfig('runner.folder', runner.folder);
+                            Genshinlib.updateConfig('runner.executable', runner.executable);
 
                             $('#runners-list > .list-item').removeClass('list-item-active');
                             item.addClass('list-item-active');
@@ -239,9 +219,7 @@ $(() => {
                         });
 
                         installer.on('close', () => {
-                            Genshinlib.updateConfig({
-                                dxvk: dxvk.version
-                            });
+                            Genshinlib.updateConfig('dxvk', dxvk.version);
     
                             $('#dxvk-list > .list-item').removeClass('list-item-active');
                             item.addClass('list-item-active');
