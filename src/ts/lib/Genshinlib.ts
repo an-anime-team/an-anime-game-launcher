@@ -1,7 +1,7 @@
 import GIJSON from '../types/GIJSON';
 import { Tools } from './Tools';
-const Store = require('electron-store');
 
+const store = require('electron-store');
 const https = require('follow-redirects').https;
 
 const fs = require('fs');
@@ -10,7 +10,7 @@ const os = require('os');
 const { spawn, exec } = require('child_process');
 const dns = require('dns');
 
-const config = new Store({
+const config = new store ({
     defaults: {
         lang: {
             launcher: 'en-us',
@@ -23,8 +23,8 @@ const config = new Store({
         version: null,
         patch: null,
         runner: null,
-        rpc: false,
-    },
+        rpc: false
+    }
 });
 
 type Runner = {
@@ -89,17 +89,17 @@ export class Genshinlib
         // return new Promise(resolve => resolve(JSON.parse(fs.readFileSync(path.join(__dirname, '..', '..', 'dxvks.json')))));
     }
 
-    public static getConfig (property: string|null = null, splitProperty: boolean = true): any
+    public static getConfig (property: string|null = null): any
     {
         if (property === null)
             return config;
 
-        return config.get(property)
+        return config.get(property);
     }
 
-    public static updateConfig (cname: string, value: string|boolean|null|number): Genshinlib
+    public static updateConfig (property: string, value: string|boolean|null|number): Genshinlib
     {
-        return config.set(cname, value);
+        return config.set(property, value);
     }
 
     public static async getData (): Promise<any>
