@@ -98,38 +98,6 @@ export class Genshinlib
             return config;
 
         return config.get(property)
-
-        /*
-        if (!fs.existsSync(this.launcherJson))
-            fs.writeFileSync(this.launcherJson, JSON.stringify({
-                lang: {
-                    launcher: 'en-us',
-                    voice: 'en-us'
-                },
-                background: {
-                    time: null,
-                    file: null
-                },
-                version: null,
-                patch: null,
-                runner: null,
-                rpc: false
-            }, null, 4));
-        
-        let config = JSON.parse(fs.readFileSync(this.launcherJson));
-
-        if (property === null)
-            return config;
-
-        else
-        {
-            if (!splitProperty)
-                return config[property];
-
-            property.split('.').forEach(prop => config = config[prop]);
-
-            return config;
-        }*/
     }
 
     public static updateConfig (cname: string, value: string|boolean|null|number): Genshinlib
