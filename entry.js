@@ -98,9 +98,7 @@ app.whenReady().then(() => {
         mainWindow.webContents.send('updateVP', { 'oldvp': args.oldvp });
     });
 
-    ipcMain.on('rpcstate', (event, args) => {
-        mainWindow.webContents.send('rpcstate', {});
-    });
+    ipcMain.on('rpc-toggle', () => mainWindow.webContents.send('rpc-toggle'));
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common

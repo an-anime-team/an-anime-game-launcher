@@ -34,9 +34,15 @@ $(() => {
     $(`#language-list option[value="${Genshinlib.lang.launcher}"]`).prop('selected', true);
 
     if (Genshinlib.getConfig().rpc)
-        $(`#drpc`).prop('checked', true);
+        $('#drpc').prop('checked', true);
 
-    $('#drpc').on('change', () => ipcRenderer.send('rpcstate', {}));
+    $('#drpc').on('change', () => {
+        Genshinlib.updateConfig({
+            rpc: $('#drpc').prop('checked')
+        });
+
+        ipcRenderer.send('rpc-toggle');
+    });
 
     $('#voice-list').on('change', (e) => {
         let activeVP = Genshinlib.lang.voice;

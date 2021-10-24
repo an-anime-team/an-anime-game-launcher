@@ -43,8 +43,8 @@ type Config = {
         folder: string,
         executable: string
     },
-    rpc: boolean,
-    dxvk: string|null
+    dxvk: string|null,
+    rpc: boolean
 };
 
 export class Genshinlib

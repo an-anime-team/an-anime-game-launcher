@@ -1,6 +1,5 @@
 const path = require('path');
 const fs = require('fs');
-const discordrpc = require("discord-rpc");
 const { exec } = require('child_process');
 const { ipcRenderer } = require('electron');
 
@@ -10,6 +9,7 @@ import { i18n } from './lib/i18n';
 import { Genshinlib } from './lib/Genshinlib';
 import { LauncherUI } from './lib/LauncherUI';
 import { Tools } from './lib/Tools';
+import { DiscordRPC } from './lib/DiscordRPC';
 
 if (!fs.existsSync(Genshinlib.prefixDir))
     fs.mkdirSync(Genshinlib.prefixDir, { recursive: true });
@@ -25,61 +25,23 @@ $(() => {
         document.title = 'Genshin Impact Linux Launcher - ' + Genshinlib.version;
 
     LauncherUI.setState('game-launch-available');
+
     LauncherUI.updateBackground();
     LauncherUI.updateSocial();
 
     ipcRenderer.on('change-lang', (event: void, data: any) => {
+        LauncherUI.updateLang(data.lang);
         LauncherUI.updateBackground();
         LauncherUI.updateSocial();
-        // Needs data.lang in the arguments since the button doesn't get updated otherwise.
-        LauncherUI.updateLang(data.lang);
     });
 
-    let rpc: any;
-
-    // FIXME
     if (Genshinlib.getConfig().rpc)
-    {
-        rpc = new discordrpc.Client({ transport: 'ipc' });
-        rpc.login({ clientId: '901534333360304168' }).catch(console.error);
+        DiscordRPC.init();
 
-        rpc.on('ready', () => {
-            rpc.setActivity({
-                details: 'Preparing to launch',
-                largeImageKey: 'launcher',
-                largeImageText: 'An Anime Game Launcher',
-                instance: false,
-            });
-        });
-    }
-
-    // FIXME
-    ipcRenderer.on('rpcstate', (event: void, data: any) => {
-        if(!rpc) {
-            rpc = new discordrpc.Client({ transport: "ipc" });
-            rpc.login({ clientId: '901534333360304168' }).catch(console.error);
-
-            rpc.on('ready', () => {
-                rpc.setActivity({
-                    details: `Preparing to launch`,
-                    largeImageKey: `launcher`,
-                    largeImageText: `An Anime Game Launcher`,
-                    instance: false,
-                });
-            });
-
-            if (!Genshinlib.getConfig().rpc)
-                Genshinlib.updateConfig({
-                    rpc: true
-                });
-        } else {
-            rpc.clearActivity();
-            rpc.destroy();
-            rpc = false;
-            Genshinlib.updateConfig({
-                rpc: false
-            });
-        }
+    ipcRenderer.on('rpc-toggle', () => {
+        DiscordRPC.isActive() ?
+            DiscordRPC.init() :
+            DiscordRPC.close();
     });
 
     // FIXME
@@ -243,15 +205,12 @@ $(() => {
 
                     console.log(`Wine executable: ${wineExeutable}`);
 
-                    // FIXME
-                    if (rpc)
+                    if (DiscordRPC.isActive())
                     {
-                        rpc.setActivity({
-                            details: `In-Game`,
-                            largeImageKey: `game`,
-                            largeImageText: `An Anime Game Launcher`,
-                            startTimestamp: parseInt(new Date().setDate(new Date().getDate()).toString()),
-                            instance: false,
+                        DiscordRPC.setActivity({
+                            details: 'In-Game',
+                            largeImageKey: 'game',
+                            largeImageText: 'An Anime Game Launcher'
                         });
                     }
 
@@ -266,14 +225,12 @@ $(() => {
 
                         ipcRenderer.invoke('show-window');
 
-                        // FIXME
-                        if (rpc)
+                        if (DiscordRPC.isActive())
                         {
-                            rpc.setActivity({
-                                details: `Preparing to launch`,
-                                largeImageKey: `launcher`,
-                                largeImageText: `An Anime Game Launcher`,
-                                instance: false,
+                            DiscordRPC.setActivity({
+                                details: 'Preparing to launch',
+                                largeImageKey: 'launcher',
+                                largeImageText: 'An Anime Game Launcher'
                             });
                         }
 
