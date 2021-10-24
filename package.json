@@ -38,6 +38,7 @@
         }
     },
     "devDependencies": {
+        "@types/discord-rpc": "^4.0.0",
         "electron": "^14.0.0",
         "electron-builder": "^22.13.1",
         "sass": "^1.41.0",

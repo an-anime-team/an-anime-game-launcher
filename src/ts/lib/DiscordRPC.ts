@@ -1,4 +1,4 @@
-const discordRpc = require('discord-rpc');
+import discordRpc, { Client, Presence } from 'discord-rpc';
 
 export class DiscordRPC
 {
@@ -8,7 +8,7 @@ export class DiscordRPC
 
     public static init ()
     {
-        this.rpc = new discordRpc.Client({ transport: 'ipc' });
+        this.rpc = new discordRpc.Client({ transport: 'ipc' }) as Client;
         
         this.rpc.login({ clientId: this.clientId }).catch(console.error);
 
@@ -16,18 +16,18 @@ export class DiscordRPC
             this.rpc.setActivity({
                 details: 'Preparing to launch',
                 largeImageKey: 'launcher',
-                largeImageText: 'An Anime Game Launcher',
-                instance: false
+                largeImageText: 'An Anime Game Launcher'
             });
         });
     }
 
-    public static setActivity (activity: any): void
+    public static setActivity (activity: Presence): void
     {
-        this.rpc?.setActivity({
-            startTimestamp: parseInt(new Date().setDate(new Date().getDate()).toString()),
-            instance: false,
-            ...activity
+        this.rpc.setActivity({
+            ...activity,
+            ...{
+                instance: false
+            }
         });
     }
 
@@ -38,9 +38,9 @@ export class DiscordRPC
 
     public static close (): void
     {
-        this.rpc?.clearActivity();
-        this.rpc?.destroy();
+        this.rpc.clearActivity();
+        this.rpc.destroy();
 
-        this.rpc = null;
+        this.rpc = null as any;
     }
 }

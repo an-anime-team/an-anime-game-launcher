@@ -40,8 +40,8 @@ $(() => {
 
     ipcRenderer.on('rpc-toggle', () => {
         DiscordRPC.isActive() ?
-            DiscordRPC.init() :
-            DiscordRPC.close();
+            DiscordRPC.close() :
+            DiscordRPC.init();
     });
 
     // FIXME
@@ -208,7 +208,8 @@ $(() => {
                         DiscordRPC.setActivity({
                             details: 'In-Game',
                             largeImageKey: 'game',
-                            largeImageText: 'An Anime Game Launcher'
+                            largeImageText: 'An Anime Game Launcher',
+                            startTimestamp: new Date().setDate(new Date().getDate())
                         });
                     }
 
