@@ -29,16 +29,25 @@ $(() => {
         $(`.menu-item[anchor=${anchor}]`).addClass('menu-item-active');
     });
 
+    $('.checkbox').on('click', (e) => {
+        let item = $(e.target);
+
+        while (!item.hasClass('checkbox'))
+            item = item.parent();
+
+        item.toggleClass('checkbox-active').trigger('classChange');
+    });
+
     // Select the saved options in launcher.json on load
     $(`#voice-list option[value="${Genshinlib.lang.voice}"]`).prop('selected', true);
     $(`#language-list option[value="${Genshinlib.lang.launcher}"]`).prop('selected', true);
 
     if (Genshinlib.getConfig('rpc'))
-        $('#drpc').prop('checked', true);
+        $('#discord-rpc').addClass('checkbox-active');
 
-    $('#drpc').on('change', () => {
+    $('#discord-rpc').on('classChange', () => {
         Genshinlib.updateConfig({
-            rpc: $('#drpc').prop('checked')
+            rpc: $('#discord-rpc').hasClass('checkbox-active')
         });
 
         ipcRenderer.send('rpc-toggle');
