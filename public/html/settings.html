@@ -25,27 +25,7 @@
             <div class="settings-item" id="general">
                 <h2 i18id="GeneralSettings">General</h2>
 
-                <h3 i18id="Langs">Language</h3>
-
-                <select class="dropdown-menu" id="language-list">
-                    <option value="en-us">English (US)</option>
-                    <option value="zh-cn">中文（简化）(Chinese Simplified)</option>
-                    <option value="de-de">Deutsch (German)</option>
-                    <option value="fr-fr">Français (French)</option>
-                    <option value="id-id">Indonesia (Indonesian)</option>
-                    <option value="ja-jp">日本語 (Japanese)</option>
-                    <option value="ko-kr">한국어 (Korean)</option>
-                    <option value="pt-pt">Português (Portuguese)</option>
-                    <option value="ru-ru">Pусский (Russian)</option>
-                    <option value="es-es">Español (Spanish)</option>
-                    <option value="th-th">ภาษาไทย (Thai)</option>
-                    <option value="zh-tw">中文（繁體）(Chinese Traditional)</option>
-                    <option value="vi-vn">Tiếng Việt (Vietnamese)</option>
-                </select>
-
-                <br>
-
-                <h3 i18id="Voice">Voice Pack</h3>
+                <!--<h3 i18id="Voice">Voice Pack</h3>
 
                 <select class="dropdown-menu" id="voice-list" disabled>
                     <option value="en-us">English (US)</option>
@@ -54,6 +34,36 @@
                     <option value="ko-kr">한국어 (Korean)</option>
                 </select>
 
+                <br>-->
+
+                <div class="select" id="language">
+                    <span i18id="Language">Language</span>
+
+                    <div class="select-options">
+                        <ul>
+                            <li value="en-us">English (US)</li>
+                            <li value="zh-cn">中文（简化）(Chinese Simplified)</li>
+                            <li value="de-de">Deutsch (German)</li>
+                            <li value="fr-fr">Français (French)</li>
+                            <li value="id-id">Indonesia (Indonesian)</li>
+                            <li value="ja-jp">日本語 (Japanese)</li>
+                            <li value="ko-kr">한국어 (Korean)</li>
+                            <li value="pt-pt">Português (Portuguese)</li>
+                            <li value="ru-ru">Pусский (Russian)</li>
+                            <li value="es-es">Español (Spanish)</li>
+                            <li value="th-th">ภาษาไทย (Thai)</li>
+                            <li value="zh-tw">中文（繁體）(Chinese Traditional)</li>
+                            <li value="vi-vn">Tiếng Việt (Vietnamese)</li>
+                        </ul>
+                    </div>
+                
+                    <div class="selected-item">
+                        <span>English</span>
+
+                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 330.002 330.002" xml:space="preserve"><path id="XMLID_226_" d="M233.252,155.997L120.752,6.001c-4.972-6.628-14.372-7.97-21-3c-6.628,4.971-7.971,14.373-3,21 l105.75,140.997L96.752,306.001c-4.971,6.627-3.627,16.03,3,21c2.698,2.024,5.856,3.001,8.988,3.001 c4.561,0,9.065-2.072,12.012-6.001l112.5-150.004C237.252,168.664,237.252,161.33,233.252,155.997z"/></svg>
+                    </div>
+                </div>
+                
                 <br>
 
                 <div class="checkbox" id="discord-rpc">

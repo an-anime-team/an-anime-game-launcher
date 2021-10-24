@@ -135,6 +135,8 @@ body
         margin-left: auto
         padding: 8px 16px
 
+        cursor: pointer
+
         &:hover
             background-color: #657ef8
 
@@ -151,3 +153,93 @@ body
 
         svg
             filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(219deg) brightness(102%) contrast(104%)
+
+.select
+    display: inline-flex
+    align-items: center
+
+    font-size: larger
+
+    width: calc(100% - 24px)
+    height: 48px
+    padding: 0 12px
+
+    border-radius: 12px
+
+    .select-options
+        position: absolute
+        display: none
+
+        background-color: white
+        border-radius: 12px
+
+        box-shadow: 0 1px 8px 0 rgba(0, 0, 0, .2)
+
+        padding: 8px 12px
+        transform: translateY(calc(50% + 32px)) translateX(208px)
+
+        cursor: pointer
+
+        ul
+            list-style: none
+
+            padding: 0
+            margin: 0
+
+            li
+                color: #8592a3
+                font-size: smaller
+
+                border-radius: 8px
+                padding: 8px
+
+                &:hover
+                    background-color: #e1e7ff
+                    color: #657ef8
+
+            li:not(last-child)
+                margin-bottom: 4px
+
+            li.selected
+                background-color: #e1e7ff
+                color: #657ef8
+
+    .selected-item
+        display: flex
+        align-items: baseline
+
+        font-size: initial
+
+        background-color: #e1e7ff
+
+        border-radius: 16px
+        margin-left: auto
+        padding: 8px 16px
+
+        cursor: pointer
+
+        &:hover
+            background-color: #657ef8
+            color: white
+
+            svg
+                filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(219deg) brightness(102%) contrast(104%)
+
+        svg
+            height: 12px
+            width: 12px
+
+            margin-left: 8px
+
+            transform: rotate(90deg)
+
+.select-active
+    .selected-item
+        color: white
+        background-color: #657ef8
+
+        svg
+            filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(219deg) brightness(102%) contrast(104%)
+
+    .select-options
+        display: block
