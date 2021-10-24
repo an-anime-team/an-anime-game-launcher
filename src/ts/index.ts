@@ -37,7 +37,8 @@ $(() => {
 
     ipcRenderer.on('change-lang', (event: void, data: any) => {
         LauncherUI.updateBackground();
-        LauncherUI.updateLang();
+        // Needs data.lang in the arguments since the button doesn't get updated otherwise.
+        LauncherUI.updateLang(data.lang);
     });
 
     let rpc: any;
