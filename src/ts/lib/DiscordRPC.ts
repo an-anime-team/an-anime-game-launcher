@@ -1,4 +1,4 @@
-import discordRpc, { Client } from 'discord-rpc';
+import discordRpc, { Client, Presence } from 'discord-rpc';
 
 export class DiscordRPC
 {
@@ -22,7 +22,7 @@ export class DiscordRPC
         });
     }
 
-    public static setActivity (activity: any): void
+    public static setActivity (activity: Presence): void
     {
         this.rpc.setActivity({
             ...activity,
