@@ -25,9 +25,7 @@ export class DiscordRPC
     {
         this.rpc.setActivity({
             ...activity,
-            ...{
-                instance: false
-            }
+            instance: false
         });
     }
 
