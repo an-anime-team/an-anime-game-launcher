@@ -9,7 +9,6 @@ import { LauncherUI } from './lib/LauncherUI';
 import { Tools } from './lib/Tools';
 
 $(() => {
-
     // Make sure settings is shown in correct language.
     LauncherUI.updateLang(Genshinlib.getConfig('lang.launcher') ?? 'en-us');
 
@@ -40,9 +39,57 @@ $(() => {
         item.toggleClass('checkbox-active').trigger('classChange');
     });
 
+    $('.selected-item').on('click', (e) => {
+        let item = $(e.target);
+
+        while (!item.hasClass('select'))
+            item = item.parent();
+
+        item.toggleClass('select-active').trigger('classChange');
+    });
+
+    $('.select-options li').on('click', (e) => {
+        let item = $(e.target), li = $(e.target);
+
+        if (!item.hasClass('selected'))
+        {
+            while (!item.hasClass('select'))
+                item = item.parent();
+
+            item.find('.select-options li').removeClass('selected');
+            li.addClass('selected');
+
+            item.removeClass('select-active');
+
+            item.find('.selected-item span').text(li.text());
+
+            item.trigger('selectionChanged', {
+                caption: li.text(),
+                value: li.attr('value')
+            });
+        }
+    });
+
+    $('#language').on('selectionChanged', (e, data: any) => {
+        let activeLang = Genshinlib.getConfig('lang.launcher');
+
+        if (activeLang != data.value)
+        {
+            Genshinlib.updateConfig('lang.launcher', data.value);
+            Genshinlib.updateConfig('background.time', null);
+
+            LauncherUI.updateLang(data.value);
+
+            // Send language updates
+            ipcRenderer.send('change-lang', { 'lang': data.value });
+        }
+    });
+
     // Select the saved options in launcher.json on load
     $(`#voice-list option[value="${Genshinlib.getConfig('lang.voice')}"]`).prop('selected', true);
-    $(`#language-list option[value="${Genshinlib.getConfig('lang.launcher')}"]`).prop('selected', true);
+
+    $(`#language li[value=${Genshinlib.getConfig('lang.launcher')}]`).addClass('selected');
+    $('#language .selected-item span').text($(`#language li[value=${Genshinlib.getConfig('lang.launcher')}]`).text());
 
     if (Genshinlib.getConfig('rpc'))
         $('#discord-rpc').addClass('checkbox-active');
@@ -67,24 +114,6 @@ $(() => {
         }
 
         else console.log('VP can\' be changed to the already set language');
-    });
-
-    $('#language-list').on('change', (e) => {
-        let activeLang = Genshinlib.getConfig('lang.launcher');
-
-        if (activeLang != e.target.value)
-        {
-            Genshinlib.updateConfig('lang.launcher', e.target.value);
-            Genshinlib.updateConfig('background.time', null);
-
-            LauncherUI.updateLang(e.target.value);
-
-            // Send language updates
-            ipcRenderer.send('change-lang', { 'lang': e.target.value });
-
-            $(`#language-list option[value="${activeLang}"]`).removeProp('selected');
-            $(`#language-list option[value="${e.target.value}"]`).prop('selected', true);
-        }
     });
 
     let activeRunner = Genshinlib.getConfig('runner');
