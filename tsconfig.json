@@ -9,6 +9,6 @@
         "removeComments": true,
         "outDir": "public/js"
     },
-    "include": ["src/ts/*"],
+    "include": ["src/ts/*", "src/ts/lib/*"],
     "exclude": ["node_modules", "**/*.spec.ts"]
 }

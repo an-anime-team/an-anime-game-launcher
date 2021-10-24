@@ -4,8 +4,10 @@ const { ipcRenderer } = require('electron');
 const { exec } = require('child_process');
 
 import $ from 'cash-dom';
-import { Genshinlib } from './Genshinlib';
-import { LauncherUI } from './LauncherUI';
+import { i18n } from './lib/i18n';
+import { Genshinlib } from './lib/Genshinlib';
+import { LauncherUI } from './lib/LauncherUI';
+import { Tools } from './lib/Tools';
 
 $(() => {
 
@@ -31,10 +33,16 @@ $(() => {
     $(`#voice-list option[value="${Genshinlib.lang.voice}"]`).prop('selected', true);
     $(`#language-list option[value="${Genshinlib.lang.launcher}"]`).prop('selected', true);
 
-    if (Genshinlib.getConfig().rpc)
-        $(`#drpc`).prop('checked', true);
+    if (Genshinlib.getConfig('rpc'))
+        $('#drpc').prop('checked', true);
 
-    $('#drpc').on('change', () => ipcRenderer.send('rpcstate', {}));
+    $('#drpc').on('change', () => {
+        Genshinlib.updateConfig({
+            rpc: $('#drpc').prop('checked')
+        });
+
+        ipcRenderer.send('rpc-toggle');
+    });
 
     $('#voice-list').on('change', (e) => {
         let activeVP = Genshinlib.lang.voice;
@@ -66,32 +74,27 @@ $(() => {
                 lang: {
                     launcher: e.target.value,
                     voice: Genshinlib.lang.voice
-                }
-            });
+                },
 
-            // This is required as the file name changes on the API but since we don't call the API before checking
-            // if the time is null or expired we set time to null here.
-            Genshinlib.updateConfig({
+                // This is required as the file name changes on the API but since we don't call the API before checking
+                // if the time is null or expired we set time to null here.
                 background: {
                     time: null,
-                    file: Genshinlib.getConfig().background.file
+                    file: Genshinlib.getConfig('background.file')
                 }
             });
 
-            // Send language updates
             LauncherUI.updateLang(e.target.value);
-            ipcRenderer.send('change-lang', { 'lang': e.target.value });
 
-            /*$('*[i18id]').each((i, element) => {
-                element.innerText = i18n.translate(element.getAttribute('i18id')?.toString()!);
-            });*/
+            // Send language updates
+            ipcRenderer.send('change-lang', { 'lang': e.target.value });
 
             $(`#language-list option[value="${activeLang}"]`).removeProp('selected');
             $(`#language-list option[value="${e.target.value}"]`).prop('selected', true);
         }
     });
 
-    let activeRunner = Genshinlib.getConfig().runner;
+    let activeRunner = Genshinlib.getConfig('runner');
 
     Genshinlib.getRunners().then(runners => {
         runners.forEach(category => {
@@ -116,11 +119,11 @@ $(() => {
 
                         let div = item.find('div');
 
-                        Genshinlib.downloadFile(runner.uri, path.join(Genshinlib.launcherDir, runner.name), (current: number, total: number, difference: number) => {
+                        Tools.downloadFile(runner.uri, path.join(Genshinlib.launcherDir, runner.name), (current: number, total: number, difference: number) => {
                             div.text(`${ Math.round(current / total * 100) }%`);
                         }).then(() => {
                             let unpacker = runner.archive === 'tar' ?
-                                Genshinlib.untar : Genshinlib.unzip;
+                                Tools.untar : Tools.unzip;
 
                             unpacker(
                                 path.join(Genshinlib.launcherDir, runner.name),
@@ -165,7 +168,7 @@ $(() => {
         });
     });
 
-    let activeDXVK = Genshinlib.getConfig().dxvk;
+    let activeDXVK = Genshinlib.getConfig('dxvk');
 
     Genshinlib.getDXVKs().then(dxvks => {
         dxvks.forEach(dxvk => {
@@ -187,10 +190,10 @@ $(() => {
 
                     let div = item.find('div');
 
-                    Genshinlib.downloadFile(dxvk.uri, path.join(Genshinlib.launcherDir, 'dxvk-' + dxvk.version), (current: number, total: number, difference: number) => {
+                    Tools.downloadFile(dxvk.uri, path.join(Genshinlib.launcherDir, 'dxvk-' + dxvk.version), (current: number, total: number, difference: number) => {
                         div.text(`${ Math.round(current / total * 100) }%`);
                     }).then(() => {
-                        Genshinlib.untar(
+                        Tools.untar(
                             path.join(Genshinlib.launcherDir, 'dxvk-' + dxvk.version),
                             Genshinlib.dxvksDir,
                             (current: number, total: number, difference: number) => {

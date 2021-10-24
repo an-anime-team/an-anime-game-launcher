@@ -1,4 +1,5 @@
 import GIJSON from './GIJSON';
+import { Tools } from './Tools';
 
 const https = require('follow-redirects').https;
 
@@ -42,13 +43,13 @@ type Config = {
         folder: string,
         executable: string
     },
-    rpc: boolean,
-    dxvk: string|null
+    dxvk: string|null,
+    rpc: boolean
 };
 
 export class Genshinlib
 {
-    public static readonly patchDir: string = path.join(path.dirname(__dirname), 'patch');
+    public static readonly patchDir: string = path.join(path.dirname(__dirname), '..', 'patch');
     public static readonly patchJson: string = path.join(this.patchDir, 'patch.json');
     public static readonly patchSh = path.join(this.patchDir, 'patch.sh');
     public static readonly patchAntiCrashSh = path.join(this.patchDir, 'patch_anti_logincrash.sh');
@@ -71,12 +72,12 @@ export class Genshinlib
 
     public static get version(): Config['version']
     {
-        return this.getConfig().version;
+        return this.getConfig('version');
     }
 
     public static get lang(): Config['lang']
     {
-        return this.getConfig().lang;
+        return this.getConfig('lang');
     }
 
     public static getRunners (): Promise<[{ title: string, runners: Runner[] }]>
@@ -101,7 +102,7 @@ export class Genshinlib
         // return new Promise(resolve => resolve(JSON.parse(fs.readFileSync(path.join(__dirname, '..', '..', 'dxvks.json')))));
     }
 
-    public static getConfig (): Config
+    public static getConfig (property: string|null = null, splitProperty: boolean = true): any
     {
         if (!fs.existsSync(this.launcherJson))
             fs.writeFileSync(this.launcherJson, JSON.stringify({
@@ -119,7 +120,20 @@ export class Genshinlib
                 rpc: false
             }, null, 4));
         
-        return JSON.parse(fs.readFileSync(this.launcherJson));
+        let config = JSON.parse(fs.readFileSync(this.launcherJson));
+
+        if (property === null)
+            return config;
+
+        else
+        {
+            if (!splitProperty)
+                return config[property];
+
+            property.split('.').forEach(prop => config = config[prop]);
+
+            return config;
+        }
     }
 
     public static setConfig (info: Config): Genshinlib
@@ -158,12 +172,12 @@ export class Genshinlib
     {
         let background = '';
         
-        if (!this.getConfig().background.time || new Date(new Date().setHours(0,0,0,0)).setDate(new Date(new Date().setHours(0,0,0,0)).getDate()).toString() >= this.getConfig().background.time!)
+        if (!this.getConfig('background.time') || new Date(new Date().setHours(0,0,0,0)).setDate(new Date(new Date().setHours(0,0,0,0)).getDate()).toString() >= this.getConfig('background.time')!)
         {
             await fetch(this.backgroundUri + this.lang.launcher)
                 .then(res => res.json())
                 .then(async resdone => {
-                    let prevBackground = this.getConfig().background.file;
+                    let prevBackground = this.getConfig('background.file');
 
                     this.updateConfig({
                         background: {
@@ -172,23 +186,23 @@ export class Genshinlib
                         }
                     });
 
-                    if (fs.existsSync(path.join(this.launcherDir, this.getConfig().background.file)))
-                        background = path.join(this.launcherDir, this.getConfig().background.file);
+                    if (fs.existsSync(path.join(this.launcherDir, this.getConfig('background.file'))))
+                        background = path.join(this.launcherDir, this.getConfig('background.file'));
                     
                     else
                     {
-                        await this.downloadFile(resdone.data.adv.background, path.join(this.launcherDir, this.getConfig().background.file), (current: number, total: number, difference: number) => null).then(() => {
+                        await Tools.downloadFile(resdone.data.adv.background, path.join(this.launcherDir, this.getConfig('background.file')), (current: number, total: number, difference: number) => null).then(() => {
                             !prevBackground ?
                                 console.log('No old background found') :
                                 fs.unlinkSync(path.join(this.launcherDir, prevBackground));
 
-                            background = path.join(this.launcherDir, this.getConfig().background.file);
+                            background = path.join(this.launcherDir, this.getConfig('background.file'));
                         });
                     };
                 });
         }
 
-        else background = path.join(this.launcherDir, this.getConfig().background.file);
+        else background = path.join(this.launcherDir, this.getConfig('background.file'));
         
         return background;
     }
@@ -228,131 +242,6 @@ export class Genshinlib
         });
     }
 
-    public static async downloadFile (uri: string, savePath: string, progress: (current: number, total: number, difference: number) => void): Promise<void|Error>
-    {
-        return new Promise((resolve, reject) => {
-            https.get(uri, (response: any) => {
-                let length = parseInt(response.headers['content-length'], 10),
-                    total  = 0;
-
-                response.on('data', (chunk: any) => {
-                    total += chunk.length;
-
-                    progress(total, length, chunk.length);
-
-                    fs.appendFileSync(savePath, chunk);
-                });
-
-                response.on('end', () => resolve());
-            }).on('error', (err: Error) => reject(err));
-        });
-    }
-
-    public static async unzip (zipPath: string, unpackedPath: string, progress: (current: number, total: number, difference: number) => void): Promise<void|Error>
-    {
-        return new Promise((resolve, reject) => {
-            let listenerProcess = spawn('unzip', ['-v', zipPath]),
-                filesList = '';
-
-            listenerProcess.stdout.on('data', (data: string) => filesList += data);
-
-            listenerProcess.on('close', () => {
-                let files = filesList.split(/\r\n|\r|\n/).slice(3, -3).map(line => {
-                    line = line.trim();
-
-                    if (line.slice(-1) == '/')
-                        line = line.slice(0, -1);
-
-                    let matches = /^(\d+)  [a-zA-Z\:]+[ ]+(\d+)[ ]+[0-9\-]+% [0-9\-]+ [0-9\:]+ [a-f0-9]{8}  (.+)/.exec(line);
-
-                    if (matches)
-                        return {
-                            path: matches[3],
-                            compressedSize: parseInt(matches[2]),
-                            uncompressedSize: parseInt(matches[1])
-                        };
-                });
-
-                let total = fs.statSync(zipPath)['size'], current = 0;
-                let unpackerProcess = spawn('unzip', ['-o', zipPath, '-d', unpackedPath]);
-
-                unpackerProcess.stdout.on('data', (data: string) => {
-                    data.toString().split(/\r\n|\r|\n/).forEach(line => {
-                        let items = line.split(': ');
-
-                        if (items[1] !== undefined)
-                        {
-                            items[1] = path.relative(unpackedPath, items[1].trim());
-
-                            files.forEach(file => {
-                                if (file?.path == items[1])
-                                {
-                                    current += file.compressedSize;
-
-                                    progress(current, total, file.compressedSize);
-                                }
-                            });
-                        }
-                    });
-                });
-
-                unpackerProcess.on('close', () => resolve());
-            });
-        });
-    }
-
-    public static async untar (tarPath: string, unpackedPath: string, progress: (current: number, total: number, difference: number) => void): Promise<void|Error>
-    {
-        return new Promise((resolve, reject) => {
-            let listenerProcess = spawn('tar', ['-tvf', tarPath]),
-                filesList = '', total = 0;
-
-            listenerProcess.stdout.on('data', (data: string) => filesList += data);
-
-            listenerProcess.on('close', () => {
-                let files = filesList.split(/\r\n|\r|\n/).slice(3, -3).map(line => {
-                    line = line.trim();
-
-                    if (line.slice(-1) == '/')
-                        line = line.slice(0, -1);
-
-                    let matches = /^[dwxr\-]+ [\w/]+[ ]+(\d+) [0-9\-]+ [0-9\:]+ (.+)/.exec(line);
-
-                    // TODO: compressedSize?
-                    if (matches)
-                    {
-                        total += parseInt(matches[1]);
-
-                        return {
-                            path: matches[2],
-                            uncompressedSize: parseInt(matches[1])
-                        };
-                    }
-                });
-
-                let current = 0;
-                let unpackerProcess = spawn('tar', ['-xvf', tarPath, '-C', unpackedPath]);
-
-                unpackerProcess.stdout.on('data', (data: string) => {
-                    data.toString().split(/\r\n|\r|\n/).forEach(line => {
-                        line = line.trim();
-
-                        files.forEach(file => {
-                            if (file?.path == line)
-                            {
-                                current += file.uncompressedSize; // compressedSize
-
-                                progress(current, total, file.uncompressedSize); // compressedSize
-                            }
-                        });
-                    });
-                });
-
-                unpackerProcess.on('close', () => resolve());
-            });
-        });
-    }
-
     // WINEPREFIX='/home/observer/genshin-impact-launcher/wineprefix' winetricks corefonts usetakefocus=n
     public static async installPrefix (prefixpath: string, progress: (output: string, current: number, total: number) => void): Promise<void>
     {
@@ -377,13 +266,13 @@ export class Genshinlib
             let installationProgress = 0;
             let installerProcess;
 
-            if (this.getConfig().runner)
+            if (this.getConfig('runner'))
             {
                 installerProcess = spawn('winetricks', ['corefonts', 'usetakefocus=n', 'dxvk191'], {
                     env: {
                         ...process.env,
                         WINEPREFIX: prefixpath,
-                        WINE: path.join(this.runnersDir, this.getConfig().runner?.folder, this.getConfig().runner?.executable)
+                        WINE: path.join(this.runnersDir, this.getConfig('runner.folder'), this.getConfig('runner.executable'))
                     }
                 });
             }
@@ -421,8 +310,8 @@ export class Genshinlib
 
     public static patchGame (version: string, onFinish: () => void, onData: (data: string) => void)
     {
-        this.downloadFile(this.patchUri, path.join(this.launcherDir, 'krock.zip'), (current: number, total: number, difference: number) => null).then(() => {
-            this.unzip(path.join(this.launcherDir, 'krock.zip'), this.launcherDir, (current: number, total: number, difference: number) => null).then(() => {
+        Tools.downloadFile(this.patchUri, path.join(this.launcherDir, 'krock.zip'), (current: number, total: number, difference: number) => null).then(() => {
+            Tools.unzip(path.join(this.launcherDir, 'krock.zip'), this.launcherDir, (current: number, total: number, difference: number) => null).then(() => {
                 // Delete zip file and assign patch directory.
                 fs.unlinkSync(path.join(this.launcherDir, 'krock.zip'));
 
@@ -476,38 +365,4 @@ export class Genshinlib
             });
         });
     }
-
-    /*public static applyPatch (onFinish: () => void, onData: (data: string) => void)
-    {
-        let patcherProcess = spawn('bash', [Genshinlib.patchSh], {
-            cwd: Genshinlib.gameDir,
-            env: {
-                ...process.env,
-                WINEPREFIX: Genshinlib.prefixDir
-            }
-        });
-
-        patcherProcess.stdout.on('data', (data: string) => onData(data));
-
-        patcherProcess.on('close', () => {
-            let patcherAntiCrashProcess = spawn('bash', [Genshinlib.patchAntiCrashSh], {
-                cwd: Genshinlib.gameDir,
-                env: {
-                    ...process.env,
-                    WINEPREFIX: Genshinlib.prefixDir
-                }
-            });
-    
-            patcherAntiCrashProcess.stdout.on('data', (data: string) => onData(data));
-    
-            patcherAntiCrashProcess.on('close', () => {
-                Genshinlib.setConfig({
-                    ...Genshinlib.getConfig(),
-                    patch: Genshinlib.getPatchInfo()
-                });
-    
-                onFinish();
-            });
-        });
-    }*/
 }
