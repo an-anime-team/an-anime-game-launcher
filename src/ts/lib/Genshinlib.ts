@@ -75,7 +75,7 @@ export class Genshinlib
                 .then(runners => resolve(runners));
         });*/
 
-        return new Promise(resolve => resolve(JSON.parse(fs.readFileSync(path.join(path.dirname(__dirname), '..', '..', 'runners.json')))));
+        return new Promise(resolve => resolve(JSON.parse(fs.readFileSync(path.join(path.dirname(__dirname), '..', 'runners.json')))));
     }
 
     public static getDXVKs (): Promise<DXVK[]>
@@ -86,7 +86,7 @@ export class Genshinlib
                 .then(dxvks => resolve(dxvks));
         });*/
 
-        return new Promise(resolve => resolve(JSON.parse(fs.readFileSync(path.join(path.dirname(__dirname), '..', '..', 'dxvks.json')))));
+        return new Promise(resolve => resolve(JSON.parse(fs.readFileSync(path.join(path.dirname(__dirname), '..', 'dxvks.json')))));
     }
 
     public static getConfig (property: string|null = null): any
