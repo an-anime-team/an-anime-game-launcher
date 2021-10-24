@@ -13,10 +13,18 @@ type LauncherState =
 export class LauncherUI
 {
     protected static _launcherState: LauncherState = 'game-launch-available';
+    protected static _i18n: any;
 
     public static get launcherState(): LauncherState
     {
         return this._launcherState;
+    }
+
+    public static get i18n(): any
+    {
+        if (!this._i18n)
+            this._i18n = i18n;
+        return this._i18n;
     }
 
     public static setState (state: LauncherState)
@@ -27,40 +35,40 @@ export class LauncherUI
         switch (state)
         {
             case 'patch-unavailable':
-                $('#launch').text(i18n.translate('PatchRequired'));
+                $('#launch').text(this.i18n.translate('PatchRequired'));
                 $('#launch').attr('disabled', 'disabled');
 
                 $('#launch').addClass('hint--top')
                             .addClass('hint--medium');
 
-                $('#launch').attr('data-hint', i18n.translate('PatchRequiredHint'));
+                $('#launch').attr('data-hint', this.i18n.translate('PatchRequiredHint'));
 
                 break;
 
             case 'test-patch-available':
-                $('#launch').text(i18n.translate('TestPatch'));
+                $('#launch').text(this.i18n.translate('TestPatch'));
 
                 $('#launch').addClass('button-blue')
                             .addClass('hint--top')
                             .addClass('hint--large');
 
-                $('#launch').attr('data-hint', i18n.translate('TestPatchHint'));
+                $('#launch').attr('data-hint', this.i18n.translate('TestPatchHint'));
 
                 break;
 
             case 'patch-applying':
-                $('#launch').text(i18n.translate('ApplyPatch'));
+                $('#launch').text(this.i18n.translate('ApplyPatch'));
                 $('#launch').attr('disabled', 'disabled');
 
                 break;
 
             case 'game-update-available':
-                $('#launch').text(i18n.translate('Update'));
+                $('#launch').text(this.i18n.translate('Update'));
 
                 break;
 
             case 'game-installation-available':
-                $('#launch').text(i18n.translate('Install'));
+                $('#launch').text(this.i18n.translate('Install'));
 
                 break;
 
@@ -73,7 +81,7 @@ export class LauncherUI
                     .removeClass('hint--medium')
                     .removeClass('hint--large');
 
-                $('#launch').text(i18n.translate('Launch'));
+                $('#launch').text(this.i18n.translate('Launch'));
 
                 break;
         }
@@ -172,10 +180,12 @@ export class LauncherUI
     public static updateLang (lang: string|null = null): void
     {
         if (lang !== null)
-            i18n.setLang(lang);
+            this.i18n.setLang(lang);
+
+        console.log(this.i18n.loadedLanguage);
 
         $('*[i18id]').each((i, element) => {
-            element.innerText = i18n.translate(element.getAttribute('i18id')!);
+            element.innerText = this.i18n.translate(element.getAttribute('i18id')!);
         });
     }
 }

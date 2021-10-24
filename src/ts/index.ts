@@ -3,9 +3,7 @@ const fs = require('fs');
 const discordrpc = require("discord-rpc");
 const { exec } = require('child_process');
 const { ipcRenderer } = require('electron');
-
 import $ from 'cash-dom';
-import { i18n } from './i18n';
 
 import { Genshinlib } from './Genshinlib';
 import { LauncherUI } from './LauncherUI';
@@ -23,16 +21,15 @@ $(() => {
     if (Genshinlib.version !== null)
         document.title = 'Genshin Impact Linux Launcher - ' + Genshinlib.version;
 
-    LauncherUI.setState('game-launch-available');
-    LauncherUI.updateBackground();
-    LauncherUI.updateSocial();
-
     ipcRenderer.on('change-lang', (event: void, data: any) => {
         LauncherUI.updateBackground();
         LauncherUI.updateSocial();
-        // Needs data.lang in the arguments since the button doesn't get updated otherwise.
         LauncherUI.updateLang(data.lang);
     });
+
+    LauncherUI.setState('game-launch-available');
+    LauncherUI.updateBackground();
+    LauncherUI.updateSocial();
 
     let rpc: any;
 
@@ -117,14 +114,14 @@ $(() => {
 
             // For some reason this keeps breaking and locking up most of the time.
             Genshinlib.downloadFile(voicePack.path, path.join(Genshinlib.launcherDir, voicePack.name), (current: number, total: number, difference: number) => {
-                LauncherUI.updateProgressBar(i18n.translate('Downloading'), current, total, difference);
+                LauncherUI.updateProgressBar(LauncherUI.i18n.translate('Downloading'), current, total, difference);
             }).then(() => {
                 console.log(`%c> Unpacking voice data...`, 'font-size: 16px');
                             
                 LauncherUI.initProgressBar();
 
                 Genshinlib.unzip(path.join(Genshinlib.launcherDir, voicePack.name), Genshinlib.gameDir, (current: number, total: number, difference: number) => {
-                    LauncherUI.updateProgressBar(i18n.translate('Unpack'), current, total, difference);
+                    LauncherUI.updateProgressBar(LauncherUI.i18n.translate('Unpack'), current, total, difference);
                 }).then(() => {
                     fs.unlinkSync(path.join(Genshinlib.launcherDir, voicePack.name));
                     LauncherUI.setState('game-launch-available');
@@ -203,7 +200,7 @@ $(() => {
             }
 
             // Launching game
-            if ($('#launch').text() == i18n.translate('Launch'))
+            if ($('#launch').text() == LauncherUI.i18n.translate('Launch'))
             {
                 console.log(`%c> Starting the game...`, 'font-size: 16px');
 
@@ -286,7 +283,7 @@ $(() => {
             }
 
             // Apply test patch
-            else if ($('#launch').text() == i18n.translate('TestPatch'))
+            else if ($('#launch').text() == LauncherUI.i18n.translate('TestPatch'))
             {
                 console.log(`%c> Applying patch...`, 'font-size: 16px');
 
@@ -326,7 +323,7 @@ $(() => {
                 LauncherUI.initProgressBar();
 
                 Genshinlib.downloadFile(diff.path, path.join(Genshinlib.launcherDir, diff.name), (current: number, total: number, difference: number) => {
-                    LauncherUI.updateProgressBar(i18n.translate('Downloading'), current, total, difference);
+                    LauncherUI.updateProgressBar(LauncherUI.i18n.translate('Downloading'), current, total, difference);
                 }).then(() => {
                     /**
                      * Unpacking downloaded game
@@ -340,7 +337,7 @@ $(() => {
                     LauncherUI.initProgressBar();
 
                     Genshinlib.unzip(path.join(Genshinlib.launcherDir, diff.name), Genshinlib.gameDir, (current: number, total: number, difference: number) => {
-                        LauncherUI.updateProgressBar(i18n.translate('Unpack'), current, total, difference);
+                        LauncherUI.updateProgressBar(LauncherUI.i18n.translate('Unpack'), current, total, difference);
                     }).then(() => {
                         /**
                          * Downloading voice data
@@ -363,7 +360,7 @@ $(() => {
                         LauncherUI.initProgressBar();
 
                         Genshinlib.downloadFile(voicePack.path, path.join(Genshinlib.launcherDir, voicePack.name), (current: number, total: number, difference: number) => {
-                            LauncherUI.updateProgressBar(i18n.translate('Downloading'), current, total, difference);
+                            LauncherUI.updateProgressBar(LauncherUI.i18n.translate('Downloading'), current, total, difference);
                         }).then(() => {
                             /**
                              * Unpacking downloaded game
@@ -374,7 +371,7 @@ $(() => {
                             LauncherUI.initProgressBar();
 
                             Genshinlib.unzip(path.join(Genshinlib.launcherDir, voicePack.name), Genshinlib.gameDir, (current: number, total: number, difference: number) => {
-                                LauncherUI.updateProgressBar(i18n.translate('Unpack'), current, total, difference);
+                                LauncherUI.updateProgressBar(LauncherUI.i18n.translate('Unpack'), current, total, difference);
                             }).then(() => {
                                 fs.unlinkSync(path.join(Genshinlib.launcherDir, voicePack.name));
 
@@ -390,14 +387,14 @@ $(() => {
                                     console.log(`%c> Applying patch...`, 'font-size: 16px');
 
                                     // patch-applying state changes only button text
-                                    $('#downloaded').text(i18n.translate('ApplyPatch'));
+                                    $('#downloaded').text(LauncherUI.i18n.translate('ApplyPatch'));
 
                                     Genshinlib.patchGame(data.game.latest.version, () => {
                                         LauncherUI.setState('game-launch-available');
 
                                         ipcRenderer.send('notification', {
                                             title: document.title,
-                                            body: i18n.translate('GameDownloaded')
+                                            body: LauncherUI.i18n.translate('GameDownloaded')
                                         });
                                     }, (data) => console.log(data.toString()));
                                 }

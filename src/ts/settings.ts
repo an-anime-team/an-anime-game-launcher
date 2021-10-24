@@ -4,14 +4,13 @@ const { ipcRenderer } = require('electron');
 const { exec } = require('child_process');
 
 import $ from 'cash-dom';
-import { i18n } from './i18n';
 import { Genshinlib } from './Genshinlib';
 import { LauncherUI } from './LauncherUI';
 
 $(() => {
 
     $('*[i18id]').each((i, element) => {
-        element.innerText = i18n.translate(element.getAttribute('i18id')?.toString()!);
+        element.innerText = LauncherUI.i18n.translate(element.getAttribute('i18id')?.toString()!);
     });
 
     $('.menu-item').on('click', (e) => {
