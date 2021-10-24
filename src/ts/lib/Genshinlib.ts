@@ -46,11 +46,8 @@ export class Genshinlib
 {
     public static readonly patchDir: string = path.join(path.dirname(__dirname), '..', 'patch');
     public static readonly patchJson: string = path.join(this.patchDir, 'patch.json');
-    public static readonly patchSh = path.join(this.patchDir, 'patch.sh');
-    public static readonly patchAntiCrashSh = path.join(this.patchDir, 'patch_anti_logincrash.sh');
 
     public static readonly launcherDir: string = path.join(os.homedir(), 'genshin-impact-launcher');
-    public static readonly launcherJson: string = path.join(this.launcherDir, 'launcher.json');
 
     public static readonly tmpPatchDir: string = path.join(this.launcherDir, 'gi-on-linux');
 
