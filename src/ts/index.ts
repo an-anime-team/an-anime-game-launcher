@@ -308,7 +308,7 @@ $(() => {
                         let voicePack = diff.voice_packs[1]; // en-us
 
                         for (let i = 0; i < diff.voice_packs.length; ++i)
-                            if (diff.voice_packs[i].language == Genshinlib.getConfig('voice'))
+                            if (diff.voice_packs[i].language == Genshinlib.getConfig('lang.voice'))
                             {
                                 voicePack = diff.voice_packs[i];
 
