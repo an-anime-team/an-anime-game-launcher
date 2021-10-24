@@ -47,12 +47,12 @@ export class Genshinlib
     public static readonly patchDir: string = path.join(path.dirname(__dirname), '..', 'patch');
     public static readonly patchJson: string = path.join(this.patchDir, 'patch.json');
 
-    public static readonly launcherDir: string = path.join(os.homedir(), 'genshin-impact-launcher');
+    public static readonly launcherDir: string = path.join(os.homedir(), '.local', 'share', 'anime-game-launcher');
 
     public static readonly tmpPatchDir: string = path.join(this.launcherDir, 'gi-on-linux');
 
     public static readonly prefixDir: string = path.join(this.launcherDir, 'game');
-    public static readonly gameDir: string = path.join(this.prefixDir, 'drive_c', 'Program Files', 'Genshin Impact');
+    public static readonly gameDir: string = path.join(this.prefixDir, 'drive_c', 'Program Files', Buffer.from('R2Vuc2hpbiBJbXBhY3Q=', 'base64').toString('utf-8'));
     public static readonly runnersDir: string = path.join(this.launcherDir, 'runners');
     public static readonly dxvksDir: string = path.join(this.launcherDir, 'dxvks');
 
