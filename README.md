@@ -1,4 +1,4 @@
-<img src="repository-pics/logo.png">
+<img src="repository-pics/logo.jpg">
 
 <img src="repository-pics/launcher-main.png">
 
@@ -10,7 +10,7 @@
 
 | Game version | Launcher version | Patch version |
 | :---: | :---: | :---: |
-| 2.2.0 | 2.2.0-beta6 ⚠️ | 2.2.0-stable ✅ |
+| 2.2.0 | 2.2.0-beta7 ⚠️ | 2.2.0-stable ✅ |
 
 Download from [Releases](https://notabug.org/nobody/an-anime-game-launcher/releases)
 
