@@ -42,29 +42,6 @@ type DXVK = {
     uri: string
 };
 
-type Config = {
-    lang: {
-        launcher: 'en-us' | 'ru-ru' | 'fr-fr' | 'id-id' | 'de-de' | 'es-es' | 'pt-pt' | 'th-th' | 'vi-vn' | 'ko-kr' | 'ja-jp' | 'zh-tw' | 'zh-cn',
-        voice: 'en-us' | 'ko-kr' | 'ja-jp' | 'zh-cn'
-    },
-    background: {
-        time: string|null,
-        file: string|null
-    },
-    version: string|null,
-    patch: {
-        version: string|null,
-        state: 'testing' | 'stable'
-    },
-    runner: null | {
-        name: string,
-        folder: string,
-        executable: string
-    },
-    dxvk: string|null,
-    rpc: boolean
-};
-
 export class Genshinlib
 {
     public static readonly patchDir: string = path.join(path.dirname(__dirname), '..', 'patch');
@@ -88,7 +65,7 @@ export class Genshinlib
     protected static readonly runnersUri: string = 'https://notabug.org/nobody/an-anime-game-launcher/raw/main/runners.json';
     protected static readonly dxvksUri: string = 'https://notabug.org/nobody/an-anime-game-launcher/raw/main/dxvks.json';
 
-    public static get version(): Config['version']
+    public static get version(): string|null
     {
         return this.getConfig('version');
     }
@@ -155,20 +132,9 @@ export class Genshinlib
         }*/
     }
 
-    public static setConfig (info: Config): Genshinlib
-    {
-        fs.writeFileSync(this.launcherJson, JSON.stringify(info, null, 4));
-
-        return this;
-    }
-
     public static updateConfig (cname: string, value: string|boolean|null|number): Genshinlib
     {
         return config.set(cname, value);
-        //return this.setConfig({
-        //    ...this.getConfig(),
-        //    ...config
-        //});
     }
 
     public static async getData (): Promise<any>
