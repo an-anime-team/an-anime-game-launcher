@@ -52,9 +52,9 @@ To 1.0.0 release
 * <s>Add preferences menu</s> *(0.5.0)*
 * <s>Add additional telemetry checking</s> *(0.6.0)*
 * <s>Add DXVK downloading in settings</s> *(0.6.0)*
+* <s>Make participation in the anonymous analytics request</s> *(0.8.0)*
 * Add launcher updates notifications
 * Make automatical patch state parsing
-* Make participation in the anonymous analytics request
 
 To 2.0.0 release
 
