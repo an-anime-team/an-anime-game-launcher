@@ -161,7 +161,12 @@ export class LauncherUI
 
     public static updateBackground (): void
     {
-        Genshinlib.getBackgroundUri().then(uri => $('body').css('background-image', `url(${uri})`));
+        Genshinlib.getBackgroundUri().then(uri => {
+            uri = `url(${uri})`;
+
+            if ($('body').css('background-image') != uri)
+                $('body').css('background-image', uri);
+        });
     }
 
     public static updateSocial (): void

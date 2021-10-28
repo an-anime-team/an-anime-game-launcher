@@ -23,7 +23,8 @@ const config = new store ({
         version: null,
         patch: null,
         runner: null,
-        rpc: false
+        rpc: false,
+        analytics: '0'
     }
 });
 
@@ -97,7 +98,7 @@ export class Genshinlib
         return config.get(property);
     }
 
-    public static updateConfig (property: string, value: string|boolean|null|number): Genshinlib
+    public static updateConfig (property: string, value: string|boolean|null|number)
     {
         return config.set(property, value);
     }
@@ -257,10 +258,10 @@ export class Genshinlib
 
     public static patchGame (version: string, onFinish: () => void, onData: (data: string) => void)
     {
-        Tools.downloadFile(this.patchUri, path.join(this.launcherDir, 'krock.zip'), (current: number, total: number, difference: number) => null).then(() => {
-            Tools.unzip(path.join(this.launcherDir, 'krock.zip'), this.launcherDir, (current: number, total: number, difference: number) => null).then(() => {
+        Tools.downloadFile(this.patchUri, path.join(this.launcherDir, 'patch.zip'), (current: number, total: number, difference: number) => null).then(() => {
+            Tools.unzip(path.join(this.launcherDir, 'patch.zip'), this.launcherDir, (current: number, total: number, difference: number) => null).then(() => {
                 // Delete zip file and assign patch directory.
-                fs.unlinkSync(path.join(this.launcherDir, 'krock.zip'));
+                fs.unlinkSync(path.join(this.launcherDir, 'patch.zip'));
 
                 let patchDir: string = path.join(this.tmpPatchDir, version.replace(/\./g, ''));
 

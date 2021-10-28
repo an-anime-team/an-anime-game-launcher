@@ -15,5 +15,13 @@
     "PatchRequired": "需要补丁",
     "PatchRequiredHint": "此游戏版本没有防作弊补丁。请等待几天，然后重试",
     "TestPatch": "应用测试补丁",
-    "TestPatchHint": "此游戏版本有防作弊补丁，但处于测试阶段。您可以等待几天直到它稳定或自担风险应用它"
+    "TestPatchHint": "此游戏版本有防作弊补丁，但处于测试阶段。您可以等待几天直到它稳定或自担风险应用它",
+    "AnalyticsTitle": "Yanfei's commission...",
+    "ParticipateInAnalytics": "Participate in anonymous data collection",
+    "AnalyticsText1": "To count the active user base for Linux, Yanfei would like to collect your IP address everytime the game updates",
+    "AnalyticsText2": "The IP address will be hashed for security purpose",
+    "AnalyticsShareCountry": "Share country",
+    "Participate": "Participate",
+    "Skip": "Skip",
+    "SkipAndDontAsk": "Skip and don't ask again"
 }

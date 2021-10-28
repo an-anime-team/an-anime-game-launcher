@@ -71,6 +71,15 @@
         "title": "Proton-GE",
         "runners": [
             {
+                "name": "Proton-6.20-GE-1",
+                "version": "6.20-GE-1",
+                "uri": "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/6.20-GE-1/Proton-6.20-GE-1.tar.gz",
+                "archive": "tar",
+                "folder": "Proton-6.20-GE-1",
+                "makeFolder": false,
+                "executable": "files/bin/wine64"
+            },
+            {
                 "name": "Proton-6.19-GE-2",
                 "version": "6.19-GE-2",
                 "uri": "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/6.19-GE-2/Proton-6.19-GE-2.tar.gz",

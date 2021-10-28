@@ -1,0 +1,220 @@
+$light: #f1f4f9
+$light2: #eff2ff
+$primary: #657ef8
+$secondary: #e1e7ff
+
+/* List of buttons */
+
+.list-item
+    display: flex
+    align-items: center
+
+    height: 52px
+    margin-bottom: 8px
+    padding: 0 12px
+
+    border-radius: 12px
+    background-color: $light
+
+    font-size: 18px
+    cursor: pointer
+
+    &:hover
+        background-color: $light2
+
+    > div
+        width: auto
+        height: 52px
+        min-width: 52px
+
+        margin-left: auto
+
+        display: flex
+        align-items: center
+
+        > img
+            width: 16px
+            height: 16px
+
+            margin: auto
+
+.list-item-active
+    background-color: $primary !important
+    color: white !important
+
+.list-item-disabled
+    background-color: $light !important
+    color: #abadbd !important
+
+    cursor: default !important
+
+    img
+        filter: invert(70%) sepia(13%) saturate(241%) hue-rotate(196deg) brightness(97%) contrast(91%)
+
+/* Checkbox */
+    
+.checkbox
+    display: inline-flex
+    align-items: center
+
+    font-size: larger
+
+    width: calc(100% - 24px)
+    height: 48px
+    padding: 0 12px
+
+    border-radius: 12px
+
+    .checkbox-mark
+        display: flex
+
+        background-color: $light2
+
+        border-radius: 16px
+        margin-left: auto
+        padding: 8px 16px
+
+        cursor: pointer
+
+        &:hover
+            background-color: $primary
+
+            svg
+                filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(219deg) brightness(102%) contrast(104%)
+
+        svg
+            height: 12px
+            width: 12px
+
+.checkbox-active
+    .checkbox-mark
+        background-color: $primary
+
+        svg
+            filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(219deg) brightness(102%) contrast(104%)
+
+.selectable-checkbox
+    cursor: pointer
+
+    &:hover
+        background-color: $light2
+
+.checkbox-active:is(.selectable-checkbox)
+    background-color: $light2
+
+/* Select box */
+
+.select
+    display: inline-flex
+    align-items: center
+
+    font-size: larger
+
+    width: calc(100% - 24px)
+    height: 48px
+    padding: 0 12px
+
+    border-radius: 12px
+
+    .select-options
+        position: absolute
+        display: none
+
+        height: 230px
+        overflow: auto
+
+        background-color: white
+        border-radius: 12px
+
+        box-shadow: 0 1px 8px 0 rgba(0, 0, 0, .2)
+
+        padding: 8px 12px
+        transform: translateY(calc(50% + 32px)) translateX(208px)
+
+        cursor: pointer
+
+        ul
+            list-style: none
+
+            padding: 0
+            margin: 0
+
+            li
+                color: #8592a3
+                font-size: smaller
+
+                border-radius: 8px
+                padding: 8px
+
+                &:hover
+                    background-color: $light2
+                    color: $primary
+
+            li:not(last-child)
+                margin-bottom: 4px
+
+            li.selected
+                background-color: $light2
+                color: $primary
+
+    .selected-item
+        display: flex
+        align-items: baseline
+
+        font-size: initial
+
+        background-color: $light2
+
+        border-radius: 16px
+        margin-left: auto
+        padding: 8px 16px
+
+        cursor: pointer
+
+        &:hover
+            background-color: $primary
+            color: white
+
+            svg
+                filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(219deg) brightness(102%) contrast(104%)
+
+        svg
+            height: 12px
+            width: 12px
+
+            margin-left: 8px
+
+            transform: rotate(90deg)
+
+.select-active
+    .selected-item
+        color: white
+        background-color: $primary
+
+        svg
+            filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(219deg) brightness(102%) contrast(104%)
+
+    .select-options
+        display: block
+
+/* Buttons */
+
+.button
+    background-color: $light
+    border-radius: 16px
+    border: none
+
+    cursor: pointer
+    font-size: 16px
+    
+    padding: 8px 20px
+
+    &:hover
+        background-color: $secondary
+
+.button-primary
+    background-color: $secondary
+
+    &:hover
+        background-color: $primary
+        color: white

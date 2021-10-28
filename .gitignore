@@ -5,5 +5,7 @@ yarn.lock
 wineprefix-installation.log
 public/css/index.css
 public/css/settings.css
+public/css/analytics.css
+public/css/components.css
 public/js
 repository-pics/logo.xcf

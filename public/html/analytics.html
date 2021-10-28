@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        <!-- CSS styles -->
+        <link rel="stylesheet" href="../css/components.css">
+        <link rel="stylesheet" href="../css/analytics.css">
+        <link rel="stylesheet" href="../css/hint.min.css">
+
+        <!-- JS scripts -->
+        <script>require('../js/lib/components.js');</script>
+        <script>require('../js/analytics.js');</script>
+
+        <title i18id="AnalyticsTitle">Yanfei's commission...</title>
+    </head>
+
+    <body>
+        <div class="header">
+            <img src="../images/yanfei.png">
+
+            <h2 i18id="ParticipateInAnalytics">Participate in anonymous data collection</h2>
+        </div>
+
+        <p i18id="AnalyticsText1">To count the active user base for Linux, Yanfei would like to collect your IP address everytime the game updates</p>
+        <p i18id="AnalyticsText2">The IP address will be hashed for security purpose</p>
+
+        <div class="footer">
+            <div class="hint--top hint--large" data-hint="Allow Yanfei to store the country your IP address registered in to make statistics more detailed. No other data than the country will be stored">
+                <div class="checkbox checkbox-active selectable-checkbox" id="share-country">
+                    <span i18id="AnalyticsShareCountry">Share country</span>
+        
+                    <div class="checkbox-mark">
+                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="45.701px" height="45.7px" viewBox="0 0 45.701 45.7" xml:space="preserve"><g><g><path d="M20.687,38.332c-2.072,2.072-5.434,2.072-7.505,0L1.554,26.704c-2.072-2.071-2.072-5.433,0-7.504 c2.071-2.072,5.433-2.072,7.505,0l6.928,6.927c0.523,0.522,1.372,0.522,1.896,0L36.642,7.368c2.071-2.072,5.433-2.072,7.505,0 c0.995,0.995,1.554,2.345,1.554,3.752c0,1.407-0.559,2.757-1.554,3.752L20.687,38.332z"/></g></g></svg>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="actions">
+                <button class="button button-primary" id="participate" i18id="Participate">Participate</button>
+
+                <div class="actions-right">
+                    <button class="button" id="skip" i18id="Skip">Skip</button>
+                    <button class="button" id="skip-and-ignore" i18id="SkipAndDontAsk">Skip and don't ask again</button>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

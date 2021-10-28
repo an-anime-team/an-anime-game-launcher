@@ -9,10 +9,9 @@ const {
 
 const path = require('path');
 
-const Store = require('electron-store');
-Store.initRenderer();
+require('electron-store').initRenderer();
 
-let mainWindow;
+let mainWindow, analyticsWindow;
 
 ipcMain.handle('hide-window', () => mainWindow.hide());
 ipcMain.handle('show-window', () => mainWindow.show());
@@ -25,7 +24,7 @@ ipcMain.on('notification', (event, args) => {
 });
 
 ipcMain.handle('open-settings', () => {
-    const settingsWindow = new BrowserWindow({
+    const settingsWindow = new BrowserWindow ({
         width: 900,
         height: 600,
         webPreferences: {
@@ -41,8 +40,30 @@ ipcMain.handle('open-settings', () => {
     });
 
     settingsWindow.loadFile(path.join(__dirname, 'public', 'html', 'settings.html'));
-    settingsWindow.once('ready-to-show', () => settingsWindow.show());
+    settingsWindow.once('ready-to-show', settingsWindow.show);
 });
+
+ipcMain.handle('open-analytics-participation', () => {
+    analyticsWindow = new BrowserWindow ({
+        width: 700,
+        height: 500,
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false
+        },
+        icon: path.join(__dirname, 'public', 'images', 'icon64.png'),
+        autoHideMenuBar: true,
+        resizable: false,
+        parent: mainWindow,
+        modal: true,
+        show: false
+    });
+
+    analyticsWindow.loadFile(path.join(__dirname, 'public', 'html', 'analytics.html'));
+    analyticsWindow.once('ready-to-show', analyticsWindow.show);
+});
+
+ipcMain.handle('hide-analytics-participation', () => analyticsWindow.close());
 
 function createWindow ()
 {

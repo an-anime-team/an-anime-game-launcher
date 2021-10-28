@@ -96,6 +96,9 @@ $(() => {
         });
     });
 
+    if (Genshinlib.getConfig('analytics') !== null && Genshinlib.getConfig('analytics') !== Genshinlib.version)
+        ipcRenderer.invoke('open-analytics-participation');
+
     Genshinlib.getData().then(data => {
         // Update available
         if (Genshinlib.version != data.game.latest.version)
