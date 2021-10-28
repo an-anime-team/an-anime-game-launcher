@@ -72,6 +72,7 @@ npm start
 
 ### To 2.0.0 release
 
+* Set default wine version to download so the wine install requirement is no longer needed.
 * Add outdated files deletion when new game's update releases
 * Add voice packs support
 * Add Patch category in settings menu with
