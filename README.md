@@ -10,7 +10,7 @@
 
 | Game version | Launcher version | Patch version |
 | :---: | :---: | :---: |
-| 2.2.0 | 0.7.0 ⚠️ | 2.2.0 stable ✅ |
+| 2.2.0 | 0.8.0 ⚠️ | 2.2.0 stable ✅ |
 
 Download from [Releases](https://notabug.org/nobody/an-anime-game-launcher/releases)
 
