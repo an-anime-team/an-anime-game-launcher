@@ -16,12 +16,14 @@
     "PatchRequiredHint": "このゲームバージョンにはアンチチートパッチがありません。数日待ってから再度お試しください",
     "TestPatch": "テストパッチの適用",
     "TestPatchHint": "このゲームバージョンにはアンチチートパッチがありますが、テスト段階にあります。安定するまで数日お待ちいただくか、ご自身の責任で適用してください",
-    "AnalyticsTitle": "Yanfei's commission...",
-    "ParticipateInAnalytics": "Participate in anonymous data collection",
-    "AnalyticsText1": "To count the active user base for Linux, Yanfei would like to collect your IP address everytime the game updates",
-    "AnalyticsText2": "The IP address will be hashed for security purpose",
-    "AnalyticsShareCountry": "Share country",
-    "Participate": "Participate",
-    "Skip": "Skip",
-    "SkipAndDontAsk": "Skip and don't ask again"
+    "AnalyticsTitle": "ヤンフェイのコミッション...",
+    "ParticipateInAnalytics": "匿名でのデータ収集に参加",
+    "AnalyticsText1": "Linuxのアクティブユーザー数をカウントするために、YanfeiはゲームがアップデートされるたびにあなたのIPアドレスを収集したいと思います。",
+    "AnalyticsText2": "IPアドレスはセキュリティのためにハッシュ化されます。",
+    "AnalyticsShareCountry": "シェアカントリー",
+    "Participate": "匿名でのデータ収集に参加",
+    "Skip": "スキップ",
+    "SkipAndDontAsk": "スキップして二度と聞かない",
+    "LUpdateNotiTitle": "ランチャーのアップデートが可能 ",
+    "LUpdateNotiBody": "ランチャーの新バージョンは、プロジェクトのリポジトリ（https://notabug.org/nobody/an-anime-game-launcher）からダウンロードできます。"
 }
