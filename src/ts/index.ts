@@ -10,6 +10,8 @@ import { LauncherUI } from './lib/LauncherUI';
 import { Tools } from './lib/Tools';
 import { DiscordRPC } from './lib/DiscordRPC';
 
+const launcher_version = require('../../package.json').version;
+
 if (!fs.existsSync(Genshinlib.prefixDir))
     fs.mkdirSync(Genshinlib.prefixDir, { recursive: true });
 
@@ -73,6 +75,7 @@ $(() => {
             // Check if the directory and file exists to prevent errors.
             if (fs.existsSync(path.join(Genshinlib.gameDir, oldstring + '_pkg_version')))
                 fs.rmSync(path.join(Genshinlib.gameDir, oldstring + '_pkg_version'));
+            
             if (fs.existsSync(path.join(Genshinlib.gameDir, 'GenshinImpact_Data', 'StreamingAssets', 'Audio', 'GeneratedSoundBanks', 'Windows', oldstring.replace('Audio_', ''))))
                 fs.rmSync(path.join(Genshinlib.gameDir, 'GenshinImpact_Data', 'StreamingAssets', 'Audio', 'GeneratedSoundBanks', 'Windows', oldstring.replace('Audio_', '')), { recursive: true });
 
@@ -96,26 +99,40 @@ $(() => {
         });
     });
 
+    Tools.getGitTags('https://notabug.org/nobody/an-anime-game-launcher').then (tags => {
+        if (tags.filter(entry => entry.tag > launcher_version).length > 0)
+        {
+            ipcRenderer.send('notification', {
+                title: `Launcher update available (${launcher_version} -> ${tags[tags.length - 1].tag})`,
+                body: 'You can download new version of the launcher from the project\'s repository at https://notabug.org/nobody/an-anime-game-launcher',
+                timeoutType: 'never',
+                icon: path.join(__dirname, '..', 'images', 'baal64-transparent.png')
+            });
+        }
+    });
+
     if (Genshinlib.getConfig('analytics') !== null && Genshinlib.getConfig('analytics') !== Genshinlib.version)
         ipcRenderer.invoke('open-analytics-participation');
 
-    Genshinlib.getData().then(data => {
+    Genshinlib.getData().then(async data => {
+        let patchInfo = await Genshinlib.getPatchInfo();
+
         // Update available
         if (Genshinlib.version != data.game.latest.version)
             LauncherUI.setState(Genshinlib.version === null ? 'game-installation-available' : 'game-update-available');
 
         // Patch version is incorrect
-        else if (Genshinlib.getConfig('patch') && Genshinlib.getConfig('patch.version') != Genshinlib.getPatchInfo().version)
+        else if (Genshinlib.getConfig('patch') && Genshinlib.getConfig('patch.version') != patchInfo.version)
         {
             // Patch is not available
-            if (Genshinlib.getPatchInfo().version !== data.game.latest.version)
+            if (patchInfo.version !== data.game.latest.version)
                 LauncherUI.setState('patch-unavailable');
 
             // Patch available
-            else if (Genshinlib.getPatchInfo().version === data.game.latest.version)
+            else if (patchInfo.version === data.game.latest.version)
             {
                 // Patch is stable
-                if (Genshinlib.getPatchInfo().state == 'stable')
+                if (patchInfo.state == 'stable')
                 {
                     console.log(`%c> Applying patch...`, 'font-size: 16px');
 
@@ -123,7 +140,7 @@ $(() => {
 
                     Genshinlib.patchGame(data.game.latest.version, () => {
                         LauncherUI.setState('game-launch-available');
-                    }, (data) => console.log(data.toString()));
+                    }, data => console.log(data.toString()));
                 }
 
                 // Patch is in testing phase
@@ -133,7 +150,7 @@ $(() => {
 
         // Current patch is in testing phase,
         // but stable is available
-        else if (Genshinlib.getConfig('patch') && Genshinlib.getConfig('patch.version') == Genshinlib.getPatchInfo().version && Genshinlib.getConfig('patch.state') == 'testing' && Genshinlib.getPatchInfo().state == 'stable')
+        else if (Genshinlib.getConfig('patch') && Genshinlib.getConfig('patch.version') == patchInfo.version && Genshinlib.getConfig('patch.state') == 'testing' && patchInfo.state == 'stable')
         {
             console.log(`%c> Applying patch...`, 'font-size: 16px');
 
@@ -141,7 +158,7 @@ $(() => {
 
             Genshinlib.patchGame(data.game.latest.version, () => {
                 LauncherUI.setState('game-launch-available');
-            }, (data) => console.log(data.toString()));
+            }, data => console.log(data.toString()));
         }
 
         $('#launch').on('click', async () => {
@@ -254,7 +271,7 @@ $(() => {
 
                 Genshinlib.patchGame(data.game.latest.version, () => {
                     LauncherUI.setState('game-launch-available');
-                }, (data) => console.log(data.toString()));
+                }, data => console.log(data.toString()));
             }
 
             // Installing game
@@ -341,7 +358,7 @@ $(() => {
                                 Genshinlib.updateConfig('version', data.game.latest.version);
 
                                 // Patch available
-                                if (Genshinlib.getPatchInfo().version === data.game.latest.version)
+                                if (patchInfo.version === data.game.latest.version)
                                 {
                                     // TODO: check the patch state
 
@@ -355,9 +372,10 @@ $(() => {
 
                                         ipcRenderer.send('notification', {
                                             title: document.title,
-                                            body: LauncherUI.i18n.translate('GameDownloaded')
+                                            body: LauncherUI.i18n.translate('GameDownloaded'),
+                                            icon: path.join(__dirname, '..', 'images', 'baal64-transparent.png')
                                         });
-                                    }, (data) => console.log(data.toString()));
+                                    }, data => console.log(data.toString()));
                                 }
 
                                 // Patch is not available

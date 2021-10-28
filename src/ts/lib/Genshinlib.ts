@@ -45,12 +45,9 @@ type DXVK = {
 
 export class Genshinlib
 {
-    public static readonly patchDir: string = path.join(path.dirname(__dirname), '..', 'patch');
-    public static readonly patchJson: string = path.join(this.patchDir, 'patch.json');
-
     public static readonly launcherDir: string = path.join(os.homedir(), '.local', 'share', 'anime-game-launcher');
 
-    public static readonly tmpPatchDir: string = path.join(this.launcherDir, 'gi-on-linux');
+    public static readonly tmpPatchDir: string = path.join(this.launcherDir, 'patch-tmp');
 
     public static readonly prefixDir: string = path.join(this.launcherDir, 'game');
     public static readonly gameDir: string = path.join(this.prefixDir, 'drive_c', 'Program Files', Buffer.from('R2Vuc2hpbiBJbXBhY3Q=', 'base64').toString('utf-8'));
@@ -155,9 +152,44 @@ export class Genshinlib
         return background;
     }
 
-    public static getPatchInfo (): { version: string, state: 'stable' | 'testing' }
+    public static async getPatchInfo (): Promise<{ version: string, state: 'stable' | 'testing' }>
     {
-        return JSON.parse(fs.readFileSync(this.patchJson));
+        return new Promise(resolve => {
+            this.getData().then(data => {
+                let gameLatest: string = data.game.latest.version;
+
+                fetch(`https://notabug.org/Krock/GI-on-Linux/raw/master/${gameLatest.replaceAll('.', '')}/patch.sh`)
+                    .then(response => response.text())
+                    .then((patch: string) => {
+                        // patch.sh exists so patch in testing, stable or it's just a preparation
+                        fetch(`https://notabug.org/Krock/GI-on-Linux/raw/master/${gameLatest.replaceAll('.', '')}/patch_files/unityplayer_patch.vcdiff`)
+                            .then(response => response.text())
+                            .then((unityPatch: string) => {
+                                // unityplayer_patch exists so it's testing or stable
+                                resolve({
+                                    version: gameLatest,
+                                    state: patch.includes('#echo "If you would like to test this patch, modify this script and remove the line below this one."') ?
+                                        'stable' : 'testing'
+                                });
+                            })
+                            .catch(() => {
+                                // unityplayer_patch doesn't exist so it's just a preparation
+                                // TODO: add preparation state
+                                resolve({
+                                    version: data.game.diffs[0].version,
+                                    state: 'stable'
+                                });
+                            });
+                    })
+                    .catch(() => {
+                        // patch.sh doesn't exist so patch is not available
+                        resolve({
+                            version: data.game.diffs[0].version,
+                            state: 'stable'
+                        });
+                    });
+            });
+        });
     }
 
     /**
@@ -212,26 +244,13 @@ export class Genshinlib
 
         return new Promise((resolve) => {
             let installationProgress = 0;
-            let installerProcess;
 
-            if (this.getConfig('runner'))
-            {
-                installerProcess = spawn('winetricks', ['corefonts', 'usetakefocus=n', 'dxvk191'], {
-                    env: {
-                        ...process.env,
-                        WINEPREFIX: prefixpath,
-                        WINE: path.join(this.runnersDir, this.getConfig('runner.folder'), this.getConfig('runner.executable'))
-                    }
-                });
-            }
-            else {
-                installerProcess = spawn('winetricks', ['corefonts', 'usetakefocus=n'], {
-                    env: {
-                        ...process.env,
-                        WINEPREFIX: prefixpath
-                    }
-                });
-            }
+            let installerProcess = spawn('winetricks', ['corefonts', 'usetakefocus=n'], {
+                env: {
+                    ...process.env,
+                    WINEPREFIX: prefixpath
+                }
+            });
 
             installerProcess.stdout.on('data', (data: string) => {
                 let str = data.toString();
@@ -263,7 +282,7 @@ export class Genshinlib
                 // Delete zip file and assign patch directory.
                 fs.unlinkSync(path.join(this.launcherDir, 'patch.zip'));
 
-                let patchDir: string = path.join(this.tmpPatchDir, version.replace(/\./g, ''));
+                let patchDir = path.join(this.tmpPatchDir, version.replace(/\./g, ''));
 
                 // Patch out the testing phase content from the shell files if active and make sure the shell files are executable.
                 exec(`cd ${patchDir} && sed -i '/^echo "If you would like to test this patch, modify this script and remove the line below this one."/,+5d' patch.sh`);

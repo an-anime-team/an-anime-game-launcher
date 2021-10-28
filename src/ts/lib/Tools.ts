@@ -4,8 +4,35 @@ const fs = require('fs');
 const path = require('path');
 const { spawn } = require('child_process');
 
+type GitTag = { tag: string, commit: string };
+
 export class Tools
 {
+    public static async getGitTags (uri: string): Promise<GitTag[]>
+    {
+        return new Promise(resolve => {
+            let git = spawn('git', ['ls-remote', '--tags', uri]),
+                tags: GitTag[] = [];
+
+            git.stdout.on('data', (data: string) => {
+                data.toString().split(/\r\n|\r|\n/).forEach(line => {
+                    if (line != '')
+                    {
+                        let matches = /^([0-9a-f]+)\trefs\/tags\/(.*)/.exec (line);
+
+                        if (matches)
+                            tags.push({
+                                tag: matches[2],
+                                commit: matches[1]
+                            });
+                    }
+                });
+            });
+
+            git.on('close', () => resolve(tags));
+        });
+    }
+
     public static async downloadFile (uri: string, savePath: string, progress: (current: number, total: number, difference: number) => void): Promise<void|Error>
     {
         return new Promise((resolve, reject) => {

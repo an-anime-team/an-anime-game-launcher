@@ -20,7 +20,7 @@ $(() => {
     });
 
     $('.settings').on('scroll', () => {
-        let anchor = $('.settings-item').filter((index, item) => $(item).offset()!.top < 264).last()[0]!.id;
+        let anchor = $('.settings-item').filter((index, item) => $(item).offset()!.top < 180).last()[0]!.id; // 264
 
         $('.menu-item').removeClass('menu-item-active');
         $(`.menu-item[anchor=${anchor}]`).addClass('menu-item-active');

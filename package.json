@@ -1,6 +1,6 @@
 {
     "name": "an-anime-game-linux-launcher",
-    "version": "0.8.0",
+    "version": "1.0.0-rc1",
     "description": "An Anime Game Linux Launcher",
     "author": "Nikita Podvirnyy <suimin.tu.mu.ga.mi@gmail.com>",
     "contributors": [
@@ -22,11 +22,12 @@
         },
         "files": [
             "public/**/*",
-            "entry.js"
+            "entry.js",
+            "package.json"
         ],
         "linux": {
             "icon": "public/images/icon256.png",
-            "category": "Utility",
+            "category": "Game",
             "target": [
                 {
                     "target": "AppImage",

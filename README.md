@@ -10,7 +10,7 @@
 
 | Game version | Launcher version | Patch version |
 | :---: | :---: | :---: |
-| 2.2.0 | 0.7.0 ⚠️ | 2.2.0 stable ✅ |
+| 2.2.0 | 1.0.0-rc1 ⚠️ | 2.2.0 stable ✅ |
 
 Download from [Releases](https://notabug.org/nobody/an-anime-game-launcher/releases)
 
@@ -25,6 +25,7 @@ To work this launcher requires
 * winetricks
 * unzip
 * tar
+* git
 
 # Development
 
@@ -42,7 +43,7 @@ npm start
 
 # Roadmap
 
-To 1.0.0 release
+### ➤ To 1.0.0 release
 
 * <s>Fix AppImage builds</s> *(0.3.0)*
 * <s>Parse background banners from the game's API ([issue #1](https://notabug.org/nobody/an-anime-game-launcher/issues/1), [pull request #2](https://notabug.org/nobody/an-anime-game-launcher/pulls/2))</s> *(0.3.0)*
@@ -52,11 +53,11 @@ To 1.0.0 release
 * <s>Add preferences menu</s> *(0.5.0)*
 * <s>Add additional telemetry checking</s> *(0.6.0)*
 * <s>Add DXVK downloading in settings</s> *(0.6.0)*
-* Add launcher updates notifications
-* Make automatical patch state parsing
-* Make participation in the anonymous analytics request
+* <s>Make participation in the anonymous analytics request</s> *(0.8.0)*
+* <s>Add launcher updates notifications</s> *(1.0.0-rc1)*
+* <s>Make automatic patch state parsing</s> *(1.0.0-rc1)*
 
-To 2.0.0 release
+### To 2.0.0 release
 
 * Add outdated files deletion when new game's update releases
 * Add voice packs support
