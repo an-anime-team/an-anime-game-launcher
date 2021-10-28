@@ -21,11 +21,24 @@ Download from [Releases](https://notabug.org/nobody/an-anime-game-launcher/relea
 To work this launcher requires
 
 * wine
-* winecfg
 * winetricks
 * unzip
 * tar
 * git
+
+## Install
+
+### apt-get
+
+```sh
+sudo apt-get install wine winetricks unzip tar git
+```
+
+### pacman
+
+```sh
+sudo pacman -Syu wine winetricks unzip tar git
+```
 
 # Development
 
