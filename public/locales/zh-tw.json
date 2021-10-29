@@ -24,6 +24,6 @@
     "Participate": "參與",
     "Skip": "省略",
     "SkipAndDontAsk": "跳過，不要再問",
-    "LUpdateNotiTitle": "啟動器更新可用：",
-    "LUpdateNotiBody": "你可以從項目的資源庫中下載新版本的啟動器，網址是：https://notabug.org/nobody/an-anime-game-launcher "
+    "LauncherUpdateTitle": "啟動器更新可用：",
+    "LauncherUpdateBody": "你可以從項目的資源庫中下載新版本的啟動器，網址是：https://notabug.org/nobody/an-anime-game-launcher "
 }

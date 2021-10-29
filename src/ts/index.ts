@@ -105,10 +105,9 @@ $(() => {
         if (tags.filter(entry => semver.gt(entry.tag, launcher_version)).length > 0)
         {
             ipcRenderer.send('notification', {
-                title: `${LauncherUI.i18n.translate('LaunchLUpdateNotiTitle')} (${launcher_version} -> ${tags[tags.length - 1].tag})`,
-                body: LauncherUI.i18n.translate('LUpdateNotiBody'),
-                timeoutType: 'never',
-                icon: path.join(__dirname, '..', 'images', 'baal64-transparent.png')
+                title: `${LauncherUI.i18n.translate('LauncherUpdateTitle')} (${launcher_version} -> ${tags[tags.length - 1].tag})`,
+                body: LauncherUI.i18n.translate('LauncherUpdateBody'),
+                timeoutType: 'never'
             });
         }
     });
@@ -140,7 +139,7 @@ $(() => {
 
                     LauncherUI.setState('patch-applying');
 
-                    Genshinlib.patchGame(data.game.latest.version, () => {
+                    Genshinlib.patchGame(() => {
                         LauncherUI.setState('game-launch-available');
                     }, data => console.log(data.toString()));
                 }
@@ -158,7 +157,7 @@ $(() => {
 
             LauncherUI.setState('patch-applying');
 
-            Genshinlib.patchGame(data.game.latest.version, () => {
+            Genshinlib.patchGame(() => {
                 LauncherUI.setState('game-launch-available');
             }, data => console.log(data.toString()));
         }
@@ -198,8 +197,7 @@ $(() => {
 
                     ipcRenderer.send('notification', {
                         title: document.title,
-                        body: 'miHoYo\'s telemetry servers doesn\'t disabled!',
-                        icon: path.join(__dirname, '..', 'images', 'baal64-transparent.png')
+                        body: 'miHoYo\'s telemetry servers doesn\'t disabled!'
                     });
                 }
 
@@ -271,7 +269,7 @@ $(() => {
 
                 LauncherUI.setState('patch-applying');
 
-                Genshinlib.patchGame(data.game.latest.version, () => {
+                Genshinlib.patchGame(() => {
                     LauncherUI.setState('game-launch-available');
                 }, data => console.log(data.toString()));
             }
@@ -368,14 +366,15 @@ $(() => {
 
                                     // patch-applying state changes only button text
                                     $('#downloaded').text(LauncherUI.i18n.translate('ApplyPatch'));
+                                    $('#speed').text('');
+                                    $('#eta').text('');
 
-                                    Genshinlib.patchGame(data.game.latest.version, () => {
+                                    Genshinlib.patchGame(() => {
                                         LauncherUI.setState('game-launch-available');
 
                                         ipcRenderer.send('notification', {
                                             title: document.title,
-                                            body: LauncherUI.i18n.translate('GameDownloaded'),
-                                            icon: path.join(__dirname, '..', 'images', 'baal64-transparent.png')
+                                            body: LauncherUI.i18n.translate('GameDownloaded')
                                         });
                                     }, data => console.log(data.toString()));
                                 }

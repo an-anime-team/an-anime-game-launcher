@@ -11,6 +11,7 @@ const { spawn, exec } = require('child_process');
 const dns = require('dns');
 
 const config = new store ({
+    cwd: path.join(os.homedir(), '.local', 'share', 'anime-game-launcher'),
     defaults: {
         lang: {
             launcher: 'en-us',
@@ -20,10 +21,13 @@ const config = new store ({
             time: null,
             file: null
         },
-        version: null,
-        patch: null,
-        runner: null,
+        version: null, // Installed game version
+        patch: null, // Installed patch info ({ version, state } - related game's version and patch's state)
+        runner: null, // Selected runner ({ folder, executable })
         rpc: false,
+
+        // Version of the game we asked about analytics last time,
+        // or null if user said don't ask him again
         analytics: '0'
     }
 });
@@ -46,8 +50,6 @@ type DXVK = {
 export class Genshinlib
 {
     public static readonly launcherDir: string = path.join(os.homedir(), '.local', 'share', 'anime-game-launcher');
-
-    public static readonly tmpPatchDir: string = path.join(this.launcherDir, 'patch-tmp');
 
     public static readonly prefixDir: string = path.join(this.launcherDir, 'game');
     public static readonly gameDir: string = path.join(this.prefixDir, 'drive_c', 'Program Files', Buffer.from('R2Vuc2hpbiBJbXBhY3Q=', 'base64').toString('utf-8'));
@@ -226,6 +228,7 @@ export class Genshinlib
     public static async installPrefix (prefixpath: string, progress: (output: string, current: number, total: number) => void): Promise<void>
     {
         let installationSteps = [
+            // corefonts
             'Executing w_do_call corefonts',
             'Executing load_corefonts',
             'Executing load_andale',
@@ -238,8 +241,9 @@ export class Genshinlib
             'Executing load_trebuchet',
             'Executing load_verdana',
             'Executing load_webdings',
-            'Executing load_usetakefocus n',
-            'Executing load_dxvk'
+
+            // usetakefocus=n (fullscreen input issues fix)
+            'Executing load_usetakefocus n'
         ];
 
         return new Promise((resolve) => {
@@ -275,61 +279,66 @@ export class Genshinlib
         return fs.existsSync(path.join(prefixPath, 'drive_c'));
     }
 
-    public static patchGame (version: string, onFinish: () => void, onData: (data: string) => void)
+    public static patchGame (onFinish: () => void, onData: (data: string) => void)
     {
-        Tools.downloadFile(this.patchUri, path.join(this.launcherDir, 'patch.zip'), (current: number, total: number, difference: number) => null).then(() => {
-            Tools.unzip(path.join(this.launcherDir, 'patch.zip'), this.launcherDir, (current: number, total: number, difference: number) => null).then(() => {
-                // Delete zip file and assign patch directory.
-                fs.unlinkSync(path.join(this.launcherDir, 'patch.zip'));
+        Genshinlib.getPatchInfo().then(pathInfo => {
+            Tools.downloadFile(this.patchUri, path.join(this.launcherDir, 'patch.zip'), (current: number, total: number, difference: number) => null).then(() => {
+                Tools.unzip(path.join(this.launcherDir, 'patch.zip'), this.launcherDir, (current: number, total: number, difference: number) => null).then(() => {
+                    // Delete zip file and assign patch directory.
+                    fs.unlinkSync(path.join(this.launcherDir, 'patch.zip'));
 
-                let patchDir = path.join(this.tmpPatchDir, version.replace(/\./g, ''));
+                    let patchDir = path.join(this.launcherDir, 'gi-on-linux', pathInfo.version.replaceAll('.', ''));
 
-                // Patch out the testing phase content from the shell files if active and make sure the shell files are executable.
-                exec(`cd ${patchDir} && sed -i '/^echo "If you would like to test this patch, modify this script and remove the line below this one."/,+5d' patch.sh`);
-                exec(`cd ${patchDir} && sed -i '/^echo "       necessary afterwards (Friday?). If that's the case, comment the line below."/,+2d' patch_anti_logincrash.sh`);
-                exec(`chmod +x ${path.join(patchDir, 'patch.sh')}`);
-                exec(`chmod +x ${path.join(patchDir, 'patch_anti_logincrash.sh')}`);
+                    // Patch out the testing phase content from the shell files if active and make sure the shell files are executable.
+                    exec(`cd ${patchDir} && sed -i '/^echo "If you would like to test this patch, modify this script and remove the line below this one."/,+5d' patch.sh`);
+                    exec(`cd ${patchDir} && sed -i '/^echo "       necessary afterwards (Friday?). If that's the case, comment the line below."/,+2d' patch_anti_logincrash.sh`);
+                    exec(`chmod +x ${path.join(patchDir, 'patch.sh')}`);
+                    exec(`chmod +x ${path.join(patchDir, 'patch_anti_logincrash.sh')}`);
 
-                // Execute the patch file with "yes yes" in the beginning to agree to the choices.
-                let patcherProcess = exec(`yes yes | ${path.join(patchDir, 'patch.sh')}`, {
-                    cwd: this.gameDir,
-                    env: {
-                        ...process.env,
-                        WINEPREFIX: this.prefixDir
-                    }
-                });
-
-                patcherProcess.stdout.on('data', (data: string) => onData(data));
-
-                patcherProcess.on('close', () => {
-                    // Make sure that launcher.bat exists if not run patch.sh again.
-                    if (!path.join(this.gameDir, 'launcher.bat'))
-                        exec(`yes yes | ${path.join(patchDir, 'patch.sh')}`, {
-                            cwd: this.gameDir,
-                            env: {
-                                ...process.env,
-                                WINEPREFIX: this.prefixDir
-                            }
-                        });
-
-                    // Execute the patch file with "yes" in the beginning to agree to the choice.
-                    let patcherAntiCrashProcess = exec(`yes | ${path.join(patchDir, 'patch_anti_logincrash.sh')}`, {
+                    // Execute the patch file with "yes yes" in the beginning to agree to the choices.
+                    let patcherProcess = exec(`yes yes | ${path.join(patchDir, 'patch.sh')}`, {
                         cwd: this.gameDir,
                         env: {
                             ...process.env,
                             WINEPREFIX: this.prefixDir
                         }
                     });
-    
-                    patcherAntiCrashProcess.stdout.on('data', (data: string) => onData(data));
-    
-                    patcherAntiCrashProcess.on('close', () => {
-                        fs.rmSync(this.tmpPatchDir, { recursive: true });
 
-                        onFinish();
+                    patcherProcess.stdout.on('data', (data: string) => onData(data));
+
+                    patcherProcess.on('close', () => {
+                        // Make sure that launcher.bat exists if not run patch.sh again.
+                        if (!path.join(this.gameDir, 'launcher.bat'))
+                            exec(`yes yes | ${path.join(patchDir, 'patch.sh')}`, {
+                                cwd: this.gameDir,
+                                env: {
+                                    ...process.env,
+                                    WINEPREFIX: this.prefixDir
+                                }
+                            });
+
+                        // Execute the patch file with "yes" in the beginning to agree to the choice.
+                        let patcherAntiCrashProcess = exec(`yes | ${path.join(patchDir, 'patch_anti_logincrash.sh')}`, {
+                            cwd: this.gameDir,
+                            env: {
+                                ...process.env,
+                                WINEPREFIX: this.prefixDir
+                            }
+                        });
+        
+                        patcherAntiCrashProcess.stdout.on('data', (data: string) => onData(data));
+        
+                        patcherAntiCrashProcess.on('close', () => {
+                            Genshinlib.updateConfig('patch.version', pathInfo.version);
+                            Genshinlib.updateConfig('patch.state', pathInfo.state);
+
+                            fs.rmSync(path.join(this.launcherDir, 'gi-on-linux'), { recursive: true });
+
+                            onFinish();
+                        });
                     });
                 });
-            });
+            })
         });
     }
 }

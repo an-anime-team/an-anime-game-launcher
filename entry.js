@@ -17,8 +17,7 @@ ipcMain.handle('hide-window', () => mainWindow.hide());
 ipcMain.handle('show-window', () => mainWindow.show());
 
 ipcMain.on('notification', (event, args) => {
-    if (args.icon !== undefined)
-        args.icon = nativeImage.createFromPath(args.icon);
+    args.icon = nativeImage.createFromPath(args.icon ?? path.join(__dirname, 'public', 'images', 'baal64-transparent.png'));
 
     new Notification(args).show();
 });
@@ -31,7 +30,7 @@ ipcMain.handle('open-settings', () => {
             nodeIntegration: true,
             contextIsolation: false
         },
-        icon: path.join(__dirname, 'public', 'images', 'icon64.png'),
+        icon: path.join(__dirname, 'public', 'images', 'icons', '64x64.png'),
         autoHideMenuBar: true,
         resizable: false,
         parent: mainWindow,
@@ -51,7 +50,7 @@ ipcMain.handle('open-analytics-participation', () => {
             nodeIntegration: true,
             contextIsolation: false
         },
-        icon: path.join(__dirname, 'public', 'images', 'icon64.png'),
+        icon: path.join(__dirname, 'public', 'images', 'icons', '64x64.png'),
         autoHideMenuBar: true,
         resizable: false,
         parent: mainWindow,
@@ -75,7 +74,7 @@ function createWindow ()
             nodeIntegration: true,
             contextIsolation: false
         },
-        icon: path.join(__dirname, 'public', 'images', 'icon64.png'),
+        icon: path.join(__dirname, 'public', 'images', 'icons', '64x64.png'),
         autoHideMenuBar: true,
         resizable: false
     });

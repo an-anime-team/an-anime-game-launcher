@@ -24,6 +24,6 @@
     "Participate": "匿名でのデータ収集に参加",
     "Skip": "スキップ",
     "SkipAndDontAsk": "スキップして二度と聞かない",
-    "LUpdateNotiTitle": "ランチャーのアップデートが可能 ",
-    "LUpdateNotiBody": "ランチャーの新バージョンは、プロジェクトのリポジトリ（https://notabug.org/nobody/an-anime-game-launcher）からダウンロードできます。"
+    "LauncherUpdateTitle": "ランチャーのアップデートが可能 ",
+    "LauncherUpdateBody": "ランチャーの新バージョンは、プロジェクトのリポジトリ（https://notabug.org/nobody/an-anime-game-launcher）からダウンロードできます。"
 }

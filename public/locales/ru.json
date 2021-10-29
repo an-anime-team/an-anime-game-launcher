@@ -24,6 +24,6 @@
     "Participate": "Участвовать",
     "Skip": "Пропустить",
     "SkipAndDontAsk": "Пропустить и не спрашивать",
-    "LUpdateNotiTitle": "Launcher update available: ",
-    "LUpdateNotiBody": "You can download a new version of the launcher from the project's repository at https://notabug.org/nobody/an-anime-game-launcher"
+    "LauncherUpdateTitle": "Доступно обновление лаунчера: ",
+    "LauncherUpdateBody": "Вы можете скачать новую версию лаунчера с репозитория проекта: https://notabug.org/nobody/an-anime-game-launcher"
 }
