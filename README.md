@@ -10,11 +10,9 @@
 
 | Game version | Launcher version | Patch version |
 | :---: | :---: | :---: |
-| 2.2.0 | 1.0.0-rc1 ⚠️ | 2.2.0 stable ✅ |
+| 2.2.0 | 1.0.0 | 2.2.0 stable ✅ |
 
 Download from [Releases](https://notabug.org/nobody/an-anime-game-launcher/releases)
-
-> ⚠️ Launcher is currently in development, but you already can use it
 
 # Requirements
 
@@ -56,7 +54,7 @@ npm start
 
 # Roadmap
 
-### ➤ To 1.0.0 release
+### ✓ <s>To 1.0.0 release</s>
 
 * <s>Fix AppImage builds</s> *(0.3.0)*
 * <s>Parse background banners from the game's API ([issue #1](https://notabug.org/nobody/an-anime-game-launcher/issues/1), [pull request #2](https://notabug.org/nobody/an-anime-game-launcher/pulls/2))</s> *(0.3.0)*
@@ -70,7 +68,7 @@ npm start
 * <s>Add launcher updates notifications</s> *(1.0.0-rc1)*
 * <s>Make automatic patch state parsing</s> *(1.0.0-rc1)*
 
-### To 2.0.0 release
+### ➤ To 2.0.0 release
 
 * Set default wine version to download so the wine install requirement is no longer needed.
 * Add outdated files deletion when new game's update releases
