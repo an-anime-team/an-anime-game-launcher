@@ -16,12 +16,14 @@
     "PatchRequiredHint": "Diese Spielversion hat noch kein anti-cheat patch, Bitte warten sie ein paar Tage bevor sie es erneut versuchen",
     "TestPatch": "Test Patch anwenden",
     "TestPatchHint": "Diese Spielversion hat ein anti-cheat patch aber es befindet sich noch in der Testphase. Sie können noch ein paar Tage warten bis es Stabil ist oder auf eigenen Risiko den Testpatch anwenden",
-    "AnalyticsTitle": "Yanfei's commission...",
-    "ParticipateInAnalytics": "Participate in anonymous data collection",
-    "AnalyticsText1": "To count the active user base for Linux, Yanfei would like to collect your IP address everytime the game updates",
-    "AnalyticsText2": "The IP address will be hashed for security purpose",
-    "AnalyticsShareCountry": "Share country",
-    "Participate": "Participate",
-    "Skip": "Skip",
-    "SkipAndDontAsk": "Skip and don't ask again"
+    "AnalyticsTitle": "Yanfei's Kommission...",
+    "ParticipateInAnalytics": "Nehmen Sie an der anonymen Datenerhebung teil",
+    "AnalyticsText1": "Um die aktive Nutzerbasis für Linux zu zählen, möchte Yanfei bei jedem Update des Spiels Ihre IP-Adresse erfassen,",
+    "AnalyticsText2": "Die IP Adresse wird aus Sicherheitsgründen gehasht.",
+    "AnalyticsShareCountry": "Land teilen",
+    "Participate": "Teilnehmen",
+    "Skip": "Überspringen",
+    "SkipAndDontAsk": "Überspingen und nicht noch mal fragen",
+    "LUpdateNotiTitle": "Launcher update verfügbar: ",
+    "LUpdateNotiBody": "Sie können eine neue Version des Launchers aus dem Repository des Projekts unter https://notabug.org/nobody/an-anime-game-launcher herunterladen."
 }

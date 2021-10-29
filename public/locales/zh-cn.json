@@ -16,12 +16,14 @@
     "PatchRequiredHint": "此游戏版本没有防作弊补丁。请等待几天，然后重试",
     "TestPatch": "应用测试补丁",
     "TestPatchHint": "此游戏版本有防作弊补丁，但处于测试阶段。您可以等待几天直到它稳定或自担风险应用它",
-    "AnalyticsTitle": "Yanfei's commission...",
-    "ParticipateInAnalytics": "Participate in anonymous data collection",
-    "AnalyticsText1": "To count the active user base for Linux, Yanfei would like to collect your IP address everytime the game updates",
-    "AnalyticsText2": "The IP address will be hashed for security purpose",
-    "AnalyticsShareCountry": "Share country",
-    "Participate": "Participate",
-    "Skip": "Skip",
-    "SkipAndDontAsk": "Skip and don't ask again"
+    "AnalyticsTitle": "燕飞的委托...",
+    "ParticipateInAnalytics": "参与匿名数据收集",
+    "AnalyticsText1": "为了统计Linux的活跃用户群，燕飞想在每次游戏更新时收集你的IP地址。",
+    "AnalyticsText2": "为安全起见，该IP地址将被加密。",
+    "AnalyticsShareCountry": "分享国家",
+    "Participate": "参与",
+    "Skip": "省略",
+    "SkipAndDontAsk": "跳过，不要再问",
+    "LUpdateNotiTitle": "启动器更新可用：",
+    "LUpdateNotiBody": "你可以从项目的资源库中下载新版本的启动器，网址是：https://notabug.org/nobody/an-anime-game-launcher"
 }
