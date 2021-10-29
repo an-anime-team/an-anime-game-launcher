@@ -3,6 +3,8 @@ const fs = require('fs');
 const { exec } = require('child_process');
 const { ipcRenderer } = require('electron');
 
+const semver = require('semver');
+
 import $ from 'cash-dom';
 
 import { Genshinlib } from './lib/Genshinlib';
@@ -100,7 +102,7 @@ $(() => {
     });
 
     Tools.getGitTags('https://notabug.org/nobody/an-anime-game-launcher').then (tags => {
-        if (tags.filter(entry => entry.tag > launcher_version).length > 0)
+        if (tags.filter(entry => semver.gt(entry.tag, launcher_version)).length > 0)
         {
             ipcRenderer.send('notification', {
                 title: `Launcher update available (${launcher_version} -> ${tags[tags.length - 1].tag})`,
