@@ -105,8 +105,8 @@ $(() => {
         if (tags.filter(entry => semver.gt(entry.tag, launcher_version)).length > 0)
         {
             ipcRenderer.send('notification', {
-                title: `Launcher update available (${launcher_version} -> ${tags[tags.length - 1].tag})`,
-                body: 'You can download new version of the launcher from the project\'s repository at https://notabug.org/nobody/an-anime-game-launcher',
+                title: `${LauncherUI.i18n.translate('LaunchLUpdateNotiTitle')} (${launcher_version} -> ${tags[tags.length - 1].tag})`,
+                body: LauncherUI.i18n.translate('LUpdateNotiBody'),
                 timeoutType: 'never',
                 icon: path.join(__dirname, '..', 'images', 'baal64-transparent.png')
             });

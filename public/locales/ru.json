@@ -23,5 +23,7 @@
     "AnalyticsShareCountry": "Поделиться названием страны",
     "Participate": "Участвовать",
     "Skip": "Пропустить",
-    "SkipAndDontAsk": "Пропустить и не спрашивать"
+    "SkipAndDontAsk": "Пропустить и не спрашивать",
+    "LUpdateNotiTitle": "Launcher update available: ",
+    "LUpdateNotiBody": "You can download a new version of the launcher from the project's repository at https://notabug.org/nobody/an-anime-game-launcher"
 }
