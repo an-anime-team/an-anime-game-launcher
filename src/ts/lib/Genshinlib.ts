@@ -28,7 +28,15 @@ const config = new store ({
 
         // Version of the game we asked about analytics last time,
         // or null if user said don't ask him again
-        analytics: '0'
+        analytics: '0',
+        
+        // Environement variables
+        env: {
+            DXVK_ASYNC: '1',
+            WINEESYNC: '1',
+            WINE_FULLSCREEN_FSR: '1',
+            WINE_FULLSCREEN_FSR_STRENGTH: '3'
+        }
     }
 });
 
@@ -51,7 +59,7 @@ export class Genshinlib
 {
     public static readonly launcherDir: string = path.join(os.homedir(), '.local', 'share', 'anime-game-launcher');
 
-    public static readonly prefixDir: string = path.join(this.launcherDir, 'game');
+    public static readonly prefixDir: string = path.join(this.launcherDir, 'game'); // TODO: rename every game's name entry to something like below
     public static readonly gameDir: string = path.join(this.prefixDir, 'drive_c', 'Program Files', Buffer.from('R2Vuc2hpbiBJbXBhY3Q=', 'base64').toString('utf-8'));
     public static readonly runnersDir: string = path.join(this.launcherDir, 'runners');
     public static readonly dxvksDir: string = path.join(this.launcherDir, 'dxvks');
@@ -100,6 +108,11 @@ export class Genshinlib
     public static updateConfig (property: string, value: string|boolean|null|number)
     {
         return config.set(property, value);
+    }
+
+    public static deleteConfig (property: string)
+    {
+        return config.delete(property);
     }
 
     public static async getData (): Promise<any>

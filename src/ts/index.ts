@@ -49,7 +49,7 @@ $(() => {
     });
 
     // FIXME
-    ipcRenderer.on('updateVP', (event: void, remotedata: any) => {
+    /*ipcRenderer.on('updateVP', (event: void, remotedata: any) => {
         Genshinlib.getData().then(data => {
             LauncherUI.initProgressBar();
 
@@ -99,7 +99,7 @@ $(() => {
                 })
             });
         });
-    });
+    });*/
 
     Tools.getGitTags('https://notabug.org/nobody/an-anime-game-launcher').then (tags => {
         if (tags.filter(entry => semver.gt(entry.tag, launcher_version)).length > 0)
@@ -237,7 +237,8 @@ $(() => {
                         cwd: Genshinlib.gameDir,
                         env: {
                             ...process.env,
-                            WINEPREFIX: Genshinlib.prefixDir
+                            WINEPREFIX: Genshinlib.prefixDir,
+                            ...Genshinlib.getConfig('env')
                         }
                     }, (err: any, stdout: any, stderr: any) => {
                         console.log(`%c> Game closed`, 'font-size: 16px');
@@ -354,6 +355,16 @@ $(() => {
                                 LauncherUI.updateProgressBar(LauncherUI.i18n.translate('Unpack'), current, total, difference);
                             }).then(() => {
                                 fs.unlinkSync(path.join(Genshinlib.launcherDir, voicePack.name));
+
+                                // If this update has excess files we should delete them
+                                if (fs.existsSync(path.join(Genshinlib.gameDir, 'deletefiles.txt')))
+                                {
+                                    let deleteFiles = fs.readFileSync(path.join(Genshinlib.gameDir, 'deletefiles.txt'));
+
+                                    deleteFiles.split(/\r\n|\r|\n/).forEach((file: string) => {
+                                        fs.unlinkSync(path.join(Genshinlib.gameDir, file.trim()));
+                                    });
+                                }
 
                                 Genshinlib.updateConfig('version', data.game.latest.version);
 

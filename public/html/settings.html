@@ -21,6 +21,7 @@
             <div class="menu-item menu-item-active" anchor="general" i18id="GeneralSettings">General</div>
             <div class="menu-item" anchor="runners" i18id="WineVersion">Wine version</div>
             <div class="menu-item" anchor="dxvks" i18id="DXVK">DXVK</div>
+            <div class="menu-item" anchor="environment">Environment</div>
         </div>
 
         <div class="settings">
@@ -89,6 +90,24 @@
                 <h2>DXVK</h2>
 
                 <div class="list" id="dxvk-list"></div>
+            </div>
+
+            <div class="settings-item" id="environment">
+                <h2>Environmental variables</h2>
+
+                <div class="properties-list" id="env-list">
+                    <table>
+                        <tr>
+                            <th>Name</th>
+                            <th>Value</th>
+                        </tr>
+                    </table>
+
+                    <div class="properties-list-buttons">
+                        <button class="button" id="add">Add</button>
+                        <button class="button" id="delete">Delete</button>
+                    </div>
+                </div>
             </div>
         </div>
     </body>

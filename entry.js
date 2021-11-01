@@ -76,10 +76,12 @@ function createWindow ()
         },
         icon: path.join(__dirname, 'public', 'images', 'icons', '64x64.png'),
         autoHideMenuBar: true,
-        resizable: false
+        resizable: false,
+        show: false
     });
 
     mainWindow.loadFile(path.join(__dirname, 'public', 'html', 'index.html'));
+    mainWindow.once('ready-to-show', mainWindow.show);
 
     // open URLs in Browser instead of an pop-up in electron app.
     mainWindow.webContents.setWindowOpenHandler(({ url }) => {
@@ -111,9 +113,9 @@ app.whenReady().then(() => {
         mainWindow.webContents.send('change-lang', { 'lang': args.lang });
     });
 
-    ipcMain.on('updateVP', (event, args) => {
+    /*ipcMain.on('updateVP', (event, args) => {
         mainWindow.webContents.send('updateVP', { 'oldvp': args.oldvp });
-    });
+    });*/
 
     ipcMain.on('rpc-toggle', () => mainWindow.webContents.send('rpc-toggle'));
 });

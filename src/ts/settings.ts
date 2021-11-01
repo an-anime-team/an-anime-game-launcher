@@ -72,6 +72,39 @@ $(() => {
         else console.log('VP can\' be changed to the already set language');
     });*/
 
+    $('#env-list').on('propertyNameChanged', (e, data) => {
+        if (data.value != '')
+            Genshinlib.updateConfig(`env.${data.name.after}`, data.value);
+
+        if (data.name.before != '')
+            Genshinlib.deleteConfig(`env.${data.name.before}`);
+    });
+
+    $('#env-list').on('propertyValueChanged', (e, data) => {
+        if (data.name != '')
+            Genshinlib.updateConfig(`env.${data.name}`, data.value.after);
+    });
+
+    $('#env-list').on('propertyDeleted', (e, data) => {
+        if (data.name != '')
+            Genshinlib.deleteConfig(`env.${data.name}`);
+    });
+
+    let env = Genshinlib.getConfig('env');
+
+    Object.keys(env).forEach((property: string) => {
+        $('#env-list .button#add')[0]!.click();
+
+        let value = env[property];
+        let td = $('#env-list tr').last().children();
+
+        td.first().find('input').val(property);
+        td.first().find('span').text(property);
+
+        td.last().find('input').val(value);
+        td.last().find('span').text(value);
+    });
+
     let activeRunner = Genshinlib.getConfig('runner');
 
     Genshinlib.getRunners().then(runners => {

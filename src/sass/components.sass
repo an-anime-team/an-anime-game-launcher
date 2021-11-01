@@ -3,6 +3,79 @@ $light2: #eff2ff
 $primary: #657ef8
 $secondary: #e1e7ff
 
+/* Editable list of properties */
+
+.properties-list
+    table
+        width: 100%
+
+        border-spacing: 0
+
+        $cell-height: 40px
+        $padding-v: 4px
+        $padding-h: 8px
+
+        tr
+            height: $cell-height
+
+            cursor: pointer
+
+            &:hover
+                background-color: $light
+
+            td:nth-of-type(1),
+            th:nth-of-type(1)
+                width: 60%
+
+            th,
+            td
+                border-bottom: 1px solid $light
+
+                &:not(:last-child)
+                    border-right: 1px solid $light
+                
+            td
+                span
+                    display: block
+
+                    width: calc(100% - 2 * $padding-h)
+                    height: calc($cell-height - 2 * $padding-h)
+
+                    margin: auto
+
+                input
+                    display: none
+
+                    width: calc(100% - 2 * $padding-h)
+                    height: calc($cell-height - 2 * $padding-h)
+
+                    background-color: $light2
+
+                    font-size: 15px
+
+                    margin: auto
+                    border: unset
+                    outline: none
+
+        .selected
+            background-color: $light2 !important
+
+            input
+                display: block
+
+            span
+                display: none
+
+    .properties-list-buttons
+        width: 100%
+        margin-top: 16px
+
+        display: inline-flex
+        justify-content: flex-end
+
+        .button:not(:last-child)
+            margin-right: 8px
+
 /* List of buttons */
 
 .list-item
