@@ -161,11 +161,11 @@ export class LauncherLib
             this.getData().then(data => {
                 let gameLatest: string = data.game.latest.version;
 
-                fetch(`https://notabug.org/Krock/GI-on-Linux/raw/master/${gameLatest.replaceAll('.', '')}/patch.sh`)
+                fetch(`${constants.uri.patch}/raw/master/${gameLatest.replaceAll('.', '')}/patch.sh`)
                     .then(response => response.text())
                     .then((patch: string) => {
                         // patch.sh exists so patch in testing, stable or it's just a preparation
-                        fetch(`https://notabug.org/Krock/GI-on-Linux/raw/master/${gameLatest.replaceAll('.', '')}/patch_files/unityplayer_patch.vcdiff`)
+                        fetch(`${constants.uri.patch}/raw/master/${gameLatest.replaceAll('.', '')}/patch_files/unityplayer_patch.vcdiff`)
                             .then(response => response.text())
                             .then((unityPatch: string) => {
                                 // unityplayer_patch exists so it's testing or stable
@@ -195,33 +195,15 @@ export class LauncherLib
         });
     }
 
-    /**
-     * 0.0.0.0 log-upload-os.mihoyo.com
-     * 0.0.0.0 overseauspider.yuanshen.com
-     */
-    public static isTelemetryDisabled (): Promise<boolean>
+    public static isTelemetryDisabled (domainNum: number = 0): Promise<boolean>
     {
         return new Promise((resolve, reject) => {
-            dns.lookup('log-upload-os.mihoyo.com', (error: any, address: string, family: any) => {
-                if (error)
-                    reject(error);
-                
-                else
-                {
-                    if (address != '0.0.0.0')
-                        resolve(false);
+            Tools.domainAvailable(constants.uri.telemetry[domainNum]).then(async (status) => {
+                if (constants.uri.telemetry[++domainNum] !== undefined)
+                    status &&= await this.isTelemetryDisabled(domainNum);
 
-                    else
-                    {
-                        dns.lookup('log-upload-os.mihoyo.com', (error: any, address: string, family: any) => {
-                            if (error)
-                                reject(error);
-                            
-                            else resolve(address == '0.0.0.0');
-                        });
-                    }
-                }
-            });
+                resolve(status);
+            }).catch(reject);
         });
     }
 

@@ -14,7 +14,7 @@ type LauncherState =
 
 export class LauncherUI
 {
-    public static readonly socialUri = `https://${constants.gamePlaceholder.lowercase.first}.${constants.gamePlaceholder.lowercase.company}.com/launcher/10/${LauncherLib.getConfig('lang.launcher')}?api_url=https%3A%2F%2Fapi-os-takumi.${constants.gamePlaceholder.lowercase.company}.com%2Fhk4e_global&prev=false`;
+    public static readonly socialUri = `https://${constants.placeholders.lowercase.first}.${constants.placeholders.lowercase.company}.com/launcher/10/${LauncherLib.getConfig('lang.launcher')}?api_url=https%3A%2F%2Fapi-os-takumi.${constants.placeholders.lowercase.company}.com%2Fhk4e_global&prev=false`;
 
     protected static _launcherState: LauncherState = 'game-launch-available';
     protected static _i18n: any;

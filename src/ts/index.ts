@@ -26,7 +26,7 @@ if (!fs.existsSync(constants.dxvksDir))
 
 $(() => {
     if (LauncherLib.version !== null)
-        document.title = `${constants.gamePlaceholder.uppercase.full} Linux Launcher - ${LauncherLib.version}`;
+        document.title = `${constants.placeholders.uppercase.full} Linux Launcher - ${LauncherLib.version}`;
 
     // On Start configuration of LauncherUI
     LauncherUI.updateLang(LauncherLib.getConfig('lang.launcher') ?? 'en-us');
@@ -102,7 +102,7 @@ $(() => {
         });
     });*/
 
-    Tools.getGitTags('https://notabug.org/nobody/an-anime-game-launcher').then (tags => {
+    Tools.getGitTags(constants.uri.launcher).then (tags => {
         if (tags.filter(entry => semver.gt(entry.tag, launcher_version)).length > 0)
         {
             ipcRenderer.send('notification', {
@@ -194,11 +194,11 @@ $(() => {
 
                 if (!await LauncherLib.isTelemetryDisabled())
                 {
-                    console.log('miHoYo\'s telemetry servers doesn\'t disabled!');
+                    console.log(`${constants.placeholders.uppercase.company}'s telemetry servers doesn't disabled!`);
 
                     ipcRenderer.send('notification', {
-                        title: document.title,
-                        body: 'miHoYo\'s telemetry servers doesn\'t disabled!'
+                        title: document.title, // FIXME add translation
+                        body: `${constants.placeholders.uppercase.company}'s telemetry servers doesn't disabled!`
                     });
                 }
 
@@ -372,23 +372,29 @@ $(() => {
                                 // Patch available
                                 if (patchInfo.version === data.game.latest.version)
                                 {
-                                    // TODO: check the patch state
+                                    // ..but it's in testing state
+                                    if (patchInfo.state === 'testing')
+                                        LauncherUI.setState('test-patch-available');
 
-                                    console.log(`%c> Applying patch...`, 'font-size: 16px');
+                                    // Otherwise it's fully released and tested and we can auto-install it
+                                    else
+                                    {
+                                        console.log(`%c> Applying patch...`, 'font-size: 16px');
 
-                                    // patch-applying state changes only button text
-                                    $('#downloaded').text(LauncherUI.i18n.translate('ApplyPatch'));
-                                    $('#speed').text('');
-                                    $('#eta').text('');
+                                        // patch-applying state changes only button text
+                                        $('#downloaded').text(LauncherUI.i18n.translate('ApplyPatch'));
+                                        $('#speed').text('');
+                                        $('#eta').text('');
 
-                                    LauncherLib.patchGame(() => {
-                                        LauncherUI.setState('game-launch-available');
+                                        LauncherLib.patchGame(() => {
+                                            LauncherUI.setState('game-launch-available');
 
-                                        ipcRenderer.send('notification', {
-                                            title: document.title,
-                                            body: LauncherUI.i18n.translate('GameDownloaded')
-                                        });
-                                    }, data => console.log(data.toString()));
+                                            ipcRenderer.send('notification', {
+                                                title: document.title,
+                                                body: LauncherUI.i18n.translate('GameDownloaded')
+                                            });
+                                        }, data => console.log(data.toString()));
+                                    }
                                 }
 
                                 // Patch is not available

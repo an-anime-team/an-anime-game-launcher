@@ -2,6 +2,7 @@ const https = require('follow-redirects').https;
 
 const fs = require('fs');
 const path = require('path');
+const dns = require('dns');
 const { spawn } = require('child_process');
 
 type GitTag = { tag: string, commit: string };
@@ -30,6 +31,20 @@ export class Tools
             });
 
             git.on('close', () => resolve(tags));
+        });
+    }
+
+    public static async domainAvailable (uri: string): Promise<boolean>
+    {
+        return new Promise((resolve, reject) => {
+            dns.lookup(uri, (error: any, address: string, family: any) => {
+                console.log(`${uri} -> ${address}`);
+                
+                if (error)
+                    reject(error);
+
+                else resolve(address == '0.0.0.0');
+            });
         });
     }
 
