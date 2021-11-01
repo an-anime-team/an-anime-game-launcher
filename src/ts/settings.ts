@@ -6,13 +6,13 @@ const { exec } = require('child_process');
 import $ from 'cash-dom';
 
 import { constants } from './lib/constants';
-import { Genshinlib } from './lib/Genshinlib';
+import { LauncherLib } from './lib/LauncherLib';
 import { LauncherUI } from './lib/LauncherUI';
 import { Tools } from './lib/Tools';
 
 $(() => {
     // Make sure settings is shown in correct language.
-    LauncherUI.updateLang(Genshinlib.getConfig('lang.launcher') ?? 'en-us');
+    LauncherUI.updateLang(LauncherLib.getConfig('lang.launcher') ?? 'en-us');
 
     $('.menu-item').on('click', (e) => {
         $('.settings')[0]!.scrollTop = document.getElementById(e.target.getAttribute('anchor'))!.offsetTop - 16;
@@ -29,12 +29,12 @@ $(() => {
     });
 
     $('#language').on('selectionChanged', (e, data: any) => {
-        let activeLang = Genshinlib.getConfig('lang.launcher');
+        let activeLang = LauncherLib.getConfig('lang.launcher');
 
         if (activeLang != data.value)
         {
-            Genshinlib.updateConfig('lang.launcher', data.value);
-            Genshinlib.updateConfig('background.time', null);
+            LauncherLib.updateConfig('lang.launcher', data.value);
+            LauncherLib.updateConfig('background.time', null);
 
             LauncherUI.updateLang(data.value);
 
@@ -44,26 +44,26 @@ $(() => {
     });
 
     // Select the saved options in launcher.json on load
-    // $(`#voice-list option[value="${Genshinlib.getConfig('lang.voice')}"]`).prop('selected', true);
+    // $(`#voice-list option[value="${LauncherLib.getConfig('lang.voice')}"]`).prop('selected', true);
 
-    $(`#language li[value=${Genshinlib.getConfig('lang.launcher')}]`).addClass('selected');
-    $('#language .selected-item span').text($(`#language li[value=${Genshinlib.getConfig('lang.launcher')}]`).text());
+    $(`#language li[value=${LauncherLib.getConfig('lang.launcher')}]`).addClass('selected');
+    $('#language .selected-item span').text($(`#language li[value=${LauncherLib.getConfig('lang.launcher')}]`).text());
 
-    if (Genshinlib.getConfig('rpc'))
+    if (LauncherLib.getConfig('rpc'))
         $('#discord-rpc').addClass('checkbox-active');
 
     $('#discord-rpc').on('classChange', () => {
-        Genshinlib.updateConfig('rpc', $('#discord-rpc').hasClass('checkbox-active'));
+        LauncherLib.updateConfig('rpc', $('#discord-rpc').hasClass('checkbox-active'));
 
         ipcRenderer.send('rpc-toggle');
     });
 
     /*$('#voice-list').on('change', (e) => {
-        let activeVP = Genshinlib.getConfig('voice');
+        let activeVP = LauncherLib.getConfig('voice');
 
         if (activeVP != e.target.value)
         {
-            Genshinlib.updateConfig('lang.voice', e.target.value);
+            LauncherLib.updateConfig('lang.voice', e.target.value);
             
             ipcRenderer.send('updateVP', { 'oldvp': activeVP });
 
@@ -76,23 +76,23 @@ $(() => {
 
     $('#env-list').on('propertyNameChanged', (e, data) => {
         if (data.value != '')
-            Genshinlib.updateConfig(`env.${data.name.after}`, data.value);
+            LauncherLib.updateConfig(`env.${data.name.after}`, data.value);
 
         if (data.name.before != '')
-            Genshinlib.deleteConfig(`env.${data.name.before}`);
+            LauncherLib.deleteConfig(`env.${data.name.before}`);
     });
 
     $('#env-list').on('propertyValueChanged', (e, data) => {
         if (data.name != '')
-            Genshinlib.updateConfig(`env.${data.name}`, data.value.after);
+            LauncherLib.updateConfig(`env.${data.name}`, data.value.after);
     });
 
     $('#env-list').on('propertyDeleted', (e, data) => {
         if (data.name != '')
-            Genshinlib.deleteConfig(`env.${data.name}`);
+            LauncherLib.deleteConfig(`env.${data.name}`);
     });
 
-    let env = Genshinlib.getConfig('env');
+    let env = LauncherLib.getConfig('env');
 
     Object.keys(env).forEach((property: string) => {
         $('#env-list .button#add')[0]!.click();
@@ -107,9 +107,9 @@ $(() => {
         td.last().find('span').text(value);
     });
 
-    let activeRunner = Genshinlib.getConfig('runner');
+    let activeRunner = LauncherLib.getConfig('runner');
 
-    Genshinlib.getRunners().then(runners => {
+    LauncherLib.getRunners().then(runners => {
         runners.forEach(category => {
             $(`<h3>${category.title}</h3>`).appendTo('#runners-list');
 
@@ -164,9 +164,9 @@ $(() => {
 
                         if (item.find('div').css('display') === 'none')
                         {
-                            Genshinlib.updateConfig('runner.name', runner.name);
-                            Genshinlib.updateConfig('runner.folder', runner.folder);
-                            Genshinlib.updateConfig('runner.executable', runner.executable);
+                            LauncherLib.updateConfig('runner.name', runner.name);
+                            LauncherLib.updateConfig('runner.folder', runner.folder);
+                            LauncherLib.updateConfig('runner.executable', runner.executable);
 
                             $('#runners-list > .list-item').removeClass('list-item-active');
                             item.addClass('list-item-active');
@@ -177,9 +177,9 @@ $(() => {
         });
     });
 
-    let activeDXVK = Genshinlib.getConfig('dxvk');
+    let activeDXVK = LauncherLib.getConfig('dxvk');
 
-    Genshinlib.getDXVKs().then(dxvks => {
+    LauncherLib.getDXVKs().then(dxvks => {
         dxvks.forEach(dxvk => {
             let item = $(`<div class="list-item">${dxvk.version}<div><img src="../images/download.png"></div></div>`).appendTo('#dxvk-list');
 
@@ -239,7 +239,7 @@ $(() => {
                         });
 
                         installer.on('close', () => {
-                            Genshinlib.updateConfig('dxvk', dxvk.version);
+                            LauncherLib.updateConfig('dxvk', dxvk.version);
     
                             $('#dxvk-list > .list-item').removeClass('list-item-active');
                             item.addClass('list-item-active');

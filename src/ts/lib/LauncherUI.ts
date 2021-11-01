@@ -1,5 +1,7 @@
 import $ from 'cash-dom';
-import { Genshinlib } from './Genshinlib';
+
+import { constants } from './constants';
+import { LauncherLib } from './LauncherLib';
 import { i18n } from './i18n';
 
 type LauncherState =
@@ -12,6 +14,8 @@ type LauncherState =
 
 export class LauncherUI
 {
+    public static readonly socialUri = `https://${constants.gamePlaceholder.lowercase.first}.${constants.gamePlaceholder.lowercase.company}.com/launcher/10/${LauncherLib.getConfig('lang.launcher')}?api_url=https%3A%2F%2Fapi-os-takumi.${constants.gamePlaceholder.lowercase.company}.com%2Fhk4e_global&prev=false`;
+
     protected static _launcherState: LauncherState = 'game-launch-available';
     protected static _i18n: any;
 
@@ -161,7 +165,7 @@ export class LauncherUI
 
     public static updateBackground (): void
     {
-        Genshinlib.getBackgroundUri().then(uri => {
+        LauncherLib.getBackgroundUri().then(uri => {
             uri = `url(${uri})`;
 
             if ($('body').css('background-image') != uri)
@@ -171,7 +175,7 @@ export class LauncherUI
 
     public static updateSocial (): void
     {
-        fetch(`https://genshin.mihoyo.com/launcher/10/${Genshinlib.getConfig('lang.launcher')}?api_url=https%3A%2F%2Fapi-os-takumi.mihoyo.com%2Fhk4e_global&prev=false`)
+        fetch(this.socialUri)
             .then(res => res.text())
             .then(body => {
                 $('#__layout').remove();

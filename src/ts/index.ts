@@ -8,7 +8,7 @@ const semver = require('semver');
 import $ from 'cash-dom';
 
 import { constants } from './lib/constants';
-import { Genshinlib } from './lib/Genshinlib';
+import { LauncherLib } from './lib/LauncherLib';
 import { LauncherUI } from './lib/LauncherUI';
 import { Tools } from './lib/Tools';
 import { DiscordRPC } from './lib/DiscordRPC';
@@ -25,11 +25,11 @@ if (!fs.existsSync(constants.dxvksDir))
     fs.mkdirSync(constants.dxvksDir, { recursive: true });
 
 $(() => {
-    if (Genshinlib.version !== null)
-        document.title = `${constants.gamePlaceholder.full} Linux Launcher - ${Genshinlib.version}`;
+    if (LauncherLib.version !== null)
+        document.title = `${constants.gamePlaceholder.uppercase.full} Linux Launcher - ${LauncherLib.version}`;
 
     // On Start configuration of LauncherUI
-    LauncherUI.updateLang(Genshinlib.getConfig('lang.launcher') ?? 'en-us');
+    LauncherUI.updateLang(LauncherLib.getConfig('lang.launcher') ?? 'en-us');
     LauncherUI.setState('game-launch-available');
     LauncherUI.updateBackground();
     LauncherUI.updateSocial();
@@ -40,7 +40,7 @@ $(() => {
         LauncherUI.updateSocial();
     });
 
-    if (Genshinlib.getConfig('rpc'))
+    if (LauncherLib.getConfig('rpc'))
         DiscordRPC.init();
 
     ipcRenderer.on('rpc-toggle', () => {
@@ -51,14 +51,14 @@ $(() => {
 
     // FIXME
     /*ipcRenderer.on('updateVP', (event: void, remotedata: any) => {
-        Genshinlib.getData().then(data => {
+        LauncherLib.getData().then(data => {
             LauncherUI.initProgressBar();
 
             let voicePack = data.game.latest.voice_packs[1]; // en-us
             let old;
 
             for (let i = 0; i < data.game.latest.voice_packs.length; ++i)
-                if (data.game.latest.voice_packs[i].language == Genshinlib.getConfig('lang.voice'))
+                if (data.game.latest.voice_packs[i].language == LauncherLib.getConfig('lang.voice'))
                 {
                     voicePack = data.game.latest.voice_packs[i];
 
@@ -76,26 +76,26 @@ $(() => {
             let oldstring = old.name.replace(`_${data.game.latest.version}.zip`, '');
 
             // Check if the directory and file exists to prevent errors.
-            if (fs.existsSync(path.join(Genshinlib.gameDir, oldstring + '_pkg_version')))
-                fs.rmSync(path.join(Genshinlib.gameDir, oldstring + '_pkg_version'));
+            if (fs.existsSync(path.join(LauncherLib.gameDir, oldstring + '_pkg_version')))
+                fs.rmSync(path.join(LauncherLib.gameDir, oldstring + '_pkg_version'));
             
-            if (fs.existsSync(path.join(Genshinlib.gameDir, 'GenshinImpact_Data', 'StreamingAssets', 'Audio', 'GeneratedSoundBanks', 'Windows', oldstring.replace('Audio_', ''))))
-                fs.rmSync(path.join(Genshinlib.gameDir, 'GenshinImpact_Data', 'StreamingAssets', 'Audio', 'GeneratedSoundBanks', 'Windows', oldstring.replace('Audio_', '')), { recursive: true });
+            if (fs.existsSync(path.join(LauncherLib.gameDir, 'GenshinImpact_Data', 'StreamingAssets', 'Audio', 'GeneratedSoundBanks', 'Windows', oldstring.replace('Audio_', ''))))
+                fs.rmSync(path.join(LauncherLib.gameDir, 'GenshinImpact_Data', 'StreamingAssets', 'Audio', 'GeneratedSoundBanks', 'Windows', oldstring.replace('Audio_', '')), { recursive: true });
 
             console.log(`%c> Downloading voice data...`, 'font-size: 16px');
 
             // For some reason this keeps breaking and locking up most of the time.
-            Tools.downloadFile(voicePack.path, path.join(Genshinlib.launcherDir, voicePack.name), (current: number, total: number, difference: number) => {
+            Tools.downloadFile(voicePack.path, path.join(LauncherLib.launcherDir, voicePack.name), (current: number, total: number, difference: number) => {
                 LauncherUI.updateProgressBar(LauncherUI.i18n.translate('Downloading'), current, total, difference);
             }).then(() => {
                 console.log(`%c> Unpacking voice data...`, 'font-size: 16px');
                             
                 LauncherUI.initProgressBar();
 
-                Tools.unzip(path.join(Genshinlib.launcherDir, voicePack.name), Genshinlib.gameDir, (current: number, total: number, difference: number) => {
+                Tools.unzip(path.join(LauncherLib.launcherDir, voicePack.name), LauncherLib.gameDir, (current: number, total: number, difference: number) => {
                     LauncherUI.updateProgressBar(LauncherUI.i18n.translate('Unpack'), current, total, difference);
                 }).then(() => {
-                    fs.unlinkSync(path.join(Genshinlib.launcherDir, voicePack.name));
+                    fs.unlinkSync(path.join(LauncherLib.launcherDir, voicePack.name));
                     LauncherUI.setState('game-launch-available');
                 })
             });
@@ -113,18 +113,18 @@ $(() => {
         }
     });
 
-    if (Genshinlib.getConfig('analytics') !== null && Genshinlib.getConfig('analytics') !== Genshinlib.version)
+    if (LauncherLib.getConfig('analytics') !== null && LauncherLib.getConfig('analytics') !== LauncherLib.version)
         ipcRenderer.invoke('open-analytics-participation');
 
-    Genshinlib.getData().then(async data => {
-        let patchInfo = await Genshinlib.getPatchInfo();
+    LauncherLib.getData().then(async data => {
+        let patchInfo = await LauncherLib.getPatchInfo();
 
         // Update available
-        if (Genshinlib.version != data.game.latest.version)
-            LauncherUI.setState(Genshinlib.version === null ? 'game-installation-available' : 'game-update-available');
+        if (LauncherLib.version != data.game.latest.version)
+            LauncherUI.setState(LauncherLib.version === null ? 'game-installation-available' : 'game-update-available');
 
         // Patch version is incorrect
-        else if (Genshinlib.getConfig('patch') && Genshinlib.getConfig('patch.version') != patchInfo.version)
+        else if (LauncherLib.getConfig('patch') && LauncherLib.getConfig('patch.version') != patchInfo.version)
         {
             // Patch is not available
             if (patchInfo.version !== data.game.latest.version)
@@ -140,7 +140,7 @@ $(() => {
 
                     LauncherUI.setState('patch-applying');
 
-                    Genshinlib.patchGame(() => {
+                    LauncherLib.patchGame(() => {
                         LauncherUI.setState('game-launch-available');
                     }, data => console.log(data.toString()));
                 }
@@ -152,27 +152,27 @@ $(() => {
 
         // Current patch is in testing phase,
         // but stable is available
-        else if (Genshinlib.getConfig('patch') && Genshinlib.getConfig('patch.version') == patchInfo.version && Genshinlib.getConfig('patch.state') == 'testing' && patchInfo.state == 'stable')
+        else if (LauncherLib.getConfig('patch') && LauncherLib.getConfig('patch.version') == patchInfo.version && LauncherLib.getConfig('patch.state') == 'testing' && patchInfo.state == 'stable')
         {
             console.log(`%c> Applying patch...`, 'font-size: 16px');
 
             LauncherUI.setState('patch-applying');
 
-            Genshinlib.patchGame(() => {
+            LauncherLib.patchGame(() => {
                 LauncherUI.setState('game-launch-available');
             }, data => console.log(data.toString()));
         }
 
         $('#launch').on('click', async () => {
             // Creating wine prefix
-            if (!Genshinlib.isPrefixInstalled(constants.prefixDir))
+            if (!LauncherLib.isPrefixInstalled(constants.prefixDir))
             {
                 console.log(`%c> Creating wineprefix...`, 'font-size: 16px');
 
                 $('#launch').css('display', 'none');
                 $('#downloader-panel').css('display', 'block');
 
-                await Genshinlib.installPrefix(constants.prefixDir, (output: string, current: number, total: number) => {
+                await LauncherLib.installPrefix(constants.prefixDir, (output: string, current: number, total: number) => {
                     output = output.trim();
 
                     console.log(output);
@@ -192,7 +192,7 @@ $(() => {
             {
                 console.log(`%c> Starting the game...`, 'font-size: 16px');
 
-                if (!await Genshinlib.isTelemetryDisabled())
+                if (!await LauncherLib.isTelemetryDisabled())
                 {
                     console.log('miHoYo\'s telemetry servers doesn\'t disabled!');
 
@@ -206,19 +206,19 @@ $(() => {
                 {
                     let wineExeutable = 'wine';
 
-                    if (Genshinlib.getConfig('runner') !== null)
+                    if (LauncherLib.getConfig('runner') !== null)
                     {
                         wineExeutable = path.join(
                             constants.runnersDir,
-                            Genshinlib.getConfig('runner.folder'),
-                            Genshinlib.getConfig('runner.executable')
+                            LauncherLib.getConfig('runner.folder'),
+                            LauncherLib.getConfig('runner.executable')
                         );
 
                         if (!fs.existsSync(wineExeutable))
                         {
                             wineExeutable = 'wine';
 
-                            Genshinlib.updateConfig('runner', null);
+                            LauncherLib.updateConfig('runner', null);
                         }
                     }
 
@@ -239,7 +239,7 @@ $(() => {
                         env: {
                             ...process.env,
                             WINEPREFIX: constants.prefixDir,
-                            ...Genshinlib.getConfig('env')
+                            ...LauncherLib.getConfig('env')
                         }
                     }, (err: any, stdout: any, stderr: any) => {
                         console.log(`%c> Game closed`, 'font-size: 16px');
@@ -271,7 +271,7 @@ $(() => {
 
                 LauncherUI.setState('patch-applying');
 
-                Genshinlib.patchGame(() => {
+                LauncherLib.patchGame(() => {
                     LauncherUI.setState('game-launch-available');
                 }, data => console.log(data.toString()));
             }
@@ -288,7 +288,7 @@ $(() => {
                 };
                 
                 for (let i = 0; i < data.game.diffs.length; ++i)
-                    if (data.game.diffs[i].version == Genshinlib.version)
+                    if (data.game.diffs[i].version == LauncherLib.version)
                     {
                         diff = data.game.diffs[i];
 
@@ -332,7 +332,7 @@ $(() => {
                         let voicePack = diff.voice_packs[1]; // en-us
 
                         for (let i = 0; i < diff.voice_packs.length; ++i)
-                            if (diff.voice_packs[i].language == Genshinlib.getConfig('lang.voice'))
+                            if (diff.voice_packs[i].language == LauncherLib.getConfig('lang.voice'))
                             {
                                 voicePack = diff.voice_packs[i];
 
@@ -367,7 +367,7 @@ $(() => {
                                     });
                                 }
 
-                                Genshinlib.updateConfig('version', data.game.latest.version);
+                                LauncherLib.updateConfig('version', data.game.latest.version);
 
                                 // Patch available
                                 if (patchInfo.version === data.game.latest.version)
@@ -381,7 +381,7 @@ $(() => {
                                     $('#speed').text('');
                                     $('#eta').text('');
 
-                                    Genshinlib.patchGame(() => {
+                                    LauncherLib.patchGame(() => {
                                         LauncherUI.setState('game-launch-available');
 
                                         ipcRenderer.send('notification', {

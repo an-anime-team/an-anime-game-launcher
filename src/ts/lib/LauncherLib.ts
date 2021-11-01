@@ -56,7 +56,7 @@ type DXVK = {
     uri: string
 };
 
-export class Genshinlib
+export class LauncherLib
 {
     public static get version(): string|null
     {
@@ -225,7 +225,7 @@ export class Genshinlib
         });
     }
 
-    // WINEPREFIX='/home/observer/genshin-impact-launcher/wineprefix' winetricks corefonts usetakefocus=n
+    // WINEPREFIX='...../wineprefix' winetricks corefonts usetakefocus=n
     public static async installPrefix (prefixpath: string, progress: (output: string, current: number, total: number) => void): Promise<void>
     {
         let installationSteps = [
@@ -282,7 +282,7 @@ export class Genshinlib
 
     public static patchGame (onFinish: () => void, onData: (data: string) => void)
     {
-        Genshinlib.getPatchInfo().then(pathInfo => {
+        this.getPatchInfo().then(pathInfo => {
             Tools.downloadFile(constants.patchUri, path.join(constants.launcherDir, 'patch.zip'), (current: number, total: number, difference: number) => null).then(() => {
                 Tools.unzip(path.join(constants.launcherDir, 'patch.zip'), constants.launcherDir, (current: number, total: number, difference: number) => null).then(() => {
                     // Delete zip file and assign patch directory.
@@ -330,8 +330,8 @@ export class Genshinlib
                         patcherAntiCrashProcess.stdout.on('data', (data: string) => onData(data));
         
                         patcherAntiCrashProcess.on('close', () => {
-                            Genshinlib.updateConfig('patch.version', pathInfo.version);
-                            Genshinlib.updateConfig('patch.state', pathInfo.state);
+                            this.updateConfig('patch.version', pathInfo.version);
+                            this.updateConfig('patch.state', pathInfo.state);
 
                             fs.rmSync(path.join(constants.launcherDir, 'gi-on-linux'), { recursive: true });
 
