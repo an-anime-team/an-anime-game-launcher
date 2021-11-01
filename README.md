@@ -14,6 +14,8 @@
 
 Download from [Releases](https://notabug.org/nobody/an-anime-game-launcher/releases)
 
+<br>
+
 ### ⚠️ Please, be careful with 2.3.0 game's release. It may suddenly break game's patch state
 
 ### ⚠️ Also patch's repository will be changed and you will HAVE to update launcher to the newest version
@@ -78,6 +80,7 @@ npm start
 
 * <s>Add runners environmental variables manager</s> *(1.1.0)*
 * <s>Add outdated files deletion when new game's update releases</s> *(1.1.0)*
+* Add installed packages deletion
 * Set default wine version to download so the wine install requirement is no longer needed.
 * Add voice packs support
 * Add Patch category in settings menu with
