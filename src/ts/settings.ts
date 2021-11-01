@@ -4,6 +4,8 @@ const { ipcRenderer } = require('electron');
 const { exec } = require('child_process');
 
 import $ from 'cash-dom';
+
+import { constants } from './lib/constants';
 import { Genshinlib } from './lib/Genshinlib';
 import { LauncherUI } from './lib/LauncherUI';
 import { Tools } from './lib/Tools';
@@ -114,7 +116,7 @@ $(() => {
             category.runners.forEach(runner => {
                 let item = $(`<div class="list-item">${runner.name}<div><img src="../images/download.png"></div></div>`).appendTo('#runners-list');
             
-                if (fs.existsSync(path.join(Genshinlib.runnersDir, runner.folder)))
+                if (fs.existsSync(path.join(constants.runnersDir, runner.folder)))
                 {
                     item.find('div').css('display', 'none');
 
@@ -130,22 +132,22 @@ $(() => {
 
                         let div = item.find('div');
 
-                        Tools.downloadFile(runner.uri, path.join(Genshinlib.launcherDir, runner.name), (current: number, total: number, difference: number) => {
+                        Tools.downloadFile(runner.uri, path.join(constants.launcherDir, runner.name), (current: number, total: number, difference: number) => {
                             div.text(`${ Math.round(current / total * 100) }%`);
                         }).then(() => {
                             let unpacker = runner.archive === 'tar' ?
                                 Tools.untar : Tools.unzip;
 
                             unpacker(
-                                path.join(Genshinlib.launcherDir, runner.name),
+                                path.join(constants.launcherDir, runner.name),
                                 runner.makeFolder ?
-                                    path.join(Genshinlib.runnersDir, runner.folder) :
-                                    Genshinlib.runnersDir,
+                                    path.join(constants.runnersDir, runner.folder) :
+                                    constants.runnersDir,
                                 (current: number, total: number, difference: number) => {
                                     div.text(`${ Math.round(current / total * 100) }%`);
                                 }
                             ).then(() => {
-                                fs.unlinkSync(path.join(Genshinlib.launcherDir, runner.name));
+                                fs.unlinkSync(path.join(constants.launcherDir, runner.name));
 
                                 item.removeClass('list-item-disabled');
                                 div.css('display', 'none');
@@ -181,7 +183,7 @@ $(() => {
         dxvks.forEach(dxvk => {
             let item = $(`<div class="list-item">${dxvk.version}<div><img src="../images/download.png"></div></div>`).appendTo('#dxvk-list');
 
-            if (fs.existsSync(path.join(Genshinlib.dxvksDir, 'dxvk-' + dxvk.version)))
+            if (fs.existsSync(path.join(constants.dxvksDir, 'dxvk-' + dxvk.version)))
             {
                 item.find('div').css('display', 'none');
 
@@ -197,17 +199,17 @@ $(() => {
 
                     let div = item.find('div');
 
-                    Tools.downloadFile(dxvk.uri, path.join(Genshinlib.launcherDir, 'dxvk-' + dxvk.version), (current: number, total: number, difference: number) => {
+                    Tools.downloadFile(dxvk.uri, path.join(constants.launcherDir, 'dxvk-' + dxvk.version), (current: number, total: number, difference: number) => {
                         div.text(`${ Math.round(current / total * 100) }%`);
                     }).then(() => {
                         Tools.untar(
-                            path.join(Genshinlib.launcherDir, 'dxvk-' + dxvk.version),
-                            Genshinlib.dxvksDir,
+                            path.join(constants.launcherDir, 'dxvk-' + dxvk.version),
+                            constants.dxvksDir,
                             (current: number, total: number, difference: number) => {
                                 div.text(`${ Math.round(current / total * 100) }%`);
                             }
                         ).then(() => {
-                            fs.unlinkSync(path.join(Genshinlib.launcherDir, 'dxvk-' + dxvk.version));
+                            fs.unlinkSync(path.join(constants.launcherDir, 'dxvk-' + dxvk.version));
 
                             item.removeClass('list-item-disabled');
                             div.css('display', 'none');
@@ -229,10 +231,10 @@ $(() => {
                             .text('Applying...');
 
                         let installer = exec('./setup_dxvk.sh install', {
-                            cwd: path.join(Genshinlib.dxvksDir, 'dxvk-' + dxvk.version),
+                            cwd: path.join(constants.dxvksDir, 'dxvk-' + dxvk.version),
                             env: {
                                 ...process.env,
-                                WINEPREFIX: Genshinlib.prefixDir
+                                WINEPREFIX: constants.prefixDir
                             }
                         });
 

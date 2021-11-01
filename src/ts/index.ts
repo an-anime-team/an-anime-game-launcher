@@ -7,6 +7,7 @@ const semver = require('semver');
 
 import $ from 'cash-dom';
 
+import { constants } from './lib/constants';
 import { Genshinlib } from './lib/Genshinlib';
 import { LauncherUI } from './lib/LauncherUI';
 import { Tools } from './lib/Tools';
@@ -14,18 +15,18 @@ import { DiscordRPC } from './lib/DiscordRPC';
 
 const launcher_version = require('../../package.json').version;
 
-if (!fs.existsSync(Genshinlib.prefixDir))
-    fs.mkdirSync(Genshinlib.prefixDir, { recursive: true });
+if (!fs.existsSync(constants.prefixDir))
+    fs.mkdirSync(constants.prefixDir, { recursive: true });
 
-if (!fs.existsSync(Genshinlib.runnersDir))
-    fs.mkdirSync(Genshinlib.runnersDir, { recursive: true });
+if (!fs.existsSync(constants.runnersDir))
+    fs.mkdirSync(constants.runnersDir, { recursive: true });
 
-if (!fs.existsSync(Genshinlib.dxvksDir))
-    fs.mkdirSync(Genshinlib.dxvksDir, { recursive: true });
+if (!fs.existsSync(constants.dxvksDir))
+    fs.mkdirSync(constants.dxvksDir, { recursive: true });
 
 $(() => {
     if (Genshinlib.version !== null)
-        document.title = 'Genshin Impact Linux Launcher - ' + Genshinlib.version;
+        document.title = `${constants.gamePlaceholder.full} Linux Launcher - ${Genshinlib.version}`;
 
     // On Start configuration of LauncherUI
     LauncherUI.updateLang(Genshinlib.getConfig('lang.launcher') ?? 'en-us');
@@ -164,14 +165,14 @@ $(() => {
 
         $('#launch').on('click', async () => {
             // Creating wine prefix
-            if (!Genshinlib.isPrefixInstalled(Genshinlib.prefixDir))
+            if (!Genshinlib.isPrefixInstalled(constants.prefixDir))
             {
                 console.log(`%c> Creating wineprefix...`, 'font-size: 16px');
 
                 $('#launch').css('display', 'none');
                 $('#downloader-panel').css('display', 'block');
 
-                await Genshinlib.installPrefix(Genshinlib.prefixDir, (output: string, current: number, total: number) => {
+                await Genshinlib.installPrefix(constants.prefixDir, (output: string, current: number, total: number) => {
                     output = output.trim();
 
                     console.log(output);
@@ -208,7 +209,7 @@ $(() => {
                     if (Genshinlib.getConfig('runner') !== null)
                     {
                         wineExeutable = path.join(
-                            Genshinlib.runnersDir,
+                            constants.runnersDir,
                             Genshinlib.getConfig('runner.folder'),
                             Genshinlib.getConfig('runner.executable')
                         );
@@ -234,10 +235,10 @@ $(() => {
                     }
 
                     exec(`${wineExeutable} launcher.bat`, {
-                        cwd: Genshinlib.gameDir,
+                        cwd: constants.gameDir,
                         env: {
                             ...process.env,
-                            WINEPREFIX: Genshinlib.prefixDir,
+                            WINEPREFIX: constants.prefixDir,
                             ...Genshinlib.getConfig('env')
                         }
                     }, (err: any, stdout: any, stderr: any) => {
@@ -294,8 +295,8 @@ $(() => {
                         break;
                     }
 
-                if (fs.existsSync(path.join(Genshinlib.gameDir, diff.name)))
-                    fs.unlinkSync(path.join(Genshinlib.gameDir, diff.name));
+                if (fs.existsSync(path.join(constants.gameDir, diff.name)))
+                    fs.unlinkSync(path.join(constants.gameDir, diff.name));
 
                 /**
                  * Downloading game
@@ -303,7 +304,7 @@ $(() => {
 
                 LauncherUI.initProgressBar();
 
-                Tools.downloadFile(diff.path, path.join(Genshinlib.launcherDir, diff.name), (current: number, total: number, difference: number) => {
+                Tools.downloadFile(diff.path, path.join(constants.launcherDir, diff.name), (current: number, total: number, difference: number) => {
                     LauncherUI.updateProgressBar(LauncherUI.i18n.translate('Downloading'), current, total, difference);
                 }).then(() => {
                     /**
@@ -312,12 +313,12 @@ $(() => {
 
                     console.log(`%c> Unpacking game data...`, 'font-size: 16px');
 
-                    if (!fs.existsSync(Genshinlib.gameDir))
-                        fs.mkdirSync(Genshinlib.gameDir, { recursive: true });
+                    if (!fs.existsSync(constants.gameDir))
+                        fs.mkdirSync(constants.gameDir, { recursive: true });
 
                     LauncherUI.initProgressBar();
 
-                    Tools.unzip(path.join(Genshinlib.launcherDir, diff.name), Genshinlib.gameDir, (current: number, total: number, difference: number) => {
+                    Tools.unzip(path.join(constants.launcherDir, diff.name), constants.gameDir, (current: number, total: number, difference: number) => {
                         LauncherUI.updateProgressBar(LauncherUI.i18n.translate('Unpack'), current, total, difference);
                     }).then(() => {
                         /**
@@ -326,7 +327,7 @@ $(() => {
 
                         console.log(`%c> Downloading voice data...`, 'font-size: 16px');
 
-                        fs.unlinkSync(path.join(Genshinlib.launcherDir, diff.name));
+                        fs.unlinkSync(path.join(constants.launcherDir, diff.name));
 
                         let voicePack = diff.voice_packs[1]; // en-us
 
@@ -340,7 +341,7 @@ $(() => {
 
                         LauncherUI.initProgressBar();
 
-                        Tools.downloadFile(voicePack.path, path.join(Genshinlib.launcherDir, voicePack.name), (current: number, total: number, difference: number) => {
+                        Tools.downloadFile(voicePack.path, path.join(constants.launcherDir, voicePack.name), (current: number, total: number, difference: number) => {
                             LauncherUI.updateProgressBar(LauncherUI.i18n.translate('Downloading'), current, total, difference);
                         }).then(() => {
                             /**
@@ -351,18 +352,18 @@ $(() => {
                             
                             LauncherUI.initProgressBar();
 
-                            Tools.unzip(path.join(Genshinlib.launcherDir, voicePack.name), Genshinlib.gameDir, (current: number, total: number, difference: number) => {
+                            Tools.unzip(path.join(constants.launcherDir, voicePack.name), constants.gameDir, (current: number, total: number, difference: number) => {
                                 LauncherUI.updateProgressBar(LauncherUI.i18n.translate('Unpack'), current, total, difference);
                             }).then(() => {
-                                fs.unlinkSync(path.join(Genshinlib.launcherDir, voicePack.name));
+                                fs.unlinkSync(path.join(constants.launcherDir, voicePack.name));
 
                                 // If this update has excess files we should delete them
-                                if (fs.existsSync(path.join(Genshinlib.gameDir, 'deletefiles.txt')))
+                                if (fs.existsSync(path.join(constants.gameDir, 'deletefiles.txt')))
                                 {
-                                    let deleteFiles = fs.readFileSync(path.join(Genshinlib.gameDir, 'deletefiles.txt'));
+                                    let deleteFiles = fs.readFileSync(path.join(constants.gameDir, 'deletefiles.txt'));
 
                                     deleteFiles.split(/\r\n|\r|\n/).forEach((file: string) => {
-                                        fs.unlinkSync(path.join(Genshinlib.gameDir, file.trim()));
+                                        fs.unlinkSync(path.join(constants.gameDir, file.trim()));
                                     });
                                 }
 

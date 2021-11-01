@@ -1,4 +1,5 @@
 import GIJSON from '../types/GIJSON';
+import { constants } from './constants';
 import { Tools } from './Tools';
 
 const store = require('electron-store');
@@ -57,19 +58,6 @@ type DXVK = {
 
 export class Genshinlib
 {
-    public static readonly launcherDir: string = path.join(os.homedir(), '.local', 'share', 'anime-game-launcher');
-
-    public static readonly prefixDir: string = path.join(this.launcherDir, 'game'); // TODO: rename every game's name entry to something like below
-    public static readonly gameDir: string = path.join(this.prefixDir, 'drive_c', 'Program Files', Buffer.from('R2Vuc2hpbiBJbXBhY3Q=', 'base64').toString('utf-8'));
-    public static readonly runnersDir: string = path.join(this.launcherDir, 'runners');
-    public static readonly dxvksDir: string = path.join(this.launcherDir, 'dxvks');
-
-    protected static readonly versionsUri: string = 'https://sdk-os-static.mihoyo.com/hk4e_global/mdk/launcher/api/resource?key=gcStgarh&launcher_id=10';
-    protected static readonly backgroundUri: string = 'https://sdk-os-static.mihoyo.com/hk4e_global/mdk/launcher/api/content?filter_adv=true&launcher_id=10&language=';
-    protected static readonly patchUri: string = 'https://notabug.org/Krock/GI-on-Linux/archive/master.zip';
-    protected static readonly runnersUri: string = 'https://notabug.org/nobody/an-anime-game-launcher/raw/main/runners.json';
-    protected static readonly dxvksUri: string = 'https://notabug.org/nobody/an-anime-game-launcher/raw/main/dxvks.json';
-
     public static get version(): string|null
     {
         return this.getConfig('version');
@@ -118,7 +106,7 @@ export class Genshinlib
     public static async getData (): Promise<any>
     {
         return new Promise((resolve, reject) => {
-            https.get(this.versionsUri, (response: any) => {
+            https.get(constants.versionsUri, (response: any) => {
                 let data = '';
     
                 response.on('data', (chunk: any) => data += chunk);
@@ -138,7 +126,7 @@ export class Genshinlib
         
         if (!this.getConfig('background.time') || new Date(new Date().setHours(0,0,0,0)).setDate(new Date(new Date().setHours(0,0,0,0)).getDate()).toString() >= this.getConfig('background.time')!)
         {
-            await fetch(this.backgroundUri + this.getConfig('lang.launcher'))
+            await fetch(constants.backgroundUri + this.getConfig('lang.launcher'))
                 .then(res => res.json())
                 .then(async resdone => {
                     let prevBackground = this.getConfig('background.file');
@@ -146,23 +134,23 @@ export class Genshinlib
                     this.updateConfig('background.time', new Date(new Date().setHours(0,0,0,0)).setDate(new Date(new Date().setHours(0,0,0,0)).getDate() + 7).toString());
                     this.updateConfig('background.file', resdone.data.adv.background.replace(/.*\//, ''));
 
-                    if (fs.existsSync(path.join(this.launcherDir, this.getConfig('background.file'))))
-                        background = path.join(this.launcherDir, this.getConfig('background.file'));
+                    if (fs.existsSync(path.join(constants.launcherDir, this.getConfig('background.file'))))
+                        background = path.join(constants.launcherDir, this.getConfig('background.file'));
                     
                     else
                     {
-                        await Tools.downloadFile(resdone.data.adv.background, path.join(this.launcherDir, this.getConfig('background.file')), (current: number, total: number, difference: number) => null).then(() => {
+                        await Tools.downloadFile(resdone.data.adv.background, path.join(constants.launcherDir, this.getConfig('background.file')), (current: number, total: number, difference: number) => null).then(() => {
                             !prevBackground ?
                                 console.log('No old background found') :
-                                fs.unlinkSync(path.join(this.launcherDir, prevBackground));
+                                fs.unlinkSync(path.join(constants.launcherDir, prevBackground));
 
-                            background = path.join(this.launcherDir, this.getConfig('background.file'));
+                            background = path.join(constants.launcherDir, this.getConfig('background.file'));
                         });
                     };
                 });
         }
 
-        else background = path.join(this.launcherDir, this.getConfig('background.file'));
+        else background = path.join(constants.launcherDir, this.getConfig('background.file'));
         
         return background;
     }
@@ -295,12 +283,12 @@ export class Genshinlib
     public static patchGame (onFinish: () => void, onData: (data: string) => void)
     {
         Genshinlib.getPatchInfo().then(pathInfo => {
-            Tools.downloadFile(this.patchUri, path.join(this.launcherDir, 'patch.zip'), (current: number, total: number, difference: number) => null).then(() => {
-                Tools.unzip(path.join(this.launcherDir, 'patch.zip'), this.launcherDir, (current: number, total: number, difference: number) => null).then(() => {
+            Tools.downloadFile(constants.patchUri, path.join(constants.launcherDir, 'patch.zip'), (current: number, total: number, difference: number) => null).then(() => {
+                Tools.unzip(path.join(constants.launcherDir, 'patch.zip'), constants.launcherDir, (current: number, total: number, difference: number) => null).then(() => {
                     // Delete zip file and assign patch directory.
-                    fs.unlinkSync(path.join(this.launcherDir, 'patch.zip'));
+                    fs.unlinkSync(path.join(constants.launcherDir, 'patch.zip'));
 
-                    let patchDir = path.join(this.launcherDir, 'gi-on-linux', pathInfo.version.replaceAll('.', ''));
+                    let patchDir = path.join(constants.launcherDir, 'gi-on-linux', pathInfo.version.replaceAll('.', ''));
 
                     // Patch out the testing phase content from the shell files if active and make sure the shell files are executable.
                     exec(`cd ${patchDir} && sed -i '/^echo "If you would like to test this patch, modify this script and remove the line below this one."/,+5d' patch.sh`);
@@ -310,10 +298,10 @@ export class Genshinlib
 
                     // Execute the patch file with "yes yes" in the beginning to agree to the choices.
                     let patcherProcess = exec(`yes yes | ${path.join(patchDir, 'patch.sh')}`, {
-                        cwd: this.gameDir,
+                        cwd: constants.gameDir,
                         env: {
                             ...process.env,
-                            WINEPREFIX: this.prefixDir
+                            WINEPREFIX: constants.prefixDir
                         }
                     });
 
@@ -321,21 +309,21 @@ export class Genshinlib
 
                     patcherProcess.on('close', () => {
                         // Make sure that launcher.bat exists if not run patch.sh again.
-                        if (!path.join(this.gameDir, 'launcher.bat'))
+                        if (!path.join(constants.gameDir, 'launcher.bat'))
                             exec(`yes yes | ${path.join(patchDir, 'patch.sh')}`, {
-                                cwd: this.gameDir,
+                                cwd: constants.gameDir,
                                 env: {
                                     ...process.env,
-                                    WINEPREFIX: this.prefixDir
+                                    WINEPREFIX: constants.prefixDir
                                 }
                             });
 
                         // Execute the patch file with "yes" in the beginning to agree to the choice.
                         let patcherAntiCrashProcess = exec(`yes | ${path.join(patchDir, 'patch_anti_logincrash.sh')}`, {
-                            cwd: this.gameDir,
+                            cwd: constants.gameDir,
                             env: {
                                 ...process.env,
-                                WINEPREFIX: this.prefixDir
+                                WINEPREFIX: constants.prefixDir
                             }
                         });
         
@@ -345,7 +333,7 @@ export class Genshinlib
                             Genshinlib.updateConfig('patch.version', pathInfo.version);
                             Genshinlib.updateConfig('patch.state', pathInfo.state);
 
-                            fs.rmSync(path.join(this.launcherDir, 'gi-on-linux'), { recursive: true });
+                            fs.rmSync(path.join(constants.launcherDir, 'gi-on-linux'), { recursive: true });
 
                             onFinish();
                         });
