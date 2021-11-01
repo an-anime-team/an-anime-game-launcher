@@ -14,6 +14,12 @@
 
 Download from [Releases](https://notabug.org/nobody/an-anime-game-launcher/releases)
 
+### ⚠️ Please, be careful with 2.3.0 game's release. It may suddenly break game's patch state
+
+### ⚠️ Also patch's repository will be changed and you will HAVE to update launcher to the newest version
+
+<br>
+
 # Requirements
 
 To work this launcher requires
