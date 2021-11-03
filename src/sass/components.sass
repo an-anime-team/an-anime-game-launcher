@@ -105,15 +105,26 @@ $secondary: #e1e7ff
         display: flex
         align-items: center
 
-        > img
+        img
             width: 16px
             height: 16px
 
             margin: auto
 
+        img.item-delete
+            // filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(93deg) brightness(103%) contrast(103%)
+
+            width: 20px
+            height: 20px
+
+            display: none
+
 .list-item-active
     background-color: $primary !important
     color: white !important
+
+    img.item-delete
+        display: none !important
 
 .list-item-disabled
     background-color: $light !important
@@ -123,6 +134,18 @@ $secondary: #e1e7ff
 
     img
         filter: invert(70%) sepia(13%) saturate(241%) hue-rotate(196deg) brightness(97%) contrast(91%)
+
+.list-item-downloading
+    img
+        display: none !important
+
+.list-item-downloaded
+    > div
+        img.item-download
+            display: none
+        
+        img.item-delete
+            display: block
 
 /* Checkbox */
     

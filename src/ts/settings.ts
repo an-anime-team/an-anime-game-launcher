@@ -114,26 +114,36 @@ $(() => {
             $(`<h3>${category.title}</h3>`).appendTo('#runners-list');
 
             category.runners.forEach(runner => {
-                let item = $(`<div class="list-item">${runner.name}<div><img src="../images/download.png"></div></div>`).appendTo('#runners-list');
+                let item = $(`<div class="list-item">
+                    ${runner.name}
+                    <div>
+                        <span></span>
+                        <img class="item-delete" src="../images/delete.png">
+                        <img class="item-download" src="../images/download.png">
+                    </div>
+                </div>`).appendTo('#runners-list');
             
                 if (fs.existsSync(path.join(constants.runnersDir, runner.folder)))
                 {
-                    item.find('div').css('display', 'none');
+                    // item.find('div').css('display', 'none');
+                    item.addClass('list-item-downloaded');
 
                     // I think we shouldn't set runner as active if it is not installed
                     if (runner.name == activeRunner?.name)
                         item.addClass('list-item-active');
                 }
 
-                item.find('div').on('click', () => {
+                item.find('img.item-download').on('click', () => {
                     if (!item.hasClass('list-item-disabled'))
                     {
                         item.addClass('list-item-disabled');
+                        item.addClass('list-item-downloading');
 
-                        let div = item.find('div');
+                        let div = item.find('div'),
+                            span = div.find('span');
 
                         Tools.downloadFile(runner.uri, path.join(constants.launcherDir, runner.name), (current: number, total: number, difference: number) => {
-                            div.text(`${ Math.round(current / total * 100) }%`);
+                            span.text(`${ Math.round(current / total * 100) }%`);
                         }).then(() => {
                             let unpacker = runner.archive === 'tar' ?
                                 Tools.untar : Tools.unzip;
@@ -144,15 +154,32 @@ $(() => {
                                     path.join(constants.runnersDir, runner.folder) :
                                     constants.runnersDir,
                                 (current: number, total: number, difference: number) => {
-                                    div.text(`${ Math.round(current / total * 100) }%`);
+                                    span.text(`${ Math.round(current / total * 100) }%`);
                                 }
                             ).then(() => {
                                 fs.unlinkSync(path.join(constants.launcherDir, runner.name));
 
+                                span.text('');
+
                                 item.removeClass('list-item-disabled');
-                                div.css('display', 'none');
+                                item.removeClass('list-item-downloading');
+
+                                item.addClass('list-item-downloaded');
+                                // div.css('display', 'none');
                             });
                         });
+                    }
+                });
+
+                item.find('img.item-delete').on('click', () => {
+                    if (!item.hasClass('list-item-disabled'))
+                    {
+                        item.addClass('list-item-disabled');
+
+                        fs.rmdirSync(path.join(constants.runnersDir, runner.folder), { recursive: true });
+
+                        item.removeClass('list-item-disabled');
+                        item.removeClass('list-item-downloaded');
                     }
                 });
 
@@ -162,7 +189,8 @@ $(() => {
                         while (!item.hasClass('list-item'))
                             item = item.parent();
 
-                        if (item.find('div').css('display') === 'none')
+                        // if (item.find('div').css('display') === 'none')
+                        if (item.hasClass('list-item-downloaded'))
                         {
                             LauncherLib.updateConfig('runner.name', runner.name);
                             LauncherLib.updateConfig('runner.folder', runner.folder);
@@ -181,40 +209,67 @@ $(() => {
 
     LauncherLib.getDXVKs().then(dxvks => {
         dxvks.forEach(dxvk => {
-            let item = $(`<div class="list-item">${dxvk.version}<div><img src="../images/download.png"></div></div>`).appendTo('#dxvk-list');
+            let item = $(`<div class="list-item">
+                ${dxvk.version}
+                <div>
+                    <span></span>
+                    <img class="item-delete" src="../images/delete.png">
+                    <img class="item-download" src="../images/download.png">
+                </div>
+            </div>`).appendTo('#dxvk-list');
 
             if (fs.existsSync(path.join(constants.dxvksDir, 'dxvk-' + dxvk.version)))
             {
-                item.find('div').css('display', 'none');
+                // item.find('div').css('display', 'none');
+                item.addClass('list-item-downloaded');
 
                 // I think we shouldn't set DXVK as active if it is not installed
                 if (dxvk.version == activeDXVK)
                     item.addClass('list-item-active');
             }
 
-            item.find('div').on('click', () => {
+            item.find('img.item-download').on('click', () => {
                 if (!item.hasClass('list-item-disabled'))
                 {
                     item.addClass('list-item-disabled');
+                    item.addClass('list-item-downloading');
 
-                    let div = item.find('div');
+                    let div = item.find('div'),
+                        span = div.find('span');
 
                     Tools.downloadFile(dxvk.uri, path.join(constants.launcherDir, 'dxvk-' + dxvk.version), (current: number, total: number, difference: number) => {
-                        div.text(`${ Math.round(current / total * 100) }%`);
+                        span.text(`${ Math.round(current / total * 100) }%`);
                     }).then(() => {
                         Tools.untar(
                             path.join(constants.launcherDir, 'dxvk-' + dxvk.version),
                             constants.dxvksDir,
                             (current: number, total: number, difference: number) => {
-                                div.text(`${ Math.round(current / total * 100) }%`);
+                                span.text(`${ Math.round(current / total * 100) }%`);
                             }
                         ).then(() => {
                             fs.unlinkSync(path.join(constants.launcherDir, 'dxvk-' + dxvk.version));
 
+                            span.text('');
+
                             item.removeClass('list-item-disabled');
-                            div.css('display', 'none');
+                            item.removeClass('list-item-downloading');
+
+                            item.addClass('list-item-downloaded');
+                            // div.css('display', 'none');
                         });
                     });
+                }
+            });
+
+            item.find('img.item-delete').on('click', () => {
+                if (!item.hasClass('list-item-disabled'))
+                {
+                    item.addClass('list-item-disabled');
+
+                    fs.rmdirSync(path.join(constants.dxvksDir, 'dxvk-' + dxvk.version), { recursive: true });
+
+                    item.removeClass('list-item-disabled');
+                    item.removeClass('list-item-downloaded');
                 }
             });
 
@@ -224,11 +279,13 @@ $(() => {
                     while (!item.hasClass('list-item'))
                         item = item.parent();
 
-                    if (item.find('div').css('display') === 'none')
+                    // if (item.find('div').css('display') === 'none')
+                    if (item.hasClass('list-item-downloaded'))
                     {
-                        item.find('div')
-                            .css('display', 'flex')
-                            .text('Applying...');
+                        item.addClass('list-item-disabled');
+                        item.addClass('list-item-downloading');
+
+                        item.find('div > span').text('Applying...');
 
                         let installer = exec('./setup_dxvk.sh install', {
                             cwd: path.join(constants.dxvksDir, 'dxvk-' + dxvk.version),
@@ -240,10 +297,18 @@ $(() => {
 
                         installer.on('close', () => {
                             LauncherLib.updateConfig('dxvk', dxvk.version);
+
+                            item.find('div > span').text('');
     
                             $('#dxvk-list > .list-item').removeClass('list-item-active');
+
+                            item.removeClass('list-item-disabled');
+                            item.removeClass('list-item-downloading');
+
                             item.addClass('list-item-active');
-                            item.find('div').css('display', 'none');
+                            item.addClass('list-item-downloaded');
+
+                            // item.find('div').css('display', 'none');
                         });
                     }
                 }

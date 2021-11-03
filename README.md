@@ -10,7 +10,7 @@
 
 | Game version | Launcher version | Patch version |
 | :---: | :---: | :---: |
-| 2.2.0 | 1.1.0 | 2.2.0 stable ✅ |
+| 2.2.0 | 1.2.0 | 2.2.0 stable ✅ |
 
 Download from [Releases](https://notabug.org/nobody/an-anime-game-launcher/releases)
 
@@ -80,7 +80,8 @@ npm start
 
 * <s>Add runners environmental variables manager</s> *(1.1.0)*
 * <s>Add outdated files deletion when new game's update releases</s> *(1.1.0)*
-* Add installed packages deletion
+* <s>Add installed packages deletion</s> *(1.2.0)*
+* Screenshots explorer
 * Set default wine version to download so the wine install requirement is no longer needed.
 * Add voice packs support
 * Add Patch category in settings menu with
