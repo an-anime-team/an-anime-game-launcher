@@ -19,9 +19,8 @@ export class i18n
 
         while ((item = /\{([a-zA-Z\.]+)\}/g.exec(translation)) !== null)
         {
-            let value = constants;
+            let value: any = constants;
 
-            // @ts-expect-error
             item[1].split('.').forEach(ref => value = value[ref]);
 
             translation = translation.replace(item[0], value);
