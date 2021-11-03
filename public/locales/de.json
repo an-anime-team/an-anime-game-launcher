@@ -31,5 +31,6 @@
     "Skip": "Überspringen",
     "SkipAndDontAsk": "Überspingen und nicht noch mal fragen",
     "LauncherUpdateTitle": "Launcher update verfügbar: ",
-    "LauncherUpdateBody": "Sie können eine neue Version des Launchers aus dem Repository des Projekts unter https://notabug.org/nobody/an-anime-game-launcher herunterladen."
+    "LauncherUpdateBody": "Sie können eine neue Version des Launchers aus dem Repository des Projekts unter {uri.launcher} herunterladen.",
+    "TelemetryNotDisabled": "{placeholders.uppercase.company}'s telemetry servers don't disabled!"
 }

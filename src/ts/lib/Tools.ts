@@ -138,7 +138,6 @@ export class Tools
 
                     let matches = /^[dwxr\-]+ [\w/]+[ ]+(\d+) [0-9\-]+ [0-9\:]+ (.+)/.exec(line);
 
-                    // TODO: compressedSize?
                     if (matches)
                     {
                         total += parseInt(matches[1]);

@@ -31,5 +31,6 @@
     "Skip": "Skip",
     "SkipAndDontAsk": "Skip and don't ask again",
     "LauncherUpdateTitle": "Launcher update available: ",
-    "LauncherUpdateBody": "You can download a new version of the launcher from the project's repository at https://notabug.org/nobody/an-anime-game-launcher"
+    "LauncherUpdateBody": "You can download a new version of the launcher from the project's repository at {uri.launcher}",
+    "TelemetryNotDisabled": "{placeholders.uppercase.company}'s telemetry servers don't disabled!"
 }

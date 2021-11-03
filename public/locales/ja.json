@@ -31,5 +31,6 @@
     "Skip": "スキップ",
     "SkipAndDontAsk": "スキップして二度と聞かない",
     "LauncherUpdateTitle": "ランチャーのアップデートが可能 ",
-    "LauncherUpdateBody": "ランチャーの新バージョンは、プロジェクトのリポジトリ（https://notabug.org/nobody/an-anime-game-launcher）からダウンロードできます。"
+    "LauncherUpdateBody": "ランチャーの新バージョンは、プロジェクトのリポジトリ（{uri.launcher}）からダウンロードできます。",
+    "TelemetryNotDisabled": "{placeholders.uppercase.company}のテレメトリサーバは無効になっていません！"
 }

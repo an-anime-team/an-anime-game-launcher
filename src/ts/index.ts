@@ -197,8 +197,8 @@ $(() => {
                     console.log(`${constants.placeholders.uppercase.company}'s telemetry servers doesn't disabled!`);
 
                     ipcRenderer.send('notification', {
-                        title: document.title, // FIXME add translation
-                        body: `${constants.placeholders.uppercase.company}'s telemetry servers doesn't disabled!`
+                        title: document.title,
+                        body: LauncherUI.i18n.translate('TelemetryNotDisabled')
                     });
                 }
 

@@ -31,5 +31,6 @@
     "Skip": "Пропустить",
     "SkipAndDontAsk": "Пропустить и не спрашивать",
     "LauncherUpdateTitle": "Доступно обновление лаунчера: ",
-    "LauncherUpdateBody": "Вы можете скачать новую версию лаунчера с репозитория проекта: https://notabug.org/nobody/an-anime-game-launcher"
+    "LauncherUpdateBody": "Вы можете скачать новую версию лаунчера с репозитория проекта: {uri.launcher}",
+    "TelemetryNotDisabled": "Серверы сбора телеметрии {placeholders.uppercase.company} не отключены!"
 }

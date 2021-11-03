@@ -28,6 +28,7 @@ export class LauncherUI
     {
         if (!this._i18n)
             this._i18n = i18n;
+        
         return this._i18n;
     }
 

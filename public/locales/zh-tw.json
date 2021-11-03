@@ -31,5 +31,6 @@
     "Skip": "跳過",
     "SkipAndDontAsk": "跳過，不要再詢問我",
     "LauncherUpdateTitle": "啟動器有新的更新可用：",
-    "LauncherUpdateBody": "您可以從此專案的資源庫中下載新版本的啟動器，網址是：https://notabug.org/nobody/an-anime-game-launcher"
+    "LauncherUpdateBody": "您可以從此專案的資源庫中下載新版本的啟動器，網址是：{uri.launcher}",
+    "TelemetryNotDisabled": "{placeholders.uppercase.company}'s telemetry servers don't disabled!"
 }
