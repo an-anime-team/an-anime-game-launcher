@@ -99,8 +99,7 @@ $(() => {
             });
         }
 
-        // @ts-expect-error
-        td.find('span').text(item.val());
+        td.find('span').text(item.val() as string);
     };
 
     $('.properties-list input').on('change', propsInputsOnChange);
