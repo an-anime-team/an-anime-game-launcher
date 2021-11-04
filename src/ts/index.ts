@@ -39,8 +39,10 @@ if (typeof LauncherLib.getConfig('lang.voice') != 'object')
 }
 
 $(() => {
+    document.title = `${constants.placeholders.uppercase.full} Linux Launcher`;
+
     if (LauncherLib.version !== null)
-        document.title = `${constants.placeholders.uppercase.full} Linux Launcher - ${LauncherLib.version}`;
+        document.title += ` - ${LauncherLib.version}`;
 
     // On Start configuration of LauncherUI
     LauncherUI.updateLang(LauncherLib.getConfig('lang.launcher') ?? 'en-us');
@@ -80,6 +82,9 @@ $(() => {
 
     if (LauncherLib.getConfig('analytics') !== null && LauncherLib.getConfig('analytics') !== LauncherLib.version)
         ipcRenderer.invoke('open-analytics-participation');
+
+    $('#settings').on('mouseenter', () => $('#settings').addClass('hovered'));
+    $('#settings').on('mouseleave', () => $('#settings').removeClass('hovered'));
 
     LauncherLib.getData().then(async data => {
         await LauncherUI.updateLauncherState(data);
