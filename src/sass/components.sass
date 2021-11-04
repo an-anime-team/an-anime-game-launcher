@@ -216,7 +216,7 @@ $secondary: #e1e7ff
         position: absolute
         display: none
 
-        height: 230px
+        max-height: 230px
         overflow: auto
 
         background-color: white
@@ -225,9 +225,13 @@ $secondary: #e1e7ff
         box-shadow: 0 1px 8px 0 rgba(0, 0, 0, .2)
 
         padding: 8px 12px
-        transform: translateY(calc(50% + 32px)) translateX(208px)
+        transform: translateY(calc(50% + 32px))
+
+        right: 32px
 
         cursor: pointer
+
+        z-index: 1
 
         ul
             list-style: none

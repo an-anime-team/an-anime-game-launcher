@@ -5,6 +5,7 @@
     "Runners": "Версии Wine",
     "Language": "Язык",
     "Voice": "Озвучка",
+    "VoiceNotification": "Эта настройка требует ручного переключения языка озвучки в настройках игры",
     "SettingsTitle": "Настройки",
     "GeneralSettings": "Общее",
     "WineVersion": "Версии Wine",

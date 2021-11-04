@@ -16,7 +16,10 @@ const config = new store ({
     defaults: {
         lang: {
             launcher: 'en-us',
-            voice: 'en-us'
+            voice: {
+                installed: null,
+                active: 'en-us'
+            }
         },
         background: {
             time: null,
@@ -124,14 +127,14 @@ export class LauncherLib
     {
         let background = '';
         
-        if (!this.getConfig('background.time') || new Date(new Date().setHours(0,0,0,0)).setDate(new Date(new Date().setHours(0,0,0,0)).getDate()).toString() >= this.getConfig('background.time')!)
+        if (!this.getConfig('background.time') || Date.now() > this.getConfig('background.time')!)
         {
             await fetch(constants.backgroundUri + this.getConfig('lang.launcher'))
                 .then(res => res.json())
                 .then(async resdone => {
                     let prevBackground = this.getConfig('background.file');
 
-                    this.updateConfig('background.time', new Date(new Date().setHours(0,0,0,0)).setDate(new Date(new Date().setHours(0,0,0,0)).getDate() + 7).toString());
+                    this.updateConfig('background.time', Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days
                     this.updateConfig('background.file', resdone.data.adv.background.replace(/.*\//, ''));
 
                     if (fs.existsSync(path.join(constants.launcherDir, this.getConfig('background.file'))))
@@ -139,7 +142,7 @@ export class LauncherLib
                     
                     else
                     {
-                        await Tools.downloadFile(resdone.data.adv.background, path.join(constants.launcherDir, this.getConfig('background.file')), (current: number, total: number, difference: number) => null).then(() => {
+                        await Tools.downloadFile(resdone.data.adv.background, path.join(constants.launcherDir, this.getConfig('background.file')), () => null).then(() => {
                             !prevBackground ?
                                 console.log('No old background found') :
                                 fs.unlinkSync(path.join(constants.launcherDir, prevBackground));

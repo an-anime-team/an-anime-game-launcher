@@ -5,6 +5,7 @@
     "Runners": "Runners",
     "Language": "Sprache",
     "Voice": "Sprachpaket",
+    "VoiceNotification": "This feature requires you to manually select the new voice pack in the game",
     "SettingsTitle": "Einstellungen",
     "GeneralSettings": "Generell",
     "WineVersion": "Wine Version",

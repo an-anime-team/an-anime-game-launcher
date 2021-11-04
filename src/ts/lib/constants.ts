@@ -33,6 +33,8 @@ export class constants
 
     public static readonly prefixDir: string = path.join(this.launcherDir, 'game');
     public static readonly gameDir: string = path.join(this.prefixDir, 'drive_c', 'Program Files', this.placeholders.uppercase.full);
+    public static readonly voiceDir: string = path.join(this.gameDir, `${this.placeholders.uppercase.first + this.placeholders.uppercase.second}_Data`, 'StreamingAssets', 'Audio', 'GeneratedSoundBanks', 'Windows');
+
     public static readonly runnersDir: string = path.join(this.launcherDir, 'runners');
     public static readonly dxvksDir: string = path.join(this.launcherDir, 'dxvks');
 

@@ -24,6 +24,20 @@ if (!fs.existsSync(constants.runnersDir))
 if (!fs.existsSync(constants.dxvksDir))
     fs.mkdirSync(constants.dxvksDir, { recursive: true });
 
+/**
+ * Compatibilities
+ */
+
+// 1.2.0 -> ^1.3.0
+// Voice packs system update
+if (typeof LauncherLib.getConfig('lang.voice') != 'object')
+{
+    let voice = LauncherLib.getConfig('lang.voice');
+
+    LauncherLib.updateConfig('lang.voice.installed', voice);
+    LauncherLib.updateConfig('lang.voice.active', voice);
+}
+
 $(() => {
     if (LauncherLib.version !== null)
         document.title = `${constants.placeholders.uppercase.full} Linux Launcher - ${LauncherLib.version}`;
@@ -49,58 +63,9 @@ $(() => {
             DiscordRPC.init();
     });
 
-    // FIXME
-    /*ipcRenderer.on('updateVP', (event: void, remotedata: any) => {
-        LauncherLib.getData().then(data => {
-            LauncherUI.initProgressBar();
-
-            let voicePack = data.game.latest.voice_packs[1]; // en-us
-            let old;
-
-            for (let i = 0; i < data.game.latest.voice_packs.length; ++i)
-                if (data.game.latest.voice_packs[i].language == LauncherLib.getConfig('lang.voice'))
-                {
-                    voicePack = data.game.latest.voice_packs[i];
-
-                    break;
-                }
-
-            for (let i = 0; i < data.game.latest.voice_packs.length; ++i)
-                if (data.game.latest.voice_packs[i].language == remotedata.oldvp)
-                {
-                    old = data.game.latest.voice_packs[i];
-
-                    break;
-                }
-
-            let oldstring = old.name.replace(`_${data.game.latest.version}.zip`, '');
-
-            // Check if the directory and file exists to prevent errors.
-            if (fs.existsSync(path.join(LauncherLib.gameDir, oldstring + '_pkg_version')))
-                fs.rmSync(path.join(LauncherLib.gameDir, oldstring + '_pkg_version'));
-            
-            if (fs.existsSync(path.join(LauncherLib.gameDir, 'GenshinImpact_Data', 'StreamingAssets', 'Audio', 'GeneratedSoundBanks', 'Windows', oldstring.replace('Audio_', ''))))
-                fs.rmSync(path.join(LauncherLib.gameDir, 'GenshinImpact_Data', 'StreamingAssets', 'Audio', 'GeneratedSoundBanks', 'Windows', oldstring.replace('Audio_', '')), { recursive: true });
-
-            console.log(`%c> Downloading voice data...`, 'font-size: 16px');
-
-            // For some reason this keeps breaking and locking up most of the time.
-            Tools.downloadFile(voicePack.path, path.join(LauncherLib.launcherDir, voicePack.name), (current: number, total: number, difference: number) => {
-                LauncherUI.updateProgressBar(LauncherUI.i18n.translate('Downloading'), current, total, difference);
-            }).then(() => {
-                console.log(`%c> Unpacking voice data...`, 'font-size: 16px');
-                            
-                LauncherUI.initProgressBar();
-
-                Tools.unzip(path.join(LauncherLib.launcherDir, voicePack.name), LauncherLib.gameDir, (current: number, total: number, difference: number) => {
-                    LauncherUI.updateProgressBar(LauncherUI.i18n.translate('Unpack'), current, total, difference);
-                }).then(() => {
-                    fs.unlinkSync(path.join(LauncherLib.launcherDir, voicePack.name));
-                    LauncherUI.setState('game-launch-available');
-                })
-            });
-        });
-    });*/
+    ipcRenderer.on('change-voicepack', () => {
+        LauncherUI.updateLauncherState();
+    });
 
     Tools.getGitTags(constants.uri.launcher).then (tags => {
         if (tags.filter(entry => semver.gt(entry.tag, launcher_version)).length > 0)
@@ -117,51 +82,7 @@ $(() => {
         ipcRenderer.invoke('open-analytics-participation');
 
     LauncherLib.getData().then(async data => {
-        let patchInfo = await LauncherLib.getPatchInfo();
-
-        // Update available
-        if (LauncherLib.version != data.game.latest.version)
-            LauncherUI.setState(LauncherLib.version === null ? 'game-installation-available' : 'game-update-available');
-
-        // Patch version is incorrect
-        else if (LauncherLib.getConfig('patch') && LauncherLib.getConfig('patch.version') != patchInfo.version)
-        {
-            // Patch is not available
-            if (patchInfo.version !== data.game.latest.version)
-                LauncherUI.setState('patch-unavailable');
-
-            // Patch available
-            else if (patchInfo.version === data.game.latest.version)
-            {
-                // Patch is stable
-                if (patchInfo.state == 'stable')
-                {
-                    console.log(`%c> Applying patch...`, 'font-size: 16px');
-
-                    LauncherUI.setState('patch-applying');
-
-                    LauncherLib.patchGame(() => {
-                        LauncherUI.setState('game-launch-available');
-                    }, data => console.log(data.toString()));
-                }
-
-                // Patch is in testing phase
-                else LauncherUI.setState('test-patch-available');
-            }
-        }
-
-        // Current patch is in testing phase,
-        // but stable is available
-        else if (LauncherLib.getConfig('patch') && LauncherLib.getConfig('patch.version') == patchInfo.version && LauncherLib.getConfig('patch.state') == 'testing' && patchInfo.state == 'stable')
-        {
-            console.log(`%c> Applying patch...`, 'font-size: 16px');
-
-            LauncherUI.setState('patch-applying');
-
-            LauncherLib.patchGame(() => {
-                LauncherUI.setState('game-launch-available');
-            }, data => console.log(data.toString()));
-        }
+        await LauncherUI.updateLauncherState(data);
 
         $('#launch').on('click', async () => {
             // Creating wine prefix
@@ -188,7 +109,7 @@ $(() => {
             }
 
             // Launching game
-            if ($('#launch').text() == LauncherUI.i18n.translate('Launch'))
+            if (LauncherUI.launcherState == 'game-launch-available')
             {
                 console.log(`%c> Starting the game...`, 'font-size: 16px');
 
@@ -265,20 +186,86 @@ $(() => {
             }
 
             // Apply test patch
-            else if ($('#launch').text() == LauncherUI.i18n.translate('TestPatch'))
+            else if (LauncherUI.launcherState == 'test-patch-available')
             {
                 console.log(`%c> Applying patch...`, 'font-size: 16px');
 
                 LauncherUI.setState('patch-applying');
 
                 LauncherLib.patchGame(() => {
-                    LauncherUI.setState('game-launch-available');
+                    LauncherUI.updateLauncherState();
                 }, data => console.log(data.toString()));
+            }
+
+            // Voice pack update
+            else if (LauncherUI.launcherState == 'game-voice-update-required')
+            {
+                // Hide settings button to prevent some unexpected changes
+                $('#settings').css('display', 'none');
+
+                LauncherUI.initProgressBar();
+
+                let voicePack = data.game.latest.voice_packs[1], // en-us
+                    installedPack;
+
+                for (let i = 0; i < data.game.latest.voice_packs.length; ++i)
+                    if (data.game.latest.voice_packs[i].language == LauncherLib.getConfig('lang.voice.active'))
+                    {
+                        voicePack = data.game.latest.voice_packs[i];
+
+                        break;
+                    }
+
+                for (let i = 0; i < data.game.latest.voice_packs.length; ++i)
+                    if (data.game.latest.voice_packs[i].language == LauncherLib.getConfig('lang.voice.installed'))
+                    {
+                        installedPack = data.game.latest.voice_packs[i];
+
+                        break;
+                    }
+
+                let installedpackName = installedPack.name.replace(`_${data.game.latest.version}.zip`, '');
+
+                console.log(`%c> Deleting installed voice pack (${installedpackName})...`, 'font-size: 16px');
+
+                // Check if the directory and file exists to prevent errors
+                if (fs.existsSync(path.join(constants.gameDir, installedpackName + '_pkg_version')))
+                    fs.rmSync(path.join(constants.gameDir, installedpackName + '_pkg_version'));
+                
+                if (fs.existsSync(path.join(constants.voiceDir, installedpackName.replace('Audio_', ''))))
+                    fs.rmSync(path.join(constants.voiceDir, installedpackName.replace('Audio_', '')), { recursive: true });
+
+                console.log(`%c> Downloading voice data...`, 'font-size: 16px');
+
+                // For some reason this keeps breaking and locking up most of the time.
+                Tools.downloadFile(voicePack.path, path.join(constants.launcherDir, voicePack.name), (current: number, total: number, difference: number) => {
+                    LauncherUI.updateProgressBar(LauncherUI.i18n.translate('Downloading'), current, total, difference);
+                }).then(() => {
+                    console.log(`%c> Unpacking voice data...`, 'font-size: 16px');
+                                
+                    LauncherUI.initProgressBar();
+
+                    Tools.unzip(path.join(constants.launcherDir, voicePack.name), constants.gameDir, (current: number, total: number, difference: number) => {
+                        LauncherUI.updateProgressBar(LauncherUI.i18n.translate('Unpack'), current, total, difference);
+                    }).then(() => {
+                        fs.unlinkSync(path.join(constants.launcherDir, voicePack.name));
+
+                        LauncherLib.updateConfig('lang.voice.installed', LauncherLib.getConfig('lang.voice.active'));
+
+                        // Show back the settings button
+                        $('#settings').css('display', 'block');
+
+                        LauncherUI.updateLauncherState();
+                    })
+                });
             }
 
             // Installing game
             else
             {
+                // Hide settings button to prevent some unexpected changes
+                $('#settings').css('display', 'none');
+
                 console.log(`%c> Downloading game data...`, 'font-size: 16px');
 
                 let diff = {
@@ -369,8 +356,13 @@ $(() => {
 
                                 LauncherLib.updateConfig('version', data.game.latest.version);
 
+                                // Show back the settings button
+                                $('#settings').css('display', 'block');
+
+                                LauncherUI.updateLauncherState();
+
                                 // Patch available
-                                if (patchInfo.version === data.game.latest.version)
+                                /*if (patchInfo.version === data.game.latest.version)
                                 {
                                     // ..but it's in testing state
                                     if (patchInfo.state === 'testing')
@@ -398,7 +390,7 @@ $(() => {
                                 }
 
                                 // Patch is not available
-                                else LauncherUI.setState('patch-unavailable');
+                                else LauncherUI.setState('patch-unavailable');*/
                             });
                         }).catch(err => console.log(err));
                     }).catch(err => console.log(err));

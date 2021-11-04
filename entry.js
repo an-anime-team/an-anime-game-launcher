@@ -113,9 +113,9 @@ app.whenReady().then(() => {
         mainWindow.webContents.send('change-lang', { 'lang': args.lang });
     });
 
-    /*ipcMain.on('updateVP', (event, args) => {
-        mainWindow.webContents.send('updateVP', { 'oldvp': args.oldvp });
-    });*/
+    ipcMain.on('change-voicepack', () => {
+        mainWindow.webContents.send('change-voicepack');
+    });
 
     ipcMain.on('rpc-toggle', () => mainWindow.webContents.send('rpc-toggle'));
 });

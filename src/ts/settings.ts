@@ -28,26 +28,54 @@ $(() => {
         $(`.menu-item[anchor=${anchor}]`).addClass('menu-item-active');
     });
 
+    /**
+     * Launcher language
+     */
+
+    $(`#language li[value=${LauncherLib.getConfig('lang.launcher')}]`).addClass('selected');
+    $('#language .selected-item span').text($(`#language li[value=${LauncherLib.getConfig('lang.launcher')}]`).text());
+
     $('#language').on('selectionChanged', (e, data: any) => {
         let activeLang = LauncherLib.getConfig('lang.launcher');
 
         if (activeLang != data.value)
         {
             LauncherLib.updateConfig('lang.launcher', data.value);
-            LauncherLib.updateConfig('background.time', null);
 
+            LauncherLib.updateConfig('background.time', null);
             LauncherUI.updateLang(data.value);
 
-            // Send language updates
+            // Send language update event
             ipcRenderer.send('change-lang', { 'lang': data.value });
         }
     });
 
-    // Select the saved options in launcher.json on load
-    // $(`#voice-list option[value="${LauncherLib.getConfig('lang.voice')}"]`).prop('selected', true);
+    /**
+     * Game voice language
+     */
 
-    $(`#language li[value=${LauncherLib.getConfig('lang.launcher')}]`).addClass('selected');
-    $('#language .selected-item span').text($(`#language li[value=${LauncherLib.getConfig('lang.launcher')}]`).text());
+    $(`#voicepack li[value=${LauncherLib.getConfig('lang.voice.active')}]`).addClass('selected');
+    $('#voicepack .selected-item span').text($(`#voicepack li[value=${LauncherLib.getConfig('lang.voice.active')}]`).text());
+
+    $('#voicepack').on('selectionChanged', (e, data: any) => {
+        let activeLang = LauncherLib.getConfig('lang.voice.active');
+
+        if (activeLang != data.value)
+        {
+            LauncherLib.updateConfig('lang.voice.active', data.value);
+
+            LauncherUI.setState('game-voice-update-required');
+
+            // Send language update event
+            ipcRenderer.send('change-voicepack');
+        }
+    });
+
+    $('#voicepack .selected-item').attr('data-hint', LauncherUI.i18n.translate('VoiceNotification'));
+
+    /**
+     * Discord RPC
+     */
 
     if (LauncherLib.getConfig('rpc'))
         $('#discord-rpc').addClass('checkbox-active');
@@ -58,21 +86,9 @@ $(() => {
         ipcRenderer.send('rpc-toggle');
     });
 
-    /*$('#voice-list').on('change', (e) => {
-        let activeVP = LauncherLib.getConfig('voice');
-
-        if (activeVP != e.target.value)
-        {
-            LauncherLib.updateConfig('lang.voice', e.target.value);
-            
-            ipcRenderer.send('updateVP', { 'oldvp': activeVP });
-
-            $(`#voice-list option[value="${activeVP}"]`).removeProp('selected');
-            $(`#voice-list option[value="${e.target.value}"]`).prop('selected', true);
-        }
-
-        else console.log('VP can\' be changed to the already set language');
-    });*/
+    /**
+     * Environmental variables manager
+     */
 
     $('#env-list').on('propertyNameChanged', (e, data) => {
         if (data.value != '')
@@ -106,6 +122,10 @@ $(() => {
         td.last().find('input').val(value);
         td.last().find('span').text(value);
     });
+
+    /**
+     * Wine versions manager
+     */
 
     let activeRunner = LauncherLib.getConfig('runner');
 
@@ -205,6 +225,10 @@ $(() => {
         });
     });
 
+    /**
+     * DXVKs manager
+     */
+    
     let activeDXVK = LauncherLib.getConfig('dxvk');
 
     LauncherLib.getDXVKs().then(dxvks => {

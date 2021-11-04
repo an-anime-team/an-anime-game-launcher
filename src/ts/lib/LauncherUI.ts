@@ -10,6 +10,7 @@ type LauncherState =
     'patch-applying' |
     'game-update-available' |
     'game-installation-available' |
+    'game-voice-update-required' |
     'game-launch-available';
 
 export class LauncherUI
@@ -77,6 +78,11 @@ export class LauncherUI
 
                 break;
 
+            case 'game-voice-update-required':
+                $('#launch').text(this.i18n.translate('Update'));
+
+                break;
+
             case 'game-launch-available':
                 $('#launch').removeAttr('disabled')
                     .removeAttr('data-hint');
@@ -92,6 +98,62 @@ export class LauncherUI
         }
 
         this._launcherState = state;
+    }
+
+    public static async updateLauncherState(data: any = null)
+    {
+        let gameData  = data ?? await LauncherLib.getData();
+        let patchInfo = await LauncherLib.getPatchInfo();
+
+        // Update available
+        if (LauncherLib.version != gameData.game.latest.version)
+            this.setState(LauncherLib.version === null ? 'game-installation-available' : 'game-update-available');
+
+        // Voice pack update required
+        else if (LauncherLib.getConfig('lang.voice.active') != LauncherLib.getConfig('lang.voice.installed'))
+            this.setState('game-voice-update-required');
+
+        // Patch version is incorrect
+        else if (LauncherLib.getConfig('patch') && LauncherLib.getConfig('patch.version') != patchInfo.version)
+        {
+            // Patch is not available
+            if (patchInfo.version !== gameData.game.latest.version)
+                this.setState('patch-unavailable');
+
+            // Patch available
+            else if (patchInfo.version === gameData.game.latest.version)
+            {
+                // Patch is stable
+                if (patchInfo.state == 'stable')
+                {
+                    console.log(`%c> Applying patch...`, 'font-size: 16px');
+
+                    this.setState('patch-applying');
+
+                    LauncherLib.patchGame(() => {
+                        this.setState('game-launch-available');
+                    }, data => console.log(data.toString()));
+                }
+
+                // Patch is in testing phase
+                else this.setState('test-patch-available');
+            }
+        }
+
+        // Current patch is in testing phase,
+        // but stable is available
+        else if (LauncherLib.getConfig('patch') && LauncherLib.getConfig('patch.version') == patchInfo.version && LauncherLib.getConfig('patch.state') == 'testing' && patchInfo.state == 'stable')
+        {
+            console.log(`%c> Applying patch...`, 'font-size: 16px');
+
+            this.setState('patch-applying');
+
+            LauncherLib.patchGame(() => {
+                this.setState('game-launch-available');
+            }, data => console.log(data.toString()));
+        }
+
+        else this.setState('game-launch-available');
     }
 
     protected static progressBar = {
@@ -130,6 +192,7 @@ export class LauncherUI
             
             let elapsed = (Date.now() - this.progressBar.beganAt) / 1000;
             let eta = Math.round(total * elapsed / current - elapsed);
+            
             let etaHours: etaType   = Math.floor(eta / 3600),
                 etaMinutes: etaType = Math.floor((eta - etaHours * 3600) / 60),
                 etaSeconds: etaType = eta - etaHours * 3600 - etaMinutes * 60;
