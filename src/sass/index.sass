@@ -87,35 +87,44 @@
         height: 100%
 
         background-color: rgba(255, 255, 255, .7)
-        border-radius: 8px
+        border-radius: 6px
 
 #downloader-panel
     user-select: none
 
-#downloader
-    position: absolute
+    #downloader
+        position: absolute
 
-    left: 48px
-    bottom: 68px
+        left: 48px
+        bottom: 68px
 
-    width: 720px
-    height: 36px
+        width: 720px
+        height: 36px
 
-#downloader-label
-    position: absolute
+    #downloader-label
+        position: absolute
 
-    left: 48px
-    bottom: 116px
+        left: 48px
+        bottom: 116px
 
-    color: white
-    font-size: 18px
+        color: white
+        font-size: 18px
 
-#downloaded
-    max-width: 720px
-    display: inline-block
-    word-break: break-all
+        #downloaded
+            max-width: 720px
+            display: inline-block
+            word-break: break-all
 
-#speed, #eta
-    margin-left: 8px
-    color: #cccccc
-    font-weight: 100
+        #speed, #eta
+            margin-left: 8px
+            color: #cccccc
+            font-weight: 100
+
+#downloader-panel.dark
+    #downloader-label
+        #downloaded, #speed, #eta
+            color: rgba(0, 0, 0, .7)
+
+    #downloader
+        background-color: rgba(0,0,0,.3)
+        border: 1px solid rgba(0,0,0,.4)

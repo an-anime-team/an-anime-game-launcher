@@ -205,6 +205,8 @@ $(() => {
             // Voice pack update
             else if (LauncherUI.launcherState == 'game-voice-update-required')
             {
+                console.log(`%c> Updating game voice data...`, 'font-size: 16px');
+
                 // Hide settings button to prevent some unexpected changes
                 $('#settings').css('display', 'none');
 
@@ -229,20 +231,22 @@ $(() => {
                         break;
                     }
 
-                let installedpackName = installedPack.name.replace(`_${data.game.latest.version}.zip`, '');
+                if (installedPack !== undefined)
+                {
+                    let installedpackName = installedPack.name.replace(`_${data.game.latest.version}.zip`, '');
 
-                console.log(`%c> Deleting installed voice pack (${installedpackName})...`, 'font-size: 16px');
+                    console.log(`%c> Deleting installed voice pack (${installedpackName})...`, 'font-size: 16px');
 
-                // Check if the directory and file exists to prevent errors
-                if (fs.existsSync(path.join(constants.gameDir, installedpackName + '_pkg_version')))
-                    fs.rmSync(path.join(constants.gameDir, installedpackName + '_pkg_version'));
-                
-                if (fs.existsSync(path.join(constants.voiceDir, installedpackName.replace('Audio_', ''))))
-                    fs.rmSync(path.join(constants.voiceDir, installedpackName.replace('Audio_', '')), { recursive: true });
+                    // Check if the directory and file exists to prevent errors
+                    if (fs.existsSync(path.join(constants.gameDir, installedpackName + '_pkg_version')))
+                        fs.rmSync(path.join(constants.gameDir, installedpackName + '_pkg_version'));
+                    
+                    if (fs.existsSync(path.join(constants.voiceDir, installedpackName.replace('Audio_', ''))))
+                        fs.rmSync(path.join(constants.voiceDir, installedpackName.replace('Audio_', '')), { recursive: true });
+                }
 
                 console.log(`%c> Downloading voice data...`, 'font-size: 16px');
 
-                // For some reason this keeps breaking and locking up most of the time.
                 Tools.downloadFile(voicePack.path, path.join(constants.launcherDir, voicePack.name), (current: number, total: number, difference: number) => {
                     LauncherUI.updateProgressBar(LauncherUI.i18n.translate('Downloading'), current, total, difference);
                 }).then(() => {
@@ -261,7 +265,7 @@ $(() => {
                         $('#settings').css('display', 'block');
 
                         LauncherUI.updateLauncherState();
-                    })
+                    });
                 });
             }
 
