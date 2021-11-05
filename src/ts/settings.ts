@@ -41,8 +41,8 @@ $(() => {
         if (activeLang != data.value)
         {
             LauncherLib.updateConfig('lang.launcher', data.value);
-
             LauncherLib.updateConfig('background.time', null);
+            
             LauncherUI.updateLang(data.value);
 
             // Send language update event
@@ -85,6 +85,15 @@ $(() => {
 
         ipcRenderer.send('rpc-toggle');
     });
+
+    /**
+     * Automatic theme switcher
+     */
+
+    if (LauncherLib.getConfig('autotheme'))
+        $('#auto-theme').addClass('checkbox-active');
+
+    $('#auto-theme').on('classChange', () => LauncherLib.updateConfig('autotheme', $('#auto-theme').hasClass('checkbox-active')));
 
     /**
      * Environmental variables manager

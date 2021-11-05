@@ -3,6 +3,7 @@ import $ from 'cash-dom';
 import { constants } from './constants';
 import { LauncherLib } from './LauncherLib';
 import { i18n } from './i18n';
+import { Tools } from './Tools';
 
 type LauncherState =
     'patch-unavailable' |
@@ -230,10 +231,37 @@ export class LauncherUI
     public static updateBackground (): void
     {
         LauncherLib.getBackgroundUri().then(uri => {
-            uri = `url(${uri})`;
+            let style = `url(${uri})`;
 
-            if ($('body').css('background-image') != uri)
-                $('body').css('background-image', uri);
+            if ($('body').css('background-image') != style)
+            {
+                $('body').css('background-image', style);
+
+                /**
+                 * Calculating background's left-bottom corner mean brightness
+                 * to make the progress bar's theme dark or light
+                 */
+                if (LauncherLib.getConfig('autotheme'))
+                {
+                    Tools.getImagePixels(uri).then(pixels => {
+                        let sector = pixels.filter(pixel => pixel.y < 186 && pixel.x < 720);
+                        let meanBrightness = 0;
+
+                        sector.forEach(pixel => meanBrightness += pixel.color.r + pixel.color.g + pixel.color.b);
+
+                        meanBrightness /= sector.length * 3;
+
+                        console.log(`Background's mean brightness is ${meanBrightness}`);
+
+                        // Image is dark so we make the progress bar light
+                        if (meanBrightness < 160)
+                            $('#downloader-panel').removeClass('dark');
+
+                        // Otherwise image is bright so the progress bar should be dark
+                        else $('#downloader-panel').addClass('dark');
+                    });
+                }
+            }
         });
     }
 

@@ -2,14 +2,14 @@ import GIJSON from '../types/GIJSON';
 import { constants } from './constants';
 import { Tools } from './Tools';
 
-const store = require('electron-store');
-const https = require('follow-redirects').https;
-
 const fs = require('fs');
 const path = require('path');
 const os = require('os');
 const { spawn, exec } = require('child_process');
 const dns = require('dns');
+
+const store = require('electron-store');
+const https = require('follow-redirects').https;
 
 const config = new store ({
     cwd: path.join(os.homedir(), '.local', 'share', 'anime-game-launcher'),
@@ -28,7 +28,8 @@ const config = new store ({
         version: null, // Installed game version
         patch: null, // Installed patch info ({ version, state } - related game's version and patch's state)
         runner: null, // Selected runner ({ folder, executable })
-        rpc: false,
+        rpc: false, // Discord RPC
+        autotheme: true, // Automatic theme switcher
 
         // Version of the game we asked about analytics last time,
         // or null if user said don't ask him again
@@ -37,7 +38,9 @@ const config = new store ({
         // Environement variables
         env: {
             DXVK_ASYNC: '1',
-            WINEESYNC: '1',
+            WINEESYNC: '1', // ESync
+
+            // FidelityFX Super Resolution
             WINE_FULLSCREEN_FSR: '1',
             WINE_FULLSCREEN_FSR_STRENGTH: '3'
         }
@@ -74,7 +77,7 @@ export class LauncherLib
                 .then(runners => resolve(runners));
         });*/
 
-        return new Promise(resolve => resolve(JSON.parse(fs.readFileSync(path.join(path.dirname(__dirname), '..', 'runners.json')))));
+        return new Promise(resolve => fs.readFile(path.join(path.dirname(__dirname), '..', 'runners.json'), (err: any, data: string) => resolve(JSON.parse(data))));
     }
 
     public static getDXVKs (): Promise<DXVK[]>
@@ -85,7 +88,7 @@ export class LauncherLib
                 .then(dxvks => resolve(dxvks));
         });*/
 
-        return new Promise(resolve => resolve(JSON.parse(fs.readFileSync(path.join(path.dirname(__dirname), '..', 'dxvks.json')))));
+        return new Promise(resolve => fs.readFile(path.join(path.dirname(__dirname), '..', 'dxvks.json'), (err: any, data: string) => resolve(JSON.parse(data))));
     }
 
     public static getConfig (property: string|null = null): any

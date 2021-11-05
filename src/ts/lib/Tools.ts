@@ -1,14 +1,62 @@
-const https = require('follow-redirects').https;
-
 const fs = require('fs');
 const path = require('path');
 const dns = require('dns');
 const { spawn } = require('child_process');
 
-type GitTag = { tag: string, commit: string };
+const https = require('follow-redirects').https;
+const getPixels = require('get-pixels');
+
+type GitTag = {
+    tag: string,
+    commit: string
+};
+
+type Pixel = {
+    x: number,
+    y: number,
+    color: {
+        r: number,
+        g: number,
+        b: number,
+        a: number|null
+    }
+};
 
 export class Tools
 {
+    public static getImagePixels (path: string): Promise<Pixel[]>
+    {
+        return new Promise(resolve => {
+            getPixels(path, (err: void, pixels: any) => {
+                let response = [];
+
+                let width  = pixels.shape[0],
+                    height = pixels.shape[1],
+                    depth  = pixels.shape[2],
+                    offset = 0;
+
+                for (let i = 0; i < height; ++i)
+                    for (let j = 0; j < width; ++j)
+                    {
+                        response.push({
+                            x: j,
+                            y: i,
+                            color: {
+                                r: pixels.data[offset],
+                                g: pixels.data[offset + 1],
+                                b: pixels.data[offset + 2],
+                                a: depth == 4 ? pixels.data[offset + 3] : null
+                            }
+                        });
+
+                        offset += depth;
+                    }
+
+                resolve(response);
+            });
+        });
+    }
+
     public static async getGitTags (uri: string): Promise<GitTag[]>
     {
         return new Promise(resolve => {
