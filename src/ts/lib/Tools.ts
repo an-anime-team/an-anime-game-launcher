@@ -28,12 +28,11 @@ export class Tools
     {
         return new Promise(resolve => {
             getPixels(path, (err: void, pixels: any) => {
-                let response = [];
+                let response = [], offset = 0;
 
-                let width  = pixels.shape[0],
-                    height = pixels.shape[1],
-                    depth  = pixels.shape[2],
-                    offset = 0;
+                const width  = pixels.shape[0],
+                      height = pixels.shape[1],
+                      depth  = pixels.shape[2];
 
                 for (let i = 0; i < height; ++i)
                     for (let j = 0; j < width; ++j)

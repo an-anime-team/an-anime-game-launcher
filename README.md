@@ -22,6 +22,12 @@ Download from [Releases](https://notabug.org/nobody/an-anime-game-launcher/relea
 
 <br>
 
+## Usage statistics
+
+<img src="repository-pics/statistics.png">
+
+<br>
+
 # Requirements
 
 To work this launcher requires
