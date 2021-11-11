@@ -69,13 +69,14 @@ $(() => {
         LauncherUI.updateLauncherState();
     });
 
-    Tools.getGitTags(constants.uri.launcher).then (tags => {
-        if (tags.filter(entry => semver.gt(entry.tag, launcher_version)).length > 0)
+    Tools.getGitTags(constants.uri.launcher).then(tags => {
+        const latestVersion = tags[tags.length - 1].tag;
+
+        if (latestVersion && semver.gt(latestVersion, launcher_version))
         {
             ipcRenderer.send('notification', {
-                title: `${LauncherUI.i18n.translate('LauncherUpdateTitle')} (${launcher_version} -> ${tags[tags.length - 1].tag})`,
-                body: LauncherUI.i18n.translate('LauncherUpdateBody'),
-                timeoutType: 'never'
+                title: `${LauncherUI.i18n.translate('LauncherUpdateTitle')} (${launcher_version} -> ${latestVersion})`,
+                body: LauncherUI.i18n.translate('LauncherUpdateBody')
             });
         }
     });
@@ -117,21 +118,21 @@ $(() => {
             if (LauncherUI.launcherState == 'game-launch-available')
             {
                 console.log(`%c> Starting the game...`, 'font-size: 16px');
-
+        
                 if (!await LauncherLib.isTelemetryDisabled())
                 {
                     console.log(`${constants.placeholders.uppercase.company}'s telemetry servers doesn't disabled!`);
-
+        
                     ipcRenderer.send('notification', {
                         title: document.title,
                         body: LauncherUI.i18n.translate('TelemetryNotDisabled')
                     });
                 }
-
+        
                 else
                 {
                     let wineExeutable = 'wine';
-
+        
                     if (LauncherLib.getConfig('runner') !== null)
                     {
                         wineExeutable = path.join(
@@ -139,27 +140,29 @@ $(() => {
                             LauncherLib.getConfig('runner.folder'),
                             LauncherLib.getConfig('runner.executable')
                         );
-
+        
                         if (!fs.existsSync(wineExeutable))
                         {
                             wineExeutable = 'wine';
-
+        
                             LauncherLib.updateConfig('runner', null);
                         }
                     }
-
+        
                     console.log(`Wine executable: ${wineExeutable}`);
-
+        
                     if (DiscordRPC.isActive())
                     {
                         DiscordRPC.setActivity({
                             details: 'In-Game',
                             largeImageKey: 'game',
                             largeImageText: 'An Anime Game Launcher',
-                            startTimestamp: new Date().setDate(new Date().getDate())
+                            startTimestamp: Date.now()
                         });
                     }
-
+        
+                    const startTime = Date.now();
+        
                     exec(`${wineExeutable} launcher.bat`, {
                         cwd: constants.gameDir,
                         env: {
@@ -169,9 +172,13 @@ $(() => {
                         }
                     }, (err: any, stdout: any, stderr: any) => {
                         console.log(`%c> Game closed`, 'font-size: 16px');
-
+        
+                        const playtime = Date.now() - startTime;
+        
                         ipcRenderer.invoke('show-window');
-
+        
+                        LauncherLib.updateConfig('playtime', LauncherLib.getConfig('playtime') + Math.round(playtime / 1000));
+        
                         if (DiscordRPC.isActive())
                         {
                             DiscordRPC.setActivity({
@@ -180,12 +187,12 @@ $(() => {
                                 largeImageText: 'An Anime Game Launcher'
                             });
                         }
-
+        
                         console.log(err);
                         console.log(stdout);
                         console.log(stderr);
                     });
-
+        
                     ipcRenderer.invoke('hide-window');
                 }
             }

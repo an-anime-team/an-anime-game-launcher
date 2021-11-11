@@ -1,6 +1,7 @@
 const { ipcRenderer } = require('electron');
 
 import $ from 'cash-dom';
+
 import { LauncherLib } from './lib/LauncherLib';
 import { LauncherUI } from './lib/LauncherUI';
 
@@ -10,13 +11,18 @@ $(() => {
     $('#participate').on('click', async () => {
         await fetch(`https://an-anime-game-launcher.000webhostapp.com${ !$('#share-country').hasClass('checkbox-active') ? '/?hide-geo' : '' }`);
 
-        LauncherLib.updateConfig('analytics', LauncherLib.version);
+        // LauncherLib.version can break this property
+        // because analytics can be displayed even with the first
+        // launcher's run and then of course uninstalled game's version
+        // will be "null", which in analytics means that user don't
+        // want to see this dialog anymore
+        LauncherLib.updateConfig('analytics', (await LauncherLib.getData()).game.latest.version);
         
         ipcRenderer.invoke('hide-analytics-participation');
     });
 
-    $('#skip').on('click', () => {
-        LauncherLib.updateConfig('analytics', LauncherLib.version);
+    $('#skip').on('click', async () => {
+        LauncherLib.updateConfig('analytics', (await LauncherLib.getData()).game.latest.version);
 
         ipcRenderer.invoke('hide-analytics-participation');
     });

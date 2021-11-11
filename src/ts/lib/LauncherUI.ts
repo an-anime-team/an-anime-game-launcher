@@ -249,6 +249,7 @@ export class LauncherUI
 
                         sector.forEach(pixel => meanBrightness += pixel.color.r + pixel.color.g + pixel.color.b);
 
+                        // TODO: convert RGB mean color to LAB to get real background brightness
                         meanBrightness /= sector.length * 3;
 
                         console.log(`Background's mean brightness is ${meanBrightness}`);

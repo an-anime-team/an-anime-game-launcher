@@ -10,7 +10,7 @@
 
 | Game version | Launcher version | Patch version |
 | :---: | :---: | :---: |
-| 2.2.0 | 1.4.0 | 2.2.0 stable ✅ |
+| 2.2.0 | 1.4.1 | 2.2.0 stable ✅ |
 
 Download from [Releases](https://notabug.org/nobody/an-anime-game-launcher/releases)
 
@@ -89,14 +89,15 @@ npm start
 * <s>Add installed packages deletion</s> *(1.2.0)*
 * <s>Add voice packs support</s> (Thank @Maroxy for the developments in the previous versions) *(1.3.0)*
 * <s>Color variants for progress bar's downloading text dependent on the background picture primary color</s> *(1.4.0)*
+* <s>Playing statistics</s> *(1.4.1)*
+* Make force launch button when the launcher's repository is unavailable
 * Screenshots explorer
-* Add vkBasalt support and "shaders library
+* Add vkBasalt support and "shaders library" (the problem is, we don't have vkBasalt binaries, but the source code)
 * Set default wine version to download so the wine install requirement is no longer needed
 * Add Patch category in settings menu with
   - Always participate in patches testing
   - Applying anti login crash patch
   - Remove patch
-* Playing statistics
 
 And don't forget to change the patch's URI when it will be changed
 

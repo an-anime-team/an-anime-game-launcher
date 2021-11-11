@@ -133,6 +133,17 @@ $(() => {
     });
 
     /**
+     * Statistics
+     */
+
+    $('#play-hours').text((LauncherLib.getConfig('playtime') / 3600).toFixed(1).toString());
+
+    // Update this once per two minute
+    setInterval(() => {
+        $('#play-hours').text((LauncherLib.getConfig('playtime') / 3600).toFixed(1).toString());
+    }, 120 * 1000);
+
+    /**
      * Wine versions manager
      */
 

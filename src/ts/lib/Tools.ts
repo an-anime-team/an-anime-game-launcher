@@ -58,7 +58,7 @@ export class Tools
 
     public static async getGitTags (uri: string): Promise<GitTag[]>
     {
-        return new Promise(resolve => {
+        return new Promise((resolve, reject) => {
             let git = spawn('git', ['ls-remote', '--tags', uri]),
                 tags: GitTag[] = [];
 
@@ -76,6 +76,8 @@ export class Tools
                     }
                 });
             });
+
+            git.stderr.on('data', (data: string) => reject(data));
 
             git.on('close', () => resolve(tags));
         });

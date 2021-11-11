@@ -6,7 +6,6 @@ const fs = require('fs');
 const path = require('path');
 const os = require('os');
 const { spawn, exec } = require('child_process');
-const dns = require('dns');
 
 const store = require('electron-store');
 const https = require('follow-redirects').https;
@@ -43,7 +42,9 @@ const config = new store ({
             // FidelityFX Super Resolution
             WINE_FULLSCREEN_FSR: '1',
             WINE_FULLSCREEN_FSR_STRENGTH: '3'
-        }
+        },
+
+        playtime: 0 // Number of seconds user spent in game
     }
 });
 
@@ -118,9 +119,10 @@ export class LauncherLib
                 response.on('data', (chunk: any) => data += chunk);
 
                 response.on('end', () => {
-                    let jsondata: GIJSON = JSON.parse(data);
+                    const jsonData: GIJSON = JSON.parse(data);
 
-                    return jsondata.message === 'OK' ? resolve(jsondata.data) : reject(null);
+                    return jsonData.message === 'OK' ?
+                        resolve(jsonData.data) : reject(null);
                 });
             }).on('error', (err: Error) => reject(err));
         });
@@ -216,7 +218,7 @@ export class LauncherLib
     // WINEPREFIX='...../wineprefix' winetricks corefonts usetakefocus=n
     public static async installPrefix (prefixpath: string, progress: (output: string, current: number, total: number) => void): Promise<void>
     {
-        let installationSteps = [
+        const installationSteps = [
             // corefonts
             'Executing w_do_call corefonts',
             'Executing load_corefonts',
@@ -276,7 +278,7 @@ export class LauncherLib
                     // Delete zip file and assign patch directory.
                     fs.unlinkSync(path.join(constants.launcherDir, 'patch.zip'));
 
-                    let patchDir = path.join(constants.launcherDir, 'gi-on-linux', pathInfo.version.replaceAll('.', ''));
+                    const patchDir = path.join(constants.launcherDir, 'gi-on-linux', pathInfo.version.replaceAll('.', ''));
 
                     // Patch out the testing phase content from the shell files if active and make sure the shell files are executable.
                     exec(`cd ${patchDir} && sed -i '/^echo "If you would like to test this patch, modify this script and remove the line below this one."/,+5d' patch.sh`);
