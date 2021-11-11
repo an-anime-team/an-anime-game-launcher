@@ -90,6 +90,7 @@ npm start
 * <s>Add voice packs support</s> (Thank @Maroxy for the developments in the previous versions) *(1.3.0)*
 * <s>Color variants for progress bar's downloading text dependent on the background picture primary color</s> *(1.4.0)*
 * <s>Playing statistics</s> *(1.4.1)*
+* Game's update pre-installation
 * Make force launch button when the launcher's repository is unavailable
 * Screenshots explorer
 * MangoHud support
