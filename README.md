@@ -92,6 +92,7 @@ npm start
 * <s>Playing statistics</s> *(1.4.1)*
 * Make force launch button when the launcher's repository is unavailable
 * Screenshots explorer
+* MangoHud support
 * Add vkBasalt support and "shaders library" (the problem is, we don't have vkBasalt binaries, but the source code)
 * Set default wine version to download so the wine install requirement is no longer needed
 * Add Patch category in settings menu with
