@@ -16,7 +16,7 @@
     },
     "build": {
         "productName": "An Anime Game Linux Launcher",
-        "artifactName": "${productName}-${os}-${arch}-${version}.${ext}",
+        "artifactName": "${productName}-${version}.${ext}",
         "appId": "com.krypt0nn.an-anime-game-linux-launcher",
         "directories": {
             "output": "dist"
