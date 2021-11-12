@@ -117,6 +117,17 @@ $(() => {
         
                 else
                 {
+                    // Initializing Discord RPC
+                    if (DiscordRPC.isActive())
+                    {
+                        DiscordRPC.setActivity({
+                            details: 'In-Game',
+                            largeImageKey: 'game',
+                            largeImageText: 'An Anime Game Launcher',
+                            startTimestamp: Date.now()
+                        });
+                    }
+
                     // Selecting wine executable
                     let wineExeutable = 'wine';
         
@@ -158,19 +169,13 @@ $(() => {
                     // Shaders
                     if (LauncherLib.getConfig('shaders') != 'none')
                     {
+                        const userShadersFile = path.join(constants.shadersDir, LauncherLib.getConfig('shaders'), 'vkBasalt.conf');
+                        const launcherShadersFile = path.join(constants.launcherDir, 'vkBasalt.conf');
+
                         env['ENABLE_VKBASALT'] = 1;
-                        env['VKBASALT_CONFIG_FILE'] = path.join(constants.shadersDir, LauncherLib.getConfig('shaders'), 'vkBasalt.conf');
-                    }
-        
-                    // Initializing Discord RPC
-                    if (DiscordRPC.isActive())
-                    {
-                        DiscordRPC.setActivity({
-                            details: 'In-Game',
-                            largeImageKey: 'game',
-                            largeImageText: 'An Anime Game Launcher',
-                            startTimestamp: Date.now()
-                        });
+                        env['VKBASALT_CONFIG_FILE'] = launcherShadersFile;
+
+                        fs.writeFileSync(launcherShadersFile, fs.readFileSync(userShadersFile));
                     }
                     
                     // Starting the game
@@ -181,8 +186,8 @@ $(() => {
                         env: {
                             ...process.env,
                             WINEPREFIX: constants.prefixDir,
-                            ...LauncherLib.getConfig('env'),
-                            ...env
+                            ...env, // User-defined variables should be the most important
+                            ...LauncherLib.getConfig('env')
                         }
                     }, (err: any, stdout: any, stderr: any) => {
                         console.log(`%c> Game closed`, 'font-size: 16px');
