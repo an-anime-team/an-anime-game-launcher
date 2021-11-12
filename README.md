@@ -16,9 +16,15 @@
 | :---: | :---: | :---: |
 | 2.2.0 | 1.5.0| 2.2.0 stable ✅ |
 
-Download from [Releases](https://notabug.org/nobody/an-anime-game-launcher/releases)
-
 > ⚠️ New patch's version will be delayed for a week because of some author's personal reasons
+
+### AppImage
+
+Download AppImage from [Releases](https://notabug.org/nobody/an-anime-game-launcher/releases) page
+
+### For arch users
+
+This launcher also available as the [an-anime-game-launcher](https://aur.archlinux.org/packages/an-anime-game-launcher) AUR repository
 
 <br>
 
