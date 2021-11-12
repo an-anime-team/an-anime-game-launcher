@@ -14,7 +14,7 @@
 
 | Game version | Launcher version | Patch version |
 | :---: | :---: | :---: |
-| 2.2.0 | 1.5.0| 2.2.0 stable ✅ |
+| 2.2.0 | 1.5.2 | 2.2.0 stable ✅ |
 
 > ⚠️ New patch's version will be delayed for a week because of some author's personal reasons
 
