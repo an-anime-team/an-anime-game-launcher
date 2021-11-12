@@ -87,7 +87,7 @@ export class Tools
     {
         return new Promise((resolve, reject) => {
             dns.lookup(uri, (error: any, address: string, family: any) => {
-                console.log(`${uri} -> ${address}`);
+                // console.log(`${uri} -> ${address}`);
                 
                 if (error)
                     reject(error);
