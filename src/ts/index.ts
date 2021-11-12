@@ -24,20 +24,6 @@ if (!fs.existsSync(constants.runnersDir))
 if (!fs.existsSync(constants.dxvksDir))
     fs.mkdirSync(constants.dxvksDir, { recursive: true });
 
-/**
- * Compatibilities
- */
-
-// 1.2.0 -> ^1.3.0
-// Voice packs system update
-if (typeof LauncherLib.getConfig('lang.voice') != 'object')
-{
-    let voice = LauncherLib.getConfig('lang.voice');
-
-    LauncherLib.updateConfig('lang.voice.installed', voice);
-    LauncherLib.updateConfig('lang.voice.active', voice);
-}
-
 $(() => {
     document.title = `${constants.placeholders.uppercase.full} Linux Launcher`;
 
@@ -131,6 +117,7 @@ $(() => {
         
                 else
                 {
+                    // Selecting wine executable
                     let wineExeutable = 'wine';
         
                     if (LauncherLib.getConfig('runner') !== null)
@@ -150,7 +137,32 @@ $(() => {
                     }
         
                     console.log(`Wine executable: ${wineExeutable}`);
+
+                    // Some special variables
+                    let env: any = {};
+
+                    // HUD
+                    switch (LauncherLib.getConfig('hud'))
+                    {
+                        case 'dxvk':
+                            env['DXVK_HUD'] = 'fps,frametimes';
+
+                            break;
+
+                        case 'mangohud':
+                            env['MANGOHUD'] = 1;
+
+                            break;
+                    }
+
+                    // Shaders
+                    if (LauncherLib.getConfig('shaders') != 'none')
+                    {
+                        env['ENABLE_VKBASALT'] = 1;
+                        env['VKBASALT_CONFIG_FILE'] = path.join(constants.shadersDir, LauncherLib.getConfig('shaders'), 'vkBasalt.conf');
+                    }
         
+                    // Initializing Discord RPC
                     if (DiscordRPC.isActive())
                     {
                         DiscordRPC.setActivity({
@@ -160,7 +172,8 @@ $(() => {
                             startTimestamp: Date.now()
                         });
                     }
-        
+                    
+                    // Starting the game
                     const startTime = Date.now();
         
                     exec(`${wineExeutable} launcher.bat`, {
@@ -168,7 +181,8 @@ $(() => {
                         env: {
                             ...process.env,
                             WINEPREFIX: constants.prefixDir,
-                            ...LauncherLib.getConfig('env')
+                            ...LauncherLib.getConfig('env'),
+                            ...env
                         }
                     }, (err: any, stdout: any, stderr: any) => {
                         console.log(`%c> Game closed`, 'font-size: 16px');

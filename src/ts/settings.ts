@@ -42,7 +42,7 @@ $(() => {
         {
             LauncherLib.updateConfig('lang.launcher', data.value);
             LauncherLib.updateConfig('background.time', null);
-            
+
             LauncherUI.updateLang(data.value);
 
             // Send language update event
@@ -74,6 +74,19 @@ $(() => {
     $('#voicepack .selected-item').attr('data-hint', LauncherUI.i18n.translate('VoiceNotification'));
 
     /**
+     * HUD
+     */
+
+    $(`#hud li[value=${LauncherLib.getConfig('hud')}]`).addClass('selected');
+    $('#hud .selected-item span').text($(`#hud li[value=${LauncherLib.getConfig('hud')}]`).text());
+
+    $('#hud').on('selectionChanged', (e, data: any) => {
+        LauncherLib.updateConfig('hud', data.value);
+    });
+
+    $('#hud li[value=mangohud]').attr('data-hint', LauncherUI.i18n.translate('PreInstallationRequired'));
+
+    /**
      * Discord RPC
      */
 
@@ -94,6 +107,68 @@ $(() => {
         $('#auto-theme').addClass('checkbox-active');
 
     $('#auto-theme').on('classChange', () => LauncherLib.updateConfig('autotheme', $('#auto-theme').hasClass('checkbox-active')));
+
+    /**
+     * Shaders
+     */
+
+    fs.readdirSync(constants.shadersDir).forEach((folder: string) => {
+        const shaders: any = JSON.parse(fs.readFileSync(path.join(constants.shadersDir, folder, 'shaders.json')));
+
+        $(`<li value="${folder}">${shaders.name}</li>`).appendTo('#shaders-list ul');
+
+        $(`<h3>${shaders.name}</h3>`).appendTo('#shaders');
+
+        $(`<p>${LauncherUI.i18n.translate('Author')}: ${shaders.author}</p>`).appendTo('#shaders');
+
+        if (shaders.images.length == 0)
+            $(`<p>${LauncherUI.i18n.translate('NoImages')}</p>`).appendTo('#shaders');
+
+        else shaders.images.forEach((image: any) => {
+            const img = $(`<img src="${ path.join(constants.shadersDir, folder, image.file) }">`).appendTo('#shaders');
+            
+            const imageCaption = typeof image.caption === 'string' ?
+                image.caption : (image.caption[LauncherUI.i18n.language] ?? image.caption['en']);
+
+            const p = $(`<p>${imageCaption}</p>`).appendTo('#shaders');
+
+            img.css('width', '100%');
+
+            p.css('text-align', 'center');
+            p.css('margin-top', '8px');
+        });
+    });
+
+    $(`#shaders-list li[value=${LauncherLib.getConfig('shaders')}]`).addClass('selected');
+    $('#shaders-list .selected-item span').text($(`#shaders-list li[value=${LauncherLib.getConfig('shaders')}]`).text());
+
+    if (LauncherLib.getConfig('shaders') != 'none')
+    {
+        const selectedItem = $('#shaders-list .selected-item');
+
+        selectedItem.removeClass('hint--small');
+        selectedItem.addClass('hint--medium');
+    }
+
+    $('#shaders-list').on('selectionChanged', (e, data: any) => {
+        LauncherLib.updateConfig('shaders', data.value);
+
+        const selectedItem = $('#shaders-list div.selected-item');
+
+        if (data.value == 'none')
+        {
+            selectedItem.removeClass('hint--medium');
+            selectedItem.addClass('hint--small');
+        }
+
+        else if (!selectedItem.hasClass('hint--medium'))
+        {
+            selectedItem.removeClass('hint--small');
+            selectedItem.addClass('hint--medium');
+        }
+    });
+
+    $('#shaders-list .selected-item').attr('data-hint', LauncherUI.i18n.translate('ToggleShadersText'));
 
     /**
      * Environmental variables manager

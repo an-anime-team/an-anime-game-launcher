@@ -7,6 +7,13 @@ export class i18n
 {
     public static readonly localesDir = path.join(path.dirname(__dirname), '..', 'locales');
 
+    protected static _language: string = navigator.language;
+
+    public static get language (): string
+    {
+        return this._language;
+    }
+
     public static loadedLanguage: any;
 
     public static translate (phrase: string): string
@@ -51,6 +58,8 @@ export class i18n
 
             break;
         }
+
+        this._language = lang;
 
         i18n.loadedLanguage = JSON.parse(fs.readFileSync(path.join(this.localesDir, 
             fs.existsSync(path.join(this.localesDir, lang + '.json')) ?

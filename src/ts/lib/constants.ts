@@ -29,6 +29,9 @@ export class constants
         ]
     };
 
+    public static readonly appDir = path.resolve(__dirname, '..', '..', '..');
+    public static readonly shadersDir = path.join(this.appDir, 'public', 'shaders');
+
     public static readonly launcherDir: string = path.join(os.homedir(), '.local', 'share', 'anime-game-launcher');
 
     public static readonly prefixDir: string = path.join(this.launcherDir, 'game');

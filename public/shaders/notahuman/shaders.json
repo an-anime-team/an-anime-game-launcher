@@ -1,0 +1,18 @@
+{
+    "name": "Prime Preset v2",
+    "author": "notahuman",
+    "uri": "https://notabug.org/Krock/GI-on-Linux/issues/200",
+    "images": [
+        {
+            "file": "preview.png",
+            "caption": {
+                "en": "Characters' faces",
+                "en-us": "Characters' faces",
+                "de": "Gesichter der Charaktere",
+                "ja": "キャラクターの顔",
+                "ko": "캐릭터의 얼굴",
+                "ru": "Лица персонажей"
+            }
+        }
+    ]
+}

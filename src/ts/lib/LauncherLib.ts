@@ -29,6 +29,9 @@ const config = new store ({
         runner: null, // Selected runner ({ folder, executable })
         rpc: false, // Discord RPC
         autotheme: true, // Automatic theme switcher
+        playtime: 0, // Number of seconds user spent in game
+        hud: 'none', // none / dxvk / mangohud
+        shaders: 'none', // none / shader's folder
 
         // Version of the game we asked about analytics last time,
         // or null if user said don't ask him again
@@ -42,9 +45,7 @@ const config = new store ({
             // FidelityFX Super Resolution
             WINE_FULLSCREEN_FSR: '1',
             WINE_FULLSCREEN_FSR_STRENGTH: '3'
-        },
-
-        playtime: 0 // Number of seconds user spent in game
+        }
     }
 });
 

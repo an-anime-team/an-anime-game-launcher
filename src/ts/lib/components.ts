@@ -29,25 +29,30 @@ $(() => {
         item.toggleClass('select-active').trigger('classChange');
     });
 
-    $('.select-options li').on('click', (e) => {
-        let item = $(e.target), li = $(e.target);
+    $('.select-options ul').on('click', (e) => {
+        let li = e.path.filter((item: any) => $(item).is('li')), item;
 
-        if (!item.hasClass('selected'))
+        if (li.length == 1)
         {
-            while (!item.hasClass('select'))
-                item = item.parent();
+            li = item = $(li[0]);
 
-            item.find('.select-options li').removeClass('selected');
-            li.addClass('selected');
+            if (!item.hasClass('selected'))
+            {
+                while (!item.hasClass('select'))
+                    item = item.parent();
 
-            item.removeClass('select-active');
+                item.find('.select-options li').removeClass('selected');
+                li.addClass('selected');
 
-            item.find('.selected-item span').text(li.text());
+                item.removeClass('select-active');
 
-            item.trigger('selectionChanged', {
-                caption: li.text(),
-                value: li.attr('value')
-            });
+                item.find('.selected-item span').text(li.text());
+
+                item.trigger('selectionChanged', {
+                    caption: li.text(),
+                    value: li.attr('value')
+                });
+            }
         }
     });
 
@@ -55,7 +60,7 @@ $(() => {
      * properties-list
      */
 
-    let propsRowSelect = (e: any) => {
+    const propsRowSelect = (e: any) => {
         let item = $(e.target);
 
         while (!item.is('tr'))
@@ -70,8 +75,8 @@ $(() => {
 
     $('.properties-list tr').on('click', propsRowSelect);
 
-    let propsInputsOnChange = (e: any) => {
-        let item = $(e.target),
+    const propsInputsOnChange = (e: any) => {
+        const item = $(e.target),
             td = item.parent(),
             td2 = td.siblings().first();
 
@@ -105,7 +110,7 @@ $(() => {
     $('.properties-list input').on('change', propsInputsOnChange);
 
     $('.properties-list .button#add').on('click', (e) => {
-        let newRow = $(`<tr>
+        const newRow = $(`<tr>
             <td>
                 <span></span>
                 <input>

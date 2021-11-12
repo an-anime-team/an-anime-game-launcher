@@ -6,13 +6,19 @@
 
 <br><br>
 
+### Please, try to use "An Anime Game" phrase instead of the real game name to avoid search engines parsing
+
+<br><br>
+
 # Status
 
 | Game version | Launcher version | Patch version |
 | :---: | :---: | :---: |
-| 2.2.0 | 1.4.1 | 2.2.0 stable ✅ |
+| 2.2.0 | 1.5.0| 2.2.0 stable ✅ |
 
 Download from [Releases](https://notabug.org/nobody/an-anime-game-launcher/releases)
+
+> ⚠️ New patch's version will be delayed for a week because of some author's personal reasons
 
 <br>
 
@@ -52,6 +58,17 @@ sudo apt-get install wine winetricks unzip tar git
 sudo pacman -Syu wine winetricks unzip tar git
 ```
 
+# Additional requirements
+
+| Name | Description |
+| --- | --- |
+| [MangoHud](https://github.com/flightlessmango/MangoHud) | To use MangoHud |
+| [vkBasalt](https://github.com/DadSchoorse/vkBasalt) | To use shaders |
+
+These requirements can't be easily installed so you should do it manually
+
+They're required only for some specific functions
+
 # Development
 
 ## Build from source
@@ -90,19 +107,20 @@ npm start
 * <s>Add voice packs support</s> (Thank @Maroxy for the developments in the previous versions) *(1.3.0)*
 * <s>Color variants for progress bar's downloading text dependent on the background picture primary color</s> *(1.4.0)*
 * <s>Playing statistics</s> *(1.4.1)*
-* Game's update pre-installation
-* Make force launch button when the launcher's repository is unavailable
+* <s>MangoHud support</s> (added HUD selector) *(1.5.0)*
+* <s>Add vkBasalt support and "shaders library"</s> *(1.5.0)*
+  - [yagocl's](https://notabug.org/Krock/GI-on-Linux/src/master/static/vkBasalt_yagocl.conf) basic sharpening preset *(without pictures)*
+  - [notahuman's](https://notabug.org/Krock/GI-on-Linux/src/master/static/vkBasalt_notahuman.conf) prime preset v2
+* Make shaders manager hidden if vkBasalt is not installed
+* Make MangoHud option hidden if it is not installed
 * Screenshots explorer
-* MangoHud support
-* Add vkBasalt support and "shaders library" (the problem is, we don't have vkBasalt binaries, but the source code)
+* Make force launch button when the launcher's repository is unavailable *(waiting for the repository's unavailability lmao)*
+* Game's update pre-installation *(waiting for the pre-installation date to find out how it actually works)*
 * Set default wine version to download so the wine install requirement is no longer needed
 * Add Patch category in settings menu with
   - Always participate in patches testing
   - Applying anti login crash patch
   - Remove patch
+* DXVK logs auto-deletion option
 
 And don't forget to change the patch's URI when it will be changed
-
-<br>
-
-### Please, try to use "An Anime Game" phrase instead of the real game name to avoid search engines parsing
