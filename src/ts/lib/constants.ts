@@ -29,6 +29,8 @@ export class constants
         ]
     };
 
+    // TODO: dirs pathes
+
     public static readonly appDir = path.resolve(__dirname, '..', '..', '..');
     public static readonly shadersDir = path.join(this.appDir, 'public', 'shaders');
 
