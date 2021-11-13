@@ -14,7 +14,7 @@
 
 | Game version | Launcher version | Patch version |
 | :---: | :---: | :---: |
-| 2.2.0 | 1.5.2 | 2.2.0 stable ✅ |
+| 2.2.0 | 1.5.3 | 2.2.0 stable ✅ |
 
 > ⚠️ New patch's version will be delayed for a week because of some author's personal reasons
 
@@ -111,7 +111,7 @@ npm start
 * <s>Add outdated files deletion when new game's update releases</s> *(1.1.0)*
 * <s>Add installed packages deletion</s> *(1.2.0)*
 * <s>Add voice packs support</s> (Thank @Maroxy for the developments in the previous versions) *(1.3.0)*
-* <s>Color variants for progress bar's downloading text dependent on the background picture primary color</s> *(1.4.0)*
+* <s>Color variants for progress bar's downloading text dependent on the background picture primary color</s> *(1.4.0, LAB-based in 1.5.3)*
 * <s>Playing statistics</s> *(1.4.1)*
 * <s>MangoHud support</s> (added HUD selector) *(1.5.0)*
 * <s>Add vkBasalt support and "shaders library"</s> *(1.5.0)*

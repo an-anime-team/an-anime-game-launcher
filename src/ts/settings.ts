@@ -100,15 +100,6 @@ $(() => {
     });
 
     /**
-     * Automatic theme switcher
-     */
-
-    if (LauncherLib.getConfig('autotheme'))
-        $('#auto-theme').addClass('checkbox-active');
-
-    $('#auto-theme').on('classChange', () => LauncherLib.updateConfig('autotheme', $('#auto-theme').hasClass('checkbox-active')));
-
-    /**
      * Shaders
      */
 

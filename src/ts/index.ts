@@ -24,6 +24,14 @@ if (!fs.existsSync(constants.runnersDir))
 if (!fs.existsSync(constants.dxvksDir))
     fs.mkdirSync(constants.dxvksDir, { recursive: true });
 
+/**
+ * Compatibilities
+ */
+
+// 1.5.2 -> ^1.6.0 (removed auto-theme option)
+if (typeof LauncherLib.getConfig('autotheme') == 'boolean')
+    LauncherLib.deleteConfig('autotheme');
+
 $(() => {
     document.title = `${constants.placeholders.uppercase.full} Linux Launcher`;
 

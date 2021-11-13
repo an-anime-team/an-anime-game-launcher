@@ -4,6 +4,7 @@ import { constants } from './constants';
 import { LauncherLib } from './LauncherLib';
 import { i18n } from './i18n';
 import { Tools } from './Tools';
+import { Colors } from './Colors';
 
 type LauncherState =
     'patch-unavailable' |
@@ -231,7 +232,7 @@ export class LauncherUI
     public static updateBackground (): void
     {
         LauncherLib.getBackgroundUri().then(uri => {
-            let style = `url(${uri})`;
+            const style = `url(${uri})`;
 
             if ($('body').css('background-image') != style)
             {
@@ -240,28 +241,39 @@ export class LauncherUI
                 /**
                  * Calculating background's left-bottom corner mean brightness
                  * to make the progress bar's theme dark or light
-                 */
-                if (LauncherLib.getConfig('autotheme'))
-                {
-                    Tools.getImagePixels(uri).then(pixels => {
-                        let sector = pixels.filter(pixel => pixel.y < 186 && pixel.x < 720);
-                        let meanBrightness = 0;
+                */
+                Tools.getImagePixels(uri).then(pixels => {
+                    const sector = pixels.filter(pixel => pixel.y > 514 && pixel.x < 720);
 
-                        sector.forEach(pixel => meanBrightness += pixel.color.r + pixel.color.g + pixel.color.b);
+                    // For some strange reasons we can't
+                    // make an object of r-g-b properties
+                    let meanColor = [0, 0, 0];
 
-                        // TODO: convert RGB mean color to LAB to get real background brightness
-                        meanBrightness /= sector.length * 3;
-
-                        console.log(`Background's mean brightness is ${meanBrightness}`);
-
-                        // Image is dark so we make the progress bar light
-                        if (meanBrightness < 160)
-                            $('#downloader-panel').removeClass('dark');
-
-                        // Otherwise image is bright so the progress bar should be dark
-                        else $('#downloader-panel').addClass('dark');
+                    sector.forEach(pixel => {
+                        meanColor[0] += pixel.color.r;
+                        meanColor[1] += pixel.color.g;
+                        meanColor[2] += pixel.color.b;
                     });
-                }
+
+                    meanColor = meanColor.map(_ => _ / sector.length);
+
+                    const meanBrightness = Colors.rgb2brightness({
+                        r: meanColor[0],
+                        g: meanColor[1],
+                        b: meanColor[2]
+                    });
+
+                    console.log(`Mean color: rgb(${Math.round(meanColor[0])},${Math.round(meanColor[1])},${Math.round(meanColor[2])})`);
+                    console.log(`Background mean brightness is ${meanBrightness}`);
+
+                    // Image is dark so we make the progress bar light
+                    if (meanBrightness < 50)
+                        $('#downloader-panel').removeClass('dark');
+
+                    // Otherwise image is bright so the progress bar should be dark
+                    else if (!$('#downloader-panel').hasClass('dark'))
+                        $('#downloader-panel').addClass('dark');
+                });
             }
         });
     }
