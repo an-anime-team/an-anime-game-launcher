@@ -1,9 +1,9 @@
 const path = require('path');
 const fs = require('fs');
 
-import { constants } from './constants';
+import constants from './constants';
 
-export class i18n
+export default class i18n
 {
     public static readonly localesDir = path.join(path.dirname(__dirname), '..', 'locales');
 

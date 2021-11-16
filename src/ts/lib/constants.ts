@@ -1,7 +1,7 @@
 const path = require('path');
 const os = require('os');
 
-export class constants
+export default class constants
 {
     public static readonly placeholders = {
         uppercase:

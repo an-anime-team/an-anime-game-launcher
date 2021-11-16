@@ -14,7 +14,7 @@
 
 | Game version | Launcher version | Patch version |
 | :---: | :---: | :---: |
-| 2.2.0 | 1.5.3 | 2.2.0 stable ✅ |
+| 2.2.0 | 1.5.4 | 2.2.0 stable ✅ |
 
 > ⚠️ New patch's version will be delayed for a week because of some author's personal reasons
 
@@ -117,8 +117,8 @@ npm start
 * <s>Add vkBasalt support and "shaders library"</s> *(1.5.0)*
   - [yagocl's](https://notabug.org/Krock/GI-on-Linux/src/master/static/vkBasalt_yagocl.conf) basic sharpening preset *(without pictures)*
   - [notahuman's](https://notabug.org/Krock/GI-on-Linux/src/master/static/vkBasalt_notahuman.conf) prime preset v2
-* Make shaders manager hidden if vkBasalt is not installed
-* Make MangoHud option hidden if it is not installed
+* <s>Make shaders manager hidden if vkBasalt is not installed</s> *(1.5.4)*
+* <s>Make MangoHud option hidden if it is not installed</s> *(1.5.4)*
 * Screenshots explorer
 * Make force launch button when the launcher's repository is unavailable *(waiting for the repository's unavailability lmao)*
 * Game's update pre-installation *(waiting for the pre-installation date to find out how it actually works)*

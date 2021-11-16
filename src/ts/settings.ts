@@ -3,12 +3,14 @@ const path = require('path');
 const { ipcRenderer } = require('electron');
 const { exec } = require('child_process');
 
+const commandExists = require('command-exists').sync;
+
 import $ from 'cash-dom';
 
-import { constants } from './lib/constants';
-import { LauncherLib } from './lib/LauncherLib';
-import { LauncherUI } from './lib/LauncherUI';
-import { Tools } from './lib/Tools';
+import constants from './lib/constants';
+import LauncherLib from './lib/LauncherLib';
+import LauncherUI from './lib/LauncherUI';
+import Tools from './lib/Tools';
 
 $(() => {
     // Make sure settings is shown in correct language.
@@ -84,7 +86,13 @@ $(() => {
         LauncherLib.updateConfig('hud', data.value);
     });
 
-    $('#hud li[value=mangohud]').attr('data-hint', LauncherUI.i18n.translate('PreInstallationRequired'));
+    if (!commandExists('mangohud'))
+    {
+        $('#hud li[value=mangohud]')
+            .attr('disabled', '')
+            .addClass('hint--top hint--small')
+            .attr('data-hint', LauncherUI.i18n.translate('PreInstallationRequired'));
+    }
 
     /**
      * Discord RPC
@@ -103,11 +111,26 @@ $(() => {
      * Shaders
      */
 
+    let reshadeAvailable = fs.existsSync('/usr/share/reshade');
+
+    if (!reshadeAvailable)
+        process.env.PATH?.split(':').forEach(path => reshadeAvailable |= fs.existsSync(`${path}/reshade`));
+
+    if (!reshadeAvailable)
+        $(`<p>⚠️ ${LauncherUI.i18n.translate('ReshadeNotInstalled')}</p>`).appendTo('#shaders');
+
     fs.readdirSync(constants.shadersDir).forEach((folder: string) => {
         const shaders: any = JSON.parse(fs.readFileSync(path.join(constants.shadersDir, folder, 'shaders.json')));
 
-        $(`<li value="${folder}">${shaders.name}</li>`).appendTo('#shaders-list ul');
+        // Selectable item
+        let li = $(`<li value="${folder}">${shaders.name}</li>`).appendTo('#shaders-list ul');
 
+        if (!reshadeAvailable)
+            li.attr('disabled', '')
+              .addClass('hint--top hint--small')
+              .attr('data-hint', LauncherUI.i18n.translate('PreInstallationRequired'));
+
+        // Shaders description
         $(`<h3>${shaders.name}</h3>`).appendTo('#shaders');
 
         $(`<p>${LauncherUI.i18n.translate('Author')}: ${shaders.author}</p>`).appendTo('#shaders');
@@ -202,12 +225,11 @@ $(() => {
      * Statistics
      */
 
-    $('#play-hours').text((LauncherLib.getConfig('playtime') / 3600).toFixed(1).toString());
+    const playedHours = Math.floor(LauncherLib.getConfig('playtime') / 3600);
+    const playedMinutes = Math.floor((LauncherLib.getConfig('playtime') - playedHours * 3600) / 60);
 
-    // Update this once per two minute
-    setInterval(() => {
-        $('#play-hours').text((LauncherLib.getConfig('playtime') / 3600).toFixed(1).toString());
-    }, 120 * 1000);
+    $('#play-hours').text(playedHours.toString());
+    $('#play-minutes').text(playedMinutes.toString());
 
     /**
      * Wine versions manager

@@ -19,7 +19,7 @@ export type LAB = {
 /**
  * Based on https://stackoverflow.com/a/59602352
  */
-export class Colors
+export default class Colors
 {
     // X, Y, Z of a "D65" light source.
     // "D65" is a standard 6500K Daylight light source.

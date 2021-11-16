@@ -7,11 +7,11 @@ const semver = require('semver');
 
 import $ from 'cash-dom';
 
-import { constants } from './lib/constants';
-import { LauncherLib } from './lib/LauncherLib';
-import { LauncherUI } from './lib/LauncherUI';
-import { Tools } from './lib/Tools';
-import { DiscordRPC } from './lib/DiscordRPC';
+import constants from './lib/constants';
+import LauncherLib from './lib/LauncherLib';
+import LauncherUI from './lib/LauncherUI';
+import Tools from './lib/Tools';
+import DiscordRPC from './lib/DiscordRPC';
 
 const launcher_version = require('../../package.json').version;
 

@@ -1,6 +1,6 @@
 import GIJSON from '../types/GIJSON';
-import { constants } from './constants';
-import { Tools } from './Tools';
+import constants from './constants';
+import Tools from './Tools';
 
 const fs = require('fs');
 const path = require('path');
@@ -63,7 +63,7 @@ type DXVK = {
     uri: string
 };
 
-export class LauncherLib
+export default class LauncherLib
 {
     public static get version(): string|null
     {
@@ -78,7 +78,7 @@ export class LauncherLib
                 .then(runners => resolve(runners));
         });*/
 
-        return new Promise(resolve => fs.readFile(path.join(path.dirname(__dirname), '..', 'runners.json'), (err: any, data: string) => resolve(JSON.parse(data))));
+        return new Promise(resolve => fs.readFile(path.join(constants.appDir, 'public', 'runners.json'), (err: any, data: string) => resolve(JSON.parse(data))));
     }
 
     public static getDXVKs (): Promise<DXVK[]>
@@ -89,7 +89,7 @@ export class LauncherLib
                 .then(dxvks => resolve(dxvks));
         });*/
 
-        return new Promise(resolve => fs.readFile(path.join(path.dirname(__dirname), '..', 'dxvks.json'), (err: any, data: string) => resolve(JSON.parse(data))));
+        return new Promise(resolve => fs.readFile(path.join(constants.appDir, 'public', 'dxvks.json'), (err: any, data: string) => resolve(JSON.parse(data))));
     }
 
     public static getConfig (property: string|null = null): any
@@ -273,8 +273,8 @@ export class LauncherLib
     public static patchGame (onFinish: () => void, onData: (data: string) => void)
     {
         this.getPatchInfo().then(pathInfo => {
-            Tools.downloadFile(constants.patchUri, path.join(constants.launcherDir, 'patch.zip'), (current: number, total: number, difference: number) => null).then(() => {
-                Tools.unzip(path.join(constants.launcherDir, 'patch.zip'), constants.launcherDir, (current: number, total: number, difference: number) => null).then(() => {
+            Tools.downloadFile(constants.patchUri, path.join(constants.launcherDir, 'patch.zip')).then(() => {
+                Tools.unzip(path.join(constants.launcherDir, 'patch.zip'), constants.launcherDir).then(() => {
                     // Delete zip file and assign patch directory.
                     fs.unlinkSync(path.join(constants.launcherDir, 'patch.zip'));
 
@@ -299,7 +299,7 @@ export class LauncherLib
 
                     patcherProcess.on('close', () => {
                         // Make sure that launcher.bat exists if not run patch.sh again.
-                        if (!path.join(constants.gameDir, 'launcher.bat'))
+                        if (!fs.existsSync(path.join(constants.gameDir, 'launcher.bat')))
                             exec(`yes yes | ${path.join(patchDir, 'patch.sh')}`, {
                                 cwd: constants.gameDir,
                                 env: {

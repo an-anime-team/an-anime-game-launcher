@@ -22,7 +22,7 @@ type Pixel = {
     }
 };
 
-export class Tools
+export default class Tools
 {
     public static getImagePixels (path: string): Promise<Pixel[]>
     {
@@ -97,7 +97,7 @@ export class Tools
         });
     }
 
-    public static async downloadFile (uri: string, savePath: string, progress: (current: number, total: number, difference: number) => void): Promise<void|Error>
+    public static async downloadFile (uri: string, savePath: string, progress: null|((current: number, total: number, difference: number) => void) = null): Promise<void|Error>
     {
         return new Promise((resolve, reject) => {
             https.get(uri, (response: any) => {
@@ -107,7 +107,8 @@ export class Tools
                 response.on('data', (chunk: any) => {
                     total += chunk.length;
 
-                    progress(total, length, chunk.length);
+                    if (progress !== null)
+                        progress(total, length, chunk.length);
 
                     fs.appendFileSync(savePath, chunk);
                 });
@@ -117,7 +118,7 @@ export class Tools
         });
     }
 
-    public static async unzip (zipPath: string, unpackedPath: string, progress: (current: number, total: number, difference: number) => void): Promise<void|Error>
+    public static async unzip (zipPath: string, unpackedPath: string, progress: null|((current: number, total: number, difference: number) => void) = null): Promise<void|Error>
     {
         return new Promise((resolve, reject) => {
             let listenerProcess = spawn('unzip', ['-v', zipPath]),
@@ -158,7 +159,8 @@ export class Tools
                                 {
                                     current += file.compressedSize;
 
-                                    progress(current, total, file.compressedSize);
+                                    if (progress !== null)
+                                        progress(current, total, file.compressedSize);
                                 }
                             });
                         }
@@ -170,7 +172,7 @@ export class Tools
         });
     }
 
-    public static async untar (tarPath: string, unpackedPath: string, progress: (current: number, total: number, difference: number) => void): Promise<void|Error>
+    public static async untar (tarPath: string, unpackedPath: string, progress: null|((current: number, total: number, difference: number) => void) = null): Promise<void|Error>
     {
         return new Promise((resolve, reject) => {
             let listenerProcess = spawn('tar', ['-tvf', tarPath]),
@@ -210,7 +212,8 @@ export class Tools
                             {
                                 current += file.uncompressedSize; // compressedSize
 
-                                progress(current, total, file.uncompressedSize); // compressedSize
+                                if (progress !== null)
+                                    progress(current, total, file.uncompressedSize); // compressedSize
                             }
                         });
                     });

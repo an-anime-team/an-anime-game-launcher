@@ -246,9 +246,14 @@ $secondary: #e1e7ff
                 border-radius: 8px
                 padding: 8px 12px
 
-                &:hover
+                &:hover:not([disabled])
                     background-color: $light2
                     color: $primary
+
+                &[disabled]
+                    display: block
+                    color: #b2c0d3
+                    cursor: default
 
             li:not(last-child)
                 margin-bottom: 4px

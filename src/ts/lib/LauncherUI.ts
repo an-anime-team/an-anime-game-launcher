@@ -1,10 +1,10 @@
 import $ from 'cash-dom';
 
-import { constants } from './constants';
-import { LauncherLib } from './LauncherLib';
-import { i18n } from './i18n';
-import { Tools } from './Tools';
-import { Colors } from './Colors';
+import constants from './constants';
+import LauncherLib from './LauncherLib';
+import i18n from './i18n';
+import Tools from './Tools';
+import Colors from './Colors';
 
 type LauncherState =
     'patch-unavailable' |
@@ -15,7 +15,7 @@ type LauncherState =
     'game-voice-update-required' |
     'game-launch-available';
 
-export class LauncherUI
+export default class LauncherUI
 {
     protected static _launcherState: LauncherState = 'game-launch-available';
     protected static _i18n: any;

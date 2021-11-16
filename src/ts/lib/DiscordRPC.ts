@@ -1,6 +1,6 @@
 import discordRpc, { Client, Presence } from 'discord-rpc';
 
-export class DiscordRPC
+export default class DiscordRPC
 {
     protected static readonly clientId = '901534333360304168';
 

@@ -2,8 +2,8 @@ const { ipcRenderer } = require('electron');
 
 import $ from 'cash-dom';
 
-import { LauncherLib } from './lib/LauncherLib';
-import { LauncherUI } from './lib/LauncherUI';
+import LauncherLib from './lib/LauncherLib';
+import LauncherUI from './lib/LauncherUI';
 
 $(() => {
     LauncherUI.updateLang(LauncherLib.getConfig('lang.launcher'));

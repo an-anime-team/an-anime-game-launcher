@@ -36,7 +36,7 @@ $(() => {
         {
             li = item = $(li[0]);
 
-            if (!item.hasClass('selected'))
+            if (!item.hasClass('selected') && !item.is('[disabled]'))
             {
                 while (!item.hasClass('select'))
                     item = item.parent();
