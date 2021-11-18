@@ -38,6 +38,8 @@ This launcher also available as the [an-anime-game-launcher](https://aur.archlin
 
 <img src="repository-pics/statistics.png">
 
+> You can suggest colors for your countries
+
 <br>
 
 # Requirements
