@@ -8,8 +8,10 @@ public/css/*
 public/js
 
 repository-pics/logo.xcf
+repository-pics/logos
 
 package-lock.json
 yarn.lock
 wineprefix-installation.log
 deletefiles.txt
+predownload_resources.json

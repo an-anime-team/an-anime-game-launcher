@@ -3,6 +3,42 @@
         "title": "Lutris",
         "runners": [
             {
+                "name": "Lutris 6.21-4",
+                "version": "6.21-4",
+                "uri": "https://github.com/lutris/wine/releases/download/lutris-6.21-4/wine-lutris-6.21-4-x86_64.tar.xz",
+                "archive": "tar",
+                "folder": "lutris-6.21-4-x86_64",
+                "makeFolder": false,
+                "executable": "bin/wine64"
+            },
+            {
+                "name": "Lutris 6.21-3",
+                "version": "6.21-3",
+                "uri": "https://github.com/lutris/wine/releases/download/lutris-6.21-3/wine-lutris-6.21-3-x86_64.tar.xz",
+                "archive": "tar",
+                "folder": "lutris-6.21-3-x86_64",
+                "makeFolder": false,
+                "executable": "bin/wine64"
+            },
+            {
+                "name": "Lutris 6.21-2",
+                "version": "6.21-2",
+                "uri": "https://github.com/lutris/wine/releases/download/lutris-6.21-2/wine-lutris-6.21-2-x86_64.tar.xz",
+                "archive": "tar",
+                "folder": "lutris-6.21-2-x86_64",
+                "makeFolder": false,
+                "executable": "bin/wine64"
+            },
+            {
+                "name": "Lutris 6.21",
+                "version": "6.21",
+                "uri": "https://github.com/lutris/wine/releases/download/lutris-6.21/wine-lutris-6.21-x86_64.tar.xz",
+                "archive": "tar",
+                "folder": "lutris-6.21-x86_64",
+                "makeFolder": false,
+                "executable": "bin/wine64"
+            },
+            {
                 "name": "Lutris 6.14-4",
                 "version": "6.14-4",
                 "uri": "https://github.com/lutris/wine/releases/download/lutris-6.14-4/wine-lutris-6.14-4-x86_64.tar.xz",
@@ -70,6 +106,15 @@
     {
         "title": "Proton-GE",
         "runners": [
+            {
+                "name": "Proton-6.21-GE-2",
+                "version": "6.21-GE-2",
+                "uri": "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/6.21-GE-2/Proton-6.21-GE-2.tar.gz",
+                "archive": "tar",
+                "folder": "Proton-6.21-GE-2",
+                "makeFolder": false,
+                "executable": "files/bin/wine64"
+            },
             {
                 "name": "Proton-6.20-GE-1",
                 "version": "6.20-GE-1",

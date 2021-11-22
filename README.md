@@ -18,6 +18,8 @@
 
 > ⚠️ New patch's version will be delayed for a week because of some author's personal reasons
 
+We have our own [An Anime Game](https://discord.gg/MA8fTBarfj) discord server where you can ask any questions
+
 ### AppImage
 
 Download AppImage from [Releases](https://notabug.org/nobody/an-anime-game-launcher/releases) page
@@ -29,8 +31,6 @@ This launcher also available as the [an-anime-game-launcher](https://aur.archlin
 <br>
 
 ### ⚠️ Please, be careful with 2.3.0 game's release. It may suddenly break game's patch state
-
-### ⚠️ Also patch's repository will be changed and you will HAVE to update launcher to the newest version
 
 <br>
 
@@ -130,5 +130,12 @@ npm start
   - Applying anti login crash patch
   - Remove patch
 * DXVK logs auto-deletion option
+* Game update pre-downloading
 
 And don't forget to change the patch's URI when it will be changed
+
+> Now I'm working on moving the project to the Tauri. Also for some personal reasons I, like the patch's author, will be busy, but until Christmas, so it's a bit more than a month. I will make some critical updates if they will be required, but the development will be frozen for this period. I hope you will enjoy playing the game, and I will enjoy continuing the development of this project
+>
+> And, by the way, @Maroxy helped me to create the discord server for this project. I will sometimes appear there and you will be able to ask me about something if you want, ehe
+> 
+> November 22
