@@ -14,7 +14,7 @@
 
 | Game version | Launcher version | Patch version |
 | :---: | :---: | :---: |
-| 2.2.0 | 1.5.4 | 2.2.0 stable ✅ |
+| 2.3.0 | 1.5.5 | 2.2.0 stable ❌ |
 
 > ⚠️ New patch's version will be delayed for a week because of some author's personal reasons
 
@@ -30,13 +30,11 @@ This launcher also available as the [an-anime-game-launcher](https://aur.archlin
 
 <br>
 
-### ⚠️ Please, be careful with 2.3.0 game's release. It may suddenly break game's patch state
-
-<br>
-
 ## Usage statistics
 
-<img src="repository-pics/statistics.png">
+### 2.2.0
+
+<img src="repository-pics/stats/2.2.0.png">
 
 > You can suggest colors for your countries
 
@@ -121,16 +119,16 @@ npm start
   - [notahuman's](https://notabug.org/Krock/GI-on-Linux/src/master/static/vkBasalt_notahuman.conf) prime preset v2
 * <s>Make shaders manager hidden if vkBasalt is not installed</s> *(1.5.4)*
 * <s>Make MangoHud option hidden if it is not installed</s> *(1.5.4)*
+* DXVK logs auto-deletion option
+* Wine prefix folder selection
+* Game's update pre-installation
 * Screenshots explorer
 * Make force launch button when the launcher's repository is unavailable *(waiting for the repository's unavailability lmao)*
-* Game's update pre-installation *(waiting for the pre-installation date to find out how it actually works)*
 * Set default wine version to download so the wine install requirement is no longer needed
 * Add Patch category in settings menu with
   - Always participate in patches testing
   - Applying anti login crash patch
   - Remove patch
-* DXVK logs auto-deletion option
-* Game update pre-downloading
 
 And don't forget to change the patch's URI when it will be changed
 
