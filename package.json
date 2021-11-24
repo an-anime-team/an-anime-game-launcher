@@ -1,6 +1,6 @@
 {
     "name": "an-anime-game-launcher",
-    "version": "1.5.5",
+    "version": "1.5.6",
     "description": "An Anime Game Linux Launcher",
     "author": "Nikita Podvirnyy <suimin.tu.mu.ga.mi@gmail.com>",
     "contributors": [
@@ -55,6 +55,7 @@
         "electron-store": "^8.0.1",
         "follow-redirects": "^1.14.5",
         "get-pixels": "^3.3.3",
+        "got": "^11.8.3",
         "semver": "^7.3.5"
     }
 }

@@ -10,23 +10,11 @@
 
 <br><br>
 
-# About 2.3.0 update
-
-1. To update background image, change the launcher language to some another, return it back **and restart the launcher to refresh the launch button's state**
-2. After you press the update button, everything will be ok before launcher will not stop at the end of the process. You should close the launcher, go to the `~/local/share/an-anime-game` folder and change the `version` field in the `config.json` file to the `2.3.0`
-3. After that you can launch the launcher
-4. You will receive analytics window. Please, participate)
-5. **DON'T PRESS THE "TEST PATCH" BUTTON**. That's a error and I don't want to know what will happen if you will press it. Just wait before I will make a hot fixes of all these issues
-
-More datailed info you can find in our discord server. Fixes will be uploaded today, so you can just wait before I will make a `1.5.6` launcher version
-
 # Status
 
 | Game version | Launcher version | Patch version |
 | :---: | :---: | :---: |
-| 2.3.0 | 1.5.5 | 2.2.0 stable ❌ |
-
-> ⚠️ New patch's version will be delayed for a week because of some author's personal reasons
+| 2.3.0 | 1.5.6 | 2.3.0 testing ⚠️ |
 
 We have our own [An Anime Game](https://discord.gg/MA8fTBarfj) discord server where you can ask any questions
 
@@ -45,6 +33,10 @@ This launcher also available as the [an-anime-game-launcher](https://aur.archlin
 ### 2.2.0
 
 <img src="repository-pics/stats/2.2.0.png">
+
+### 2.3.0
+
+<img src="repository-pics/stats/2.3.0.png">
 
 > You can suggest colors for your countries
 
@@ -139,8 +131,8 @@ npm start
   - Always participate in patches testing
   - Applying anti login crash patch
   - Remove patch
-
-And don't forget to change the patch's URI when it will be changed
+* GameMode integration (#28)
+* Hybrid GPU integration (#29)
 
 > Now I'm working on moving the project to the Tauri. Also for some personal reasons I, like the patch's author, will be busy, but until Christmas, so it's a bit more than a month. I will make some critical updates if they will be required, but the development will be frozen for this period. I hope you will enjoy playing the game, and I will enjoy continuing the development of this project
 >

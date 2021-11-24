@@ -382,11 +382,12 @@ $(() => {
                                 // If this update has excess files we should delete them
                                 if (fs.existsSync(path.join(constants.gameDir, 'deletefiles.txt')))
                                 {
-                                    let deleteFiles = fs.readFileSync(path.join(constants.gameDir, 'deletefiles.txt'));
+                                    let deleteFiles = fs.readFileSync(path.join(constants.gameDir, 'deletefiles.txt'), { encoding: 'utf-8' });
 
-                                    deleteFiles.split(/\r\n|\r|\n/).forEach((file: string) => {
-                                        fs.unlinkSync(path.join(constants.gameDir, file.trim()));
-                                    });
+                                    if (deleteFiles != '')
+                                        deleteFiles.split(/\r\n|\r|\n/).forEach((file: string) => {
+                                            fs.unlinkSync(path.join(constants.gameDir, file.trim()));
+                                        });
                                 }
 
                                 LauncherLib.updateConfig('version', data.game.latest.version);

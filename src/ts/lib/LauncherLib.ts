@@ -9,6 +9,7 @@ const { spawn, exec } = require('child_process');
 
 const store = require('electron-store');
 const https = require('follow-redirects').https;
+const got = require('got');
 
 const config = new store ({
     cwd: path.join(os.homedir(), '.local', 'share', 'anime-game-launcher'),
@@ -163,29 +164,37 @@ export default class LauncherLib
         return background;
     }
 
-    public static async getPatchInfo (): Promise<{ version: string, state: 'stable' | 'testing' }>
+    public static async getPatchInfo (): Promise<{ version: string, state: 'testing' | 'stable' }>
     {
         return new Promise(resolve => {
-            this.getData().then(data => {
+            this.getData().then(async (data) => {
                 let gameLatest: string = data.game.latest.version;
 
-                fetch(`${constants.uri.patch}/raw/master/${gameLatest.replaceAll('.', '')}/patch.sh`)
-                    .then(response => response.text())
-                    .then((patch: string) => {
-                        // patch.sh exists so patch in testing, stable or it's just a preparation
-                        fetch(`${constants.uri.patch}/raw/master/${gameLatest.replaceAll('.', '')}/patch_files/unityplayer_patch.vcdiff`)
-                            .then(response => response.text())
-                            .then((unityPatch: string) => {
-                                // unityplayer_patch exists so it's testing or stable
+                got(`${constants.uri.patch}/raw/master/${gameLatest.replaceAll('.', '')}/patch.sh`)
+                    .then((patch: any) => {
+                        /**
+                         * [game version]/patch.sh file exists
+                         * so it's testing or stable version
+                         */
+                        got(`${constants.uri.patch}/raw/master/${gameLatest.replaceAll('.', '')}/patch_files/unityplayer_patch.vcdiff`)
+                            .then(() => {
+                                /**
+                                 * [game version]/patch_files/unityplayer_patch
+                                 * exists so it's testing or stable
+                                 */
                                 resolve({
                                     version: gameLatest,
-                                    state: patch.includes('#echo "If you would like to test this patch, modify this script and remove the line below this one."') ?
+                                    state: patch.body.includes('#echo "If you would like to test this patch, modify this script and remove the line below this one."') ?
                                         'stable' : 'testing'
                                 });
                             })
                             .catch(() => {
-                                // unityplayer_patch doesn't exist so it's just a preparation
-                                // TODO: add preparation state
+                                /**
+                                 * [game version]/patch_files/unityplayer_patch
+                                 * doesn't exist so it's just a preparation
+                                 * 
+                                 * TODO: add preparation state
+                                 */
                                 resolve({
                                     version: data.game.diffs[0].version,
                                     state: 'stable'
@@ -193,7 +202,9 @@ export default class LauncherLib
                             });
                     })
                     .catch(() => {
-                        // patch.sh doesn't exist so patch is not available
+                        /**
+                         * Otherwise it's definitely preparation
+                         */
                         resolve({
                             version: data.game.diffs[0].version,
                             state: 'stable'
@@ -278,7 +289,7 @@ export default class LauncherLib
                     // Delete zip file and assign patch directory.
                     fs.unlinkSync(path.join(constants.launcherDir, 'patch.zip'));
 
-                    const patchDir = path.join(constants.launcherDir, 'gi-on-linux', pathInfo.version.replaceAll('.', ''));
+                    const patchDir = path.join(constants.launcherDir, 'dawn', pathInfo.version.replaceAll('.', ''));
 
                     // Patch out the testing phase content from the shell files if active and make sure the shell files are executable.
                     exec(`cd ${patchDir} && sed -i '/^echo "If you would like to test this patch, modify this script and remove the line below this one."/,+5d' patch.sh`);
@@ -323,7 +334,7 @@ export default class LauncherLib
                             this.updateConfig('patch.version', pathInfo.version);
                             this.updateConfig('patch.state', pathInfo.state);
 
-                            fs.rmSync(path.join(constants.launcherDir, 'gi-on-linux'), { recursive: true });
+                            fs.rmSync(path.join(constants.launcherDir, 'dawn'), { recursive: true });
 
                             onFinish();
                         });

@@ -21,13 +21,20 @@ export default class constants
 
     public static readonly uri = {
         api: `https://sdk-os-static.${this.placeholders.lowercase.company}.com/hk4e_global/mdk/launcher/api`,
-        patch: 'https://notabug.org/Krock/GI-on-Linux',
+        patch: 'https://notabug.org/Krock/dawn',
         launcher: 'https://notabug.org/nobody/an-anime-game-launcher',
         telemetry: [
             `log-upload-os.${this.placeholders.lowercase.company}.com`,
             'overseauspider.yuanshen.com'
         ]
     };
+
+    // TODO: cache drops at that dates instead of the 7 days period
+    /*public static readonly cacheDropDates = [
+        new Date('November 24, 2021').getTime(), // 2.3.0 half 1 release
+        new Date('December 15, 2021').getTime(), // 2.3.0 half 2 release
+        new Date('January 5, 2022').getTime() // 2.4.0 half 1 release
+    ];*/
 
     // TODO: dirs pathes
 

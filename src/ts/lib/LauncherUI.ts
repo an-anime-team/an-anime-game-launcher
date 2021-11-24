@@ -102,8 +102,8 @@ export default class LauncherUI
 
     public static async updateLauncherState(data: any = null)
     {
-        let gameData  = data ?? await LauncherLib.getData();
-        let patchInfo = await LauncherLib.getPatchInfo();
+        const gameData  = data ?? await LauncherLib.getData();
+        const patchInfo = await LauncherLib.getPatchInfo();
 
         // Update available
         if (LauncherLib.version != gameData.game.latest.version)
