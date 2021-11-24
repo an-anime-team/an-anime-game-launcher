@@ -14,7 +14,7 @@
 
 | Game version | Launcher version | Patch version |
 | :---: | :---: | :---: |
-| 2.3.0 | 1.5.6 | 2.3.0 testing ⚠️ |
+| 2.3.0 | 1.5.7 | 2.3.0 testing ⚠️ |
 
 We have our own [An Anime Game](https://discord.gg/MA8fTBarfj) discord server where you can ask any questions
 
@@ -122,6 +122,7 @@ npm start
 * <s>Make shaders manager hidden if vkBasalt is not installed</s> *(1.5.4)*
 * <s>Make MangoHud option hidden if it is not installed</s> *(1.5.4)*
 * DXVK logs auto-deletion option
+* Fix button flickering at start when the launcher's state updates
 * Wine prefix folder selection
 * Game's update pre-installation
 * Screenshots explorer

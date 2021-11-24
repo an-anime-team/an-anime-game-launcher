@@ -114,7 +114,8 @@ export default class LauncherUI
             this.setState('game-voice-update-required');
 
         // Patch version is incorrect
-        else if (LauncherLib.getConfig('patch') && LauncherLib.getConfig('patch.version') != patchInfo.version)
+        // or it's even not installed
+        else if ((LauncherLib.getConfig('patch') && LauncherLib.getConfig('patch.version') != patchInfo.version) || LauncherLib.getConfig('patch') === null)
         {
             // Patch is not available
             if (patchInfo.version !== gameData.game.latest.version)
