@@ -10,6 +10,7 @@
     "ToggleShadersText": "Gunakan tombol Home untuk menyalakan/mematikan shader di dalam Game",
     "Shaders": "Shader",
     "ReshadeNotInstalled": "Kamu belum memasang vkBasalt dan library reshade-shaders",
+    "GameModeNotInstalled": "You don't have GameMode installed",
     "Author": "Pembuat",
     "NoImages": "Tidak ada gambar ditambahkan",
     "SettingsTitle": "Pengaturan",

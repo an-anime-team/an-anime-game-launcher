@@ -108,6 +108,25 @@ $(() => {
     });
 
     /**
+     * GameMode
+     */
+
+    let gameModeAvailable = 0;
+    process.env.PATH?.split(':').forEach(path => gameModeAvailable |= fs.existsSync(`${path}/gamemoderun`));
+
+    if(!gameModeAvailable)
+        $(`<p>⚠️ ${LauncherUI.i18n.translate('GameModeNotInstalled')}</p>`).insertAfter('#gamemode');
+
+    if (LauncherLib.getConfig("gamemode"))
+        $("#gamemode").addClass("checkbox-active");
+
+    $("#gamemode").on("classChange", () => {
+        LauncherLib.updateConfig("gamemode",$("#gamemode").hasClass("checkbox-active"));
+
+        ipcRenderer.send("rpc-toggle");
+    });
+
+    /**
      * Shaders
      */
 

@@ -32,6 +32,7 @@ const config = new store ({
         playtime: 0, // Number of seconds user spent in game
         hud: 'none', // none / dxvk / mangohud
         shaders: 'none', // none / shader's folder
+        gamemode: false,
 
         // Version of the game we asked about analytics last time,
         // or null if user said don't ask him again

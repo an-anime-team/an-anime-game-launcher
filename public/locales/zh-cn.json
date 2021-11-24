@@ -10,6 +10,7 @@
     "ToggleShadersText": "Use Home button to toggle shaders in the game",
     "Shaders": "Shaders",
     "ReshadeNotInstalled": "You haven't installed vkBasalt and reshade-shaders library",
+    "GameModeNotInstalled": "You don't have GameMode installed",
     "Author": "Author",
     "NoImages": "No images added",
     "SettingsTitle": "设置",

@@ -10,6 +10,7 @@
     "ToggleShadersText": "Verwenden Sie die Home-Taste (POS 1), um Shader im Spiel ein/aus-zuschalten",
     "Shaders": "Shadern",
     "ReshadeNotInstalled": "Sie haben vkBasalt und Reshade-Shader nicht installiert",
+    "GameModeNotInstalled": "Sie haben GameMode nicht installiert",
     "Author": "Autor",
     "NoImages": "Bilder sind nicht verfügbar",
     "SettingsTitle": "Einstellungen",
