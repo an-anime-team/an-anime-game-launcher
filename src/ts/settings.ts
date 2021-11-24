@@ -122,8 +122,6 @@ $(() => {
 
     $("#gamemode").on("classChange", () => {
         LauncherLib.updateConfig("gamemode",$("#gamemode").hasClass("checkbox-active"));
-
-        ipcRenderer.send("rpc-toggle");
     });
 
     /**
