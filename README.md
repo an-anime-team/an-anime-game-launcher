@@ -10,6 +10,16 @@
 
 <br><br>
 
+# About 2.3.0 update
+
+1. To update background image, change the launcher language to some another, return it back **and restart to refresh the launch button's state**
+2. After you press the update button, everything will be ok before launcher will not stop at the end of the process. You should close the launcher, go to the `~/local/share/an-anime-game` folder and change the version field in the `config.json` file to the `2.3.0`
+3. After that you can launch the launcher
+4. You will receive analytics window. Please, participate)
+5. **DON'T PRESS THE "TEST PATCH" BUTTON**. That's a error and I don't want to know what will happen if you will press it. Just wait before I will make a hot fixes of all these issues
+
+More datailed info you can find in our discord server. Fixes will be uploaded today, so you can just wait before I will make a `1.5.6` launcher version
+
 # Status
 
 | Game version | Launcher version | Patch version |
