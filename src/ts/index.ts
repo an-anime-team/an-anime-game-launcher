@@ -238,8 +238,14 @@ $(() => {
 
                         if (LauncherLib.getConfig('autodelete_dxvk_logs'))
                         {
+                            const removeExts = [
+                                '.log',
+                                '.dxvk-cache',
+                                '.dmp'
+                            ];
+
                             fs.readdirSync(constants.gameDir).forEach((file: string) => {
-                                if (path.extname(file) == '.log')
+                                if (removeExts.includes(path.extname(file)))
                                 {
                                     fs.unlinkSync(path.join(constants.gameDir, file));
 

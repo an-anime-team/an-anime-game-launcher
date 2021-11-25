@@ -24,7 +24,7 @@ Download AppImage from [Releases](https://notabug.org/nobody/an-anime-game-launc
 
 ### For arch users
 
-This launcher also available as the [an-anime-game-launcher](https://aur.archlinux.org/packages/an-anime-game-launcher) AUR repository
+This launcher is also available as the [an-anime-game-launcher](https://aur.archlinux.org/packages/an-anime-game-launcher) AUR repository
 
 <br>
 
