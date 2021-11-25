@@ -33,6 +33,7 @@ const config = new store ({
         hud: 'none', // none / dxvk / mangohud
         shaders: 'none', // none / shader's folder
         gamemode: false,
+        gpu: 'default',
 
         // Version of the game we asked about analytics last time,
         // or null if user said don't ask him again

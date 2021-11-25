@@ -12,6 +12,8 @@ import LauncherLib from './lib/LauncherLib';
 import LauncherUI from './lib/LauncherUI';
 import Tools from './lib/Tools';
 
+import SwitcherooControl from './lib/SwitcherooControl';
+
 $(() => {
     // Make sure settings is shown in correct language.
     LauncherUI.updateLang(LauncherLib.getConfig('lang.launcher') ?? 'en-us');
@@ -129,6 +131,25 @@ $(() => {
     $('#gamemode').on('classChange', () => {
         LauncherLib.updateConfig('gamemode', $('#gamemode').hasClass('checkbox-active'));
     });
+
+    SwitcherooControl.waitReady().then(async () => {
+        const gpus = await SwitcherooControl.getGpus()
+        if (gpus) {
+            console.log(gpus);
+            for (const gpu of gpus.value) {
+                $(`<li value="${gpu.Name.value}">${gpu.Name.value}</li>`).appendTo("#gpu .select-options ul");
+            }
+        }
+    }, () => {
+        console.log("switcheroo-control not running");
+        $("#gpu .selected-item")
+          .addClass("hint--top hint--medium")
+          .attr("data-hint", LauncherUI.i18n.translate("SwitcherooNotInstalled"));
+    });
+
+    $('#gpu').on('selectionChanged', (e, data: any) => {
+        LauncherLib.updateConfig('gpu', data.value);
+    })
 
     /**
      * Shaders

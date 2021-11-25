@@ -11,6 +11,7 @@
     "Shaders": "シェーダ",
     "ReshadeNotInstalled": "vkBasaltとreshade-shadersライブラリをインストールしていません",
     "GameModeNotInstalled": "GameModeドがインストールされていません",
+    "SwitcherooNotInstalled": "You don't have switcheroo-control installed",
     "Author": "著者",
     "NoImages": "画像は追加されていません",
     "SettingsTitle": "設定",

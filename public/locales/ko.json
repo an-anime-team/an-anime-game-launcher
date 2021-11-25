@@ -11,6 +11,7 @@
     "Shaders": "쉐이더",
     "ReshadeNotInstalled": "vkBasalt 및 reshade-shaders 라이브러리를 설치하지 않았습니다",
     "GameModeNotInstalled": "GameMode 가 설치되어 있지 않습니다",
+    "SwitcherooNotInstalled": "You don't have switcheroo-control installed",
     "Author": "저자",
     "NoImages": "추가 된 이미지 없음",
     "SettingsTitle": "설정",
