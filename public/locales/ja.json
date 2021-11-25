@@ -10,6 +10,7 @@
     "ToggleShadersText": "ホームボタンを使用してゲーム内のシェーダを切り替えます",
     "Shaders": "シェーダ",
     "ReshadeNotInstalled": "vkBasaltとreshade-shadersライブラリをインストールしていません",
+    "GameModeNotInstalled": "You don't have GameMode installed",
     "Author": "著者",
     "NoImages": "画像は追加されていません",
     "SettingsTitle": "設定",

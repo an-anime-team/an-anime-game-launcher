@@ -177,11 +177,17 @@ $(() => {
 
                         fs.writeFileSync(launcherShadersFile, fs.readFileSync(userShadersFile));
                     }
+
+                    let cmd = `${wineExeutable} launcher.bat`;
+
+                    if (LauncherLib.getConfig('gamemode')) {
+                        cmd = `gamemoderun ${cmd}`;
+                    }
                     
                     // Starting the game
                     const startTime = Date.now();
         
-                    exec(`${wineExeutable} launcher.bat`, {
+                    exec(cmd, {
                         cwd: constants.gameDir,
                         env: {
                             ...process.env,
