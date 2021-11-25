@@ -14,7 +14,7 @@
 
 | Game version | Launcher version | Patch version |
 | :---: | :---: | :---: |
-| 2.3.0 | 1.5.9 | 2.3.0 testing ⚠️ |
+| 2.3.0 | 1.6.0 | 2.3.0 testing ⚠️ |
 
 We have our own [An Anime Game](https://discord.gg/ck37X6UWBp) discord server where you can ask any questions
 
@@ -46,24 +46,23 @@ This launcher also available as the [an-anime-game-launcher](https://aur.archlin
 
 To work this launcher requires
 
-* wine
-* winetricks
 * unzip
 * tar
 * git
+* xdelta3
 
 ## Install
 
 ### apt-get
 
 ```sh
-sudo apt-get install wine winetricks unzip tar git
+sudo apt-get install unzip tar git xdelta3
 ```
 
 ### pacman
 
 ```sh
-sudo pacman -Syu wine winetricks unzip tar git
+sudo pacman -Syu unzip tar git xdelta3
 ```
 
 # Additional requirements
@@ -73,6 +72,7 @@ sudo pacman -Syu wine winetricks unzip tar git
 | [MangoHud](https://github.com/flightlessmango/MangoHud) | To use MangoHud |
 | [vkBasalt](https://github.com/DadSchoorse/vkBasalt) | To use shaders |
 | [GameMode](https://github.com/FeralInteractive/gamemode) | To use GameMode (performance optimisation) |
+| [switcheroo-control](https://gitlab.freedesktop.org/hadess/switcheroo-control/) | To select the GPU launcher should use to run the game |
 
 These requirements can't be easily installed so you should do it manually
 
@@ -123,18 +123,19 @@ npm start
 * <s>Make shaders manager hidden if vkBasalt is not installed</s> *(1.5.4)*
 * <s>Make MangoHud option hidden if it is not installed</s> *(1.5.4)*
 * <s>GameMode integration ([issue 28](https://notabug.org/nobody/an-anime-game-launcher/issues/28), [pull request 30](https://notabug.org/nobody/an-anime-game-launcher/pulls/30))</s> *(1.5.8)*
-* DXVK logs auto-deletion option
+* <s>Hybrid GPU integration ([issue 29](https://notabug.org/nobody/an-anime-game-launcher/issues/29), [pull request 33](https://notabug.org/nobody/an-anime-game-launcher/pulls/33))</s> *(1.6.0)*
+* <s>Add winetricks auto-downloading when new prefix creates so it is no longer required</s> *(1.6.0)*
+* <s>DXVK logs auto-deletion option</s> *(1.6.0)*
+* <s>Add default wine version to download</s> (Proton-6.20-GE-1) *(1.6.0)*
 * Fix button flickering at start when the launcher's state updates
 * Wine prefix folder selection *(symlinks?)*
 * Game's update pre-installation
 * Screenshots explorer
 * Make force launch button when the launcher's repository is unavailable *(waiting for the repository's unavailability lmao)*
-* Set default wine version to download so the wine install requirement is no longer needed
 * Add Patch category in settings menu with
   - Always participate in patches testing
   - Applying anti login crash patch
   - Remove patch
-* Hybrid GPU integration ([issue 29](https://notabug.org/nobody/an-anime-game-launcher/issues/29))
 
 > Now I'm working on moving the project to the Tauri. Also for some personal reasons I, like the patch's author, will be busy, but until Christmas, so it's a bit more than a month. I will make some critical updates if they will be required, but the development will be frozen for this period. I hope you will enjoy playing the game, and I will enjoy continuing the development of this project
 >

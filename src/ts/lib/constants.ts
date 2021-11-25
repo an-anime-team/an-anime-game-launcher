@@ -26,7 +26,8 @@ export default class constants
         telemetry: [
             `log-upload-os.${this.placeholders.lowercase.company}.com`,
             'overseauspider.yuanshen.com'
-        ]
+        ],
+        winetricks: 'https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks'
     };
 
     // TODO: cache drops at that dates instead of the 7 days period

@@ -32,8 +32,9 @@ const config = new store ({
         playtime: 0, // Number of seconds user spent in game
         hud: 'none', // none / dxvk / mangohud
         shaders: 'none', // none / shader's folder
-        gamemode: false,
-        gpu: 'default',
+        gamemode: false, // GameMode
+        gpu: 'default', // GPU
+        autodelete_dxvk_logs: false, // Auto-delete DXVK logs
 
         // Version of the game we asked about analytics last time,
         // or null if user said don't ask him again
@@ -246,30 +247,38 @@ export default class LauncherLib
         ];
 
         return new Promise((resolve) => {
-            let installationProgress = 0;
+            const winetricksSh = path.join(constants.launcherDir, 'winetricks.sh');
 
-            let installerProcess = spawn('winetricks', ['corefonts', 'usetakefocus=n'], {
-                env: {
-                    ...process.env,
-                    WINEPREFIX: prefixpath
-                }
-            });
+            Tools.downloadFile(constants.uri.winetricks, winetricksSh).then(() => {
+                let installationProgress = 0;
 
-            installerProcess.stdout.on('data', (data: string) => {
-                let str = data.toString();
-
-                for (let i = 0; i < installationSteps.length; ++i)
-                    if (str.includes(installationSteps[i]))
-                    {
-                        installationProgress = i + 1;
-
-                        break;
+                let installerProcess = spawn('bash', [winetricksSh, 'corefonts', 'usetakefocus=n'], {
+                    env: {
+                        ...process.env,
+                        WINEPREFIX: prefixpath
                     }
-
-                progress(str, installationProgress, installationSteps.length);
-            });
+                });
     
-            installerProcess.on('close', () => resolve());
+                installerProcess.stdout.on('data', (data: string) => {
+                    let str = data.toString();
+    
+                    for (let i = 0; i < installationSteps.length; ++i)
+                        if (str.includes(installationSteps[i]))
+                        {
+                            installationProgress = i + 1;
+    
+                            break;
+                        }
+    
+                    progress(str, installationProgress, installationSteps.length);
+                });
+        
+                installerProcess.on('close', () => {
+                    fs.unlinkSync(winetricksSh);
+
+                    resolve();
+                });
+            });
         });
     }
 

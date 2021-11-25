@@ -179,6 +179,24 @@ $(() => {
                         fs.writeFileSync(launcherShadersFile, fs.readFileSync(userShadersFile));
                     }
 
+                    /**
+                     * GPU selection
+                     */
+                    if (LauncherLib.getConfig('gpu') != 'default')
+                    {
+                        const gpu = await SwitcherooControl.getGpuByName(LauncherLib.getConfig('gpu'));
+
+                        if (gpu)
+                        {
+                            env = {
+                                ...env,
+                                ...SwitcherooControl.getEnvAsObject(gpu)
+                            };
+                        }
+                        
+                        else console.warn(`GPU ${LauncherLib.getConfig('gpu')} not found. Launching on the default GPU`);
+                    }
+
                     let command = `${wineExeutable} launcher.bat`;
 
                     /**
@@ -186,16 +204,8 @@ $(() => {
                      */
                     if (LauncherLib.getConfig('gamemode'))
                         command = `gamemoderun ${command}`;
-                    
-                    // GPU
-                    if (LauncherLib.getConfig('gpu') != 'default') {
-                        const gpu = await SwitcherooControl.getGpuByName(LauncherLib.getConfig('gpu'));
-                        if (gpu) {
-                            env = { ...env, ...SwitcherooControl.getEnvAsObject(gpu) };
-                        } else {
-                            console.warn(`GPU ${LauncherLib.getConfig('gpu')} not found. Launching on the default GPU.`);
-                        }
-                    }
+
+                    console.log(`Execution command: ${command}`);
 
                     // Starting the game
                     const startTime = Date.now();
@@ -225,10 +235,23 @@ $(() => {
                                 largeImageText: 'An Anime Game Launcher'
                             });
                         }
-        
-                        console.log(err);
+
+                        if (LauncherLib.getConfig('autodelete_dxvk_logs'))
+                        {
+                            fs.readdirSync(constants.gameDir).forEach((file: string) => {
+                                if (path.extname(file) == '.log')
+                                {
+                                    fs.unlinkSync(path.join(constants.gameDir, file));
+
+                                    console.log(`Removed log file: ${file}`);
+                                }
+                            });
+                        }
+
                         console.log(stdout);
-                        console.log(stderr);
+
+                        if (err)
+                            console.error(stderr);
                     });
         
                     ipcRenderer.invoke('hide-window');
@@ -245,6 +268,44 @@ $(() => {
                 LauncherLib.patchGame(() => {
                     LauncherUI.updateLauncherState();
                 }, data => console.log(data.toString()));
+            }
+
+            // Download default wine because we don't have it
+            else if (LauncherUI.launcherState == 'wine-installation-required')
+            {
+                const runners = await LauncherLib.getRunners();
+
+                let defaultRunner = runners[0].runners[0];
+
+                // Search defaul runner to download (Proton-6.20-GE-1)
+                runners.forEach(category => {
+                    category.runners.forEach(runner => {
+                        if (runner.name == 'Proton-6.20-GE-1')
+                            defaultRunner = runner;
+                    });
+                });
+
+                LauncherUI.setState('wine-installing');
+
+                Tools.downloadFile(defaultRunner.uri, path.join(constants.launcherDir, defaultRunner.name)).then(() => {
+                    const unpacker = defaultRunner.archive === 'tar' ?
+                        Tools.untar : Tools.unzip;
+
+                    unpacker(
+                        path.join(constants.launcherDir, defaultRunner.name),
+                        defaultRunner.makeFolder ?
+                            path.join(constants.runnersDir, defaultRunner.folder) :
+                            constants.runnersDir
+                    ).then(() => {
+                        fs.unlinkSync(path.join(constants.launcherDir, defaultRunner.name));
+
+                        LauncherLib.updateConfig('runner.name', defaultRunner.name);
+                        LauncherLib.updateConfig('runner.folder', defaultRunner.folder);
+                        LauncherLib.updateConfig('runner.executable', defaultRunner.executable);
+
+                        LauncherUI.updateLauncherState();
+                    });
+                });
             }
 
             // Voice pack update

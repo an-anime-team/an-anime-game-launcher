@@ -26,7 +26,7 @@ $(() => {
     });
 
     $('.settings').on('scroll', () => {
-        let anchor = $('.settings-item').filter((index, item) => $(item).offset()!.top < 180).last()[0]!.id; // 264
+        const anchor = $('.settings-item').filter((index, item) => $(item).offset()!.top < 180).last()[0]!.id; // 264
 
         $('.menu-item').removeClass('menu-item-active');
         $(`.menu-item[anchor=${anchor}]`).addClass('menu-item-active');
@@ -40,9 +40,7 @@ $(() => {
     $('#language .selected-item span').text($(`#language li[value=${LauncherLib.getConfig('lang.launcher')}]`).text());
 
     $('#language').on('selectionChanged', (e, data: any) => {
-        let activeLang = LauncherLib.getConfig('lang.launcher');
-
-        if (activeLang != data.value)
+        if (LauncherLib.getConfig('lang.launcher') != data.value)
         {
             LauncherLib.updateConfig('lang.launcher', data.value);
             LauncherLib.updateConfig('background.time', null);
@@ -62,9 +60,7 @@ $(() => {
     $('#voicepack .selected-item span').text($(`#voicepack li[value=${LauncherLib.getConfig('lang.voice.active')}]`).text());
 
     $('#voicepack').on('selectionChanged', (e, data: any) => {
-        let activeLang = LauncherLib.getConfig('lang.voice.active');
-
-        if (activeLang != data.value)
+        if (LauncherLib.getConfig('lang.voice.active') != data.value)
         {
             LauncherLib.updateConfig('lang.voice.active', data.value);
 
@@ -110,6 +106,17 @@ $(() => {
     });
 
     /**
+     * Auto-delete DXVK logs
+     */
+
+    if (LauncherLib.getConfig('rpc'))
+        $('#autodelete-dxvk-logs').addClass('checkbox-active');
+
+    $('#autodelete-dxvk-logs').on('classChange', () => {
+        LauncherLib.updateConfig('autodelete_dxvk_logs', $('#autodelete-dxvk-logs').hasClass('checkbox-active'));
+    });
+
+    /**
      * GameMode
      */
 
@@ -132,24 +139,31 @@ $(() => {
         LauncherLib.updateConfig('gamemode', $('#gamemode').hasClass('checkbox-active'));
     });
 
+    /**
+     * GPU selection
+     */
+
     SwitcherooControl.waitReady().then(async () => {
-        const gpus = await SwitcherooControl.getGpus()
-        if (gpus) {
+        const gpus = await SwitcherooControl.getGpus();
+
+        if (gpus)
+        {
             console.log(gpus);
-            for (const gpu of gpus.value) {
-                $(`<li value="${gpu.Name.value}">${gpu.Name.value}</li>`).appendTo("#gpu .select-options ul");
-            }
+
+            for (const gpu of gpus.value)
+                $(`<li value="${gpu.Name.value}">${gpu.Name.value}</li>`).appendTo('#gpu .select-options ul');
         }
     }, () => {
-        console.log("switcheroo-control not running");
-        $("#gpu .selected-item")
-          .addClass("hint--top hint--medium")
-          .attr("data-hint", LauncherUI.i18n.translate("SwitcherooNotInstalled"));
+        console.log('switcheroo-control not running');
+
+        $('#gpu .selected-item')
+          .addClass('hint--top hint--medium')
+          .attr('data-hint', LauncherUI.i18n.translate('SwitcherooNotInstalled'));
     });
 
     $('#gpu').on('selectionChanged', (e, data: any) => {
         LauncherLib.updateConfig('gpu', data.value);
-    })
+    });
 
     /**
      * Shaders
@@ -317,7 +331,7 @@ $(() => {
                         Tools.downloadFile(runner.uri, path.join(constants.launcherDir, runner.name), (current: number, total: number, difference: number) => {
                             span.text(`${ Math.round(current / total * 100) }%`);
                         }).then(() => {
-                            let unpacker = runner.archive === 'tar' ?
+                            const unpacker = runner.archive === 'tar' ?
                                 Tools.untar : Tools.unzip;
 
                             unpacker(
