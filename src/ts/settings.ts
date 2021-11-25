@@ -109,7 +109,7 @@ $(() => {
      * Auto-delete DXVK logs
      */
 
-    if (LauncherLib.getConfig('rpc'))
+    if (LauncherLib.getConfig('autodelete_dxvk_logs'))
         $('#autodelete-dxvk-logs').addClass('checkbox-active');
 
     $('#autodelete-dxvk-logs').on('classChange', () => {
