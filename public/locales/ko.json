@@ -10,7 +10,7 @@
     "ToggleShadersText": "홈 버튼을 사용하여 게임에서 쉐이더를 전환하십시오",
     "Shaders": "쉐이더",
     "ReshadeNotInstalled": "vkBasalt 및 reshade-shaders 라이브러리를 설치하지 않았습니다",
-    "GameModeNotInstalled": "You don't have GameMode installed",
+    "GameModeNotInstalled": "GameMode 가 설치되어 있지 않습니다",
     "Author": "저자",
     "NoImages": "추가 된 이미지 없음",
     "SettingsTitle": "설정",

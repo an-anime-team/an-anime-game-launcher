@@ -111,17 +111,23 @@ $(() => {
      * GameMode
      */
 
-    let gameModeAvailable = 0;
-    process.env.PATH?.split(':').forEach(path => gameModeAvailable |= fs.existsSync(`${path}/gamemoderun`));
+    let gameModeAvailable = fs.existsSync('/usr/share/gamemoderun');
 
-    if(!gameModeAvailable)
-        $(`<p>⚠️ ${LauncherUI.i18n.translate('GameModeNotInstalled')}</p>`).insertAfter('#gamemode');
+    process.env.PATH?.split(':').forEach(path => gameModeAvailable ||= fs.existsSync(`${path}/gamemoderun`));
 
-    if (LauncherLib.getConfig("gamemode"))
-        $("#gamemode").addClass("checkbox-active");
+    if (!gameModeAvailable)
+    {
+        $('#gamemode')
+            .addClass('checkbox-disabled')
+            .addClass('hint--top hint--medium')
+            .attr('data-hint', LauncherUI.i18n.translate('GameModeNotInstalled'));
+    }
 
-    $("#gamemode").on("classChange", () => {
-        LauncherLib.updateConfig("gamemode",$("#gamemode").hasClass("checkbox-active"));
+    if (LauncherLib.getConfig('gamemode'))
+        $('#gamemode').addClass('checkbox-active');
+
+    $('#gamemode').on('classChange', () => {
+        LauncherLib.updateConfig('gamemode', $('#gamemode').hasClass('checkbox-active'));
     });
 
     /**
@@ -131,7 +137,7 @@ $(() => {
     let reshadeAvailable = fs.existsSync('/usr/share/reshade');
 
     if (!reshadeAvailable)
-        process.env.PATH?.split(':').forEach(path => reshadeAvailable |= fs.existsSync(`${path}/reshade`));
+        process.env.PATH?.split(':').forEach(path => reshadeAvailable ||= fs.existsSync(`${path}/reshade`));
 
     if (!reshadeAvailable)
         $(`<p>⚠️ ${LauncherUI.i18n.translate('ReshadeNotInstalled')}</p>`).appendTo('#shaders');

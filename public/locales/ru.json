@@ -10,7 +10,7 @@
     "ToggleShadersText": "Используйте кнопку Home для переключения шейдеров в игре",
     "Shaders": "Шейдеры",
     "ReshadeNotInstalled": "Вы не установили vkBasalt и библиотеку reshade-shaders",
-    "GameModeNotInstalled": "You don't have GameMode installed",
+    "GameModeNotInstalled": "Вы не установили GameMode",
     "Author": "Автор",
     "NoImages": "Изображения не добавлены",
     "SettingsTitle": "Настройки",

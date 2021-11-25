@@ -150,7 +150,7 @@ $secondary: #e1e7ff
 /* Checkbox */
     
 .checkbox
-    display: inline-flex
+    display: inline-flex !important
     align-items: center
 
     font-size: larger
@@ -181,6 +181,12 @@ $secondary: #e1e7ff
         svg
             height: 12px
             width: 12px
+
+.checkbox-disabled
+    background-color: $light
+
+    .checkbox-mark
+        display: none
 
 .checkbox-active
     .checkbox-mark
