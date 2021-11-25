@@ -67,7 +67,7 @@ $(() => {
         }
     });
 
-    if (LauncherLib.getConfig('analytics') !== null && LauncherLib.getConfig('analytics') !== LauncherLib.version)
+    if (LauncherLib.getConfig('analytics') !== null && LauncherLib.version !== null && LauncherLib.getConfig('analytics') !== LauncherLib.version)
         ipcRenderer.invoke('open-analytics-participation');
 
     $('#settings').on('mouseenter', () => $('#settings').addClass('hovered'));

@@ -132,35 +132,30 @@ export default class LauncherLib
 
     public static async getBackgroundUri (): Promise<string>
     {
-        let background = '';
+        let background = this.getConfig('background.file') ?
+            path.join(constants.launcherDir, this.getConfig('background.file')) : null;
         
-        if (!this.getConfig('background.time') || Date.now() > this.getConfig('background.time')!)
+        if (!this.getConfig('background.time') || Date.now() > this.getConfig('background.time')! || background === null || !fs.existsSync(background))
         {
             await fetch(constants.backgroundUri + this.getConfig('lang.launcher'))
                 .then(res => res.json())
                 .then(async resdone => {
-                    let prevBackground = this.getConfig('background.file');
+                    const prevBackground = this.getConfig('background.file');
 
                     this.updateConfig('background.time', Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days
                     this.updateConfig('background.file', resdone.data.adv.background.replace(/.*\//, ''));
 
-                    if (fs.existsSync(path.join(constants.launcherDir, this.getConfig('background.file'))))
-                        background = path.join(constants.launcherDir, this.getConfig('background.file'));
-                    
-                    else
-                    {
-                        await Tools.downloadFile(resdone.data.adv.background, path.join(constants.launcherDir, this.getConfig('background.file')), () => null).then(() => {
-                            !prevBackground ?
-                                console.log('No old background found') :
-                                fs.unlinkSync(path.join(constants.launcherDir, prevBackground));
+                    background = path.join(constants.launcherDir, this.getConfig('background.file'));
 
-                            background = path.join(constants.launcherDir, this.getConfig('background.file'));
+                    if (!fs.existsSync(background))
+                    {
+                        await Tools.downloadFile(resdone.data.adv.background, background).then(() => {
+                            if (prevBackground && prevBackground != this.getConfig('background.file'))
+                                fs.unlinkSync(path.join(constants.launcherDir, prevBackground));
                         });
                     };
                 });
         }
-
-        else background = path.join(constants.launcherDir, this.getConfig('background.file'));
         
         return background;
     }

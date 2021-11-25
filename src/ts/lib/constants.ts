@@ -51,7 +51,7 @@ export default class constants
     public static readonly dxvksDir: string = path.join(this.launcherDir, 'dxvks');
 
     public static readonly versionsUri: string = `${this.uri.api}/resource?key=gcStgarh&launcher_id=10`;
-    public static readonly backgroundUri: string = `${this.uri.api}/content?filter_adv=true&launcher_id=10&language=`;
+    public static readonly backgroundUri: string = `${this.uri.api}/content?filter_adv=true&launcher_id=10&key=gcStgarh&language=`;
     
     public static readonly patchUri: string = `${this.uri.patch}/archive/master.zip`;
 
