@@ -11,6 +11,7 @@
     "Shaders": "Shader",
     "ReshadeNotInstalled": "Kamu belum memasang vkBasalt dan library reshade-shaders",
     "GameModeNotInstalled": "Kamu belum memasang GameMode",
+    "SwitcherooNotInstalled": "You don't have switcheroo-control installed",
     "Author": "Pembuat",
     "NoImages": "Tidak ada gambar ditambahkan",
     "SettingsTitle": "Pengaturan",

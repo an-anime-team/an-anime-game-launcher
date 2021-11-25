@@ -52,6 +52,7 @@
         "cash-dom": "^8.1.0",
         "command-exists": "^1.2.9",
         "discord-rpc": "^4.0.1",
+        "dbus-next": "^0.10.2",
         "electron-store": "^8.0.1",
         "follow-redirects": "^1.14.5",
         "get-pixels": "^3.3.3",

@@ -12,6 +12,7 @@ import LauncherLib from './lib/LauncherLib';
 import LauncherUI from './lib/LauncherUI';
 import Tools from './lib/Tools';
 import DiscordRPC from './lib/DiscordRPC';
+import SwitcherooControl from './lib/SwitcherooControl';
 
 const launcher_version = require('../../package.json').version;
 
@@ -186,6 +187,16 @@ $(() => {
                     if (LauncherLib.getConfig('gamemode'))
                         command = `gamemoderun ${command}`;
                     
+                    // GPU
+                    if (LauncherLib.getConfig('gpu') != 'default') {
+                        const gpu = await SwitcherooControl.getGpuByName(LauncherLib.getConfig('gpu'));
+                        if (gpu) {
+                            env = { ...env, ...SwitcherooControl.getEnvAsObject(gpu) };
+                        } else {
+                            console.warn(`GPU ${LauncherLib.getConfig('gpu')} not found. Launching on the default GPU.`);
+                        }
+                    }
+
                     // Starting the game
                     const startTime = Date.now();
         

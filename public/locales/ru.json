@@ -11,6 +11,7 @@
     "Shaders": "Шейдеры",
     "ReshadeNotInstalled": "Вы не установили vkBasalt и библиотеку reshade-shaders",
     "GameModeNotInstalled": "Вы не установили GameMode",
+    "SwitcherooNotInstalled": "You don't have switcheroo-control installed",
     "Author": "Автор",
     "NoImages": "Изображения не добавлены",
     "SettingsTitle": "Настройки",
