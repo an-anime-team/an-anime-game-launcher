@@ -10,7 +10,7 @@
     "ToggleShadersText": "Gunakan tombol Home untuk menyalakan/mematikan shader di dalam Game",
     "Shaders": "Shader",
     "ReshadeNotInstalled": "Kamu belum memasang vkBasalt dan library reshade-shaders",
-    "GameModeNotInstalled": "You don't have GameMode installed",
+    "GameModeNotInstalled": "Kamu belum memasang GameMode",
     "Author": "Pembuat",
     "NoImages": "Tidak ada gambar ditambahkan",
     "SettingsTitle": "Pengaturan",
@@ -33,7 +33,7 @@
     "PatchRequired": "Patch dibutuhkan",
     "PatchRequiredHint": "Versi Game ini tidak memiliki patch anti-cheat. Mohon tunggu beberapa hari dan coba lagi",
     "TestPatch": "Pasang patch uji coba",
-    "TestPatchHint": "Versi Game ini memiliki patch anti-cheat, tetapi masih dalam tahap uji coba. Kamu dapat menunggu beberapa hari hingga patch stabil atau memasangnya dengan resiko kamu sendiri",
+    "TestPatchHint": "Versi Game ini memiliki patch anti-cheat, tetapi masih dalam tahap uji coba. Kamu dapat menunggu beberapa hari hingga patch stabil atau memasangnya dengan risiko kamu sendiri",
     "AnalyticsTitle": "Komisi Yanfei...",
     "ParticipateInAnalytics": "Berpartisipasi dalam pengambilan data anonim",
     "AnalyticsText1": "Untuk menghitung pengguna aktif di Linux, Yanfei ingin mengumpulkan alamat IP tiap kali Game diperbarui",
@@ -42,7 +42,7 @@
     "Participate": "Berpartisipasi",
     "Skip": "Lewati",
     "SkipAndDontAsk": "Lewati dan jangan tanya lagi",
-    "LauncherUpdateTitle": "Pembaruan Launcher tersedia: ",
-    "LauncherUpdateBody": "Kamu dapat mengunduh versi baru launcher dari repositori di {uri.launcher}",
-    "TelemetryNotDisabled": "Server telemetri {placeholders.uppercase.company} tidak dimatikan!"
+    "LauncherUpdateTitle": "Pembaruan Peluncur tersedia: ",
+    "LauncherUpdateBody": "Kamu dapat mengunduh versi baru peluncur dari repositori di {uri.launcher}",
+    "TelemetryNotDisabled": "Peladen telemetri {placeholders.uppercase.company} tidak dimatikan!"
 }
