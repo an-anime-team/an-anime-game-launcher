@@ -266,6 +266,8 @@ export default class LauncherLib
                         LauncherLib.getConfig('runner.executable')
                     );
 
+                    env['WINESERVER'] = path.join(path.dirname(env['WINE']), 'wineserver');
+
                     if (!fs.existsSync(env['WINE']))
                         console.error(`Patcher supposed to use ${LauncherLib.getConfig('runner.name')} runner, but it doesn't installed`);
                 }

@@ -46,23 +46,26 @@ This launcher is also available as the [an-anime-game-launcher](https://aur.arch
 
 To work this launcher requires
 
-* unzip
-* tar
-* git
-* xdelta3
+| Name | Description |
+| --- | --- |
+| unzip | To unpack zip archives (DXVKs / wines) |
+| tar | To unpack tar archives (DXVKs / wines) |
+| git | To check for new versions of the launcher |
+| xdelta3 | To apply the patch to the game |
+| cabextract | To install fonts to the wine prefix |
 
 ## Install
 
 ### apt-get
 
 ```sh
-sudo apt-get install unzip tar git xdelta3
+sudo apt-get install unzip tar git xdelta3 cabextract
 ```
 
 ### pacman
 
 ```sh
-sudo pacman -Syu unzip tar git xdelta3
+sudo pacman -Syu unzip tar git xdelta3 cabextract
 ```
 
 # Additional requirements
