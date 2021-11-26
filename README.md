@@ -130,6 +130,7 @@ npm start
 * <s>Add winetricks auto-downloading when new prefix creates so it is no longer required</s> *(1.6.0)*
 * <s>DXVK logs auto-deletion option</s> *(1.6.0)*
 * <s>Add default wine version to download</s> (Proton-6.20-GE-1) *(1.6.0)*
+* Add winetricks and winecfg buttons to settings
 * Add dark theme support for settings menu
 * Fix button flickering at start when the launcher's state updates
 * Wine prefix folder selection *(symlinks?)*

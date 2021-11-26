@@ -95,34 +95,43 @@ $(() => {
                     });
                 });
 
+                /**
+                 * Download wine version
+                 */
                 LauncherUI.initProgressBar();
 
                 await Tools.downloadFile(defaultRunner.uri, path.join(constants.launcherDir, defaultRunner.name), (current: number, total: number, difference: number) => {
                     LauncherUI.updateProgressBar(LauncherUI.i18n.translate('Downloading'), current, total, difference);
-                }).then(async () => {
-                    const unpacker = defaultRunner.archive === 'tar' ?
-                        Tools.untar : Tools.unzip;
-
-                    LauncherUI.initProgressBar();
-
-                    await unpacker(
-                        path.join(constants.launcherDir, defaultRunner.name),
-                        defaultRunner.makeFolder ?
-                            path.join(constants.runnersDir, defaultRunner.folder) :
-                            constants.runnersDir,
-                        (current: number, total: number, difference: number) => {
-                            LauncherUI.updateProgressBar(LauncherUI.i18n.translate('Unpacking'), current, total, difference);
-                        }
-                    ).then(() => {
-                        fs.unlinkSync(path.join(constants.launcherDir, defaultRunner.name));
-
-                        LauncherLib.updateConfig('runner.name', defaultRunner.name);
-                        LauncherLib.updateConfig('runner.folder', defaultRunner.folder);
-                        LauncherLib.updateConfig('runner.executable', defaultRunner.executable);
-
-                        LauncherUI.clearProgressBar();
-                    });
                 });
+
+                /**
+                 * Unpack it to the runners folder
+                 */
+                const unpacker = defaultRunner.archive === 'tar' ?
+                    Tools.untar : Tools.unzip;
+
+                LauncherUI.initProgressBar();
+
+                await unpacker(
+                    path.join(constants.launcherDir, defaultRunner.name),
+                    defaultRunner.makeFolder ?
+                        path.join(constants.runnersDir, defaultRunner.folder) :
+                        constants.runnersDir,
+                    (current: number, total: number, difference: number) => {
+                        LauncherUI.updateProgressBar(LauncherUI.i18n.translate('Unpacking'), current, total, difference);
+                    }
+                );
+
+                /**
+                 * And update config file with this runner
+                 */
+                fs.unlinkSync(path.join(constants.launcherDir, defaultRunner.name));
+
+                LauncherLib.updateConfig('runner.name', defaultRunner.name);
+                LauncherLib.updateConfig('runner.folder', defaultRunner.folder);
+                LauncherLib.updateConfig('runner.executable', defaultRunner.executable);
+
+                LauncherUI.clearProgressBar();
             }
 
             // Creating wine prefix
