@@ -112,6 +112,10 @@ $(() => {
 
                 LauncherUI.initProgressBar();
 
+                // That is a temp solution because for some reasons
+                // unpacker takes some time to understand what's happening with its life
+                $('#downloaded').text(LauncherUI.i18n.translate('Unpacking'));
+
                 await unpacker(
                     path.join(constants.launcherDir, defaultRunner.name),
                     defaultRunner.makeFolder ?
