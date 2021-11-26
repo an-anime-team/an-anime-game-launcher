@@ -24,6 +24,32 @@ type Pixel = {
 
 export default class Tools
 {
+    public static prettifyBytes (bytes: number): string
+    {
+        const types = [
+            {
+                name: 'B',
+                multiplier: 1
+            },
+            {
+                name: 'KB',
+                multiplier: 1024
+            },
+            {
+                name: 'MB',
+                multiplier: 1024 * 1024
+            },
+            {
+                name: 'GB',
+                multiplier: 1024 * 1024 * 1024
+            }
+        ].filter(type => type.multiplier < bytes);
+
+        return types.length == 0 ?
+            `${bytes} B` :
+            `${(bytes / types[types.length - 1].multiplier).toFixed(2)} ${types[types.length - 1].name}`;
+    }
+
     public static getImagePixels (path: string): Promise<Pixel[]>
     {
         return new Promise(resolve => {

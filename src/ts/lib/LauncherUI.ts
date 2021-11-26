@@ -183,7 +183,7 @@ export default class LauncherUI
 
     public static updateProgressBar (prefix: string, current: number, total: number, difference: number): void
     {
-        $('#downloaded').text(`${prefix}: ${ Math.round(current / total * 100) }% (${ (current / 1024 / 1024 / 1024).toFixed(2) } GB / ${ Math.round(total / 1024 / 1024 / 1024).toFixed(2) } GB)`);
+        $('#downloaded').text(`${prefix}: ${ Math.round(current / total * 100) }% (${Tools.prettifyBytes(current)} / ${Tools.prettifyBytes(total)})`);
                         
         this.progressBar.temp += difference;
 
@@ -208,7 +208,7 @@ export default class LauncherUI
                 etaSeconds = '0' + etaSeconds.toString();
 
             $('#downloader .progress').css('width', `${ Math.round(current / total * 100) }%`);
-            $('#speed').text(`${ (this.progressBar.temp / (Date.now() - this.progressBar.prevTime) * 1000 / 1024 / 1024).toFixed(2) } MB/s`);
+            $('#speed').text(`${Tools.prettifyBytes(this.progressBar.temp / (Date.now() - this.progressBar.prevTime) * 1000)}/s`);
             $('#eta').text(`ETA: ${etaHours}:${etaMinutes}:${etaSeconds}`);
 
             this.progressBar.prevTime = Date.now();
