@@ -6,8 +6,6 @@ import i18n from './i18n';
 import Tools from './Tools';
 import Colors from './Colors';
 
-const commandExists = require('command-exists').sync;
-
 type LauncherState =
     'patch-unavailable' |
     'test-patch-available' |
@@ -15,8 +13,6 @@ type LauncherState =
     'game-update-available' |
     'game-installation-available' |
     'game-voice-update-required' |
-    'wine-installation-required' |
-    'wine-installing' |
     'game-launch-available';
 
 export default class LauncherUI
@@ -84,17 +80,6 @@ export default class LauncherUI
 
             case 'game-voice-update-required':
                 $('#launch').text(this.i18n.translate('Update'));
-
-                break;
-
-            case 'wine-installation-required':
-                $('#launch').text(this.i18n.translate('DownloadWine'));
-
-                break;
-
-            case 'wine-installing':
-                $('#launch').text(this.i18n.translate('Downloading'));
-                $('#launch').attr('disabled', 'disabled');
 
                 break;
 
@@ -168,10 +153,6 @@ export default class LauncherUI
                 this.setState('game-launch-available');
             }, data => console.log(data.toString()));
         }
-
-        // If we don't have wine or any runner installed
-        else if (LauncherLib.getConfig('runner') === null && !commandExists('wine'))
-            this.setState('wine-installation-required');
 
         else this.setState('game-launch-available');
     }

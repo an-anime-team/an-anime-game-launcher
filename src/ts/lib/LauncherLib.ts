@@ -10,6 +10,7 @@ const { spawn, exec } = require('child_process');
 const store = require('electron-store');
 const https = require('follow-redirects').https;
 const got = require('got');
+const commandExists = require('command-exists').sync;
 
 const config = new store ({
     cwd: path.join(os.homedir(), '.local', 'share', 'anime-game-launcher'),
@@ -225,7 +226,7 @@ export default class LauncherLib
     }
 
     // WINEPREFIX='...../wineprefix' winetricks corefonts usetakefocus=n
-    public static async installPrefix (prefixpath: string, progress: (output: string, current: number, total: number) => void): Promise<void>
+    public static async installPrefix (prefixPath: string, progress: (output: string, current: number, total: number) => void): Promise<void>
     {
         const installationSteps = [
             // corefonts
@@ -252,11 +253,25 @@ export default class LauncherLib
             Tools.downloadFile(constants.uri.winetricks, winetricksSh).then(() => {
                 let installationProgress = 0;
 
-                let installerProcess = spawn('bash', [winetricksSh, 'corefonts', 'usetakefocus=n'], {
-                    env: {
-                        ...process.env,
-                        WINEPREFIX: prefixpath
-                    }
+                let env: any = {
+                    ...process.env,
+                    WINEPREFIX: prefixPath
+                };
+
+                if (!commandExists('wine') && LauncherLib.getConfig('runner') !== null)
+                {
+                    env['WINE'] = path.join(
+                        constants.runnersDir,
+                        LauncherLib.getConfig('runner.folder'),
+                        LauncherLib.getConfig('runner.executable')
+                    );
+
+                    if (!fs.existsSync(env['WINE']))
+                        console.error(`Patcher supposed to use ${LauncherLib.getConfig('runner.name')} runner, but it doesn't installed`);
+                }
+
+                const installerProcess = spawn('bash', [winetricksSh, 'corefonts', 'usetakefocus=n'], {
+                    env: env
                 });
     
                 installerProcess.stdout.on('data', (data: string) => {

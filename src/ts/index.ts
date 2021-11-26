@@ -4,6 +4,7 @@ const { exec } = require('child_process');
 const { ipcRenderer } = require('electron');
 
 const semver = require('semver');
+const commandExists = require('command-exists').sync;
 
 import $ from 'cash-dom';
 
@@ -78,6 +79,52 @@ $(() => {
         await LauncherUI.updateLauncherState(data);
 
         $('#launch').on('click', async () => {
+            // Download default wine if we
+            // don'thave wine or any runner installed
+            if (LauncherLib.getConfig('runner') === null && !commandExists('wine'))
+            {
+                const runners = await LauncherLib.getRunners();
+
+                let defaultRunner = runners[0].runners[0];
+
+                // Search defaul runner to download (Proton-6.20-GE-1)
+                runners.forEach(category => {
+                    category.runners.forEach(runner => {
+                        if (runner.name == 'Proton-6.20-GE-1')
+                            defaultRunner = runner;
+                    });
+                });
+
+                LauncherUI.initProgressBar();
+
+                await Tools.downloadFile(defaultRunner.uri, path.join(constants.launcherDir, defaultRunner.name), (current: number, total: number, difference: number) => {
+                    LauncherUI.updateProgressBar(LauncherUI.i18n.translate('Downloading'), current, total, difference);
+                }).then(async () => {
+                    const unpacker = defaultRunner.archive === 'tar' ?
+                        Tools.untar : Tools.unzip;
+
+                    LauncherUI.initProgressBar();
+
+                    await unpacker(
+                        path.join(constants.launcherDir, defaultRunner.name),
+                        defaultRunner.makeFolder ?
+                            path.join(constants.runnersDir, defaultRunner.folder) :
+                            constants.runnersDir,
+                        (current: number, total: number, difference: number) => {
+                            LauncherUI.updateProgressBar(LauncherUI.i18n.translate('Unpacking'), current, total, difference);
+                        }
+                    ).then(() => {
+                        fs.unlinkSync(path.join(constants.launcherDir, defaultRunner.name));
+
+                        LauncherLib.updateConfig('runner.name', defaultRunner.name);
+                        LauncherLib.updateConfig('runner.folder', defaultRunner.folder);
+                        LauncherLib.updateConfig('runner.executable', defaultRunner.executable);
+
+                        LauncherUI.clearProgressBar();
+                    });
+                });
+            }
+
             // Creating wine prefix
             if (!LauncherLib.isPrefixInstalled(constants.prefixDir))
             {
@@ -240,8 +287,8 @@ $(() => {
                         {
                             const removeExts = [
                                 '.log',
-                                '.dxvk-cache',
-                                '.dmp'
+                                '.dmp',
+                                // '.dxvk-cache'
                             ];
 
                             fs.readdirSync(constants.gameDir).forEach((file: string) => {
@@ -274,44 +321,6 @@ $(() => {
                 LauncherLib.patchGame(() => {
                     LauncherUI.updateLauncherState();
                 }, data => console.log(data.toString()));
-            }
-
-            // Download default wine because we don't have it
-            else if (LauncherUI.launcherState == 'wine-installation-required')
-            {
-                const runners = await LauncherLib.getRunners();
-
-                let defaultRunner = runners[0].runners[0];
-
-                // Search defaul runner to download (Proton-6.20-GE-1)
-                runners.forEach(category => {
-                    category.runners.forEach(runner => {
-                        if (runner.name == 'Proton-6.20-GE-1')
-                            defaultRunner = runner;
-                    });
-                });
-
-                LauncherUI.setState('wine-installing');
-
-                Tools.downloadFile(defaultRunner.uri, path.join(constants.launcherDir, defaultRunner.name)).then(() => {
-                    const unpacker = defaultRunner.archive === 'tar' ?
-                        Tools.untar : Tools.unzip;
-
-                    unpacker(
-                        path.join(constants.launcherDir, defaultRunner.name),
-                        defaultRunner.makeFolder ?
-                            path.join(constants.runnersDir, defaultRunner.folder) :
-                            constants.runnersDir
-                    ).then(() => {
-                        fs.unlinkSync(path.join(constants.launcherDir, defaultRunner.name));
-
-                        LauncherLib.updateConfig('runner.name', defaultRunner.name);
-                        LauncherLib.updateConfig('runner.folder', defaultRunner.folder);
-                        LauncherLib.updateConfig('runner.executable', defaultRunner.executable);
-
-                        LauncherUI.updateLauncherState();
-                    });
-                });
             }
 
             // Voice pack update
@@ -367,7 +376,7 @@ $(() => {
                     LauncherUI.initProgressBar();
 
                     Tools.unzip(path.join(constants.launcherDir, voicePack.name), constants.gameDir, (current: number, total: number, difference: number) => {
-                        LauncherUI.updateProgressBar(LauncherUI.i18n.translate('Unpack'), current, total, difference);
+                        LauncherUI.updateProgressBar(LauncherUI.i18n.translate('Unpacking'), current, total, difference);
                     }).then(() => {
                         fs.unlinkSync(path.join(constants.launcherDir, voicePack.name));
 
@@ -427,7 +436,7 @@ $(() => {
                     LauncherUI.initProgressBar();
 
                     Tools.unzip(path.join(constants.launcherDir, diff.name), constants.gameDir, (current: number, total: number, difference: number) => {
-                        LauncherUI.updateProgressBar(LauncherUI.i18n.translate('Unpack'), current, total, difference);
+                        LauncherUI.updateProgressBar(LauncherUI.i18n.translate('Unpacking'), current, total, difference);
                     }).then(() => {
                         /**
                          * Downloading voice data
@@ -461,7 +470,7 @@ $(() => {
                             LauncherUI.initProgressBar();
 
                             Tools.unzip(path.join(constants.launcherDir, voicePack.name), constants.gameDir, (current: number, total: number, difference: number) => {
-                                LauncherUI.updateProgressBar(LauncherUI.i18n.translate('Unpack'), current, total, difference);
+                                LauncherUI.updateProgressBar(LauncherUI.i18n.translate('Unpacking'), current, total, difference);
                             }).then(() => {
                                 fs.unlinkSync(path.join(constants.launcherDir, voicePack.name));
 

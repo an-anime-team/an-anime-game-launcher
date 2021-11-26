@@ -71,7 +71,7 @@ sudo pacman -Syu unzip tar git xdelta3
 | --- | --- |
 | [MangoHud](https://github.com/flightlessmango/MangoHud) | To use MangoHud |
 | [vkBasalt](https://github.com/DadSchoorse/vkBasalt) | To use shaders |
-| [GameMode](https://github.com/FeralInteractive/gamemode) | To use GameMode (performance optimisation) |
+| [GameMode](https://github.com/FeralInteractive/gamemode) | To use GameMode (performance optimization) |
 | [switcheroo-control](https://gitlab.freedesktop.org/hadess/switcheroo-control/) | To select the GPU launcher should use to run the game |
 
 These requirements can't be easily installed so you should do it manually
@@ -127,6 +127,7 @@ npm start
 * <s>Add winetricks auto-downloading when new prefix creates so it is no longer required</s> *(1.6.0)*
 * <s>DXVK logs auto-deletion option</s> *(1.6.0)*
 * <s>Add default wine version to download</s> (Proton-6.20-GE-1) *(1.6.0)*
+* Add dark theme support for settings menu
 * Fix button flickering at start when the launcher's state updates
 * Wine prefix folder selection *(symlinks?)*
 * Game's update pre-installation
