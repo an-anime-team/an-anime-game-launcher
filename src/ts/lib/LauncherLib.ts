@@ -36,7 +36,7 @@ const config = new store ({
         gamemode: false, // GameMode
         gpu: 'default', // GPU
         autodelete_dxvk_logs: false, // Auto-delete DXVK logs
-        darkmode: false,
+        theme: 'system', // light / dark / system
 
         // Version of the game we asked about analytics last time,
         // or null if user said don't ask him again

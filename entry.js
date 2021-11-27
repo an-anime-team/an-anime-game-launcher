@@ -4,7 +4,8 @@ const {
     ipcMain,
     Notification,
     shell,
-    nativeImage
+    nativeImage,
+    nativeTheme
 } = require('electron');
 
 const path = require('path');
@@ -21,6 +22,8 @@ ipcMain.on('notification', (event, args) => {
 
     new Notification(args).show();
 });
+
+ipcMain.on('is-window-dark', (e) => e.returnValue = nativeTheme.shouldUseDarkColors);
 
 ipcMain.handle('open-settings', () => {
     const settingsWindow = new BrowserWindow ({

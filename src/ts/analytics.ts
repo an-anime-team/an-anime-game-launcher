@@ -8,6 +8,8 @@ import LauncherUI from './lib/LauncherUI';
 $(() => {
     LauncherUI.updateLang(LauncherLib.getConfig('lang.launcher'));
 
+    $('body').attr('theme', LauncherUI.theme);
+
     $('#participate').on('click', async () => {
         await fetch(`https://an-anime-game-launcher.000webhostapp.com${ !$('#share-country').hasClass('checkbox-active') ? '/?hide-geo' : '' }`);
 

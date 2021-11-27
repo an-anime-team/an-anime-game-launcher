@@ -14,7 +14,7 @@
 
 | Game version | Launcher version | Patch version |
 | :---: | :---: | :---: |
-| 2.3.0 | 1.6.0 | 2.3.0 testing ⚠️ |
+| 2.3.0 | 1.7.0 | 2.3.0 stable ✅ |
 
 We have our own [An Anime Game](https://discord.gg/ck37X6UWBp) discord server where you can ask any questions
 
@@ -130,10 +130,10 @@ npm start
 * <s>Add winetricks auto-downloading when new prefix creates so it is no longer required</s> *(1.6.0)*
 * <s>DXVK logs auto-deletion option</s> *(1.6.0)*
 * <s>Add default wine version to download</s> (Proton-6.20-GE-1) *(1.6.0)*
-* Add winetricks and winecfg buttons to settings
-* Add dark theme support for settings menu
+* <s>Add dark theme support for settings menu</s> *(1.7.0)*
+* Add winetricks and winecfg buttons to settings ([issue 35](https://notabug.org/nobody/an-anime-game-launcher/issues/35))
 * Fix button flickering at start when the launcher's state updates
-* Wine prefix folder selection *(symlinks?)*
+* Wine prefix folder selection *(symlinks?)* ([issue 37](https://notabug.org/nobody/an-anime-game-launcher/issues/37))
 * Game's update pre-installation
 * Screenshots explorer
 * Make force launch button when the launcher's repository is unavailable *(waiting for the repository's unavailability lmao)*

@@ -18,28 +18,20 @@ $(() => {
     // Make sure settings is shown in correct language.
     LauncherUI.updateLang(LauncherLib.getConfig('lang.launcher') ?? 'en-us');
 
+    $('body').attr('theme', LauncherUI.theme);
+
     $('.menu-item').on('click', (e) => {
         $('.settings')[0]!.scrollTop = document.getElementById(e.target.getAttribute('anchor'))!.offsetTop - 16;
 
         $('.menu-item').removeClass('menu-item-active');
-        $('.menu-item').removeClass('menu-item-active-dark');
-        $(e.target).addClass(
-            LauncherLib.getConfig('darkmode') ?
-                'menu-item-active-dark' :
-                'menu-item-active'
-        );
+        $(e.target).addClass('menu-item-active');
     });
 
     $('.settings').on('scroll', () => {
         const anchor = $('.settings-item').filter((index, item) => $(item).offset()!.top < 180).last()[0]!.id; // 264
 
         $('.menu-item').removeClass('menu-item-active');
-        $('.menu-item').removeClass('menu-item-active-dark');
-        $(`.menu-item[anchor=${anchor}]`).addClass(
-            LauncherLib.getConfig('darkmode') ?
-                'menu-item-active-dark' :
-                'menu-item-active'
-        );
+        $(`.menu-item[anchor=${anchor}]`).addClass('menu-item-active');
     });
 
     /**
@@ -84,6 +76,23 @@ $(() => {
     $('#voicepack .selected-item').attr('data-hint', LauncherUI.i18n.translate('VoiceNotification'));
 
     /**
+     * Theme
+     */
+
+    $(`#theme li[value=${LauncherLib.getConfig('theme')}]`).addClass('selected');
+    $('#theme .selected-item span').text($(`#theme li[value=${LauncherLib.getConfig('theme')}]`).text());
+
+    $('#theme').on('selectionChanged', (e, data: any) => {
+        if (LauncherLib.getConfig('theme') != data.value)
+        {
+            LauncherLib.updateConfig('theme', data.value);
+            
+            // Not `data.value` because we don't have "system" theme
+            $('body').attr('theme', LauncherUI.theme);
+        }
+    });
+
+    /**
      * HUD
      */
 
@@ -113,42 +122,6 @@ $(() => {
         LauncherLib.updateConfig('rpc', $('#discord-rpc').hasClass('checkbox-active'));
 
         ipcRenderer.send('rpc-toggle');
-    });
-
-    /**
-     * Dark Mode
-     */
-
-    let darkMode = LauncherLib.getConfig('darkmode');
-    const toggledItem: string[] = 
-            ['menu', 'menu-item', 'menu-item-active',
-                'settings', 'list-item', 'selected-item',
-                'select-options', 'checkbox', 'checkbox-disabled',
-                'properties-list', 'button'];
-
-    if (darkMode === true) {
-        $('#darkmode').addClass('checkbox-active');
-        $('body').addClass('body-dark');
-        toggledItem.forEach((e:string) =>{ 
-            $(`.${e}`).addClass(`${e}-dark`);
-        })
-    }
-
-    if (darkMode === false) {
-        $('#darkmode').removeClass('checkbox-active');
-        $('body').removeClass('body-dark');
-        toggledItem.forEach((e:string) =>{ 
-            $(`.${e}`).removeClass(`${e}-dark`);
-        })
-    }
-
-
-    $('#darkmode').on('classChange', () => {
-        LauncherLib.updateConfig('darkmode', $('#darkmode').hasClass('checkbox-active'));
-        $('body').toggleClass('body-dark');
-        toggledItem.forEach(e =>{ 
-            $(`.${e}`).toggleClass(`${e}-dark`);
-        })
     });
 
     /**

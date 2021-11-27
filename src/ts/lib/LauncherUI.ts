@@ -1,3 +1,5 @@
+const { ipcRenderer } = require('electron');
+
 import $ from 'cash-dom';
 
 import constants from './constants';
@@ -14,6 +16,8 @@ type LauncherState =
     'game-installation-available' |
     'game-voice-update-required' |
     'game-launch-available';
+
+type Theme = 'light' | 'dark';
 
 export default class LauncherUI
 {
@@ -231,11 +235,13 @@ export default class LauncherUI
     public static updateBackground (): void
     {
         LauncherLib.getBackgroundUri().then(uri => {
-            const style = `url(${uri})`;
-
-            if ($('body').css('background-image') != style)
+            if ($('img.background').attr('src') != uri)
             {
-                $('body').css('background-image', style);
+                $('img.background').attr('src', uri);
+
+                // TODO
+                /*if (LauncherLib.getConfig('darken_background'))
+                    $('img.background').css('filter', this.theme == 'dark' ? 'brightness(0.75)' : '');*/
 
                 /**
                  * Calculating background's left-bottom corner mean brightness
@@ -306,5 +312,14 @@ export default class LauncherUI
         $('*[i18id]').each((i, element) => {
             element.innerText = this.i18n.translate(element.getAttribute('i18id')!);
         });
+    }
+
+    public static get theme(): Theme
+    {
+        const theme: Theme | 'system' = LauncherLib.getConfig('theme');
+
+        return theme === 'system' ?
+            (ipcRenderer.sendSync('is-window-dark') ? 'dark' : 'light') :
+            theme;
     }
 }

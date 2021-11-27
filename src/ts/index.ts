@@ -27,6 +27,8 @@ if (!fs.existsSync(constants.dxvksDir))
     fs.mkdirSync(constants.dxvksDir, { recursive: true });
 
 $(() => {
+    $('body').attr('theme', LauncherUI.theme);
+
     document.title = `${constants.placeholders.uppercase.full} Linux Launcher`;
 
     if (LauncherLib.version !== null)

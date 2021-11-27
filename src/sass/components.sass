@@ -1,416 +1,372 @@
-$light: #f1f4f9
-$light2: #eff2ff
-$primary: #657ef8
-$secondary: #e1e7ff
+@use "sass:map"
 
-$dark: #3B4252
-$dark2: #2E3440
-$dark3: #4C566A
-$dark-fg-disabled: #D8DEE9
-$dark-fg: #ECEFF4
+@import "themes/light"
+@import "themes/dark"
 
-/* Editable list of properties */
+@mixin themable($theme-name, $theme-map)
+    body[theme=#{$theme-name}]
 
-.properties-list
-    table
-        width: 100%
+        background-color: map.get($theme-map, "background")
+        color: map.get($theme-map, "text")
 
-        border-spacing: 0
+        p, span, div
+            color: map.get($theme-map, "text")
 
-        $cell-height: 40px
-        $padding-v: 4px
-        $padding-h: 8px
+        /* Editable list of properties */
 
-        tr
-            height: $cell-height
+        .properties-list
+            table
+                width: 100%
 
+                border-spacing: 0
+
+                $cell-height: 40px
+                $padding-v: 4px
+                $padding-h: 8px
+
+                tr
+                    height: $cell-height
+
+                    cursor: pointer
+
+                    &:hover
+                        background-color: map.get($theme-map, "background1")
+
+                    td:nth-of-type(1),
+                    th:nth-of-type(1)
+                        width: 60%
+
+                    th,
+                    td
+                        border-bottom: 1px solid map.get($theme-map, "background1")
+
+                        &:not(:last-child)
+                            border-right: 1px solid map.get($theme-map, "background1")
+                        
+                    td
+                        span
+                            display: block
+
+                            width: calc(100% - 2 * $padding-h)
+                            height: calc($cell-height - 2 * $padding-h)
+
+                            margin: auto
+
+                        input
+                            display: none
+
+                            width: calc(100% - 2 * $padding-h)
+                            height: calc($cell-height - 2 * $padding-h)
+
+                            background-color: map.get($theme-map, "background2")
+                            color: map.get($theme-map, "text")
+
+                            font-size: 15px
+
+                            margin: auto
+                            border: unset
+                            outline: none
+
+                .selected
+                    background-color: map.get($theme-map, "background2") !important
+
+                    input
+                        display: block
+
+                    span
+                        display: none
+
+            .properties-list-buttons
+                width: 100%
+                margin-top: 16px
+
+                display: inline-flex
+                justify-content: flex-end
+
+                .button:not(:last-child)
+                    margin-right: 8px
+
+        /* List of buttons */
+
+        .list-item
+            display: flex
+            align-items: center
+
+            height: 52px
+            margin-bottom: 8px
+            padding: 0 12px
+
+            border-radius: 12px
+            background-color: map.get($theme-map, "background1")
+
+            font-size: 18px
+            cursor: pointer
+
+            @if $theme-name == dark
+                img
+                    filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(219deg) brightness(102%) contrast(104%)
+
+            &:hover
+                background-color: map.get($theme-map, "background2")
+
+            > div
+                width: auto
+                height: 52px
+                min-width: 52px
+
+                margin-left: auto
+
+                display: flex
+                align-items: center
+
+                img
+                    width: 16px
+                    height: 16px
+
+                    margin: auto
+
+                img.item-delete
+                    // filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(93deg) brightness(103%) contrast(103%)
+
+                    width: 20px
+                    height: 20px
+
+                    display: none
+
+        .list-item-active
+            background-color: map.get($theme-map, "primary") !important
+            color: white !important
+
+            img.item-delete
+                display: none !important
+
+        .list-item-disabled
+            background-color: map.get($theme-map, "background1") !important
+            color: #abadbd !important
+
+            cursor: default !important
+
+            img
+                filter: invert(70%) sepia(13%) saturate(241%) hue-rotate(196deg) brightness(97%) contrast(91%)
+
+        .list-item-downloading
+            img
+                display: none !important
+
+        .list-item-downloaded
+            > div
+                img.item-download
+                    display: none
+                
+                img.item-delete
+                    display: block
+
+        /* Checkbox */
+            
+        .checkbox
+            display: inline-flex !important
+            align-items: center
+
+            font-size: larger
+
+            width: calc(100% - 24px)
+            height: 48px
+            padding: 0 12px
+
+            border-radius: 12px
+
+            .checkbox-mark
+                display: flex
+
+                background-color: map.get($theme-map, "background2")
+
+                border-radius: 16px
+                margin-left: auto
+                padding: 8px 16px
+
+                cursor: pointer
+
+                &:hover
+                    background-color: map.get($theme-map, "primary")
+
+                    svg
+                        filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(219deg) brightness(102%) contrast(104%)
+
+                svg
+                    height: 12px
+                    width: 12px
+
+                    @if $theme-name == dark
+                        filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(219deg) brightness(102%) contrast(104%)
+
+        .checkbox-disabled
+            background-color: map.get($theme-map, "background1")
+
+            .checkbox-mark
+                display: none
+
+        .checkbox-active
+            .checkbox-mark
+                background-color: map.get($theme-map, "primary")
+
+                svg
+                    filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(219deg) brightness(102%) contrast(104%)
+
+        .selectable-checkbox
             cursor: pointer
 
             &:hover
-                background-color: $light
+                background-color: map.get($theme-map, "background2")
 
-            td:nth-of-type(1),
-            th:nth-of-type(1)
-                width: 60%
+        .checkbox-active:is(.selectable-checkbox)
+            background-color: map.get($theme-map, "background2")
 
-            th,
-            td
-                border-bottom: 1px solid $light
+        /* Select box */
 
-                &:not(:last-child)
-                    border-right: 1px solid $light
-                
-            td
-                span
-                    display: block
+        .select
+            display: inline-flex
+            align-items: center
 
-                    width: calc(100% - 2 * $padding-h)
-                    height: calc($cell-height - 2 * $padding-h)
+            font-size: larger
 
-                    margin: auto
+            width: calc(100% - 24px)
+            height: 48px
+            padding: 0 12px
 
-                input
-                    display: none
+            border-radius: 12px
 
-                    width: calc(100% - 2 * $padding-h)
-                    height: calc($cell-height - 2 * $padding-h)
-
-                    background-color: $light2
-
-                    font-size: 15px
-
-                    margin: auto
-                    border: unset
-                    outline: none
-
-        .selected
-            background-color: $light2 !important
-
-            input
-                display: block
-
-            span
+            .select-options
+                position: absolute
                 display: none
 
-    .properties-list-buttons
-        width: 100%
-        margin-top: 16px
+                max-height: 230px
+                overflow: auto
 
-        display: inline-flex
-        justify-content: flex-end
+                background-color: map.get($theme-map, "select-boxes")
+                border-radius: 12px
 
-        .button:not(:last-child)
-            margin-right: 8px
+                box-shadow: 0 1px 8px 0 rgba(0, 0, 0, .2)
 
-
-.properties-list-dark
-    table
-        tr
-            &:hover
-                background-color: $dark3
-            
-            td
-                input
-                    background-color: $dark2
-                    color: $dark-fg
-
-        .selected
-            background-color: $dark2 !important
-
-/* List of buttons */
-
-.list-item
-    display: flex
-    align-items: center
-
-    height: 52px
-    margin-bottom: 8px
-    padding: 0 12px
-
-    border-radius: 12px
-    background-color: $light
-
-    font-size: 18px
-    cursor: pointer
-
-    &:hover
-        background-color: $light2
-
-    > div
-        width: auto
-        height: 52px
-        min-width: 52px
-
-        margin-left: auto
-
-        display: flex
-        align-items: center
-
-        img
-            width: 16px
-            height: 16px
-
-            margin: auto
-
-        img.item-delete
-            // filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(93deg) brightness(103%) contrast(103%)
-
-            width: 20px
-            height: 20px
-
-            display: none
-
-.list-item-dark
-    background-color: $dark2
-
-    &:hover
-        background-color: $dark
-
-.list-item-active
-    background-color: $primary !important
-    color: white !important
-
-    img.item-delete
-        display: none !important
-
-.list-item-disabled
-    background-color: $light !important
-    color: #abadbd !important
-
-    cursor: default !important
-
-    img
-        filter: invert(70%) sepia(13%) saturate(241%) hue-rotate(196deg) brightness(97%) contrast(91%)
-
-.list-item-downloading
-    img
-        display: none !important
-
-.list-item-downloaded
-    > div
-        img.item-download
-            display: none
-        
-        img.item-delete
-            display: block
-
-/* Checkbox */
-    
-.checkbox
-    display: inline-flex !important
-    align-items: center
-
-    font-size: larger
-
-    width: calc(100% - 24px)
-    height: 48px
-    padding: 0 12px
-
-    border-radius: 12px
-
-    .checkbox-mark
-        display: flex
-
-        background-color: $light2
-
-        border-radius: 16px
-        margin-left: auto
-        padding: 8px 16px
-
-        cursor: pointer
-
-        &:hover
-            background-color: $primary
-
-            svg
-                filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(219deg) brightness(102%) contrast(104%)
-
-        svg
-            height: 12px
-            width: 12px
-
-.checkbox-dark
-    .checkbox-mark
-        background-color: $dark2
-        
-        svg
-            filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(219deg) brightness(102%) contrast(104%)
-
-.checkbox-disabled
-    background-color: $light
-
-    .checkbox-mark
-        display: none
-
-.checkbox-disabled-dark
-    background-color: $dark
-    color: $dark3
-
-    .checkbox-mark
-        display: none
-
-.checkbox-active
-    .checkbox-mark
-        background-color: $primary
-
-        svg
-            filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(219deg) brightness(102%) contrast(104%)
-
-.selectable-checkbox
-    cursor: pointer
-
-    &:hover
-        background-color: $light2
-
-.checkbox-active:is(.selectable-checkbox)
-    background-color: $light2
-
-/* Select box */
-
-.select
-    display: inline-flex
-    align-items: center
-
-    font-size: larger
-
-    width: calc(100% - 24px)
-    height: 48px
-    padding: 0 12px
-
-    border-radius: 12px
-
-    .select-options
-        position: absolute
-        display: none
-
-        max-height: 230px
-        overflow: auto
-
-        background-color: white
-        border-radius: 12px
-
-        box-shadow: 0 1px 8px 0 rgba(0, 0, 0, .2)
-
-        padding: 8px 12px
-        transform: translateY(calc(50% + 32px))
-
-        right: 32px
-
-        cursor: pointer
-
-        z-index: 1
-
-        ul
-            list-style: none
-
-            padding: 0
-            margin: 0
-
-            li
-                color: #8592a3
-                font-size: smaller
-
-                border-radius: 8px
-                
                 padding: 8px 12px
-                margin: 0 -4px
+                transform: translateY(calc(50% + 32px))
 
-                &:hover:not([disabled])
-                    background-color: $light2
-                    color: $primary
+                right: 32px
 
-                &[disabled]
-                    display: block
-                    color: #b2c0d3
-                    cursor: default
+                cursor: pointer
 
-            li:not(last-child)
-                margin-bottom: 4px
+                z-index: 1
 
-            li.selected
-                background-color: $light2
-                color: $primary
+                @if $theme-name == dark
+                    &::-webkit-scrollbar-track
+                        background-color: map.get($theme-map, "background2")
 
-    .select-options-dark
-        background-color: $dark2
+                    &::-webkit-scrollbar-thumb
+                        background: #d8dee9
 
-        &::-webkit-scrollbar-track
-            background-color: $dark2
+                        &:hover
+                            background: #e5e9f0
 
-        &::-webkit-scrollbar-thumb
-            background: #D8DEE9
+                ul
+                    list-style: none
+
+                    padding: 0
+                    margin: 0
+
+                    li
+                        color: #8592a3
+                        font-size: smaller
+
+                        border-radius: 8px
+                        
+                        padding: 8px 12px
+                        margin: 0 -4px
+
+                        &:hover:not([disabled])
+                            background-color: map.get($theme-map, "background2")
+                            color: map.get($theme-map, "primary")
+
+                        &[disabled]
+                            display: block
+                            color: #b2c0d3
+                            cursor: default
+
+                    li:not(last-child)
+                        margin-bottom: 4px
+
+                    li.selected
+                        background-color: map.get($theme-map, "background2")
+                        color: map.get($theme-map, "primary")
+
+            .selected-item
+                display: flex
+                align-items: baseline
+
+                font-size: initial
+
+                background-color: map.get($theme-map, "background2")
+
+                border-radius: 16px
+                margin-left: auto
+                padding: 8px 16px
+
+                cursor: pointer
+
+                &:hover
+                    background-color: map.get($theme-map, "primary")
+
+                    span
+                        color: white
+
+                    svg
+                        filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(219deg) brightness(102%) contrast(104%)
+
+                svg
+                    height: 12px
+                    width: 12px
+
+                    margin-left: 8px
+
+                    transform: rotate(90deg)
+
+                    @if $theme-name == dark
+                        filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(219deg) brightness(102%) contrast(104%)
+
+        .select-active
+            .selected-item
+                background-color: map.get($theme-map, "primary")
+
+                span
+                    color: white
+
+                svg
+                    filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(219deg) brightness(102%) contrast(104%)
+
+            .select-options
+                display: block
+
+        /* Buttons */
+
+        .button
+            background-color: map.get($theme-map, "background1")
+            border-radius: 16px
+            border: none
+
+            cursor: pointer
+            font-size: 16px
+            
+            padding: 8px 20px
+
+            color: map.get($theme-map, "text")
 
             &:hover
-                background: #E5E9F0
+                background-color: map.get($theme-map, "background2")
 
-        ul
-            li
-                color: $dark-fg
+        .button-primary
+            background-color: map.get($theme-map, "background2")
 
-                &:hover:not([disabled])
-                    background-color: $dark
-                
-                &[disabled]
-                    color: $dark3
-            
-            li.selected
-                background-color: $dark
+            &:hover
+                background-color: map.get($theme-map, "primary")
+                color: white
 
-
-    .selected-item
-        display: flex
-        align-items: baseline
-
-        font-size: initial
-
-        background-color: $light2
-
-        border-radius: 16px
-        margin-left: auto
-        padding: 8px 16px
-
-        cursor: pointer
-
-        &:hover
-            background-color: $primary
-            color: white
-
-            svg
-                filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(219deg) brightness(102%) contrast(104%)
-
-        svg
-            height: 12px
-            width: 12px
-
-            margin-left: 8px
-
-            transform: rotate(90deg)
-    
-    .selected-item-dark
-        background-color: $dark2
-
-        &:hover
-            background-color: $dark
-
-        svg 
-            filter: invert(100%) 
-
-.select-active
-    .selected-item
-        color: white
-        background-color: $primary
-
-        svg
-            filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(219deg) brightness(102%) contrast(104%)
-
-    .select-options
-        display: block
-
-/* Buttons */
-
-.button
-    background-color: $light
-    border-radius: 16px
-    border: none
-
-    cursor: pointer
-    font-size: 16px
-    
-    padding: 8px 20px
-
-    &:hover
-        background-color: $secondary
-
-.button-primary
-    background-color: $secondary
-
-    &:hover
-        background-color: $primary
-        color: white
-
-.button-dark
-    background-color: $dark2
-    color: $dark-fg
-
-    &:hover
-        background-color: $dark
+@include themable(light, $light)
+@include themable(dark, $dark)
