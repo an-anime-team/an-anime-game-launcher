@@ -1,6 +1,8 @@
 const { ipcRenderer } = require('electron');
 
 import $ from 'cash-dom';
+import path from 'path';
+import fs from 'fs';
 
 import constants from './constants';
 import LauncherLib from './LauncherLib';
@@ -15,6 +17,7 @@ type LauncherState =
     'game-update-available' |
     'game-installation-available' |
     'game-voice-update-required' |
+    'download-resumable' |
     'game-launch-available';
 
 type Theme = 'light' | 'dark';
@@ -99,6 +102,8 @@ export default class LauncherUI
                 $('#launch').text(this.i18n.translate('Launch'));
 
                 break;
+            case 'download-resumable':
+                $('#launch').text(this.i18n.translate('ResumeDownload'));
         }
 
         this._launcherState = state;
@@ -110,8 +115,11 @@ export default class LauncherUI
         const patchInfo = await LauncherLib.getPatchInfo();
 
         // Update available
-        if (LauncherLib.version != gameData.game.latest.version)
-            this.setState(LauncherLib.version === null ? 'game-installation-available' : 'game-update-available');
+        if (LauncherLib.version != gameData.game.latest.version) {
+            if(!fs.existsSync(path.join(constants.launcherDir, `latest-${gameData.game.latest.version}.zip`))) 
+                this.setState(LauncherLib.version === null ? 'game-installation-available' : 'game-update-available');
+            else this.setState('download-resumable');
+        }
 
         // Voice pack update required
         else if (LauncherLib.getConfig('lang.voice.active') != LauncherLib.getConfig('lang.voice.installed'))
