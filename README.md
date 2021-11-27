@@ -20,7 +20,7 @@ We have our own [An Anime Game](https://discord.gg/ck37X6UWBp) discord server wh
 
 ### AppImage
 
-Download AppImage from [Releases](https://notabug.org/nobody/an-anime-game-launcher/releases) page
+Download AppImage from [Releases](https://gitlab.com/KRypt0n_/an-anime-game-launcher/-/releases) page
 
 ### For arch users
 
@@ -100,9 +100,9 @@ npm start
 ### ✓ <s>To 1.0.0 release</s>
 
 * <s>Fix AppImage builds</s> *(0.3.0)*
-* <s>Parse background banners from the game's API ([issue #1](https://notabug.org/nobody/an-anime-game-launcher/issues/1), [pull request #2](https://notabug.org/nobody/an-anime-game-launcher/pulls/2))</s> *(0.3.0)*
+* <s>Parse background banners from the game's API ([notabug issue #1](https://notabug.org/nobody/an-anime-game-launcher/issues/1), [notabug pull request #2](https://notabug.org/nobody/an-anime-game-launcher/pulls/2))</s> *(0.3.0)*
 * <s>Update launcher logo</s> *(0.4.0)*
-* <s>Cache launcher background picture ([pull request #6](https://notabug.org/nobody/an-anime-game-launcher/pulls/6))</s> *(0.4.0)*
+* <s>Cache launcher background picture ([notabug pull request #6](https://notabug.org/nobody/an-anime-game-launcher/pulls/6))</s> *(0.4.0)*
 * <s>Make Proton-GE default compatibility tool and fix game input issues</s> (added runners manager) *(0.5.0)*
 * <s>Add preferences menu</s> *(0.5.0)*
 * <s>Add additional telemetry checking</s> *(0.6.0)*
@@ -125,15 +125,15 @@ npm start
   - [notahuman's](https://notabug.org/Krock/GI-on-Linux/src/master/static/vkBasalt_notahuman.conf) prime preset v2
 * <s>Make shaders manager hidden if vkBasalt is not installed</s> *(1.5.4)*
 * <s>Make MangoHud option hidden if it is not installed</s> *(1.5.4)*
-* <s>GameMode integration ([issue 28](https://notabug.org/nobody/an-anime-game-launcher/issues/28), [pull request 30](https://notabug.org/nobody/an-anime-game-launcher/pulls/30))</s> *(1.5.8)*
-* <s>Hybrid GPU integration ([issue 29](https://notabug.org/nobody/an-anime-game-launcher/issues/29), [pull request 33](https://notabug.org/nobody/an-anime-game-launcher/pulls/33))</s> *(1.6.0)*
+* <s>GameMode integration ([notabug issue 28](https://notabug.org/nobody/an-anime-game-launcher/issues/28), [notabug pull request 30](https://notabug.org/nobody/an-anime-game-launcher/pulls/30))</s> *(1.5.8)*
+* <s>Hybrid GPU integration ([notabug issue 29](https://notabug.org/nobody/an-anime-game-launcher/issues/29), [notabug pull request 33](https://notabug.org/nobody/an-anime-game-launcher/pulls/33))</s> *(1.6.0)*
 * <s>Add winetricks auto-downloading when new prefix creates so it is no longer required</s> *(1.6.0)*
 * <s>DXVK logs auto-deletion option</s> *(1.6.0)*
 * <s>Add default wine version to download</s> (Proton-6.20-GE-1) *(1.6.0)*
 * <s>Add dark theme support for settings menu</s> *(1.7.0)*
-* Add winetricks and winecfg buttons to settings ([issue 35](https://notabug.org/nobody/an-anime-game-launcher/issues/35))
+* Add winetricks and winecfg buttons to settings ([notabug issue 35](https://notabug.org/nobody/an-anime-game-launcher/issues/35))
 * Fix button flickering at start when the launcher's state updates
-* Wine prefix folder selection *(symlinks?)* ([issue 37](https://notabug.org/nobody/an-anime-game-launcher/issues/37))
+* Wine prefix folder selection *(symlinks?)* ([notabug issue 37](https://notabug.org/nobody/an-anime-game-launcher/issues/37))
 * Game's update pre-installation
 * Screenshots explorer
 * Make force launch button when the launcher's repository is unavailable *(waiting for the repository's unavailability lmao)*
