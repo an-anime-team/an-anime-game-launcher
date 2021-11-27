@@ -128,10 +128,9 @@ export default class Tools
         return new Promise((resolve, reject) => {
             let rangeStart = 0;
 
-            if(fs.existsSync(savePath)) {
-                // Part of the file was already downloaded, resume the download
+            // Part of the file was already downloaded, resume the download
+            if (fs.existsSync(savePath))
                 rangeStart = fs.statSync(savePath).size;
-            }
             
             https.get(uri, {
                 headers: {

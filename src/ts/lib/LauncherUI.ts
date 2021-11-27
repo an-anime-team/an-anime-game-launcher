@@ -17,7 +17,7 @@ type LauncherState =
     'game-update-available' |
     'game-installation-available' |
     'game-voice-update-required' |
-    'download-resumable' |
+    'resume-download-available' |
     'game-launch-available';
 
 type Theme = 'light' | 'dark';
@@ -102,8 +102,11 @@ export default class LauncherUI
                 $('#launch').text(this.i18n.translate('Launch'));
 
                 break;
-            case 'download-resumable':
+            
+            case 'resume-download-available':
                 $('#launch').text(this.i18n.translate('ResumeDownload'));
+
+                break;
         }
 
         this._launcherState = state;
@@ -115,10 +118,15 @@ export default class LauncherUI
         const patchInfo = await LauncherLib.getPatchInfo();
 
         // Update available
-        if (LauncherLib.version != gameData.game.latest.version) {
-            if(!fs.existsSync(path.join(constants.launcherDir, `latest-${gameData.game.latest.version}.zip`))) 
+        if (LauncherLib.version != gameData.game.latest.version)
+        {
+            // If we already started downloading - then resume it
+            // Otherwise begin new downloading process
+            
+            if (!fs.existsSync(path.join(constants.launcherDir, `latest-${gameData.game.latest.version}.zip`))) 
                 this.setState(LauncherLib.version === null ? 'game-installation-available' : 'game-update-available');
-            else this.setState('download-resumable');
+            
+            else this.setState('resume-download-available');
         }
 
         // Voice pack update required
