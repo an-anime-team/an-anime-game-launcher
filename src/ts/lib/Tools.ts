@@ -126,9 +126,20 @@ export default class Tools
     public static async downloadFile (uri: string, savePath: string, progress: null|((current: number, total: number, difference: number) => void) = null): Promise<void|Error>
     {
         return new Promise((resolve, reject) => {
-            https.get(uri, (response: any) => {
-                let length = parseInt(response.headers['content-length'], 10),
-                    total  = 0;
+            let rangeStart = 0;
+
+            if(fs.existsSync(savePath)) {
+                // Part of the file was already downloaded, resume the download
+                rangeStart = fs.statSync(savePath).size;
+            }
+            
+            https.get(uri, {
+                headers: {
+                    Range: `bytes=${rangeStart}-`
+                }
+            }, (response: any) => {
+                let length = parseInt(response.headers['content-length'], 10) + rangeStart,
+                    total  = rangeStart;
 
                 response.on('data', (chunk: any) => {
                     total += chunk.length;
