@@ -3,6 +3,12 @@ $light2: #eff2ff
 $primary: #657ef8
 $secondary: #e1e7ff
 
+$dark: #3B4252
+$dark2: #2E3440
+$dark3: #4C566A
+$dark-fg-disabled: #D8DEE9
+$dark-fg: #ECEFF4
+
 /* Editable list of properties */
 
 .properties-list
@@ -76,6 +82,21 @@ $secondary: #e1e7ff
         .button:not(:last-child)
             margin-right: 8px
 
+
+.properties-list-dark
+    table
+        tr
+            &:hover
+                background-color: $dark3
+            
+            td
+                input
+                    background-color: $dark2
+                    color: $dark-fg
+
+        .selected
+            background-color: $dark2 !important
+
 /* List of buttons */
 
 .list-item
@@ -118,6 +139,12 @@ $secondary: #e1e7ff
             height: 20px
 
             display: none
+
+.list-item-dark
+    background-color: $dark2
+
+    &:hover
+        background-color: $dark
 
 .list-item-active
     background-color: $primary !important
@@ -182,8 +209,22 @@ $secondary: #e1e7ff
             height: 12px
             width: 12px
 
+.checkbox-dark
+    .checkbox-mark
+        background-color: $dark2
+        
+        svg
+            filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(219deg) brightness(102%) contrast(104%)
+
 .checkbox-disabled
     background-color: $light
+
+    .checkbox-mark
+        display: none
+
+.checkbox-disabled-dark
+    background-color: $dark
+    color: $dark3
 
     .checkbox-mark
         display: none
@@ -270,6 +311,32 @@ $secondary: #e1e7ff
                 background-color: $light2
                 color: $primary
 
+    .select-options-dark
+        background-color: $dark2
+
+        &::-webkit-scrollbar-track
+            background-color: $dark2
+
+        &::-webkit-scrollbar-thumb
+            background: #D8DEE9
+
+            &:hover
+                background: #E5E9F0
+
+        ul
+            li
+                color: $dark-fg
+
+                &:hover:not([disabled])
+                    background-color: $dark
+                
+                &[disabled]
+                    color: $dark3
+            
+            li.selected
+                background-color: $dark
+
+
     .selected-item
         display: flex
         align-items: baseline
@@ -298,6 +365,15 @@ $secondary: #e1e7ff
             margin-left: 8px
 
             transform: rotate(90deg)
+    
+    .selected-item-dark
+        background-color: $dark2
+
+        &:hover
+            background-color: $dark
+
+        svg 
+            filter: invert(100%) 
 
 .select-active
     .selected-item
@@ -331,3 +407,10 @@ $secondary: #e1e7ff
     &:hover
         background-color: $primary
         color: white
+
+.button-dark
+    background-color: $dark2
+    color: $dark-fg
+
+    &:hover
+        background-color: $dark
