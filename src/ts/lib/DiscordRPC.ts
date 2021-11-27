@@ -16,7 +16,7 @@ export default class DiscordRPC
             this.rpc.setActivity({
                 details: 'Preparing to launch',
                 largeImageKey: 'launcher',
-                largeImageText: 'An Anime Game Launcher'
+                largeImageText: 'An Anime Game'
             });
         });
     }

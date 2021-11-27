@@ -186,7 +186,7 @@ $(() => {
                         DiscordRPC.setActivity({
                             details: 'In-Game',
                             largeImageKey: 'game',
-                            largeImageText: 'An Anime Game Launcher',
+                            largeImageText: 'An Anime Game',
                             startTimestamp: Date.now()
                         });
                     }
@@ -294,7 +294,7 @@ $(() => {
                             DiscordRPC.setActivity({
                                 details: 'Preparing to launch',
                                 largeImageKey: 'launcher',
-                                largeImageText: 'An Anime Game Launcher'
+                                largeImageText: 'An Anime Game'
                             });
                         }
 
