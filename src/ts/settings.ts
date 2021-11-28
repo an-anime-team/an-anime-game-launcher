@@ -58,10 +58,10 @@ $(() => {
      * Prefix
      */
 
-    $('#prefixloc span').text(LauncherLib.getConfig('prefix'));
+    $('#prefixloc #currentprefix').text(LauncherLib.getConfig('prefix'));
 
     ipcRenderer.on('prefix-changed', () => {
-        $('#prefixloc span').text(LauncherLib.getConfig('prefix'));
+        $('#prefixloc #currentprefix').text(LauncherLib.getConfig('prefix'));
     })
 
     $('#prefixloc #prefixdir').on('click', () => {
