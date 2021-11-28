@@ -119,7 +119,7 @@ $(() => {
     {
         $('#general-action-buttons #winetricks')
             .addClass('hint--top hint--small')
-            .attr('data-hint', LauncherUI.i18n.translate('HasNotInstalled', ['winetricks']))
+            .attr('data-hint', LauncherUI.i18n.translate('IsNotInstalled', ['winetricks']))
             .attr('disabled', 'disabled');
     }
 
@@ -142,7 +142,7 @@ $(() => {
     {
         $('#general-action-buttons #winecfg')
             .addClass('hint--top hint--small')
-            .attr('data-hint', LauncherUI.i18n.translate('HasNotInstalled', ['winecfg']))
+            .attr('data-hint', LauncherUI.i18n.translate('IsNotInstalled', ['winecfg']))
             .attr('disabled', 'disabled');
     }
 

@@ -11,7 +11,7 @@
     "Light": "Hell",
     "Dark": "Dunkel",
     "System": "System",
-    "HasNotInstalled": "{0} has not installed",
+    "IsNotInstalled": "{0} ist nicht installiert",
     "PreInstallationRequired": "Vorinstallation erförderlich",
     "ToggleShadersText": "Verwenden Sie die Home-Taste (POS 1), um Shader im Spiel ein/aus-zuschalten",
     "Shaders": "Shadern",

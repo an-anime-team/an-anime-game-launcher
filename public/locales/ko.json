@@ -11,7 +11,7 @@
     "Light": "빛",
     "Dark": "어두운",
     "System": "시스템",
-    "HasNotInstalled": "{0} has not installed",
+    "IsNotInstalled": "{0} 설치되지 않았습니다",
     "PreInstallationRequired": "사전 설치 필요",
     "ToggleShadersText": "홈 버튼을 사용하여 게임에서 쉐이더를 전환하십시오",
     "Shaders": "쉐이더",
