@@ -132,6 +132,7 @@ npm start
 * <s>Add default wine version to download</s> (Proton-6.20-GE-1) *(1.6.0)*
 * <s>Add dark theme support for settings menu</s> *(1.7.0)*
 * Add winetricks and winecfg buttons to settings ([notabug issue 35](https://notabug.org/nobody/an-anime-game-launcher/issues/35))
+* Use `LauncherLib.getGameVersion` function instead of the `config.json`'s `version` property
 * Fix button flickering at start when the launcher's state updates
 * Wine prefix folder selection *(symlinks?)* ([notabug issue 37](https://notabug.org/nobody/an-anime-game-launcher/issues/37))
 * Game's update pre-installation
