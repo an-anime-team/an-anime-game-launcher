@@ -53,5 +53,7 @@
     "SkipAndDontAsk": "スキップして二度と聞かない",
     "LauncherUpdateTitle": "ランチャーのアップデートが可能 ",
     "LauncherUpdateBody": "ランチャーの新バージョンは、プロジェクトのリポジトリ（{uri.launcher}）からダウンロードできます。",
-    "TelemetryNotDisabled": "{placeholders.uppercase.company}のテレメトリサーバは無効になっていません！"
+    "TelemetryNotDisabled": "{placeholders.uppercase.company}のテレメトリサーバは無効になっていません！",
+    "DefPrefix": "デフォルトへのリセット",
+    "ChangePrefix": "プレフィックスを変更"
 }
