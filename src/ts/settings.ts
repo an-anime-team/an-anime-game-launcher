@@ -58,17 +58,17 @@ $(() => {
      * Prefix
      */
 
-    $('#prefixloc #currentprefix').text(LauncherLib.getConfig('prefix'));
+    $('#prefix input').val(constants.prefixDir.get());
 
     ipcRenderer.on('prefix-changed', () => {
-        $('#prefixloc #currentprefix').text(LauncherLib.getConfig('prefix'));
+        $('#prefix input').val(constants.prefixDir.get());
     });
 
-    $('#prefixloc #prefixdir').on('click', () => {
+    $('#prefix #choose-location').on('click', () => {
         ipcRenderer.send('prefix-select');
     });
 
-    $('#prefixloc #defprefix').on('click', () => {
+    $('#prefix #reset-location').on('click', () => {
         ipcRenderer.send('prefix-reset');
     });
 

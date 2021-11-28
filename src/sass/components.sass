@@ -12,6 +12,53 @@
         p, span, div
             color: map.get($theme-map, "text")
 
+        /* Directory selector
+
+        .directory-selector
+            display: inline-flex
+
+            width: calc(100% - 28px)
+            border-radius: 16px
+            padding: 8px
+
+            background-color: map.get($theme-map, "background2")
+
+            > span
+                align-self: center
+                margin: 0 12px
+
+            > input
+                width: 100%
+                height: 24px
+                align-self: center
+
+                background-color: transparent
+
+                font-size: 15px
+                color: map.get($theme-map, "text")
+
+                border: unset
+                outline: none
+                border-bottom: 1px solid map.get($theme-map, "primary")
+
+            > div
+                width: 120px
+                margin-left: 8px
+
+                button
+                    padding: 4px 8px
+
+                    &:nth-child(1) svg
+                        width: 20px
+                        height: 20px
+                
+                    &:nth-child(2) svg
+                        width: 18px
+                        height: 18px
+
+                    &:hover
+                        background-color: map.get($theme-map, "background1") !important
+
         /* Editable list of properties */
 
         .properties-list
