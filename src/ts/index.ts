@@ -295,7 +295,7 @@ $(() => {
                         cwd: constants.gameDir,
                         env: {
                             ...process.env,
-                            WINEPREFIX: constants.prefixDir,
+                            WINEPREFIX: constants.prefixDir.get(),
                             ...env, // User-defined variables should be the most important
                             ...LauncherLib.getConfig('env')
                         }

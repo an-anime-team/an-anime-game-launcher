@@ -349,7 +349,7 @@ export default class LauncherLib
                         cwd: constants.gameDir,
                         env: {
                             ...process.env,
-                            WINEPREFIX: constants.prefixDir
+                            WINEPREFIX: constants.prefixDir.get()
                         }
                     });
 
@@ -362,7 +362,7 @@ export default class LauncherLib
                                 cwd: constants.gameDir,
                                 env: {
                                     ...process.env,
-                                    WINEPREFIX: constants.prefixDir
+                                    WINEPREFIX: constants.prefixDir.get()
                                 }
                             });
 
@@ -371,7 +371,7 @@ export default class LauncherLib
                             cwd: constants.gameDir,
                             env: {
                                 ...process.env,
-                                WINEPREFIX: constants.prefixDir
+                                WINEPREFIX: constants.prefixDir.get()
                             }
                         });
         

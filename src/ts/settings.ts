@@ -127,7 +127,7 @@ $(() => {
             exec('winetricks', {
                 env: {
                     ...process.env,
-                    WINEPREFIX: constants.prefixDir
+                    WINEPREFIX: constants.prefixDir.get()
                 }
             });
         });
@@ -150,7 +150,7 @@ $(() => {
             exec('winecfg', {
                 env: {
                     ...process.env,
-                    WINEPREFIX: constants.prefixDir
+                    WINEPREFIX: constants.prefixDir.get()
                 }
             });
         });
@@ -572,7 +572,7 @@ $(() => {
                             cwd: path.join(constants.dxvksDir, 'dxvk-' + dxvk.version),
                             env: {
                                 ...process.env,
-                                WINEPREFIX: constants.prefixDir
+                                WINEPREFIX: constants.prefixDir.get()
                             }
                         });
 
