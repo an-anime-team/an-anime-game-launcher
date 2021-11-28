@@ -53,5 +53,7 @@
     "SkipAndDontAsk": "Überspingen und nicht noch mal fragen",
     "LauncherUpdateTitle": "Launcher update verfügbar: ",
     "LauncherUpdateBody": "Sie können eine neue Version des Launchers aus dem Repository des Projekts unter {uri.launcher} herunterladen.",
-    "TelemetryNotDisabled": "{placeholders.uppercase.company} Telemetrieserver sind nicht deaktiviert!"
+    "TelemetryNotDisabled": "{placeholders.uppercase.company} Telemetrieserver sind nicht deaktiviert!",
+    "DefPrefix": "Zurücksetzen zum Standard-Prefix",
+    "ChangePrefix": "Prefix ändern"
 }

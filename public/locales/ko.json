@@ -53,5 +53,7 @@
     "SkipAndDontAsk": "건너 뛰고 다시 묻지 마십시오",
     "LauncherUpdateTitle": "실행기 업데이트 가능: ",
     "LauncherUpdateBody": "에서 프로젝트의 저장소에서 실행기의 새 버전을 다운로드 할 수 있습니다 {uri.launcher}",
-    "TelemetryNotDisabled": "{placeholders.uppercase.company} 의 원격 측정 서버가 비활성화되지 않음!"
+    "TelemetryNotDisabled": "{placeholders.uppercase.company} 의 원격 측정 서버가 비활성화되지 않음!",
+    "DefPrefix": "Reset to Default",
+    "ChangePrefix": "Change Prefix"
 }

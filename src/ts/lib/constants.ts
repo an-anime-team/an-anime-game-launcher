@@ -1,5 +1,6 @@
 const path = require('path');
 const os = require('os');
+import LauncherLib from "./LauncherLib";
 
 export default class constants
 {
@@ -44,7 +45,7 @@ export default class constants
 
     public static readonly launcherDir: string = path.join(os.homedir(), '.local', 'share', 'anime-game-launcher');
 
-    public static readonly prefixDir: string = path.join(this.launcherDir, 'game');
+    public static prefixDir: string = LauncherLib.getConfig('prefix');
     public static readonly gameDir: string = path.join(this.prefixDir, 'drive_c', 'Program Files', this.placeholders.uppercase.full);
     public static readonly voiceDir: string = path.join(this.gameDir, `${this.placeholders.uppercase.first + this.placeholders.uppercase.second}_Data`, 'StreamingAssets', 'Audio', 'GeneratedSoundBanks', 'Windows');
 

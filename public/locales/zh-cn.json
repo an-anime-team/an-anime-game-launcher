@@ -53,5 +53,7 @@
     "SkipAndDontAsk": "跳过，不要再问",
     "LauncherUpdateTitle": "启动器更新可用：",
     "LauncherUpdateBody": "你可以从项目的资源库中下载新版本的启动器，网址是：{uri.launcher}",
-    "TelemetryNotDisabled": "{placeholders.uppercase.company}'s telemetry servers don't disabled!"
+    "TelemetryNotDisabled": "{placeholders.uppercase.company}'s telemetry servers don't disabled!",
+    "DefPrefix": "Reset to Default",
+    "ChangePrefix": "Change Prefix"
 }

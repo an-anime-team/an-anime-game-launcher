@@ -53,5 +53,7 @@
     "SkipAndDontAsk": "Lewati dan jangan tanya lagi",
     "LauncherUpdateTitle": "Pembaruan Peluncur tersedia: ",
     "LauncherUpdateBody": "Kamu dapat mengunduh versi baru peluncur dari repositori di {uri.launcher}",
-    "TelemetryNotDisabled": "Peladen telemetri {placeholders.uppercase.company} tidak dimatikan!"
+    "TelemetryNotDisabled": "Peladen telemetri {placeholders.uppercase.company} tidak dimatikan!",
+    "DefPrefix": "Reset to Default",
+    "ChangePrefix": "Change Prefix"
 }

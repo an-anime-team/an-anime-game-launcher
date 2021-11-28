@@ -55,6 +55,24 @@ $(() => {
     });
 
     /**
+     * Prefix
+     */
+
+    $('#prefixloc #currentprefix').text(LauncherLib.getConfig('prefix'));
+
+    ipcRenderer.on('prefix-changed', () => {
+        $('#prefixloc #currentprefix').text(LauncherLib.getConfig('prefix'));
+    })
+
+    $('#prefixloc #prefixdir').on('click', () => {
+        ipcRenderer.send('prefix-con');
+    })
+
+    $('#prefixloc #defprefix').on('click', () => {
+        ipcRenderer.send('prefix-reset');
+    })
+
+    /**
      * Game voice language
      */
 

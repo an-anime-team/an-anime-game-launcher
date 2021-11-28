@@ -5,14 +5,15 @@ const {
     Notification,
     shell,
     nativeImage,
-    nativeTheme
+    nativeTheme,
+    dialog
 } = require('electron');
 
 const path = require('path');
 
 require('electron-store').initRenderer();
 
-let mainWindow, analyticsWindow;
+let mainWindow, analyticsWindow, settingsWindow;
 
 ipcMain.handle('hide-window', () => mainWindow.hide());
 ipcMain.handle('show-window', () => mainWindow.show());
@@ -26,7 +27,7 @@ ipcMain.on('notification', (event, args) => {
 ipcMain.on('is-window-dark', (e) => e.returnValue = nativeTheme.shouldUseDarkColors);
 
 ipcMain.handle('open-settings', () => {
-    const settingsWindow = new BrowserWindow ({
+    settingsWindow = new BrowserWindow ({
         width: 900,
         height: 600,
         webPreferences: {
@@ -118,6 +119,20 @@ app.whenReady().then(() => {
 
     ipcMain.on('change-voicepack', () => {
         mainWindow.webContents.send('change-voicepack');
+    });
+
+    ipcMain.on('prefix-con', async () => {
+        const result = await dialog.showOpenDialog({ properties: ['openDirectory'] });
+        if(result.filePaths.length == 0) return;
+        mainWindow.webContents.send('change-prefix', { 'type': 'change', 'dir': result.filePaths[0] });
+    });
+
+    ipcMain.on('prefix-reset', async () => {
+        mainWindow.webContents.send('change-prefix', { 'type': 'reset' });
+    });
+
+    ipcMain.on('prefix-changed', async () => {
+        settingsWindow.webContents.send('prefix-changed');
     });
 
     ipcMain.on('rpc-toggle', () => mainWindow.webContents.send('rpc-toggle'));
