@@ -11,6 +11,7 @@
     "Light": "Светлая",
     "Dark": "Тёмная",
     "System": "Системная",
+    "HasNotInstalled": "{0} не установлен",
     "PreInstallationRequired": "требуется предустановка",
     "ToggleShadersText": "Используйте кнопку Home для переключения шейдеров в игре",
     "Shaders": "Шейдеры",

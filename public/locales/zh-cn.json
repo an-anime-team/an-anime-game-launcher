@@ -11,6 +11,7 @@
     "Light": "Light",
     "Dark": "Dark",
     "System": "System",
+    "HasNotInstalled": "{0} has not installed",
     "PreInstallationRequired": "pre-installation required",
     "ToggleShadersText": "Use Home button to toggle shaders in the game",
     "Shaders": "Shaders",

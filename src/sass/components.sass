@@ -358,8 +358,11 @@
 
             color: map.get($theme-map, "text")
 
-            &:hover
+            &:hover:not([disabled])
                 background-color: map.get($theme-map, "background2")
+
+            &[disabled]
+                cursor: default
 
         .button-primary
             background-color: map.get($theme-map, "background2")

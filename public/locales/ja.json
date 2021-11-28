@@ -11,6 +11,7 @@
     "Light": "ライト",
     "Dark": "暗い",
     "System": "システム",
+    "HasNotInstalled": "{0} has not installed",
     "PreInstallationRequired": "事前インストールが必要",
     "ToggleShadersText": "ホームボタンを使用してゲーム内のシェーダを切り替えます",
     "Shaders": "シェーダ",

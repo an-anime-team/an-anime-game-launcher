@@ -11,6 +11,7 @@
     "Light": "Terang",
     "Dark": "Gelap",
     "System": "Sistem",
+    "HasNotInstalled": "{0} has not installed",
     "PreInstallationRequired": "pra-pemasangan dibutuhkan",
     "ToggleShadersText": "Gunakan tombol Home untuk menyalakan/mematikan shader di dalam Game",
     "Shaders": "Shader",

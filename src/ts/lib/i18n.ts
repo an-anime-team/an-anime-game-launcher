@@ -16,7 +16,7 @@ export default class i18n
 
     public static loadedLanguage: any;
 
-    public static translate (phrase: string): string
+    public static translate (phrase: string, placeholders: string[] = []): string
     {
         if (i18n.loadedLanguage === undefined)
             this.setLang(navigator.language);
@@ -24,13 +24,19 @@ export default class i18n
         let translation = i18n.loadedLanguage[phrase] ?? phrase;
         let item;
 
-        while ((item = /\{([a-zA-Z\.]+)\}/g.exec(translation)) !== null)
+        while ((item = /\{([a-zA-Z0-9\.]+)\}/g.exec(translation)) !== null)
         {
-            let value: any = constants;
+            if (/^-?\d+$/.test(item[1]))
+                translation = translation.replace(item[0], placeholders[parseInt(item[1])]);
+            
+            else
+            {
+                let value: any = constants;
 
-            item[1].split('.').forEach(ref => value = value[ref]);
+                item[1].split('.').forEach(ref => value = value[ref]);
 
-            translation = translation.replace(item[0], value);
+                translation = translation.replace(item[0], value);
+            }
         }
 
         return translation;

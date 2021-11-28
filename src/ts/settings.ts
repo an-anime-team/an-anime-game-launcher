@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const { ipcRenderer } = require('electron');
-const { exec } = require('child_process');
+const { exec, spawn } = require('child_process');
 
 const commandExists = require('command-exists').sync;
 
@@ -91,6 +91,60 @@ $(() => {
             $('body').attr('theme', LauncherUI.theme);
         }
     });
+
+    /**
+     * Action buttons
+     */
+
+    $('#general-action-buttons #launcher-folder').on('click', () => {
+        spawn('xdg-open', [constants.launcherDir]);
+    });
+
+    /**
+     * winetricks button
+     */
+    if (!commandExists('winetricks'))
+    {
+        $('#general-action-buttons #winetricks').on('click', () => {
+            exec('winetricks', {
+                env: {
+                    ...process.env,
+                    WINEPREFIX: constants.prefixDir
+                }
+            });
+        });
+    }
+
+    else
+    {
+        $('#general-action-buttons #winetricks')
+            .addClass('hint--top hint--small')
+            .attr('data-hint', LauncherUI.i18n.translate('HasNotInstalled', ['winetricks']))
+            .attr('disabled', 'disabled');
+    }
+
+    /**
+     * winecfg button
+     */
+    if (!commandExists('winecfg'))
+    {
+        $('#general-action-buttons #winecfg').on('click', () => {
+            exec('winecfg', {
+                env: {
+                    ...process.env,
+                    WINEPREFIX: constants.prefixDir
+                }
+            });
+        });
+    }
+
+    else
+    {
+        $('#general-action-buttons #winecfg')
+            .addClass('hint--top hint--small')
+            .attr('data-hint', LauncherUI.i18n.translate('HasNotInstalled', ['winecfg']))
+            .attr('disabled', 'disabled');
+    }
 
     /**
      * HUD
