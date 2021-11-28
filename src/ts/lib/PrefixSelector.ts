@@ -1,5 +1,6 @@
 const fs = require('fs');
 import LauncherLib from "./LauncherLib";
+import constants from "./constants";
 const path = require('path');
 const os = require('os');
 
@@ -15,6 +16,7 @@ export default class PrefixSelector
 
             LauncherLib.updateConfig('version', version);
             LauncherLib.updateConfig('prefix', location);
+            constants.prefixDir = location;
             this.prefix = location;
         } else if (fs.existsSync(path.join(location, 'drive_c', 'Program Files', 'Genshin Impact', 'GenshinImpact_Data', 'globalgamemanagers'))) {
             const config = fs.readFileSync(path.join(location, 'drive_c', 'Program Files', 'Genshin Impact', 'GenshinImpact_Data', 'globalgamemanagers'), { encoding: 'ascii' });
@@ -22,6 +24,7 @@ export default class PrefixSelector
 
             LauncherLib.updateConfig('version', version);
             LauncherLib.updateConfig('prefix', location);
+            constants.prefixDir = location;
             this.prefix = location;
         } else {
             console.log('Game not found.');
@@ -29,6 +32,7 @@ export default class PrefixSelector
             // Unset version if game is not found.
             LauncherLib.updateConfig('version', null);
             LauncherLib.updateConfig('prefix', location);
+            constants.prefixDir = location;
             this.prefix = location;
         }
     }
@@ -43,6 +47,7 @@ export default class PrefixSelector
             
             LauncherLib.updateConfig('version', version);
             LauncherLib.updateConfig('prefix', dp);
+            constants.prefixDir = dp;
             this.prefix = dp;
         } else if (fs.existsSync(path.join(dp, 'drive_c', 'Program Files', 'Genshin Impact', 'GenshinImpact_Data', 'globalgamemanagers'))) {
             const config = fs.readFileSync(path.join(dp, 'drive_c', 'Program Files', 'Genshin Impact', 'GenshinImpact_Data', 'globalgamemanagers'), { encoding: 'ascii' });
@@ -50,6 +55,7 @@ export default class PrefixSelector
 
             LauncherLib.updateConfig('version', version);
             LauncherLib.updateConfig('prefix', dp);
+            constants.prefixDir = dp;
             this.prefix = dp;
         } else {
             console.log('Game not found.');
@@ -57,6 +63,7 @@ export default class PrefixSelector
             // Unset version if game is not found.
             LauncherLib.updateConfig('version', null);
             LauncherLib.updateConfig('prefix', dp);
+            constants.prefixDir = dp;
             this.prefix = dp;
         }
     }
