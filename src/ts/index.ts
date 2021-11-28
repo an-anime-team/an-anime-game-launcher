@@ -13,13 +13,12 @@ import LauncherLib from './lib/LauncherLib';
 import LauncherUI from './lib/LauncherUI';
 import Tools from './lib/Tools';
 import DiscordRPC from './lib/DiscordRPC';
-import PrefixSelector from './lib/PrefixSelector';
 import SwitcherooControl from './lib/SwitcherooControl';
 
 const launcher_version = require('../../package.json').version;
 
-if (!fs.existsSync(LauncherLib.getConfig('prefix')))
-    fs.mkdirSync(LauncherLib.getConfig('prefix'), { recursive: true });
+if (!fs.existsSync(constants.prefixDir.get()))
+    fs.mkdirSync(constants.prefixDir.get(), { recursive: true });
 
 if (!fs.existsSync(constants.runnersDir))
     fs.mkdirSync(constants.runnersDir, { recursive: true });
@@ -61,9 +60,21 @@ $(() => {
     });
 
     ipcRenderer.on('change-prefix', (event: void, data: any) => {
-        if(data.type == 'change') PrefixSelector.set(data.dir);
-        if(data.type == 'reset') PrefixSelector.Default();
+        switch (data.type)
+        {
+            case 'change':
+                constants.prefixDir.set(data.dir);
+
+                break;
+
+            case 'reset':
+                constants.prefixDir.set(constants.prefixDir.getDefault());
+
+                break;
+        }
+
         LauncherUI.updateLauncherState();
+
         ipcRenderer.send('prefix-changed');
     });
 
@@ -149,14 +160,14 @@ $(() => {
             }
 
             // Creating wine prefix
-            if (!LauncherLib.isPrefixInstalled(constants.prefixDir))
+            if (!LauncherLib.isPrefixInstalled(constants.prefixDir.get()))
             {
                 console.log(`%c> Creating wineprefix...`, 'font-size: 16px');
 
                 $('#launch').css('display', 'none');
                 $('#downloader-panel').css('display', 'block');
 
-                await LauncherLib.installPrefix(constants.prefixDir, (output: string, current: number, total: number) => {
+                await LauncherLib.installPrefix(constants.prefixDir.get(), (output: string, current: number, total: number) => {
                     output = output.trim();
 
                     console.log(output);

@@ -3,13 +3,24 @@
         "title": "Lutris",
         "runners": [
             {
+                "name": "Lutris 6.21-5",
+                "version": "6.21-5",
+                "uri": "https://github.com/lutris/wine/releases/download/lutris-6.21-5/wine-lutris-6.21-5-x86_64.tar.xz",
+                "archive": "tar",
+                "folder": "lutris-6.21-5-x86_64",
+                "makeFolder": false,
+                "executable": "bin/wine64",
+                "recommendable": false
+            },
+            {
                 "name": "Lutris 6.21-4",
                 "version": "6.21-4",
                 "uri": "https://github.com/lutris/wine/releases/download/lutris-6.21-4/wine-lutris-6.21-4-x86_64.tar.xz",
                 "archive": "tar",
                 "folder": "lutris-6.21-4-x86_64",
                 "makeFolder": false,
-                "executable": "bin/wine64"
+                "executable": "bin/wine64",
+                "recommendable": false
             },
             {
                 "name": "Lutris 6.21-3",
@@ -18,7 +29,8 @@
                 "archive": "tar",
                 "folder": "lutris-6.21-3-x86_64",
                 "makeFolder": false,
-                "executable": "bin/wine64"
+                "executable": "bin/wine64",
+                "recommendable": false
             },
             {
                 "name": "Lutris 6.21-2",
@@ -27,7 +39,8 @@
                 "archive": "tar",
                 "folder": "lutris-6.21-2-x86_64",
                 "makeFolder": false,
-                "executable": "bin/wine64"
+                "executable": "bin/wine64",
+                "recommendable": false
             },
             {
                 "name": "Lutris 6.21",
@@ -36,7 +49,8 @@
                 "archive": "tar",
                 "folder": "lutris-6.21-x86_64",
                 "makeFolder": false,
-                "executable": "bin/wine64"
+                "executable": "bin/wine64",
+                "recommendable": false
             },
             {
                 "name": "Lutris 6.14-4",
@@ -45,7 +59,8 @@
                 "archive": "tar",
                 "folder": "lutris-6.14-4-x86_64",
                 "makeFolder": false,
-                "executable": "bin/wine64"
+                "executable": "bin/wine64",
+                "recommendable": true
             },
             {
                 "name": "Lutris 6.14-3",
@@ -54,7 +69,8 @@
                 "archive": "tar",
                 "folder": "lutris-6.14-3-x86_64",
                 "makeFolder": false,
-                "executable": "bin/wine64"
+                "executable": "bin/wine64",
+                "recommendable": true
             },
             {
                 "name": "Lutris 6.14-2",
@@ -63,7 +79,8 @@
                 "archive": "tar",
                 "folder": "lutris-6.14-2-x86_64",
                 "makeFolder": false,
-                "executable": "bin/wine64"
+                "executable": "bin/wine64",
+                "recommendable": true
             },
             {
                 "name": "Lutris 6.14",
@@ -72,7 +89,8 @@
                 "archive": "tar",
                 "folder": "lutris-6.14-x86_64",
                 "makeFolder": false,
-                "executable": "bin/wine64"
+                "executable": "bin/wine64",
+                "recommendable": true
             },
             {
                 "name": "Lutris 6.13-3",
@@ -81,7 +99,8 @@
                 "archive": "tar",
                 "folder": "lutris-6.13-3-x86_64",
                 "makeFolder": false,
-                "executable": "bin/wine64"
+                "executable": "bin/wine64",
+                "recommendable": false
             },
             {
                 "name": "Lutris 6.13-2",
@@ -90,7 +109,8 @@
                 "archive": "tar",
                 "folder": "lutris-6.13-2-x86_64",
                 "makeFolder": false,
-                "executable": "bin/wine64"
+                "executable": "bin/wine64",
+                "recommendable": false
             },
             {
                 "name": "Lutris 6.13",
@@ -99,7 +119,8 @@
                 "archive": "tar",
                 "folder": "lutris-6.13-x86_64",
                 "makeFolder": false,
-                "executable": "bin/wine64"
+                "executable": "bin/wine64",
+                "recommendable": false
             }
         ]
     },
@@ -113,7 +134,8 @@
                 "archive": "tar",
                 "folder": "Proton-6.21-GE-2",
                 "makeFolder": false,
-                "executable": "files/bin/wine64"
+                "executable": "files/bin/wine64",
+                "recommendable": false
             },
             {
                 "name": "Proton-6.20-GE-1",
@@ -122,7 +144,8 @@
                 "archive": "tar",
                 "folder": "Proton-6.20-GE-1",
                 "makeFolder": false,
-                "executable": "files/bin/wine64"
+                "executable": "files/bin/wine64",
+                "recommendable": true
             },
             {
                 "name": "Proton-6.19-GE-2",
@@ -131,7 +154,8 @@
                 "archive": "tar",
                 "folder": "Proton-6.19-GE-2",
                 "makeFolder": false,
-                "executable": "files/bin/wine64"
+                "executable": "files/bin/wine64",
+                "recommendable": false
             },
             {
                 "name": "Proton-6.19-GE-1",
@@ -140,7 +164,8 @@
                 "archive": "tar",
                 "folder": "Proton-6.19-GE-1",
                 "makeFolder": false,
-                "executable": "files/bin/wine64"
+                "executable": "files/bin/wine64",
+                "recommendable": false
             },
             {
                 "name": "Proton-6.18-GE-2",
@@ -149,7 +174,8 @@
                 "archive": "tar",
                 "folder": "Proton-6.18-GE-2",
                 "makeFolder": false,
-                "executable": "files/bin/wine64"
+                "executable": "files/bin/wine64",
+                "recommendable": false
             },
             {
                 "name": "Proton-6.18-GE-1",
@@ -158,7 +184,8 @@
                 "archive": "tar",
                 "folder": "Proton-6.18-GE-1",
                 "makeFolder": false,
-                "executable": "files/bin/wine64"
+                "executable": "files/bin/wine64",
+                "recommendable": false
             },
             {
                 "name": "Proton-6.16-GE-1",
@@ -167,7 +194,8 @@
                 "archive": "tar",
                 "folder": "Proton-6.16-GE-1",
                 "makeFolder": false,
-                "executable": "files/bin/wine64"
+                "executable": "files/bin/wine64",
+                "recommendable": false
             },
             {
                 "name": "Proton-6.15-GE-2",
@@ -176,7 +204,8 @@
                 "archive": "tar",
                 "folder": "Proton-6.15-GE-2",
                 "makeFolder": false,
-                "executable": "files/bin/wine64"
+                "executable": "files/bin/wine64",
+                "recommendable": false
             },
             {
                 "name": "Proton-6.15-GE-1",
@@ -185,7 +214,8 @@
                 "archive": "tar",
                 "folder": "Proton-6.15-GE-1",
                 "makeFolder": false,
-                "executable": "files/bin/wine64"
+                "executable": "files/bin/wine64",
+                "recommendable": false
             },
             {
                 "name": "Proton-6.14-GE-2",
@@ -194,7 +224,8 @@
                 "archive": "tar",
                 "folder": "Proton-6.14-GE-2",
                 "makeFolder": false,
-                "executable": "files/bin/wine64"
+                "executable": "files/bin/wine64",
+                "recommendable": false
             },
             {
                 "name": "Proton-6.14-GE-1",
@@ -203,7 +234,8 @@
                 "archive": "tar",
                 "folder": "Proton-6.14-GE-1",
                 "makeFolder": false,
-                "executable": "files/bin/wine64"
+                "executable": "files/bin/wine64",
+                "recommendable": false
             },
             {
                 "name": "Proton-5.21-GE-1",
@@ -212,7 +244,8 @@
                 "archive": "tar",
                 "folder": "Proton-5.21-GE-1",
                 "makeFolder": false,
-                "executable": "files/bin/wine64"
+                "executable": "files/bin/wine64",
+                "recommendable": true
             }
         ]
     }

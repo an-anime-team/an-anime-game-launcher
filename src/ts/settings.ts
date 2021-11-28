@@ -62,15 +62,15 @@ $(() => {
 
     ipcRenderer.on('prefix-changed', () => {
         $('#prefixloc #currentprefix').text(LauncherLib.getConfig('prefix'));
-    })
+    });
 
     $('#prefixloc #prefixdir').on('click', () => {
-        ipcRenderer.send('prefix-con');
-    })
+        ipcRenderer.send('prefix-select');
+    });
 
     $('#prefixloc #defprefix').on('click', () => {
         ipcRenderer.send('prefix-reset');
-    })
+    });
 
     /**
      * Game voice language
@@ -121,7 +121,7 @@ $(() => {
     /**
      * winetricks button
      */
-    if (!commandExists('winetricks'))
+    if (commandExists('winetricks'))
     {
         $('#general-action-buttons #winetricks').on('click', () => {
             exec('winetricks', {
@@ -144,7 +144,7 @@ $(() => {
     /**
      * winecfg button
      */
-    if (!commandExists('winecfg'))
+    if (commandExists('winecfg'))
     {
         $('#general-action-buttons #winecfg').on('click', () => {
             exec('winecfg', {

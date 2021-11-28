@@ -1,5 +1,7 @@
 const path = require('path');
 const os = require('os');
+const fs = require('fs');
+
 import LauncherLib from "./LauncherLib";
 
 export default class constants
@@ -45,10 +47,6 @@ export default class constants
 
     public static readonly launcherDir: string = path.join(os.homedir(), '.local', 'share', 'anime-game-launcher');
 
-    public static prefixDir: string = LauncherLib.getConfig('prefix');
-    public static readonly gameDir: string = path.join(this.prefixDir, 'drive_c', 'Program Files', this.placeholders.uppercase.full);
-    public static readonly voiceDir: string = path.join(this.gameDir, `${this.placeholders.uppercase.first + this.placeholders.uppercase.second}_Data`, 'StreamingAssets', 'Audio', 'GeneratedSoundBanks', 'Windows');
-
     public static readonly runnersDir: string = path.join(this.launcherDir, 'runners');
     public static readonly dxvksDir: string = path.join(this.launcherDir, 'dxvks');
 
@@ -59,4 +57,38 @@ export default class constants
 
     public static readonly runnersUri: string = `${this.uri.launcher}/raw/main/runners.json`;
     public static readonly dxvksUri: string = `${this.uri.launcher}/raw/main/dxvks.json`;
+
+    public static prefixDir = new class
+    {
+        public get(): string
+        {
+            return LauncherLib.getConfig('prefix');
+        }
+
+        public getDefault(): string
+        {
+            return path.join(os.homedir(), '.local', 'share', 'anime-game-launcher', 'game');
+        }
+
+        public set(location: string)
+        {
+            if (path.relative(LauncherLib.getConfig('prefix'), location) === '')
+                return console.log('Can\'t set already selected prefix as new prefix');
+
+            const dataPath = path.join(location, 'drive_c', 'Program Files', constants.placeholders.uppercase.full, `${constants.placeholders.uppercase.first + constants.placeholders.uppercase.second}_Data`);
+
+            LauncherLib.updateConfig('prefix', location);
+            LauncherLib.updateConfig('version', LauncherLib.getGameVersion(dataPath));
+        }
+    }
+
+    public static get gameDir(): string
+    {
+        return path.join(this.prefixDir.get(), 'drive_c', 'Program Files', this.placeholders.uppercase.full);
+    }
+
+    public static get voiceDir(): string
+    {
+        return path.join(this.gameDir, `${this.placeholders.uppercase.first + this.placeholders.uppercase.second}_Data`, 'StreamingAssets', 'Audio', 'GeneratedSoundBanks', 'Windows');
+    }
 }

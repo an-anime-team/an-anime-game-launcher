@@ -227,6 +227,28 @@ export default class LauncherLib
         });
     }
 
+    /**
+     * @param dataLocation path to the [An Anime Game]_Data folder
+     */
+    public static getGameVersion(dataLocation: string): string|null
+    {
+        const persistentPath = path.join(dataLocation, 'Persistent');
+        const globalGameManagersPath = path.join(dataLocation, 'globalgamemanagers');
+
+        if (fs.existsSync(persistentPath))
+            return fs.readFileSync(path.join(persistentPath, 'ScriptVersion'), { encoding: 'UTF-8' }).toString();
+        
+        else if (fs.existsSync(globalGameManagersPath))
+        {
+            const config = fs.readFileSync(globalGameManagersPath, { encoding: 'ascii' });
+            const version = /([1-9]+\.[0-9]+\.[0-9]+)_[\d]+_[\d]+/.exec(config);
+            
+            return version !== null ? version[1] : null;
+        }
+        
+        else return null;
+    }
+
     // WINEPREFIX='...../wineprefix' winetricks corefonts usetakefocus=n
     public static async installPrefix (prefixPath: string, progress: (output: string, current: number, total: number) => void): Promise<void>
     {
