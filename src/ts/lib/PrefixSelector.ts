@@ -19,7 +19,7 @@ export default class PrefixSelector
         } else if (fs.existsSync(path.join(location, 'drive_c', 'Program Files', 'Genshin Impact', 'GenshinImpact_Data', 'globalgamemanagers'))) {
             const config = fs.readFileSync(path.join(location, 'drive_c', 'Program Files', 'Genshin Impact', 'GenshinImpact_Data', 'globalgamemanagers'), { encoding: 'ascii' });
             const version = /([1-9]+\.[0-9]+\.[0-9]+)_[\d]+_[\d]+/.exec(config)![1];
-            
+
             LauncherLib.updateConfig('version', version);
             LauncherLib.updateConfig('prefix', location);
             this.prefix = location;
@@ -40,16 +40,24 @@ export default class PrefixSelector
 
         if (fs.existsSync(path.join(dp, 'drive_c', 'Program Files', 'Genshin Impact', 'GenshinImpact_Data', 'Persistent'))) {
             const version = fs.readFileSync(path.join(dp, 'drive_c', 'Program Files', 'Genshin Impact', 'GenshinImpact_Data', 'Persistent', 'ScriptVersion'), { encoding: 'UTF-8' }).toString();
-            console.log(version);
+            
+            LauncherLib.updateConfig('version', version);
+            LauncherLib.updateConfig('prefix', dp);
+            this.prefix = dp;
         } else if (fs.existsSync(path.join(dp, 'drive_c', 'Program Files', 'Genshin Impact', 'GenshinImpact_Data', 'globalgamemanagers'))) {
             const config = fs.readFileSync(path.join(dp, 'drive_c', 'Program Files', 'Genshin Impact', 'GenshinImpact_Data', 'globalgamemanagers'), { encoding: 'ascii' });
             const version = /([1-9]+\.[0-9]+\.[0-9]+)_[\d]+_[\d]+/.exec(config)![1];
-            console.log(version);
+
+            LauncherLib.updateConfig('version', version);
+            LauncherLib.updateConfig('prefix', dp);
+            this.prefix = dp;
         } else {
             console.log('Game not found.');
 
             // Unset version if game is not found.
             LauncherLib.updateConfig('version', null);
+            LauncherLib.updateConfig('prefix', dp);
+            this.prefix = dp;
         }
     }
 

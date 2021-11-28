@@ -61,7 +61,8 @@ $(() => {
     });
 
     ipcRenderer.on('change-prefix', (event: void, data: any) => {
-        PrefixSelector.set(data.dir);
+        if(data.type == 'change') PrefixSelector.set(data.dir);
+        if(data.type == 'reset') PrefixSelector.Default();
         LauncherUI.updateLauncherState();
         ipcRenderer.send('prefix-changed');
     });

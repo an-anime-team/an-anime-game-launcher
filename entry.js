@@ -124,7 +124,11 @@ app.whenReady().then(() => {
     ipcMain.on('prefix-con', async () => {
         const result = await dialog.showOpenDialog({ properties: ['openDirectory'] });
         if(result.filePaths.length == 0) return;
-        mainWindow.webContents.send('change-prefix', { 'dir': result.filePaths[0] });
+        mainWindow.webContents.send('change-prefix', { 'type': 'change', 'dir': result.filePaths[0] });
+    });
+
+    ipcMain.on('prefix-reset', async () => {
+        mainWindow.webContents.send('change-prefix', { 'type': 'reset' });
     });
 
     ipcMain.on('prefix-changed', async () => {
