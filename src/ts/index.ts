@@ -13,12 +13,13 @@ import LauncherLib from './lib/LauncherLib';
 import LauncherUI from './lib/LauncherUI';
 import Tools from './lib/Tools';
 import DiscordRPC from './lib/DiscordRPC';
+import PrefixSelector from './lib/PrefixSelector';
 import SwitcherooControl from './lib/SwitcherooControl';
 
 const launcher_version = require('../../package.json').version;
 
-if (!fs.existsSync(constants.prefixDir))
-    fs.mkdirSync(constants.prefixDir, { recursive: true });
+if (!fs.existsSync(LauncherLib.getConfig('prefix')))
+    fs.mkdirSync(LauncherLib.getConfig('prefix'), { recursive: true });
 
 if (!fs.existsSync(constants.runnersDir))
     fs.mkdirSync(constants.runnersDir, { recursive: true });
@@ -57,6 +58,12 @@ $(() => {
 
     ipcRenderer.on('change-voicepack', () => {
         LauncherUI.updateLauncherState();
+    });
+
+    ipcRenderer.on('change-prefix', (event: void, data: any) => {
+        PrefixSelector.set(data.dir);
+        LauncherUI.updateLauncherState();
+        ipcRenderer.send('prefix-changed');
     });
 
     Tools.getGitTags(constants.uri.launcher).then(tags => {

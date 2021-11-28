@@ -27,6 +27,7 @@ const config = new store ({
             file: null
         },
         version: null, // Installed game version
+        prefix: path.join(os.homedir(), '.local', 'share', 'anime-game-launcher', 'game'), // Default Prefix
         patch: null, // Installed patch info ({ version, state } - related game's version and patch's state)
         runner: null, // Selected runner ({ folder, executable })
         rpc: false, // Discord RPC
