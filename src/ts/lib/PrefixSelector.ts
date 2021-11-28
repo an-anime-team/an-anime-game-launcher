@@ -19,7 +19,8 @@ export default class PrefixSelector
         } else if (fs.existsSync(path.join(location, 'drive_c', 'Program Files', 'Genshin Impact', 'GenshinImpact_Data', 'globalgamemanagers'))) {
             const config = fs.readFileSync(path.join(location, 'drive_c', 'Program Files', 'Genshin Impact', 'GenshinImpact_Data', 'globalgamemanagers'), { encoding: 'ascii' });
             const version = /([1-9]+\.[0-9]+\.[0-9]+)_[\d]+_[\d]+/.exec(config)![1];
-            console.log(version);
+            
+            LauncherLib.updateConfig('version', version);
             LauncherLib.updateConfig('prefix', location);
             this.prefix = location;
         } else {
