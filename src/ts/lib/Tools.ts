@@ -84,12 +84,12 @@ export default class Tools
 
     public static async getGitTags (uri: string): Promise<GitTag[]>
     {
-        return new Promise((resolve, reject) => {
+        return new Promise(resolve => {
             let git = spawn('git', ['ls-remote', '--tags', uri]),
                 tags: GitTag[] = [];
 
             git.stdout.on('data', (data: string) => {
-                data.toString().split(/\r\n|\r|\n/).forEach(line => {
+                data.toString().split(/\r\n|\r|\n/).forEach((line: string) => {
                     if (line != '')
                     {
                         let matches = /^([0-9a-f]+)\trefs\/tags\/(.*)/.exec (line);
@@ -102,8 +102,6 @@ export default class Tools
                     }
                 });
             });
-
-            git.stderr.on('data', (data: string) => reject(data));
 
             git.on('close', () => resolve(tags));
         });
