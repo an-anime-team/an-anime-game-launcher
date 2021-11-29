@@ -39,6 +39,12 @@ const config = new store ({
         autodelete_dxvk_logs: false, // Auto-delete DXVK logs
         theme: 'system', // light / dark / system
 
+        // Lists filters
+        lists_filters: {
+            wine: true, // show only recommendable wine versions
+            dxvk: true  // show only recommendable dxvk versions
+        },
+
         // Version of the game we asked about analytics last time,
         // or null if user said don't ask him again
         analytics: '0',
@@ -62,12 +68,14 @@ type Runner = {
     archive: 'tar' | 'zip' // Archive type
     folder: string,        // Folder name where it will be downloaded
     makeFolder: boolean,   // Do we need to create folder or it is included in archive
-    executable: string     // Path to wine executable inside folder
+    executable: string,    // Path to wine executable inside folder
+    recommendable: boolean // Is this runner recommendable to use
 };
 
 type DXVK = {
     version: string,
-    uri: string
+    uri: string,
+    recommendable: boolean
 };
 
 export default class LauncherLib

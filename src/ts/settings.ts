@@ -381,17 +381,40 @@ $(() => {
     $('#play-minutes').text(playedMinutes.toString());
 
     /**
+     * Wine recommendable only
+     */
+
+    const wineRecomOnly = LauncherLib.getConfig('lists_filters.wine');
+
+    if (wineRecomOnly)
+        $('#wine-recommendable').addClass('checkbox-active');
+
+    $('#wine-recommendable').on('classChange', () => {
+        const recommendableOnly = $('#wine-recommendable').hasClass('checkbox-active');
+
+        LauncherLib.updateConfig('lists_filters.wine', recommendableOnly);
+
+        if (recommendableOnly)
+        {
+            $(`#runners-list .list-item[recommendable]`).css('display', 'flex');
+            $(`#runners-list .list-item:not([recommendable])`).css('display', 'none');
+        }
+
+        else $(`#runners-list .list-item`).css('display', 'flex');
+    });
+
+    /**
      * Wine versions manager
      */
 
-    let activeRunner = LauncherLib.getConfig('runner');
+    const activeRunner = LauncherLib.getConfig('runner');
 
     LauncherLib.getRunners().then(runners => {
         runners.forEach(category => {
             $(`<h3>${category.title}</h3>`).appendTo('#runners-list');
 
             category.runners.forEach(runner => {
-                let item = $(`<div class="list-item">
+                let item = $(`<div class="list-item"${runner.recommendable ? ' recommendable' : ''}>
                     ${runner.name}
                     <div>
                         <span></span>
@@ -399,6 +422,9 @@ $(() => {
                         <img class="item-download" src="../images/download.png">
                     </div>
                 </div>`).appendTo('#runners-list');
+
+                if (wineRecomOnly && !runner.recommendable)
+                    item.css('display', 'none');
             
                 if (fs.existsSync(path.join(constants.runnersDir, runner.folder)))
                 {
@@ -483,14 +509,37 @@ $(() => {
     });
 
     /**
+     * DXVK recommendable only
+     */
+
+     const dxvkRecomOnly = LauncherLib.getConfig('lists_filters.dxvk');
+
+     if (dxvkRecomOnly)
+         $('#dxvk-recommendable').addClass('checkbox-active');
+ 
+     $('#dxvk-recommendable').on('classChange', () => {
+         const recommendableOnly = $('#dxvk-recommendable').hasClass('checkbox-active');
+ 
+         LauncherLib.updateConfig('lists_filters.dxvk', recommendableOnly);
+ 
+         if (recommendableOnly)
+         {
+             $(`#dxvk-list .list-item[recommendable]`).css('display', 'flex');
+             $(`#dxvk-list .list-item:not([recommendable])`).css('display', 'none');
+         }
+ 
+         else $(`#dxvk-list .list-item`).css('display', 'flex');
+     });
+
+    /**
      * DXVKs manager
      */
     
-    let activeDXVK = LauncherLib.getConfig('dxvk');
+    const activeDXVK = LauncherLib.getConfig('dxvk');
 
     LauncherLib.getDXVKs().then(dxvks => {
         dxvks.forEach(dxvk => {
-            let item = $(`<div class="list-item">
+            let item = $(`<div class="list-item"${dxvk.recommendable ? ' recommendable' : ''}>
                 ${dxvk.version}
                 <div>
                     <span></span>
@@ -498,6 +547,9 @@ $(() => {
                     <img class="item-download" src="../images/download.png">
                 </div>
             </div>`).appendTo('#dxvk-list');
+
+            if (dxvkRecomOnly && !dxvk.recommendable)
+                item.css('display', 'none');
 
             if (fs.existsSync(path.join(constants.dxvksDir, 'dxvk-' + dxvk.version)))
             {

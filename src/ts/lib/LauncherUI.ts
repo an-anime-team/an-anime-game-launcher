@@ -302,22 +302,8 @@ export default class LauncherUI
     public static updateSocial (): void
     {
         const socialUri = `https://${constants.placeholders.lowercase.first}.${constants.placeholders.lowercase.company}.com/launcher/10/${LauncherLib.getConfig('lang.launcher')}?api_url=https%3A%2F%2Fapi-os-takumi.${constants.placeholders.lowercase.company}.com%2Fhk4e_global&key=gcStgarh&prev=false`;
-        $('#socials').attr('src', socialUri);
-        /* fetch(socialUri)
-            .then(res => res.text())
-            .then(body => {
-                $('#__layout').remove();
-                $(body).find('#__layout').appendTo('#launchcontent');
-
-                // Next banner button
-                // TODO
-                /*$('#launchcontent .home__main .swiper-button-prev').on('click', () => {
-
-                });
-
-                $('#launchcontent .home__main .home-swiper-wrap').remove();
-                $('#launchcontent .home__main .home-news').remove();
-            }); */
+        
+        $('#launcher-content #social').attr('src', socialUri);
     }
 
     public static updateLang (lang: string|null = null): void

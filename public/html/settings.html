@@ -114,7 +114,7 @@
 
 
                     <div class="selected-item">
-                        <span>System</span>
+                        <span i18id="System">System</span>
 
                         <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 330.002 330.002" xml:space="preserve"><path d="M233.252,155.997L120.752,6.001c-4.972-6.628-14.372-7.97-21-3c-6.628,4.971-7.971,14.373-3,21 l105.75,140.997L96.752,306.001c-4.971,6.627-3.627,16.03,3,21c2.698,2.024,5.856,3.001,8.988,3.001 c4.561,0,9.065-2.072,12.012-6.001l112.5-150.004C237.252,168.664,237.252,161.33,233.252,155.997z"/></svg>
                     </div>
@@ -133,7 +133,7 @@
                 <br><br>
 
                 <div class="directory-selector" id="prefix">
-                    <span>Prefix</span>
+                    <span i18id="Prefix">Prefix</span>
                     
                     <input readonly>
 
@@ -151,7 +151,7 @@
                 <br><br>
 
                 <div id="general-action-buttons">
-                    <button class="button" id="launcher-folder">launcher folder</button>
+                    <button class="button" id="launcher-folder" i18id="LauncherFolder">launcher folder</button>
                     <button class="button" id="winetricks">winetricks</button>
                     <button class="button" id="winecfg">winecfg</button>
                 </div>
@@ -206,11 +206,31 @@
             <div class="settings-item" id="runners">
                 <h2 i18id="WineVersion">Wine version</h2>
 
+                <div class="checkbox" id="wine-recommendable">
+                    <span i18id="RecommendableOnly">Show recommendable versions</span>
+
+                    <div class="checkbox-mark">
+                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="45.701px" height="45.7px" viewBox="0 0 45.701 45.7" xml:space="preserve"><g><g><path d="M20.687,38.332c-2.072,2.072-5.434,2.072-7.505,0L1.554,26.704c-2.072-2.071-2.072-5.433,0-7.504 c2.071-2.072,5.433-2.072,7.505,0l6.928,6.927c0.523,0.522,1.372,0.522,1.896,0L36.642,7.368c2.071-2.072,5.433-2.072,7.505,0 c0.995,0.995,1.554,2.345,1.554,3.752c0,1.407-0.559,2.757-1.554,3.752L20.687,38.332z"/></g></g></svg>
+                    </div>
+                </div>
+
+                <br>
+
                 <div class="list" id="runners-list"></div>
             </div>
 
             <div class="settings-item" id="dxvks">
                 <h2>DXVK</h2>
+
+                <div class="checkbox" id="dxvk-recommendable">
+                    <span i18id="RecommendableOnly">Show recommendable versions</span>
+
+                    <div class="checkbox-mark">
+                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="45.701px" height="45.7px" viewBox="0 0 45.701 45.7" xml:space="preserve"><g><g><path d="M20.687,38.332c-2.072,2.072-5.434,2.072-7.505,0L1.554,26.704c-2.072-2.071-2.072-5.433,0-7.504 c2.071-2.072,5.433-2.072,7.505,0l6.928,6.927c0.523,0.522,1.372,0.522,1.896,0L36.642,7.368c2.071-2.072,5.433-2.072,7.505,0 c0.995,0.995,1.554,2.345,1.554,3.752c0,1.407-0.559,2.757-1.554,3.752L20.687,38.332z"/></g></g></svg>
+                    </div>
+                </div>
+
+                <br><br>
 
                 <div class="list" id="dxvk-list"></div>
             </div>
