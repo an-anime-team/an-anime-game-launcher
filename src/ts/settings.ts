@@ -64,13 +64,11 @@ $(() => {
         $('#prefix input').val(constants.prefixDir.get());
     });
 
-    $('#prefix #choose-location').on('click', () => {
-        ipcRenderer.send('prefix-select');
-    });
+    $('#prefix #choose-location').on('click', () => ipcRenderer.send('prefix-select'));
+    $('#prefix #reset-location').on('click', () => ipcRenderer.send('prefix-reset'));
 
-    $('#prefix #reset-location').on('click', () => {
-        ipcRenderer.send('prefix-reset');
-    });
+    $('#prefix #choose-location').attr('data-hint', LauncherUI.i18n.translate('SelectDir'));
+    $('#prefix #reset-location').attr('data-hint', LauncherUI.i18n.translate('ResetDir'));
 
     /**
      * Game voice language

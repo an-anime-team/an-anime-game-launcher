@@ -30,11 +30,11 @@ This launcher is also available as the [an-anime-game-launcher](https://aur.arch
 
 ## Usage statistics
 
-### 2.2.0
+### 2.2.0 — 29 total
 
 <img src="repository-pics/stats/2.2.0.png">
 
-### 2.3.0
+### 2.3.0 — 27 total
 
 <img src="repository-pics/stats/2.3.0.png">
 
@@ -133,8 +133,8 @@ npm start
 * <s>Add dark theme support for settings menu</s> *(1.7.0)*
 * Add winetricks and winecfg buttons to settings ([notabug issue 35](https://notabug.org/nobody/an-anime-game-launcher/issues/35))
 * Use `LauncherLib.getGameVersion` function instead of the `config.json`'s `version` property
-* Fix button flickering at start when the launcher's state updates
 * Wine prefix folder selection *(symlinks?)* ([notabug issue 37](https://notabug.org/nobody/an-anime-game-launcher/issues/37))
+* Fix button flickering at start when the launcher's state updates
 * Game's update pre-installation
 * Screenshots explorer
 * Make force launch button when the launcher's repository is unavailable *(waiting for the repository's unavailability lmao)*

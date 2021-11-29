@@ -22,6 +22,8 @@
     "RecommendableOnly": "Show recommendable versions",
     "LauncherFolder": "launcher folder",
     "Prefix": "Prefix",
+    "SelectDir": "Select dir",
+    "ResetDir": "Reset dir",
     "Author": "Author",
     "NoImages": "No images added",
     "SettingsTitle": "設定",

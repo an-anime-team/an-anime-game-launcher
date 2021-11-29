@@ -22,6 +22,8 @@
     "RecommendableOnly": "Отображать только рекомендуемые",
     "LauncherFolder": "Папка лаунчера",
     "Prefix": "Префикс",
+    "SelectDir": "Выбрать папку",
+    "ResetDir": "Восстановить по умолчанию",
     "Author": "Автор",
     "NoImages": "Изображения не добавлены",
     "SettingsTitle": "Настройки",

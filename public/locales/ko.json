@@ -22,6 +22,8 @@
     "RecommendableOnly": "Show recommendable versions",
     "LauncherFolder": "launcher folder",
     "Prefix": "Prefix",
+    "SelectDir": "Select dir",
+    "ResetDir": "Reset dir",
     "Author": "저자",
     "NoImages": "추가 된 이미지 없음",
     "SettingsTitle": "설정",
