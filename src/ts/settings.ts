@@ -35,6 +35,26 @@ $(() => {
     });
 
     /**
+     * Statistics
+     */
+
+    const playedHours = Math.floor(LauncherLib.getConfig('playtime') / 3600);
+    const playedMinutes = Math.floor((LauncherLib.getConfig('playtime') - playedHours * 3600) / 60);
+
+    $('#play-hours').text(playedHours.toString());
+    $('#play-minutes').text(playedMinutes.toString());
+
+    const levelHours = (level: number) => 0.000441332 * Math.pow(level + 10, 3.10628);
+
+    let level = 1;
+
+    while (level < 91 && levelHours(level) < playedHours)
+        ++level;
+
+    $('.launcher-stats .level').text(level.toString());
+    $('.launcher-stats .level').attr('data-hint', LauncherUI.i18n.translate('YourLauncherLevel'));
+
+    /**
      * Launcher language
      */
 
@@ -241,6 +261,14 @@ $(() => {
 
             for (const gpu of gpus.value)
                 $(`<li value="${gpu.Name.value}">${gpu.Name.value}</li>`).appendTo('#gpu .select-options ul');
+
+            SwitcherooControl.getGpuByName(LauncherLib.getConfig('gpu')).then((gpu) => {
+                if (gpu)
+                {
+                    $(`#gpu li[value=${gpu.Name.value}]`).addClass('selected');
+                    $('#gpu .selected-item span').text(gpu.Name.value);
+                }
+            });
         }
     }, () => {
         console.log('switcheroo-control not running');
@@ -367,16 +395,6 @@ $(() => {
         td.last().find('input').val(value);
         td.last().find('span').text(value);
     });
-
-    /**
-     * Statistics
-     */
-
-    const playedHours = Math.floor(LauncherLib.getConfig('playtime') / 3600);
-    const playedMinutes = Math.floor((LauncherLib.getConfig('playtime') - playedHours * 3600) / 60);
-
-    $('#play-hours').text(playedHours.toString());
-    $('#play-minutes').text(playedMinutes.toString());
 
     /**
      * Wine recommendable only

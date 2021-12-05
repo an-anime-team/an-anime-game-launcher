@@ -25,12 +25,48 @@
             <div class="menu-item" anchor="dxvks" i18id="DXVK">DXVK</div>
             <div class="menu-item" anchor="shaders" i18id="Shaders">Shaders</div>
             <div class="menu-item" anchor="environment" i18id="Environment">Environment</div>
-            <div class="menu-item" anchor="statistics" i18id="Statistics">Statistics</div>
         </div>
 
         <div class="settings">
             <div class="settings-item" id="general">
                 <h2 i18id="General">General</h2>
+
+                <div class="launcher-stats">
+                    <img src="../images/rank.png">
+    
+                    <div class="level hint--bottom hint--medium">1</div>
+    
+                    <div class="stats">
+                        <p i18id="Statistics">Statistics</p>
+
+                        <div class="time-spent">
+                            <span i18id="YouPlayedFor">You've played for</span>
+                            <span id="play-hours"></span>
+                            <span i18id="hours">hours</span>
+                            <span id="play-minutes"></span>
+                            <span i18id="minutes">minutes</span>
+                        </div>
+    
+                        <!--
+                            This is an instrument-surprise which will be used later :D
+                            Please, don't mention it in our discord server
+                            I wanna make a great update at christmas
+                        -->
+                        <!-- <div class="badges">
+                            <div class="hint--bottom hint--medium" data-hint="Pioneer: be one of the first launcher users">
+                                <img src="../images/badges/torch.png">
+                            </div>
+    
+                            <div class="hint--bottom hint--medium" data-hint="Pioneer: be one of the first launcher users">
+                                <img src="../images/badges/torch.png">
+                            </div>
+    
+                            <div class="hint--bottom hint--medium" data-hint="Pioneer: be one of the first launcher users">
+                                <img src="../images/badges/torch.png">
+                            </div>
+                        </div> -->
+                    </div>
+                </div>
 
                 <div class="select" id="language">
                     <span i18id="Language">Language</span>
@@ -272,18 +308,6 @@
                         <button class="button" id="add" i18id="Add">Add</button>
                         <button class="button" id="delete" i18id="Delete">Delete</button>
                     </div>
-                </div>
-            </div>
-
-            <div class="settings-item" id="statistics">
-                <h2 i18id="Statistics">Statistics</h2>
-
-                <div>
-                    <span i18id="YouPlayedFor">You've played for</span>
-                    <span id="play-hours"></span>
-                    <span i18id="hours">hours</span>
-                    <span id="play-minutes"></span>
-                    <span i18id="minutes">minutes</span>
                 </div>
             </div>
         </div>

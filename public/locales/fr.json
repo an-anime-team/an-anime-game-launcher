@@ -40,6 +40,7 @@
     "YouPlayedFor": "You've played for",
     "hours": "hours",
     "minutes": "minutes",
+    "YourLauncherLevel": "Your launcher's level",
     "Downloading": "Downloading",
     "Unpacking": "Unpacking",
     "GameDownloaded": "Game was successfully installed",
@@ -59,6 +60,8 @@
     "LauncherUpdateTitle": "Launcher update available: ",
     "LauncherUpdateBody": "You can download a new version of the launcher from the project's repository at {uri.launcher}",
     "TelemetryNotDisabled": "{placeholders.uppercase.company}'s telemetry servers don't disabled!",
+    "PatchRepoUnavailableTitle": "Patch's repository is not available",
+    "PatchRepoUnavailableBody": "Most likely notabug is under attack and is not responding",
     "DefPrefix": "Reset to Default",
     "ChangePrefix": "Change Prefix"
 }

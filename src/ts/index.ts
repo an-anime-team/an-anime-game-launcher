@@ -352,9 +352,8 @@ $(() => {
 
                 LauncherUI.setState('patch-applying');
 
-                LauncherLib.patchGame(() => {
-                    LauncherUI.updateLauncherState();
-                }, data => console.log(data.toString()));
+                LauncherLib.patchGame((data) => console.log(data.toString()))
+                    .then(() => LauncherUI.updateLauncherState());
             }
 
             // Voice pack update

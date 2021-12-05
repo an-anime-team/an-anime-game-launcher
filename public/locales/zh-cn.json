@@ -41,6 +41,7 @@
     "YouPlayedFor": "You've played for",
     "hours": "hours",
     "minutes": "minutes",
+    "YourLauncherLevel": "Your launcher's level",
     "Unpacking": "开箱",
     "GameDownloaded": "游戏安装成功",
     "ApplyPatch": "应用补丁...",
@@ -59,6 +60,8 @@
     "LauncherUpdateTitle": "启动器更新可用：",
     "LauncherUpdateBody": "你可以从项目的资源库中下载新版本的启动器，网址是：{uri.launcher}",
     "TelemetryNotDisabled": "{placeholders.uppercase.company}'s telemetry servers don't disabled!",
+    "PatchRepoUnavailableTitle": "Patch's repository is not available",
+    "PatchRepoUnavailableBody": "Most likely notabug is under attack and is not responding",
     "DefPrefix": "Reset to Default",
     "ChangePrefix": "Change Prefix"
 }

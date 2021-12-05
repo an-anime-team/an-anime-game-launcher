@@ -40,6 +40,7 @@
     "YouPlayedFor": "당신은 위해 연주했습니다",
     "hours": "시간",
     "minutes": "분",
+    "YourLauncherLevel": "런처의 레벨",
     "Downloading": "다운로드 중",
     "Unpacking": "풀기",
     "GameDownloaded": "게임이 성공적으로 설치되었습니다",
@@ -59,6 +60,8 @@
     "LauncherUpdateTitle": "실행기 업데이트 가능: ",
     "LauncherUpdateBody": "에서 프로젝트의 저장소에서 실행기의 새 버전을 다운로드 할 수 있습니다 {uri.launcher}",
     "TelemetryNotDisabled": "{placeholders.uppercase.company} 의 원격 측정 서버가 비활성화되지 않음!",
+    "PatchRepoUnavailableTitle": "Patch's repository is not available",
+    "PatchRepoUnavailableBody": "Most likely notabug is under attack and is not responding",
     "DefPrefix": "Reset to Default",
     "ChangePrefix": "Change Prefix"
 }

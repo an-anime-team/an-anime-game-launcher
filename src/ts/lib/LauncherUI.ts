@@ -114,8 +114,22 @@ export default class LauncherUI
 
     public static async updateLauncherState(data: any = null)
     {
-        const gameData  = data ?? await LauncherLib.getData();
-        const patchInfo = await LauncherLib.getPatchInfo();
+        const gameData = data ?? await LauncherLib.getData();
+        let patchInfo  = await LauncherLib.getPatchInfo();
+
+        // If patch's repo is not available
+        if (patchInfo === null)
+        {
+            patchInfo = {
+                version: LauncherLib.getConfig('patch.version'),
+                state: LauncherLib.getConfig('patch.state')
+            };
+
+            ipcRenderer.send('notification', {
+                title: this.i18n.translate('PatchRepoUnavailableTitle'),
+                body: this.i18n.translate('PatchRepoUnavailableBody')
+            });
+        }
 
         // Update available
         if (LauncherLib.version != gameData.game.latest.version)
@@ -151,9 +165,8 @@ export default class LauncherUI
 
                     this.setState('patch-applying');
 
-                    LauncherLib.patchGame(() => {
-                        this.setState('game-launch-available');
-                    }, data => console.log(data.toString()));
+                    LauncherLib.patchGame((data) => console.log(data.toString()))
+                        .then(() => this.setState('game-launch-available'));
                 }
 
                 // Patch is in testing phase
@@ -169,9 +182,8 @@ export default class LauncherUI
 
             this.setState('patch-applying');
 
-            LauncherLib.patchGame(() => {
-                this.setState('game-launch-available');
-            }, data => console.log(data.toString()));
+            LauncherLib.patchGame((data) => console.log(data.toString()))
+                .then(() => this.setState('game-launch-available'));
         }
 
         else this.setState('game-launch-available');
@@ -183,7 +195,7 @@ export default class LauncherUI
         temp: 0
     };
 
-    public static initProgressBar (): void
+    public static initProgressBar(): void
     {
         this.progressBar = {
             beganAt: Date.now(),
@@ -201,7 +213,7 @@ export default class LauncherUI
         $('#launch').css('display', 'none');
     }
 
-    public static updateProgressBar (prefix: string, current: number, total: number, difference: number): void
+    public static updateProgressBar(prefix: string, current: number, total: number, difference: number): void
     {
         $('#downloaded').text(`${prefix}: ${ Math.round(current / total * 100) }% (${Tools.prettifyBytes(current)} / ${Tools.prettifyBytes(total)})`);
                         
@@ -248,7 +260,7 @@ export default class LauncherUI
         $('#downloader .progress').css('width', '0');
     }
 
-    public static updateBackground (): void
+    public static updateBackground(): void
     {
         LauncherLib.getBackgroundUri().then(uri => {
             if ($('img.background').attr('src') != uri)
@@ -299,14 +311,14 @@ export default class LauncherUI
         });
     }
 
-    public static updateSocial (): void
+    public static updateSocial(): void
     {
         const socialUri = `https://${constants.placeholders.lowercase.first}.${constants.placeholders.lowercase.company}.com/launcher/10/${LauncherLib.getConfig('lang.launcher')}?api_url=https%3A%2F%2Fapi-os-takumi.${constants.placeholders.lowercase.company}.com%2Fhk4e_global&key=gcStgarh&prev=false`;
         
         $('#launcher-content #social').attr('src', socialUri);
     }
 
-    public static updateLang (lang: string|null = null): void
+    public static updateLang(lang: string|null = null): void
     {
         if (lang !== null)
             this.i18n.setLang(lang);

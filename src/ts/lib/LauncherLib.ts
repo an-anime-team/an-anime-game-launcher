@@ -7,6 +7,9 @@ const path = require('path');
 const os = require('os');
 const { spawn, exec } = require('child_process');
 
+// TODO: This is an instrument-surprise which will be used later :)
+// const crypto = require('crypto');
+
 const store = require('electron-store');
 const https = require('follow-redirects').https;
 const got = require('got');
@@ -84,6 +87,38 @@ export default class LauncherLib
     {
         return this.getConfig('version');
     }
+
+    /*public static getKeypair(): { public: string, private: string }
+    {
+        const keypairFile = path.join(constants.launcherDir, 'keypair.json');
+
+        if (fs.existsSync(keypairFile))
+            return JSON.parse(fs.readFileSync(keypairFile));
+        
+        else
+        {
+            const { privateKey, publicKey } = crypto.generateKeyPairSync('ec', {
+                namedCurve: 'secp224r1'
+            });
+
+            fs.writeFileSync(keypairFile, JSON.stringify({
+                public: publicKey.export({
+                    type: 'spki',
+                    format: 'der'
+                }).toString('base64'),
+
+                private: privateKey.export({
+                    type: 'sec1',
+                    format: 'der'
+                }).toString('base64')
+            }));
+
+            return {
+                public: publicKey,
+                private: privateKey
+            };
+        }
+    }*/
 
     public static getRunners (): Promise<[{ title: string, runners: Runner[] }]>
     {
@@ -173,20 +208,30 @@ export default class LauncherLib
         return background;
     }
 
-    public static async getPatchInfo (): Promise<{ version: string, state: 'testing' | 'stable' }>
+    /**
+     * Get patch's state and version from the repository
+     * @returns information about the patch, or null if repository is not available
+     */
+    public static async getPatchInfo(): Promise<{ version: string, state: 'testing' | 'stable' }|null>
     {
         return new Promise(resolve => {
             this.getData().then(async (data) => {
                 let gameLatest: string = data.game.latest.version;
 
-                got(`${constants.uri.patch}/raw/master/${gameLatest.replaceAll('.', '')}/patch.sh`)
-                    .then((patch: any) => {
+                got(`${constants.uri.patch}/raw/master/${gameLatest.replaceAll('.', '')}/patch.sh`, {
+                    timeout: {
+                        request: 4000
+                    }
+                }).then((patch: any) => {
                         /**
                          * [game version]/patch.sh file exists
                          * so it's testing or stable version
                          */
-                        got(`${constants.uri.patch}/raw/master/${gameLatest.replaceAll('.', '')}/patch_files/unityplayer_patch.vcdiff`)
-                            .then(() => {
+                        got(`${constants.uri.patch}/raw/master/${gameLatest.replaceAll('.', '')}/patch_files/unityplayer_patch.vcdiff`, {
+                            timeout: {
+                                request: 4000
+                            }
+                        }).then(() => {
                                 /**
                                  * [game version]/patch_files/unityplayer_patch
                                  * exists so it's testing or stable
@@ -197,27 +242,49 @@ export default class LauncherLib
                                         'stable' : 'testing'
                                 });
                             })
-                            .catch(() => {
+                            .catch((error: Error) => {
+                                console.error(error);
+
+                                /**
+                                 * Notabug is not responding
+                                 */
+                                if (error.message.includes('Timeout awaiting'))
+                                    resolve(null);
+                                
                                 /**
                                  * [game version]/patch_files/unityplayer_patch
                                  * doesn't exist so it's just a preparation
                                  * 
                                  * TODO: add preparation state
                                  */
-                                resolve({
-                                    version: data.game.diffs[0].version,
-                                    state: 'stable'
-                                });
+                                else
+                                {
+                                    resolve({
+                                        version: data.game.diffs[0].version,
+                                        state: 'stable'
+                                    });
+                                }
                             });
                     })
-                    .catch(() => {
+                    .catch((error: Error) => {
+                        console.error(error);
+
+                        /**
+                         * Notabug is not responding
+                         */
+                        if (error.message.includes('Timeout awaiting'))
+                            resolve(null);
+
                         /**
                          * Otherwise it's definitely preparation
                          */
-                        resolve({
-                            version: data.game.diffs[0].version,
-                            state: 'stable'
-                        });
+                        else
+                        {
+                            resolve({
+                                version: data.game.diffs[0].version,
+                                state: 'stable'
+                            });
+                        }
                     });
             });
         });
@@ -331,71 +398,76 @@ export default class LauncherLib
         });
     }
 
-    public static isPrefixInstalled (prefixPath: string): boolean
+    public static isPrefixInstalled(prefixPath: string): boolean
     {
         return fs.existsSync(path.join(prefixPath, 'drive_c'));
     }
 
-    public static patchGame (onFinish: () => void, onData: (data: string) => void)
+    public static patchGame(onData: (data: string) => void): Promise<boolean>
     {
-        this.getPatchInfo().then(pathInfo => {
-            Tools.downloadFile(constants.patchUri, path.join(constants.launcherDir, 'patch.zip')).then(() => {
-                Tools.unzip(path.join(constants.launcherDir, 'patch.zip'), constants.launcherDir).then(() => {
-                    // Delete zip file and assign patch directory.
-                    fs.unlinkSync(path.join(constants.launcherDir, 'patch.zip'));
+        return new Promise((resolve) => {
+            this.getPatchInfo().then(pathInfo => {
+                if (pathInfo === null)
+                    resolve(false);
 
-                    const patchDir = path.join(constants.launcherDir, 'dawn', pathInfo.version.replaceAll('.', ''));
-
-                    // Patch out the testing phase content from the shell files if active and make sure the shell files are executable.
-                    exec(`cd ${patchDir} && sed -i '/^echo "If you would like to test this patch, modify this script and remove the line below this one."/,+5d' patch.sh`);
-                    exec(`cd ${patchDir} && sed -i '/^echo "       necessary afterwards (Friday?). If that's the case, comment the line below."/,+2d' patch_anti_logincrash.sh`);
-                    exec(`chmod +x ${path.join(patchDir, 'patch.sh')}`);
-                    exec(`chmod +x ${path.join(patchDir, 'patch_anti_logincrash.sh')}`);
-
-                    // Execute the patch file with "yes yes" in the beginning to agree to the choices.
-                    let patcherProcess = exec(`yes yes | ${path.join(patchDir, 'patch.sh')}`, {
-                        cwd: constants.gameDir,
-                        env: {
-                            ...process.env,
-                            WINEPREFIX: constants.prefixDir.get()
-                        }
-                    });
-
-                    patcherProcess.stdout.on('data', (data: string) => onData(data));
-
-                    patcherProcess.on('close', () => {
-                        // Make sure that launcher.bat exists if not run patch.sh again.
-                        if (!fs.existsSync(path.join(constants.gameDir, 'launcher.bat')))
-                            exec(`yes yes | ${path.join(patchDir, 'patch.sh')}`, {
-                                cwd: constants.gameDir,
-                                env: {
-                                    ...process.env,
-                                    WINEPREFIX: constants.prefixDir.get()
-                                }
-                            });
-
-                        // Execute the patch file with "yes" in the beginning to agree to the choice.
-                        let patcherAntiCrashProcess = exec(`yes | ${path.join(patchDir, 'patch_anti_logincrash.sh')}`, {
+                else Tools.downloadFile(constants.patchUri, path.join(constants.launcherDir, 'patch.zip')).then(() => {
+                    Tools.unzip(path.join(constants.launcherDir, 'patch.zip'), constants.launcherDir).then(() => {
+                        // Delete zip file and assign patch directory.
+                        fs.unlinkSync(path.join(constants.launcherDir, 'patch.zip'));
+    
+                        const patchDir = path.join(constants.launcherDir, 'dawn', pathInfo.version.replaceAll('.', ''));
+    
+                        // Patch out the testing phase content from the shell files if active and make sure the shell files are executable.
+                        exec(`cd ${patchDir} && sed -i '/^echo "If you would like to test this patch, modify this script and remove the line below this one."/,+5d' patch.sh`);
+                        exec(`cd ${patchDir} && sed -i '/^echo "       necessary afterwards (Friday?). If that's the case, comment the line below."/,+2d' patch_anti_logincrash.sh`);
+                        exec(`chmod +x ${path.join(patchDir, 'patch.sh')}`);
+                        exec(`chmod +x ${path.join(patchDir, 'patch_anti_logincrash.sh')}`);
+    
+                        // Execute the patch file with "yes yes" in the beginning to agree to the choices.
+                        let patcherProcess = exec(`yes yes | ${path.join(patchDir, 'patch.sh')}`, {
                             cwd: constants.gameDir,
                             env: {
                                 ...process.env,
                                 WINEPREFIX: constants.prefixDir.get()
                             }
                         });
-        
-                        patcherAntiCrashProcess.stdout.on('data', (data: string) => onData(data));
-        
-                        patcherAntiCrashProcess.on('close', () => {
-                            this.updateConfig('patch.version', pathInfo.version);
-                            this.updateConfig('patch.state', pathInfo.state);
-
-                            fs.rmSync(path.join(constants.launcherDir, 'dawn'), { recursive: true });
-
-                            onFinish();
+    
+                        patcherProcess.stdout.on('data', (data: string) => onData(data));
+    
+                        patcherProcess.on('close', () => {
+                            // Make sure that launcher.bat exists if not run patch.sh again.
+                            if (!fs.existsSync(path.join(constants.gameDir, 'launcher.bat')))
+                                exec(`yes yes | ${path.join(patchDir, 'patch.sh')}`, {
+                                    cwd: constants.gameDir,
+                                    env: {
+                                        ...process.env,
+                                        WINEPREFIX: constants.prefixDir.get()
+                                    }
+                                });
+    
+                            // Execute the patch file with "yes" in the beginning to agree to the choice.
+                            let patcherAntiCrashProcess = exec(`yes | ${path.join(patchDir, 'patch_anti_logincrash.sh')}`, {
+                                cwd: constants.gameDir,
+                                env: {
+                                    ...process.env,
+                                    WINEPREFIX: constants.prefixDir.get()
+                                }
+                            });
+            
+                            patcherAntiCrashProcess.stdout.on('data', (data: string) => onData(data));
+            
+                            patcherAntiCrashProcess.on('close', () => {
+                                this.updateConfig('patch.version', pathInfo.version);
+                                this.updateConfig('patch.state', pathInfo.state);
+    
+                                fs.rmSync(path.join(constants.launcherDir, 'dawn'), { recursive: true });
+    
+                                resolve(true);
+                            });
                         });
                     });
-                });
-            })
+                })
+            });
         });
     }
 }

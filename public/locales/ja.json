@@ -41,6 +41,7 @@
     "YouPlayedFor": "あなたはのためにプレーしてきました",
     "hours": "時間",
     "minutes": "分",
+    "YourLauncherLevel": "Your launcher's level",
     "Unpacking": "開梱",
     "GameDownloaded": "ゲームのインストールに成功しました",
     "ApplyPatch": "パッチの適用...",
@@ -59,6 +60,8 @@
     "LauncherUpdateTitle": "ランチャーのアップデートが可能 ",
     "LauncherUpdateBody": "ランチャーの新バージョンは、プロジェクトのリポジトリ（{uri.launcher}）からダウンロードできます。",
     "TelemetryNotDisabled": "{placeholders.uppercase.company}のテレメトリサーバは無効になっていません！",
+    "PatchRepoUnavailableTitle": "Patch's repository is not available",
+    "PatchRepoUnavailableBody": "Most likely notabug is under attack and is not responding",
     "DefPrefix": "デフォルトへのリセット",
     "ChangePrefix": "プレフィックスを変更"
 }

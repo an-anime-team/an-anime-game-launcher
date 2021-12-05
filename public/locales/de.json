@@ -40,6 +40,7 @@
     "YouPlayedFor": "Sie haben ungefähr",
     "hours": "Stunden und",
     "minutes": "Minuten gespielt",
+    "YourLauncherLevel": "Your launcher's level",
     "Downloading": "wird Heruntergeladen",
     "Unpacking": "wird Entpackt",
     "GameDownloaded": "Spiel würde erfolgreich heruntergeladen",
@@ -59,6 +60,8 @@
     "LauncherUpdateTitle": "Launcher update verfügbar: ",
     "LauncherUpdateBody": "Sie können eine neue Version des Launchers aus dem Repository des Projekts unter {uri.launcher} herunterladen.",
     "TelemetryNotDisabled": "{placeholders.uppercase.company} Telemetrieserver sind nicht deaktiviert!",
+    "PatchRepoUnavailableTitle": "Patch's repository is not available",
+    "PatchRepoUnavailableBody": "Most likely notabug is under attack and is not responding",
     "DefPrefix": "Zurücksetzen zum Standard-Prefix",
     "ChangePrefix": "Prefix ändern"
 }

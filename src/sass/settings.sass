@@ -82,5 +82,45 @@
         .settings-item:last-child
             margin-bottom: 24px
 
+        .launcher-stats
+            display: inline-flex
+            margin-bottom: 16px
+
+            > img
+                width: 96px
+                height: 96px
+
+            .level
+                position: absolute
+                width: 96px
+                top: 105px
+
+                text-align: center
+                font-size: 20px
+                color: #71b71b
+
+            .stats
+                margin-left: 32px
+                align-self: center
+
+                > p
+                    font-size: 20px
+                    font-weight: 600
+                    margin: 0
+
+                .time-spent
+                    font-size: 18px
+                    margin: 8px 0 16px 0
+
+                .badges
+                    margin-bottom: 16px
+
+                    img
+                        width: 24px
+                        height: 24px
+
+                        margin-right: 4px
+
+
 @include themable(light, $light)
 @include themable(dark, $dark)

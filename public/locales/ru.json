@@ -40,6 +40,7 @@
     "YouPlayedFor": "Вы играли",
     "hours": "часов",
     "minutes": "минут",
+    "YourLauncherLevel": "Уровень вашего лаунчера",
     "Downloading": "Загрузка",
     "Unpacking": "Распаковка",
     "GameDownloaded": "Игра была успешно установлена",
@@ -59,6 +60,8 @@
     "LauncherUpdateTitle": "Доступно обновление лаунчера: ",
     "LauncherUpdateBody": "Вы можете скачать новую версию лаунчера с репозитория проекта: {uri.launcher}",
     "TelemetryNotDisabled": "Серверы сбора телеметрии {placeholders.uppercase.company} не отключены!",
+    "PatchRepoUnavailableTitle": "Репозиторий патча недоступен",
+    "PatchRepoUnavailableBody": "Скорее всего notabug находится под атакой и не отвечает",
     "DefPrefix": "Сбросить до умолчания",
     "ChangePrefix": "Изменить префикс"
 }
