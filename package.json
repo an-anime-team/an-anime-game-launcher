@@ -4,7 +4,7 @@
     "description": "An Anime Game Linux Launcher",
     "author": "Nikita Podvirnyy <suimin.tu.mu.ga.mi@gmail.com>",
     "contributors": [
-        "Marie Piontek <marie@mxy.gg> (https://marie.omg.lol)"
+        "Marie Piontek <marie@kaifa.ch> (https://marie.omg.lol)"
     ],
     "license": "GPL-3.0",
     "main": "entry.js",
