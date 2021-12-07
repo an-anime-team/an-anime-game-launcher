@@ -257,10 +257,10 @@ $(() => {
 
         if (gpus)
         {
-            console.log(gpus);
-
             for (const gpu of gpus.value)
                 $(`<li value="${gpu.Name.value}">${gpu.Name.value}</li>`).appendTo('#gpu .select-options ul');
+
+            console.log(`Selected GPU: ${LauncherLib.getConfig('gpu')}`);
 
             SwitcherooControl.getGpuByName(LauncherLib.getConfig('gpu')).then((gpu) => {
                 if (gpu)
