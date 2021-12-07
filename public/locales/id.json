@@ -2,7 +2,7 @@
     "Install": "Pasang",
     "Update": "Perbarui",
     "Launch": "Luncurkan",
-    "ResumeDownload": "Resume Download",
+    "ResumeDownload": "Lanjutkan Unduh",
     "Runners": "Runners",
     "Language": "Bahasa",
     "Voice": "Paket Suara",
@@ -19,7 +19,7 @@
     "GameModeNotInstalled": "Kamu belum memasang GameMode",
     "SwitcherooNotInstalled": "Kamu belum memasang switcheroo-control",
     "AutoDeleteDXVKLogs": "Otomatis hapus log DXVK",
-    "RecommendableOnly": "Tampilkan pilihan yang direkomendasikan",
+    "RecommendableOnly": "Tampilkan pilihan yang disarankan",
     "LauncherFolder": "folder peluncur",
     "Prefix": "Prefix",
     "SelectDir": "Pilih direktori",
@@ -62,6 +62,6 @@
     "TelemetryNotDisabled": "Peladen telemetri {placeholders.uppercase.company} tidak dimatikan!",
     "PatchRepoUnavailableTitle": "Repositori patch tidak tersedia",
     "PatchRepoUnavailableBody": "Sepertinya notabug sedang dalam serangan dan tidak merespon",
-    "DefPrefix": "Reset to Default",
-    "ChangePrefix": "Change Prefix"
+    "DefPrefix": "Setel ulang ke bawaan",
+    "ChangePrefix": "Ganti Prefix"
 }
