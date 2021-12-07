@@ -40,7 +40,7 @@
     "YouPlayedFor": "Kamu sudah bermain selama",
     "hours": "jam",
     "minutes": "menit",
-    "YourLauncherLevel": "Your launcher's level",
+    "YourLauncherLevel": "Level peluncur kamu",
     "Downloading": "Mengunduh",
     "Unpacking": "Membuka paket",
     "GameDownloaded": "Game berhasil dipasang",
@@ -60,8 +60,8 @@
     "LauncherUpdateTitle": "Pembaruan Peluncur tersedia: ",
     "LauncherUpdateBody": "Kamu dapat mengunduh versi baru peluncur dari repositori di {uri.launcher}",
     "TelemetryNotDisabled": "Peladen telemetri {placeholders.uppercase.company} tidak dimatikan!",
-    "PatchRepoUnavailableTitle": "Patch's repository is not available",
-    "PatchRepoUnavailableBody": "Most likely notabug is under attack and is not responding",
+    "PatchRepoUnavailableTitle": "Repositori patch tidak tersedia",
+    "PatchRepoUnavailableBody": "Sepertinya notabug sedang dalam serangan dan tidak merespon",
     "DefPrefix": "Reset to Default",
     "ChangePrefix": "Change Prefix"
 }

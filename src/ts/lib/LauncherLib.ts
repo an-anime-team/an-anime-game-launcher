@@ -212,24 +212,24 @@ export default class LauncherLib
      * Get patch's state and version from the repository
      * @returns information about the patch, or null if repository is not available
      */
-    public static async getPatchInfo(): Promise<{ version: string, state: 'testing' | 'stable' }|null>
+    public static async getPatchInfo(source: 'origin' | 'additional' = 'origin'): Promise<{ version: string, state: 'testing' | 'stable' }|null>
     {
         return new Promise(resolve => {
             this.getData().then(async (data) => {
                 let gameLatest: string = data.game.latest.version;
 
-                got(`${constants.uri.patch}/raw/master/${gameLatest.replaceAll('.', '')}/patch.sh`, {
+                got(`${constants.uri.patch[source]}/raw/master/${gameLatest.replaceAll('.', '')}/patch.sh`, {
                     timeout: {
-                        request: 4000
+                        request: 3000
                     }
                 }).then((patch: any) => {
                         /**
                          * [game version]/patch.sh file exists
                          * so it's testing or stable version
                          */
-                        got(`${constants.uri.patch}/raw/master/${gameLatest.replaceAll('.', '')}/patch_files/unityplayer_patch.vcdiff`, {
+                        got(`${constants.uri.patch[source]}/raw/master/${gameLatest.replaceAll('.', '')}/patch_files/unityplayer_patch.vcdiff`, {
                             timeout: {
-                                request: 4000
+                                request: 3000
                             }
                         }).then(() => {
                                 /**
@@ -246,10 +246,17 @@ export default class LauncherLib
                                 console.error(error);
 
                                 /**
-                                 * Notabug is not responding
+                                 * Source is not responding
                                  */
                                 if (error.message.includes('Timeout awaiting'))
-                                    resolve(null);
+                                {
+                                    // If it was a notabug - then we can try to use
+                                    // Maroxy's patch's repo mirror
+                                    if (source === 'origin')
+                                        this.getPatchInfo('additional').then(resolve);
+        
+                                    else resolve(null);
+                                }
                                 
                                 /**
                                  * [game version]/patch_files/unityplayer_patch
@@ -270,10 +277,17 @@ export default class LauncherLib
                         console.error(error);
 
                         /**
-                         * Notabug is not responding
+                         * Source is not responding
                          */
                         if (error.message.includes('Timeout awaiting'))
-                            resolve(null);
+                        {
+                            // If it was a notabug - then we can try to use
+                            // Maroxy's patch's repo mirror
+                            if (source === 'origin')
+                                this.getPatchInfo('additional').then(resolve);
+
+                            else resolve(null);
+                        }
 
                         /**
                          * Otherwise it's definitely preparation

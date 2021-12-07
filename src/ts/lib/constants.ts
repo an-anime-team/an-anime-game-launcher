@@ -24,7 +24,10 @@ export default class constants
 
     public static readonly uri = {
         api: `https://sdk-os-static.${this.placeholders.lowercase.company}.com/hk4e_global/mdk/launcher/api`,
-        patch: 'https://notabug.org/Krock/dawn',
+        patch: {
+            origin: 'https://notabug.org/Krock/dawn',
+            additional: 'https://dev.kaifa.ch/Maroxy/dawn'
+        },
         launcher: 'https://gitlab.com/KRypt0n_/an-anime-game-launcher',
         telemetry: [
             `log-upload-os.${this.placeholders.lowercase.company}.com`,
