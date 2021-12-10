@@ -34,7 +34,7 @@ This launcher is also available as the [an-anime-game-launcher](https://aur.arch
 
 <img src="repository-pics/stats/2.2.0.png">
 
-### 2.3.0 — 50 total
+### 2.3.0 — 56 total
 
 <img src="repository-pics/stats/2.3.0.png">
 
