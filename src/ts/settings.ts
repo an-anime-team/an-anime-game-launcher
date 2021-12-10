@@ -265,7 +265,7 @@ $(() => {
             SwitcherooControl.getGpuByName(LauncherLib.getConfig('gpu')).then((gpu) => {
                 if (gpu)
                 {
-                    $(`#gpu li[value=${gpu.Name.value}]`).addClass('selected');
+                    $(`#gpu li[value="${gpu.Name.value}"]`).addClass('selected');
                     $('#gpu .selected-item span').text(gpu.Name.value);
                 }
             });
@@ -274,8 +274,8 @@ $(() => {
         console.log('switcheroo-control not running');
 
         $('#gpu .selected-item')
-          .addClass('hint--top hint--medium')
-          .attr('data-hint', LauncherUI.i18n.translate('SwitcherooNotInstalled'));
+            .addClass('hint--top hint--medium')
+            .attr('data-hint', LauncherUI.i18n.translate('SwitcherooNotInstalled'));
     });
 
     $('#gpu').on('selectionChanged', (e, data: any) => {
