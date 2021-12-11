@@ -34,6 +34,14 @@ const config = new store ({
         patch: null, // Installed patch info ({ version, state } - related game's version and patch's state)
         runner: null, // Selected runner ({ folder, executable })
         rpc: false, // Discord RPC
+        rpcsettings: {
+            launcher: 'Preparing to launch',
+            ingame: {
+                details: 'In-Game',
+                state: null,
+                elapsed: true
+            }
+        },
         playtime: 0, // Number of seconds user spent in game
         hud: 'none', // none / dxvk / mangohud
         shaders: 'none', // none / shader's folder

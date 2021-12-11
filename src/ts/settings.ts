@@ -208,10 +208,50 @@ $(() => {
     if (LauncherLib.getConfig('rpc'))
         $('#discord-rpc').addClass('checkbox-active');
 
+        // Unhides the settings for discord rpc
+        $('#discord-rpc-conf').toggle();
+        $('#discord-rpc-conf-btn').toggle();
+
+        if (LauncherLib.getConfig('rpcsettings.ingame.elapsed'))
+            $('#rpc-game-elapsed').addClass('checkbox-active');
+
+        $('#rpc-game-state').attr('placeholder', LauncherLib.getConfig('rpcsettings.ingame.state'));
+        $('#rpc-game-details').attr('placeholder', LauncherLib.getConfig('rpcsettings.ingame.details'));
+        $('#rpc-launch-details').attr('placeholder', LauncherLib.getConfig('rpcsettings.launcher'));
+
     $('#discord-rpc').on('classChange', () => {
         LauncherLib.updateConfig('rpc', $('#discord-rpc').hasClass('checkbox-active'));
 
+        // Toggles the RPC Settings (hide/show)
+        $('#discord-rpc-conf').toggle();
+        $('#discord-rpc-conf-btn').toggle();
+
         ipcRenderer.send('rpc-toggle');
+    });
+
+    $('#rpc-launch-details').on('change', () => {
+        if ($('#rpc-launch-details').val() == " ")
+            LauncherLib.updateConfig('rpcsettings.launcher', 'Preparing to launch');
+        else
+            LauncherLib.updateConfig('rpcsettings.launcher', $('#rpc-launch-details').val() as string);
+    });
+
+    $('#rpc-game-details').on('change', () => {
+        if ($('#rpc-game-details').val() == " ")
+            LauncherLib.updateConfig('rpcsettings.ingame.details', 'In-Game');
+        else
+            LauncherLib.updateConfig('rpcsettings.ingame.details', $('#rpc-game-details').val() as string);
+    });
+
+    $('#rpc-game-state').on('change', () => {
+        if ($('#rpc-game-state').val() == " ")
+            LauncherLib.updateConfig('rpcsettings.ingame.state', null);
+        else
+            LauncherLib.updateConfig('rpcsettings.ingame.state', $('#rpc-game-state').val() as string);
+    });
+
+    $('#rpc-game-elapsed').on('classChange', () => {
+        LauncherLib.updateConfig('rpcsettings.ingame.elapsed', $('#rpc-game-elapsed').hasClass('checkbox-active'));
     });
 
     /**

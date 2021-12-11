@@ -203,10 +203,11 @@ $(() => {
                     if (DiscordRPC.isActive())
                     {
                         DiscordRPC.setActivity({
-                            details: 'In-Game',
+                            details: LauncherLib.getConfig('rpcsettings.ingame.details'),
+                            state: LauncherLib.getConfig('rpcsettings.ingame.state') ? LauncherLib.getConfig('rpcsettings.ingame.state') : undefined,
                             largeImageKey: 'game',
                             largeImageText: 'An Anime Game',
-                            startTimestamp: Date.now()
+                            startTimestamp: LauncherLib.getConfig('rpcsettings.ingame.elapsed') ? Date.now() : undefined
                         });
                     }
 

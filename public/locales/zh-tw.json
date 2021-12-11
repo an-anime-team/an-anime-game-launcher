@@ -62,6 +62,5 @@
     "TelemetryNotDisabled": "{placeholders.uppercase.company}'s telemetry servers don't disabled!",
     "PatchRepoUnavailableTitle": "Patch's repository is not available",
     "PatchRepoUnavailableBody": "Most likely notabug is under attack and is not responding",
-    "DefPrefix": "Reset to Default",
-    "ChangePrefix": "Change Prefix"
+    "DRPConf": "Discord RPC"
 }

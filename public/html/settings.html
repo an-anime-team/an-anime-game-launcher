@@ -25,6 +25,7 @@
             <div class="menu-item" anchor="dxvks" i18id="DXVK">DXVK</div>
             <div class="menu-item" anchor="shaders" i18id="Shaders">Shaders</div>
             <div class="menu-item" anchor="environment" i18id="Environment">Environment</div>
+            <div class="menu-item" id="discord-rpc-conf-btn" anchor="discord-rpc-conf" i18id="DRPConf" style="display: none;">Discord RPC</div>
         </div>
 
         <div class="settings">
@@ -309,6 +310,30 @@
                         <button class="button" id="delete" i18id="Delete">Delete</button>
                     </div>
                 </div>
+            </div>
+            <div class="settings-item" id="discord-rpc-conf" style="display: none;">
+                <h2 i18id="DRPConf">Discord RPC</h2>
+                
+                <h3>Launcher</h3>
+
+                <h4>Details/Information</h4>
+                <input type="text" id="rpc-launch-details" class="text-field" placeholder="Preparing to launch" />
+
+                <h3>In-Game</h3>
+
+                <div class="checkbox" id="rpc-game-elapsed">
+                    <span>Elapsed Time</span>
+
+                    <div class="checkbox-mark">
+                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="45.701px" height="45.7px" viewBox="0 0 45.701 45.7" xml:space="preserve"><g><g><path d="M20.687,38.332c-2.072,2.072-5.434,2.072-7.505,0L1.554,26.704c-2.072-2.071-2.072-5.433,0-7.504 c2.071-2.072,5.433-2.072,7.505,0l6.928,6.927c0.523,0.522,1.372,0.522,1.896,0L36.642,7.368c2.071-2.072,5.433-2.072,7.505,0 c0.995,0.995,1.554,2.345,1.554,3.752c0,1.407-0.559,2.757-1.554,3.752L20.687,38.332z"/></g></g></svg>
+                    </div>
+                </div>
+
+                <h4>Details/Information</h4>
+                <input type="text" id="rpc-game-details" class="text-field" placeholder="In-Game" />
+
+                <h4>Extra Text</h4>
+                <input type="text" id="rpc-game-state" class="text-field" placeholder="" />
             </div>
         </div>
     </body>

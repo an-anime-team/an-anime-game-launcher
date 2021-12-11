@@ -1,4 +1,5 @@
 import discordRpc, { Client, Presence } from 'discord-rpc';
+import LauncherLib from './LauncherLib';
 
 export default class DiscordRPC
 {
@@ -14,7 +15,7 @@ export default class DiscordRPC
 
         this.rpc.on('ready', () => {
             this.rpc.setActivity({
-                details: 'Preparing to launch',
+                details: LauncherLib.getConfig('rpcsettings.launcher'),
                 largeImageKey: 'launcher',
                 largeImageText: 'An Anime Game'
             });
