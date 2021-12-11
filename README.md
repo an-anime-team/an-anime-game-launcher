@@ -34,7 +34,7 @@ This launcher is also available as the [an-anime-game-launcher](https://aur.arch
 
 <img src="repository-pics/stats/2.2.0.png">
 
-### 2.3.0 — 50 total
+### 2.3.0 — 56 total
 
 <img src="repository-pics/stats/2.3.0.png">
 
@@ -134,6 +134,7 @@ npm start
 * <s>Add winetricks and winecfg buttons to settings ([notabug issue 35](https://notabug.org/nobody/an-anime-game-launcher/issues/35))</s> *(1.8.0)*
 * <s>Wine prefix folder selection ([notabug issue 37](https://notabug.org/nobody/an-anime-game-launcher/issues/37))</s> *(1.8.0)*
 * Use auto-downloaded winetricks in settings menu
+* Use `winecfg.exe` from the installed runner in settings menu
 * Use `LauncherLib.getGameVersion` function instead of the `config.json`'s `version` property
 * Fix button flickering at start when the launcher's state updates
 * Game's update pre-installation
