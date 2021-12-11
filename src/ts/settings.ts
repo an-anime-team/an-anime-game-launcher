@@ -229,6 +229,31 @@ $(() => {
         ipcRenderer.send('rpc-toggle');
     });
 
+    $('#rpc-launch-details').on('change', () => {
+        if ($('#rpc-launch-details').val() == "")
+            LauncherLib.updateConfig('rpcsettings.launcher', 'Preparing to launch');
+
+        LauncherLib.updateConfig('rpcsettings.launcher', $('#rpc-launch-details').val() as string);
+    });
+
+    $('#rpc-game-details').on('change', () => {
+        if ($('#rpc-game-details').val() == "")
+            LauncherLib.updateConfig('rpcsettings.ingame.details', 'In-Game');
+
+        LauncherLib.updateConfig('rpcsettings.ingame.details', $('#rpc-game-details').val() as string);
+    });
+
+    $('#rpc-game-state').on('change', () => {
+        if ($('#rpc-game-state').val() == "")
+            LauncherLib.updateConfig('rpcsettings.ingame.state', null);
+
+        LauncherLib.updateConfig('rpcsettings.ingame.state', $('#rpc-game-state').val() as string);
+    });
+
+    $('#rpc-game-elapsed').on('classChange', () => {
+        LauncherLib.updateConfig('rpcsettings.ingame.elapsed', $('#rpc-game-elapsed').hasClass('checkbox-active'));
+    });
+
     /**
      * Auto-delete DXVK logs
      */
