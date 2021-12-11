@@ -212,9 +212,16 @@ $(() => {
         $('#discord-rpc-conf').toggle();
         $('#discord-rpc-conf-btn').toggle();
 
+        if (LauncherLib.getConfig('rpcsettings.ingame.elapsed'))
+            $('#rpc-game-elapsed').addClass('checkbox-active');
+
+        $('#rpc-game-state').attr('placeholder', LauncherLib.getConfig('rpcsettings.ingame.state'));
+        $('#rpc-game-details').attr('placeholder', LauncherLib.getConfig('rpcsettings.ingame.details'));
+        $('#rpc-launch-details').attr('placeholder', LauncherLib.getConfig('rpcsettings.launcher'));
+
     $('#discord-rpc').on('classChange', () => {
         LauncherLib.updateConfig('rpc', $('#discord-rpc').hasClass('checkbox-active'));
-        
+
         // Toggles the RPC Settings (hide/show)
         $('#discord-rpc-conf').toggle();
         $('#discord-rpc-conf-btn').toggle();
