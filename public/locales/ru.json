@@ -62,6 +62,5 @@
     "TelemetryNotDisabled": "Серверы сбора телеметрии {placeholders.uppercase.company} не отключены!",
     "PatchRepoUnavailableTitle": "Репозиторий патча недоступен",
     "PatchRepoUnavailableBody": "Скорее всего notabug находится под атакой и не отвечает",
-    "DefPrefix": "Сбросить до умолчания",
-    "ChangePrefix": "Изменить префикс"
+    "DRPConf": "Discord RPC"
 }

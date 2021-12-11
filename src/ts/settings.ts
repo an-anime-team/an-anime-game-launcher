@@ -208,8 +208,16 @@ $(() => {
     if (LauncherLib.getConfig('rpc'))
         $('#discord-rpc').addClass('checkbox-active');
 
+        // Unhides the settings for discord rpc
+        $('#discord-rpc-conf').toggle();
+        $('#discord-rpc-conf-btn').toggle();
+
     $('#discord-rpc').on('classChange', () => {
         LauncherLib.updateConfig('rpc', $('#discord-rpc').hasClass('checkbox-active'));
+        
+        // Toggles the RPC Settings (hide/show)
+        $('#discord-rpc-conf').toggle();
+        $('#discord-rpc-conf-btn').toggle();
 
         ipcRenderer.send('rpc-toggle');
     });

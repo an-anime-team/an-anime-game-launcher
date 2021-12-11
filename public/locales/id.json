@@ -62,6 +62,5 @@
     "TelemetryNotDisabled": "Peladen telemetri {placeholders.uppercase.company} tidak dimatikan!",
     "PatchRepoUnavailableTitle": "Repositori patch tidak tersedia",
     "PatchRepoUnavailableBody": "Sepertinya notabug sedang dalam serangan dan tidak merespon",
-    "DefPrefix": "Setel ulang ke bawaan",
-    "ChangePrefix": "Ganti Prefix"
+    "DRPConf": "Discord RPC"
 }
