@@ -113,9 +113,8 @@ export default class Tools
             dns.lookup(uri, (error: any, address: string, family: any) => {
                 // console.log(`${uri} -> ${address}`);
                 
-                if (error)
-                    reject(error);
-
+                if (error.toString().startsWith('Error: getaddrinfo ENOTFOUND')) resolve(true);
+                else if (error) reject(error);
                 else resolve(address == '0.0.0.0');
             });
         });
