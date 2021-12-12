@@ -139,48 +139,78 @@ $(() => {
     /**
      * winetricks button
      */
-    if (commandExists('winetricks'))
-    {
-        $('#general-action-buttons #winetricks').on('click', () => {
-            exec('winetricks', {
-                env: {
-                    ...process.env,
-                    WINEPREFIX: constants.prefixDir.get()
-                }
-            });
-        });
-    }
 
-    else
-    {
-        $('#general-action-buttons #winetricks')
-            .addClass('hint--top hint--small')
-            .attr('data-hint', LauncherUI.i18n.translate('IsNotInstalled', ['winetricks']))
-            .attr('disabled', 'disabled');
-    }
+    $('#general-action-buttons #winetricks').on('click', async () => {
+        let winetricks = await LauncherLib.getWinetricks();
+        $('#general-action-buttons #winetricks').attr('disabled', 'disabled');
+
+        let env: any = {
+            ...process.env,
+            WINEPREFIX: constants.prefixDir.get()
+        };
+
+        if (!commandExists('wine') && LauncherLib.getConfig('runner') !== null)
+        {
+            env['WINE'] = path.join(
+                constants.runnersDir,
+                LauncherLib.getConfig('runner.folder'),
+                LauncherLib.getConfig('runner.executable')
+            );
+
+            env['WINESERVER'] = path.join(path.dirname(env['WINE']), 'wineserver');
+
+            if (!fs.existsSync(env['WINE']))
+                console.error(`Patcher supposed to use ${LauncherLib.getConfig('runner.name')} runner, but it doesn't installed`);
+        }
+
+        const winetrickshell = spawn('bash', [winetricks], {
+            env: env
+        })
+
+        winetrickshell.on('close', () => {
+            $('#general-action-buttons #winetricks').removeAttr('disabled');
+        });
+    });
 
     /**
      * winecfg button
      */
-    if (commandExists('winecfg'))
-    {
-        $('#general-action-buttons #winecfg').on('click', () => {
-            exec('winecfg', {
-                env: {
-                    ...process.env,
-                    WINEPREFIX: constants.prefixDir.get()
-                }
-            });
-        });
-    }
 
-    else
-    {
-        $('#general-action-buttons #winecfg')
-            .addClass('hint--top hint--small')
-            .attr('data-hint', LauncherUI.i18n.translate('IsNotInstalled', ['winecfg']))
-            .attr('disabled', 'disabled');
-    }
+    $('#general-action-buttons #winecfg').on('click', () => {
+        $('#general-action-buttons #winecfg').attr('disabled', 'disabled');
+
+        let env: any = {
+            ...process.env,
+            WINEPREFIX: constants.prefixDir.get()
+        };
+
+        if (!commandExists('wine') && LauncherLib.getConfig('runner') !== null)
+        {
+            env['WINE'] = path.join(
+                constants.runnersDir,
+                LauncherLib.getConfig('runner.folder'),
+                LauncherLib.getConfig('runner.executable')
+            );
+
+            env['WINESERVER'] = path.join(path.dirname(env['WINE']), 'wineserver');
+
+            if (!fs.existsSync(env['WINE']))
+                console.error(`Patcher supposed to use ${LauncherLib.getConfig('runner.name')} runner, but it doesn't installed`);
+        }
+
+        const winecfg = LauncherLib.getConfig('runner.name').startsWith == 'Proton' ?
+                        path.join(LauncherLib.getConfig('runner.folder'), 'files', 'lib64', 'wine', 'x86_64-windows', 'winecfg.exe') :
+                        LauncherLib.getConfig('runner.name').startsWith == 'Lutris' ?
+                        path.join(LauncherLib.getConfig('runner.folder'), 'lib64', 'wine', 'x86_64-windows', 'winecfg.exe') : 'winecfg'
+
+        const winecfgshell = exec(winecfg, {
+            env: env
+        });
+
+        winecfgshell.on('close', () => {
+            $('#general-action-buttons #winecfg').removeAttr('disabled');
+        });
+    });
 
     /**
      * HUD
