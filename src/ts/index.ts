@@ -97,6 +97,7 @@ $(() => {
     $('#settings').on('mouseleave', () => $('#settings').removeClass('hovered'));
 
     LauncherLib.getData().then(async data => {
+        ipcRenderer.invoke('loaded');
         await LauncherUI.updateLauncherState(data);
 
         $('#launch').on('click', async () => {
