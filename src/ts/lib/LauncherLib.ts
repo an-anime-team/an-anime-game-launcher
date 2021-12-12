@@ -346,6 +346,22 @@ export default class LauncherLib
         else return null;
     }
 
+    public static async getWinetricks (): Promise<string>
+    {
+        return new Promise((resolve) => {
+            if (!fs.existsSync(path.join(constants.launcherDir, 'winetricks.sh')))
+            {
+                Tools.downloadFile(constants.uri.winetricks, path.join(constants.launcherDir, 'winetricks.sh')).then(() => {
+                    resolve(path.join(constants.launcherDir, 'winetricks.sh'));
+                });
+            }
+            else
+            {
+                resolve(path.join(constants.launcherDir, 'winetricks.sh'));
+            }
+        });
+    }
+
     // WINEPREFIX='...../wineprefix' winetricks corefonts usetakefocus=n
     public static async installPrefix (prefixPath: string, progress: (output: string, current: number, total: number) => void): Promise<void>
     {
@@ -369,9 +385,7 @@ export default class LauncherLib
         ];
 
         return new Promise((resolve) => {
-            const winetricksSh = path.join(constants.launcherDir, 'winetricks.sh');
-
-            Tools.downloadFile(constants.uri.winetricks, winetricksSh).then(() => {
+            LauncherLib.getWinetricks().then((winetricksSh) => {
                 let installationProgress = 0;
 
                 let env: any = {
@@ -412,8 +426,6 @@ export default class LauncherLib
                 });
         
                 installerProcess.on('close', () => {
-                    fs.unlinkSync(winetricksSh);
-
                     resolve();
                 });
             });
