@@ -135,6 +135,7 @@ npm start
 * <s>Wine prefix folder selection ([notabug issue 37](https://notabug.org/nobody/an-anime-game-launcher/issues/37))</s> *(1.8.0)*
 * Use auto-downloaded winetricks in settings menu *(done in main branch by @Maroxy, !14)*
 * Use `winecfg.exe` from the installed runner in settings menu *(done in main branch by @Maroxy, !14)*
+* Fix voice data installation
 * Add fps unlocker option
 * Add downloading pause button
 * Move project to Vue
