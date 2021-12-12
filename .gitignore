@@ -2,8 +2,6 @@ node_modules
 dist
 
 public/css/*
-!public/css/hint.min.css
-!public/css/layout.min.css
 
 public/js
 
