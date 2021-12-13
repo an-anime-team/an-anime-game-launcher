@@ -318,6 +318,42 @@ $(() => {
         LauncherLib.updateConfig('gamemode', $('#gamemode').hasClass('checkbox-active'));
     });
 
+
+    /**
+     * FPS Unlocker
+     */
+    
+    // Hide FPS Unlock until Prefix is installed
+    if (!LauncherLib.isPrefixInstalled(constants.prefixDir.get())) 
+        $('#fps-unlocker').toggle();
+    else if(LauncherLib.isPrefixInstalled(constants.prefixDir.get()) && !$('#fps-unlocker').is(':visible'))
+        $('#fps-unlocker').toggle();
+
+    if (LauncherLib.getConfig('fpsunlock'))
+        if (!fs.existsSync(constants.fpsunlockerDir)) 
+            LauncherLib.updateConfig('fpsunlock', false);
+        else
+            $('#fps-unlocker').addClass('checkbox-active');
+
+    $('#fps-unlocker').on('classChange', async () => {
+        if (LauncherLib.getConfig('fpsunlock') && !$('#fps-unlocker').hasClass('checkbox-active') && fs.existsSync(constants.fpsunlockerDir))
+        {
+            fs.rmdirSync(constants.fpsunlockerDir, { recursive: true });
+            fs.rmSync(path.join(constants.gameDir, 'fps_config.ini'));
+        }
+        else if(!LauncherLib.getConfig('fpsunlock') && $('#fps-unlocker').hasClass('checkbox-active') && !fs.existsSync(constants.fpsunlockerDir))
+        {
+            fs.mkdirSync(constants.fpsunlockerDir);
+            let fpsunlockexe = Buffer.from('aHR0cHM6Ly9naXRodWIuY29tLzM0NzM2Mzg0L2dlbnNoaW4tZnBzLXVubG9jay9yZWxlYXNlcy9kb3dubG9hZC92MS40LjIvdW5sb2NrZnBzLmV4ZQ==', 'base64').toString();
+            let fpsunlockbat = Buffer.from('aHR0cHM6Ly9kZXYua2FpZmEuY2gvTWFyb3h5L2FuLWFuaW1lLWdhbWUtYXVyL3Jhdy9icmFuY2gvZnBzdW5sb2NrL2Zwc3VubG9jay5iYXQ=', 'base64').toString();
+
+            await Tools.downloadFile(fpsunlockbat, path.join(constants.gameDir, 'fpsunlock.bat'), (current: number, total: number, difference: number) => null);
+            await Tools.downloadFile(fpsunlockexe, path.join(constants.fpsunlockerDir, 'unlockfps.exe'), (current: number, total: number, difference: number) => null);
+        }
+
+        LauncherLib.updateConfig('fpsunlock', $('#fps-unlocker').hasClass('checkbox-active'));
+    });
+
     /**
      * GPU selection
      */

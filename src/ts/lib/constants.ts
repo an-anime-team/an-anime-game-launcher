@@ -90,6 +90,11 @@ export default class constants
         return path.join(this.prefixDir.get(), 'drive_c', 'Program Files', this.placeholders.uppercase.full);
     }
 
+    public static get fpsunlockerDir(): string
+    {
+        return path.join(this.prefixDir.get(), 'drive_c', 'Program Files', Buffer.from('R0lfRlBTVW5sb2NrZXI=', 'base64').toString());
+    }
+
     public static get voiceDir(): string
     {
         return path.join(this.gameDir, `${this.placeholders.uppercase.first + this.placeholders.uppercase.second}_Data`, 'StreamingAssets', 'Audio', 'GeneratedSoundBanks', 'Windows');
