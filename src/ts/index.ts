@@ -280,7 +280,7 @@ $(() => {
                         else console.warn(`GPU ${LauncherLib.getConfig('gpu')} not found. Launching on the default GPU`);
                     }
 
-                    let command = `${wineExeutable} launcher.bat`;
+                    let command = `${wineExeutable} ${LauncherLib.getConfig('fpsunlock') ? 'fpsunlock.bat' : 'launcher.bat'}`;
 
                     /**
                      * Gamemode integration
@@ -484,7 +484,7 @@ $(() => {
                         let voicePack = diff.voice_packs[1]; // en-us
 
                         for (let i = 0; i < diff.voice_packs.length; ++i)
-                            if (diff.voice_packs[i].language == LauncherLib.getConfig('lang.voice'))
+                            if (diff.voice_packs[i].language == LauncherLib.getConfig('lang.voice.active'))
                             {
                                 voicePack = diff.voice_packs[i];
 
@@ -521,6 +521,7 @@ $(() => {
                                 }
 
                                 LauncherLib.updateConfig('version', data.game.latest.version);
+                                LauncherLib.updateConfig('lang.voice.installed', LauncherLib.getConfig('lang.voice.active'));
 
                                 // Show back the settings button
                                 $('#settings').css('display', 'block');

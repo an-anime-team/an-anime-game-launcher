@@ -46,6 +46,7 @@ const config = new store ({
         hud: 'none', // none / dxvk / mangohud
         shaders: 'none', // none / shader's folder
         gamemode: false, // GameMode
+        fpsunlock: false, // FPS Unlocker
         gpu: 'default', // GPU
         autodelete_dxvk_logs: false, // Auto-delete DXVK logs
         theme: 'system', // light / dark / system
