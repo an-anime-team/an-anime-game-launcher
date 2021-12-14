@@ -333,7 +333,7 @@ $(() => {
     if (!LauncherLib.isPrefixInstalled(constants.prefixDir.get())) 
         $('#fps-unlocker').toggle();
 
-    else if (LauncherLib.isPrefixInstalled(constants.prefixDir.get()) && !$('#fps-unlocker').is(':visible'))
+    else if (LauncherLib.isPrefixInstalled(constants.prefixDir.get()) && $('#fps-unlocker').css('display') == 'none')
         $('#fps-unlocker').toggle();
 
     if (LauncherLib.getConfig('fpsunlock'))
