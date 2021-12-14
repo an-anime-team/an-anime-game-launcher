@@ -141,7 +141,8 @@ $(() => {
      */
 
     $('#general-action-buttons #winetricks').on('click', async () => {
-        let winetricks = await LauncherLib.getWinetricks();
+        const winetricks = await LauncherLib.getWinetricks();
+
         $('#general-action-buttons #winetricks').attr('disabled', 'disabled');
 
         let env: any = {
@@ -149,7 +150,7 @@ $(() => {
             WINEPREFIX: constants.prefixDir.get()
         };
 
-        if (!commandExists('wine') && LauncherLib.getConfig('runner') !== null)
+        if (LauncherLib.getConfig('runner') !== null)
         {
             env['WINE'] = path.join(
                 constants.runnersDir,
@@ -184,7 +185,9 @@ $(() => {
             WINEPREFIX: constants.prefixDir.get()
         };
 
-        if (!commandExists('wine') && LauncherLib.getConfig('runner') !== null)
+        let wine = 'wine';
+
+        if (LauncherLib.getConfig('runner') !== null)
         {
             env['WINE'] = path.join(
                 constants.runnersDir,
@@ -196,18 +199,21 @@ $(() => {
 
             if (!fs.existsSync(env['WINE']))
                 console.error(`Patcher supposed to use ${LauncherLib.getConfig('runner.name')} runner, but it doesn't installed`);
+
+            else wine = env['WINE'];
         }
 
-        const winecfg = LauncherLib.getConfig('runner.name').startsWith == 'Proton' ?
-                        path.join(LauncherLib.getConfig('runner.folder'), 'files', 'lib64', 'wine', 'x86_64-windows', 'winecfg.exe') :
-                        LauncherLib.getConfig('runner.name').startsWith == 'Lutris' ?
-                        path.join(LauncherLib.getConfig('runner.folder'), 'lib64', 'wine', 'x86_64-windows', 'winecfg.exe') : 'winecfg'
+        const winecfg = path.join(
+            constants.runnersDir,
+            LauncherLib.getConfig('runner.folder'),
+            LauncherLib.getConfig('runner.winecfg')
+        );
 
-        const winecfgshell = exec(winecfg, {
+        console.log(`Running command: '${wine}' '${winecfg}'`);
+
+        exec(`'${wine}' '${winecfg}'`, {
             env: env
-        });
-
-        winecfgshell.on('close', () => {
+        }, () => {
             $('#general-action-buttons #winecfg').removeAttr('disabled');
         });
     });
@@ -236,18 +242,20 @@ $(() => {
      */
 
     if (LauncherLib.getConfig('rpc'))
+    {
         $('#discord-rpc').addClass('checkbox-active');
 
         // Unhides the settings for discord rpc
         $('#discord-rpc-conf').toggle();
         $('#discord-rpc-conf-btn').toggle();
+    }
 
-        if (LauncherLib.getConfig('rpcsettings.ingame.elapsed'))
-            $('#rpc-game-elapsed').addClass('checkbox-active');
+    if (LauncherLib.getConfig('rpcsettings.ingame.elapsed'))
+        $('#rpc-game-elapsed').addClass('checkbox-active');
 
-        $('#rpc-game-state').attr('placeholder', LauncherLib.getConfig('rpcsettings.ingame.state'));
-        $('#rpc-game-details').attr('placeholder', LauncherLib.getConfig('rpcsettings.ingame.details'));
-        $('#rpc-launch-details').attr('placeholder', LauncherLib.getConfig('rpcsettings.launcher'));
+    $('#rpc-game-state').attr('placeholder', LauncherLib.getConfig('rpcsettings.ingame.state'));
+    $('#rpc-game-details').attr('placeholder', LauncherLib.getConfig('rpcsettings.ingame.details'));
+    $('#rpc-launch-details').attr('placeholder', LauncherLib.getConfig('rpcsettings.launcher'));
 
     $('#discord-rpc').on('classChange', () => {
         LauncherLib.updateConfig('rpc', $('#discord-rpc').hasClass('checkbox-active'));
@@ -260,24 +268,21 @@ $(() => {
     });
 
     $('#rpc-launch-details').on('change', () => {
-        if ($('#rpc-launch-details').val() == " ")
-            LauncherLib.updateConfig('rpcsettings.launcher', 'Preparing to launch');
-        else
-            LauncherLib.updateConfig('rpcsettings.launcher', $('#rpc-launch-details').val() as string);
+        const launcher = ($('#rpc-launch-details').val() as string).trim();
+
+        LauncherLib.updateConfig('rpcsettings.launcher', launcher == '' ? 'Preparing to launch' : launcher);
     });
 
     $('#rpc-game-details').on('change', () => {
-        if ($('#rpc-game-details').val() == " ")
-            LauncherLib.updateConfig('rpcsettings.ingame.details', 'In-Game');
-        else
-            LauncherLib.updateConfig('rpcsettings.ingame.details', $('#rpc-game-details').val() as string);
+        const details = ($('#rpc-game-details').val() as string).trim();
+
+        LauncherLib.updateConfig('rpcsettings.ingame.details', details == '' ? 'In-Game' : details);
     });
 
     $('#rpc-game-state').on('change', () => {
-        if ($('#rpc-game-state').val() == " ")
-            LauncherLib.updateConfig('rpcsettings.ingame.state', null);
-        else
-            LauncherLib.updateConfig('rpcsettings.ingame.state', $('#rpc-game-state').val() as string);
+        const state = ($('#rpc-game-state').val() as string).trim();
+
+        LauncherLib.updateConfig('rpcsettings.ingame.state', state == '' ? null : state);
     });
 
     $('#rpc-game-elapsed').on('classChange', () => {
@@ -324,16 +329,22 @@ $(() => {
      */
     
     // Hide FPS Unlock until Prefix is installed
+
     if (!LauncherLib.isPrefixInstalled(constants.prefixDir.get())) 
-        $('#fps-unlocker').toggle();
-    else if(LauncherLib.isPrefixInstalled(constants.prefixDir.get()) && !$('#fps-unlocker').is(':visible'))
+    {
         $('#fps-unlocker').toggle();
 
+        if (!$('#fps-unlocker').is(':visible'))
+            $('#fps-unlocker').toggle();
+    }
+
     if (LauncherLib.getConfig('fpsunlock'))
-        if (!fs.existsSync(constants.fpsunlockerDir)) 
+    {
+        if (!fs.existsSync(constants.fpsunlockerDir))
             LauncherLib.updateConfig('fpsunlock', false);
-        else
-            $('#fps-unlocker').addClass('checkbox-active');
+
+        else $('#fps-unlocker').addClass('checkbox-active');
+    }
 
     $('#fps-unlocker').on('classChange', async () => {
         if (LauncherLib.getConfig('fpsunlock') && !$('#fps-unlocker').hasClass('checkbox-active') && fs.existsSync(constants.fpsunlockerDir))
@@ -341,14 +352,16 @@ $(() => {
             fs.rmdirSync(constants.fpsunlockerDir, { recursive: true });
             fs.rmSync(path.join(constants.gameDir, 'fps_config.ini'));
         }
-        else if(!LauncherLib.getConfig('fpsunlock') && $('#fps-unlocker').hasClass('checkbox-active') && !fs.existsSync(constants.fpsunlockerDir))
+
+        else if (!LauncherLib.getConfig('fpsunlock') && $('#fps-unlocker').hasClass('checkbox-active') && !fs.existsSync(constants.fpsunlockerDir))
         {
             fs.mkdirSync(constants.fpsunlockerDir);
-            let fpsunlockexe = Buffer.from('aHR0cHM6Ly9naXRodWIuY29tLzM0NzM2Mzg0L2dlbnNoaW4tZnBzLXVubG9jay9yZWxlYXNlcy9kb3dubG9hZC92MS40LjIvdW5sb2NrZnBzLmV4ZQ==', 'base64').toString();
-            let fpsunlockbat = Buffer.from('aHR0cHM6Ly9kZXYua2FpZmEuY2gvTWFyb3h5L2FuLWFuaW1lLWdhbWUtYXVyL3Jhdy9icmFuY2gvZnBzdW5sb2NrL2Zwc3VubG9jay5iYXQ=', 'base64').toString();
 
-            await Tools.downloadFile(fpsunlockbat, path.join(constants.gameDir, 'fpsunlock.bat'), (current: number, total: number, difference: number) => null);
-            await Tools.downloadFile(fpsunlockexe, path.join(constants.fpsunlockerDir, 'unlockfps.exe'), (current: number, total: number, difference: number) => null);
+            const fpsunlockexe = Buffer.from('aHR0cHM6Ly9naXRodWIuY29tLzM0NzM2Mzg0L2dlbnNoaW4tZnBzLXVubG9jay9yZWxlYXNlcy9kb3dubG9hZC92MS40LjIvdW5sb2NrZnBzLmV4ZQ==', 'base64').toString();
+            const fpsunlockbat = Buffer.from('aHR0cHM6Ly9kZXYua2FpZmEuY2gvTWFyb3h5L2FuLWFuaW1lLWdhbWUtYXVyL3Jhdy9icmFuY2gvZnBzdW5sb2NrL2Zwc3VubG9jay5iYXQ=', 'base64').toString();
+
+            await Tools.downloadFile(fpsunlockbat, path.join(constants.gameDir, 'fpsunlock.bat'));
+            await Tools.downloadFile(fpsunlockexe, path.join(constants.fpsunlockerDir, 'unlockfps.exe'));
         }
 
         LauncherLib.updateConfig('fpsunlock', $('#fps-unlocker').hasClass('checkbox-active'));
@@ -620,6 +633,7 @@ $(() => {
                             LauncherLib.updateConfig('runner.name', runner.name);
                             LauncherLib.updateConfig('runner.folder', runner.folder);
                             LauncherLib.updateConfig('runner.executable', runner.executable);
+                            LauncherLib.updateConfig('runner.winecfg', runner.winecfg);
 
                             $('#runners-list > .list-item').removeClass('list-item-active');
                             item.addClass('list-item-active');

@@ -14,7 +14,7 @@
 
 | Game version | Launcher version | Patch version |
 | :---: | :---: | :---: |
-| 2.3.0 | 1.8.0 | 2.3.0 stable ✅ |
+| 2.3.0 | 1.9.0 | 2.3.0 stable ✅ |
 
 We have our own [An Anime Game](https://discord.gg/ck37X6UWBp) discord server where you can ask any questions
 
@@ -34,7 +34,7 @@ This launcher is also available as the [an-anime-game-launcher](https://aur.arch
 
 <img src="repository-pics/stats/2.2.0.png">
 
-### 2.3.0 — 60 total
+### 2.3.0 — 62 total
 
 <img src="repository-pics/stats/2.3.0.png">
 
@@ -133,17 +133,16 @@ npm start
 * <s>Add dark theme support for settings menu</s> *(1.7.0)*
 * <s>Add winetricks and winecfg buttons to settings ([notabug issue 35](https://notabug.org/nobody/an-anime-game-launcher/issues/35))</s> *(1.8.0)*
 * <s>Wine prefix folder selection ([notabug issue 37](https://notabug.org/nobody/an-anime-game-launcher/issues/37))</s> *(1.8.0)*
-* Use auto-downloaded winetricks in settings menu *(done in main branch by @Maroxy, !14)*
-* Use `winecfg.exe` from the installed runner in settings menu *(done in main branch by @Maroxy, !14)*
-* Fix voice data installation *(done in main branch by @Maroxy, !15)*
-* Add fps unlocker option *(done in main branch by @Maroxy, !15)*
+* <s>Use auto-downloaded winetricks in settings menu</s> *(1.9.0, !14)*
+* <s>Use `winecfg.exe` from the installed runner in settings menu</s> *(1.9.0, !14)*
+* <s>Fix voice data installation</s> *(1.9.0, !15)*
+* <s>Add fps unlocker option</s> *(1.9.0, !15)*
 * Add downloading pause button
 * Move project to Vue
 * Use `LauncherLib.getGameVersion` function instead of the `config.json`'s `version` property
 * Fix button flickering at start when the launcher's state updates
 * Game's update pre-installation
 * Screenshots explorer
-* Make force launch button when the launcher's repository is unavailable *(waiting for the repository's unavailability lmao)*
 * Add Patch category in settings menu with
   - Always participate in patches testing
   - Applying anti login crash patch

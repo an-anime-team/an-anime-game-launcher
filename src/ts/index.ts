@@ -26,6 +26,24 @@ if (!fs.existsSync(constants.runnersDir))
 if (!fs.existsSync(constants.dxvksDir))
     fs.mkdirSync(constants.dxvksDir, { recursive: true });
 
+/**
+ * Config updates
+ */
+
+// 1.8.0 -> ^1.9.0
+// Added runner.winecfg property
+if (!LauncherLib.getConfig('runner.winecfg'))
+{
+    LauncherLib.getRunners().then((groups) => {
+        groups.forEach((group) => {
+            group.runners.forEach((runner) => {
+                if (runner.folder == LauncherLib.getConfig('runner.folder'))
+                    LauncherLib.updateConfig('runner.winecfg', runner.winecfg);
+            });
+        });
+    });
+}
+
 $(() => {
     $('body').attr('theme', LauncherUI.theme);
 
@@ -97,8 +115,9 @@ $(() => {
     $('#settings').on('mouseleave', () => $('#settings').removeClass('hovered'));
 
     LauncherLib.getData().then(async data => {
-        ipcRenderer.invoke('loaded');
         await LauncherUI.updateLauncherState(data);
+
+        ipcRenderer.invoke('loaded');
 
         $('#launch').on('click', async () => {
             // Download default wine if we

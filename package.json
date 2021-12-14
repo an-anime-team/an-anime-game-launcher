@@ -1,6 +1,6 @@
 {
     "name": "an-anime-game-launcher",
-    "version": "1.8.0",
+    "version": "1.9.0",
     "description": "An Anime Game Linux Launcher",
     "author": "Nikita Podvirnyy <suimin.tu.mu.ga.mi@gmail.com>",
     "contributors": [
@@ -45,8 +45,8 @@
         "@types/semver": "^7.3.9",
         "electron": "^16.0.4",
         "electron-builder": "^22.14.5",
-        "sass": "^1.44.0",
-        "typescript": "^4.5.2"
+        "sass": "^1.45.0",
+        "typescript": "^4.5.4"
     },
     "dependencies": {
         "cash-dom": "^8.1.0",
@@ -54,9 +54,9 @@
         "discord-rpc": "^4.0.1",
         "dbus-next": "^0.10.2",
         "electron-store": "^8.0.1",
-        "follow-redirects": "^1.14.5",
+        "follow-redirects": "^1.14.6",
         "get-pixels": "^3.3.3",
-        "got": "^11.8.3",
+        "got": "^12.0.0",
         "semver": "^7.3.5"
     }
 }

@@ -81,6 +81,7 @@ type Runner = {
     folder: string,        // Folder name where it will be downloaded
     makeFolder: boolean,   // Do we need to create folder or it is included in archive
     executable: string,    // Path to wine executable inside folder
+    winecfg: string,       // Path to the winecfg.exe
     recommendable: boolean // Is this runner recommendable to use
 };
 

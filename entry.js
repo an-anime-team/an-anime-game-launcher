@@ -68,10 +68,10 @@ ipcMain.handle('open-analytics-participation', () => {
 
 ipcMain.handle('hide-analytics-participation', () => analyticsWindow.close());
 
+// https://www.electronjs.org/docs/latest/api/browser-window/#class-browserwindow
 function createWindow ()
 {
     // Launcher
-    // https://www.electronjs.org/docs/latest/api/browser-window/#class-browserwindow
     mainWindow = new BrowserWindow ({
         width: 1280,
         height: 700,
@@ -97,7 +97,6 @@ function createWindow ()
     // mainWindow.webContents.openDevTools();
 
     // Splash
-
     splashWindow = new BrowserWindow({
         width: 250, 
         height: 320, 
@@ -106,6 +105,7 @@ function createWindow ()
         icon: path.join(__dirname, 'public', 'images', 'icons', '64x64.png'),
         autoHideMenuBar: true
     });
+
     splashWindow.loadFile(path.join(__dirname, 'public', 'splash', 'index.html'));
     splashWindow.center();
 }
@@ -126,10 +126,8 @@ app.whenReady().then(() => {
     });
 
     ipcMain.handle('loaded', () => {
-        setTimeout(() => {
-            mainWindow.show();
-            splashWindow.close();
-        }, 2000);
+        splashWindow.close();
+        mainWindow.show();
     });
 
     // This has to be here otherwise webContents is invalid
