@@ -56,7 +56,7 @@
         "electron-store": "^8.0.1",
         "follow-redirects": "^1.14.6",
         "get-pixels": "^3.3.3",
-        "got": "^12.0.0",
+        "got": "^11.8.3",
         "semver": "^7.3.5"
     }
 }
