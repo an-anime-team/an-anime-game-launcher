@@ -331,12 +331,10 @@ $(() => {
     // Hide FPS Unlock until Prefix is installed
 
     if (!LauncherLib.isPrefixInstalled(constants.prefixDir.get())) 
-    {
         $('#fps-unlocker').toggle();
 
-        if (!$('#fps-unlocker').is(':visible'))
-            $('#fps-unlocker').toggle();
-    }
+    else if (LauncherLib.isPrefixInstalled(constants.prefixDir.get()) && !$('#fps-unlocker').is(':visible'))
+        $('#fps-unlocker').toggle();
 
     if (LauncherLib.getConfig('fpsunlock'))
     {

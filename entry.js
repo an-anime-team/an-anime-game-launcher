@@ -126,8 +126,10 @@ app.whenReady().then(() => {
     });
 
     ipcMain.handle('loaded', () => {
-        splashWindow.close();
-        mainWindow.show();
+        setTimeout(() => {
+            splashWindow.close();
+            mainWindow.show();
+        }, 1000);
     });
 
     // This has to be here otherwise webContents is invalid
