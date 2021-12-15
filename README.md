@@ -14,7 +14,7 @@
 
 | Game version | Launcher version | Patch version |
 | :---: | :---: | :---: |
-| 2.3.0 | 1.9.0 | 2.3.0 stable ✅ |
+| 2.3.0 | 1.9.1 | 2.3.0 stable ✅ |
 
 We have our own [An Anime Game](https://discord.gg/ck37X6UWBp) discord server where you can ask any questions
 

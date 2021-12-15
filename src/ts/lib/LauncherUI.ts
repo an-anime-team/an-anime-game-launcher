@@ -122,7 +122,8 @@ export default class LauncherUI
         {
             patchInfo = {
                 version: LauncherLib.getConfig('patch.version'),
-                state: LauncherLib.getConfig('patch.state')
+                state: LauncherLib.getConfig('patch.state'),
+                source: 'origin'
             };
 
             ipcRenderer.send('notification', {

@@ -348,7 +348,10 @@ $(() => {
         if (LauncherLib.getConfig('fpsunlock') && !$('#fps-unlocker').hasClass('checkbox-active') && fs.existsSync(constants.fpsunlockerDir))
         {
             fs.rmdirSync(constants.fpsunlockerDir, { recursive: true });
-            fs.rmSync(path.join(constants.gameDir, 'fps_config.ini'));
+            
+            fs.rmSync(path.join(constants.gameDir, 'fps_config.ini'), {
+                throwIfNoEntry: false
+            });
         }
 
         else if (!LauncherLib.getConfig('fpsunlock') && $('#fps-unlocker').hasClass('checkbox-active') && !fs.existsSync(constants.fpsunlockerDir))

@@ -91,6 +91,12 @@ type DXVK = {
     recommendable: boolean
 };
 
+type PatchInfo = {
+    version: string,
+    state: 'testing' | 'stable',
+    source: 'origin' | 'additional'
+};
+
 export default class LauncherLib
 {
     public static get version(): string|null
@@ -222,7 +228,7 @@ export default class LauncherLib
      * Get patch's state and version from the repository
      * @returns information about the patch, or null if repository is not available
      */
-    public static async getPatchInfo(source: 'origin' | 'additional' = 'origin'): Promise<{ version: string, state: 'testing' | 'stable' }|null>
+    public static async getPatchInfo(source: 'origin' | 'additional' = 'origin'): Promise<PatchInfo|null>
     {
         return new Promise(resolve => {
             this.getData().then(async (data) => {
@@ -249,7 +255,8 @@ export default class LauncherLib
                                 resolve({
                                     version: gameLatest,
                                     state: patch.body.includes('#echo "If you would like to test this patch, modify this script and remove the line below this one."') ?
-                                        'stable' : 'testing'
+                                        'stable' : 'testing',
+                                    source: source
                                 });
                             })
                             .catch((error: Error) => {
@@ -278,7 +285,8 @@ export default class LauncherLib
                                 {
                                     resolve({
                                         version: data.game.diffs[0].version,
-                                        state: 'stable'
+                                        state: 'stable',
+                                        source: source
                                     });
                                 }
                             });
@@ -306,7 +314,8 @@ export default class LauncherLib
                         {
                             resolve({
                                 version: data.game.diffs[0].version,
-                                state: 'stable'
+                                state: 'stable',
+                                source: source
                             });
                         }
                     });
@@ -442,11 +451,11 @@ export default class LauncherLib
     public static patchGame(onData: (data: string) => void): Promise<boolean>
     {
         return new Promise((resolve) => {
-            this.getPatchInfo().then(pathInfo => {
+            this.getPatchInfo().then((pathInfo) => {
                 if (pathInfo === null)
                     resolve(false);
 
-                else Tools.downloadFile(constants.patchUri, path.join(constants.launcherDir, 'patch.zip')).then(() => {
+                else Tools.downloadFile(constants.getPatchUri(pathInfo.source), path.join(constants.launcherDir, 'patch.zip')).then(() => {
                     Tools.unzip(path.join(constants.launcherDir, 'patch.zip'), constants.launcherDir).then(() => {
                         // Delete zip file and assign patch directory.
                         fs.unlinkSync(path.join(constants.launcherDir, 'patch.zip'));
@@ -502,7 +511,7 @@ export default class LauncherLib
                             });
                         });
                     });
-                })
+                });
             });
         });
     }
