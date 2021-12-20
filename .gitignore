@@ -5,6 +5,7 @@ yarn.lock
 /dist
 /bundle
 /node_modules
+/repository-pics/**/*.xcf
 
 neutralino.js
 
