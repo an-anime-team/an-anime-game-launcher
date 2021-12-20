@@ -34,7 +34,7 @@ This launcher is also available as the [an-anime-game-launcher](https://aur.arch
 
 <img src="repository-pics/stats/2.2.0.png">
 
-### 2.3.0 — 71 total
+### 2.3.0 — 73 total
 
 <img src="repository-pics/stats/2.3.0.png">
 
@@ -147,9 +147,3 @@ npm start
   - Always participate in patches testing
   - Applying anti login crash patch
   - Remove patch
-
-> Now I'm working on moving the project to the Tauri. Also for some personal reasons I, like the patch's author, will be busy, but until Christmas, so it's a bit more than a month. I will make some critical updates if they will be required, but the development will be frozen for this period. I hope you will enjoy playing the game, and I will enjoy continuing the development of this project
->
-> And, by the way, @Maroxy helped me to create the discord server for this project. I will sometimes appear there and you will be able to ask me about something if you want, ehe
-> 
-> November 22
