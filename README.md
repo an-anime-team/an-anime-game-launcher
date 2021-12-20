@@ -83,16 +83,24 @@ They're required only for some specific functions
 
 # Development
 
-## Build from source
+## Download
 
 ```sh
-npm run build
+git clone https://gitlab.com/KRypt0n_/an-anime-game-launcher
+cd an-anime-game-launcher
+yarn
 ```
 
-## Run from source
+## Run
 
 ```sh
-npm start
+yarn dev
+```
+
+## Build
+
+```sh
+yarn build
 ```
 
 # Roadmap
@@ -111,7 +119,7 @@ npm start
 * <s>Add launcher updates notifications</s> *(1.0.0-rc1)*
 * <s>Make automatic patch state parsing</s> *(1.0.0-rc1)*
 
-### ➤ To 2.0.0 release
+### ✓ <s>To 2.0.0 release</s>
 
 * <s>Add runners environmental variables manager</s> *(1.1.0)*
 * <s>Add outdated files deletion when new game's update releases</s> *(1.1.0)*
@@ -137,8 +145,12 @@ npm start
 * <s>Use `winecfg.exe` from the installed runner in settings menu</s> *(1.9.0, !14)*
 * <s>Fix voice data installation</s> *(1.9.0, !15)*
 * <s>Add fps unlocker option</s> *(1.9.0, !15)*
-* Add downloading pause button
+
+### ➤ To 3.0.0 release
+
+* Move project to Neutralino
 * Move project to Vue
+* Add downloading pause button
 * Use `LauncherLib.getGameVersion` function instead of the `config.json`'s `version` property
 * Fix button flickering at start when the launcher's state updates
 * Game's update pre-installation
