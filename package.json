@@ -1,6 +1,6 @@
 {
-  "name": "neutralino-template",
-  "version": "0.0.0",
+  "name": "an-anime-game-launcher",
+  "version": "3.0.0",
   "scripts": {
     "dev": "vite build && neu run",
     "build": "vite build && neu build --release"

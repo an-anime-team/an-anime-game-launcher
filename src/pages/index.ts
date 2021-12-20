@@ -1,9 +1,18 @@
 import * as Vue from 'vue/dist/vue.esm-bundler';
 
 import Window from '../ts/neutralino/Window';
-import Runners from '../ts/Runners';
 
-Runners.get().then(console.log);
+import Downloader from '../ts/Downloader';
+
+Downloader.download('https://vitejs.dev/', 'test.html').then((stream) => {
+    stream.progress((current: number, total: number) => {
+        console.log(`${Math.round(current / total * 100)}%`);
+    });
+
+    stream.finish(() => {
+        console.log('finished');
+    });
+});
 
 Vue.createApp({
     data: () => {
