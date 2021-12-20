@@ -1,24 +1,106 @@
-const path = require('path');
-const os = require('os');
-const fs = require('fs');
+class Dirs
+{
+    /**
+     * Directory where the launcher's executable stored
+     * 
+     * @returns string
+     */
+    // @ts-expect-error
+    public static readonly app: string = NL_PATH;
 
-import LauncherLib from "./LauncherLib";
+    /**
+     * Shaders directory
+     * 
+     * Default is [constants.dirs.app]/public/shaders
+     * 
+     * @returns string
+     */
+    public static readonly shaders: string = `${this.app}/public/shaders`;
+
+    /**
+     * Launcher data directory
+     * 
+     * Default is ~/.local/share/anime-game-launcher
+     * 
+     * @returns Promise<string>
+     */
+    public static get launcher(): Promise<string>
+    {
+        // @ts-expect-error
+        return new Promise(async (resolve) => resolve(`${await Neutralino.os.getPath('data')}/anime-game-launcher`));
+    }
+
+    /**
+     * Runners directory
+     * 
+     * Default is ~/.local/share/anime-game-launcher/runners
+     * 
+     * @returns Promise<string>
+     */
+    public static get runners(): Promise<string>
+    {
+        return new Promise(async (resolve) => resolve(`${await this.launcher}/runners`));
+    }
+
+    /**
+     * DXVKs directory
+     * 
+     * Default is ~/.local/share/anime-game-launcher/dxvks
+     * 
+     * @returns Promise<string>
+     */
+    public static get dxvks(): Promise<string>
+    {
+        return new Promise(async (resolve) => resolve(`${await this.launcher}/dxvks`));
+    }
+
+    /*public static readonly prefix = new class
+    {
+        /**
+         * Current prefix directory
+         * 
+         * Default is ~/.local/share/anime-game-launcher/game
+         * 
+         * @returns string
+         */
+        /*public get(): string
+        {
+            return LauncherLib.getConfig('prefix');
+        }
+
+        public getDefault(): string
+        {
+            return path.join(os.homedir(), '.local', 'share', 'anime-game-launcher', 'game');
+        }
+
+        public set(location: string)
+        {
+            if (path.relative(LauncherLib.getConfig('prefix'), location) === '')
+                return console.log('Can\'t set already selected prefix as new prefix');
+
+            const dataPath = path.join(location, 'drive_c', 'Program Files', constants.placeholders.uppercase.full, `${constants.placeholders.uppercase.first + constants.placeholders.uppercase.second}_Data`);
+
+            LauncherLib.updateConfig('prefix', location);
+            LauncherLib.updateConfig('version', LauncherLib.getGameVersion(dataPath));
+        }
+    }*/
+}
 
 export default class constants
 {
     public static readonly placeholders = {
         uppercase:
         {
-            first: Buffer.from('R2Vuc2hpbg==', 'base64').toString(),
-            second: Buffer.from('SW1wYWN0', 'base64').toString(),
-            full: Buffer.from('R2Vuc2hpbiBJbXBhY3Q=', 'base64').toString(),
-            company: Buffer.from('bWlIb1lv', 'base64').toString()
+            first: 'Genshin',
+            second: 'Impact',
+            full: 'Genshin Impact',
+            company: 'miHoYo'
         },
 
         lowercase:
         {
-            first: Buffer.from('Z2Vuc2hpbg==', 'base64').toString(),
-            company: Buffer.from('bWlob3lv', 'base64').toString()
+            first: 'genshin',
+            company: 'mihoyo'
         }
     };
 
@@ -43,15 +125,7 @@ export default class constants
         new Date('January 5, 2022').getTime() // 2.4.0 half 1 release
     ];*/
 
-    // TODO: dirs pathes
-
-    public static readonly appDir = path.resolve(__dirname, '..', '..', '..');
-    public static readonly shadersDir = path.join(this.appDir, 'public', 'shaders');
-
-    public static readonly launcherDir: string = path.join(os.homedir(), '.local', 'share', 'anime-game-launcher');
-
-    public static readonly runnersDir: string = path.join(this.launcherDir, 'runners');
-    public static readonly dxvksDir: string = path.join(this.launcherDir, 'dxvks');
+    public static readonly dirs = Dirs;
 
     public static readonly versionsUri: string = `${this.uri.api}/resource?key=gcStgarh&launcher_id=10`;
     public static readonly backgroundUri: string = `${this.uri.api}/content?filter_adv=true&launcher_id=10&key=gcStgarh&language=`;
@@ -59,7 +133,7 @@ export default class constants
     public static readonly runnersUri: string = `${this.uri.launcher}/raw/main/runners.json`;
     public static readonly dxvksUri: string = `${this.uri.launcher}/raw/main/dxvks.json`;
 
-    public static prefixDir = new class
+    /*public static prefixDir = new class
     {
         public get(): string
         {
@@ -81,9 +155,9 @@ export default class constants
             LauncherLib.updateConfig('prefix', location);
             LauncherLib.updateConfig('version', LauncherLib.getGameVersion(dataPath));
         }
-    }
+    }*/
 
-    public static get gameDir(): string
+    /*public static get gameDir(): string
     {
         return path.join(this.prefixDir.get(), 'drive_c', 'Program Files', this.placeholders.uppercase.full);
     }
@@ -101,5 +175,5 @@ export default class constants
     public static getPatchUri(source: 'origin' | 'additional'): string
     {
         return `${this.uri.patch[source]}/archive/master.zip`;
-    }
+    }*/
 }

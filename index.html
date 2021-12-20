@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        <link rel="stylesheet" lang="sass" href="/src/sass/index.sass" />
+    </head>
+
+    <body>
+        <div id="app" theme="light">
+            <img class="background">
+
+            <div id="downloader-panel" class="dark" style="display: none">
+                <div id="downloader-label">
+                    <span id="downloaded">Downloading</span>
+                    <span id="speed"></span>
+                    <span id="eta"></span>
+                </div>
+
+                <div class="progress-bar" id="downloader">
+                    <div class="progress"></div>
+                </div>
+            </div>
+
+            <div id="launcher-content">
+                <iframe id="social" scrolling="no" style="position: absolute; border: 0; top: 0; left: 0;" width="100%" height="100%"></iframe>
+            </div>
+
+            <div id="settings">
+                <img src="/src/assets/images/gear.png" class="unactive">
+                <img src="/src/assets/images/gear-active.png" class="active">
+            </div>
+            
+            <button class="button" id="launch" i18id="Launch">Launch</button>
+        </div>
+
+        <script src="neutralino.js"></script>
+
+        <script type="module" src="/src/entry.js"></script>
+        <script type="module" lang="ts" src="/src/pages/index.ts"></script>
+    </body>
+</html>
