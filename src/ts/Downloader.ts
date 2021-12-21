@@ -1,5 +1,8 @@
 class Stream
 {
+    /**
+     * The interval in ms between progress event calls
+     */
     public progressInterval: number = 200;
 
     protected uri: string;
