@@ -92,7 +92,7 @@ export default abstract class Installer
     }
 
     /**
-     * Specify event that will be called after downloading will begin
+     * Specify event that will be called after download has begun
      * 
      * @param callback
      */
@@ -105,7 +105,7 @@ export default abstract class Installer
     }
 
     /**
-     * Specify event that will be called after unpacking will begin
+     * Specify event that will be called after extraction has begun
      * 
      * @param callback
      */
@@ -118,7 +118,7 @@ export default abstract class Installer
     }
 
     /**
-     * Specify event that will be called every [this.downloadProgressInterval] ms during downloading
+     * Specify event that will be called every [this.downloadProgressInterval] ms while downloading
      * 
      * @param callback
      */
@@ -128,7 +128,7 @@ export default abstract class Installer
     }
 
     /**
-     * Specify event that will be called every [this.unpackProgressInterval] ms during unpacking
+     * Specify event that will be called every [this.unpackProgressInterval] ms while extracting
      * 
      * @param callback
      */
@@ -138,7 +138,7 @@ export default abstract class Installer
     }
 
     /**
-     * Specify event that will be called after downloading will be finished
+     * Specify event that will be called after download has finished
      * 
      * @param callback
      */
@@ -151,7 +151,7 @@ export default abstract class Installer
     }
 
     /**
-     * Specify event that will be called after unpacking will be finished
+     * Specify event that will be called after extraction has finished
      * 
      * @param callback
      */

@@ -62,13 +62,13 @@ class Runners
      * Download runner to the [constants.paths.runners] directory
      * 
      * @param runner runner object or name
-     * @returns null if the runner with specified name is not exists. Otherwise - installation stream
+     * @returns null if the runner with specified name dosen't exist. Otherwise - installation stream
      */
     public static download(runner: Runner|Runner['name']): Promise<null|Stream>
     {
         return new Promise(async (resolve) => {
-            // If we provided runner property as a name of the runner
-            // then we should find this runner and call this method from it
+            // If we provided runner parameter with a name of a runner
+            // then we should find this runner and call this method for it
             if (typeof runner == 'string')
             {
                 let foundRunner = null;

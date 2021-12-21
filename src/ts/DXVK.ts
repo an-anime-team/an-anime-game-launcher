@@ -50,13 +50,13 @@ export default class DXVK
      * Download DXVK to the [constants.paths.dxvks] directory
      * 
      * @param dxvk DXVK object or version
-     * @returns null if the DXVK with specified version is not exists. Otherwise - installation stream
+     * @returns null if the DXVK with specified version dosen't exist. Otherwise - installation stream
      */
     public static download(dxvk: TDXVK|TDXVK['version']): Promise<null|Stream>
     {
         return new Promise(async (resolve) => {
-            // If we provided dxvk property as a version of the DXVK
-            // then we should find this DXVK and call this method from it
+            // If we provided dxvk parameter with a version of DXVK
+            // then we should find this DXVK version and call this method for it
             if (typeof dxvk == 'string')
             {
                 let foundDXVK = null;

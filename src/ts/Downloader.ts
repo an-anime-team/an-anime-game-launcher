@@ -59,7 +59,7 @@ class Stream
     }
 
     /**
-     * Specify event that will be called when the downloading will be started
+     * Specify event that will be called when the download gets started
      * 
      * @param callback
      */
@@ -72,7 +72,7 @@ class Stream
     }
 
     /**
-     * Specify event that will be called every [this.progressInterval] ms during the file downloading
+     * Specify event that will be called every [this.progressInterval] ms while the file is downloading
      * 
      * @param callback
      */
@@ -82,7 +82,7 @@ class Stream
     }
 
     /**
-     * Specify event that will be called after the file will be downloaded
+     * Specify event that will be called after the file is downloaded
      * 
      * @param callback
      */

@@ -109,7 +109,7 @@ class Stream
     }
 
     /**
-     * Specify event that will be called when the unpacking will be started
+     * Specify event that will be called when the extraction has started
      * 
      * @param callback
      */
@@ -122,7 +122,7 @@ class Stream
     }
 
     /**
-     * Specify event that will be called every [this.progressInterval] ms during archive unpacking
+     * Specify event that will be called every [this.progressInterval] ms while extracting the archive
      * 
      * @param callback
      */
@@ -132,7 +132,7 @@ class Stream
     }
 
     /**
-     * Specify event that will be called after the archive will be unpacked
+     * Specify event that will be called after the archive has been extracted
      * 
      * @param callback
      */
@@ -145,7 +145,7 @@ class Stream
     }
 
     /**
-     * Specify event that will be called if archive can't be unpacked
+     * Specify event that will be called if archive can't be extracted
      * 
      * @param callback
      */
