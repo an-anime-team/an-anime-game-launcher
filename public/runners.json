@@ -16,5 +16,23 @@
                 "recommended": false
             }
         ]
+    },
+    {
+        "title": "Wine-GE",
+        "runners": [
+            {
+                "family": "Wine-GE",
+                "name": "wine-lutris-ge-6.20-1-x86_64",
+                "title": "Wine-6.20-GE-1",
+                "uri": "https://github.com/GloriousEggroll/wine-ge-custom/releases/download/6.20-GE-1/wine-lutris-ge-6.20-1-x86_64.tar.xz",
+                "archive": "tar",
+                "files": {
+                    "wine": "bin/wine64",
+                    "wineserver": "bin/wineserver",
+                    "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
+                },
+                "recommended": false
+            }
+        ]
     }
 ]
