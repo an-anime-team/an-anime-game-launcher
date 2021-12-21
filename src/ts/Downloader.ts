@@ -9,15 +9,21 @@ class Stream
     protected total: number;
     protected previous: number = 0;
 
+    protected onStart?: () => void;
     protected onProgress?: (current: number, total: number, difference: number) => void;
     protected onFinish?: () => void;
 
+    protected started: boolean = false;
     protected finished: boolean = false;
 
     public constructor(uri: string, output: string, total: number)
     {
         this.uri = uri;
         this.total = total;
+        this.started = true;
+
+        if (this.onStart)
+            this.onStart();
 
         // @ts-expect-error
         Neutralino.os.execCommand(`curl -s -L -N -o "${output}" "${uri}"`, {
@@ -49,6 +55,19 @@ class Stream
         };
 
         setTimeout(updateProgress, this.progressInterval);
+    }
+
+    /**
+     * Specify event that will be called when the downloading will be started
+     * 
+     * @param callback
+     */
+    public start(callback: () => void)
+    {
+        this.onStart = callback;
+
+        if (this.started)
+            callback();
     }
 
     /**
@@ -96,13 +115,16 @@ export default class Downloader
 
             else statsRaw = statsRaw.stdOut;
 
-            const length = parseInt(/content-length: ([\d]+)/i.exec(statsRaw)[1]);
+            let length = 0;
+
+            for (const match of statsRaw.matchAll(/content-length: ([\d]+)/gi))
+                length = match[1];
 
             resolve(new Stream(uri, output ?? this.fileFromUri(uri), length));
         });
     }
 
-    protected static fileFromUri(uri: string): string
+    public static fileFromUri(uri: string): string
     {
         const file = uri.split('/').pop().split('#')[0].split('?')[0];
 

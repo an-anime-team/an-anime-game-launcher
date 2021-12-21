@@ -18,10 +18,12 @@ class Stream
 
     protected archive: ArchiveInfo;
 
+    protected onStart?: () => void;
     protected onProgress?: (current: number, total: number, difference: number) => void;
     protected onFinish?: () => void;
     protected onError?: () => void;
 
+    protected started: boolean = false;
     protected finished: boolean = false;
     protected throwedError: boolean = false;
 
@@ -33,6 +35,10 @@ class Stream
     {
         this.path = path;
         this.unpackDir = unpackDir;
+        this.started = true;
+
+        if (this.onStart)
+            this.onStart();
 
         Archive.getInfo(path).then((info) => {
             if (info === null)
@@ -100,6 +106,19 @@ class Stream
                 setTimeout(updateProgress, this.progressInterval);
             }
         });
+    }
+
+    /**
+     * Specify event that will be called when the unpacking will be started
+     * 
+     * @param callback
+     */
+    public start(callback: () => void)
+    {
+        this.onStart = callback;
+
+        if (this.started)
+            callback();
     }
 
     /**
