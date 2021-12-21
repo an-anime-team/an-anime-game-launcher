@@ -1,26 +1,61 @@
+import Configs from './Configs';
+
 declare const Neutralino;
 declare const NL_PATH;
+
+class Prefix
+{
+    /**
+     * Current prefix directory
+     * 
+     * @default "~/.local/share/anime-game-launcher/game"
+     */
+    public static get current(): Promise<string>
+    {
+        return new Promise(async (resolve) => resolve(await Configs.get('prefix') as string));
+    }
+
+    /**
+     * Default prefix directory
+     * 
+     * @default "~/.local/share/anime-game-launcher/game"
+     */
+    public static get default(): Promise<string>
+    {
+        return new Promise(async (resolve) => resolve(`${await Paths.launcherDir}/game`));
+    }
+
+    /**
+     * Change prefix directory
+     * 
+     * @returns promise that indicates when the prefix path will be changed in configs
+     */
+    public static set(location: string): Promise<void>
+    {
+        return Configs.set('prefix', location);
+    }
+}
 
 class Paths
 {
     /**
      * Directory where the launcher's executable stored
      */
-    public static readonly app: string = NL_PATH;
+    public static readonly appDir: string = NL_PATH;
 
     /**
      * Shaders directory
      * 
-     * @defaultValue "[Constants.paths.app]/public/shaders"
+     * @default "[constants.paths.app]/public/shaders"
      */
-    public static readonly shaders: string = `${this.app}/public/shaders`;
+    public static readonly shadersDir: string = `${this.appDir}/public/shaders`;
 
     /**
      * Launcher data directory
      * 
-     * @defaultValue "~/.local/share/anime-game-launcher"
+     * @default "~/.local/share/anime-game-launcher"
      */
-    public static get launcher(): Promise<string>
+    public static get launcherDir(): Promise<string>
     {
         return new Promise(async (resolve) => resolve(`${await Neutralino.os.getPath('data')}/anime-game-launcher`));
     }
@@ -28,63 +63,70 @@ class Paths
     /**
      * Runners directory
      * 
-     * @defaultValue "~/.local/share/anime-game-launcher/runners"
+     * @default "~/.local/share/anime-game-launcher/runners"
      */
-    public static get runners(): Promise<string>
+    public static get runnersDir(): Promise<string>
     {
-        return new Promise(async (resolve) => resolve(`${await this.launcher}/runners`));
+        return new Promise(async (resolve) => resolve(`${await this.launcherDir}/runners`));
     }
 
     /**
      * DXVKs directory
      * 
-     * @defaultValue "~/.local/share/anime-game-launcher/dxvks"
+     * @default "~/.local/share/anime-game-launcher/dxvks"
      */
-    public static get dxvks(): Promise<string>
+    public static get dxvksDir(): Promise<string>
     {
-        return new Promise(async (resolve) => resolve(`${await this.launcher}/dxvks`));
+        return new Promise(async (resolve) => resolve(`${await this.launcherDir}/dxvks`));
     }
 
     /**
      * Config file
      * 
-     * @defaultValue "~/.local/share/anime-game-launcher/config.json"
+     * @default "~/.local/share/anime-game-launcher/config.json"
      */
     public static get config(): Promise<string>
     {
-        return new Promise(async (resolve) => resolve(`${await this.launcher}/config.json`));
+        return new Promise(async (resolve) => resolve(`${await this.launcherDir}/config.json`));
     }
 
-    /*public static readonly prefix = new class
+    public static readonly prefix = Prefix;
+
+    /**
+     * Game directory
+     * 
+     * @default "~/.local/share/anime-game-launcher/game/drive_c/Program Files/[An Anime Game]"
+     * 
+     * @returns "[constants.prefix.current]/drive_c/Program Files/[An Anime Game]"
+     */
+    public static get gameDir(): Promise<string>
     {
-        /**
-         * Current prefix directory
-         * 
-         * Default is ~/.local/share/anime-game-launcher/game
-         * 
-         * @returns string
-         */
-        /*public get(): string
-        {
-            return LauncherLib.getConfig('prefix');
-        }
+        return new Promise(async (resolve) => resolve(`${await this.prefix.current}/drive_c/Program Files/${constants.placeholders.uppercase.full}`));
+    }
 
-        public getDefault(): string
-        {
-            return path.join(os.homedir(), '.local', 'share', 'anime-game-launcher', 'game');
-        }
+    /**
+     * Game data directory
+     * 
+     * @default "~/.local/share/anime-game-launcher/game/drive_c/Program Files/[An Anime Game]/[An Anime Game]_Data"
+     * 
+     * @returns "[constants.paths.gameDir]/[An Anime Game]_Data"
+     */
+    public static get gameDataDir(): Promise<string>
+    {
+        return new Promise(async (resolve) => resolve(`${await this.gameDir}/${constants.placeholders.uppercase.first + constants.placeholders.uppercase.second}_Data`));
+    }
 
-        public set(location: string)
-        {
-            if (path.relative(LauncherLib.getConfig('prefix'), location) === '')
-                return console.log('Can\'t set already selected prefix as new prefix');
-
-            const dataPath = path.join(location, 'drive_c', 'Program Files', constants.placeholders.uppercase.full, `${constants.placeholders.uppercase.first + constants.placeholders.uppercase.second}_Data`);
-
-            LauncherLib.updateConfig('prefix', location);
-            LauncherLib.updateConfig('version', LauncherLib.getGameVersion(dataPath));
-        }
-    }*/
+    /**
+     * Game voice data directory
+     * 
+     * @default "~/.local/share/anime-game-launcher/game/drive_c/Program Files/[An Anime Game]/[An Anime Game]_Data/StreamingAssets/Audio/GeneratedSoundBanks/Windows"
+     * 
+     * @returns "[constants.paths.gameDataDir]/StreamingAssets/Audio/GeneratedSoundBanks/Windows"
+     */
+    public static get voiceDir(): Promise<string>
+    {
+        return new Promise(async (resolve) => resolve(`${await this.gameDataDir}/StreamingAssets/Audio/GeneratedSoundBanks/Windows`));
+    }
 }
 
 export default class constants
@@ -92,16 +134,16 @@ export default class constants
     public static readonly placeholders = {
         uppercase:
         {
-            first: 'Genshin',
-            second: 'Impact',
-            full: 'Genshin Impact',
-            company: 'miHoYo'
+            first: atob('R2Vuc2hpbg=='),
+            second: atob('SW1wYWN0'),
+            full: atob('R2Vuc2hpbiBJbXBhY3Q='),
+            company: atob('bWlIb1lv')
         },
 
         lowercase:
         {
-            first: 'genshin',
-            company: 'mihoyo'
+            first: atob('Z2Vuc2hpbg=='),
+            company: atob('bWlob3lv')
         }
     };
 
@@ -134,23 +176,8 @@ export default class constants
     public static readonly runnersUri: string = `${this.uri.launcher}/raw/main/runners.json`;
     public static readonly dxvksUri: string = `${this.uri.launcher}/raw/main/dxvks.json`;
 
-    /*public static get gameDir(): string
-    {
-        return path.join(this.prefixDir.get(), 'drive_c', 'Program Files', this.placeholders.uppercase.full);
-    }
-
-    public static get fpsunlockerDir(): string
-    {
-        return path.join(this.prefixDir.get(), 'drive_c', 'Program Files', Buffer.from('R0lfRlBTVW5sb2NrZXI=', 'base64').toString());
-    }
-
-    public static get voiceDir(): string
-    {
-        return path.join(this.gameDir, `${this.placeholders.uppercase.first + this.placeholders.uppercase.second}_Data`, 'StreamingAssets', 'Audio', 'GeneratedSoundBanks', 'Windows');
-    }
-
     public static getPatchUri(source: 'origin' | 'additional'): string
     {
         return `${this.uri.patch[source]}/archive/master.zip`;
-    }*/
+    }
 }

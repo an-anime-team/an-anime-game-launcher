@@ -1,4 +1,4 @@
-import Constants from './Constants';
+import constants from './Constants';
 
 declare const Neutralino;
 declare const NL_CWD;
@@ -18,7 +18,7 @@ export default class Configs
     public static get(name: string = ''): Promise<undefined|scalar|scalar[]>
     {
         return new Promise(async (resolve) => {
-            Neutralino.filesystem.readFile(await Constants.paths.config).then((config) => {
+            Neutralino.filesystem.readFile(await constants.paths.config).then((config) => {
                 config = JSON.parse(config);
 
                 if (name !== '')
@@ -50,15 +50,15 @@ export default class Configs
         };
 
         return new Promise(async (resolve) => {
-            Neutralino.filesystem.readFile(await Constants.paths.config).then(async (config) => {
+            Neutralino.filesystem.readFile(await constants.paths.config).then(async (config) => {
                 config = JSON.stringify(getUpdatedArray(name.split('.'), JSON.parse(config), value), null, 4);
 
-                Neutralino.filesystem.writeFile(await Constants.paths.config, config)
+                Neutralino.filesystem.writeFile(await constants.paths.config, config)
                     .then(() => resolve());
             }).catch(async () => {
                 let config = JSON.stringify(getUpdatedArray(name.split('.'), {}, value), null, 4);
 
-                Neutralino.filesystem.writeFile(await Constants.paths.config, config)
+                Neutralino.filesystem.writeFile(await constants.paths.config, config)
                     .then(() => resolve());
             });
         });
@@ -98,11 +98,11 @@ export default class Configs
 
                 current = JSON.stringify(updateDefaults(current, configs), null, 4);
 
-                Neutralino.filesystem.writeFile(await Constants.paths.config, current)
+                Neutralino.filesystem.writeFile(await constants.paths.config, current)
                     .then(() => resolve());
             };
 
-            Neutralino.filesystem.readFile(await Constants.paths.config)
+            Neutralino.filesystem.readFile(await constants.paths.config)
                 .then((config) => setDefaults(JSON.parse(config)))
                 .catch(() => setDefaults({}));
         });

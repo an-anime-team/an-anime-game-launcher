@@ -3,7 +3,7 @@ import {
     RunnerFamily
 } from './types/Runners';
 
-import Constants from './Constants';
+import constants from './Constants';
 import AbstractInstaller from './AbstractInstaller';
 
 declare const Neutralino;
@@ -12,7 +12,7 @@ class Stream extends AbstractInstaller
 {
     public constructor(runner: Runner)
     {
-        super(runner.uri, Constants.paths.runners);
+        super(runner.uri, constants.paths.runnersDir);
     }
 }
 
@@ -24,8 +24,8 @@ class Runners
     public static get(): Promise<RunnerFamily[]>
     {
         return new Promise((resolve) => {
-            Constants.paths.runners.then(async (runnersDir: string) => {
-                let list: RunnerFamily[] = JSON.parse(await Neutralino.filesystem.readFile(`${Constants.paths.app}/public/runners.json`));
+            constants.paths.runnersDir.then(async (runnersDir: string) => {
+                let list: RunnerFamily[] = JSON.parse(await Neutralino.filesystem.readFile(`${constants.paths.appDir}/public/runners.json`));
 
                 const installed: { entry: string, type: string }[] = await Neutralino.filesystem.readDirectory(runnersDir);
 
@@ -59,7 +59,7 @@ class Runners
     }
 
     /**
-     * Download runner to the [Constants.paths.runners] directory
+     * Download runner to the [constants.paths.runners] directory
      * 
      * @param runner runner object or name
      * @returns null if the runner with specified name is not exists. Otherwise - installation stream

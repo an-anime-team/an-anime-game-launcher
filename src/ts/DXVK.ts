@@ -1,6 +1,6 @@
 import type { DXVK as TDXVK } from './types/DXVK';
 
-import Constants from './Constants';
+import constants from './Constants';
 import AbstractInstaller from './AbstractInstaller';
 
 declare const Neutralino;
@@ -9,7 +9,7 @@ class Stream extends AbstractInstaller
 {
     public constructor(dxvk: TDXVK)
     {
-        super(dxvk.uri, Constants.paths.dxvks);
+        super(dxvk.uri, constants.paths.dxvksDir);
     }
 }
 
@@ -21,8 +21,8 @@ export default class DXVK
     public static get(): Promise<TDXVK[]>
     {
         return new Promise((resolve) => {
-            Constants.paths.dxvks.then(async (dxvksDir: string) => {
-                let list: TDXVK[] = JSON.parse(await Neutralino.filesystem.readFile(`${Constants.paths.app}/public/dxvks.json`));
+            constants.paths.dxvksDir.then(async (dxvksDir: string) => {
+                let list: TDXVK[] = JSON.parse(await Neutralino.filesystem.readFile(`${constants.paths.appDir}/public/dxvks.json`));
 
                 const installed: { entry: string, type: string }[] = await Neutralino.filesystem.readDirectory(dxvksDir);
 
@@ -47,7 +47,7 @@ export default class DXVK
     }
 
     /**
-     * Download DXVK to the [Constants.paths.dxvks] directory
+     * Download DXVK to the [constants.paths.dxvks] directory
      * 
      * @param dxvk DXVK object or version
      * @returns null if the DXVK with specified version is not exists. Otherwise - installation stream
