@@ -89,4 +89,4 @@ export default class DXVK
     }
 }
 
-export type { TDXVK };
+export type { TDXVK, DXVKTable };
