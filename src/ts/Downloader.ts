@@ -103,7 +103,7 @@ export default class Downloader
      * @param uri
      * @param output
      * 
-     * @returns Promise<Stream>
+     * @returns downloading stream
      */
     public static async download(uri: string, output: string|null = null): Promise<Stream>
     {

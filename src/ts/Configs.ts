@@ -1,4 +1,5 @@
 import Constants from './Constants';
+
 declare const Neutralino;
 declare const NL_CWD;
 
@@ -12,7 +13,7 @@ export default class Configs
      * Get config value
      * 
      * @param name config name, e.g. "lang.launcher"
-     * @returns Promise<undefined|..>
+     * @returns undefined if config is not exists. Otherwise - config value
      */
     public static get(name: string = ''): Promise<undefined|scalar|scalar[]>
     {
@@ -67,6 +68,7 @@ export default class Configs
      * Set default values
      * 
      * @param configs object of default values
+     * @returns Promise<void> indicates when the default settings was applied
      */
     public static defaults(configs: scalar): Promise<void>
     {

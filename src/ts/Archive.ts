@@ -164,7 +164,7 @@ export default class Archive
      * Get type of archive
      * 
      * @param path path to archive
-     * @returns ArchiveType|null
+     * @returns supported archive type or null
      */
     public static getType(path: string): ArchiveType|null
     {
@@ -181,7 +181,7 @@ export default class Archive
      * Get archive info
      * 
      * @param path path to archive
-     * @returns Promise<ArchiveInfo|null>
+     * @returns null if the archive has unsupported type. Otherwise - archive info
      */
     public static getInfo(path: string): Promise<ArchiveInfo|null>
     {

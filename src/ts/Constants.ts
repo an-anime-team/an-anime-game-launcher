@@ -1,30 +1,24 @@
 declare const Neutralino;
+declare const NL_PATH;
 
 class Paths
 {
     /**
      * Directory where the launcher's executable stored
-     * 
-     * @returns string
      */
-    // @ts-expect-error
     public static readonly app: string = NL_PATH;
 
     /**
      * Shaders directory
      * 
-     * Default is [constants.paths.app]/public/shaders
-     * 
-     * @returns string
+     * @defaultValue "[Constants.paths.app]/public/shaders"
      */
     public static readonly shaders: string = `${this.app}/public/shaders`;
 
     /**
      * Launcher data directory
      * 
-     * Default is ~/.local/share/anime-game-launcher
-     * 
-     * @returns Promise<string>
+     * @defaultValue "~/.local/share/anime-game-launcher"
      */
     public static get launcher(): Promise<string>
     {
@@ -34,9 +28,7 @@ class Paths
     /**
      * Runners directory
      * 
-     * Default is ~/.local/share/anime-game-launcher/runners
-     * 
-     * @returns Promise<string>
+     * @defaultValue "~/.local/share/anime-game-launcher/runners"
      */
     public static get runners(): Promise<string>
     {
@@ -46,9 +38,7 @@ class Paths
     /**
      * DXVKs directory
      * 
-     * Default is ~/.local/share/anime-game-launcher/dxvks
-     * 
-     * @returns Promise<string>
+     * @defaultValue "~/.local/share/anime-game-launcher/dxvks"
      */
     public static get dxvks(): Promise<string>
     {
@@ -58,9 +48,7 @@ class Paths
     /**
      * Config file
      * 
-     * Default is ~/.local/share/anime-game-launcher/config.json
-     * 
-     * @returns Promise<string>
+     * @defaultValue "~/.local/share/anime-game-launcher/config.json"
      */
     public static get config(): Promise<string>
     {

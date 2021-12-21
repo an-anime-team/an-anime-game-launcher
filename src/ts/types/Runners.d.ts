@@ -2,7 +2,7 @@ type Runner = {
     /**
      * e.g. proton-ge
      */
-     family: string;
+    family: string;
 
     /**
      * e.g. Proton-6.20-GE-1
