@@ -1,3 +1,6 @@
+declare const Neutralino;
+declare const NL_CWD;
+
 class Stream
 {
     /**
@@ -25,13 +28,11 @@ class Stream
         if (this.onStart)
             this.onStart();
 
-        // @ts-expect-error
         Neutralino.os.execCommand(`curl -s -L -N -o "${output}" "${uri}"`, {
             background: true
         });
 
         const updateProgress = () => {
-            // @ts-expect-error
             Neutralino.filesystem.getStats(output).then((stats) => {
                 if (this.onProgress)
                     this.onProgress(stats.size, this.total, this.previous - stats.size);
@@ -107,7 +108,6 @@ export default class Downloader
     public static async download(uri: string, output: string|null = null): Promise<Stream>
     {
         return new Promise(async (resolve) => {
-            // @ts-expect-error
             let statsRaw = await Neutralino.os.execCommand(`curl -s -I -L "${uri}"`);
 
             if (statsRaw.stdOut == '')

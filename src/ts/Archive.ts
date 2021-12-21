@@ -5,6 +5,9 @@ import type {
     ArchiveInfo
 } from './types/Archive';
 
+declare const Neutralino;
+declare const NL_CWD;
+
 class Stream
 {
     /**
@@ -60,10 +63,8 @@ class Stream
 
                 let remainedFiles = this.archive.files;
                 
-                // @ts-expect-error
                 const baseDir = unpackDir ?? NL_CWD;
 
-                // @ts-expect-error
                 Neutralino.os.execCommand(command, {
                     background: true
                 });
@@ -74,7 +75,6 @@ class Stream
                     remainedFiles.forEach((file) => {
                         if (file.path != '#unpacked#')
                         {
-                            // @ts-expect-error
                             Neutralino.filesystem.getStats(`${baseDir}/${file.path}`)
                                 .then(() => {
                                     this.unpacked += file.size.uncompressed;
@@ -198,7 +198,6 @@ export default class Archive
             switch (archive.type)
             {
                 case 'tar':
-                    // @ts-expect-error
                     const tarOutput = await Neutralino.os.execCommand(`tar -tvf "${path}"`);
 
                     for (const match of tarOutput.stdOut.matchAll(/^[dwxr\-]+ [\w/]+[ ]+(\d+) [0-9\-]+ [0-9\:]+ (.+)/gm))
@@ -221,7 +220,6 @@ export default class Archive
                     break;
 
                 case 'zip':
-                    // @ts-expect-error
                     const zipOutput = await Neutralino.os.execCommand(`unzip -v "${path}"`);
 
                     for (const match of zipOutput.stdOut.matchAll(/^(\d+)  [a-zA-Z\:]+[ ]+(\d+)[ ]+[0-9\-]+% [0-9\-]+ [0-9\:]+ [a-f0-9]{8}  (.+)/gm))

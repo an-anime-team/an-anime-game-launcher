@@ -3,6 +3,8 @@ import {
     RunnerFamily
 } from './types/Runners';
 
+declare const Neutralino;
+
 import Constants from './Constants';
 import Downloader from './Downloader';
 import Archive from './Archive';
@@ -175,10 +177,8 @@ class Runners
     {
         return new Promise((resolve) => {
             Constants.paths.runners.then(async (runnersDir: string) => {
-                // @ts-expect-error
                 let list: RunnerFamily[] = JSON.parse(await Neutralino.filesystem.readFile(`${Constants.paths.app}/public/runners.json`));
 
-                // @ts-expect-error
                 const installed: { entry: string, type: string }[] = await Neutralino.filesystem.readDirectory(runnersDir);
 
                 let runners: RunnerFamily[] = [];

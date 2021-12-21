@@ -22,18 +22,18 @@ type WindowOptions = WindowSize & {
     processArgs?: string;
 };
 
+declare const Neutralino;
+
 class Window
 {
     public static get current(): any
     {
-        // @ts-expect-error
         return Neutralino.window;
     }
 
     public static async open(name: string, options: WindowOptions = {}): Promise<boolean>
     {
         return new Promise(async (resolve) => {
-            // @ts-expect-error
             const status = Neutralino.window.create(`/${name}.html`, {
                 width: 600,
                 height: 400,

@@ -1,3 +1,5 @@
+declare const Neutralino;
+
 class Paths
 {
     /**
@@ -26,7 +28,6 @@ class Paths
      */
     public static get launcher(): Promise<string>
     {
-        // @ts-expect-error
         return new Promise(async (resolve) => resolve(`${await Neutralino.os.getPath('data')}/anime-game-launcher`));
     }
 
