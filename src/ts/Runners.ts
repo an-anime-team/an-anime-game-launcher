@@ -210,6 +210,12 @@ class Runners
         });
     }
 
+    /**
+     * Download runner to the [Constants.paths.runners] directory
+     * 
+     * @param runner Runner object or name
+     * @returns Promise<null|Stream>
+     */
     public static download(runner: Runner|Runner['name']): Promise<null|Stream>
     {
         return new Promise(async (resolve) => {

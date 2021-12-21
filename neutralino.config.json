@@ -7,10 +7,10 @@
   "url": "/",
   "enableServer": true,
   "enableNativeAPI": true,
-  "exportAuthInfo": false,
+  "exportAuthInfo": true,
   "logging": {
-    "enabled": true,
-    "writeToLogFile": true
+    "enabled": false,
+    "writeToLogFile": false
   },
   "nativeBlockList": [],
   "globalVariables": {},
@@ -21,7 +21,7 @@
       "height": 700,
       "fullScreen": false,
       "alwaysOnTop": false,
-      "icon": "/public/icons/256x256.png",
+      "icon": "/public/icons/64x64.png",
       "enableInspector": true,
       "borderless": false,
       "maximize": false,

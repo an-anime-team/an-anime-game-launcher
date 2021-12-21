@@ -7,7 +7,6 @@
     "build": "vite build && neu build --release"
   },
   "dependencies": {
-    "es6-promisify": "^7.0.0",
     "vue": "^3.2.25"
   },
   "devDependencies": {
