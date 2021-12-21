@@ -31,7 +31,7 @@ export default abstract class Installer
 
     public constructor(uri: string, unpackDir: string|Promise<string>)
     {
-        constants.paths.launcher.then((launcherDir) => {
+        constants.paths.launcherDir.then((launcherDir) => {
             const archivePath = `${launcherDir}/${Downloader.fileFromUri(uri)}`;
 
             // Download archive
