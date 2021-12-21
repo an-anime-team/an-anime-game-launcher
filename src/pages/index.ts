@@ -35,7 +35,7 @@ const app = Vue.createApp({
             stream.unpackFinish(() => console.log('Unpacking finished'));
         });*/
 
-        /*dxvk.download('1.9.2').then((stream) => {
+        /*DXVK.download('1.8').then((stream) => {
             stream.downloadStart(() => console.log('Downloading started'));
             stream.downloadFinish(() => console.log('Downloading finished'));
 

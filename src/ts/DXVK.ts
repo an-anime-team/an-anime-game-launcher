@@ -1,7 +1,4 @@
-import type {
-    DXVKTable, 
-    DXVK as TDXVK
-} from './types/DXVK';
+import type { DXVK as TDXVK } from './types/DXVK';
 
 import constants from './Constants';
 import AbstractInstaller from './AbstractInstaller';
@@ -21,36 +18,27 @@ export default class DXVK
     /**
      * Get DXVKs list
      */
-    public static get(): Promise<DXVKTable[]>
+    public static get(): Promise<TDXVK[]>
     {
         return new Promise((resolve) => {
             constants.paths.dxvksDir.then(async (dxvksDir: string) => {
-                let list: DXVKTable[] = JSON.parse(await Neutralino.filesystem.readFile(`${constants.paths.appDir}/public/dxvks.json`));
+                let list: TDXVK[] = JSON.parse(await Neutralino.filesystem.readFile(`${constants.paths.appDir}/public/dxvks.json`));
 
                 const installed: { entry: string, type: string }[] = await Neutralino.filesystem.readDirectory(dxvksDir);
 
-                let dxvks: DXVKTable[] = [];
+                let dxvks: TDXVK[] = [];
 
-                list.forEach((family) => {
-                    let newFamily: DXVKTable = {
-                        title: family.title,
-                        versions: []
-                    };
+                list.forEach((dxvk) => {
+                    let inst = false;
 
-                    family.versions.forEach((dxvk) => {
-                        let inst = false;
+                    for (let dir of installed)
+                        inst ||= dir.entry == `dxvk-${dxvk.version}`;
 
-                        for (let dir of installed)
-                            inst ||= dir.entry == `dxvk-${dxvk.version}`;
+                    dxvks.push({
+                        ...dxvk,
 
-                        newFamily.versions.push({
-                            ...dxvk,
-
-                            installed: inst
-                        });
+                        installed: inst
                     });
-
-                    dxvks.push(newFamily);
                 });
 
                 resolve(dxvks);
@@ -73,11 +61,9 @@ export default class DXVK
             {
                 let foundDXVK = null;
 
-                (await this.get()).forEach((family) => {
-                    family.versions.forEach((DXVK) => {
-                        if (DXVK.version == dxvk)
-                            foundDXVK = DXVK;
-                    });
+                (await this.get()).forEach((currDxvk) => {
+                    if (currDxvk.version == dxvk)
+                        foundDXVK = currDxvk;
                 });
 
                 resolve(foundDXVK === null ? null : new Stream(foundDXVK));
@@ -89,4 +75,4 @@ export default class DXVK
     }
 }
 
-export type { TDXVK, DXVKTable };
+export type { TDXVK };

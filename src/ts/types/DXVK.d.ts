@@ -6,9 +6,4 @@ type DXVK = {
     installed: boolean;
 };
 
-type DXVKTable = {
-    title: string;
-    versions: DXVK[];
-};
-
-export type { DXVKTable, DXVK };
+export type { DXVK };
