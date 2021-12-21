@@ -35,6 +35,14 @@ const app = Vue.createApp({
             stream.unpackFinish(() => console.log('Unpacking finished'));
         });*/
 
+        /*dxvk.download('1.9.2').then((stream) => {
+            stream.downloadStart(() => console.log('Downloading started'));
+            stream.downloadFinish(() => console.log('Downloading finished'));
+
+            stream.unpackStart(() => console.log('Unpacking started'));
+            stream.unpackFinish(() => console.log('Unpacking finished'));
+        });*/
+
         /*Archive.unpack('Audio_English(US)_2.3.0.zip', 'tmp').then((stream) => {
             stream.progress((current, total) => {
                 console.log(`${Math.round(current / total * 100)}%`);
