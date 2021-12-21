@@ -1,4 +1,4 @@
-import Constants from './Constants';
+import constants from './Constants';
 import Downloader from './Downloader';
 import Archive from './Archive';
 
@@ -31,7 +31,7 @@ export default abstract class Installer
 
     public constructor(uri: string, unpackDir: string|Promise<string>)
     {
-        Constants.paths.launcher.then((launcherDir) => {
+        constants.paths.launcher.then((launcherDir) => {
             const archivePath = `${launcherDir}/${Downloader.fileFromUri(uri)}`;
 
             // Download archive
