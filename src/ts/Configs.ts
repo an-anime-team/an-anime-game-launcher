@@ -13,7 +13,7 @@ export default class Configs
      * Get config value
      * 
      * @param name config name, e.g. "lang.launcher"
-     * @returns undefined if config is not exists. Otherwise - config value
+     * @returns undefined if config doesn't exist. Otherwise - config value
      */
     public static get(name: string = ''): Promise<undefined|scalar|scalar[]>
     {
@@ -38,7 +38,7 @@ export default class Configs
      * 
      * @param name config name, e.g. "lang.launcher"
      * @param value config value, e.g. "en-us"
-     * @returns Promise<void> indicates when the settings was updated
+     * @returns Promise<void> indicates if the settings were updated
      */
     public static set(name: string, value: scalar|scalar[]): Promise<void>
     {
@@ -68,7 +68,7 @@ export default class Configs
      * Set default values
      * 
      * @param configs object of default values
-     * @returns Promise<void> indicates when the default settings was applied
+     * @returns Promise<void> indicates if the default settings were applied
      */
     public static defaults(configs: scalar): Promise<void>
     {
@@ -76,7 +76,7 @@ export default class Configs
             const setDefaults = async (current: scalar) => {
                 const updateDefaults = (current: scalar, defaults: scalar) => {
                     Object.keys(defaults).forEach((key) => {
-                        // If the field exists in defaults and don't exists in current
+                        // If the field exists in defaults and doesn't exist in current
                         if (current[key] === undefined)
                             current[key] = defaults[key];
 
