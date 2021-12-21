@@ -15,7 +15,6 @@ type Runner = {
     title: string;
 
     uri: string;
-    archive: 'tar' | 'zip';
 
     files: {
         /**
