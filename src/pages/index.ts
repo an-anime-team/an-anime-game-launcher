@@ -4,6 +4,7 @@ import Window from '../ts/neutralino/Window';
 
 import Downloader from '../ts/Downloader';
 import Archive from '../ts/Archive';
+import Configs from '../ts/Configs';
 
 const app = Vue.createApp({
     data: () => ({
@@ -25,7 +26,7 @@ const app = Vue.createApp({
             stream.finish(() => console.log('finished'));
         });*/
 
-        /*Downloader.download('https://autopatchhk.yuanshen.com/client_app/download/pc_zip/20211117173404_G0gLRnxvOd4PvSu9/Audio_English(US)_2.3.0.zip').then((stream) => {
+        /*Downloader.download('https://autopatchhk.yuanshen.com/client_app/download/pc_zip/20211117173404_G0gLRnxvOd4PvSu9/Audio_English(US)_2.3.0.zip', '123.zip').then((stream) => {
             stream.progress((current: number, total: number) => {
                 document.getElementById('progress').innerHTML = `${Math.round(current / total * 100)}%`;
             });

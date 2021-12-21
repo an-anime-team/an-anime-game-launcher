@@ -1,16 +1,16 @@
 type Runner = {
     /**
-     * i.e. proton-ge
+     * e.g. proton-ge
      */
      family: string;
 
     /**
-     * i.e. Proton-6.20-GE-1
+     * e.g. Proton-6.20-GE-1
      */
     name: string;
 
     /**
-     * i.e. Proton 6.20 GE 1
+     * e.g. Proton 6.20 GE 1
      */
     title: string;
 
@@ -18,17 +18,17 @@ type Runner = {
 
     files: {
         /**
-         * i.e. bin/wine64
+         * e.g. bin/wine64
          */
         wine: string;
 
         /**
-         * i.e. bin/wineserver
+         * e.g. bin/wineserver
          */
         wineserver: string;
 
         /**
-         * i.e. lib64/wine/x86_64-windows/winecfg.exe
+         * e.g. lib64/wine/x86_64-windows/winecfg.exe
          */
         winecfg: string;
     };
@@ -37,12 +37,12 @@ type Runner = {
     installed: boolean;
 };
 
-type RunnersFamily = {
+type RunnerFamily = {
     title: string;
     runners: Runner[];
 };
 
 export type {
     Runner,
-    RunnersFamily
+    RunnerFamily
 };

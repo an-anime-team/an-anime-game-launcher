@@ -1,6 +1,6 @@
 import type {
     Runner,
-    RunnersFamily
+    RunnerFamily
 } from './types/Runners';
 
 import constants from './Constants';
@@ -15,9 +15,9 @@ class Runners
     public static get(): Promise<Runner[]>
     {
         return new Promise((resolve) => {
-            constants.dirs.runners.then(async (runnersDir: string) => {
+            constants.paths.runners.then(async (runnersDir: string) => {
                 // @ts-expect-error
-                let list: RunnersFamily[] = JSON.parse(await Neutralino.filesystem.readFile(`${constants.dirs.app}/public/runners.json`));
+                let list: RunnerFamily[] = JSON.parse(await Neutralino.filesystem.readFile(`${constants.dirs.app}/public/runners.json`));
 
                 // @ts-expect-error
                 const installed: { entry: string, type: string }[] = await Neutralino.filesystem.readDirectory(runnersDir);
@@ -25,7 +25,7 @@ class Runners
                 let runners = [];
 
                 list.forEach((family) => {
-                    let newFamily: RunnersFamily = {
+                    let newFamily: RunnerFamily = {
                         title: family.title,
                         runners: []
                     };
@@ -63,5 +63,5 @@ export default Runners;
 
 export type {
     Runner,
-    RunnersFamily
+    RunnerFamily
 };

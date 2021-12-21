@@ -48,9 +48,11 @@ To work this launcher requires
 
 | Name | Description |
 | --- | --- |
+| webkit2gtk | To run Neutralino apps |
 | unzip | To unpack zip archives (DXVKs / wines) |
 | tar | To unpack tar archives (DXVKs / wines) |
 | git | To check for new versions of the launcher |
+| curl | To download archives with game, voice data, runners and so on |
 | xdelta3 | To apply the patch to the game |
 | cabextract | To install fonts to the wine prefix |
 
@@ -59,13 +61,13 @@ To work this launcher requires
 ### apt-get
 
 ```sh
-sudo apt-get install unzip tar git xdelta3 cabextract
+sudo apt-get install webkit2gtk unzip tar git curl xdelta3 cabextract
 ```
 
 ### pacman
 
 ```sh
-sudo pacman -Syu unzip tar git xdelta3 cabextract
+sudo pacman -Syu webkit2gtk unzip tar git curl xdelta3 cabextract
 ```
 
 # Additional requirements

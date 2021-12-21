@@ -20,41 +20,35 @@ class Stream
         this.total = total;
 
         // @ts-expect-error
-        Neutralino.os.execCommand('pidof curl').then((stats) => {
-            if (stats.stdOut == '')
-            {
-                // @ts-expect-error
-                Neutralino.os.execCommand(`curl -s -L -N -o "${output}" "${uri}"`, {
-                    background: true
-                });
-
-                const updateProgress = () => {
-                    // @ts-expect-error
-                    Neutralino.filesystem.getStats(output).then((stats) => {
-                        if (this.onProgress)
-                            this.onProgress(stats.size, this.total, this.previous - stats.size);
-        
-                        this.previous = stats.size;
-
-                        if (stats.size >= this.total)
-                        {
-                            this.finished = true;
-        
-                            if (this.onFinish)
-                                this.onFinish();
-                        }
-        
-                        if (!this.finished)
-                            setTimeout(updateProgress, this.progressInterval);
-                    }).catch(() => {
-                        if (!this.finished)
-                            setTimeout(updateProgress, this.progressInterval);
-                    });
-                };
-        
-                setTimeout(updateProgress, this.progressInterval);
-            }
+        Neutralino.os.execCommand(`curl -s -L -N -o "${output}" "${uri}"`, {
+            background: true
         });
+
+        const updateProgress = () => {
+            // @ts-expect-error
+            Neutralino.filesystem.getStats(output).then((stats) => {
+                if (this.onProgress)
+                    this.onProgress(stats.size, this.total, this.previous - stats.size);
+
+                this.previous = stats.size;
+
+                if (stats.size >= this.total)
+                {
+                    this.finished = true;
+
+                    if (this.onFinish)
+                        this.onFinish();
+                }
+
+                if (!this.finished)
+                    setTimeout(updateProgress, this.progressInterval);
+            }).catch(() => {
+                if (!this.finished)
+                    setTimeout(updateProgress, this.progressInterval);
+            });
+        };
+
+        setTimeout(updateProgress, this.progressInterval);
     }
 
     /**

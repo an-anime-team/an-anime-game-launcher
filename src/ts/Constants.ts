@@ -1,4 +1,4 @@
-class Dirs
+class Paths
 {
     /**
      * Directory where the launcher's executable stored
@@ -11,7 +11,7 @@ class Dirs
     /**
      * Shaders directory
      * 
-     * Default is [constants.dirs.app]/public/shaders
+     * Default is [constants.paths.app]/public/shaders
      * 
      * @returns string
      */
@@ -52,6 +52,18 @@ class Dirs
     public static get dxvks(): Promise<string>
     {
         return new Promise(async (resolve) => resolve(`${await this.launcher}/dxvks`));
+    }
+
+    /**
+     * Config file
+     * 
+     * Default is ~/.local/share/anime-game-launcher/config.json
+     * 
+     * @returns Promise<string>
+     */
+    public static get config(): Promise<string>
+    {
+        return new Promise(async (resolve) => resolve(`${await this.launcher}/config.json`));
     }
 
     /*public static readonly prefix = new class
@@ -125,37 +137,13 @@ export default class constants
         new Date('January 5, 2022').getTime() // 2.4.0 half 1 release
     ];*/
 
-    public static readonly dirs = Dirs;
+    public static readonly paths = Paths;
 
     public static readonly versionsUri: string = `${this.uri.api}/resource?key=gcStgarh&launcher_id=10`;
     public static readonly backgroundUri: string = `${this.uri.api}/content?filter_adv=true&launcher_id=10&key=gcStgarh&language=`;
 
     public static readonly runnersUri: string = `${this.uri.launcher}/raw/main/runners.json`;
     public static readonly dxvksUri: string = `${this.uri.launcher}/raw/main/dxvks.json`;
-
-    /*public static prefixDir = new class
-    {
-        public get(): string
-        {
-            return LauncherLib.getConfig('prefix');
-        }
-
-        public getDefault(): string
-        {
-            return path.join(os.homedir(), '.local', 'share', 'anime-game-launcher', 'game');
-        }
-
-        public set(location: string)
-        {
-            if (path.relative(LauncherLib.getConfig('prefix'), location) === '')
-                return console.log('Can\'t set already selected prefix as new prefix');
-
-            const dataPath = path.join(location, 'drive_c', 'Program Files', constants.placeholders.uppercase.full, `${constants.placeholders.uppercase.first + constants.placeholders.uppercase.second}_Data`);
-
-            LauncherLib.updateConfig('prefix', location);
-            LauncherLib.updateConfig('version', LauncherLib.getGameVersion(dataPath));
-        }
-    }*/
 
     /*public static get gameDir(): string
     {
