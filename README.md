@@ -89,6 +89,7 @@ They're required only for some specific functions
 git clone https://gitlab.com/KRypt0n_/an-anime-game-launcher
 cd an-anime-game-launcher
 yarn
+yarn neu update
 ```
 
 ## Run

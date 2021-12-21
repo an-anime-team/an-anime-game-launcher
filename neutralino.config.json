@@ -9,8 +9,8 @@
   "enableNativeAPI": true,
   "exportAuthInfo": false,
   "logging": {
-    "enabled": false,
-    "writeToLogFile": false
+    "enabled": true,
+    "writeToLogFile": true
   },
   "nativeBlockList": [],
   "globalVariables": {},

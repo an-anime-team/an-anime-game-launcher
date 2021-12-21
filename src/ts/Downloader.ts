@@ -1,63 +1,80 @@
 class Stream
 {
-    protected uri: string;
-    protected total: number|null;
+    public progressInterval: number = 200;
 
-    protected onProgress?: (current: number, total: number) => void;
+    protected uri: string;
+    protected total: number;
+    protected previous: number = 0;
+
+    protected onProgress?: (current: number, total: number, difference: number) => void;
     protected onFinish?: () => void;
 
     protected finished: boolean = false;
 
-    public constructor(uri: string, output: string, total: number|null = null)
+    public constructor(uri: string, output: string, total: number)
     {
         this.uri = uri;
         this.total = total;
 
         // @ts-expect-error
-        Neutralino.os.execCommand(`wget -O "${output}" -nv "${uri}"`).then(() => {
-            this.finished = true;
-
-            this.onFinish();
-        });
-
-        if (total !== null)
-        {
-            const updateProgress = () => {
+        Neutralino.os.execCommand('pidof curl').then((stats) => {
+            if (stats.stdOut == '')
+            {
                 // @ts-expect-error
-                Neutralino.filesystem.getStats(output).then((stats) => {
-                    if (this.onProgress)
-                        this.onProgress(stats.size, this.total);
-
-                    if (!this.finished)
-                        setTimeout(updateProgress, 100);
+                Neutralino.os.execCommand(`curl -s -L -N -o "${output}" "${uri}"`, {
+                    background: true
                 });
-            };
 
-            updateProgress();
-        }
+                const updateProgress = () => {
+                    // @ts-expect-error
+                    Neutralino.filesystem.getStats(output).then((stats) => {
+                        if (this.onProgress)
+                            this.onProgress(stats.size, this.total, this.previous - stats.size);
+        
+                        this.previous = stats.size;
+
+                        if (stats.size >= this.total)
+                        {
+                            this.finished = true;
+        
+                            if (this.onFinish)
+                                this.onFinish();
+                        }
+        
+                        if (!this.finished)
+                            setTimeout(updateProgress, this.progressInterval);
+                    }).catch(() => {
+                        if (!this.finished)
+                            setTimeout(updateProgress, this.progressInterval);
+                    });
+                };
+        
+                setTimeout(updateProgress, this.progressInterval);
+            }
+        });
     }
 
     /**
-     * Specify event that will be called every 100 ms during the file downloading
+     * Specify event that will be called every [this.progressInterval] ms during the file downloading
      * 
-     * @param callable
+     * @param callback
      */
-    public progress(callable: (current: number, total: number) => void)
+    public progress(callback: (current: number, total: number, difference: number) => void)
     {
-        this.onProgress = callable;
+        this.onProgress = callback;
     }
 
     /**
      * Specify event that will be called after the file will be downloaded
      * 
-     * @param callable
+     * @param callback
      */
-    public finish(callable: () => void)
+    public finish(callback: () => void)
     {
-        this.onFinish = callable;
+        this.onFinish = callback;
 
         if (this.finished)
-            callable();
+            callback();
     }
 }
 
@@ -71,24 +88,34 @@ export default class Downloader
      * 
      * @returns Promise<Stream>
      */
-    public static async download(uri: string, output: string): Promise<Stream>
+    public static async download(uri: string, output: string|null = null): Promise<Stream>
     {
         return new Promise(async (resolve) => {
             // @ts-expect-error
-            let statsRaw = await Neutralino.os.execCommand(`wget --spider "${uri}"`);
+            let statsRaw = await Neutralino.os.execCommand(`curl -s -I -L "${uri}"`);
 
             if (statsRaw.stdOut == '')
                 statsRaw = statsRaw.stdErr;
 
             else statsRaw = statsRaw.stdOut;
 
-            let length: any = /Length: ([\d]+)/.exec(statsRaw)[1] ?? null;
+            const length = parseInt(/content-length: ([\d]+)/i.exec(statsRaw)[1]);
 
-            if (length !== null)
-                length = parseInt(length);
-
-            resolve(new Stream(uri, output, length));
+            resolve(new Stream(uri, output ?? this.fileFromUri(uri), length));
         });
+    }
+
+    protected static fileFromUri(uri: string): string
+    {
+        const file = uri.split('/').pop().split('#')[0].split('?')[0];
+
+        if (file === '')
+            return 'index.html';
+
+        else if (`https://${file}` != uri && `http://${file}` != uri)
+            return file;
+
+        else 'index.html';
     }
 }
 
