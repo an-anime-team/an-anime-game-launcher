@@ -1,5 +1,6 @@
 .lite_workspace.lua
 yarn.lock
+package_lock.json
 Audio_English(US)_2.3.0.zip
 
 /bin
