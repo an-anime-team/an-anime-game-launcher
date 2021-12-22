@@ -1,4 +1,4 @@
-import constants from './Constants';
+import constants from '../Constants';
 import Downloader from './Downloader';
 import Archive from './Archive';
 

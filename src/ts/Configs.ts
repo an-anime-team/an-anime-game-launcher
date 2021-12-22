@@ -80,14 +80,6 @@ export default class Configs
                         if (current[key] === undefined)
                             current[key] = defaults[key];
 
-                        // If default is scalar and current object
-                        else if (typeof current[key] == 'object' && typeof defaults[key] != 'object')
-                            current[key] = defaults[key];
-
-                        // If default is object and current scalar
-                        else if (typeof current[key] != 'object' && typeof defaults[key] == 'object')
-                            current[key] = defaults[key];
-
                         // If both of default and current are objects
                         else if (typeof current[key] == 'object' && typeof defaults[key] == 'object')
                             current[key] = updateDefaults(current[key], defaults[key]);

@@ -1,5 +1,4 @@
 declare const Neutralino;
-declare const NL_CWD;
 
 class Stream
 {

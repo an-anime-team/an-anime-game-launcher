@@ -2,12 +2,6 @@ import * as Vue from 'vue/dist/vue.esm-bundler';
 
 import Window from '../ts/neutralino/Window';
 
-import Downloader from '../ts/Downloader';
-import Archive from '../ts/Archive';
-import Configs from '../ts/Configs';
-import Runners from '../ts/Runners';
-import DXVK from '../ts/DXVK';
-
 const app = Vue.createApp({
     data: () => ({
         progress: '0%'

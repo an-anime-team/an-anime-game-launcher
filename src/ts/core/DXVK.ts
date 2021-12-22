@@ -1,6 +1,6 @@
-import type { DXVK as TDXVK } from './types/DXVK';
+import type { DXVK as TDXVK } from '../types/DXVK';
 
-import constants from './Constants';
+import constants from '../Constants';
 import AbstractInstaller from './AbstractInstaller';
 
 declare const Neutralino;

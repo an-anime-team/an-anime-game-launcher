@@ -1,9 +1,9 @@
 import {
     Runner,
     RunnerFamily
-} from './types/Runners';
+} from '../types/Runners';
 
-import constants from './Constants';
+import constants from '../Constants';
 import AbstractInstaller from './AbstractInstaller';
 
 declare const Neutralino;

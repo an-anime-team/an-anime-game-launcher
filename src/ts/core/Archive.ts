@@ -3,7 +3,7 @@ import type {
     Size,
     File,
     ArchiveInfo
-} from './types/Archive';
+} from '../types/Archive';
 
 declare const Neutralino;
 declare const NL_CWD;
