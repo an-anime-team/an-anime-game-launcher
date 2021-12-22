@@ -7,12 +7,13 @@
     "build": "vite build && neu build --release"
   },
   "dependencies": {
+    "js-md5": "^0.7.3",
     "vue": "^3.2.25"
   },
   "devDependencies": {
     "@neutralinojs/neu": "^8.0.0",
     "@vitejs/plugin-vue": "^2.0.1",
-    "vite": "^2.7.4",
-    "sass": "^1.45.1"
+    "sass": "^1.45.1",
+    "vite": "^2.7.4"
   }
 }

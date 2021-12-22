@@ -1,7 +1,10 @@
 import * as Vue from 'vue/dist/vue.esm-bundler';
 
 import Window from '../ts/neutralino/Window';
+import Patch from '../ts/Patch';
 import Voice from '../ts/Voice';
+import fetch from '../ts/core/Fetch';
+import Downloader from '../ts/core/Downloader';
 
 const app = Vue.createApp({
     data: () => ({
@@ -15,8 +18,12 @@ const app = Vue.createApp({
     mounted: () => {
         Window.current.show();
 
-        Voice.getDiff('2.1.0')
-            .then((data) => console.log(data));
+        /*fetch('https://sdk-os-static.mihoyo.com/hk4e_global/mdk/launcher/api/resource?key=gcStgarh&launcher_id=10', 1000)
+            .then((response) => {
+                console.log(response);
+
+                response.body().then((body) => console.log(body.length));
+            });*/
 
         /*Downloader.download('https://github.com/GloriousEggroll/wine-ge-custom/releases/download/6.20-GE-1/wine-lutris-ge-6.20-1-x86_64.tar.xz', '123.tar.xz').then((stream) => {
             stream.start(() => console.log('Downloading started'));

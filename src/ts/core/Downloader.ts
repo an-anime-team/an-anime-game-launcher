@@ -1,3 +1,5 @@
+import fetch from './Fetch';
+
 declare const Neutralino;
 
 class Stream
@@ -107,19 +109,9 @@ export default class Downloader
     public static async download(uri: string, output: string|null = null): Promise<Stream>
     {
         return new Promise(async (resolve) => {
-            let statsRaw = await Neutralino.os.execCommand(`curl -s -I -L "${uri}"`);
-
-            if (statsRaw.stdOut == '')
-                statsRaw = statsRaw.stdErr;
-
-            else statsRaw = statsRaw.stdOut;
-
-            let length = 0;
-
-            for (const match of statsRaw.matchAll(/content-length: ([\d]+)/gi))
-                length = match[1];
-
-            resolve(new Stream(uri, output ?? this.fileFromUri(uri), length));
+            fetch(uri).then((response) => {
+                resolve(new Stream(uri, output ?? this.fileFromUri(uri), response.length));
+            });
         });
     }
 

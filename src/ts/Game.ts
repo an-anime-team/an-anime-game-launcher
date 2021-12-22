@@ -75,6 +75,26 @@ export default class Game
     }
 
     /**
+     * Get game versions list
+     * 
+     * @returns rejects Error object if company's servers are unreachable or they responded with an error
+     */
+    public static get versions(): Promise<string[]>
+    {
+        return new Promise((resolve, reject) => {
+            this.getLatestData()
+                .then((data) => {
+                    let versions = [data.game.latest.version];
+
+                    data.game.diffs.forEach((diff) => versions.push(diff.version));
+
+                    resolve(versions);
+                })
+                .catch((error) => reject(error));
+        });
+    }
+
+    /**
      * Get updated game data from the specified version to the latest
      * 
      * @returns null if the difference can't be calculated

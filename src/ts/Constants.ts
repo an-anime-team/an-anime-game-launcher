@@ -173,9 +173,6 @@ export default class constants
     public static readonly versionsUri: string = `${this.uri.api}/resource?key=gcStgarh&launcher_id=10`;
     public static readonly backgroundUri: string = `${this.uri.api}/content?filter_adv=true&launcher_id=10&key=gcStgarh&language=`;
 
-    public static readonly runnersUri: string = `${this.uri.launcher}/raw/main/runners.json`;
-    public static readonly dxvksUri: string = `${this.uri.launcher}/raw/main/dxvks.json`;
-
     public static getPatchUri(source: 'origin' | 'additional'): string
     {
         return `${this.uri.patch[source]}/archive/master.zip`;
