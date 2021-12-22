@@ -75,7 +75,8 @@ export default class Game
     }
 
     /**
-     * Get game versions list
+     * Get some latest game versions list in descending order
+     * e.g. ["2.3.0", "2.2.0", "2.1.0"]
      * 
      * @returns rejects Error object if company's servers are unreachable or they responded with an error
      */

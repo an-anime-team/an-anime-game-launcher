@@ -18,6 +18,8 @@ const app = Vue.createApp({
     mounted: () => {
         Window.current.show();
 
+        Patch.latest.then(console.log);
+
         /*fetch('https://sdk-os-static.mihoyo.com/hk4e_global/mdk/launcher/api/resource?key=gcStgarh&launcher_id=10', 1000)
             .then((response) => {
                 console.log(response);

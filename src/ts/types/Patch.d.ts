@@ -11,14 +11,9 @@ type PatchInfo = {
     state: PatchState;
 
     /**
-     * If the main UnityPlayer patch applied
+     * If the patch was applied
      */
-    player: boolean;
-
-    /**
-     * If the anti-login crash patch applied
-     */
-    xlua: boolean;
+    applied: boolean;
 };
 
 export type {
