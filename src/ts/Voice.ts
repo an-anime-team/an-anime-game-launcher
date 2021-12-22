@@ -1,15 +1,8 @@
-import type {
-    ServerResponse,
-    Data,
-    Latest
-} from './types/GameData';
-
-import type {
-    VoiceLang,
-    InstalledVoice
-} from './types/Voice';
+import type { VoicePack } from './types/GameData';
+import type { InstalledVoice } from './types/Voice';
 
 import constants from './Constants';
+import Game from './Game';
 
 declare const Neutralino;
 
@@ -58,16 +51,31 @@ export default class Voice
     }
 
     /**
-     * Get latest game version data
+     * Get latest voice data info
      * 
-     * @returns Error object if company's servers are unreachable or they responded with an error
+     * @returns rejects Error object if company's servers are unreachable or they responded with an error
      */
-    /*public static get latest(): Promise<Latest>
+    public static get latest(): Promise<VoicePack[]>
     {
-        return new Promise(async (resolve, reject) => {
-            this.getLatestData()
-                .then((data) => resolve(data.game.latest))
+        return new Promise((resolve, reject) => {
+            Game.getLatestData()
+                .then((data) => resolve(data.game.latest.voice_packs))
                 .catch((error) => reject(error));
         });
-    }*/
+    }
+
+    /**
+     * Get updated voice data from the specified version to the latest
+     * 
+     * @returns null if the difference can't be calculated
+     * @returns rejects Error object if company's servers are unreachable or they responded with an error
+     */
+    public static getDiff(version: string): Promise<VoicePack[]|null>
+    {
+        return new Promise((resolve, reject) => {
+            Game.getDiff(version)
+                .then((data) => resolve(data.voice_packs ?? null))
+                .catch((error) => reject(error));
+        });
+    }
 }

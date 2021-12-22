@@ -1,7 +1,8 @@
 import type {
     ServerResponse,
     Data,
-    Latest
+    Latest,
+    Diff
 } from './types/GameData';
 
 import constants from './Constants';
@@ -38,7 +39,7 @@ export default class Game
     /**
      * Get latest game data, including voice data and packages difference
      * 
-     * @returns Error object if company's servers are unreachable or they responded with an error
+     * @returns rejects Error object if company's servers are unreachable or they responded with an error
      */
     public static getLatestData(): Promise<Data>
     {
@@ -62,13 +63,37 @@ export default class Game
     /**
      * Get latest game version data
      * 
-     * @returns Error object if company's servers are unreachable or they responded with an error
+     * @returns rejects Error object if company's servers are unreachable or they responded with an error
      */
     public static get latest(): Promise<Latest>
     {
-        return new Promise(async (resolve, reject) => {
+        return new Promise((resolve, reject) => {
             this.getLatestData()
                 .then((data) => resolve(data.game.latest))
+                .catch((error) => reject(error));
+        });
+    }
+
+    /**
+     * Get updated game data from the specified version to the latest
+     * 
+     * @returns null if the difference can't be calculated
+     */
+    public static getDiff(version: string): Promise<Diff|null>
+    {
+        return new Promise(async (resolve, reject) => {
+            this.getLatestData()
+                .then((data) => {
+                    for (const diff of data.game.diffs)
+                        if (diff.version == version)
+                        {
+                            resolve(diff);
+
+                            return;
+                        }
+
+                    resolve(null);
+                })
                 .catch((error) => reject(error));
         });
     }
