@@ -108,7 +108,7 @@ yarn build
 
 # Roadmap
 
-### ✓ <s>To 1.0.0 release</s>
+## ✓ <s>To 1.0.0 release</s>
 
 * <s>Fix AppImage builds</s> *(0.3.0)*
 * <s>Parse background banners from the game's API ([notabug issue #1](https://notabug.org/nobody/an-anime-game-launcher/issues/1), [notabug pull request #2](https://notabug.org/nobody/an-anime-game-launcher/pulls/2))</s> *(0.3.0)*
@@ -122,7 +122,7 @@ yarn build
 * <s>Add launcher updates notifications</s> *(1.0.0-rc1)*
 * <s>Make automatic patch state parsing</s> *(1.0.0-rc1)*
 
-### ✓ <s>To 2.0.0 release</s>
+## ✓ <s>To 2.0.0 release</s>
 
 * <s>Add runners environmental variables manager</s> *(1.1.0)*
 * <s>Add outdated files deletion when new game's update releases</s> *(1.1.0)*
@@ -149,10 +149,48 @@ yarn build
 * <s>Fix voice data installation</s> *(1.9.0, !15)*
 * <s>Add fps unlocker option</s> *(1.9.0, !15)*
 
-### ➤ To 3.0.0 release
+## ➤ To 3.0.0 release
 
-* Move project to Neutralino
-* Move project to Vue
+### 2.0.0 release goals - moving launcher to Neutralino
+
+#### Core functionality
+
+* <s>Make `constants` class to store launcher's constants</s>
+* <s>Make `Downloader` class to download files</s>
+* <s>Make `Archive` class to work with archives</s>
+* <s>Make `DXVK` class to manage DXVK installations</s>
+* <s>Make `Runners` class to manage wines installations</s>
+* <s>Make `Configs` class to manage launcher's configs</s>
+* Make `Game` class to control game-related features
+  * <s>Ability to parse current installed version</s>
+  * <s>Ability to get latest available version</s>
+  * Ability to download and install updates
+* Make `Voice` class to control voice packages-related features
+  * <s>Ability to parse current installed voice packs and get selected one</s>
+  * <s>Ability to get latest available voice packs</s>
+  * Ability to download and install updates
+* Make `Patch` class to control patch-related features
+  * <s>Ability to get current installed patch</s>
+  * <s>Ability to get latest available patch</s>
+  * Ability to download and install it
+* Add project binaries bundling
+  * AppImage
+
+#### Launcher functions
+
+* Make `Launcher` class to manage launcher-related features
+  * Launcher state functionality
+* Make Vue components
+  * Progress bar for the main window
+  * Checkbox
+  * Selection
+  * SelectionList
+  * PropertiesEditor
+* Rewrite sass code, provide more flexible theming ability
+* Add `vue-i18n`
+
+### Features
+
 * Add downloading pause button
 * Use `LauncherLib.getGameVersion` function instead of the `config.json`'s `version` property
 * Fix button flickering at start when the launcher's state updates
