@@ -6,6 +6,7 @@ import type {
 } from './types/GameData';
 
 import constants from './Constants';
+import fetch from './core/Fetch';
 
 import Downloader, { Stream } from './core/Downloader';
 
@@ -50,7 +51,7 @@ export default class Game
 
             if (response.ok)
             {
-                const json: ServerResponse = await response.json();
+                const json: ServerResponse = await (response as any).json();
 
                 if (json.message == 'OK')
                     resolve(json.data);

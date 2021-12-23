@@ -67,7 +67,6 @@ export default class Patch
         return new Promise(async (resolve, reject) => {
             const patchUri = constants.uri.patch[source];
 
-            // @ts-expect-error
             fetch(`${patchUri}/raw/master/${version.replaceAll('.', '')}/patch.sh`, this.fetchTimeout)
                 .then((patcherResponse) => {
                     // Return an error if patch's server is unavailable
@@ -82,7 +81,7 @@ export default class Patch
                     // Otherwise it should be [preparation], [testing] or [stable]
                     else
                     {
-                        // @ts-expect-error
+                        
                         fetch(`${patchUri}/raw/master/${version.replaceAll('.', '')}/patch_files/unityplayer_patch.vcdiff`, this.fetchTimeout)
                             .then((response) => {
                                 // Return an error if patch's server is unavailable
