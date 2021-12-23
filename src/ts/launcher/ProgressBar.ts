@@ -23,7 +23,7 @@ export default class ProgressBar
     public speedLabelElement: HTMLElement;
     public etaLabelElement: HTMLElement;
 
-    public options: InitOptions;
+    public options?: InitOptions;
 
     protected progress = {
         beganAt: 0,
@@ -87,23 +87,23 @@ export default class ProgressBar
     public update(current: number, total: number, difference: number): void
     {
         // Update progress label if it is not a static text
-        if (typeof this.options.label === 'function')
-            this.downloadedLabelElement.textContent = this.options.label(current, total, difference);
+        if (typeof this.options!.label === 'function')
+            this.downloadedLabelElement.textContent = this.options!.label(current, total, difference);
 
         // Otherwise update percents and totals if we should
-        else if (this.options.showPercents || this.options.showPercents)
+        else if (this.options!.showPercents || this.options!.showPercents)
         {
-            this.downloadedLabelElement.textContent = `${this.options.label}:`;
+            this.downloadedLabelElement.textContent = `${this.options!.label}:`;
 
-            if (this.options.showPercents)
+            if (this.options!.showPercents)
                 this.downloadedLabelElement.textContent += ` ${Math.round(current / total * 100)}%`;
 
-            if (this.options.showTotals)
+            if (this.options!.showTotals)
                 this.downloadedLabelElement.textContent += ` (${ProgressBar.prettifyBytes(current)} / ${ProgressBar.prettifyBytes(total)})`;
         }
 
         // Update progress width
-        this.progressElement.style['width'] = `${(current / total * 100).toFixed(2)}%`;
+        this.progressElement.style['width'] = `${(current / total * 100).toFixed(3)}%`;
 
         this.progress.temp += difference;
 
@@ -111,11 +111,11 @@ export default class ProgressBar
         if (Date.now() - this.progress.prevTime > 1000)
         {
             // Update speed if we need
-            if (this.options.showSpeed)
+            if (this.options!.showSpeed)
                 this.speedLabelElement.textContent = `${ProgressBar.prettifyBytes(this.progress.temp / (Date.now() - this.progress.prevTime) * 1000)}/s`;
             
             // Update ETA if we need
-            if (this.options.showEta)
+            if (this.options!.showEta)
             {
                 type etaType = string | number;
             
@@ -143,11 +143,11 @@ export default class ProgressBar
         }
 
         // Call user-provided update callback
-        if (this.options.update)
-            this.options.update(current, total, difference);
+        if (this.options!.update)
+            this.options!.update(current, total, difference);
 
-        if (current === total && this.options.finish)
-            this.options.finish();
+        if (current === total && this.options!.finish)
+            this.options!.finish();
     }
 
     /**

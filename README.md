@@ -122,14 +122,14 @@ This is our current roadmap goals. You can find older ones [here](ROADMAP.md)
 * <s>Make `DXVK` class to manage DXVK installations</s>
 * <s>Make `Runners` class to manage wines installations</s>
 * <s>Make `Configs` class to manage launcher's configs</s>
-* Make `Game` class to control game-related features
+* <s>Make `Game` class to control game-related features</s>
   * <s>Ability to parse current installed version</s>
   * <s>Ability to get latest available version</s>
-  * Ability to download and install updates
-* Make `Voice` class to control voice packages-related features
+  * <s>Ability to download and install updates</s>
+* <s>Make `Voice` class to control voice packages-related features</s>
   * <s>Ability to parse current installed voice packs and get selected one</s>
   * <s>Ability to get latest available voice packs</s>
-  * Ability to download and install updates
+  * <s>Ability to download and install updates</s>
 * Make `Patch` class to control patch-related features
   * <s>Ability to get current installed patch</s>
   * <s>Ability to get latest available patch</s>
@@ -140,9 +140,9 @@ This is our current roadmap goals. You can find older ones [here](ROADMAP.md)
 #### Launcher functions
 
 * Make `Launcher` class to manage launcher-related features
+  * <s>Downloading progress</s>
   * Launcher state functionality
 * Make Vue components
-  * Progress bar for the main window
   * Checkbox
   * Selection
   * SelectionList

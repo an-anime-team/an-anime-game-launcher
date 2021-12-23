@@ -1,6 +1,7 @@
 {
   "name": "an-anime-game-launcher",
   "version": "3.0.0",
+  "license": "GPL-3.0-or-later",
   "scripts": {
     "neu": "neu",
     "dev": "vite build && neu run --disable-auto-reload",
@@ -12,6 +13,7 @@
   },
   "devDependencies": {
     "@neutralinojs/neu": "^8.0.0",
+    "@types/js-md5": "^0.4.3",
     "@vitejs/plugin-vue": "^2.0.1",
     "sass": "^1.45.1",
     "vite": "^2.7.6"

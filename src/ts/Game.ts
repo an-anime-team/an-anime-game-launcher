@@ -7,10 +7,17 @@ import type {
 
 import constants from './Constants';
 import fetch from './core/Fetch';
-
-import Downloader, { Stream } from './core/Downloader';
+import AbstractInstaller from './core/AbstractInstaller';
 
 declare const Neutralino;
+
+class Stream extends AbstractInstaller
+{
+    public constructor(uri: string)
+    {
+        super(uri, constants.paths.gameDir);
+    }
+}
 
 export default class Game
 {
@@ -122,10 +129,20 @@ export default class Game
         });
     }
 
-    public static update(version: string|null = null): Promise<Stream>
+    /**
+     * Get the game installation stream
+     * 
+     * @returns null if the version can't be found
+     * @returns rejects Error object if company's servers are unreachable or they responded with an error
+     */
+    public static update(version: string|null = null): Promise<Stream|null>
     {
-        return new Promise((resolve) => {
-            
+        return new Promise((resolve, reject) => {
+            (version === null ? this.latest : this.getDiff(version))
+                .then((data: Latest|Diff|null) => resolve(data === null ? null : new Stream(data.path)))
+                .catch((error) => reject(error));
         });
     }
 }
+
+export { Stream };

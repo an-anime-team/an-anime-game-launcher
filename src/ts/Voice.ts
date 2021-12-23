@@ -3,8 +3,17 @@ import type { InstalledVoice } from './types/Voice';
 
 import constants from './Constants';
 import Game from './Game';
+import AbstractInstaller from './core/AbstractInstaller';
 
 declare const Neutralino;
+
+class Stream extends AbstractInstaller
+{
+    public constructor(uri: string)
+    {
+        super(uri, constants.paths.gameDir);
+    }
+}
 
 export default class Voice
 {
@@ -16,10 +25,11 @@ export default class Voice
         return new Promise(async (resolve) => {
             const persistentPath = `${await constants.paths.gameDataDir}/Persistent/audio_lang_14`;
 
-            // TODO: more langs folders
             const langs = {
                 'English(US)': 'en-us',
-                'Japanese': 'ja-jp'
+                'Japanese': 'ja-jp',
+                'Korean': 'ko-kr',
+                'Chinese': 'zn-cn'
             };
 
             let installedVoice: InstalledVoice = {
@@ -78,4 +88,31 @@ export default class Voice
                 .catch((error) => reject(error));
         });
     }
+
+    /**
+     * Get the voice data installation stream
+     * 
+     * @returns null if the language or the version can't be found
+     * @returns rejects Error object if company's servers are unreachable or they responded with an error
+     */
+    public static update(lang: string|null = null, version: string|null = null): Promise<Stream|null>
+    {
+        return new Promise((resolve, reject) => {
+            (version === null ? this.latest : this.getDiff(version))
+                .then((data: VoicePack[]|null) => {
+                    if (data === null)
+                        resolve(null);
+
+                    else
+                    {
+                        const voice = data.filter(voice => voice.language === lang);
+
+                        resolve(voice.length === 1 ? new Stream(voice[0].path) : null);
+                    }
+                })
+                .catch((error) => reject(error));
+        });
+    }
 }
+
+export { Stream };
