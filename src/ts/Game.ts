@@ -7,6 +7,8 @@ import type {
 
 import constants from './Constants';
 
+import Downloader, { Stream } from './core/Downloader';
+
 declare const Neutralino;
 
 export default class Game
@@ -116,6 +118,13 @@ export default class Game
                     resolve(null);
                 })
                 .catch((error) => reject(error));
+        });
+    }
+
+    public static update(version: string|null = null): Promise<Stream>
+    {
+        return new Promise((resolve) => {
+            
         });
     }
 }

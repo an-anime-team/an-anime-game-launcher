@@ -12,6 +12,7 @@ export default class Configs
      * Get config value
      * 
      * @param name config name, e.g. "lang.launcher"
+     * 
      * @returns undefined if config doesn't exist. Otherwise - config value
      */
     public static get(name: string = ''): Promise<undefined|scalar|scalar[]>
@@ -37,9 +38,10 @@ export default class Configs
      * 
      * @param name config name, e.g. "lang.launcher"
      * @param value config value, e.g. "en-us"
+     * 
      * @returns Promise<void> indicates if the settings were updated
      */
-    public static set(name: string, value: scalar|scalar[]): Promise<void>
+    public static set(name: string, value: scalar|scalar[]|Promise<scalar|scalar[]>): Promise<void>
     {
         const getUpdatedArray = (path: string[], array: scalar|scalar[], value: scalar|scalar[]): scalar|scalar[] => {
             array[path[0]] = path.length > 1 ?
@@ -49,6 +51,8 @@ export default class Configs
         };
 
         return new Promise(async (resolve) => {
+            value = await Promise.resolve(value);
+
             Neutralino.filesystem.readFile(await constants.paths.config).then(async (config) => {
                 config = JSON.stringify(getUpdatedArray(name.split('.'), JSON.parse(config), value), null, 4);
 
@@ -67,6 +71,7 @@ export default class Configs
      * Set default values
      * 
      * @param configs object of default values
+     * 
      * @returns Promise<void> indicates if the default settings were applied
      */
     public static defaults(configs: scalar): Promise<void>

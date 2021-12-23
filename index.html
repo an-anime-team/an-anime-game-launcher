@@ -9,11 +9,11 @@
 
     <body>
         <div id="app" theme="light">
-            <img class="background" :src="backgroundUri">
+            <img class="background" :src="uri.background">
 
             <div class="downloader-panel" theme="dark">
                 <div class="downloader-label">
-                    <span id="downloaded">Downloading</span>
+                    <span id="downloaded"></span>
                     <span id="speed"></span>
                     <span id="eta"></span>
                 </div>
@@ -24,7 +24,7 @@
             </div>
 
             <div id="launcher-content">
-                <iframe id="social" :src="socialUri" scrolling="no" style="position: absolute; border: 0; top: 0; left: 0;" width="100%" height="100%"></iframe>
+                <iframe :src="uri.social" scrolling="no" style="position: absolute; border: 0; top: 0; left: 0;" width="100%" height="100%"></iframe>
             </div>
 
             <div id="settings">

@@ -82,10 +82,8 @@ export default abstract class Installer
                         });
                     };
 
-                    if (typeof unpackDir === 'string')
-                        unpackArchive(unpackDir);
-                    
-                    else unpackDir.then((unpackDir) => unpackArchive(unpackDir));
+                    Promise.resolve(unpackDir)
+                        .then((unpackDir) => unpackArchive(unpackDir));
                 });
             });
         });
