@@ -9,8 +9,6 @@ import constants from './Constants';
 import Game from './Game';
 import fetch from './core/Fetch';
 
-declare const Neutralino;
-
 export default class Patch
 {
     public static fetchTimeout: number = 3000;

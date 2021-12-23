@@ -75,33 +75,10 @@
     .unactive
         display: none
 
-.progress-bar
-    padding: 0
-
-    background-color: rgba(0, 0, 0, .1)
-    border: 1px solid rgba(0, 0, 0, .2)
-    border-radius: 8px
-
-    .progress
-        width: 0
-        height: 100%
-
-        background-color: rgba(255, 255, 255, .7)
-        border-radius: 6px
-
-#downloader-panel
+.downloader-panel
     user-select: none
 
-    #downloader
-        position: absolute
-
-        left: 48px
-        bottom: 68px
-
-        width: 720px
-        height: 36px
-
-    #downloader-label
+    .downloader-label
         position: absolute
 
         left: 48px
@@ -120,7 +97,30 @@
             color: #cccccc
             font-weight: 100
 
-#downloader-panel.dark
+    .progress-bar
+        position: absolute
+
+        padding: 0
+
+        left: 48px
+        bottom: 68px
+
+        width: 720px
+        height: 36px
+
+        background-color: rgba(0, 0, 0, .1)
+        border: 1px solid rgba(0, 0, 0, .2)
+        border-radius: 8px
+
+        .progress
+            width: 0
+            height: 100%
+
+            background-color: rgba(255, 255, 255, .7)
+            border-radius: 6px
+
+
+/*#downloader-panel.dark
     #downloader-label
         #downloaded, #speed, #eta
             color: rgba(0, 0, 0, .7)
