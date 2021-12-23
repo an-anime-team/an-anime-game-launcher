@@ -71,7 +71,7 @@ class Runners
             // then we should find this runner and call this method for it
             if (typeof runner == 'string')
             {
-                let foundRunner = null;
+                let foundRunner;
 
                 (await this.get()).forEach((family) => {
                     family.runners.forEach((familyRunner) => {

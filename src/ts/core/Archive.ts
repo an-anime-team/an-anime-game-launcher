@@ -19,7 +19,7 @@ class Stream
     protected unpackDir: string|null;
     protected unpacked: number = 0;
 
-    protected archive: ArchiveInfo;
+    protected archive?: ArchiveInfo;
 
     protected onStart?: () => void;
     protected onProgress?: (current: number, total: number, difference: number) => void;
@@ -59,7 +59,7 @@ class Stream
                 const command = {
                     tar: `tar -xvf "${path}"${unpackDir ? ` -C "${unpackDir}"` : ''}`,
                     zip: `unzip -o "${path}"${unpackDir ? ` -d "${unpackDir}"` : ''}`
-                }[this.archive.type];
+                }[this.archive.type!];
 
                 let remainedFiles = this.archive.files;
                 
@@ -77,8 +77,8 @@ class Stream
                         {
                             Neutralino.filesystem.getStats(`${baseDir}/${file.path}`)
                                 .then(() => {
-                                    this.unpacked += file.size.uncompressed;
-                                    difference += file.size.uncompressed;
+                                    this.unpacked += file.size.uncompressed!;
+                                    difference += file.size.uncompressed!;
 
                                     file.path = '#unpacked#';
                                 })
@@ -89,9 +89,9 @@ class Stream
                     remainedFiles = remainedFiles.filter((file) => file.path != '#unpacked#');
 
                     if (this.onProgress)
-                        this.onProgress(this.unpacked, this.archive.size.uncompressed, difference);
+                        this.onProgress(this.unpacked, this.archive!.size.uncompressed!, difference);
 
-                    if (this.unpacked >= this.archive.size.uncompressed)
+                    if (this.unpacked >= this.archive!.size.uncompressed!)
                     {
                         this.finished = true;
     
@@ -204,7 +204,7 @@ export default class Archive
                     {
                         let fileSize = parseInt(match[1]);
 
-                        archive.size.uncompressed += fileSize;
+                        archive.size.uncompressed! += fileSize;
 
                         archive.files.push({
                             path: match[2],
@@ -227,8 +227,8 @@ export default class Archive
                         let uncompressedSize = parseInt(match[1]),
                             compressedSize = parseInt(match[2]);
 
-                        archive.size.compressed   += compressedSize;
-                        archive.size.uncompressed += uncompressedSize;
+                        archive.size.compressed!   += compressedSize;
+                        archive.size.uncompressed! += uncompressedSize;
 
                         archive.files.push({
                             path: match[3],

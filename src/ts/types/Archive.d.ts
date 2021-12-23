@@ -1,10 +1,11 @@
 type ArchiveType =
     | 'tar'
-    | 'zip';
+    | 'zip'
+    | null;
 
 type Size = {
-    compressed?: number;
-    uncompressed?: number;
+    compressed?: number | null;
+    uncompressed?: number | null;
 };
 
 type File = {

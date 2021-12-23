@@ -29,7 +29,7 @@ class Response
         this.length = length;
 
         // https://developer.mozilla.org/en-US/docs/Web/API/Response/ok
-        this.ok = status >= 200 && status <= 299;
+        this.ok = status! >= 200 && status! <= 299;
     }
 
     /**

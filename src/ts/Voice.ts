@@ -74,7 +74,7 @@ export default class Voice
     {
         return new Promise((resolve, reject) => {
             Game.getDiff(version)
-                .then((data) => resolve(data.voice_packs ?? null))
+                .then((data) => resolve(data!.voice_packs ?? null))
                 .catch((error) => reject(error));
         });
     }

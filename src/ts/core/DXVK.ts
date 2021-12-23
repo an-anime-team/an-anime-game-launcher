@@ -59,7 +59,7 @@ export default class DXVK
             // then we should find this DXVK version and call this method for it
             if (typeof dxvk == 'string')
             {
-                let foundDXVK = null;
+                let foundDXVK;
 
                 (await this.get()).forEach((currDxvk) => {
                     if (currDxvk.version == dxvk)

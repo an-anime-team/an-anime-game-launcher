@@ -110,14 +110,14 @@ export default class Downloader
     {
         return new Promise(async (resolve) => {
             fetch(uri).then((response) => {
-                resolve(new Stream(uri, output ?? this.fileFromUri(uri), response.length));
+                resolve(new Stream(uri, output ?? this.fileFromUri(uri), response.length!));
             });
         });
     }
 
     public static fileFromUri(uri: string): string
     {
-        const file = uri.split('/').pop().split('#')[0].split('?')[0];
+        const file = uri.split('/').pop()!.split('#')[0].split('?')[0];
 
         if (file === '')
             return 'index.html';
@@ -125,7 +125,7 @@ export default class Downloader
         else if (`https://${file}` != uri && `http://${file}` != uri)
             return file;
 
-        else 'index.html';
+        else return 'index.html';
     }
 }
 

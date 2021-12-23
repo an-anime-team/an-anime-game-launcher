@@ -42,8 +42,8 @@ export default class Configs
     public static set(name: string, value: scalar|scalar[]): Promise<void>
     {
         const getUpdatedArray = (path: string[], array: scalar|scalar[], value: scalar|scalar[]): scalar|scalar[] => {
-            array[path[0]] = path.length > 1 ?
-                getUpdatedArray(path.slice(1), array[path[0]] ?? {}, value) : value;
+            array![path[0]] = path.length > 1 ?
+                getUpdatedArray(path.slice(1), array![path[0]] ?? {}, value) : value;
 
             return array;
         };
@@ -74,14 +74,14 @@ export default class Configs
         return new Promise(async (resolve) => {
             const setDefaults = async (current: scalar) => {
                 const updateDefaults = (current: scalar, defaults: scalar) => {
-                    Object.keys(defaults).forEach((key) => {
+                    Object.keys(defaults!).forEach((key) => {
                         // If the field exists in defaults and doesn't exist in current
-                        if (current[key] === undefined)
-                            current[key] = defaults[key];
+                        if (current![key] === undefined)
+                            current![key] = defaults![key];
 
                         // If both of default and current are objects
-                        else if (typeof current[key] == 'object' && typeof defaults[key] == 'object')
-                            current[key] = updateDefaults(current[key], defaults[key]);
+                        else if (typeof current![key] == 'object' && typeof defaults![key] == 'object')
+                            current![key] = updateDefaults(current![key], defaults![key]);
                     });
 
                     return current;
