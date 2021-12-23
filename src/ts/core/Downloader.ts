@@ -101,8 +101,8 @@ export default class Downloader
     /**
      * Download file
      * 
-     * @param uri
-     * @param output
+     * @param uri file's uri to download
+     * @param output relative or absolute path to the file to save it as
      * 
      * @returns downloading stream
      */

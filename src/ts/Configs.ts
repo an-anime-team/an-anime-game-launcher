@@ -1,11 +1,10 @@
 import constants from './Constants';
 
 declare const Neutralino;
-declare const NL_CWD;
 
-// Ok yea, null and object aren't scalars
+// Ok yea, null, object and boolean aren't scalars
 // but I don't care
-type scalar = null | string | number | object;
+type scalar = null | string | number | boolean | object;
 
 export default class Configs
 {

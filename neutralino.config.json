@@ -1,6 +1,6 @@
 {
   "applicationId": "com.krypt0nn.an-anime-game-linux-launcher",
-  "version": "1.0.0",
+  "version": "3.0.0",
   "defaultMode": "window",
   "port": 0,
   "documentRoot": "/bundle/",
