@@ -105,7 +105,11 @@ export default (launcher: Launcher): Promise<void> => {
         const startTime = Date.now();
 
         const process = await Process.run(command, {
-            env: env,
+            env: {
+                ...env,
+
+                WINEPREFIX: await constants.paths.prefix.current
+            },
             cwd: await constants.paths.gameDir
         });
 

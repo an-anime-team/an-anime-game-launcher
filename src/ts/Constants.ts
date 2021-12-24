@@ -107,7 +107,7 @@ class Paths
      * 
      * @default "~/.local/share/anime-game-launcher/game/drive_c/Program Files/[An Anime Game]"
      * 
-     * @returns "[constants.prefix.current]/drive_c/Program Files/[An Anime Game]"
+     * @returns "[constants.paths.prefix.current]/drive_c/Program Files/[An Anime Game]"
      */
     public static get gameDir(): Promise<string>
     {
