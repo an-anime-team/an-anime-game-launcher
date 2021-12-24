@@ -14,8 +14,6 @@ export default (launcher: Launcher): Promise<void> => {
         let wineExeutable = 'wine';
 
         const runner = await Runners.current;
-
-        console.log(runner);
             
         if (runner !== null)
         {

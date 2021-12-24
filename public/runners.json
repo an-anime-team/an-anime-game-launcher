@@ -4,9 +4,153 @@
         "runners": [
             {
                 "family": "Lutris",
+                "name": "lutris-6.21-6-x86_64",
+                "title": "Lutris 6.21-6",
+                "uri": "https://github.com/lutris/wine/releases/download/lutris-6.21-6/wine-lutris-6.21-6-x86_64.tar.xz",
+                "files": {
+                    "wine": "bin/wine64",
+                    "wineserver": "bin/wineserver",
+                    "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
+                },
+                "recommended": false
+            },
+            {
+                "family": "Lutris",
                 "name": "lutris-6.21-5-x86_64",
                 "title": "Lutris 6.21-5",
                 "uri": "https://github.com/lutris/wine/releases/download/lutris-6.21-5/wine-lutris-6.21-5-x86_64.tar.xz",
+                "files": {
+                    "wine": "bin/wine64",
+                    "wineserver": "bin/wineserver",
+                    "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
+                },
+                "recommended": false
+            },
+            {
+                "family": "Lutris",
+                "name": "lutris-6.21-4-x86_64",
+                "title": "Lutris 6.21-4",
+                "uri": "https://github.com/lutris/wine/releases/download/lutris-6.21-4/wine-lutris-6.21-4-x86_64.tar.xz",
+                "files": {
+                    "wine": "bin/wine64",
+                    "wineserver": "bin/wineserver",
+                    "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
+                },
+                "recommended": false
+            },
+            {
+                "family": "Lutris",
+                "name": "lutris-6.21-3-x86_64",
+                "title": "Lutris 6.21-3",
+                "uri": "https://github.com/lutris/wine/releases/download/lutris-6.21-3/wine-lutris-6.21-3-x86_64.tar.xz",
+                "files": {
+                    "wine": "bin/wine64",
+                    "wineserver": "bin/wineserver",
+                    "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
+                },
+                "recommended": false
+            },
+            {
+                "family": "Lutris",
+                "name": "lutris-6.21-2-x86_64",
+                "title": "Lutris 6.21-2",
+                "uri": "https://github.com/lutris/wine/releases/download/lutris-6.21-2/wine-lutris-6.21-2-x86_64.tar.xz",
+                "files": {
+                    "wine": "bin/wine64",
+                    "wineserver": "bin/wineserver",
+                    "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
+                },
+                "recommended": false
+            },
+            {
+                "family": "Lutris",
+                "name": "lutris-6.21-x86_64",
+                "title": "Lutris 6.21",
+                "uri": "https://github.com/lutris/wine/releases/download/lutris-6.21/wine-lutris-6.21-x86_64.tar.xz",
+                "files": {
+                    "wine": "bin/wine64",
+                    "wineserver": "bin/wineserver",
+                    "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
+                },
+                "recommended": false
+            },
+            {
+                "family": "Lutris",
+                "name": "lutris-6.14-4-x86_64",
+                "title": "Lutris 6.14-4",
+                "uri": "https://github.com/lutris/wine/releases/download/lutris-6.14-4/wine-lutris-6.14-4-x86_64.tar.xz",
+                "files": {
+                    "wine": "bin/wine64",
+                    "wineserver": "bin/wineserver",
+                    "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
+                },
+                "recommended": true
+            },
+            {
+                "family": "Lutris",
+                "name": "lutris-6.14-3-x86_64",
+                "title": "Lutris 6.14-3",
+                "uri": "https://github.com/lutris/wine/releases/download/lutris-6.14-3/wine-lutris-6.14-3-x86_64.tar.xz",
+                "files": {
+                    "wine": "bin/wine64",
+                    "wineserver": "bin/wineserver",
+                    "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
+                },
+                "recommended": true
+            },
+            {
+                "family": "Lutris",
+                "name": "lutris-6.14-2-x86_64",
+                "title": "Lutris 6.14-2",
+                "uri": "https://github.com/lutris/wine/releases/download/lutris-6.14-2/wine-lutris-6.14-2-x86_64.tar.xz",
+                "files": {
+                    "wine": "bin/wine64",
+                    "wineserver": "bin/wineserver",
+                    "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
+                },
+                "recommended": true
+            },
+            {
+                "family": "Lutris",
+                "name": "lutris-6.14-x86_64",
+                "title": "Lutris 6.14",
+                "uri": "https://github.com/lutris/wine/releases/download/lutris-6.14/wine-lutris-6.14-x86_64.tar.xz",
+                "files": {
+                    "wine": "bin/wine64",
+                    "wineserver": "bin/wineserver",
+                    "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
+                },
+                "recommended": true
+            },
+            {
+                "family": "Lutris",
+                "name": "lutris-6.13-3-x86_64",
+                "title": "Lutris 6.13-3",
+                "uri": "https://github.com/lutris/wine/releases/download/lutris-6.13-3/wine-lutris-6.13-3-x86_64.tar.xz",
+                "files": {
+                    "wine": "bin/wine64",
+                    "wineserver": "bin/wineserver",
+                    "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
+                },
+                "recommended": false
+            },
+            {
+                "family": "Lutris",
+                "name": "lutris-6.13-2-x86_64",
+                "title": "Lutris 6.13-2",
+                "uri": "https://github.com/lutris/wine/releases/download/lutris-6.13-2/wine-lutris-6.13-2-x86_64.tar.xz",
+                "files": {
+                    "wine": "bin/wine64",
+                    "wineserver": "bin/wineserver",
+                    "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
+                },
+                "recommended": false
+            },
+            {
+                "family": "Lutris",
+                "name": "lutris-6.13-x86_64",
+                "title": "Lutris 6.13",
+                "uri": "https://github.com/lutris/wine/releases/download/lutris-6.13/wine-lutris-6.13-x86_64.tar.xz",
                 "files": {
                     "wine": "bin/wine64",
                     "wineserver": "bin/wineserver",
@@ -21,9 +165,57 @@
         "runners": [
             {
                 "family": "Wine-GE",
-                "name": "wine-lutris-ge-6.20-1-x86_64",
+                "name": "lutris-ge-6.21-1-x86_64",
+                "title": "Wine-6.21-GE-1",
+                "uri": "https://github.com/GloriousEggroll/wine-ge-custom/releases/download/6.21-GE-1/wine-lutris-ge-6.21-1-x86_64.tar.xz",
+                "files": {
+                    "wine": "bin/wine64",
+                    "wineserver": "bin/wineserver",
+                    "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
+                },
+                "recommended": false
+            },
+            {
+                "family": "Wine-GE",
+                "name": "lutris-ge-6.20-1-x86_64",
                 "title": "Wine-6.20-GE-1",
                 "uri": "https://github.com/GloriousEggroll/wine-ge-custom/releases/download/6.20-GE-1/wine-lutris-ge-6.20-1-x86_64.tar.xz",
+                "files": {
+                    "wine": "bin/wine64",
+                    "wineserver": "bin/wineserver",
+                    "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
+                },
+                "recommended": false
+            },
+            {
+                "family": "Wine-GE",
+                "name": "lutris-ge-6.19-1-x86_64",
+                "title": "Wine-6.19-GE-1",
+                "uri": "https://github.com/GloriousEggroll/wine-ge-custom/releases/download/6.19-GE-1/wine-lutris-ge-6.19-1-x86_64.tar.xz",
+                "files": {
+                    "wine": "bin/wine64",
+                    "wineserver": "bin/wineserver",
+                    "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
+                },
+                "recommended": false
+            },
+            {
+                "family": "Wine-GE",
+                "name": "lutris-ge-6.18-1-x86_64",
+                "title": "Wine-6.18-GE-1",
+                "uri": "https://github.com/GloriousEggroll/wine-ge-custom/releases/download/6.18-GE-1/wine-lutris-ge-6.18-1-x86_64.tar.xz",
+                "files": {
+                    "wine": "bin/wine64",
+                    "wineserver": "bin/wineserver",
+                    "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
+                },
+                "recommended": false
+            },
+            {
+                "family": "Wine-GE",
+                "name": "lutris-ge-6.16-1-x86_64",
+                "title": "Wine-6.16-GE-1",
+                "uri": "https://github.com/GloriousEggroll/wine-ge-custom/releases/download/6.16-GE-1/wine-lutris-ge-6.16-1-x86_64.tar.xz",
                 "files": {
                     "wine": "bin/wine64",
                     "wineserver": "bin/wineserver",
