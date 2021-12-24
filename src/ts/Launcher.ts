@@ -1,3 +1,5 @@
+import Window from './neutralino/Window';
+
 import constants from './Constants';
 import Configs from './Configs';
 
@@ -42,6 +44,15 @@ export default class Launcher
         };
 
         t(0);
+    }
+
+    public showSettings()
+    {
+        Window.open('settings', {
+            title: 'Settings',
+            width: 900,
+            height: 600
+        });
     }
 
     /**

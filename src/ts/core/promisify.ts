@@ -55,10 +55,13 @@ export default function promisify(callback: callback|PromiseOptions): Promise<an
                 setTimeout(updater, callback.interval ?? 100);
             }
 
-            else for (let i = 0; i < callback.callbacks.length; ++i)
-                outputs[i] = await promisify(callback.callbacks[i]());
+            else
+            {
+                for (let i = 0; i < callback.callbacks.length; ++i)
+                    outputs[i] = await promisify(callback.callbacks[i]);
 
-            resolve(outputs);
+                resolve(outputs);
+            }
         }
     });
 };
