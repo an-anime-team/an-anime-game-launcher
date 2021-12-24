@@ -17,7 +17,7 @@ export default (launcher: Launcher): Promise<void> => {
             
         if (runner !== null)
         {
-            wineExeutable = `${constants.paths.runnersDir}/${runner.name}/${runner.files.wine}`;
+            wineExeutable = `${await constants.paths.runnersDir}/${runner.name}/${runner.files.wine}`;
 
             try
             {
