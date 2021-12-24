@@ -1,3 +1,5 @@
+import YAML from 'yaml';
+
 import constants from './Constants';
 
 declare const Neutralino;
@@ -19,7 +21,7 @@ export default class Configs
     {
         return new Promise(async (resolve) => {
             Neutralino.filesystem.readFile(await constants.paths.config).then((config) => {
-                config = JSON.parse(config);
+                config = YAML.parse(config);
 
                 if (name !== '')
                 {
@@ -54,12 +56,12 @@ export default class Configs
             value = await Promise.resolve(value);
 
             Neutralino.filesystem.readFile(await constants.paths.config).then(async (config) => {
-                config = JSON.stringify(getUpdatedArray(name.split('.'), JSON.parse(config), value), null, 4);
+                config = YAML.stringify(getUpdatedArray(name.split('.'), YAML.parse(config), value));
 
                 Neutralino.filesystem.writeFile(await constants.paths.config, config)
                     .then(() => resolve());
             }).catch(async () => {
-                let config = JSON.stringify(getUpdatedArray(name.split('.'), {}, value), null, 4);
+                let config = YAML.stringify(getUpdatedArray(name.split('.'), {}, value));
 
                 Neutralino.filesystem.writeFile(await constants.paths.config, config)
                     .then(() => resolve());
@@ -74,32 +76,32 @@ export default class Configs
      * 
      * @returns Promise<void> indicates if the default settings were applied
      */
-    public static defaults(configs: scalar): Promise<void>
+    public static defaults(configs: object): Promise<void>
     {
         return new Promise(async (resolve) => {
-            const setDefaults = async (current: scalar) => {
-                const updateDefaults = (current: scalar, defaults: scalar) => {
-                    Object.keys(defaults!).forEach((key) => {
+            const setDefaults = async (current: object) => {
+                const updateDefaults = (current: object, defaults: object) => {
+                    Object.keys(defaults).forEach((key) => {
                         // If the field exists in defaults and doesn't exist in current
-                        if (current![key] === undefined)
-                            current![key] = defaults![key];
+                        if (current[key] === undefined)
+                            current[key] = defaults[key];
 
                         // If both of default and current are objects
-                        else if (typeof current![key] == 'object' && typeof defaults![key] == 'object')
-                            current![key] = updateDefaults(current![key], defaults![key]);
+                        // and we also should check if they're not nulls
+                        // because JS thinks that [typeof null === 'object']
+                        else if (typeof current[key] == 'object' && typeof defaults[key] == 'object' && current[key] !== null && defaults[key] !== null)
+                            current[key] = updateDefaults(current[key], defaults![key]);
                     });
 
                     return current;
                 };
 
-                current = JSON.stringify(updateDefaults(current, configs), null, 4);
-
-                Neutralino.filesystem.writeFile(await constants.paths.config, current)
+                Neutralino.filesystem.writeFile(await constants.paths.config, YAML.stringify(updateDefaults(current, configs)))
                     .then(() => resolve());
             };
 
             Neutralino.filesystem.readFile(await constants.paths.config)
-                .then((config) => setDefaults(JSON.parse(config)))
+                .then((config) => setDefaults(YAML.parse(config)))
                 .catch(() => setDefaults({}));
         });
     }

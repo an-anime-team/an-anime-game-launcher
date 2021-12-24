@@ -83,11 +83,11 @@ class Paths
     /**
      * Config file
      * 
-     * @default "~/.local/share/anime-game-launcher/config.json"
+     * @default "~/.local/share/anime-game-launcher/config.yaml"
      */
     public static get config(): Promise<string>
     {
-        return new Promise(async (resolve) => resolve(`${await this.launcherDir}/config.json`));
+        return new Promise(async (resolve) => resolve(`${await this.launcherDir}/config.yaml`));
     }
 
     /**

@@ -1,18 +1,22 @@
 import constants from './Constants';
 import Configs from './Configs';
+
 import Background from './launcher/Background';
 import ProgressBar from './launcher/ProgressBar';
-
-declare const Neutralino;
+import State from './launcher/State';
 
 export default class Launcher
 {
     public app;
+
+    public state: State;
     public progressBar: ProgressBar;
 
     public constructor(app)
     {
         this.app = app;
+
+        this.state = new State(this);
         this.progressBar = new ProgressBar(this);
 
         // Progress bar test
@@ -40,6 +44,9 @@ export default class Launcher
         t(0);
     }
 
+    /**
+     * Update launcher background picture
+     */
     public updateBackground(): Promise<void>
     {
         return new Promise(async (resolve) => {

@@ -5,16 +5,39 @@ import Window from '../ts/neutralino/Window';
 import Launcher from '../ts/Launcher';
 import Configs from '../ts/Configs';
 import constants from '../ts/Constants';
+import promisify from '../ts/core/promisify';
+import Process from '../ts/neutralino/Process';
 
-(async () => {
+promisify(async () => {
     Configs.defaults({
         lang: {
             launcher: 'en-us',
             voice: 'en-us'
         },
-        prefix: await constants.paths.prefix.default
+
+        // Path to wine prefix
+        prefix: await constants.paths.prefix.default,
+
+        // runner name to use, or null if runner is not specified
+        runner: null,
+
+        /**
+         * HUD
+         * 
+         * null if don't use
+         * otherwise should be "dxvk" or "mangohud"
+         */
+        hud: null,
+
+        /**
+         * vkBasalt preset to use
+         * 
+         * null if don't use
+         * otherwise should be some folder name from the "shaders" folder
+         */
+        shaders: null
     });
-})();
+});
 
 let app = createApp({
     data: () => ({

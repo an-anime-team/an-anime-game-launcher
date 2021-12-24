@@ -4,6 +4,7 @@ import {
 } from '../types/Runners';
 
 import constants from '../Constants';
+import Configs from '../Configs';
 import AbstractInstaller from './AbstractInstaller';
 
 declare const Neutralino;
@@ -19,9 +20,24 @@ class Stream extends AbstractInstaller
 class Runners
 {
     /**
+     * Get the current using runner according to the config file
+     */
+    public static get current(): Promise<Runner|null>
+    {
+        return new Promise((resolve) => {
+            Configs.get('runner').then((runner) => {
+                if (typeof runner === 'string')
+                    Runners.get(runner).then((runner) => resolve(runner));
+
+                else resolve(null);
+            });
+        });
+    }
+
+    /**
      * Get runners list
      */
-    public static get(): Promise<RunnerFamily[]>
+    public static list(): Promise<RunnerFamily[]>
     {
         return new Promise((resolve) => {
             constants.paths.runnersDir.then(async (runnersDir: string) => {
@@ -59,6 +75,29 @@ class Runners
     }
 
     /**
+     * Get the runner with a specified name
+     * 
+     * @returns null if the runner with this name is not found
+     */
+    public static get(name: string): Promise<Runner|null>
+    {
+        return new Promise((resolve) => {
+            this.list().then((list) => {
+                for (const family of list)
+                    for (const runner of family.runners)
+                        if (runner.name == name)
+                        {
+                            resolve(runner);
+
+                            return;
+                        }
+
+                resolve(null);
+            });
+        });
+    }
+
+    /**
      * Download runner to the [constants.paths.runners] directory
      * 
      * @param runner runner object or name
@@ -66,21 +105,14 @@ class Runners
      */
     public static download(runner: Runner|Runner['name']): Promise<null|Stream>
     {
-        return new Promise(async (resolve) => {
+        return new Promise((resolve) => {
             // If we provided runner parameter with a name of a runner
             // then we should find this runner and call this method for it
             if (typeof runner == 'string')
             {
-                let foundRunner;
-
-                (await this.get()).forEach((family) => {
-                    family.runners.forEach((familyRunner) => {
-                        if (familyRunner.name == runner)
-                            foundRunner = familyRunner;
-                    });
+                this.get(runner).then((foundRunner) => {
+                    resolve(foundRunner === null ? null : new Stream(foundRunner));
                 });
-
-                resolve(foundRunner === null ? null : new Stream(foundRunner));
             }
 
             // Otherwise we can use runner.uri and so on to download runner

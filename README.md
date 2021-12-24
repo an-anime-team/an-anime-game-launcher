@@ -142,6 +142,11 @@ This is our current roadmap goals. You can find older ones [here](ROADMAP.md)
 * Make `Launcher` class to manage launcher-related features
   * <s>Downloading progress</s>
   * Launcher state functionality
+    * <s>Game launch available</s>
+    * Game update (installation) required
+    * Voice data update (installation) required
+    * Patch unavailable
+    * Test patch available
 * Make Vue components
   * Checkbox
   * Selection

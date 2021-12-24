@@ -9,7 +9,8 @@
   },
   "dependencies": {
     "js-md5": "^0.7.3",
-    "vue": "^3.2.25"
+    "vue": "^3.2.25",
+    "yaml": "^1.10.2"
   },
   "devDependencies": {
     "@neutralinojs/neu": "^8.0.0",
