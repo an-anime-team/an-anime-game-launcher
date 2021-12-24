@@ -2,6 +2,8 @@ import constants from '../Constants';
 import Downloader from './Downloader';
 import Archive from './Archive';
 
+declare const Neutralino;
+
 export default abstract class Installer
 {
     /**
@@ -75,6 +77,8 @@ export default abstract class Installer
     
                             stream.finish(() => {
                                 this.unpackFinished = true;
+
+                                Neutralino.filesystem.removeFile(archivePath);
     
                                 if (this.onUnpackFinish)
                                     this.onUnpackFinish();

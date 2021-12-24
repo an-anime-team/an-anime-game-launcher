@@ -6,7 +6,6 @@ import Launcher from '../ts/Launcher';
 import Configs from '../ts/Configs';
 import constants from '../ts/Constants';
 import promisify from '../ts/core/promisify';
-import Process from '../ts/neutralino/Process';
 
 promisify(async () => {
     Configs.defaults({

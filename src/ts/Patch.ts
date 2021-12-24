@@ -1,13 +1,125 @@
-import type {
-    PatchState,
-    PatchInfo
-} from './types/Patch';
+import type { PatchInfo } from './types/Patch';
 
 import md5 from 'js-md5';
 
 import constants from './Constants';
 import Game from './Game';
 import fetch from './core/Fetch';
+import AbstractInstaller from './core/AbstractInstaller';
+import promisify from './core/promisify';
+import Process from './neutralino/Process';
+
+declare const Neutralino;
+
+class Stream extends AbstractInstaller
+{
+    protected userUnpackFinishCallback?: () => void;
+    protected onPatchFinish?: () => void;
+
+    protected patchFinished: boolean = false;
+
+    public constructor(uri: string, version: string|null = null)
+    {
+        super(uri, constants.paths.launcherDir);
+
+        /**
+         * We'll make our own AbstractInstaller unpacking finish event
+         * and provide some hack to call another user-provided function
+         * if he wants to make something after patch's archive unpacking
+         */
+        this.onUnpackFinish = async () => {
+            if (this.userUnpackFinishCallback)
+                this.userUnpackFinishCallback();
+
+            // Find patch version if it wasn't provided
+            if (version === null)
+                version = (await Patch.latest).version;
+
+            const patchDir = `${await constants.paths.launcherDir}/dawn/${version.replaceAll('.', '')}`;
+
+            /**
+             * Patch out the testing phase content from the shell files
+             * if active and make sure the shell files are executable
+             */
+            const pipeline = promisify({
+                callbacks: [
+                    /**
+                     * Remove test version restrictions from the main patch
+                     */
+                    () => Neutralino.os.execCommand(`cd '${patchDir}' && sed -i '/^echo "If you would like to test this patch, modify this script and remove the line below this one."/,+5d' patch.sh`),
+                    
+                    /**
+                     * Remove test version restrictions from the anti-login crash patch
+                     */
+                    () => Neutralino.os.execCommand(`cd '${patchDir}' && sed -i '/^echo "       necessary afterwards (Friday?). If that's the case, comment the line below."/,+2d' patch_anti_logincrash.sh`),
+
+                    /**
+                     * Make the main patch executable
+                     */
+                    () => Neutralino.os.execCommand(`chmod +x '${patchDir}/patch.sh'`),
+
+                    /**
+                     * Make the anti-login crash patch executable
+                     */
+                    () => Neutralino.os.execCommand(`chmod +x '${patchDir}/patch_anti_logincrash.sh'`),
+
+                    /**
+                     * Execute the main patch installation script
+                     */
+                    (): Promise<void> => {
+                        return new Promise(async (resolve) => {
+                            Process.run(`yes yes | bash '${patchDir}/patch.sh'`, {
+                                cwd: await constants.paths.gameDir
+                            }).then((process) => {
+                                process.finish(() => resolve());
+                            });
+                        });
+                    },
+
+                    /**
+                     * Execute the anti-login crash patch installation script
+                     */
+                    (): Promise<void> => {
+                        return new Promise(async (resolve) => {
+                            Process.run(`yes | bash '${patchDir}/patch_anti_logincrash.sh'`, {
+                                cwd: await constants.paths.gameDir
+                            }).then((process) => {
+                                process.finish(() => resolve());
+                            });
+                        });
+                    }
+                ]
+            });
+
+            // When all the things above was done
+            pipeline.then(() => {
+                this.patchFinished = true;
+
+                if (this.onPatchFinish)
+                    this.onPatchFinish();
+            });
+        };
+    }
+
+    public unpackFinish(callback: () => void)
+    {
+        this.userUnpackFinishCallback = callback;
+
+        if (this.unpackFinished)
+            callback();
+    }
+
+    /**
+     * Specify event that will be called when the patch will be applied
+     */
+    public patchFinish(callback: () => void)
+    {
+        this.onPatchFinish = callback;
+
+        if (this.patchFinished)
+            callback();
+    }
+}
 
 export default class Patch
 {
@@ -95,7 +207,8 @@ export default class Patch
                                     resolve({
                                         version: version,
                                         state: 'preparation',
-                                        applied: false
+                                        applied: false,
+                                        source: source
                                     });
                                 }
 
@@ -118,7 +231,8 @@ export default class Patch
                                                 let patchInfo: PatchInfo = {
                                                     version: version,
                                                     state: response.includes(stableMark) ? 'stable' : 'testing',
-                                                    applied: false
+                                                    applied: false,
+                                                    source: source
                                                 };
 
                                                 const originalPlayer = /if \[ "\${sum}" != "([a-z0-9]{32})" \]; then/mg.exec(response);
@@ -138,4 +252,18 @@ export default class Patch
                 });
         });
     }
+
+    /**
+     * Get patch installation stream
+     */
+    public static install(): Promise<Stream>
+    {
+        return new Promise((resolve, reject) => {
+            this.latest
+                .then((patch) => resolve(new Stream(constants.getPatchUri(patch.source ?? 'origin'), patch.version)))
+                .catch((err) => reject(err));
+        });
+    }
 }
+
+export { Stream };

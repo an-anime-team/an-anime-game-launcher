@@ -130,12 +130,13 @@ This is our current roadmap goals. You can find older ones [here](ROADMAP.md)
   * <s>Ability to parse current installed voice packs and get selected one</s>
   * <s>Ability to get latest available voice packs</s>
   * <s>Ability to download and install updates</s>
-* Make `Patch` class to control patch-related features
+* <s>Make `Patch` class to control patch-related features</s>
   * <s>Ability to get current installed patch</s>
   * <s>Ability to get latest available patch</s>
-  * Ability to download and install it
+  * <s>Ability to download and install it</s>
 * Add project binaries bundling
-  * AppImage
+  * <s>AppImage</s> *(seems to be impossible)*
+  * One-time small installation script because then launcher will have auto updates
 
 #### Launcher functions
 

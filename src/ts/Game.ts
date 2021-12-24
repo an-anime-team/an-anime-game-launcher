@@ -58,7 +58,7 @@ export default class Game
 
             if (response.ok)
             {
-                const json: ServerResponse = await (response as any).json();
+                const json: ServerResponse = JSON.parse(await response.body());
 
                 if (json.message == 'OK')
                     resolve(json.data);
