@@ -19,9 +19,9 @@ export default defineComponent({
         active: false
     }),
 
-    async created()
+    created()
     {
-        this.active = await Configs.get(this.prop) as boolean;
+        Configs.get(this.prop).then((active) => this.active = active as boolean);
     },
 
     methods: {

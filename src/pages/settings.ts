@@ -4,9 +4,13 @@ import { createI18n } from 'vue-i18n';
 import Window from '../ts/neutralino/Window';
 
 import Locales from '../ts/core/Locales';
+import DXVK from '../ts/core/DXVK';
+import Configs from '../ts/Configs';
 
 import Checkbox from '../components/Checkbox.vue';
-import Selectbox from '../components/Selectbox.vue';
+import LanguageSelection from '../components/LanguageSelection.vue';
+import DXVKS from '../components/DXVKs.vue';
+import DXVKItem from '../components/DXVKItem.vue';
 
 const app = createApp({
     data: () => ({
@@ -15,8 +19,10 @@ const app = createApp({
         // Languages selection
         languages: {
             'en-us': 'English (US)',
-            'ru-ru': 'Russian'
-        }
+            'ru-ru': 'Русский'
+        },
+
+        dxvks: []
     }),
 
     provide()
@@ -26,17 +32,26 @@ const app = createApp({
         };
     },
 
+    created()
+    {
+        DXVK.list().then((list) => this.dxvks = list);
+    },
+
     components: {
         'l-checkbox': Checkbox,
-        'l-selectbox': Selectbox
+        'l-language': LanguageSelection,
+        'l-dxvks': DXVKS,
+        'l-dxvk-item': DXVKItem
     },
 
     mounted: () => Window.current.show()
 });
 
-Locales.get().then((locales) => {
+Locales.get().then(async (locales) => {
+    const locale = await Configs.get('lang.launcher');
+
     app.use(createI18n({
-        locale: 'en-us',
+        locale: locale as string,
         fallbackLocale: 'en-us',
 
         // @ts-expect-error

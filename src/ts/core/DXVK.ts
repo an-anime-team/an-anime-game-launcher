@@ -18,7 +18,7 @@ export default class DXVK
     /**
      * Get DXVKs list
      */
-    public static get(): Promise<TDXVK[]>
+    public static list(): Promise<TDXVK[]>
     {
         return new Promise((resolve) => {
             constants.paths.dxvksDir.then(async (dxvksDir: string) => {
@@ -47,6 +47,26 @@ export default class DXVK
     }
 
     /**
+     * Get DXVK with specified version
+     */
+    public static get(version: string): Promise<DXVK|null>
+    {
+        return new Promise((resolve) => {
+            this.list().then((list) => {
+                for (const dxvk of list)
+                    if (dxvk.version === version)
+                    {
+                        resolve(dxvk);
+
+                        return;
+                    }
+
+                resolve(null);
+            });
+        });
+    }
+
+    /**
      * Download DXVK to the [constants.paths.dxvks] directory
      * 
      * @param dxvk DXVK object or version
@@ -59,14 +79,16 @@ export default class DXVK
             // then we should find this DXVK version and call this method for it
             if (typeof dxvk == 'string')
             {
-                let foundDXVK;
-
-                (await this.get()).forEach((currDxvk) => {
-                    if (currDxvk.version == dxvk)
-                        foundDXVK = currDxvk;
+                this.list().then((list) => {
+                    let foundDXVK;
+                    
+                    list.forEach((currDxvk) => {
+                        if (currDxvk.version == dxvk)
+                            foundDXVK = currDxvk;
+                    });
+    
+                    resolve(foundDXVK === null ? null : new Stream(foundDXVK));
                 });
-
-                resolve(foundDXVK === null ? null : new Stream(foundDXVK));
             }
 
             // Otherwise we can use dxvk.uri and so on to download DXVK

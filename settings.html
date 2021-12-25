@@ -10,7 +10,7 @@
     <body theme="light">
         <div id="app">
             <div class="menu">
-                <div class="menu-item menu-item-active" anchor="general">General</div>
+                <div class="menu-item menu-item-active" anchor="general">{{ $t('settings.general.title') }}</div>
             </div>
             
             <div class="settings">
@@ -21,9 +21,13 @@
                     <l-checkbox locale="general.test2" prop="test2"></l-checkbox>
                     <l-checkbox locale="general.test3" prop="test3"></l-checkbox>
 
-                    <l-selectbox locale="general.lang.launcher" prop="lang.launcher">
-                        <li v-for="(lang, code) in languages" :lang="code">{{ lang }}</li>
-                    </l-selectbox>
+                    <l-language locale="general.lang.launcher" prop="lang.launcher">
+                        <li v-for="(lang, code) in languages" :option="code">{{ lang }}</li>
+                    </l-language>
+
+                    <l-dxvks>
+                        <l-dxvk-item v-for="dxvk in dxvks" :title="dxvk.version"></l-dxvk-item>
+                    </l-dxvks>
                 </div>
             </div>
         </div>
