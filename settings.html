@@ -4,20 +4,30 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-        <link rel="stylesheet" lang="sass" href="/src/sass/basic.sass" />
+        <link rel="stylesheet" lang="sass" href="/src/sass/settings.sass" />
     </head>
 
-    <body>
+    <body theme="light">
         <div id="app">
-            <h1>{{ $t('settings.test') }}</h1>
-
-            <div class="locale-changer">
-                <select v-model="$i18n.locale">
-                    <option v-for="locale in $i18n.availableLocales" :key="`locale-${locale}`" :value="locale">{{ locale }}</option>
-                </select>
+            <div class="menu">
+                <div class="menu-item menu-item-active" anchor="general">General</div>
             </div>
+            
+            <div class="settings">
+                <div class="settings-item" id="general">
+                    <h2>{{ $t('settings.general.title') }}</h2>
 
-            <l-checkbox property="test"></l-checkbox>
+                    <div class="locale-changer">
+                        <select v-model="$i18n.locale">
+                            <option v-for="locale in $i18n.availableLocales" :key="`locale-${locale}`" :value="locale">{{ locale }}</option>
+                        </select>
+                    </div>
+    
+                    <l-checkbox locale="general.test1" prop="test1"></l-checkbox>
+                    <l-checkbox locale="general.test2" prop="test2"></l-checkbox>
+                    <l-checkbox locale="general.test3" prop="test3"></l-checkbox>
+                </div>
+            </div>
         </div>
 
         <script src="neutralino.js"></script>
