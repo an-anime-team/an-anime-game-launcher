@@ -1,6 +1,6 @@
 <template>
     <div class="checkbox" :class="{'checkbox-active': active}">
-        {{ $t(`settings.${locale.split('.')[0]}.items.${locale.split('.')[1]}`) }}
+        {{ $t(`settings.${locale.split('.')[0]}.items.${locale.substring(locale.indexOf('.') + 1)}`) }}
 
         <div class="checkbox-mark" @click="updateSetting">
             <img src="../assets/svgs/checkmark.svg" />
@@ -35,4 +35,4 @@ export default defineComponent({
 });
 </script>
 
-<style src="../sass/components/checkbox.sass" lang="sass" scoped></style>
+<style src="../sass/components/checkbox.sass" lang="sass"></style>

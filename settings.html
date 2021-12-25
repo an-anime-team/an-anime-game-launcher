@@ -16,16 +16,14 @@
             <div class="settings">
                 <div class="settings-item" id="general">
                     <h2>{{ $t('settings.general.title') }}</h2>
-
-                    <div class="locale-changer">
-                        <select v-model="$i18n.locale">
-                            <option v-for="locale in $i18n.availableLocales" :key="`locale-${locale}`" :value="locale">{{ locale }}</option>
-                        </select>
-                    </div>
     
                     <l-checkbox locale="general.test1" prop="test1"></l-checkbox>
                     <l-checkbox locale="general.test2" prop="test2"></l-checkbox>
                     <l-checkbox locale="general.test3" prop="test3"></l-checkbox>
+
+                    <l-selectbox locale="general.lang.launcher" prop="lang.launcher">
+                        <li v-for="(lang, code) in languages" :lang="code">{{ lang }}</li>
+                    </l-selectbox>
                 </div>
             </div>
         </div>

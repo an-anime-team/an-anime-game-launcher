@@ -1,7 +1,12 @@
 settings:
+  # General
   general:
     title: Основное
     items:
       test1: Привет 1
       test2: Привет 2
       test3: Привет 3
+
+      # Language selection
+      lang:
+        launcher: Язык

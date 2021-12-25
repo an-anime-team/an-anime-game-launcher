@@ -4,8 +4,8 @@ import constants from '../Constants';
 import promisify from './promisify';
 
 type AvailableLocales =
-    | 'en'
-    | 'ru';
+    | 'en-us'
+    | 'ru-ru';
 
 declare const Neutralino;
 

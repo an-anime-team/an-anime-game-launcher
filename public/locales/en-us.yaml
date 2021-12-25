@@ -1,0 +1,12 @@
+settings:
+  # General
+  general:
+    title: General
+    items:
+      test1: Hello 1
+      test2: Hello 2
+      test3: Hello 3
+
+      # Language selection
+      lang:
+        launcher: Language

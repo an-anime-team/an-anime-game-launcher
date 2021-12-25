@@ -149,12 +149,13 @@ This is our current roadmap goals. You can find older ones [here](ROADMAP.md)
     * Patch unavailable
     * Test patch available
 * Make Vue components
-  * Checkbox
-  * Selection
+  * <s>Checkbox</s>
+  * <s>Selectbox</s>
   * SelectionList
+  * SelectableCheckbox
   * PropertiesEditor
 * Rewrite sass code, provide more flexible theming ability
-* Add `vue-i18n`
+* <s>Add `vue-i18n`</s>
 
 ### Features
 
