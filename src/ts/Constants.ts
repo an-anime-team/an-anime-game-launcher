@@ -51,6 +51,13 @@ class Paths
     public static readonly shadersDir: string = `${this.appDir}/public/shaders`;
 
     /**
+     * Locales directory
+     * 
+     * @default "[constants.paths.app]/public/locales"
+     */
+    public static readonly localesDir: string = `${this.appDir}/public/locales`;
+
+    /**
      * Launcher data directory
      * 
      * @default "~/.local/share/anime-game-launcher"

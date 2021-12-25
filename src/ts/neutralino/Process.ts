@@ -8,12 +8,19 @@ type ProcessOptions = {
 
 class Process
 {
+    /**
+     * Process ID
+     */
     public readonly id: number;
 
     /**
-     * Interval between process status update
+     * Interval in ms between process status update
+     * 
+     * null if you don't want to update process status
+     * 
+     * @default 200
      */
-    public interval: number = 200;
+    public interval: number|null;
 
     protected _finished: boolean = false;
 
@@ -27,15 +34,19 @@ class Process
 
     protected onFinish?: (process: Process) => void;
 
-    public constructor(pid: number)
+    public constructor(pid: number, interval: number|null = 200)
     {
         this.id = pid;
+        this.interval = interval;
 
-        const updateStatus = async () => {
-            Neutralino.os.execCommand(`ps -p ${this.id}`).then((output) => {
+        const updateStatus = () => {
+            this.running().then((running) => {
                 // The process is still running
-                if (output.stdOut.includes(this.id))
-                    setTimeout(updateStatus, this.interval);
+                if (running)
+                {
+                    if (this.interval)
+                        setTimeout(updateStatus, this.interval);
+                }
 
                 // Otherwise the process was stopped
                 else
@@ -48,7 +59,8 @@ class Process
             });
         };
 
-        setTimeout(updateStatus, this.interval);
+        if (this.interval)
+            setTimeout(updateStatus, this.interval);
     }
 
     /**
@@ -60,6 +72,44 @@ class Process
 
         if (this._finished)
             callback(this);
+
+        // If user stopped process status auto-checking
+        // then we should check it manually when this method was called
+        else if (this.interval === null)
+        {
+            this.running().then((running) => {
+                if (!running)
+                {
+                    this._finished = true;
+
+                    callback(this);
+                }
+            });
+        }
+    }
+
+    /**
+     * Kill process
+     */
+    public kill(forced: boolean = false): Promise<void>
+    {
+        return new Promise((resolve) => {
+            Neutralino.os.execCommand(`kill ${forced ? '-9' : '-15'} ${this.id}`).then(() => resolve());
+        });
+    }
+
+    /**
+     * Returns whether the process is running
+     * 
+     * This method doesn't call onFinish event
+     */
+    public running(): Promise<boolean>
+    {
+        return new Promise((resolve) => {
+            Neutralino.os.execCommand(`ps -p ${this.id}`).then((output) => {
+                resolve(output.stdOut.includes(this.id));
+            });
+        });
     }
 
     /**

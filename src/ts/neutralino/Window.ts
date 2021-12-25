@@ -22,6 +22,16 @@ type WindowOptions = WindowSize & {
     processArgs?: string;
 };
 
+type WindowOpenResult = {
+    status: boolean;
+    data?: {
+        pid: number;
+        stdOut: string;
+        stdErr: string;
+        exitCode: number;
+    };
+};
+
 declare const Neutralino;
 
 class Window
@@ -31,10 +41,10 @@ class Window
         return Neutralino.window;
     }
 
-    public static async open(name: string, options: WindowOptions = {}): Promise<boolean>
+    public static open(name: string, options: WindowOptions = {}): Promise<WindowOpenResult>
     {
         return new Promise(async (resolve) => {
-            const status = Neutralino.window.create(`/${name}.html`, {
+            const status = await Neutralino.window.create(`/${name}.html`, {
                 width: 600,
                 height: 400,
                 enableInspector: false,
@@ -48,14 +58,18 @@ class Window
                 hidden: true
             });
 
-            resolve(status !== undefined);
+            resolve({
+                status: status !== undefined,
+                data: status
+            });
         });
     }
 }
 
 export type {
     WindowSize,
-    WindowOptions
+    WindowOptions,
+    WindowOpenResult
 };
 
 export default Window;

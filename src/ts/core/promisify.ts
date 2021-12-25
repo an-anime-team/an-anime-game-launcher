@@ -1,7 +1,7 @@
 type callback = () => any;
 
 type PromiseOptions = {
-    callbacks: callback[];
+    callbacks: callback[]|Promise<any>[];
 
     /**
      * If true, then all the callbacks will be called
@@ -24,21 +24,30 @@ type PromiseOptions = {
 /**
  * Make a promise from a function(s) and run it
  */
-export default function promisify(callback: callback|PromiseOptions): Promise<any>
+export default function promisify(callback: callback|Promise<any>|PromiseOptions): Promise<any>
 {
     return new Promise(async (resolve) => {
+        // promisify(() => { ... })
         if (typeof callback === 'function')
             resolve(await Promise.resolve(callback()));
 
+        // promisify(new Promise(...))
+        else if (typeof callback['then'] === 'function')
+            resolve(await callback);
+        
+        // promisify({ callbacks: [ ... ] })
         else
         {
             let outputs = {};
 
+            // @ts-expect-error
             if (callback.callAtOnce)
             {
+                // @ts-expect-error
                 let remained = callback.callbacks.length;
 
-                for (let i = 0; i < callback.callbacks.length; ++i)
+                // @ts-expect-error
+                for (let i = 0; i < callback.callbacks.length; ++i) // @ts-expect-error
                     promisify(callback.callbacks[i]).then((output) => {
                         outputs[i] = output;
 
@@ -46,18 +55,20 @@ export default function promisify(callback: callback|PromiseOptions): Promise<an
                     });
 
                 const updater = () => {
-                    if (remained > 0)
+                    if (remained > 0) // @ts-expect-error
                         setTimeout(updater, callback.interval ?? 100);
 
                     else resolve(outputs);
                 };
 
+                // @ts-expect-error
                 setTimeout(updater, callback.interval ?? 100);
             }
 
             else
             {
-                for (let i = 0; i < callback.callbacks.length; ++i)
+                // @ts-expect-error
+                for (let i = 0; i < callback.callbacks.length; ++i) // @ts-expect-error
                     outputs[i] = await promisify(callback.callbacks[i]);
 
                 resolve(outputs);

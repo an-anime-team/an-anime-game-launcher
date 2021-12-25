@@ -39,7 +39,7 @@ promisify(async () => {
     });
 });
 
-let app = createApp({
+const app = createApp({
     data: () => ({
         uri: {
             social: '',
@@ -81,7 +81,8 @@ let app = createApp({
                 () => launcher.updateSocial(),
                 () => launcher.updateBackground()
             ],
-            callAtOnce: true
+            callAtOnce: true,
+            interval: 500
         });
 
         // Show window when all the stuff was completed

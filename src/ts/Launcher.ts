@@ -1,4 +1,5 @@
 import Window from './neutralino/Window';
+import Process from './neutralino/Process';
 
 import constants from './Constants';
 import Configs from './Configs';
@@ -7,12 +8,16 @@ import Background from './launcher/Background';
 import ProgressBar from './launcher/ProgressBar';
 import State from './launcher/State';
 
+declare const Neutralino;
+
 export default class Launcher
 {
     public app;
 
     public state: State;
     public progressBar: ProgressBar;
+
+    protected settingsMenu?: Process;
 
     public constructor(app)
     {
@@ -46,12 +51,36 @@ export default class Launcher
         t(0);
     }
 
-    public showSettings()
+    public showSettings(): Promise<boolean>
     {
-        Window.open('settings', {
-            title: 'Settings',
-            width: 900,
-            height: 600
+        return new Promise(async (resolve) => {
+            if (this.settingsMenu && await this.settingsMenu.running())
+                resolve(false);
+            
+            else
+            {
+                this.settingsMenu = undefined;
+
+                const window = await Window.open('settings', {
+                    title: 'Settings',
+                    width: 900,
+                    height: 600,
+                    enableInspector: true
+                });
+
+                if (window.status)
+                {
+                    this.settingsMenu = new Process(window.data!.pid, 500);
+
+                    /*this.settingsMenu.finish(() => {
+                        Window.current.show();
+                    })
+
+                    Window.current.hide();*/
+                }
+
+                resolve(window.status);
+            }
         });
     }
 

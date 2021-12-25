@@ -9,7 +9,15 @@
 
     <body>
         <div id="app">
-            <h1>{{ title }}</h1>
+            <h1>{{ $t('settings.test') }}</h1>
+
+            <div class="locale-changer">
+                <select v-model="$i18n.locale">
+                    <option v-for="locale in $i18n.availableLocales" :key="`locale-${locale}`" :value="locale">{{ locale }}</option>
+                </select>
+            </div>
+
+            <l-checkbox property="test"></l-checkbox>
         </div>
 
         <script src="neutralino.js"></script>
