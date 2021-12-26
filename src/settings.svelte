@@ -3,6 +3,16 @@
     import { _, locale, locales } from 'svelte-i18n';
 
     import Checkbox from './components/Checkbox.svelte';
+    import SelectionBox from './components/SelectionBox.svelte';
+    import DXVKSelectionList from './components/DXVKSelectionList.svelte';
+
+    let availableLocales: ArrayLike<string> = [];
+
+    $locales.forEach((locale) => {
+        availableLocales[locale] = `settings.general.items.lang.launcher.items.${locale}`;
+    });
+
+    availableLocales = availableLocales;
 
     import Window from './ts/neutralino/Window';
 
@@ -21,15 +31,14 @@
         <div class="settings-item" id="general">
             <h1>{$_('settings.general.title')}</h1>
 
-            <Checkbox lang="settings.general.items.test1" prop="test.1" />
-            <Checkbox lang="settings.general.items.test2" prop="test.2" />
-            <Checkbox lang="settings.general.items.test3" prop="test.3" />
+            <SelectionBox
+                lang="settings.general.items.lang.launcher.title"
+                prop="lang.launcher"
+                items={availableLocales}
+                valueChanged={(value) => $locale = value}
+            />
 
-            <select bind:value={$locale}>
-                {#each $locales as locale}
-                    <option value={locale}>{locale}</option>
-                {/each}
-            </select>
+            <DXVKSelectionList />
         </div>
     </div>
 {/if}

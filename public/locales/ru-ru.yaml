@@ -1,12 +1,14 @@
 settings:
-  # General
+  # Основное
   general:
     title: Основное
     items:
-      test1: Привет 1
-      test2: Привет 2
-      test3: Привет 3
-
-      # Language selection
+      # Выбор языка
       lang:
-        launcher: Язык
+        launcher:
+          title: Лаунчер
+          items:
+            en-us: English (US)
+            ru-ru: Русский
+    
+      dxvks: DXVK

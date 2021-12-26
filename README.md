@@ -148,14 +148,14 @@ This is our current roadmap goals. You can find older ones [here](ROADMAP.md)
     * Voice data update (installation) required
     * Patch unavailable
     * Test patch available
-* Make Vue components
+* Make Svelte components
   * <s>Checkbox</s>
   * <s>Selectbox</s>
   * SelectionList
   * SelectableCheckbox
   * PropertiesEditor
 * Rewrite sass code, provide more flexible theming ability
-* <s>Add `vue-i18n`</s>
+* <s>Add `svelte-i18n`</s>
 
 ### Features
 
