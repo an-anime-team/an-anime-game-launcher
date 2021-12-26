@@ -1,4 +1,4 @@
-import Launcher from '../Launcher';
+import type Launcher from '../Launcher';
 
 type InitOptions = {
     label: string|((current: number, total: number, difference: number) => string);

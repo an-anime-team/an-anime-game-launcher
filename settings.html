@@ -5,36 +5,13 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
         <link rel="stylesheet" lang="sass" href="/src/sass/settings.sass" />
+        <link rel="stylesheet" lang="sass" href="/src/sass/components.sass" />
     </head>
 
-    <body theme="light">
-        <div id="app">
-            <div class="menu">
-                <div class="menu-item menu-item-active" anchor="general">{{ $t('settings.general.title') }}</div>
-            </div>
-            
-            <div class="settings">
-                <div class="settings-item" id="general">
-                    <h2>{{ $t('settings.general.title') }}</h2>
-    
-                    <l-checkbox locale="general.test1" prop="test1"></l-checkbox>
-                    <l-checkbox locale="general.test2" prop="test2"></l-checkbox>
-                    <l-checkbox locale="general.test3" prop="test3"></l-checkbox>
-
-                    <l-language locale="general.lang.launcher" prop="lang.launcher">
-                        <li v-for="(lang, code) in languages" :option="code">{{ lang }}</li>
-                    </l-language>
-
-                    <l-dxvks>
-                        <l-dxvk-item v-for="dxvk in dxvks" :title="dxvk.version"></l-dxvk-item>
-                    </l-dxvks>
-                </div>
-            </div>
-        </div>
+    <body data-theme="light">
+        <div id="app"></div>
 
         <script src="neutralino.js"></script>
-
-        <script type="module" src="/src/entry.js"></script>
-        <script type="module" lang="ts" src="/src/pages/settings.ts"></script>
+        <script type="module" src="/src/pages/settings.ts" lang="ts"></script>
     </body>
 </html>

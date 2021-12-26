@@ -1,7 +1,7 @@
 @use "sass:map"
 
 @mixin themable($theme-name, $theme-map)
-    body[theme=#{$theme-name}]
+    body[data-theme=#{$theme-name}]
         .list-item
             display: flex
             align-items: center

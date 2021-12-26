@@ -1,4 +1,4 @@
-import {
+import type {
     Runner,
     RunnerFamily
 } from '../types/Runners';

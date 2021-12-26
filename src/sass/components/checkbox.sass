@@ -1,7 +1,7 @@
 @use "sass:map"
 
 @mixin themable($theme-name, $theme-map)
-    body[theme=#{$theme-name}]
+    body[data-theme=#{$theme-name}]
         .checkbox
             display: inline-flex !important
             align-items: center
@@ -60,8 +60,8 @@
         .checkbox-active:is(.selectable-checkbox)
             background-color: map.get($theme-map, "background2")
 
-@import "../themes/light"
-@import "../themes/dark"
+@import "src/sass/themes/light"
+@import "src/sass/themes/dark"
 
 @include themable(light, $light)
 @include themable(dark, $dark)

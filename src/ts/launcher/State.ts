@@ -1,4 +1,4 @@
-import Launcher from '../Launcher';
+import type Launcher from '../Launcher';
 
 import type { LauncherState } from '../types/Launcher';
 
@@ -44,7 +44,7 @@ export default class State
         switch(state)
         {
             case 'game-launch-available':
-                this.launcher.progressBar.hide();
+                this.launcher.progressBar!.hide();
 
                 this.launchButton.textContent = 'Launch';
 

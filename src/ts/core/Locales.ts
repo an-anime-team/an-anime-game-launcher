@@ -2,6 +2,7 @@ import YAML from 'yaml';
 
 import constants from '../Constants';
 import promisify from './promisify';
+import Configs from '../Configs';
 
 type AvailableLocales =
     | 'en-us'
@@ -11,6 +12,17 @@ declare const Neutralino;
 
 export default class Locales
 {
+    /**
+     * Get or update the default locale
+     */
+    public static default(lang: AvailableLocales|null = null): Promise<string>
+    {
+        if (lang !== null)
+            Configs.set('lang.launcher', lang);
+
+        return Configs.get('lang.launcher') as Promise<string>;
+    }
+
     /**
      * Get locales
      * 

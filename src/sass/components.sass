@@ -1,10 +1,9 @@
 @use "sass:map"
 
-@import "themes/light"
-@import "themes/dark"
+@import "components/checkbox"
 
 @mixin themable($theme-name, $theme-map)
-    body[theme=#{$theme-name}]
+    body[data-theme=#{$theme-name}]
 
         background-color: map.get($theme-map, "background")
         color: map.get($theme-map, "text")
@@ -171,6 +170,9 @@
             &:hover
                 background-color: map.get($theme-map, "primary")
                 color: white
+
+@import "themes/light"
+@import "themes/dark"
 
 @include themable(light, $light)
 @include themable(dark, $dark)

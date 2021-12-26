@@ -1,12 +1,11 @@
 import Configs from '../../Configs';
 import constants from '../../Constants';
 import Runners from '../../core/Runners';
-import Launcher from '../../Launcher';
 import Process from '../../neutralino/Process';
 
 declare const Neutralino;
 
-export default (launcher: Launcher): Promise<void> => {
+export default (): Promise<void> => {
     return new Promise(async (resolve) => {
         /**
          * Selecting wine executable

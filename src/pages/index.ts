@@ -1,14 +1,14 @@
-import { createApp } from 'vue/dist/vue.esm-bundler';
-
-import Window from '../ts/neutralino/Window';
-
-import Launcher from '../ts/Launcher';
 import Configs from '../ts/Configs';
 import constants from '../ts/Constants';
-import promisify from '../ts/core/promisify';
-import Game from '../ts/Game';
 
-promisify(async () => {
+import '../i18n';
+import App from '../index.svelte';
+
+declare const Neutralino;
+
+Neutralino.init();
+
+Neutralino.events.on('ready', async () => {
     Configs.defaults({
         lang: {
             launcher: 'en-us',
@@ -39,57 +39,8 @@ promisify(async () => {
     });
 });
 
-const app = createApp({
-    data: () => ({
-        uri: {
-            social: '',
-            background: ''
-        }
-    }),
-
-    mounted()
-    {
-        const launcher = new Launcher(this);
-
-        /**
-         * Update launcher's title
-         */
-        Game.latest.then((game) => {
-            Window.current.setTitle(`${constants.placeholders.uppercase.full} Linux Launcher - ${game.version}`);
-        });
-
-        /**
-         * Add some events to some elements
-         */
-        const settingsButton = document.getElementById('settings');
-
-        settingsButton!.onclick = () => launcher.showSettings();
-
-        settingsButton!.onmouseenter = () => {
-            settingsButton?.classList.add('hovered');
-        };
-
-        settingsButton!.onmouseleave = () => {
-            settingsButton?.classList.remove('hovered');
-        };
-
-        /**
-         * Do some launcher stuff
-         */
-        const pipeline = promisify({
-            callbacks: [
-                () => launcher.updateSocial(),
-                () => launcher.updateBackground()
-            ],
-            callAtOnce: true,
-            interval: 500
-        });
-
-        // Show window when all the stuff was completed
-        pipeline.then(() => {
-            Window.current.show();
-        });
-    }
+const app = new App({
+    target: document.getElementById('app')!
 });
 
-app.mount('#app');
+export default app;
