@@ -106,8 +106,8 @@ class Process
     public running(): Promise<boolean>
     {
         return new Promise((resolve) => {
-            Neutralino.os.execCommand(`ps -p ${this.id}`).then((output) => {
-                resolve(output.stdOut.includes(this.id));
+            Neutralino.os.execCommand(`ps -p ${this.id} -S`).then((output) => {
+                resolve(output.stdOut.includes(this.id) && !output.stdOut.includes('Z   '));
             });
         });
     }

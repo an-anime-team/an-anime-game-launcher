@@ -8,12 +8,12 @@ export default class State
 
     public launchButton: HTMLElement;
 
-    protected _state: LauncherState = 'game-launch-available';
+    protected _state: LauncherState = 'game-installation-available';
 
     protected events = {
         'game-launch-available': import('./states/Launch'),
 
-        'game-install-available': import('./states/Install'),
+        'game-installation-available': import('./states/Install'),
         'game-update-available': import('./states/Install')
     };
 
@@ -25,7 +25,7 @@ export default class State
 
         this.launchButton.onclick = () => {
             if (this.events[this._state])
-                this.events[this._state].then((event) => event.default());
+                this.events[this._state].then((event) => event.default(this.launcher));
         };
     }
 

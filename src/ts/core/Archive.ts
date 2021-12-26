@@ -10,6 +10,16 @@ declare const NL_CWD;
 
 class Stream
 {
+    protected _id: number = -1;
+
+    /**
+     * ID of the archive unpacker process
+     */
+    public get id(): number
+    {
+        return this._id;
+    }
+
     /**
      * The interval in ms between progress event calls
      */
@@ -67,6 +77,8 @@ class Stream
 
                 Neutralino.os.execCommand(command, {
                     background: true
+                }).then((result) => {
+                    this._id = result.pid;
                 });
 
                 const updateProgress = async () => {
@@ -156,10 +168,20 @@ class Stream
         if (this.throwedError)
             callback();
     }
+
+    /**
+     * Close unpacking stream
+     */
+    public close(forced: boolean = false)
+    {
+        Neutralino.os.execCommand(`kill ${forced ? '-9' : '-15'} ${this._id}`);
+    }
 }
 
 export default class Archive
 {
+    protected static streams: Stream[] = [];
+
     /**
      * Get type of archive
      * 
@@ -259,7 +281,23 @@ export default class Archive
      */
     public static unpack(path: string, unpackDir: string|null = null): Promise<Stream>
     {
-        return new Promise((resolve) => resolve(new Stream(path, unpackDir)));
+        return new Promise((resolve) => {
+            const stream = new Stream(path, unpackDir);
+
+            this.streams.push(stream);
+
+            resolve(stream);
+        });
+    }
+
+    /**
+     * Close every open archive unpacking stream
+     */
+    public static closeStreams(forced: boolean = false)
+    {
+        this.streams.forEach((stream) => {
+            stream.close(forced);
+        });
     }
 }
 

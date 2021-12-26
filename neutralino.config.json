@@ -27,7 +27,7 @@
       "maximize": false,
       "hidden": true,
       "resizable": false,
-      "exitProcessOnClose": true
+      "exitProcessOnClose": false
     },
     "browser": {},
     "cloud": {}

@@ -21,7 +21,7 @@ export default class Launcher
             this.progressBar = new ProgressBar(this);
 
             // Progress bar test
-            this.progressBar.init({
+            /*this.progressBar.init({
                 label: 'Abobus',
                 showSpeed: true,
                 showEta: true,
@@ -42,7 +42,7 @@ export default class Launcher
                 }
             };
 
-            t(0);
+            t(0);*/
         });
     }
 

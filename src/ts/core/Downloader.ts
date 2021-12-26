@@ -4,6 +4,16 @@ declare const Neutralino;
 
 class Stream
 {
+    protected _id: number = -1;
+
+    /**
+     * ID of the curl process
+     */
+    public get id(): number
+    {
+        return this._id;
+    }
+
     /**
      * The interval in ms between progress event calls
      */
@@ -31,12 +41,14 @@ class Stream
 
         Neutralino.os.execCommand(`curl -s -L -N -o "${output}" "${uri}"`, {
             background: true
+        }).then((result) => {
+            this._id = result.pid;
         });
 
         const updateProgress = () => {
             Neutralino.filesystem.getStats(output).then((stats) => {
                 if (this.onProgress)
-                    this.onProgress(stats.size, this.total, this.previous - stats.size);
+                    this.onProgress(stats.size, this.total, stats.size - this.previous);
 
                 this.previous = stats.size;
 
@@ -94,10 +106,20 @@ class Stream
         if (this.finished)
             callback();
     }
+
+    /**
+     * Close downloading stream
+     */
+    public close(forced: boolean = false)
+    {
+        Neutralino.os.execCommand(`kill ${forced ? '-9' : '-15'} ${this._id}`);
+    }
 }
 
 export default class Downloader
 {
+    protected static streams: Stream[] = [];
+
     /**
      * Download file
      * 
@@ -110,11 +132,28 @@ export default class Downloader
     {
         return new Promise(async (resolve) => {
             fetch(uri).then((response) => {
-                resolve(new Stream(uri, output ?? this.fileFromUri(uri), response.length!));
+                const stream = new Stream(uri, output ?? this.fileFromUri(uri), response.length!);
+
+                this.streams.push(stream);
+
+                resolve(stream);
             });
         });
     }
 
+    /**
+     * Close every open downloading stream
+     */
+    public static closeStreams(forced: boolean = false)
+    {
+        this.streams.forEach((stream) => {
+            stream.close(forced);
+        });
+    }
+
+    /**
+     * Get a file name from the URI
+     */
     public static fileFromUri(uri: string): string
     {
         const file = uri.split('/').pop()!.split('#')[0].split('?')[0];
