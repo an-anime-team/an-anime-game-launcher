@@ -7,19 +7,27 @@
         DXVK as TDXVK
     } from '../ts/types/DXVK';
     
-    let dxvks: TDXVK[] = [];
+    let dxvks: TDXVK[] = [], selectedVersion;
 
     DXVK.list().then((list) => dxvks = list);
+    DXVK.current.then((current) => selectedVersion = current?.version);
 
     import Delete from '../assets/images/delete.png';
     import Download from '../assets/images/download.png';
-</script>
 
-<h2>{ $_('settings.general.items.dxvks') }</h2>
+    const dxvkInstalled = (dxvk: TDXVK): boolean => {
+        const filtered = dxvks.filter((item) => item.version === dxvk.version);
+
+        if (filtered.length === 1)
+            return filtered[0].installed;
+
+        else return false;
+    };
+</script>
 
 <div class="list">
     {#each dxvks as dxvk}
-        <div class="list-item">
+        <div class="list-item" class:list-item-downloaded={dxvkInstalled(dxvk)} class:list-item-active={dxvk.version === selectedVersion}>
             { dxvk.version }
 
             <div>

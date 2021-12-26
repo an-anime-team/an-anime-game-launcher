@@ -5,10 +5,49 @@ settings:
     items:
       # Language selection
       lang:
+        # Launcher language
         launcher:
           title: Launcher
           items:
             en-us: English (US)
             ru-ru: Русский
-    
+
+        # Game voice pack language
+        voice:
+          title: Voice pack
+          items:
+            en-us: English (US)
+            ja-jp: Japanese
+            ko-kr: Korean
+            zn-cn: Chinese
+
+      # Launcher theme
+      theme:
+        title: Theme
+        items:
+          system: System
+          light: Light
+          dark: Dark
+      
+      discord: Discord RPC
       dxvks: DXVK
+
+  # Enhancements
+  enhancements:
+    title: Enhancements
+    items:
+      # HUD
+      hud:
+        title: HUD
+        items:
+          none: None
+          dxvk: DXVK
+          mangohud: MangoHUD
+      
+      gamemode: GameMode
+      fps_unlocker: Unlock FPS
+      purge_dxvk_logs: Auto-delete DXVK logs
+
+  # DXVKs
+  dxvks:
+    title: DXVK

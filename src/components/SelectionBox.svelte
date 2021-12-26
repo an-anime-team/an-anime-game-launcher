@@ -5,7 +5,7 @@
 
     export let prop: string = '';
     export let lang: string = '';
-    export let items: ArrayLike<string> = [];
+    export let items = {};
     export let valueChanged: (value: string) => void = () => {};
 
     import Arrow from '../assets/svgs/arrow.svg';
@@ -44,7 +44,7 @@
                     data-value={itemLang}
 
                     on:click={selectionChanged}
-                    
+
                     on:click={() => {
                         selectedValue = itemLang;
 

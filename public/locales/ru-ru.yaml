@@ -5,10 +5,50 @@ settings:
     items:
       # Выбор языка
       lang:
+        # Лаунчер
         launcher:
           title: Лаунчер
           items:
             en-us: English (US)
             ru-ru: Русский
-    
+
+        # Язык озвучки в игре
+        voice:
+          title: Язык озвучки
+          items:
+            en-us: Английский (США)
+            ja-jp: Японский
+            ko-kr: Корейский
+            zn-cn: Китайский
+
+      # Тема лаунчера
+      theme:
+        title: Тема
+        items:
+          system: Системная
+          light: Светлая
+          dark: Тёмная
+      
+      discord: Discord RPC
       dxvks: DXVK
+
+  # Улучшения
+  enhancements:
+    title: Улучшения
+    items:
+      # HUD
+      hud:
+        title: HUD
+        items:
+          none: Отключён
+          dxvk: DXVK
+          mangohud: MangoHUD
+      
+      # TODO: add hints to the components so I could describe what these options means
+      gamemode: GameMode
+      fps_unlocker: Разблокировать FPS
+      purge_dxvk_logs: Автоматически удалять логи DXVK
+
+  # DXVKs
+  dxvks:
+    title: DXVK

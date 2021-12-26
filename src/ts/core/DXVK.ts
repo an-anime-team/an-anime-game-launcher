@@ -1,6 +1,7 @@
 import type { DXVK as TDXVK } from '../types/DXVK';
 
 import constants from '../Constants';
+import Configs from '../Configs';
 import AbstractInstaller from './AbstractInstaller';
 
 declare const Neutralino;
@@ -15,6 +16,21 @@ class Stream extends AbstractInstaller
 
 export default class DXVK
 {
+    /**
+     * Get the current using DXVK according to the config file
+     */
+    public static get current(): Promise<TDXVK|null>
+    {
+        return new Promise((resolve) => {
+            Configs.get('dxvk').then((dxvk) => {
+                if (typeof dxvk === 'string')
+                    DXVK.get(dxvk).then((dxvk) => resolve(dxvk));
+
+                else resolve(null);
+            });
+        });
+    }
+
     /**
      * Get DXVKs list
      */
@@ -49,7 +65,7 @@ export default class DXVK
     /**
      * Get DXVK with specified version
      */
-    public static get(version: string): Promise<DXVK|null>
+    public static get(version: string): Promise<TDXVK|null>
     {
         return new Promise((resolve) => {
             this.list().then((list) => {
