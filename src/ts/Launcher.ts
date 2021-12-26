@@ -7,8 +7,6 @@ import Configs from './Configs';
 import ProgressBar from './launcher/ProgressBar';
 import State from './launcher/State';
 
-declare const Neutralino;
-
 export default class Launcher
 {
     public state?: State;
@@ -51,7 +49,7 @@ export default class Launcher
     public showSettings(): Promise<boolean>
     {
         return new Promise(async (resolve) => {
-            if (this.settingsMenu && await this.settingsMenu.running())
+            if (this.settingsMenu)
                 resolve(false);
             
             else
@@ -67,7 +65,7 @@ export default class Launcher
 
                 if (window.status)
                 {
-                    this.settingsMenu = new Process(window.data!.pid, 500);
+                    this.settingsMenu = new Process(window.data!.pid, null);
 
                     /*this.settingsMenu.finish(() => {
                         Window.current.show();

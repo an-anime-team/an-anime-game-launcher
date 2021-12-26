@@ -117,22 +117,19 @@ class Process
      */
     public static run(command: string, options: ProcessOptions = {}): Promise<Process>
     {
-        // Replace '\a\b' to '\\a\\b'
-        // And replace ''' to '\''
-        const addSlashes = (str: string) => str.replaceAll('\\', '\\\\').replaceAll('\'', '\\\'');
-
+        
         return new Promise(async (resolve) => {
             // Set env variables
             if (options.env)
             {
                 Object.keys(options.env).forEach((key) => {
-                    command = `${key}='${addSlashes(options.env![key])}' ${command}`;
+                    command = `${key}='${this.addSlashes(options.env![key])}' ${command}`;
                 });
             }
 
             // Set current working directory
             if (options.cwd)
-                command = `cd '${addSlashes(options.cwd)}' && ${command} && cd -`;
+                command = `cd '${this.addSlashes(options.cwd)}' && ${command} && cd -`;
 
             // And run the command
             const process = await Neutralino.os.execCommand(command, {
@@ -142,6 +139,15 @@ class Process
 
             resolve(new Process(process.pid));
         });
+    }
+
+    /**
+     * Replace '\a\b' to '\\a\\b'
+     * And replace ''' to '\''
+     */
+    public static addSlashes(str: string): string
+    {
+        return str.replaceAll('\\', '\\\\').replaceAll('\'', '\\\'');
     }
 }
 

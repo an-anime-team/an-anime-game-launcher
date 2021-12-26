@@ -11,7 +11,10 @@ export default class State
     protected _state: LauncherState = 'game-launch-available';
 
     protected events = {
-        'game-launch-available': import('./states/Launch')
+        'game-launch-available': import('./states/Launch'),
+
+        'game-install-available': import('./states/Install'),
+        'game-update-available': import('./states/Install')
     };
 
     public constructor(launcher: Launcher)
