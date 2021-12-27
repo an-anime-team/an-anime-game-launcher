@@ -173,7 +173,7 @@
                     "wineserver": "bin/wineserver",
                     "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
                 },
-                "recommended": false
+                "recommended": true
             },
             {
                 "family": "Wine-GE",
@@ -185,7 +185,7 @@
                     "wineserver": "bin/wineserver",
                     "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
                 },
-                "recommended": false
+                "recommended": true
             },
             {
                 "family": "Wine-GE",

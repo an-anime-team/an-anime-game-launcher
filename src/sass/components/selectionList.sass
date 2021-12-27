@@ -33,6 +33,9 @@
                 display: flex
                 align-items: center
 
+                span
+                    color: #abadbd
+
                 img
                     width: 16px
                     height: 16px
@@ -46,6 +49,14 @@
                     height: 20px
 
                     display: none
+
+                img.item-loading
+                    display: none
+
+                    width: 20px
+                    height: 20px
+
+                    image-rendering: optimizeQuality
 
         .list-item-active
             background-color: map.get($theme-map, "primary") !important
@@ -77,6 +88,13 @@
                 
                 img.item-delete
                     display: block
+
+        .list-item-applying
+            img
+                display: none !important
+
+            img.item-loading
+                display: block !important
 
 @import "../themes/light"
 @import "../themes/dark"

@@ -3,6 +3,9 @@ import type { DXVK as TDXVK } from '../types/DXVK';
 import constants from '../Constants';
 import Configs from '../Configs';
 import AbstractInstaller from './AbstractInstaller';
+import Process from '../neutralino/Process';
+import promisify from './promisify';
+import Runners from './Runners';
 
 declare const Neutralino;
 
@@ -18,16 +21,29 @@ export default class DXVK
 {
     /**
      * Get the current DXVK according to the config file
+     * or set the new one
      */
-    public static get current(): Promise<TDXVK|null>
+    public static current(dxvk: TDXVK|TDXVK['version']|null = null): Promise<TDXVK|null>
     {
-        return new Promise((resolve) => {
-            Configs.get('dxvk').then((dxvk) => {
-                if (typeof dxvk === 'string')
-                    DXVK.get(dxvk).then((dxvk) => resolve(dxvk));
+        return new Promise(async (resolve) => {
+            if (dxvk === null)
+            {
+                Configs.get('dxvk').then((dxvk) => {
+                    if (typeof dxvk === 'string')
+                        DXVK.get(dxvk).then((dxvk) => resolve(dxvk));
+    
+                    else resolve(null);
+                });
+            }
+            
+            else
+            {
+                Configs.set('dxvk', typeof dxvk === 'string' ?
+                    dxvk : dxvk.version);
 
-                else resolve(null);
-            });
+                resolve(typeof dxvk === 'string' ?
+                    await this.get(dxvk) : dxvk);
+            }
         });
     }
 
@@ -109,6 +125,65 @@ export default class DXVK
 
             // Otherwise we can use dxvk.uri and so on to download DXVK
             else resolve(new Stream(dxvk));
+        });
+    }
+
+    /**
+     * Delete specified DXVK
+     */
+    public static delete(dxvk: TDXVK|TDXVK['version']): Promise<void>
+    {
+        return new Promise(async (resolve) => {
+            const version = typeof dxvk !== 'string' ?
+                dxvk.version : dxvk;
+
+            Process.run(`rm -rf '${Process.addSlashes(await constants.paths.dxvksDir + '/dxvk-' + version)}'`)
+                .then((process) => {
+                    process.finish(() => resolve());
+                });
+        });
+    }
+
+    /**
+     * Apply DXVK to the prefix
+     */
+    public static apply(prefix: string, dxvk: TDXVK|TDXVK['version']): Promise<void>
+    {
+        return new Promise(async (resolve) => {
+            const version = typeof dxvk !== 'string' ?
+                dxvk.version : dxvk;
+            
+            const dxvkDir = `${await constants.paths.dxvksDir}/dxvk-${version}`;
+            const runner = await Runners.current();
+            const runnerDir = `${await constants.paths.runnersDir}/${runner?.name}`;
+
+            const pipeline = promisify({
+                callbacks: [
+                    /**
+                     * Make the installation script executable
+                     */
+                    () => Neutralino.os.execCommand(`chmod +x '${dxvkDir}/setup_dxvk.sh'`),
+
+                    /**
+                     * And then run it
+                     */
+                    (): Promise<void> => new Promise(async (resolve) => {
+                        Process.run(`bash '${dxvkDir}/setup_dxvk.sh' install`, {
+                            cwd: dxvkDir,
+                            env: {
+                                WINE: runner ? `${runnerDir}/${runner.files.wine}` : 'wine',
+                                WINECFG: runner ? `${runnerDir}/${runner.files.winecfg}` : 'winecfg',
+                                WINESERVER: runner ? `${runnerDir}/${runner.files.wineserver}` : 'wineserver',
+                                WINEPREFIX: prefix
+                            }
+                        }).then((process) => {
+                            process.finish(() => resolve());
+                        });
+                    })
+                ]
+            });
+
+            pipeline.then(() => resolve());
         });
     }
 }

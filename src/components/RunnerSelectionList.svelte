@@ -28,7 +28,7 @@
 
     Runners.current().then((current) => selectedVersion = current?.name);
 
-    let progress = {};
+    let progress = {}, applying = {};
 
     const downloadRunner = (runner: Runner) => {
         Runners.download(runner).then((stream) => {
@@ -53,10 +53,12 @@
 
     const deleteRunner = (runner: Runner) => {
         disabledRunners[runner.name] = true;
+        applying[runner.name] = true;
 
         Runners.delete(runner).then(() => {
             installedRunners[runner.name] = false;
             disabledRunners[runner.name] = false;
+            applying[runner.name] = false;
         });
     };
 </script>
@@ -71,9 +73,11 @@
                 class:list-item-downloaded={installedRunners[runner.name]}
                 class:list-item-active={runner.name === selectedVersion}
                 class:list-item-hidden={recommendable && !runner.recommended}
-                class:list-item-downloading={progress[runner.name] !== undefined}
+                class:list-item-downloading={progress[runner.name]}
+                class:list-item-applying={applying[runner.name]}
                 class:list-item-disabled={disabledRunners[runner.name]}
-                on:click={() => {
+
+                on:click|self={() => {
                     if (installedRunners[runner.name])
                     {
                         selectedVersion = runner.name;
