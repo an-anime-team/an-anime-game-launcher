@@ -44,7 +44,7 @@ settings:
           dxvk: DXVK
           mangohud: MangoHUD
       
-      gamemode: GameMode
+      gamemode: Use GameMode
       fps_unlocker: Unlock FPS
       purge_dxvk_logs: Delete DXVK logs
 
@@ -59,3 +59,12 @@ settings:
     title: DXVK
     items:
       recommended: Show recommendable only
+
+  # Shaders
+  shaders:
+    title: Shaders
+    items:
+      shaders:
+        title: Shaders
+        items:
+          none: None

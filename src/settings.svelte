@@ -2,10 +2,13 @@
     import { onMount } from 'svelte';
     import { _, locale, locales } from 'svelte-i18n';
 
+    import Shaders from './ts/core/Shaders';
+
     import Checkbox from './components/Checkbox.svelte';
     import SelectionBox from './components/SelectionBox.svelte';
     import DXVKSelectionList from './components/DXVKSelectionList.svelte';
     import RunnerSelectionList from './components/RunnerSelectionList.svelte';
+    import ShadersSelection from './components/ShadersSelection.svelte';
 
     import Window from './ts/neutralino/Window';
 
@@ -53,11 +56,15 @@
         'mangohud': 'settings.enhancements.items.hud.items.mangohud'
     };
 
+    /**
+     * Menu items
+     */
     const menuItems = [
         'general',
         'enhancements',
         'runners',
-        'dxvks'
+        'dxvks',
+        'shaders'
     ];
 
     /**
@@ -159,6 +166,12 @@
             <br><br>
 
             <DXVKSelectionList recommendable={dxvkRecommendable} />
+        </div>
+
+        <div class="settings-item" id="shaders">
+            <h1>{$_('settings.shaders.title')}</h1>
+
+            <ShadersSelection />
         </div>
     </div>
 {/if}

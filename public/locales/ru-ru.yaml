@@ -45,18 +45,27 @@ settings:
           mangohud: MangoHUD
       
       # TODO: add hints to the components so I could describe what these options means
-      gamemode: GameMode
+      gamemode: Использовать GameMode
       fps_unlocker: Разблокировать FPS
       purge_dxvk_logs: Удалять логи DXVK
 
-  # Runners
+  # Версии Wine
   runners:
     title: Версия Wine
     items:
       recommended: Показывать только рекомендуемое
   
-  # DXVKs
+  # DXVK
   dxvks:
     title: DXVK
     items:
       recommended: Показывать только рекомендуемое
+
+  # Шейдеры
+  shaders:
+    title: Шейдеры
+    items:
+      shaders:
+        title: Шейдеры
+        items:
+          none: Отключены

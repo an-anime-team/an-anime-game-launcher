@@ -51,11 +51,11 @@ promisify(async () => {
         /**
          * vkBasalt preset to use
          * 
-         * null if not in use. Otherwise it should be a folder name from the "shaders" folder
+         * "none" if not in use. Otherwise it should be a folder name from the "shaders" folder
          * 
-         * @default null
+         * @default "none"
          */
-        shaders: null,
+        shaders: 'none',
 
         /**
          * Discord RPC integration

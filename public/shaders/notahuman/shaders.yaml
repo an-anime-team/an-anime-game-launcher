@@ -1,0 +1,11 @@
+name: Prime Preset v2
+author: notahuman
+uri: https://notabug.org/Krock/GI-on-Linux/issues/200
+images:
+  - file: preview.png
+    caption:
+      en-us: Characters' faces
+      de-de: Gesichter der Charaktere
+      ja-jp: キャラクターの顔
+      ko-kr: 캐릭터의 얼굴
+      ru-ru: Лица персонажей
