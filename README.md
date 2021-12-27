@@ -68,6 +68,11 @@ sudo apt-get install unzip tar git xdelta3 cabextract
 sudo pacman -Syu unzip tar git xdelta3 cabextract
 ```
 
+### dnf
+```sh
+sudo dnf install unzip tar git xdelta cabextract
+```
+
 # Additional requirements
 
 | Name | Description |
