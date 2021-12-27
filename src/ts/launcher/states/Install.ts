@@ -1,34 +1,23 @@
 import type Launcher from '../../Launcher';
 
 import Game from '../../Game';
-import constants from '../../Constants';
-import Runners from '../../core/Runners';
-
-declare const Neutralino;
+import Prefix from '../../core/Prefix';
 
 export default (launcher: Launcher): Promise<void> => {
     return new Promise(async (resolve) => {
-        const prefixDir = await constants.paths.prefix.current;
-
-        Neutralino.filesystem.getStats(prefixDir)
-            .then(() => updateGame())
-            .catch(() => {
-                Runners.createPrefix(prefixDir).then((result) => {
-                    if (result === true)
-                        updateGame();
-
-                    else
-                    {
-                        // TODO
-                        console.error('There\'s no wine version installed to use to create the prefix');
-
-                        resolve();
-                    }
+        Prefix.exists().then((exists) => {
+            if (!exists)
+            {
+                import('./CreatePrefix').then((module) => {
+                    module.default(launcher).then(() => updateGame());
                 });
-            });
+            }
+        });
 
         const updateGame = async () => {
-            Game.update(await Game.current).then((stream) => {
+            const prevGameVersion = await Game.current;
+
+            Game.update(prevGameVersion).then((stream) => {
                 launcher.progressBar?.init({
                     label: 'Downloading game...',
                     showSpeed: true,
@@ -57,7 +46,12 @@ export default (launcher: Launcher): Promise<void> => {
                     launcher.progressBar?.update(current, total, difference);
                 });
     
-                stream?.unpackFinish(() => resolve());
+                stream?.unpackFinish(() => {
+                    // Download voice package when the game itself was installed
+                    import('./InstallVoice').then((module) => {
+                        module.default(launcher, prevGameVersion).then(() => resolve());
+                    });
+                });
             });
         };
     });

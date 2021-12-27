@@ -1,9 +1,10 @@
 import type { VoicePack } from './types/GameData';
-import type { InstalledVoice } from './types/Voice';
+import type { InstalledVoice, VoiceLang } from './types/Voice';
 
 import constants from './Constants';
 import Game from './Game';
 import AbstractInstaller from './core/AbstractInstaller';
+import Configs from './Configs';
 
 declare const Neutralino;
 
@@ -61,6 +62,14 @@ export default class Voice
     }
 
     /**
+     * Get currently selected voice package language accotring to the config file
+     */
+    public static get selected(): Promise<VoiceLang>
+    {
+        return Configs.get('lang.voice') as Promise<VoiceLang>;
+    }
+
+    /**
      * Get latest voice data info
      * 
      * @returns rejects Error object if company's servers are unreachable or they responded with an error
@@ -84,7 +93,7 @@ export default class Voice
     {
         return new Promise((resolve, reject) => {
             Game.getDiff(version)
-                .then((data) => resolve(data!.voice_packs ?? null))
+                .then((data) => resolve(data?.voice_packs ?? null))
                 .catch((error) => reject(error));
         });
     }

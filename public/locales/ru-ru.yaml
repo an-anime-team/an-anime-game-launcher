@@ -47,7 +47,7 @@ settings:
       # TODO: add hints to the components so I could describe what these options means
       gamemode: GameMode
       fps_unlocker: Разблокировать FPS
-      purge_dxvk_logs: Автоматически удалять логи DXVK
+      purge_dxvk_logs: Удалять логи DXVK
 
   # DXVKs
   dxvks:

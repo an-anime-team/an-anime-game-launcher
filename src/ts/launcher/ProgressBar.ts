@@ -75,10 +75,14 @@ export default class ProgressBar
         this.speedLabelElement.textContent = '';
         this.etaLabelElement.textContent = '';
 
-        if (typeof options.label === 'string')
-            this.downloadedLabelElement.textContent = options.label;
+        this.downloadedLabelElement.textContent = typeof options.label === 'string' ?
+            options.label : '';
 
-        this.progress.beganAt = Date.now();
+        this.progress = {
+            beganAt: Date.now(),
+            prevTime: Date.now(),
+            temp: 0
+        };
     }
 
     /**
@@ -93,7 +97,7 @@ export default class ProgressBar
         // Otherwise update percents and totals if we should
         else if (this.options!.showPercents || this.options!.showPercents)
         {
-            this.downloadedLabelElement.textContent = `${this.options!.label}:`;
+            this.downloadedLabelElement.textContent = this.options!.label;
 
             if (this.options!.showPercents)
                 this.downloadedLabelElement.textContent += ` ${Math.round(current / total * 100)}%`;

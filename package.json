@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "neu": "neu",
-    "dev": "vite build && neu run",
+    "dev": "vite build && neu run --disable-auto-reload",
     "build": "vite build && neu build --release",
     "check": "svelte-check --tsconfig ./tsconfig.json"
   },

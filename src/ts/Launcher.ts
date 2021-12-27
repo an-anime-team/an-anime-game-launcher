@@ -17,32 +17,8 @@ export default class Launcher
     public constructor(onMount)
     {
         onMount(() => {
-            this.state = new State(this);
             this.progressBar = new ProgressBar(this);
-
-            // Progress bar test
-            /*this.progressBar.init({
-                label: 'Abobus',
-                showSpeed: true,
-                showEta: true,
-                showPercents: true,
-                showTotals: true,
-
-                finish: () => this.progressBar!.hide()
-            });
-
-            this.progressBar.show();
-
-            const t = (curr) => {
-                if (curr <= 3000)
-                {
-                    this.progressBar!.update(curr, 3000, 1);
-
-                    setTimeout(() => t(curr + 1), 10);
-                }
-            };
-
-            t(0);*/
+            this.state = new State(this);
         });
     }
 
@@ -65,7 +41,8 @@ export default class Launcher
 
                 if (window.status)
                 {
-                    this.settingsMenu = new Process(window.data!.pid, null);
+                    this.settingsMenu = new Process(window.data!.pid);
+                    this.settingsMenu.runningInterval = null;
 
                     /*this.settingsMenu.finish(() => {
                         Window.current.show();

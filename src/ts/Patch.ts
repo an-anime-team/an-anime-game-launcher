@@ -241,9 +241,19 @@ export default class Patch
                                                 // compare it with actual UnityPlayer.dll hash and say whether the patch
                                                 // was applied or not
                                                 if (originalPlayer !== null)
-                                                    patchInfo.applied = md5(`${constants.paths.gameDir}/UnityPlayer.dll`) != originalPlayer[1];
+                                                {
+                                                    constants.paths.gameDir.then((gameDir) => {
+                                                        Neutralino.filesystem.readBinaryFile(`${gameDir}/UnityPlayer.dll`)
+                                                            .then((currPlayer: ArrayBuffer) => {
+                                                                patchInfo.applied = md5(currPlayer) != originalPlayer[1];
 
-                                                resolve(patchInfo);
+                                                                resolve(patchInfo);
+                                                            })
+                                                            .catch(() => resolve(patchInfo));
+                                                    });
+                                                }
+
+                                                else resolve(patchInfo);
                                             }
                                         });
                                 }
@@ -255,12 +265,20 @@ export default class Patch
 
     /**
      * Get patch installation stream
+     * 
+     * @returns null if the latest available patch in preparation state
+     * @returns rejects Error object if the patch's repositories are unreachable or they responded with an error
      */
-    public static install(): Promise<Stream>
+    public static install(): Promise<Stream|null>
     {
         return new Promise((resolve, reject) => {
             this.latest
-                .then((patch) => resolve(new Stream(constants.getPatchUri(patch.source ?? 'origin'), patch.version)))
+                .then((patch) => {
+                    if (patch.state === 'preparation')
+                        resolve(null);
+                    
+                    else resolve(new Stream(constants.getPatchUri(patch.source ?? 'origin'), patch.version));
+                })
                 .catch((err) => reject(err));
         });
     }

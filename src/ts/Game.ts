@@ -35,9 +35,10 @@ export default class Game
             Neutralino.filesystem.readFile(persistentPath)
                 .then((version) => resolve(version))
                 .catch(() => {
-                    Neutralino.filesystem.readFile(globalGameManagersPath)
-                        .then((config) => {
-                            const version = /([1-9]+\.[0-9]+\.[0-9]+)_[\d]+_[\d]+/.exec(config);
+                    Neutralino.filesystem.readBinaryFile(globalGameManagersPath)
+                        .then((config: ArrayBuffer) => {
+                            const buffer = new TextDecoder('ascii').decode(new Uint8Array(config));
+                            const version = /([1-9]+\.[0-9]+\.[0-9]+)_[\d]+_[\d]+/.exec(buffer);
 
                             resolve(version !== null ? version[1] : null);
                         })

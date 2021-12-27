@@ -46,7 +46,7 @@ settings:
       
       gamemode: GameMode
       fps_unlocker: Unlock FPS
-      purge_dxvk_logs: Auto-delete DXVK logs
+      purge_dxvk_logs: Delete DXVK logs
 
   # DXVKs
   dxvks:

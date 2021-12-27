@@ -5,6 +5,8 @@ import type {
     ArchiveInfo
 } from '../types/Archive';
 
+import promisify from './promisify';
+
 declare const Neutralino;
 declare const NL_CWD;
 
@@ -83,19 +85,32 @@ class Stream
 
                 const updateProgress = async () => {
                     let difference: number = 0;
+                    let pool: any[] = [];
 
                     remainedFiles.forEach((file) => {
                         if (file.path != '#unpacked#')
                         {
-                            Neutralino.filesystem.getStats(`${baseDir}/${file.path}`)
-                                .then(() => {
-                                    this.unpacked += file.size.uncompressed!;
-                                    difference += file.size.uncompressed!;
+                            pool.push((): Promise<void> => {
+                                return new Promise((resolve) => {
+                                    Neutralino.filesystem.getStats(`${baseDir}/${file.path}`)
+                                        .then(() => {
+                                            this.unpacked += file.size.uncompressed!;
+                                            difference += file.size.uncompressed!;
 
-                                    file.path = '#unpacked#';
-                                })
-                                .catch(() => {});
+                                            file.path = '#unpacked#';
+
+                                            resolve();
+                                        })
+                                        .catch(() => resolve())
+                                });
+                            });
                         }
+                    });
+
+                    await promisify({
+                        callbacks: pool,
+                        callAtOnce: true,
+                        interval: 200
                     });
 
                     remainedFiles = remainedFiles.filter((file) => file.path != '#unpacked#');

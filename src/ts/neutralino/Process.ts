@@ -1,7 +1,7 @@
 declare const Neutralino;
+declare const NL_CWD;
 
 type ProcessOptions = {
-    input?: string;
     env?: object;
     cwd?: string;
 };
@@ -20,7 +20,19 @@ class Process
      * 
      * @default 200
      */
-    public interval: number|null;
+    public runningInterval: number|null = 200;
+
+    /**
+     * Interval in ms between process output update
+     * 
+     * null if you don't want to update process output
+     * 
+     * @default 500
+     */
+    public outputInterval: number|null = 500;
+
+    protected outputFile: string|null;
+    protected outputOffset: number = 0;
 
     protected _finished: boolean = false;
 
@@ -32,20 +44,21 @@ class Process
         return this._finished;
     };
 
+    protected onOutput?: (output: string, process: Process) => void;
     protected onFinish?: (process: Process) => void;
 
-    public constructor(pid: number, interval: number|null = 200)
+    public constructor(pid: number, outputFile: string|null = null)
     {
         this.id = pid;
-        this.interval = interval;
+        this.outputFile = outputFile;
 
         const updateStatus = () => {
             this.running().then((running) => {
                 // The process is still running
                 if (running)
                 {
-                    if (this.interval)
-                        setTimeout(updateStatus, this.interval);
+                    if (this.runningInterval)
+                        setTimeout(updateStatus, this.runningInterval);
                 }
 
                 // Otherwise the process was stopped
@@ -59,8 +72,34 @@ class Process
             });
         };
 
-        if (this.interval)
-            setTimeout(updateStatus, this.interval);
+        if (this.runningInterval)
+            setTimeout(updateStatus, this.runningInterval);
+
+        if (this.outputFile)
+        {
+            const updateOutput = () => {
+                Neutralino.filesystem.readFile(this.outputFile)
+                    .then((output: string) => {
+                        if (this.onOutput)
+                            this.onOutput(output.substring(this.outputOffset), this);
+
+                        this.outputOffset = output.length;
+
+                        if (this._finished)
+                            Neutralino.filesystem.removeFile(this.outputFile);
+
+                        else if (this.outputInterval)
+                            setTimeout(updateOutput, this.outputInterval);
+                    })
+                    .catch(() => {
+                        if (this.outputInterval && !this._finished)
+                            setTimeout(updateOutput, this.outputInterval);
+                    });
+            };
+
+            if (this.outputInterval)
+                setTimeout(updateOutput, this.outputInterval);
+        }
     }
 
     /**
@@ -75,7 +114,7 @@ class Process
 
         // If user stopped process status auto-checking
         // then we should check it manually when this method was called
-        else if (this.interval === null)
+        else if (this.runningInterval === null)
         {
             this.running().then((running) => {
                 if (!running)
@@ -86,6 +125,11 @@ class Process
                 }
             });
         }
+    }
+
+    public output(callback: (output: string, process: Process) => void)
+    {
+        this.onOutput = callback;
     }
 
     /**
@@ -117,8 +161,9 @@ class Process
      */
     public static run(command: string, options: ProcessOptions = {}): Promise<Process>
     {
-        
         return new Promise(async (resolve) => {
+            const tmpFile = `${NL_CWD}/${10000 + Math.round(Math.random() * 89999)}.tmp`;
+
             // Set env variables
             if (options.env)
             {
@@ -127,17 +172,19 @@ class Process
                 });
             }
 
+            // Set output redirection to the temp file
+            command = `${command} > '${this.addSlashes(tmpFile)}' 2>&1`;
+
             // Set current working directory
             if (options.cwd)
                 command = `cd '${this.addSlashes(options.cwd)}' && ${command} && cd -`;
 
             // And run the command
             const process = await Neutralino.os.execCommand(command, {
-                background: true,
-                stdin: options.input ?? ''
+                background: true
             });
 
-            resolve(new Process(process.pid));
+            resolve(new Process(process.pid, tmpFile));
         });
     }
 
