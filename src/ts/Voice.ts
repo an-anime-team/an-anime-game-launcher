@@ -62,7 +62,7 @@ export default class Voice
     }
 
     /**
-     * Get currently selected voice package language accotring to the config file
+     * Get currently selected voice package language according to the config file
      */
     public static get selected(): Promise<VoiceLang>
     {
@@ -72,7 +72,7 @@ export default class Voice
     /**
      * Get latest voice data info
      * 
-     * @returns rejects Error object if company's servers are unreachable or they responded with an error
+     * @returns Latest Voice Pack information else throws Error if company's servers are unreachable or if they responded with an error
      */
     public static get latest(): Promise<VoicePack[]>
     {
@@ -86,8 +86,8 @@ export default class Voice
     /**
      * Get updated voice data from the specified version to the latest
      * 
-     * @returns null if the difference can't be calculated
-     * @returns rejects Error object if company's servers are unreachable or they responded with an error
+     * @returns Latest voice pack if current is out of date
+     * @returns Error object if company's servers are unreachable or they responded with an error
      */
     public static getDiff(version: string): Promise<VoicePack[]|null>
     {

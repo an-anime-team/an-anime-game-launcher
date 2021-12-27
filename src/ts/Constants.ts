@@ -28,7 +28,7 @@ class Prefix
     /**
      * Change prefix directory
      * 
-     * @returns promise that indicates when the prefix path will be changed in configs
+     * @returns promise that indicates that the prefix path has been changed in config
      */
     public static set(location: string): Promise<void>
     {

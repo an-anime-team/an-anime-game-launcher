@@ -17,7 +17,7 @@ class Stream extends AbstractInstaller
 export default class DXVK
 {
     /**
-     * Get the current using DXVK according to the config file
+     * Get the current DXVK according to the config file
      */
     public static get current(): Promise<TDXVK|null>
     {
@@ -86,7 +86,7 @@ export default class DXVK
      * Download DXVK to the [constants.paths.dxvks] directory
      * 
      * @param dxvk DXVK object or version
-     * @returns null if the DXVK with specified version dosen't exist. Otherwise - installation stream
+     * @returns null if the specified version of DXVK dosen't exist. Otherwise - installation stream
      */
     public static download(dxvk: TDXVK|TDXVK['version']): Promise<null|Stream>
     {

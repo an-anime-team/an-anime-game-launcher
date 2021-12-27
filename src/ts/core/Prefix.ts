@@ -25,7 +25,7 @@ export default class Prefix
      * Get path to the winetricks.sh file
      * 
      * If this file is not downloaded - then this method will download it
-     * and return the path after it
+     * and return the path to it
      */
     public static getWinetricks(): Promise<string>
     {

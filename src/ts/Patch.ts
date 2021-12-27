@@ -91,7 +91,7 @@ class Stream extends AbstractInstaller
                 ]
             });
 
-            // When all the things above was done
+            // When all the things above are done
             pipeline.then(() => {
                 this.patchFinished = true;
 
@@ -128,7 +128,7 @@ export default class Patch
     /**
      * Get information about latest available patch
      * 
-     * @returns rejects Error object if the patch's repositories are unreachable or they responded with an error
+     * @returns Patch information otherwise throws Error object if the patch's repositories are unreachable or they responded with an error
      */
     public static get latest(): Promise<PatchInfo>
     {
@@ -168,7 +168,7 @@ export default class Patch
      * Get information about the patch with specified version
      * 
      * Be aware that `applied = true` field may mean that the game version
-     * is more modern that the one that this patch was made for because
+     * is more recent than the one that this patch was made for because
      * this field actually compares some files hashes
      * 
      * @returns null if patch with given version doesn't exist in given source

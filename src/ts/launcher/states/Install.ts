@@ -47,7 +47,7 @@ export default (launcher: Launcher): Promise<void> => {
                 });
     
                 stream?.unpackFinish(() => {
-                    // Download voice package when the game itself was installed
+                    // Download voice package when the game itself has been installed
                     import('./InstallVoice').then((module) => {
                         module.default(launcher, prevGameVersion).then(() => resolve());
                     });

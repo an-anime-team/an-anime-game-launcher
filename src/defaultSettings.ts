@@ -42,7 +42,7 @@ promisify(async () => {
         /**
          * HUD
          * 
-         * "none" if don't use. Otherwise should be "dxvk" or "mangohud"
+         * "none" if not in use. Otherwise it's "dxvk" or "mangohud"
          * 
          * @default "none"
          */
@@ -51,7 +51,7 @@ promisify(async () => {
         /**
          * vkBasalt preset to use
          * 
-         * null if don't use. Otherwise should be some folder name from the "shaders" folder
+         * null if not in use. Otherwise it should be a folder name from the "shaders" folder
          * 
          * @default null
          */
@@ -75,21 +75,21 @@ promisify(async () => {
         },
 
         /**
-         * Do the launcher should use GameMode
+         * If the launcher should use GameMode
          * 
          * @default false
          */
         gamemode: false,
 
         /**
-         * Do the launcher should use FPS unlocker
+         * If the launcher should unlock FPS
          * 
          * @default false
          */
         fps_unlocker: false,
 
         /**
-         * Do the launcher should automatically delete DXVK log files
+         * If the launcher should automatically delete DXVK log files
          * 
          * @default true
          */

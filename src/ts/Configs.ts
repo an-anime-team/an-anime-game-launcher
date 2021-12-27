@@ -86,7 +86,7 @@ export default class Configs
                         if (current[key] === undefined)
                             current[key] = defaults[key];
 
-                        // If both of default and current are objects
+                        // If both default and current are objects
                         // and we also should check if they're not nulls
                         // because JS thinks that [typeof null === 'object']
                         else if (typeof current[key] == 'object' && typeof defaults[key] == 'object' && current[key] !== null && defaults[key] !== null)

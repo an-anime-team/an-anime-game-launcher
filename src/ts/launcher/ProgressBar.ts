@@ -114,11 +114,11 @@ export default class ProgressBar
         // If the delay between update calls was more than 1 second - then update some stats
         if (Date.now() - this.progress.prevTime > 1000)
         {
-            // Update speed if we need
+            // Update speed if required
             if (this.options!.showSpeed)
                 this.speedLabelElement.textContent = `${ProgressBar.prettifyBytes(this.progress.temp / (Date.now() - this.progress.prevTime) * 1000)}/s`;
             
-            // Update ETA if we need
+            // Update ETA if required
             if (this.options!.showEta)
             {
                 type etaType = string | number;

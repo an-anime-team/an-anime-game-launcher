@@ -44,7 +44,7 @@ class Stream
 
     /**
      * @param path path to archive
-     * @param unpackDir directory to unpack
+     * @param unpackDir directory to extract the files to
      */
     public constructor(path: string, unpackDir: string|null = null)
     {
@@ -289,10 +289,10 @@ export default class Archive
     }
 
     /**
-     * Unpack archive
+     * Extract Archive
      * 
      * @param path path to archive
-     * @param unpackDir directory to unpack
+     * @param unpackDir directory to extract the files to
      */
     public static unpack(path: string, unpackDir: string|null = null): Promise<Stream>
     {
@@ -306,7 +306,7 @@ export default class Archive
     }
 
     /**
-     * Close every open archive unpacking stream
+     * Close every open archive extracting stream
      */
     public static closeStreams(forced: boolean = false)
     {

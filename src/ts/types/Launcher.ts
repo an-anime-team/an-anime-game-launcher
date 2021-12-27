@@ -1,16 +1,15 @@
 /**
- * With a first run the game will not be installed
- * and the launcher will have "game-installation-available" state
+ * When first run the game will not be installed
+ * and the launcher will have the "game-installation-available" state
  * 
- * With it, launcher will create wine prefix if it is required,
- * download the game, voice data and unpack them
+ * With that state the launcher will create the wine prefix if it is required then download the game, voice data and unpack them.
  * 
- * Then, with game's updates launcher will have "game-update-available" state
- * and with it it will download and unpack game and voice updates
+ * If the game has an update available the launcher will have the "game-update-available" state
+ * which causes the launcher to download the update and apply it.
  * 
- * When the game is installed and updated - then launcher will have either
+ * When the game is installed and updated then the launcher will have either
  * "patch-unavailable", "test-patch-available", "patch-available", or "game-launch-available"
- * So it will either download and apply patch, launch the game or notify user that the patch is not available
+ * So it will either download and apply the patch, launch the game or notify user that the patch is not available.
  */
 
 type LauncherState =

@@ -50,7 +50,7 @@ export default class Game
     /**
      * Get latest game data, including voice data and packages difference
      * 
-     * @returns rejects Error object if company's servers are unreachable or they responded with an error
+     * @returns JSON from API else throws Error if company's servers are unreachable or if they responded with an error
      */
     public static getLatestData(): Promise<Data>
     {
@@ -74,7 +74,7 @@ export default class Game
     /**
      * Get latest game version data
      * 
-     * @returns rejects Error object if company's servers are unreachable or they responded with an error
+     * @returns Latest version else throws Error if company's servers are unreachable or if they responded with an error
      */
     public static get latest(): Promise<Latest>
     {
@@ -89,7 +89,7 @@ export default class Game
      * Get some latest game versions list in descending order
      * e.g. ["2.3.0", "2.2.0", "2.1.0"]
      * 
-     * @returns rejects Error object if company's servers are unreachable or they responded with an error
+     * @returns Version else throws Error if company's servers are unreachable or if they responded with an error
      */
     public static get versions(): Promise<string[]>
     {
@@ -134,7 +134,7 @@ export default class Game
      * Get the game installation stream
      * 
      * @returns null if the version can't be found
-     * @returns rejects Error object if company's servers are unreachable or they responded with an error
+     * @returns Error if company's servers are unreachable or they responded with an error
      */
     public static update(version: string|null = null): Promise<Stream|null>
     {
