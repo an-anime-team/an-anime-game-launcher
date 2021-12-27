@@ -1,8 +1,10 @@
-import Game from '../Game';
 import type Launcher from '../Launcher';
-import Patch from '../Patch';
-
 import type { LauncherState } from '../types/Launcher';
+
+import Window from '../neutralino/Window';
+
+import Game from '../Game';
+import Patch from '../Patch';
 
 export default class State
 {
@@ -32,10 +34,18 @@ export default class State
 
         this.launchButton.onclick = () => {
             if (this.events[this._state])
-                this.events[this._state].then((event) => event.default(this.launcher));
+            {
+                this.events[this._state].then((event) => {
+                    event.default(this.launcher).then(() => {
+                        this.update();
+                    });
+                });
+            }
         };
 
-        this.update();
+        this.update().then(() => {
+            Window.current.show();
+        });
     }
 
     /**

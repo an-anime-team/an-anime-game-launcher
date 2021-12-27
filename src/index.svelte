@@ -36,8 +36,6 @@
         settingsButton!.onmouseleave = () => {
             settingsButton?.classList.remove('hovered');
         };
-
-        Window.current.show();
     });
 </script>
 

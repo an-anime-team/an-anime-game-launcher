@@ -36,19 +36,20 @@ export default class Launcher
                     title: 'Settings',
                     width: 900,
                     height: 600,
-                    enableInspector: true
+                    enableInspector: false
                 });
 
                 if (window.status)
                 {
                     this.settingsMenu = new Process(window.data!.pid);
-                    this.settingsMenu.runningInterval = null;
 
-                    /*this.settingsMenu.finish(() => {
+                    this.settingsMenu.finish(() => {
+                        this.settingsMenu = undefined;
+                        
                         Window.current.show();
                     })
 
-                    Window.current.hide();*/
+                    Window.current.hide();
                 }
 
                 resolve(window.status);
