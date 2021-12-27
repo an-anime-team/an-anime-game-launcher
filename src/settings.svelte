@@ -87,6 +87,9 @@
         selectedItem = visibleElement.getAttribute('id');
     };
 
+    let dxvkRecommendable = true,
+        runnersRecommendable = true;
+
     // Do some stuff when all the content will be loaded
     onMount(() => {
         Window.current.show();
@@ -143,13 +146,19 @@
         <div class="settings-item" id="runners">
             <h1>{$_('settings.runners.title')}</h1>
 
-            <RunnerSelectionList />
+            <Checkbox lang="settings.runners.items.recommended" valueChanged={(value) => runnersRecommendable = value} />
+
+            <RunnerSelectionList recommendable={runnersRecommendable} />
         </div>
 
         <div class="settings-item" id="dxvks">
             <h1>{$_('settings.dxvks.title')}</h1>
 
-            <DXVKSelectionList />
+            <Checkbox lang="settings.runners.items.recommended" valueChanged={(value) => dxvkRecommendable = value} />
+
+            <br><br>
+
+            <DXVKSelectionList recommendable={dxvkRecommendable} />
         </div>
     </div>
 {/if}

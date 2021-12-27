@@ -1,6 +1,8 @@
 <script lang="ts">
     import { _ } from 'svelte-i18n';
 
+    export let recommendable = true;
+
     import DXVK from '../ts/core/DXVK';
 
     import type {
@@ -27,7 +29,7 @@
 
 <div class="list">
     {#each dxvks as dxvk}
-        <div class="list-item" class:list-item-downloaded={dxvkInstalled(dxvk)} class:list-item-active={dxvk.version === selectedVersion}>
+        <div class="list-item" class:list-item-downloaded={dxvkInstalled(dxvk)} class:list-item-active={dxvk.version === selectedVersion} class:list-item-hidden={recommendable && !dxvk.recommended}>
             { dxvk.version }
 
             <div>

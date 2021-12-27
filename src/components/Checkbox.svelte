@@ -6,6 +6,8 @@
     export let prop: string = '';
     export let lang: string = '';
 
+    export let valueChanged: (value: boolean) => void = () => {};
+
     import Checkmark from '../assets/svgs/checkmark.svg';
 
     import Configs from '../ts/Configs';
@@ -16,7 +18,11 @@
     {
         active = !active;
 
-        Configs.set(prop, active);
+        if (prop)
+            Configs.set(prop, active);
+
+        if (valueChanged)
+            valueChanged(active);
     }
 </script>
 

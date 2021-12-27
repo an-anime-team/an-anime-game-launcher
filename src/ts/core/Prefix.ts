@@ -72,7 +72,7 @@ export default class Prefix
         ];
 
         return new Promise((resolve) => {
-            Runners.current.then((runner) => {
+            Runners.current().then((runner) => {
                 if (runner === null)
                     resolve(false);
     

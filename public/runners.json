@@ -215,7 +215,7 @@
                 "family": "Wine-GE",
                 "name": "lutris-ge-6.16-1-x86_64",
                 "title": "Wine-6.16-GE-1",
-                "uri": "https://github.com/GloriousEggroll/wine-ge-custom/releases/download/6.16-GE-1/wine-lutris-ge-6.16-1-x86_64.tar.xz",
+                "uri": "https://github.com/GloriousEggroll/wine-ge-custom/releases/download/6.16-GE-1/lutris-ge-6.16-1-x86_64.tar.xz",
                 "files": {
                     "wine": "bin/wine64",
                     "wineserver": "bin/wineserver",

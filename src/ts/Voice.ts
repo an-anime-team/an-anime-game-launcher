@@ -86,7 +86,7 @@ export default class Voice
     /**
      * Get updated voice data from the specified version to the latest
      * 
-     * @returns Latest voice pack if current is out of date
+     * @returns null if the difference can't be calculated
      * @returns Error object if company's servers are unreachable or they responded with an error
      */
     public static getDiff(version: string): Promise<VoicePack[]|null>

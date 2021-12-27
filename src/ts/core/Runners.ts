@@ -23,16 +23,29 @@ class Runners
 {
     /**
      * Get the current using runner according to the config file
+     * or set the new one
      */
-    public static get current(): Promise<Runner|null>
+    public static current(runner: Runner|Runner['name']|null = null): Promise<Runner|null>
     {
-        return new Promise((resolve) => {
-            Configs.get('runner').then((runner) => {
-                if (typeof runner === 'string')
-                    Runners.get(runner).then((runner) => resolve(runner));
+        return new Promise(async (resolve) => {
+            if (runner === null)
+            {
+                Configs.get('runner').then((runner) => {
+                    if (typeof runner === 'string')
+                        Runners.get(runner).then((runner) => resolve(runner));
 
-                else resolve(null);
-            });
+                    else resolve(null);
+                });
+            }
+
+            else
+            {
+                Configs.set('runner', typeof runner === 'string' ?
+                    runner : runner.name);
+
+                resolve(typeof runner === 'string' ?
+                    await this.get(runner) : runner);
+            }
         });
     }
 
@@ -119,6 +132,22 @@ class Runners
 
             // Otherwise we can use runner.uri and so on to download runner
             else resolve(new Stream(runner));
+        });
+    }
+
+    /**
+     * Delete specified runner
+     */
+    public static delete(runner: Runner|Runner['name']): Promise<void>
+    {
+        return new Promise(async (resolve) => {
+            const name = typeof runner !== 'string' ?
+                runner.name : runner;
+
+            Process.run(`rm -rf '${Process.addSlashes(await constants.paths.runnersDir + '/' + name)}'`)
+                .then((process) => {
+                    process.finish(() => resolve());
+                });
         });
     }
 }

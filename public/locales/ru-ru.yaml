@@ -52,7 +52,11 @@ settings:
   # Runners
   runners:
     title: Версия Wine
+    items:
+      recommended: Показывать только рекомендуемое
   
   # DXVKs
   dxvks:
     title: DXVK
+    items:
+      recommended: Показывать только рекомендуемое

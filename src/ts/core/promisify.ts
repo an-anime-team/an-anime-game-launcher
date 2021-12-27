@@ -22,7 +22,7 @@ type PromiseOptions = {
 };
 
 /**
- * Make a promise from the provided function(s) and run it/them
+ * Make a promise from the provided function(s) and run it(them)
  */
 export default function promisify(callback: callback|Promise<any>|PromiseOptions): Promise<any>
 {

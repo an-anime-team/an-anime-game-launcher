@@ -12,7 +12,7 @@ export default (): Promise<void> => {
          */
         let wineExeutable = 'wine';
 
-        const runner = await Runners.current;
+        const runner = await Runners.current();
 
         if (runner !== null)
         {
