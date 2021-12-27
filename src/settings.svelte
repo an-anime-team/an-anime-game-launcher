@@ -5,6 +5,7 @@
     import Checkbox from './components/Checkbox.svelte';
     import SelectionBox from './components/SelectionBox.svelte';
     import DXVKSelectionList from './components/DXVKSelectionList.svelte';
+    import RunnerSelectionList from './components/RunnerSelectionList.svelte';
 
     import Window from './ts/neutralino/Window';
 
@@ -55,6 +56,7 @@
     const menuItems = [
         'general',
         'enhancements',
+        'runners',
         'dxvks'
     ];
 
@@ -136,6 +138,12 @@
             <Checkbox lang="settings.enhancements.items.gamemode" prop="gamemode" />
             <Checkbox lang="settings.enhancements.items.fps_unlocker" prop="fps_unlocker" />
             <Checkbox lang="settings.enhancements.items.purge_dxvk_logs" prop="purge_dxvk_logs" />
+        </div>
+
+        <div class="settings-item" id="runners">
+            <h1>{$_('settings.runners.title')}</h1>
+
+            <RunnerSelectionList />
         </div>
 
         <div class="settings-item" id="dxvks">

@@ -109,8 +109,6 @@ export default class State
             const gameLatest = (await Game.latest).version;
             const patch = await Patch.latest;
 
-            console.log(patch);
-
             if (gameCurrent === null)
                 state = 'game-installation-available';
             

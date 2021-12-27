@@ -48,6 +48,10 @@ settings:
       fps_unlocker: Unlock FPS
       purge_dxvk_logs: Delete DXVK logs
 
+  # Runners
+  runners:
+    title: Wine version
+
   # DXVKs
   dxvks:
     title: DXVK

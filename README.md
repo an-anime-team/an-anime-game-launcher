@@ -70,6 +70,12 @@ sudo apt-get install webkit2gtk unzip tar git curl xdelta3 cabextract
 sudo pacman -Syu webkit2gtk unzip tar git curl xdelta3 cabextract
 ```
 
+### dnf
+
+```sh
+sudo dnf install webkit2gtk unzip tar git curl xdelta cabextract
+```
+
 # Additional requirements
 
 | Name | Description |
