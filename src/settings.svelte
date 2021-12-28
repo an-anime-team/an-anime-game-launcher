@@ -2,8 +2,6 @@
     import { onMount } from 'svelte';
     import { _, locale, locales } from 'svelte-i18n';
 
-    import Shaders from './ts/core/Shaders';
-
     import Checkbox from './components/Checkbox.svelte';
     import SelectionBox from './components/SelectionBox.svelte';
     import DXVKSelectionList from './components/DXVKSelectionList.svelte';

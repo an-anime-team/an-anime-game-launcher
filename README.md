@@ -150,18 +150,29 @@ This is our current roadmap goals. You can find older ones [here](ROADMAP.md)
   * <s>Downloading progress</s>
   * Launcher state functionality
     * <s>Game launch available</s>
-    * Game update (installation) required
-    * Voice data update (installation) required
+    * <s>Game update (installation) required</s>
+    * <s>Voice data update (installation) required</s>
     * Patch unavailable
     * Test patch available
 * Make Svelte components
   * <s>Checkbox</s>
   * <s>Selectbox</s>
-  * SelectionList
+  * <s>SelectionList</s>
   * SelectableCheckbox
   * PropertiesEditor
 * Rewrite sass code, provide more flexible theming ability
 * <s>Add `svelte-i18n`</s>
+* Game pre-installation
+* Telemetry checking
+* Launcher auto-updates
+* Statistics window
+* Debugger
+* Loading screen
+* Tooltips for some options
+* Theming system
+* Chengelog window
+* Default runner auto-installation
+* Ability to change the temp directory where the launcher should download some files
 
 ### Features
 
