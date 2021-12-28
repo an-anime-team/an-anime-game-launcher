@@ -121,6 +121,7 @@
 
             <SelectionBox
                 lang="settings.general.items.lang.voice.title"
+                tooltip="settings.general.items.lang.voice.tooltip"
                 prop="lang.voice"
                 items={voiceLocales}
             />
@@ -143,9 +144,23 @@
                 items={huds}
             />
 
-            <Checkbox lang="settings.enhancements.items.gamemode" prop="gamemode" />
-            <Checkbox lang="settings.enhancements.items.fps_unlocker" prop="fps_unlocker" />
-            <Checkbox lang="settings.enhancements.items.purge_dxvk_logs" prop="purge_dxvk_logs" />
+            <Checkbox
+                lang="settings.enhancements.items.gamemode.title"
+                tooltip="settings.enhancements.items.gamemode.tooltip"
+                prop="gamemode"
+            />
+
+            <Checkbox
+                lang="settings.enhancements.items.fps_unlocker.title"
+                tooltip="settings.enhancements.items.fps_unlocker.tooltip"
+                prop="fps_unlocker"
+            />
+
+            <Checkbox
+                lang="settings.enhancements.items.purge_dxvk_logs.title"
+                tooltip="settings.enhancements.items.purge_dxvk_logs.tooltip"
+                prop="purge_dxvk_logs"
+            />
         </div>
 
         <div class="settings-item" id="runners">

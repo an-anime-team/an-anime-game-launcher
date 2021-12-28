@@ -15,6 +15,7 @@ settings:
         # Game voice pack language
         voice:
           title: Voice pack
+          tooltip: You will have to manually select the new voice pack in the game
           items:
             en-us: English (US)
             ja-jp: Japanese
@@ -44,9 +45,21 @@ settings:
           dxvk: DXVK
           mangohud: MangoHUD
       
-      gamemode: Use GameMode
-      fps_unlocker: Unlock FPS
-      purge_dxvk_logs: Delete DXVK logs
+      # GameMode
+      gamemode:
+        title: Use GameMode
+        tooltip: It is a software that can improve the game performance
+      
+      # Unlock FPS
+      fps_unlocker:
+        title: Unlock FPS
+        tooltip: This option will unlock maximum of the 60 fps limitation
+      
+      # Delete DXVK logs
+      purge_dxvk_logs:
+        title: Delete DXVK logs
+        tooltip: With this option enabled your launcher will automatically
+                 delete DXVK log files
 
   # Runners
   runners:
@@ -66,5 +79,6 @@ settings:
     items:
       shaders:
         title: Shaders
+        tooltip: Use Home button to toggle shaders in the game
         items:
           none: None

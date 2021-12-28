@@ -5,6 +5,7 @@
 
     export let prop: string = '';
     export let lang: string = '';
+    export let tooltip: string = '';
 
     export let valueChanged: (value: boolean) => void = () => {};
 
@@ -27,7 +28,11 @@
 </script>
 
 <div class="checkbox" class:checkbox-active={active}>
-    { $_(lang) }
+    <span
+        class:hint--bottom={tooltip !== ''}
+        class:hint--medium={tooltip !== ''}
+        aria-label={$_(tooltip)}
+    >{ $_(lang) }</span>
 
     <div class="checkbox-mark" on:click={updateCheckbox}>
         <!-- svelte-ignore a11y-missing-attribute -->

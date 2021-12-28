@@ -5,6 +5,7 @@
 
     export let prop: string = '';
     export let lang: string = '';
+    export let tooltip: string = '';
     export let items = {};
 
     export let valueChanged: (value: string) => void = () => {};
@@ -58,7 +59,13 @@
         </ul>
     </div>
 
-    <div class="selected-item" on:click={() => selectionOpen = !selectionOpen}>
+    <div
+        class="selected-item"
+        class:hint--left={tooltip !== ''}
+        class:hint--medium={tooltip !== ''}
+        aria-label={$_(tooltip)}
+        on:click={() => selectionOpen = !selectionOpen}
+    >
         <span>{ $_(items[selectedValue]) }</span>
 
         <!-- svelte-ignore a11y-missing-attribute -->

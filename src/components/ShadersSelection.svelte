@@ -22,6 +22,7 @@
 
 <SelectionBox
     lang="settings.shaders.items.shaders.title"
+    tooltip="settings.shaders.items.shaders.tooltip"
     prop="shaders"
     items={shadersOptions}
 />

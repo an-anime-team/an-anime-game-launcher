@@ -15,6 +15,7 @@ settings:
         # Язык озвучки в игре
         voice:
           title: Язык озвучки
+          tooltip: Вам будет нужно вручную изменить язык озвучки в игре
           items:
             en-us: Английский (США)
             ja-jp: Японский
@@ -44,10 +45,20 @@ settings:
           dxvk: DXVK
           mangohud: MangoHUD
       
-      # TODO: add hints to the components so I could describe what these options means
-      gamemode: Использовать GameMode
-      fps_unlocker: Разблокировать FPS
-      purge_dxvk_logs: Удалять логи DXVK
+      # GameMode
+      gamemode:
+        title: Использовать GameMode
+        tooltip: Это программа, которая может улучшить производительность игры
+
+      # Разблокировать FPS
+      fps_unlocker:
+        title: Разблокировать FPS
+        tooltip: Эта опция позволит разблокировать лимит на отрисовку не более чем 60 кадров в секунду
+
+      # Удалять логи DXVK
+      purge_dxvk_logs:
+        title: Удалять логи DXVK
+        tooltip: Если включено, лаунчер будет автоматически удалять логи DXVK
 
   # Версии Wine
   runners:
@@ -67,5 +78,6 @@ settings:
     items:
       shaders:
         title: Шейдеры
+        tooltip: Используйте кнопку Home чтобы переключать шейдеры в игре
         items:
           none: Отключены

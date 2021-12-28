@@ -12,7 +12,7 @@ export default (): Promise<void> => {
         const telemetry = await Game.isTelemetryDisabled();
 
         // If telemetry servers are not disabled
-        if (telemetry)
+        if (!telemetry)
         {
             const icon = `${constants.paths.appDir}/public/icons/baal64-transparent.png`;
 
