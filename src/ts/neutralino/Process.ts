@@ -1,3 +1,5 @@
+import Debug, { DebugThread } from "../core/Debug";
+
 declare const Neutralino;
 declare const NL_CWD;
 
@@ -49,6 +51,8 @@ class Process
 
     public constructor(pid: number, outputFile: string|null = null)
     {
+        const debugThread = new DebugThread('Process/Stream', 'Opened process stream');
+
         this.id = pid;
         this.outputFile = outputFile;
 
@@ -65,6 +69,8 @@ class Process
                 else
                 {
                     this._finished = true;
+
+                    debugThread.log('Process stopped');
 
                     if (this.onFinish)
                         this.onFinish(this);
@@ -86,7 +92,19 @@ class Process
                         this.outputOffset = output.length;
 
                         if (this._finished)
+                        {
+                            if (output !== '')
+                            {
+                                debugThread.log({
+                                    message: [
+                                        'Process output:',
+                                        ...output.split(/\r\n|\r|\n/)
+                                    ]
+                                });
+                            }
+
                             Neutralino.filesystem.removeFile(this.outputFile);
+                        }
 
                         else if (this.outputInterval)
                             setTimeout(updateOutput, this.outputInterval);
@@ -182,6 +200,15 @@ class Process
             // And run the command
             const process = await Neutralino.os.execCommand(command, {
                 background: true
+            });
+
+            Debug.log({
+                function: 'Process.run',
+                message: {
+                    'running command': command,
+                    'cwd': options.cwd,
+                    ...options.env
+                }
             });
 
             resolve(new Process(process.pid, tmpFile));

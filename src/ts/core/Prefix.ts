@@ -1,5 +1,6 @@
 import constants from '../Constants';
 import Process from '../neutralino/Process';
+import Debug, { DebugThread } from './Debug';
 import Downloader from './Downloader';
 import Runners from './Runners';
 
@@ -16,8 +17,22 @@ export default class Prefix
             path ??= await constants.paths.prefix.current;
 
             Neutralino.filesystem.getStats(`${path}/drive_c`)
-                .then(() => resolve(true))
-                .catch(() => resolve(false));
+                .then(() => {
+                    Debug.log({
+                        function: 'Prefix.exists',
+                        message: `Prefix exists here: ${path}`
+                    });
+
+                    resolve(true);
+                })
+                .catch(() => {
+                    Debug.log({
+                        function: 'Prefix.exists',
+                        message: `Prefix doesn't exist here: ${path}`
+                    });
+
+                    resolve(false);
+                });
         });
     }
 
@@ -52,6 +67,8 @@ export default class Prefix
      */
     public static create(path: string, progress?: (output: string, current: number, total: number) => void): Promise<boolean>
     {
+        const debugThread = new DebugThread('Prefix.create', 'Creating wine prefix');
+
         const installationSteps = [
             // corefonts
             'Executing w_do_call corefonts',
@@ -74,14 +91,20 @@ export default class Prefix
         return new Promise((resolve) => {
             Runners.current().then((runner) => {
                 if (runner === null)
+                {
+                    debugThread.log('Runner doesn\'t selected');
+
                     resolve(false);
+                }
     
                 else
                 {
+                    debugThread.log(`Using runner: ${runner.title} (${runner.name})`);
+
                     this.getWinetricks().then(async (winetricks) => {
                         let installationProgress = 0;
 
-                        const process = await Process.run(`bash '${Process.addSlashes(winetricks)}' corefonts usetakefocus=n`, {
+                        const process = await Process.run(`./'${Process.addSlashes(winetricks)}' corefonts usetakefocus=n`, {
                             env: {
                                 WINE: `${await constants.paths.runnersDir}/${runner.name}/${runner.files.wine}`,
                                 WINESERVER: `${await constants.paths.runnersDir}/${runner.name}/${runner.files.wineserver}`,
@@ -91,6 +114,7 @@ export default class Prefix
 
                         process.outputInterval = null;
 
+                        // If progress specified
                         if (progress)
                         {
                             process.outputInterval = 1500;
@@ -116,7 +140,11 @@ export default class Prefix
                             });
                         }
 
-                        process.finish(() => resolve(true));
+                        process.finish(() => {
+                            debugThread.log('Prefix creation completed');
+
+                            resolve(true);
+                        });
                     });
                 }
             });

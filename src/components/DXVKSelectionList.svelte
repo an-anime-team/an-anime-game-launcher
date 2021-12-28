@@ -98,7 +98,7 @@
             class:list-item-disabled={disabledDxvks[dxvk.version]}
 
             on:click|self={() => {
-                if (installedDxvks[dxvk.version])
+                if (installedDxvks[dxvk.version] && selectedVersion !== dxvk.version)
                     selectDxvk(dxvk);
             }}
         >

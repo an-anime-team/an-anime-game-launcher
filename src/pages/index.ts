@@ -1,6 +1,8 @@
 import '../i18n';
 import App from '../index.svelte';
+import constants from '../ts/Constants';
 import Archive from '../ts/core/Archive';
+import Debug from '../ts/core/Debug';
 import Downloader from '../ts/core/Downloader';
 
 declare const Neutralino;
@@ -13,7 +15,26 @@ Neutralino.events.on('windowClose', () => {
     Downloader.closeStreams(true);
     Archive.closeStreams(true);
 
-    Neutralino.app.exit();
+    constants.paths.launcherDir.then(async (path) => {
+        const time = new Date;
+
+        Neutralino.filesystem.getStats(`${path}/logs`)
+            .then(() => saveLog())
+            .catch(async () => {
+                await Neutralino.filesystem.createDirectory(`${path}/logs`);
+
+                saveLog();
+            });
+
+        const saveLog = async () => {
+            const log = Debug.get().join("\r\n");
+
+            if (log != '')
+                await Neutralino.filesystem.writeFile(`${path}/logs/${time.getDay()}-${time.getMonth()}-${time.getFullYear()}-${time.getHours()}-${time.getMinutes()}-${time.getSeconds()}.log`, log);
+
+            Neutralino.app.exit();
+        };
+    });
 });
 
 const app = new App({

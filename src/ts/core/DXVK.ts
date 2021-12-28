@@ -6,6 +6,7 @@ import AbstractInstaller from './AbstractInstaller';
 import Process from '../neutralino/Process';
 import promisify from './promisify';
 import Runners from './Runners';
+import { DebugThread } from './Debug';
 
 declare const Neutralino;
 
@@ -133,13 +134,19 @@ export default class DXVK
      */
     public static delete(dxvk: TDXVK|TDXVK['version']): Promise<void>
     {
+        const debugThread = new DebugThread('DXVK.delete', `Deleting dxvk ${typeof dxvk === 'string' ? dxvk : dxvk.version}`);
+
         return new Promise(async (resolve) => {
             const version = typeof dxvk !== 'string' ?
                 dxvk.version : dxvk;
 
             Process.run(`rm -rf '${Process.addSlashes(await constants.paths.dxvksDir + '/dxvk-' + version)}'`)
                 .then((process) => {
-                    process.finish(() => resolve());
+                    process.finish(() => {
+                        debugThread.log('Deletion completed');
+
+                        resolve();
+                    });
                 });
         });
     }
@@ -152,6 +159,8 @@ export default class DXVK
         return new Promise(async (resolve) => {
             const version = typeof dxvk !== 'string' ?
                 dxvk.version : dxvk;
+
+            const debugThread = new DebugThread('DXVK.apply', `Applying dxvk ${version}`);
             
             const dxvkDir = `${await constants.paths.dxvksDir}/dxvk-${version}`;
             const runner = await Runners.current();
@@ -168,22 +177,40 @@ export default class DXVK
                      * And then run it
                      */
                     (): Promise<void> => new Promise(async (resolve) => {
-                        Process.run(`bash '${dxvkDir}/setup_dxvk.sh' install`, {
+                        const alias = runner ? `alias winecfg=\\'${runnerDir}/${runner.files.winecfg}\\'\\n` : '';
+
+                        Process.run(`eval $'${alias ? alias : ''}./setup_dxvk.sh install'`, {
                             cwd: dxvkDir,
                             env: {
                                 WINE: runner ? `${runnerDir}/${runner.files.wine}` : 'wine',
-                                WINECFG: runner ? `${runnerDir}/${runner.files.winecfg}` : 'winecfg',
                                 WINESERVER: runner ? `${runnerDir}/${runner.files.wineserver}` : 'wineserver',
                                 WINEPREFIX: prefix
                             }
                         }).then((process) => {
-                            process.finish(() => resolve());
+                            let processOutput = '';
+
+                            process.output((output) => processOutput += output);
+
+                            process.finish(() => {
+                                debugThread.log({
+                                    message: [
+                                        'Setup script output:',
+                                        ...processOutput.split(/\r\n|\r|\n/)
+                                    ]
+                                });
+
+                                resolve();
+                            });
                         });
                     })
                 ]
             });
 
-            pipeline.then(() => resolve());
+            pipeline.then(() => {
+                debugThread.log('Applying completed');
+
+                resolve();
+            });
         });
     }
 }

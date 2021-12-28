@@ -5,6 +5,7 @@ import constants from './Constants';
 import Game from './Game';
 import AbstractInstaller from './core/AbstractInstaller';
 import Configs from './Configs';
+import Debug from './core/Debug';
 
 declare const Neutralino;
 
@@ -41,23 +42,36 @@ export default class Voice
             // Parse installed voice packages
             Neutralino.filesystem.readDirectory(await constants.paths.voiceDir)
                 .then((files) => {
-                    files = files
-                        .filter((file) => file.type == 'DIRECTORY')
+                    files = files.filter((file) => file.type == 'DIRECTORY')
                         .map((file) => file.entry);
 
                     Object.keys(langs).forEach((folder) => {
-                        if (files.includes(folder) && langs[folder] !== undefined)
+                        if (files.includes(folder))
                             installedVoice.installed.push(langs[folder]);
                     });
+
+                    parseActiveVoice();
                 })
-                .catch(() => {});
+                .catch(() => parseActiveVoice());
 
             // Parse active voice package
-            Neutralino.filesystem.readFile(persistentPath)
-                .then((lang) => installedVoice.active = langs[lang] ?? null)
-                .catch(() => {});
+            const parseActiveVoice = () => {
+                Neutralino.filesystem.readFile(persistentPath)
+                    .then((lang) => {
+                        installedVoice.active = langs[lang] ?? null;
 
-            resolve(installedVoice);
+                        Debug.log({
+                            function: 'Voice.current',
+                            message: {
+                                'active voice': installedVoice.active,
+                                'installed voices': installedVoice.installed.join(', ')
+                            }
+                        });
+
+                        resolve(installedVoice);
+                    })
+                    .catch(() => resolve(installedVoice));
+            };
         });
     }
 
@@ -106,6 +120,12 @@ export default class Voice
      */
     public static update(lang: string|null = null, version: string|null = null): Promise<Stream|null>
     {
+        Debug.log(
+            version !== null ?
+            `Updating the voice package from the ${version} version` :
+            'Installing the voice package'
+        );
+
         return new Promise((resolve, reject) => {
             (version === null ? this.latest : this.getDiff(version))
                 .then((data: VoicePack[]|null) => {

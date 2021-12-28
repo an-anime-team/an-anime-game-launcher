@@ -10,6 +10,7 @@ import fetch from './core/Fetch';
 import AbstractInstaller from './core/AbstractInstaller';
 import Domain from './core/Domain';
 import promisify from './core/promisify';
+import Debug, { DebugThread } from './core/Debug';
 
 declare const Neutralino;
 
@@ -41,6 +42,11 @@ export default class Game
                         .then((config: ArrayBuffer) => {
                             const buffer = new TextDecoder('ascii').decode(new Uint8Array(config));
                             const version = /([1-9]+\.[0-9]+\.[0-9]+)_[\d]+_[\d]+/.exec(buffer);
+
+                            Debug.log({
+                                function: 'Game.current',
+                                message: `Current game version: ${version !== null ? version[1] : '<unknown>'}`
+                            });
 
                             resolve(version !== null ? version[1] : null);
                         })
@@ -140,6 +146,12 @@ export default class Game
      */
     public static update(version: string|null = null): Promise<Stream|null>
     {
+        Debug.log(
+            version !== null ?
+            `Updating the game from the ${version} version` :
+            'Installing the game'
+        );
+
         return new Promise((resolve, reject) => {
             (version === null ? this.latest : this.getDiff(version))
                 .then((data: Latest|Diff|null) => resolve(data === null ? null : new Stream(data.path)))
@@ -152,6 +164,8 @@ export default class Game
      */
     public static isTelemetryDisabled(): Promise<boolean>
     {
+        const debugThread = new DebugThread('Game.isTelemetryDisabled', 'Checking if the telemetry servers are disabled');
+
         return new Promise(async (resolve) => {
             const pipeline = promisify({
                 callbacks: await constants.uri.telemetry.map((domain) => {
@@ -167,6 +181,8 @@ export default class Game
                 let disabled = false;
 
                 Object.values(result).forEach((value) => disabled ||= value as boolean);
+
+                debugThread.log(`Telemetry is ${disabled ? 'not ' : ''}disabled`);
 
                 resolve(disabled === false);
             });

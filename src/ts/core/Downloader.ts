@@ -1,3 +1,4 @@
+import { DebugThread } from './Debug';
 import fetch from './Fetch';
 
 declare const Neutralino;
@@ -36,14 +37,26 @@ class Stream
         this.total = total;
         this.started = true;
 
+        const debugThread = new DebugThread('Downloader/Stream', {
+            message: {
+                'uri': uri,
+                'output file': output,
+                'total size': total
+            }
+        });
+
         if (this.onStart)
             this.onStart();
 
-        Neutralino.os.execCommand(`curl -s -L -N -o "${output}" "${uri}"`, {
+        const command = `curl -s -L -N -o "${output}" "${uri}"`;
+
+        Neutralino.os.execCommand(command, {
             background: true
         }).then((result) => {
             this._id = result.pid;
         });
+
+        debugThread.log(`Downloading started with command: ${command}`);
 
         const updateProgress = () => {
             Neutralino.filesystem.getStats(output).then((stats) => {
@@ -55,6 +68,8 @@ class Stream
                 if (stats.size >= this.total)
                 {
                     this.finished = true;
+
+                    debugThread.log('Downloading finished');
 
                     if (this.onFinish)
                         this.onFinish();
@@ -166,6 +181,6 @@ export default class Downloader
 
         else return 'index.html';
     }
-}
+};
 
 export { Stream };

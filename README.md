@@ -164,12 +164,12 @@ This is our current roadmap goals. You can find older ones [here](ROADMAP.md)
 * Rewrite sass code, provide more flexible theming ability
 * <s>Add `svelte-i18n`</s>
 * <s>Telemetry checking</s>
+* <s>Tooltips for some options</s>
+* <s>Debugger</s>
 * Game pre-installation
 * Launcher auto-updates
 * Statistics window
-* Debugger
-* Loading screen
-* Tooltips for some options
+* Splash screen
 * Theming system
 * Chengelog window
 * Default runner auto-installation
@@ -180,7 +180,6 @@ This is our current roadmap goals. You can find older ones [here](ROADMAP.md)
 * <s>Use `LauncherLib.getGameVersion` function instead of the `config.json`'s `version` property</s> *(deprecated due to the new core functions)*
 * Add downloading pause button
 * Fix button flickering at start when the launcher's state updates
-* Game's update pre-installation
 * Screenshots explorer
 * Add Patch category in settings menu with
   - Always participate in patches testing

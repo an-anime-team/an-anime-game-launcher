@@ -5,6 +5,7 @@ import type {
     ArchiveInfo
 } from '../types/Archive';
 
+import { DebugThread } from './Debug';
 import promisify from './promisify';
 
 declare const Neutralino;
@@ -52,6 +53,13 @@ class Stream
         this.unpackDir = unpackDir;
         this.started = true;
 
+        const debugThread = new DebugThread('Archive/Stream', {
+            message: {
+                'path': path,
+                'unpack dir': unpackDir
+            }
+        });
+
         if (this.onStart)
             this.onStart();
 
@@ -82,6 +90,8 @@ class Stream
                 }).then((result) => {
                     this._id = result.pid;
                 });
+
+                debugThread.log(`Unpacking started with command: ${command}`);
 
                 const updateProgress = async () => {
                     let difference: number = 0;
@@ -122,6 +132,8 @@ class Stream
                     {
                         this.finished = true;
     
+                        debugThread.log('Unpacking finished');
+
                         if (this.onFinish)
                             this.onFinish();
                     }
@@ -222,6 +234,8 @@ export default class Archive
      */
     public static getInfo(path: string): Promise<ArchiveInfo|null>
     {
+        const debugThread = new DebugThread('Archive.getInfo', `Getting info about archive: ${path}`);
+
         return new Promise(async (resolve) => {
             let archive: ArchiveInfo = {
                 size: {
@@ -252,6 +266,15 @@ export default class Archive
                         });
                     }
 
+                    debugThread.log({
+                        message: {
+                            'type': archive.type,
+                            'compressed size': archive.size.compressed,
+                            'uncompressed size': archive.size.uncompressed,
+                            'files amount': archive.files.length
+                        }
+                    });
+
                     resolve(archive);
 
                     break;
@@ -276,11 +299,22 @@ export default class Archive
                         });
                     }
 
+                    debugThread.log({
+                        message: {
+                            'type': archive.type,
+                            'compressed size': archive.size.compressed,
+                            'uncompressed size': archive.size.uncompressed,
+                            'files amount': archive.files.length
+                        }
+                    });
+
                     resolve(archive);
 
                     break;
 
                 default:
+                    debugThread.log(`Unsupported archive type: ${archive.type}`);
+
                     resolve(null);
 
                     break;
@@ -314,7 +348,7 @@ export default class Archive
             stream.close(forced);
         });
     }
-}
+};
 
 export { Stream };
 

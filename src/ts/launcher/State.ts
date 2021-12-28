@@ -5,6 +5,7 @@ import Window from '../neutralino/Window';
 
 import Game from '../Game';
 import Patch from '../Patch';
+import Voice from '../Voice';
 
 export default class State
 {
@@ -35,8 +36,12 @@ export default class State
         this.launchButton.onclick = () => {
             if (this.events[this._state])
             {
+                this.launchButton.style['display'] = 'none';
+
                 this.events[this._state].then((event) => {
                     event.default(this.launcher).then(() => {
+                        this.launchButton.style['display'] = 'block';
+
                         this.update();
                     });
                 });
@@ -118,12 +123,17 @@ export default class State
             const gameCurrent = await Game.current;
             const gameLatest = (await Game.latest).version;
             const patch = await Patch.latest;
+            const voiceData = await Voice.current;
 
             if (gameCurrent === null)
                 state = 'game-installation-available';
             
             else if (gameCurrent != gameLatest)
                 state = 'game-update-available';
+
+            // TODO: update this thing if the user selected another voice language
+            else if (voiceData.installed.length === 0)
+                state = 'game-voice-update-required';
 
             else if (!patch.applied)
             {

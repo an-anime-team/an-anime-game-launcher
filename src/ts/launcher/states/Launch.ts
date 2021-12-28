@@ -1,5 +1,6 @@
 import Configs from '../../Configs';
 import constants from '../../Constants';
+import { DebugThread } from '../../core/Debug';
 import Notifications from '../../core/Notifications';
 import Runners from '../../core/Runners';
 import Game from '../../Game';
@@ -9,6 +10,8 @@ declare const Neutralino;
 
 export default (): Promise<void> => {
     return new Promise(async (resolve) => {
+        const debugThread = new DebugThread('State/Launch', 'Starting the game');
+
         const telemetry = await Game.isTelemetryDisabled();
 
         // If telemetry servers are not disabled
@@ -22,6 +25,8 @@ export default (): Promise<void> => {
                 icon: icon,
                 importance: 'critical'
             });
+
+            debugThread.log('Telemetry is not disabled!');
         }
         
         // Otherwise run the game
@@ -51,7 +56,7 @@ export default (): Promise<void> => {
                 }
             }
 
-            console.log(`Wine executable: ${wineExeutable}`);
+            debugThread.log(`Wine executable path: ${wineExeutable}`);
 
             // Some special variables
             let env: any = {};
@@ -77,9 +82,9 @@ export default (): Promise<void> => {
              */
             const shaders = await Configs.get('shaders');
 
-            if (shaders !== null)
+            if (shaders !== 'none')
             {
-                const userShadersFile = `${constants.paths.shadersDir}/${shaders}/vkBasalt.conf`;
+                const userShadersFile = `${constants.paths.shadersDir}/public/${shaders}/vkBasalt.conf`;
                 const launcherShadersFile = `${await constants.paths.launcherDir}/vkBasalt.conf`;
 
                 env['ENABLE_VKBASALT'] = 1;
@@ -114,9 +119,7 @@ export default (): Promise<void> => {
             /*if (LauncherLib.getConfig('gamemode'))
                 command = `gamemoderun ${command}`;*/
 
-            const command = `${wineExeutable} launcher.bat`;
-
-            console.log(`Execution command: ${command}`);
+            const command = `'${Process.addSlashes(wineExeutable)}' launcher.bat`;
 
             /**
              * Starting the game

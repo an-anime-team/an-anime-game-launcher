@@ -6,6 +6,9 @@ import Configs from './Configs';
 
 import ProgressBar from './launcher/ProgressBar';
 import State from './launcher/State';
+import Debug from './core/Debug';
+
+declare const Neutralino;
 
 export default class Launcher
 {
@@ -36,7 +39,8 @@ export default class Launcher
                     title: 'Settings',
                     width: 900,
                     height: 600,
-                    enableInspector: true
+                    enableInspector: true,
+                    exitProcessOnClose: false
                 });
 
                 if (window.status)
@@ -45,6 +49,14 @@ export default class Launcher
 
                     this.settingsMenu.finish(() => {
                         this.settingsMenu = undefined;
+
+                        Neutralino.storage.getData('log')
+                            .then((data) => {
+                                Debug.merge(JSON.parse(data));
+
+                                Neutralino.storage.setData('log', undefined);
+                            })
+                            .catch(() => {});
                         
                         Window.current.show();
                     })

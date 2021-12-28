@@ -78,7 +78,7 @@
                 class:list-item-disabled={disabledRunners[runner.name]}
 
                 on:click|self={() => {
-                    if (installedRunners[runner.name])
+                    if (installedRunners[runner.name] && selectedVersion !== runner.name)
                     {
                         selectedVersion = runner.name;
 

@@ -6,8 +6,8 @@ import type {
 import constants from '../Constants';
 import Configs from '../Configs';
 import AbstractInstaller from './AbstractInstaller';
-import Downloader from './Downloader';
 import Process from '../neutralino/Process';
+import { DebugThread } from './Debug';
 
 declare const Neutralino;
 
@@ -140,13 +140,19 @@ class Runners
      */
     public static delete(runner: Runner|Runner['name']): Promise<void>
     {
+        const debugThread = new DebugThread('Runners.delete', `Deleting runner ${typeof runner === 'string' ? runner : runner.name}`);
+        
         return new Promise(async (resolve) => {
             const name = typeof runner !== 'string' ?
                 runner.name : runner;
 
             Process.run(`rm -rf '${Process.addSlashes(await constants.paths.runnersDir + '/' + name)}'`)
                 .then((process) => {
-                    process.finish(() => resolve());
+                    process.finish(() => {
+                        debugThread.log('Runner deleted');
+
+                        resolve();
+                    });
                 });
         });
     }

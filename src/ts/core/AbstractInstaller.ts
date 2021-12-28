@@ -1,6 +1,7 @@
 import constants from '../Constants';
 import Downloader from './Downloader';
 import Archive from './Archive';
+import { DebugThread } from './Debug';
 
 declare const Neutralino;
 
@@ -33,6 +34,13 @@ export default abstract class Installer
 
     public constructor(uri: string, unpackDir: string|Promise<string>)
     {
+        const debugThread = new DebugThread('AbstractInstaller', {
+            message: {
+                'uri': uri,
+                'unpack dir': typeof unpackDir === 'string' ? unpackDir : '<promise>'
+            }
+        });
+
         constants.paths.launcherDir.then((launcherDir) => {
             const archivePath = `${launcherDir}/${Downloader.fileFromUri(uri)}`;
 
@@ -79,6 +87,8 @@ export default abstract class Installer
                                 this.unpackFinished = true;
 
                                 Neutralino.filesystem.removeFile(archivePath);
+
+                                debugThread.log('Installation finished');
     
                                 if (this.onUnpackFinish)
                                     this.onUnpackFinish();
@@ -86,8 +96,15 @@ export default abstract class Installer
                         });
                     };
 
+                    const shouldResolve = typeof unpackDir !== 'string';
+
                     Promise.resolve(unpackDir)
-                        .then((unpackDir) => unpackArchive(unpackDir));
+                        .then((unpackDir) => {
+                            if (shouldResolve)
+                                debugThread.log(`Resolved unpack dir: ${unpackDir}`);
+
+                            unpackArchive(unpackDir);
+                        });
                 });
             });
         });
@@ -164,4 +181,4 @@ export default abstract class Installer
         if (this.unpackFinished)
             callback();
     }
-}
+};

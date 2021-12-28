@@ -8,6 +8,7 @@ import fetch from './core/Fetch';
 import AbstractInstaller from './core/AbstractInstaller';
 import promisify from './core/promisify';
 import Process from './neutralino/Process';
+import Debug, { DebugThread } from './core/Debug';
 
 declare const Neutralino;
 
@@ -132,6 +133,8 @@ export default class Patch
      */
     public static get latest(): Promise<PatchInfo>
     {
+        const debugThread = new DebugThread('Patch.latest', 'Getting the latest patch information');
+
         return new Promise(async (resolve, reject) => {
             const getLatestPatchInfo = (versions: string[], source: 'origin' | 'additional'): Promise<PatchInfo> => {
                 return new Promise(async (resolve) => {
@@ -145,7 +148,12 @@ export default class Patch
                                 resolve(await getLatestPatchInfo(versions.slice(1), 'origin'));
 
                             // Otherwise - return found info
-                            else resolve(patchInfo);
+                            else
+                            {
+                                debugThread.log({ message: patchInfo });
+
+                                resolve(patchInfo);
+                            }
                         })
                         .catch(async (error) => {
                             // If we couldn't connect to the origin repo
@@ -271,6 +279,11 @@ export default class Patch
      */
     public static install(): Promise<Stream|null>
     {
+        Debug.log({
+            function: 'Patch.install',
+            message: 'Installing the patch...'
+        });
+
         return new Promise((resolve, reject) => {
             this.latest
                 .then((patch) => {

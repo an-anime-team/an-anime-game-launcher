@@ -5,8 +5,6 @@ import Prefix from '../../core/Prefix';
 
 export default (launcher: Launcher): Promise<void> => {
     return new Promise(async (resolve) => {
-        launcher.state!.launchButton!.style['display'] = 'none';
-
         Prefix.exists().then((exists) => {
             if (!exists)
             {
