@@ -24,7 +24,7 @@ Download AppImage from [Releases](https://gitlab.com/KRypt0n_/an-anime-game-laun
 
 ### For arch users
 
-This launcher is also available as the [an-anime-game-launcher](https://aur.archlinux.org/packages/an-anime-game-launcher) AUR repository
+This launcher is also available as the [an-anime-game-launcher-bin](https://aur.archlinux.org/packages/an-anime-game-launcher-bin) AUR repository
 
 <br>
 
@@ -62,19 +62,19 @@ To work this launcher requires
 ### apt-get
 
 ```sh
-sudo apt-get install webkit2gtk unzip tar git curl xdelta3 cabextract notify-send
+sudo apt-get install unzip tar git curl xdelta3 cabextract notify-send
 ```
 
 ### pacman
 
 ```sh
-sudo pacman -Syu webkit2gtk unzip tar git curl xdelta3 cabextract notify-send
+sudo pacman -Syu unzip tar git curl xdelta3 cabextract notify-send
 ```
 
 ### dnf
 
 ```sh
-sudo dnf install webkit2gtk unzip tar git curl xdelta cabextract notify-send
+sudo dnf install unzip tar git curl xdelta cabextract notify-send
 ```
 
 # Additional requirements

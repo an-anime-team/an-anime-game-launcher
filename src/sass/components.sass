@@ -6,7 +6,6 @@
 
 @mixin themable($theme-name, $theme-map)
     body[data-theme=#{$theme-name}]
-
         background-color: map.get($theme-map, "background")
         color: map.get($theme-map, "text")
 

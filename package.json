@@ -1,7 +1,7 @@
 {
   "name": "an-anime-game-launcher",
   "version": "3.0.0",
-  "license": "GPL-3.0-or-later",
+  "license": "GPL-3.0",
   "type": "module",
   "scripts": {
     "neu": "neu",

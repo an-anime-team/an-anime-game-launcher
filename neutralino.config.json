@@ -1,5 +1,5 @@
 {
-  "applicationId": "com.krypt0nn.an-anime-game-linux-launcher",
+  "applicationId": "com.krypt0nn.an-anime-game-launcher",
   "version": "3.0.0",
   "defaultMode": "window",
   "port": 0,
@@ -16,7 +16,7 @@
   "globalVariables": {},
   "modes": {
     "window": {
-      "title": "An Anime Game Linux Launcher",
+      "title": "An Anime Game Launcher",
       "width": 1280,
       "height": 700,
       "fullScreen": false,

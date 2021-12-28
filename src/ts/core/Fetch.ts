@@ -40,7 +40,7 @@ class Response
     public body(delay: number|null = null): Promise<string>
     {
         return new Promise((resolve) => {
-            Neutralino.os.execCommand(`curl -s -L ${delay !== null ? `-m ${(delay / 1000).toFixed(3)}` : ''} "${this.url}"`)
+            Neutralino.os.execCommand(`curl -s -L ${delay !== null ? `-m ${delay / 1000}` : ''} "${this.url}"`)
                 .then((output) => resolve(output.stdOut));
         });
     }
@@ -54,7 +54,7 @@ class Response
 export default function fetch(url: string, delay: number|null = null): Promise<Response>
 {
     return new Promise(async (resolve) => {
-        let header = await Neutralino.os.execCommand(`curl -s -I -L ${delay !== null ? `-m ${(delay / 1000).toFixed(3)}` : ''} "${url}"`);
+        let header = await Neutralino.os.execCommand(`curl -s -I -L ${delay !== null ? `-m ${delay / 1000}` : ''} "${url}"`);
 
         if (header.stdOut == '')
             header = header.stdErr;

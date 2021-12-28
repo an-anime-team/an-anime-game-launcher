@@ -124,7 +124,7 @@ class Stream extends AbstractInstaller
 
 export default class Patch
 {
-    public static fetchTimeout: number = 3000;
+    public static fetchTimeout: number|null = 3000;
 
     /**
      * Get information about latest available patch

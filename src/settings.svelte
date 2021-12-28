@@ -95,6 +95,11 @@
     let dxvkRecommendable = true,
         runnersRecommendable = true;
 
+    // Auto theme switcher
+    // TODO: an option to disable it
+    if (window.matchMedia('(prefers-color-scheme: dark)').matches)
+        document.body.setAttribute('data-theme', 'dark');
+
     // Do some stuff when all the content will be loaded
     onMount(() => {
         Window.current.show();
@@ -102,89 +107,91 @@
 </script>
 
 {#if typeof $locale === 'string'}
-    <div class="menu">
-        {#each menuItems as item}
-            <div class="menu-item" on:click={changeItem} class:menu-item-active={selectedItem === item} data-anchor={item}>{ $_(`settings.${item}.title`) }</div>
-        {/each}
-    </div>
-
-    <div class="settings" on:scroll={updateItems}>
-        <div class="settings-item" id="general">
-            <h1>{$_('settings.general.title')}</h1>
-
-            <SelectionBox
-                lang="settings.general.items.lang.launcher.title"
-                prop="lang.launcher"
-                items={launcherLocales}
-                valueChanged={(value) => $locale = value}
-            />
-
-            <SelectionBox
-                lang="settings.general.items.lang.voice.title"
-                tooltip="settings.general.items.lang.voice.tooltip"
-                prop="lang.voice"
-                items={voiceLocales}
-            />
-
-            <SelectionBox
-                lang="settings.general.items.theme.title"
-                prop="theme"
-                items={themes}
-            />
-
-            <Checkbox lang="settings.general.items.discord" prop="discord.enabled" />
+    <main>
+        <div class="menu">
+            {#each menuItems as item}
+                <div class="menu-item" on:click={changeItem} class:menu-item-active={selectedItem === item} data-anchor={item}>{ $_(`settings.${item}.title`) }</div>
+            {/each}
         </div>
 
-        <div class="settings-item" id="enhancements">
-            <h1>{$_('settings.enhancements.title')}</h1>
+        <div class="settings" on:scroll={updateItems}>
+            <div class="settings-item" id="general">
+                <h1>{$_('settings.general.title')}</h1>
 
-            <SelectionBox
-                lang="settings.enhancements.items.hud.title"
-                prop="hud"
-                items={huds}
-            />
+                <SelectionBox
+                    lang="settings.general.items.lang.launcher.title"
+                    prop="lang.launcher"
+                    items={launcherLocales}
+                    valueChanged={(value) => $locale = value}
+                />
 
-            <Checkbox
-                lang="settings.enhancements.items.gamemode.title"
-                tooltip="settings.enhancements.items.gamemode.tooltip"
-                prop="gamemode"
-            />
+                <SelectionBox
+                    lang="settings.general.items.lang.voice.title"
+                    tooltip="settings.general.items.lang.voice.tooltip"
+                    prop="lang.voice"
+                    items={voiceLocales}
+                />
 
-            <Checkbox
-                lang="settings.enhancements.items.fps_unlocker.title"
-                tooltip="settings.enhancements.items.fps_unlocker.tooltip"
-                prop="fps_unlocker"
-            />
+                <SelectionBox
+                    lang="settings.general.items.theme.title"
+                    prop="theme"
+                    items={themes}
+                />
 
-            <Checkbox
-                lang="settings.enhancements.items.purge_dxvk_logs.title"
-                tooltip="settings.enhancements.items.purge_dxvk_logs.tooltip"
-                prop="purge_dxvk_logs"
-            />
+                <Checkbox lang="settings.general.items.discord" prop="discord.enabled" />
+            </div>
+
+            <div class="settings-item" id="enhancements">
+                <h1>{$_('settings.enhancements.title')}</h1>
+
+                <SelectionBox
+                    lang="settings.enhancements.items.hud.title"
+                    prop="hud"
+                    items={huds}
+                />
+
+                <Checkbox
+                    lang="settings.enhancements.items.gamemode.title"
+                    tooltip="settings.enhancements.items.gamemode.tooltip"
+                    prop="gamemode"
+                />
+
+                <Checkbox
+                    lang="settings.enhancements.items.fps_unlocker.title"
+                    tooltip="settings.enhancements.items.fps_unlocker.tooltip"
+                    prop="fps_unlocker"
+                />
+
+                <Checkbox
+                    lang="settings.enhancements.items.purge_dxvk_logs.title"
+                    tooltip="settings.enhancements.items.purge_dxvk_logs.tooltip"
+                    prop="purge_dxvk_logs"
+                />
+            </div>
+
+            <div class="settings-item" id="runners">
+                <h1>{$_('settings.runners.title')}</h1>
+
+                <Checkbox lang="settings.runners.items.recommended" valueChanged={(value) => runnersRecommendable = value} />
+
+                <RunnerSelectionList recommendable={runnersRecommendable} />
+            </div>
+
+            <div class="settings-item" id="dxvks">
+                <h1>{$_('settings.dxvks.title')}</h1>
+
+                <Checkbox lang="settings.runners.items.recommended" valueChanged={(value) => dxvkRecommendable = value} />
+
+                <br><br>
+
+                <DXVKSelectionList recommendable={dxvkRecommendable} />
+            </div>
+
+            <div class="settings-item" id="shaders">
+                <h1>{$_('settings.shaders.title')}</h1>
+
+                <ShadersSelection />
+            </div>
         </div>
-
-        <div class="settings-item" id="runners">
-            <h1>{$_('settings.runners.title')}</h1>
-
-            <Checkbox lang="settings.runners.items.recommended" valueChanged={(value) => runnersRecommendable = value} />
-
-            <RunnerSelectionList recommendable={runnersRecommendable} />
-        </div>
-
-        <div class="settings-item" id="dxvks">
-            <h1>{$_('settings.dxvks.title')}</h1>
-
-            <Checkbox lang="settings.runners.items.recommended" valueChanged={(value) => dxvkRecommendable = value} />
-
-            <br><br>
-
-            <DXVKSelectionList recommendable={dxvkRecommendable} />
-        </div>
-
-        <div class="settings-item" id="shaders">
-            <h1>{$_('settings.shaders.title')}</h1>
-
-            <ShadersSelection />
-        </div>
-    </div>
+    </main>
 {/if}

@@ -50,6 +50,8 @@
 
                 applying[dxvk.version] = true;
 
+                DXVK.current(dxvk);
+
                 DXVK.apply(await constants.paths.prefix.current, dxvk).then(() => {
                     applying[dxvk.version] = false;
                     disabledDxvks[dxvk.version] = false;

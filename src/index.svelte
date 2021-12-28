@@ -37,12 +37,16 @@
             settingsButton?.classList.remove('hovered');
         };
     });
+
+    // Auto theme switcher
+    // TODO: an option to disable it
+    if (window.matchMedia('(prefers-color-scheme: dark)').matches)
+        document.body.setAttribute('data-theme', 'dark');
 </script>
 
 <main>
     {#await Background.get() then uri}
-        <!-- svelte-ignore a11y-missing-attribute -->
-        <img class="background" src="{uri}">
+        <img class="background" src="{uri}" alt="Missing Texture"> <!-- Alt: Random GMOD reference -->
     {/await}
 
     <div class="downloader-panel" data-theme="light">
@@ -59,17 +63,14 @@
 
     <div id="launcher-content">
         {#await launcher.getSocial() then uri}
-            <!-- svelte-ignore a11y-missing-attribute -->
-            <iframe src="{uri}" scrolling="no" style="position: absolute; border: 0; top: 0; left: 0;" width="100%" height="100%"></iframe>
+            <iframe title="Launcher-iframe" src="{uri}" scrolling="no" style="position: absolute; border: 0; top: 0; left: 0;" width="100%" height="100%"></iframe>
         {/await}
     </div>
 
     <div id="settings">
-        <!-- svelte-ignore a11y-missing-attribute -->
-        <img src={Gear} class="unactive">
+        <img src={Gear} class="unactive" alt="Settings">
 
-        <!-- svelte-ignore a11y-missing-attribute -->
-        <img src={GearActive} class="active">
+        <img src={GearActive} class="active" alt="Settings">
     </div>
     
     <button class="button" id="launch">Launch</button>
