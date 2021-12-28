@@ -55,25 +55,26 @@ To work this launcher requires
 | curl | To download archives with game, voice data, runners and so on |
 | xdelta3 | To apply the patch to the game |
 | cabextract | To install fonts to the wine prefix |
+| notify-send | To send system notifications |
 
 ## Install
 
 ### apt-get
 
 ```sh
-sudo apt-get install webkit2gtk unzip tar git curl xdelta3 cabextract
+sudo apt-get install webkit2gtk unzip tar git curl xdelta3 cabextract notify-send
 ```
 
 ### pacman
 
 ```sh
-sudo pacman -Syu webkit2gtk unzip tar git curl xdelta3 cabextract
+sudo pacman -Syu webkit2gtk unzip tar git curl xdelta3 cabextract notify-send
 ```
 
 ### dnf
 
 ```sh
-sudo dnf install webkit2gtk unzip tar git curl xdelta cabextract
+sudo dnf install webkit2gtk unzip tar git curl xdelta cabextract notify-send
 ```
 
 # Additional requirements
@@ -162,8 +163,8 @@ This is our current roadmap goals. You can find older ones [here](ROADMAP.md)
   * PropertiesEditor
 * Rewrite sass code, provide more flexible theming ability
 * <s>Add `svelte-i18n`</s>
+* <s>Telemetry checking</s>
 * Game pre-installation
-* Telemetry checking
 * Launcher auto-updates
 * Statistics window
 * Debugger

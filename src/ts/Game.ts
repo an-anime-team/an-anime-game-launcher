@@ -8,6 +8,8 @@ import type {
 import constants from './Constants';
 import fetch from './core/Fetch';
 import AbstractInstaller from './core/AbstractInstaller';
+import Domain from './core/Domain';
+import promisify from './core/promisify';
 
 declare const Neutralino;
 
@@ -142,6 +144,32 @@ export default class Game
             (version === null ? this.latest : this.getDiff(version))
                 .then((data: Latest|Diff|null) => resolve(data === null ? null : new Stream(data.path)))
                 .catch((error) => reject(error));
+        });
+    }
+
+    /**
+     * Check if the telemetry servers are disabled
+     */
+    public static isTelemetryDisabled(): Promise<boolean>
+    {
+        return new Promise(async (resolve) => {
+            const pipeline = promisify({
+                callbacks: await constants.uri.telemetry.map((domain) => {
+                    return new Promise((resolve) => {
+                        Domain.getInfo(domain).then((info) => resolve(info.available));
+                    });
+                }),
+                callAtOnce: true,
+                interval: 500
+            });
+
+            pipeline.then((result) => {
+                let disabled = false;
+
+                Object.values(result).forEach((value) => disabled ||= value as boolean);
+
+                resolve(disabled === false);
+            });
         });
     }
 }

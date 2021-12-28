@@ -1,7 +1,7 @@
 import Configs from './Configs';
 
 declare const Neutralino;
-declare const NL_PATH;
+declare const NL_CWD;
 
 class Prefix
 {
@@ -41,7 +41,7 @@ class Paths
     /**
      * Directory where the launcher's executable stored
      */
-    public static readonly appDir: string = NL_PATH;
+    public static readonly appDir: string = NL_CWD;
 
     /**
      * Shaders directory
