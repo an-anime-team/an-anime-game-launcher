@@ -1,3 +1,6 @@
+<script context="module" lang="ts">
+    declare const Neutralino;
+</script>
 <script lang="ts">
     import { onMount } from 'svelte';
 
@@ -11,7 +14,6 @@
     import Game from './ts/Game';
     import Background from './ts/launcher/Background';
 
-    // @ts-expect-error
     Neutralino.events.on('ready', () => {
         Window.open('splash', {
             title: 'Splash',

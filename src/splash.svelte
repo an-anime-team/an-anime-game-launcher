@@ -1,3 +1,6 @@
+<script context="module" lang="ts">
+    declare const Neutralino;
+</script>
 <script lang="ts">
     import { onMount } from 'svelte';
     import { _, locale } from 'svelte-i18n';
@@ -18,26 +21,20 @@
     });
 
     const isLauncherLoaded = () => {
-        // @ts-expect-error
         Neutralino.storage.getData('launcherLoaded')
             .then(() => {
-                // @ts-expect-error
                 Neutralino.storage.setData('launcherLoaded', undefined);
 
                 Window.current.hide();
 
-                // @ts-expect-error
                 Neutralino.app.exit();
             })
             .catch(() => setTimeout(isLauncherLoaded, 1000));
     };
 
-    // @ts-expect-error
-    Neutralino.events.on('ready', () => setTimeout(isLauncherLoaded, 1000));
+    Neutralino.events.on('ready', () => setTimeout(isLauncherLoaded, 3000));
 
-    // @ts-expect-error
     Neutralino.events.on('windowClose', () => {
-        // @ts-expect-error
         Neutralino.app.exit();
     });
 

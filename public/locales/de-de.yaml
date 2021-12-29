@@ -1,20 +1,20 @@
-# Splash window
+# Start Fenster
 splash:
-  title: Loading launcher
+  title: Starte Launcher
   phrases:
-    - Doing some important stuff...
-    - Bullying Paimon...
-    - Pulling for Yae...
+    - Bruder, lass uns Genshin Impact spielen...
+    - Paimon am ärgern...
+    - Versuche Yae zu ziehen...
 
-# Settings window
+# Einstellungs Fenster
 settings:
   # General
   general:
     title: General
     items:
-      # Language selection
+      # Sprach-Auswahl
       lang:
-        # Launcher language
+        # Launcher sprache
         launcher:
           title: Launcher
           items:
@@ -22,30 +22,30 @@ settings:
             ru-ru: Русский
             de-de: Deutsch
 
-        # Game voice pack language
+        # Spiel sprachpaket auswahl
         voice:
-          title: Voice pack
-          tooltip: You will have to manually select the new voice pack in the game
+          title: Sprachpaket
+          tooltip: Bitte wähle im Spiel das Sprachpaket aus um es zu benutzen
           items:
             en-us: English (US)
             ja-jp: Japanese
             ko-kr: Korean
             zn-cn: Chinese
 
-      # Launcher theme
+      # Launcher thema
       theme:
-        title: Theme
+        title: Thema
         items:
           system: System
-          light: Light
-          dark: Dark
+          light: Hell
+          dark: Dunkel
       
       discord: Discord RPC
       dxvks: DXVK
 
-  # Enhancements
+  # Verberssungen
   enhancements:
-    title: Enhancements
+    title: Verbesserungen
     items:
       # HUD
       hud:
@@ -57,31 +57,31 @@ settings:
       
       # GameMode
       gamemode:
-        title: Use GameMode
-        tooltip: It is a software that can improve the game performance
+        title: Benutze GameMode
+        tooltip: GameMode ist ein Program welches die Leistung verbessert
       
       # Unlock FPS
       fps_unlocker:
-        title: Unlock FPS
-        tooltip: This option will unlock maximum of the 60 fps limitation
+        title: Entsperre FPS
+        tooltip: Diese option entsperrt/entfernt die 60 FPS limiterung
       
       # Delete DXVK logs
       purge_dxvk_logs:
-        title: Delete DXVK logs
-        tooltip: With this option enabled your launcher will automatically
-                 delete DXVK log files
+        title: DXVK logs löschen
+        tooltip: When diese option angeschaltet ist löscht
+                 der Launcher automatisch alle DXVK logs
 
   # Runners
   runners:
     title: Wine version
     items:
-      recommended: Show recommendable only
+      recommended: Nur empfohlene anzeigen
 
   # DXVKs
   dxvks:
     title: DXVK
     items:
-      recommended: Show recommendable only
+      recommended: Nur empfohlene anzeigen
 
   # Shaders
   shaders:
@@ -89,6 +89,6 @@ settings:
     items:
       shaders:
         title: Shaders
-        tooltip: Use Home button to toggle shaders in the game
+        tooltip: Benutze die Home/POS1 taste um die Shader in-spiel zu togglen
         items:
           none: None

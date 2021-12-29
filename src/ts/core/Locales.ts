@@ -6,7 +6,8 @@ import Configs from '../Configs';
 
 type AvailableLocales =
     | 'en-us'
-    | 'ru-ru';
+    | 'ru-ru'
+    | 'de-de';
 
 declare const Neutralino;
 

@@ -4,6 +4,7 @@ import Locales from './ts/core/Locales';
 
 register('en-us', () => Locales.get('en-us'));
 register('ru-ru', () => Locales.get('ru-ru'));
+register('de-de', () => Locales.get('de-de'));
 
 Locales.default().then((locale) => {
     init({
