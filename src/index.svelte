@@ -1,6 +1,7 @@
 <script context="module" lang="ts">
     declare const Neutralino;
 </script>
+
 <script lang="ts">
     import { onMount } from 'svelte';
 
@@ -50,16 +51,11 @@
             settingsButton?.classList.remove('hovered');
         };
     });
-
-    // Auto theme switcher
-    // TODO: an option to disable it
-    if (window.matchMedia('(prefers-color-scheme: dark)').matches)
-        document.body.setAttribute('data-theme', 'dark');
 </script>
 
 <main>
     {#await Background.get() then uri}
-        <img class="background" src="{uri}" alt="Missing Texture"> <!-- Alt: Random GMOD reference -->
+        <img class="background" src="{uri}" alt="">
     {/await}
 
     <div class="downloader-panel" data-theme="light">
