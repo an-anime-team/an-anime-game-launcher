@@ -19,6 +19,8 @@ type LauncherState =
     | 'game-installation-available'
     | 'game-update-available'
     | 'game-voice-update-required'
+    | 'game-pre-installation-available'
+    | 'game-voice-pre-installation-available'
     | 'game-launch-available';
 
 export type { LauncherState };

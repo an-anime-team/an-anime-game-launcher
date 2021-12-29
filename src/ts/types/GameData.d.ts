@@ -52,12 +52,17 @@ type DeprecatedPackage = {
     md5: string;
 }
 
+type PreDownloadGame = {
+    latest: Latest;
+    diffs: Diff[];
+};
+
 type Data = {
     game: Game;
     plugin: Plugin;
     web_url: string;
     force_update?: any;
-    pre_download_game?: any;
+    pre_download_game?: PreDownloadGame;
     deprecated_packages: DeprecatedPackage[];
     sdk?: any;
 }

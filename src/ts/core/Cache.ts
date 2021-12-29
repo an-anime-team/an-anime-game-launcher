@@ -1,4 +1,5 @@
 import constants from '../Constants';
+import Debug from './Debug';
 
 type Record = {
     expired: boolean;
@@ -9,6 +10,10 @@ declare const Neutralino;
 
 export default class Cache
 {
+    // Locally stored cache to not to access
+    // cache.json file every time we want to find something
+    protected static cache: object|null = null;
+
     /**
      * Get cached value
      * 
@@ -17,19 +22,44 @@ export default class Cache
     public static get(name: string): Promise<Record|null>
     {
         return new Promise(async (resolve) => {
-            Neutralino.filesystem.readFile(await constants.paths.cache)
-                .then((cache) => {
-                    cache = JSON.parse(cache);
+            if (this.cache !== null && this.cache[name] !== undefined)
+            {
+                Debug.log({
+                    function: 'Cache.get',
+                    message: [
+                        `Resolved ${this.cache[name].expired ? 'expired' : 'unexpired'} hot cache record`,
+                        `[name] ${name}`,
+                        `[value]: ${this.cache[name].value}`
+                    ]
+                });
 
-                    if (cache[name] === undefined)
+                resolve(this.cache[name]);
+            }
+            
+            else Neutralino.filesystem.readFile(await constants.paths.cache)
+                .then((cache) => {
+                    this.cache = JSON.parse(cache);
+
+                    if (this.cache![name] === undefined)
                         resolve(null);
 
                     else
                     {
-                        resolve({
-                            expired: cache[name].ttl !== null ? Date.now() > cache[name].ttl * 1000 : false,
-                            value: JSON.parse(atob(cache[name].value))
+                        const output = {
+                            expired: this.cache![name].ttl !== null ? Date.now() > this.cache![name].ttl * 1000 : false,
+                            value: this.cache![name].value
+                        };
+
+                        Debug.log({
+                            function: 'Cache.get',
+                            message: [
+                                `Resolved ${output.expired ? 'expired' : 'unexpired'} cache`,
+                                `[name] ${name}`,
+                                `[value]: ${JSON.stringify(output.value)}`
+                            ]
                         });
+
+                        resolve(output);
                     }
                 })
                 .catch(() => resolve(null));
@@ -49,19 +79,40 @@ export default class Cache
     {
         return new Promise((resolve) => {
             constants.paths.cache.then((cacheFile) => {
-                let cache = {};
+                if (this.cache === null)
+                {
+                    Neutralino.filesystem.readFile(cacheFile)
+                        .then((cacheRaw) => 
+                        {
+                            this.cache = JSON.parse(cacheRaw);
 
-                Neutralino.filesystem.readFile(cacheFile)
-                    .then((cacheRaw) => cache = JSON.parse(cacheRaw))
-                    .catch(() => {});
+                            writeCache();
+                        })
+                        .catch(() => {
+                            this.cache = {};
 
-                cache[name] = {
-                    ttl: ttl !== null ? Math.round(Date.now() / 1000) + ttl : null,
-                    value: btoa(JSON.stringify(value))
+                            writeCache();
+                        });
+                }
+
+                const writeCache = () => {
+                    Debug.log({
+                        function: 'Cache.set',
+                        message: [
+                            'Caching data:',
+                            `[ttl] ${ttl}`,
+                            `[value] ${JSON.stringify(value)}`
+                        ]
+                    });
+    
+                    this.cache![name] = {
+                        ttl: ttl !== null ? Math.round(Date.now() / 1000) + ttl : null,
+                        value: value
+                    };
+    
+                    Neutralino.filesystem.writeFile(cacheFile, JSON.stringify(this.cache))
+                        .then(() => resolve());
                 };
-
-                Neutralino.filesystem.writeFile(cacheFile, JSON.stringify(cache))
-                    .then(() => resolve());
             });
         });
     }

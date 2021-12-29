@@ -168,7 +168,7 @@ This is our current roadmap goals. You can find older ones [here](ROADMAP.md)
 * <s>Debugger</s>
 * <s>Splash screen</s>
 * <s>Theming system</s>
-* Game pre-installation
+* <s>Game pre-installation</s>
 * Launcher auto-updates
 * Statistics window
 * Chengelog window

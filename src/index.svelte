@@ -5,9 +5,6 @@
 <script lang="ts">
     import { onMount } from 'svelte';
 
-    import Gear from '/src/assets/images/gear.png';
-    import GearActive from '/src/assets/images/gear-active.png';
-
     import Window from './ts/neutralino/Window';
 
     import Launcher from './ts/Launcher';
@@ -15,11 +12,15 @@
     import Game from './ts/Game';
     import Background from './ts/launcher/Background';
 
+    import Gear from './assets/images/gear.png';
+    import GearActive from './assets/images/gear-active.png';
+    import Download from './assets/images/cloud-download.png';
+
     Neutralino.events.on('ready', () => {
         Window.open('splash', {
             title: 'Splash',
-            width: 400,
-            height: 500,
+            width: 300,
+            height: 400,
             borderless: true,
             exitProcessOnClose: false
         });
@@ -82,5 +83,9 @@
         <img src={GearActive} class="active" alt="Settings">
     </div>
     
+    <button class="button hint--left hint--small" aria-label="Pre-download the game" id="predownload">
+        <img src={Download} alt="Download" />
+    </button>
+
     <button class="button" id="launch">Launch</button>
 </main>

@@ -5,6 +5,7 @@ import Notifications from '../../core/Notifications';
 import Runners from '../../core/Runners';
 import Game from '../../Game';
 import Process from '../../neutralino/Process';
+import Window from '../../neutralino/Window';
 
 declare const Neutralino;
 
@@ -32,6 +33,8 @@ export default (): Promise<void> => {
         // Otherwise run the game
         else
         {
+            Window.current.hide();
+
             /**
              * Selecting wine executable
              */
@@ -138,6 +141,8 @@ export default (): Promise<void> => {
             // Game closed event
             process.finish(() => {
                 const stopTime = Date.now();
+
+                Window.current.show();
 
                 // todo
 

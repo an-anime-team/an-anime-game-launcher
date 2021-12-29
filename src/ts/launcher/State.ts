@@ -14,6 +14,7 @@ export default class State
     public launcher: Launcher;
 
     public launchButton: HTMLElement;
+    public predownloadButton: HTMLElement;
 
     protected _state: LauncherState = 'game-launch-available';
 
@@ -34,6 +35,7 @@ export default class State
         this.launcher = launcher;
 
         this.launchButton = <HTMLElement>document.getElementById('launch');
+        this.predownloadButton = <HTMLElement>document.getElementById('predownload');
 
         this.launchButton.onclick = () => {
             if (this.events[this._state])
@@ -42,12 +44,28 @@ export default class State
 
                 this.events[this._state].then((event) => {
                     event.default(this.launcher).then(() => {
-                        this.launchButton.style['display'] = 'block';
-
-                        this.update();
+                        this.update().then(() => {
+                            this.launchButton.style['display'] = 'block';
+                        });
                     });
                 });
             }
+        };
+
+        this.predownloadButton.onclick = () => {
+            this.launchButton.style['display'] = 'none';
+            this.predownloadButton.style['display'] = 'none';
+
+            const module = this._state === 'game-pre-installation-available' ?
+                'Predownload' : 'PredownloadVoice';
+
+            import(`./states/${module}`).then((module) => {
+                module.default(this.launcher).then(() => {
+                    this.update().then(() => {
+                        this.launchButton.style['display'] = 'block';
+                    });
+                });
+            });
         };
 
         this.update().then(() => {
@@ -73,11 +91,20 @@ export default class State
         this._state = state;
 
         this.launcher.progressBar!.hide();
+        this.predownloadButton.style['display'] = 'none';
 
         switch(state)
         {
             case 'game-launch-available':
                 this.launchButton.textContent = 'Launch';
+
+                break;
+
+            case 'game-pre-installation-available':
+            case 'game-voice-pre-installation-available':
+                this.launchButton.textContent = 'Launch';
+
+                this.predownloadButton.style['display'] = 'block';
 
                 break;
 
@@ -125,14 +152,14 @@ export default class State
             let state: LauncherState;
 
             const gameCurrent = await Game.current;
-            const gameLatest = (await Game.latest).version;
+            const gameLatest = await Game.getLatestData();
             const patch = await Patch.latest;
             const voiceData = await Voice.current;
 
             if (gameCurrent === null)
                 state = 'game-installation-available';
             
-            else if (gameCurrent != gameLatest)
+            else if (gameCurrent != gameLatest.game.latest.version)
                 state = 'game-update-available';
 
             // TODO: update this thing if the user selected another voice language
@@ -145,6 +172,12 @@ export default class State
                     'patch-unavailable' : (patch.state == 'testing' ?
                     'test-patch-available' : 'patch-available');
             }
+
+            else if (gameLatest.pre_download_game && !await Game.isUpdatePredownloaded())
+                state = 'game-pre-installation-available';
+
+            else if (gameLatest.pre_download_game && !await Voice.isUpdatePredownloaded(await Voice.selected))
+                state = 'game-voice-pre-installation-available';
 
             else state = 'game-launch-available';
 

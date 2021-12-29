@@ -5,7 +5,8 @@ import constants from './Constants';
 import Game from './Game';
 import AbstractInstaller from './core/AbstractInstaller';
 import Configs from './Configs';
-import Debug from './core/Debug';
+import Debug, { DebugThread } from './core/Debug';
+import Downloader, { Stream as DownloadingStream } from './core/Downloader';
 
 declare const Neutralino;
 
@@ -118,13 +119,14 @@ export default class Voice
      * @returns null if the language or the version can't be found
      * @returns rejects Error object if company's servers are unreachable or they responded with an error
      */
-    public static update(lang: string|null = null, version: string|null = null): Promise<Stream|null>
+    public static update(lang: string, version: string|null = null): Promise<Stream|null>
     {
-        Debug.log(
-            version !== null ?
-            `Updating the voice package from the ${version} version` :
-            'Installing the voice package'
-        );
+        Debug.log({
+            function: 'Voice.update',
+            message: version !== null ?
+                `Updating the voice package from the ${version} version` :
+                'Installing the voice package'
+        });
 
         return new Promise((resolve, reject) => {
             (version === null ? this.latest : this.getDiff(version))
@@ -140,6 +142,65 @@ export default class Voice
                     }
                 })
                 .catch((error) => reject(error));
+        });
+    }
+
+    /**
+     * Pre-download the game's voice update
+     * 
+     * @param version current game version to download difference from
+     * 
+     * @returns null if the game pre-downloading is not available or the language wasn't found. Otherwise - downloading stream
+     * @returns Error if company's servers are unreachable or they responded with an error
+     */
+    public static predownloadUpdate(lang: string, version: string|null = null): Promise<DownloadingStream|null>
+    {
+        const debugThread = new DebugThread('Voice.predownloadUpdate', 'Predownloading game voice data...')
+
+        return new Promise((resolve) => {
+            Game.getLatestData()
+                .then((data) => {
+                    if (data.pre_download_game)
+                    {
+                        let voicePack = data.pre_download_game.latest.voice_packs.filter(voice => voice.language === lang);
+
+                        if (version !== null)
+                            for (const diff of data.pre_download_game.diffs)
+                                if (diff.version == version)
+                                {
+                                    voicePack = diff.voice_packs.filter(voice => voice.language === lang);
+
+                                    break;
+                                }
+
+                        if (voicePack.length === 1)
+                        {
+                            debugThread.log(`Downloading update from the path: ${voicePack[0].path}`);
+
+                            constants.paths.launcherDir.then((dir) => {
+                                Downloader.download(voicePack[0].path, `${dir}/voice-${lang}-predownloaded.zip`)
+                                    .then((stream) => resolve(stream));
+                            });
+                        }
+
+                        else resolve(null);
+                    }
+
+                    else resolve(null);
+                })
+                .catch((error) => resolve(error));
+        });
+    }
+
+    /**
+     * Checks whether the update was downloaded or not
+     */
+    public static isUpdatePredownloaded(lang: string): Promise<boolean>
+    {
+        return new Promise(async (resolve) => {
+            Neutralino.filesystem.getStats(`${await constants.paths.launcherDir}/voice-${lang}-predownloaded.zip`)
+                .then(() => resolve(true))
+                .catch(() => resolve(false));
         });
     }
 }

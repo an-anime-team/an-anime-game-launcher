@@ -11,6 +11,8 @@ import AbstractInstaller from './core/AbstractInstaller';
 import Domain from './core/Domain';
 import promisify from './core/promisify';
 import Debug, { DebugThread } from './core/Debug';
+import Downloader, { Stream as DownloadingStream } from './core/Downloader';
+import Cache from './core/Cache';
 
 declare const Neutralino;
 
@@ -67,12 +69,24 @@ export default class Game
 
             if (response.ok)
             {
-                const json: ServerResponse = JSON.parse(await response.body());
+                const cache = await Cache.get('Game.getLatestData.ServerResponse');
 
-                if (json.message == 'OK')
-                    resolve(json.data);
+                if (cache && !cache.expired)
+                    resolve(cache.value as Data);
 
-                else reject(new Error(`${constants.placeholders.uppercase.company}'s versions server responds with an error: [${json.retcode}] ${json.message}`));
+                else
+                {
+                    const json: ServerResponse = JSON.parse(await response.body());
+
+                    if (json.message == 'OK')
+                    {
+                        Cache.set('Game.getLatestData.ServerResponse', json.data, 24 * 3600);
+
+                        resolve(json.data);
+                    }
+
+                    else reject(new Error(`${constants.placeholders.uppercase.company}'s versions server responds with an error: [${json.retcode}] ${json.message}`));
+                }
             }
 
             else reject(new Error(`${constants.placeholders.uppercase.company}'s versions server is unreachable`));
@@ -141,21 +155,78 @@ export default class Game
     /**
      * Get the game installation stream
      * 
+     * @param version current game version to download difference from
+     * 
      * @returns null if the version can't be found
      * @returns Error if company's servers are unreachable or they responded with an error
      */
     public static update(version: string|null = null): Promise<Stream|null>
     {
-        Debug.log(
-            version !== null ?
-            `Updating the game from the ${version} version` :
-            'Installing the game'
-        );
+        Debug.log({
+            function: 'Game.update',
+            message: version !== null ?
+                `Updating the game from the ${version} version` :
+                'Installing the game'
+        });
 
         return new Promise((resolve, reject) => {
             (version === null ? this.latest : this.getDiff(version))
                 .then((data: Latest|Diff|null) => resolve(data === null ? null : new Stream(data.path)))
                 .catch((error) => reject(error));
+        });
+    }
+
+    /**
+     * Pre-download the game update
+     * 
+     * @param version current game version to download difference from
+     * 
+     * @returns null if the game pre-downloading is not available. Otherwise - downloading stream
+     * @returns Error if company's servers are unreachable or they responded with an error
+     */
+    public static predownloadUpdate(version: string|null = null): Promise<DownloadingStream|null>
+    {
+        const debugThread = new DebugThread('Game.predownloadUpdate', 'Predownloading game data...')
+
+        return new Promise((resolve) => {
+            this.getLatestData()
+                .then((data) => {
+                    if (data.pre_download_game)
+                    {
+                        let path = data.pre_download_game.latest.path;
+
+                        if (version !== null)
+                            for (const diff of data.pre_download_game.diffs)
+                                if (diff.version == version)
+                                {
+                                    path = diff.path;
+
+                                    break;
+                                }
+
+                        debugThread.log(`Downloading update from the path: ${path}`);
+
+                        constants.paths.launcherDir.then((dir) => {
+                            Downloader.download(path, `${dir}/game-predownloaded.zip`)
+                                .then((stream) => resolve(stream));
+                        });
+                    }
+
+                    else resolve(null);
+                })
+                .catch((error) => resolve(error));
+        });
+    }
+
+    /**
+     * Checks whether the update was downloaded or not
+     */
+    public static isUpdatePredownloaded(): Promise<boolean>
+    {
+        return new Promise(async (resolve) => {
+            Neutralino.filesystem.getStats(`${await constants.paths.launcherDir}/game-predownloaded.zip`)
+                .then(() => resolve(true))
+                .catch(() => resolve(false));
         });
     }
 
