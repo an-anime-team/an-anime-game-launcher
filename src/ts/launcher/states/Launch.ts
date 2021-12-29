@@ -144,7 +144,7 @@ export default (): Promise<void> => {
 
                 Window.current.show();
 
-                // todo
+                // TODO
 
                 resolve();
             });

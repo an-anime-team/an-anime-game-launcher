@@ -114,13 +114,7 @@ export default abstract class Installer
                         if (this.onDownloadFinish)
                             this.onDownloadFinish();
 
-                        Promise.resolve(unpackDir)
-                            .then((unpackDir) => {
-                                if (shouldResolve)
-                                    debugThread.log(`Resolved unpack dir: ${unpackDir}`);
-            
-                                unpackArchive();
-                            });
+                        unpackArchive();
                     });
                 });
             }

@@ -47,6 +47,10 @@
                 disabledRunners[runner.name] = false;
 
                 progress[runner.name] = undefined;
+
+                selectedVersion = runner.name;
+
+                Runners.current(runner);
             });
         });
     };

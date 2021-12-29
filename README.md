@@ -169,11 +169,11 @@ This is our current roadmap goals. You can find older ones [here](ROADMAP.md)
 * <s>Splash screen</s>
 * <s>Theming system</s>
 * <s>Game pre-installation</s>
-* Launcher auto-updates
+* <s>Default runner and DXVK auto-installation</s>
 * Statistics window
-* Chengelog window
-* Default runner auto-installation
 * Ability to change the temp directory where the launcher should download some files
+* Launcher auto-updates
+* Changelog window
 
 ### Features
 

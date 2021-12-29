@@ -7,7 +7,7 @@ export default (launcher: Launcher): Promise<void> => {
     return new Promise(async (resolve) => {
         const prefixDir = await constants.paths.prefix.current;
 
-        Prefix.exists().then((exists) => {
+        Prefix.exists(prefixDir).then((exists) => {
             if (exists)
                 resolve();
 
@@ -28,23 +28,12 @@ export default (launcher: Launcher): Promise<void> => {
                 Prefix.create(prefixDir, (output, current, total) => {
                     progressLabel = output;
 
-                    if (progressLabel.length > 70)
-                        progressLabel = progressLabel.substring(0, 70) + '...';
+                    if (progressLabel.length > 80)
+                        progressLabel = progressLabel.substring(0, 80) + '...';
 
                     launcher.progressBar!.update(current, total, 1);
                 })
-                .then((result) => {
-                    if (result === true)
-                        resolve();
-
-                    else
-                    {
-                        // TODO
-                        console.error('There\'s no wine version installed to use to create the prefix');
-
-                        resolve();
-                    }
-                });
+                .then(() => resolve());
             }
         });
     });

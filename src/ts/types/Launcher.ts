@@ -13,6 +13,8 @@
  */
 
 type LauncherState =
+    | 'runner-installation-required'
+    | 'dxvk-installation-required'
     | 'patch-unavailable'
     | 'test-patch-available'
     | 'patch-available'
