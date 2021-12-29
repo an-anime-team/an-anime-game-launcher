@@ -11,6 +11,17 @@
     import Game from './ts/Game';
     import Background from './ts/launcher/Background';
 
+    // @ts-expect-error
+    Neutralino.events.on('ready', () => {
+        Window.open('splash', {
+            title: 'Splash',
+            width: 400,
+            height: 500,
+            borderless: true,
+            exitProcessOnClose: false
+        });
+    });
+
     const launcher = new Launcher(onMount);
 
     // Do some stuff when all the content will be loaded

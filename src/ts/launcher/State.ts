@@ -7,6 +7,8 @@ import Game from '../Game';
 import Patch from '../Patch';
 import Voice from '../Voice';
 
+declare const Neutralino;
+
 export default class State
 {
     public launcher: Launcher;
@@ -49,6 +51,8 @@ export default class State
         };
 
         this.update().then(() => {
+            Neutralino.storage.setData('launcherLoaded', 'aboba');
+
             Window.current.show();
         });
     }

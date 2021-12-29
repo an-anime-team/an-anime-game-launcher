@@ -155,9 +155,7 @@ class Process
      */
     public kill(forced: boolean = false): Promise<void>
     {
-        return new Promise((resolve) => {
-            Neutralino.os.execCommand(`kill ${forced ? '-9' : '-15'} ${this.id}`).then(() => resolve());
-        });
+        return Process.kill(this.id, forced);
     }
 
     /**
@@ -212,6 +210,13 @@ class Process
             });
 
             resolve(new Process(process.pid, tmpFile));
+        });
+    }
+
+    public static kill(id: number, forced: boolean = false): Promise<void>
+    {
+        return new Promise((resolve) => {
+            Neutralino.os.execCommand(`kill ${forced ? '-9' : '-15'} ${id}`).then(() => resolve());
         });
     }
 

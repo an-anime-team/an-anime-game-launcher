@@ -1,0 +1,27 @@
+@use "sass:map"
+
+@import "basic"
+
+@mixin themable($theme-name, $theme-map)
+    body[data-theme=#{$theme-name}]
+        div
+            width: 60%
+            margin: 56px auto 0 auto
+
+            video
+                width: 100%
+
+            h2, p
+                margin: 0
+                text-align: center
+
+            p
+                color: grey
+                font-weight: 600
+                margin-top: 12px
+
+@import "themes/light"
+@import "themes/dark"
+
+@include themable(light, $light)
+@include themable(dark, $dark)

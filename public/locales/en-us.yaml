@@ -1,3 +1,12 @@
+# Splash window
+splash:
+  title: Loading launcher
+  phrases:
+    - Doing some important stuff...
+    - Bullying Paimon...
+    - Pulling for Yae...
+
+# Settings window
 settings:
   # General
   general:
