@@ -18,8 +18,8 @@ settings:
         launcher:
           title: Launcher
           items:
-            en-us: English (US)
-            ru-ru: Русский
+            en-us: Englisch (US)
+            ru-ru: Russisch
             de-de: Deutsch
 
         # Spiel sprachpaket auswahl
@@ -27,10 +27,10 @@ settings:
           title: Sprachpaket
           tooltip: Bitte wähle im Spiel das Sprachpaket aus um es zu benutzen
           items:
-            en-us: English (US)
-            ja-jp: Japanese
-            ko-kr: Korean
-            zn-cn: Chinese
+            en-us: Englisch (US)
+            ja-jp: Japanisch
+            ko-kr: Koreanische
+            zn-cn: Chinesisch
 
       # Launcher thema
       theme:
