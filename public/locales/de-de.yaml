@@ -1,4 +1,4 @@
-# Splash window
+# Start Fenster
 splash:
   title: Starte Launcher
   phrases:
@@ -6,15 +6,15 @@ splash:
     - Paimon am ärgern...
     - Versuche Yae zu ziehen...
 
-# Settings window
+# Einstellungs Fenster
 settings:
   # General
   general:
     title: General
     items:
-      # Language selection
+      # Sprach-Auswahl
       lang:
-        # Launcher language
+        # Launcher sprache
         launcher:
           title: Launcher
           items:
@@ -22,7 +22,7 @@ settings:
             ru-ru: Русский
             de-de: Deutsch
 
-        # Game voice pack language
+        # Spiel sprachpaket auswahl
         voice:
           title: Sprachpaket
           tooltip: Bitte wähle im Spiel das Sprachpaket aus um es zu benutzen
@@ -32,7 +32,7 @@ settings:
             ko-kr: Korean
             zn-cn: Chinese
 
-      # Launcher theme
+      # Launcher thema
       theme:
         title: Thema
         items:
@@ -43,7 +43,7 @@ settings:
       discord: Discord RPC
       dxvks: DXVK
 
-  # Enhancements
+  # Verberssungen
   enhancements:
     title: Verbesserungen
     items:
