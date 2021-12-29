@@ -4,16 +4,20 @@
 
 @mixin themable($theme-name, $theme-map)
     body[data-theme=#{$theme-name}]
+        background-color: map.get($theme-map, "background")
+
         div
             width: 60%
             margin: 56px auto 0 auto
 
-            video
+            img
                 width: 100%
+                image-rendering: optimizeQuality
 
             h2, p
                 margin: 0
                 text-align: center
+                color: map.get($theme-map, "text")
 
             p
                 color: grey

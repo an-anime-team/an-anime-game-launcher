@@ -22,7 +22,7 @@
       "fullScreen": false,
       "alwaysOnTop": false,
       "icon": "/public/icons/64x64.png",
-      "enableInspector": true,
+      "enableInspector": false,
       "borderless": false,
       "maximize": false,
       "hidden": true,

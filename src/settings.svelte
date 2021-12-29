@@ -2,6 +2,8 @@
     import { onMount } from 'svelte';
     import { _, locale, locales } from 'svelte-i18n';
 
+    import Configs from './ts/Configs';
+
     import Checkbox from './components/Checkbox.svelte';
     import SelectionBox from './components/SelectionBox.svelte';
     import DXVKSelectionList from './components/DXVKSelectionList.svelte';
@@ -92,13 +94,18 @@
         selectedItem = visibleElement.getAttribute('id');
     };
 
+    const switchTheme = (theme: string) => {
+        if (theme === 'system')
+            theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+
+        document.body.setAttribute('data-theme', theme as string);
+    };
+
     let dxvkRecommendable = true,
         runnersRecommendable = true;
 
     // Auto theme switcher
-    // TODO: an option to disable it
-    if (window.matchMedia('(prefers-color-scheme: dark)').matches)
-        document.body.setAttribute('data-theme', 'dark');
+    Configs.get('theme').then((theme) => switchTheme(theme as string));
 
     // Do some stuff when all the content will be loaded
     onMount(() => {
@@ -136,6 +143,7 @@
                     lang="settings.general.items.theme.title"
                     prop="theme"
                     items={themes}
+                    valueChanged={switchTheme}
                 />
 
                 <Checkbox lang="settings.general.items.discord" prop="discord.enabled" />

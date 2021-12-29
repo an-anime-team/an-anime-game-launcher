@@ -167,10 +167,10 @@ This is our current roadmap goals. You can find older ones [here](ROADMAP.md)
 * <s>Tooltips for some options</s>
 * <s>Debugger</s>
 * <s>Splash screen</s>
+* <s>Theming system</s>
 * Game pre-installation
 * Launcher auto-updates
 * Statistics window
-* Theming system
 * Chengelog window
 * Default runner auto-installation
 * Ability to change the temp directory where the launcher should download some files
