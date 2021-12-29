@@ -12,9 +12,9 @@ declare const Neutralino;
 
 class Stream extends AbstractInstaller
 {
-    public constructor(uri: string)
+    public constructor(uri: string, predownloaded: boolean = false)
     {
-        super(uri, constants.paths.gameDir);
+        super(uri, constants.paths.gameDir, predownloaded);
     }
 }
 
@@ -129,19 +129,34 @@ export default class Voice
         });
 
         return new Promise((resolve, reject) => {
-            (version === null ? this.latest : this.getDiff(version))
-                .then((data: VoicePack[]|null) => {
-                    if (data === null)
-                        resolve(null);
+            this.isUpdatePredownloaded(lang).then(async (predownloaded) => {
+                if (predownloaded)
+                {
+                    Debug.log({
+                        function: 'Voice.update',
+                        message: 'Voice package update is already pre-downloaded. Unpacking started'
+                    });
 
-                    else
-                    {
-                        const voice = data.filter(voice => voice.language === lang);
+                    resolve(new Stream(`${await constants.paths.launcherDir}/voice-${lang}-predownloaded.zip`, true));
+                }
 
-                        resolve(voice.length === 1 ? new Stream(voice[0].path) : null);
-                    }
-                })
-                .catch((error) => reject(error));
+                else
+                {
+                    (version === null ? this.latest : this.getDiff(version))
+                        .then((data: VoicePack[]|null) => {
+                            if (data === null)
+                                resolve(null);
+
+                            else
+                            {
+                                const voice = data.filter(voice => voice.language === lang);
+
+                                resolve(voice.length === 1 ? new Stream(voice[0].path) : null);
+                            }
+                        })
+                        .catch((error) => reject(error));
+                }
+            });
         });
     }
 

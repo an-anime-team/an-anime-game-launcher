@@ -32,81 +32,100 @@ export default abstract class Installer
     protected downloadFinished: boolean = false;
     protected unpackFinished: boolean = false;
 
-    public constructor(uri: string, unpackDir: string|Promise<string>)
+    /**
+     * @param uri URI to the archive we need to download
+     * @param unpackDir path to unpack this archive to
+     * 
+     * @param alreadyDownloaded specifies whether the archive was already downloaded
+     * If true, then URI will be used as a path to the archive. Otherwise stream will download it 
+     */
+    public constructor(uri: string, unpackDir: string|Promise<string>, alreadyDownloaded: boolean = false)
     {
+        const shouldResolve = typeof unpackDir !== 'string';
+
         const debugThread = new DebugThread('AbstractInstaller', {
             message: {
                 'uri': uri,
-                'unpack dir': typeof unpackDir === 'string' ? unpackDir : '<promise>'
+                'unpack dir': shouldResolve ? '<promise>' : unpackDir,
+                'already downloaded': alreadyDownloaded ? 'true' : 'false'
             }
         });
 
         constants.paths.launcherDir.then((launcherDir) => {
-            const archivePath = `${launcherDir}/${Downloader.fileFromUri(uri)}`;
+            const archivePath = alreadyDownloaded ? uri : `${launcherDir}/${Downloader.fileFromUri(uri)}`;
 
-            // Download archive
-            Downloader.download(uri, archivePath).then((stream) => {
-                stream.progressInterval = this.downloadProgressInterval;
+            // And then unpack it
+            const unpackArchive = () => {
+                Promise.resolve(unpackDir)
+                    .then((unpackDir) => {
+                        if (shouldResolve)
+                            debugThread.log(`Resolved unpack dir: ${unpackDir}`);
 
-                stream.start(() => {
-                    this.downloadStarted = true;
-
-                    if (this.onDownloadStart)
-                        this.onDownloadStart();
-                });
-
-                stream.progress((current, total, difference) => {
-                    if (this.onDownloadProgress)
-                        this.onDownloadProgress(current, total, difference);
-                });
-
-                stream.finish(() => {
-                    this.downloadFinished = true;
-
-                    if (this.onDownloadFinish)
-                        this.onDownloadFinish();
-
-                    // And then unpack it
-                    const unpackArchive = (unpackDir: string) => {
                         Archive.unpack(archivePath, unpackDir).then((stream) => {
                             stream.progressInterval = this.unpackProgressInterval;
-    
+        
                             stream.start(() => {
                                 this.unpackStarted = true;
             
                                 if (this.onUnpackStart)
                                     this.onUnpackStart();
                             });
-    
+        
                             stream.progress((current, total, difference) => {
                                 if (this.onUnpackProgress)
                                     this.onUnpackProgress(current, total, difference);
                             });
-    
+        
                             stream.finish(() => {
                                 this.unpackFinished = true;
-
+        
                                 Neutralino.filesystem.removeFile(archivePath);
-
+        
                                 debugThread.log('Installation finished');
-    
+        
                                 if (this.onUnpackFinish)
                                     this.onUnpackFinish();
                             });
                         });
-                    };
+                    });
+            };
 
-                    const shouldResolve = typeof unpackDir !== 'string';
+            // Download archive
+            if (!alreadyDownloaded)
+            {
+                Downloader.download(uri, archivePath).then((stream) => {
+                    stream.progressInterval = this.downloadProgressInterval;
 
-                    Promise.resolve(unpackDir)
-                        .then((unpackDir) => {
-                            if (shouldResolve)
-                                debugThread.log(`Resolved unpack dir: ${unpackDir}`);
+                    stream.start(() => {
+                        this.downloadStarted = true;
 
-                            unpackArchive(unpackDir);
-                        });
+                        if (this.onDownloadStart)
+                            this.onDownloadStart();
+                    });
+
+                    stream.progress((current, total, difference) => {
+                        if (this.onDownloadProgress)
+                            this.onDownloadProgress(current, total, difference);
+                    });
+
+                    stream.finish(() => {
+                        this.downloadFinished = true;
+
+                        if (this.onDownloadFinish)
+                            this.onDownloadFinish();
+
+                        Promise.resolve(unpackDir)
+                            .then((unpackDir) => {
+                                if (shouldResolve)
+                                    debugThread.log(`Resolved unpack dir: ${unpackDir}`);
+            
+                                unpackArchive();
+                            });
+                    });
                 });
-            });
+            }
+
+            else unpackArchive();
         });
     }
 

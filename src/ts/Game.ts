@@ -18,9 +18,9 @@ declare const Neutralino;
 
 class Stream extends AbstractInstaller
 {
-    public constructor(uri: string)
+    public constructor(uri: string, predownloaded: boolean = false)
     {
-        super(uri, constants.paths.gameDir);
+        super(uri, constants.paths.gameDir, predownloaded);
     }
 }
 
@@ -170,9 +170,24 @@ export default class Game
         });
 
         return new Promise((resolve, reject) => {
-            (version === null ? this.latest : this.getDiff(version))
-                .then((data: Latest|Diff|null) => resolve(data === null ? null : new Stream(data.path)))
-                .catch((error) => reject(error));
+            this.isUpdatePredownloaded().then(async (predownloaded) => {
+                if (predownloaded)
+                {
+                    Debug.log({
+                        function: 'Game.update',
+                        message: 'Update is already pre-downloaded. Unpacking started'
+                    });
+
+                    resolve(new Stream(`${await constants.paths.launcherDir}/game-predownloaded.zip`, true));
+                }
+
+                else
+                {
+                    (version === null ? this.latest : this.getDiff(version))
+                        .then((data: Latest|Diff|null) => resolve(data === null ? null : new Stream(data.path)))
+                        .catch((error) => reject(error));
+                }
+            });
         });
     }
 
