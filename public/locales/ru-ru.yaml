@@ -20,6 +20,7 @@ settings:
           items:
             en-us: English (US)
             ru-ru: Русский
+            de-de: Deutsch
 
         # Язык озвучки в игре
         voice:
