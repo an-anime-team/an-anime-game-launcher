@@ -64,14 +64,7 @@ class Paths
      */
     public static get launcherDir(): Promise<string>
     {
-        return new Promise(async (resolve) => {
-            Neutralino.filesystem.getStats(`${await Neutralino.os.getPath('data')}/anime-game-launcher`)
-            .then(async () => resolve(`${await Neutralino.os.getPath('data')}/anime-game-launcher`))
-            .catch(async () => {
-                await Neutralino.filesystem.createDirectory(`${await Neutralino.os.getPath('data')}/anime-game-launcher`);
-                resolve(`${await Neutralino.os.getPath('data')}/anime-game-launcher`);
-            });
-        });
+        return new Promise(async (resolve) => resolve(`${await Neutralino.os.getPath('data')}/anime-game-launcher`));
     }
 
     /**
@@ -81,14 +74,7 @@ class Paths
      */
     public static get runnersDir(): Promise<string>
     {
-        return new Promise(async (resolve) => {
-            Neutralino.filesystem.getStats(`${await this.launcherDir}/runners`)
-            .then(async () => resolve(`${await this.launcherDir}/runners`))
-            .catch(async () => {
-                await Neutralino.filesystem.createDirectory(`${await this.launcherDir}/runners`);
-                resolve(`${await this.launcherDir}/runners`);
-            });
-        });
+        return new Promise(async (resolve) => resolve(`${await this.launcherDir}/runners`));
     }
 
     /**
@@ -98,14 +84,7 @@ class Paths
      */
     public static get dxvksDir(): Promise<string>
     {
-        return new Promise(async (resolve) => {
-            Neutralino.filesystem.getStats(`${await this.launcherDir}/dxvks`)
-            .then(async () => resolve(`${await this.launcherDir}/dxvks`))
-            .catch(async () => {
-                await Neutralino.filesystem.createDirectory(`${await this.launcherDir}/dxvks`);
-                resolve(`${await this.launcherDir}/dxvks`);
-            });
-        });
+        return new Promise(async (resolve) => resolve(`${await this.launcherDir}/dxvks`));
     }
 
     /**

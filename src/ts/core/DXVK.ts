@@ -53,18 +53,21 @@ export default class DXVK
      */
     public static list(): Promise<TDXVK[]>
     {
-        return new Promise((resolve) => {
-            constants.paths.dxvksDir.then(async (dxvksDir: string) => {
+        return new Promise(async (resolve) => {
+            const dxvksDir = await constants.paths.dxvksDir;
+
+            Neutralino.filesystem.readDirectory(dxvksDir)
+                .then((folders) => resolveList(folders))
+                .catch(() => resolveList([]));
+
+            const resolveList = async (folders: { entry: string, type: string }[]) => {
                 let list: TDXVK[] = JSON.parse(await Neutralino.filesystem.readFile(`${constants.paths.appDir}/public/dxvks.json`));
-
-                const installed: { entry: string, type: string }[] = await Neutralino.filesystem.readDirectory(dxvksDir);
-
                 let dxvks: TDXVK[] = [];
 
                 list.forEach((dxvk) => {
                     let inst = false;
 
-                    for (let dir of installed)
+                    for (let dir of folders)
                         inst ||= dir.entry == `dxvk-${dxvk.version}`;
 
                     dxvks.push({
@@ -75,7 +78,7 @@ export default class DXVK
                 });
 
                 resolve(dxvks);
-            });
+            };
         });
     }
 

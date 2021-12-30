@@ -26,6 +26,11 @@
         });
     });
 
+    constants.paths.launcherDir.then((dir) => {
+        Neutralino.filesystem.getStats(dir)
+            .catch(() => Neutralino.filesystem.createDirectory(dir));
+    });
+
     const launcher = new Launcher(onMount);
 
     // Do some stuff when all the content will be loaded

@@ -54,12 +54,15 @@ class Runners
      */
     public static list(): Promise<RunnerFamily[]>
     {
-        return new Promise((resolve) => {
-            constants.paths.runnersDir.then(async (runnersDir: string) => {
+        return new Promise(async (resolve) => {
+            const runnersDir = await constants.paths.runnersDir;
+
+            Neutralino.filesystem.readDirectory(runnersDir)
+                .then((folders) => resolveList(folders))
+                .catch(() => resolveList([]));
+            
+            const resolveList = async (folders: { entry: string, type: string }[]) => {
                 let list: RunnerFamily[] = JSON.parse(await Neutralino.filesystem.readFile(`${constants.paths.appDir}/public/runners.json`));
-
-                const installed: { entry: string, type: string }[] = await Neutralino.filesystem.readDirectory(runnersDir);
-
                 let runners: RunnerFamily[] = [];
 
                 list.forEach((family) => {
@@ -71,7 +74,7 @@ class Runners
                     family.runners.forEach((runner) => {
                         let inst = false;
 
-                        for (let dir of installed)
+                        for (let dir of folders)
                             inst ||= dir.entry == runner.name;
 
                         newFamily.runners.push({
@@ -85,7 +88,7 @@ class Runners
                 });
 
                 resolve(runners);
-            });
+            };
         });
     }
 

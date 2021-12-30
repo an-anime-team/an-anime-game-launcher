@@ -7,6 +7,7 @@ import type {
 
 import { DebugThread } from './Debug';
 import promisify from './promisify';
+import Process from '../neutralino/Process';
 
 declare const Neutralino;
 declare const NL_CWD;
@@ -76,10 +77,13 @@ class Stream
             {
                 this.archive = info;
 
-                const command = {
-                    tar: `tar -xvf "${path}"${unpackDir ? ` -C "${unpackDir}"` : ''}`,
-                    zip: `unzip -o "${path}"${unpackDir ? ` -d "${unpackDir}"` : ''}`
+                let command = {
+                    tar: `tar -xvf '${Process.addSlashes(path)}'${unpackDir ? ` -C '${Process.addSlashes(unpackDir)}'` : ''}`,
+                    zip: `unzip -o '${Process.addSlashes(path)}'${unpackDir ? ` -d '${Process.addSlashes(unpackDir)}'` : ''}`
                 }[this.archive.type!];
+
+                if (unpackDir)
+                    command = `mkdir -p '${Process.addSlashes(unpackDir)}' && ${command}`;
 
                 let remainedFiles = this.archive.files;
                 
