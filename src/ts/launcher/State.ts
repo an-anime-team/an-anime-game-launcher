@@ -145,8 +145,9 @@ export default class State
                 break;
 
             case 'test-patch-available':
-                // todo some warning message
                 this.launchButton.textContent = 'Apply test patch';
+
+                this.launchButton.setAttribute('aria-label', 'This game version has an anti-cheat patch, but it is in the testing phase. You can wait a few days until it is stable or apply it at your own risk');
 
                 break;
 

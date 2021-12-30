@@ -2,16 +2,21 @@ import type Launcher from '../../Launcher';
 
 import Game from '../../Game';
 import Prefix from '../../core/Prefix';
+import constants from '../../Constants';
 
 export default (launcher: Launcher): Promise<void> => {
     return new Promise(async (resolve) => {
-        Prefix.exists().then((exists) => {
+        const prefixDir = await constants.paths.prefix.current;
+        
+        Prefix.exists(prefixDir).then((exists) => {
             if (!exists)
             {
                 import('./CreatePrefix').then((module) => {
                     module.default(launcher).then(() => updateGame());
                 });
             }
+
+            else updateGame();
         });
 
         const updateGame = async () => {

@@ -51,7 +51,11 @@ export default class Prefix
                 .then(() => resolve(winetricksPath))
                 .catch(() => {
                     Downloader.download(constants.uri.winetricks, winetricksPath).then((stream) => {
-                        stream.finish(() => resolve(winetricksPath));
+                        stream.finish(async () => {
+                            await Neutralino.os.execCommand(`chmod +x '${Process.addSlashes(winetricksPath)}'`);
+
+                            resolve(winetricksPath);
+                        });
                     });
                 });
         });

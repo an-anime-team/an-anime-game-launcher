@@ -34,7 +34,10 @@ export default (launcher: Launcher): Promise<void> => {
                 launcher.progressBar?.update(current, total, difference);
             });
 
-            stream?.unpackFinish(() => {
+            stream?.unpackFinish(async () => {
+                // Select this runner
+                await Runners.current('lutris-ge-6.21-1-x86_64');
+
                 // Create prefix if it is not created
                 import('./CreatePrefix').then((module) => {
                     module.default(launcher).then(() => {

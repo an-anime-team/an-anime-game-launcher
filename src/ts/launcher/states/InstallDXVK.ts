@@ -43,6 +43,10 @@ export default (launcher: Launcher): Promise<void> => {
                     stream?.unpackFinish(async () => {
                         unpacking = true;
 
+                        // Select this DXVK
+                        await DXVK.current('1.9.2');
+
+                        // And apply it
                         DXVK.apply(await constants.paths.prefix.current, '1.9.2').then(() => {
                             launcher.progressBar?.hide();
 
