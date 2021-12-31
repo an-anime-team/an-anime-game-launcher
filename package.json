@@ -1,6 +1,6 @@
 {
   "name": "an-anime-game-launcher",
-  "version": "3.0.0",
+  "version": "2.0.0",
   "license": "GPL-3.0",
   "type": "module",
   "scripts": {
@@ -15,16 +15,16 @@
     "yaml": "^1.10.2"
   },
   "devDependencies": {
-    "@neutralinojs/neu": "^8.0.0",
-    "@sveltejs/vite-plugin-svelte": "^1.0.0-next.32",
+    "@neutralinojs/neu": "^8.1.0",
+    "@sveltejs/vite-plugin-svelte": "^1.0.0-next.33",
     "@tsconfig/svelte": "^3.0.0",
     "@types/js-md5": "^0.4.3",
-    "sass": "^1.45.1",
+    "sass": "^1.45.2",
     "svelte": "^3.44.3",
     "svelte-check": "^2.2.11",
     "svelte-preprocess": "^4.10.1",
     "tslib": "^2.3.1",
     "typescript": "^4.5.4",
-    "vite": "^2.7.8"
+    "vite": "^2.7.10"
   }
 }

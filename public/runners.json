@@ -12,7 +12,7 @@
                     "wineserver": "bin/wineserver",
                     "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
                 },
-                "recommended": true
+                "recommended": false
             },
             {
                 "family": "Wine-GE",

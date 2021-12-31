@@ -7,6 +7,8 @@ import Game from '../../Game';
 import Process from '../../neutralino/Process';
 import Window from '../../neutralino/Window';
 
+import Baal from '../../../assets/images/baal64-transparent.png';
+
 declare const Neutralino;
 
 export default (): Promise<void> => {
@@ -18,12 +20,10 @@ export default (): Promise<void> => {
         // If telemetry servers are not disabled
         if (!telemetry)
         {
-            const icon = `${constants.paths.appDir}/public/icons/baal64-transparent.png`;
-
             Notifications.show({
                 title: 'An Anime Game Launcher',
                 body: 'Telemetry servers are not disabled',
-                icon: icon,
+                icon: Baal,
                 importance: 'critical'
             });
 
