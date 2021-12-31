@@ -1,6 +1,6 @@
-name: Prime Preset v2
+name: Prime Preset v3
 author: notahuman
-uri: https://notabug.org/Krock/GI-on-Linux/issues/200
+uri: https://notabug.org/notahuman/presets/raw/master/Resin-Impact/vkBasalt.conf
 images:
   - file: preview.png
     caption:
