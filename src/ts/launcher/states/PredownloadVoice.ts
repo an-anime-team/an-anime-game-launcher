@@ -1,9 +1,12 @@
 import type Launcher from '../../Launcher';
 
 import Voice from '../../Voice';
+import Game from '../../Game';
 
 export default (launcher: Launcher, prevGameVersion: string|null = null): Promise<void> => {
     return new Promise(async (resolve) => {
+        prevGameVersion ??= await Game.current;
+
         Voice.predownloadUpdate(await Voice.selected, prevGameVersion).then((stream) => {
             launcher.progressBar?.init({
                 label: 'Downloading voice package...',

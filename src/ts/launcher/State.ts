@@ -65,17 +65,20 @@ export default class State
             this.predownloadButton.style['display'] = 'none';
             this.settingsButton.style['display'] = 'none';
 
-            const module = this._state === 'game-pre-installation-available' ?
-                'Predownload' : 'PredownloadVoice';
+            // We must specify this files here directly
+            // because otherwise Vite will not bundle 'em
+            const predownloadModule = import('./states/Predownload');
+            const predownloadVoiceModule = import('./states/PredownloadVoice');
 
-            import(`./states/${module}`).then((module) => {
-                module.default(this.launcher).then(() => {
-                    this.update().then(() => {
-                        this.launchButton.style['display'] = 'block';
-                        this.settingsButton.style['display'] = 'block';
+            (this._state === 'game-pre-installation-available' ? predownloadModule : predownloadVoiceModule)
+                .then((module) => {
+                    module.default(this.launcher).then(() => {
+                        this.update().then(() => {
+                            this.launchButton.style['display'] = 'block';
+                            this.settingsButton.style['display'] = 'block';
+                        });
                     });
                 });
-            });
         };
 
         this.update().then(() => {

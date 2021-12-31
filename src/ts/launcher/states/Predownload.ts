@@ -12,6 +12,8 @@ export default (launcher: Launcher): Promise<void> => {
                     module.default(launcher).then(() => updateGame());
                 });
             }
+
+            else updateGame();
         });
 
         const updateGame = async () => {

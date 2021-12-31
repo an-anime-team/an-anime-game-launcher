@@ -1,3 +1,4 @@
+import Process from '../neutralino/Process';
 import { DebugThread } from './Debug';
 import fetch from './Fetch';
 
@@ -48,7 +49,7 @@ class Stream
         if (this.onStart)
             this.onStart();
 
-        const command = `curl -s -L -N -o "${output}" "${uri}"`;
+        const command = `curl -s -L -N -o '${Process.addSlashes(output)}' '${uri}'`;
 
         Neutralino.os.execCommand(command, {
             background: true
