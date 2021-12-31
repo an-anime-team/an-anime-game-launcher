@@ -5,7 +5,7 @@
             {
                 "family": "Wine-GE",
                 "name": "lutris-ge-6.21-1-x86_64",
-                "title": "Wine-6.21-GE-1",
+                "title": "Wine 6.21 GE 1",
                 "uri": "https://github.com/GloriousEggroll/wine-ge-custom/releases/download/6.21-GE-1/wine-lutris-ge-6.21-1-x86_64.tar.xz",
                 "files": {
                     "wine": "bin/wine64",
@@ -17,7 +17,7 @@
             {
                 "family": "Wine-GE",
                 "name": "lutris-ge-6.20-1-x86_64",
-                "title": "Wine-6.20-GE-1",
+                "title": "Wine 6.20 GE 1",
                 "uri": "https://github.com/GloriousEggroll/wine-ge-custom/releases/download/6.20-GE-1/wine-lutris-ge-6.20-1-x86_64.tar.xz",
                 "files": {
                     "wine": "bin/wine64",
@@ -29,7 +29,7 @@
             {
                 "family": "Wine-GE",
                 "name": "lutris-ge-6.19-1-x86_64",
-                "title": "Wine-6.19-GE-1",
+                "title": "Wine 6.19 GE 1",
                 "uri": "https://github.com/GloriousEggroll/wine-ge-custom/releases/download/6.19-GE-1/wine-lutris-ge-6.19-1-x86_64.tar.xz",
                 "files": {
                     "wine": "bin/wine64",
@@ -41,7 +41,7 @@
             {
                 "family": "Wine-GE",
                 "name": "lutris-ge-6.18-1-x86_64",
-                "title": "Wine-6.18-GE-1",
+                "title": "Wine 6.18 GE 1",
                 "uri": "https://github.com/GloriousEggroll/wine-ge-custom/releases/download/6.18-GE-1/wine-lutris-ge-6.18-1-x86_64.tar.xz",
                 "files": {
                     "wine": "bin/wine64",
@@ -53,7 +53,7 @@
             {
                 "family": "Wine-GE",
                 "name": "lutris-ge-6.16-1-x86_64",
-                "title": "Wine-6.16-GE-1",
+                "title": "Wine 6.16 GE 1",
                 "uri": "https://github.com/GloriousEggroll/wine-ge-custom/releases/download/6.16-GE-1/lutris-ge-6.16-1-x86_64.tar.xz",
                 "files": {
                     "wine": "bin/wine64",
@@ -77,7 +77,7 @@
                     "wineserver": "bin/wineserver",
                     "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
                 },
-                "recommended": false
+                "recommended": true
             },
             {
                 "family": "Lutris",
@@ -89,7 +89,7 @@
                     "wineserver": "bin/wineserver",
                     "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
                 },
-                "recommended": false
+                "recommended": true
             },
             {
                 "family": "Lutris",
@@ -222,6 +222,95 @@
                     "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
                 },
                 "recommended": false
+            }
+        ]
+    },
+    {
+        "title": "Proton-GE",
+        "runners": [
+            {
+                "family": "Proton-GE",
+                "name": "Proton-6.21-GE-2",
+                "title": "Proton 6.21 GE 2",
+                "uri": "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/6.21-GE-2/Proton-6.21-GE-2.tar.gz",
+                "files": {
+                    "wine": "files/bin/wine64",
+                    "wineserver": "files/bin/wineserver",
+                    "winecfg": "files/lib64/wine/x86_64-windows/winecfg.exe"
+                },
+                "recommended": true
+            },
+            {
+                "family": "Proton-GE",
+                "name": "Proton-6.20-GE-1",
+                "title": "Proton 6.20 GE 1",
+                "uri": "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/6.20-GE-1/Proton-6.20-GE-1.tar.gz",
+                "files": {
+                    "wine": "files/bin/wine64",
+                    "wineserver": "files/bin/wineserver",
+                    "winecfg": "files/lib64/wine/x86_64-windows/winecfg.exe"
+                },
+                "recommended": true
+            },
+            {
+                "family": "Proton-GE",
+                "name": "Proton-6.19-GE-2",
+                "title": "Proton 6.19 GE 2",
+                "uri": "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/6.19-GE-2/Proton-6.19-GE-2.tar.gz",
+                "files": {
+                    "wine": "files/bin/wine64",
+                    "wineserver": "files/bin/wineserver",
+                    "winecfg": "files/lib64/wine/x86_64-windows/winecfg.exe"
+                },
+                "recommended": true
+            },
+            {
+                "family": "Proton-GE",
+                "name": "Proton-6.19-GE-1",
+                "title": "Proton 6.19 GE 1",
+                "uri": "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/6.19-GE-1/Proton-6.19-GE-1.tar.gz",
+                "files": {
+                    "wine": "files/bin/wine64",
+                    "wineserver": "files/bin/wineserver",
+                    "winecfg": "files/lib64/wine/x86_64-windows/winecfg.exe"
+                },
+                "recommended": true
+            },
+            {
+                "family": "Proton-GE",
+                "name": "Proton-6.18-GE-2",
+                "title": "Proton 6.18 GE 2",
+                "uri": "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/6.18-GE-2/Proton-6.18-GE-2.tar.gz",
+                "files": {
+                    "wine": "files/bin/wine64",
+                    "wineserver": "files/bin/wineserver",
+                    "winecfg": "files/lib64/wine/x86_64-windows/winecfg.exe"
+                },
+                "recommended": true
+            },
+            {
+                "family": "Proton-GE",
+                "name": "Proton-6.18-GE-1",
+                "title": "Proton 6.18 GE 1",
+                "uri": "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/6.18-GE-1/Proton-6.18-GE-1.tar.gz",
+                "files": {
+                    "wine": "files/bin/wine64",
+                    "wineserver": "files/bin/wineserver",
+                    "winecfg": "files/lib64/wine/x86_64-windows/winecfg.exe"
+                },
+                "recommended": true
+            },
+            {
+                "family": "Proton-GE",
+                "name": "Proton-6.16-GE-1",
+                "title": "Proton 6.16 GE 1",
+                "uri": "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/6.16-GE-1/Proton-6.16-GE-1.tar.gz",
+                "files": {
+                    "wine": "files/bin/wine64",
+                    "wineserver": "files/bin/wineserver",
+                    "winecfg": "files/lib64/wine/x86_64-windows/winecfg.exe"
+                },
+                "recommended": true
             }
         ]
     }
