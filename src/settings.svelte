@@ -180,7 +180,11 @@
             <div class="settings-item" id="runners">
                 <h1>{$_('settings.runners.title')}</h1>
 
-                <Checkbox lang="settings.runners.items.recommended" valueChanged={(value) => runnersRecommendable = value} />
+                <Checkbox
+                    lang="settings.runners.items.recommended.title"
+                    tooltip="settings.runners.items.recommended.tooltip"
+                    valueChanged={(value) => runnersRecommendable = value}
+                />
 
                 <RunnerSelectionList recommendable={runnersRecommendable} />
             </div>
@@ -188,7 +192,11 @@
             <div class="settings-item" id="dxvks">
                 <h1>{$_('settings.dxvks.title')}</h1>
 
-                <Checkbox lang="settings.runners.items.recommended" valueChanged={(value) => dxvkRecommendable = value} />
+                <Checkbox
+                    lang="settings.dxvks.items.recommended.title"
+                    tooltip="settings.dxvks.items.recommended.tooltip"
+                    valueChanged={(value) => dxvkRecommendable = value}
+                />
 
                 <br><br>
 

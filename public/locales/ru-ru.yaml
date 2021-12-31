@@ -74,13 +74,17 @@ settings:
   runners:
     title: Версия Wine
     items:
-      recommended: Показывать только рекомендуемое
+      recommended:
+        title: Показывать только рекомендуемое
+        tooltip: Эта опция будет скрывать неиграбельные версии Wine
   
   # DXVK
   dxvks:
     title: DXVK
     items:
-      recommended: Показывать только рекомендуемое
+      recommended:
+        title: Показывать только рекомендуемое
+        tooltip: Эта опция будет скрывать устаревшие версии DXVK
 
   # Шейдеры
   shaders:
