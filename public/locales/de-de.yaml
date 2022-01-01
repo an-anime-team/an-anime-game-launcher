@@ -77,7 +77,8 @@ settings:
     items:
       recommended:
         title: Nur empfohlene anzeigen
-        tooltip: This option will hide unplayable wine versions
+        tooltip: Falls diese option eingeschaltet ist werden nur Wine versionen angezeigt
+                 die funktioneren.
 
   # DXVKs
   dxvks:
@@ -85,7 +86,7 @@ settings:
     items:
       recommended:
         title: Nur empfohlene anzeigen
-        tooltip: This option will hide old DXVK versions
+        tooltip: Falls diese option eingeschaltet ist werden alte DXVK versionen nicht angezeigt
 
   # Shaders
   shaders:

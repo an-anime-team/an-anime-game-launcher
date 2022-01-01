@@ -172,6 +172,11 @@ export default class DXVK
             const pipeline = promisify({
                 callbacks: [
                     /**
+                     * Replace all wine entries and remove wineboot -u to make applying dxvk work
+                     */
+                    () => Neutralino.os.execCommand(`sed -i 's/wine="wine"/wine="${runnerDir.replaceAll('/', '\\/')}\\/${runner!.files.wine.replace('64', '').replaceAll('/', '\\/')}"/g' ${dxvkDir}/setup_dxvk.sh && sed -i 's/wine64="wine64"/wine64="${runnerDir.replaceAll('/', '\\/')}\\/${runner!.files.wine.replaceAll('/', '\\/')}"/g' ${dxvkDir}/setup_dxvk.sh && sed -i 's/wineboot="wineboot"/wineboot="${runnerDir.replaceAll('/', '\\/')}\\/${runner!.files.wine.replace('64', 'boot').replaceAll('/', '\\/')}"/g' ${dxvkDir}/setup_dxvk.sh && sed -i '/$wineboot -u/d' ${dxvkDir}/setup_dxvk.sh`),
+
+                    /**
                      * Make the installation script executable
                      */
                     () => Neutralino.os.execCommand(`chmod +x '${dxvkDir}/setup_dxvk.sh'`),
