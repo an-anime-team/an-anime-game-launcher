@@ -4,6 +4,7 @@ import constants from '../ts/Constants';
 import Archive from '../ts/core/Archive';
 import Debug from '../ts/core/Debug';
 import Downloader from '../ts/core/Downloader';
+import IPC from '../ts/core/IPC';
 
 declare const Neutralino;
 
@@ -17,6 +18,8 @@ Neutralino.events.on('windowClose', () => {
 
     constants.paths.launcherDir.then(async (path) => {
         const time = new Date;
+
+        await IPC.purge();
 
         Neutralino.filesystem.getStats(`${path}/logs`)
             .then(() => saveLog())

@@ -24,6 +24,15 @@ class IPCRecord
 
         return this;
     }
+
+    public get(): { id: number; time: number; data: any}
+    {
+        return {
+            id: this.id,
+            time: this.time,
+            data: this.data
+        };
+    }
 }
 
 export default class IPC
@@ -35,7 +44,7 @@ export default class IPC
     {
         return new Promise(async (resolve) => {
             Neutralino.filesystem.readFile(`${await constants.paths.launcherDir}/.ipc.json`)
-                .then((data) => resolve(JSON.parse(data)))
+                .then((data) => resolve(JSON.parse(data).map((record) => new IPCRecord(record.id, record.time, record.data))))
                 .catch(() => resolve([]));
         });
     }
@@ -68,11 +77,23 @@ export default class IPC
         return new Promise(async (resolve) => {
             let records = await this.read();
 
-            records = records.filter((item) => item.id !== record.id && item.time !== record.time);
+            records = records.filter((item) => item.id !== record.id || item.time !== record.time);
 
             await Neutralino.filesystem.writeFile(`${await constants.paths.launcherDir}/.ipc.json`, JSON.stringify(records));
 
             resolve();
+        });
+    }
+
+    /**
+     * Remove all the record from the "shared inter-process storage"
+     */
+    public static purge(): Promise<void>
+    {
+        return new Promise(async (resolve) => {
+            Neutralino.filesystem.removeFile(`${await constants.paths.launcherDir}/.ipc.json`)
+                .then(() => resolve())
+                .catch(() => resolve());
         });
     }
 };

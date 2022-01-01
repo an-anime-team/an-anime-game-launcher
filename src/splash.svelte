@@ -23,12 +23,13 @@
     });
 
     const isLauncherLoaded = () => {
-        IPC.read().then((records) => {
+        IPC.read().then(async (records) => {
             const launcherLoaded = records.filter((record) => record.data === 'launcher-loaded');
 
             if (launcherLoaded.length > 0)
             {
-                launcherLoaded.forEach((record) => record.pop());
+                for (const record of launcherLoaded)
+                    await record.pop();
 
                 Window.current.hide();
 
