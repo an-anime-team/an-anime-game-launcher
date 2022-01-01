@@ -7,6 +7,7 @@
     import { _, locale } from 'svelte-i18n';
 
     import Configs from './ts/Configs';
+    import IPC from './ts/core/IPC';
 
     import Window from './ts/neutralino/Window';
 
@@ -22,15 +23,20 @@
     });
 
     const isLauncherLoaded = () => {
-        Neutralino.storage.getData('launcherLoaded')
-            .then(() => {
-                Neutralino.storage.setData('launcherLoaded', undefined);
+        IPC.read().then((records) => {
+            const launcherLoaded = records.filter((record) => record.data === 'launcher-loaded');
+
+            if (launcherLoaded.length > 0)
+            {
+                launcherLoaded.forEach((record) => record.pop());
 
                 Window.current.hide();
 
                 Neutralino.app.exit();
-            })
-            .catch(() => setTimeout(isLauncherLoaded, 1000));
+            }
+
+            else setTimeout(isLauncherLoaded, 1000);
+        });
     };
 
     Neutralino.events.on('ready', () => setTimeout(isLauncherLoaded, 3000));

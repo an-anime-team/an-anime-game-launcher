@@ -7,6 +7,7 @@ import Configs from './Configs';
 import ProgressBar from './launcher/ProgressBar';
 import State from './launcher/State';
 import Debug from './core/Debug';
+import IPC from './core/IPC';
 
 declare const Neutralino;
 
@@ -50,13 +51,12 @@ export default class Launcher
                     this.settingsMenu.finish(() => {
                         this.settingsMenu = undefined;
 
-                        Neutralino.storage.getData('log')
-                            .then((data) => {
-                                Debug.merge(JSON.parse(data));
-
-                                Neutralino.storage.setData('log', undefined);
-                            })
-                            .catch(() => {});
+                        IPC.read().then((records) => {
+                            records.forEach((record) => {
+                                if (record.data.type !== undefined && record.data.type === 'log')
+                                    Debug.merge(record.pop().data.records);
+                            });
+                        });
                         
                         Window.current.show();
                     })

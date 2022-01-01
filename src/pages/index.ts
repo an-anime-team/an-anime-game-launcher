@@ -30,7 +30,7 @@ Neutralino.events.on('windowClose', () => {
             const log = Debug.get().join("\r\n");
 
             if (log != '')
-                await Neutralino.filesystem.writeFile(`${path}/logs/${time.getDay()}-${time.getMonth()}-${time.getFullYear()}-${time.getHours()}-${time.getMinutes()}-${time.getSeconds()}.log`, log);
+                await Neutralino.filesystem.writeFile(`${path}/logs/${time.getDate()}-${time.getMonth() + 1}-${time.getFullYear()}-${time.getHours()}-${time.getMinutes()}-${time.getSeconds()}.log`, log);
 
             Neutralino.app.exit();
         };

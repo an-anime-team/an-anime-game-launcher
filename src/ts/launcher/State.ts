@@ -9,6 +9,7 @@ import Voice from '../Voice';
 import Runners from '../core/Runners';
 import { DebugThread } from '../core/Debug';
 import DXVK from '../core/DXVK';
+import IPC from '../core/IPC';
 
 declare const Neutralino;
 
@@ -82,7 +83,7 @@ export default class State
         };
 
         this.update().then(() => {
-            Neutralino.storage.setData('launcherLoaded', 'aboba');
+            IPC.write('launcher-loaded');
 
             Window.current.show();
         });
