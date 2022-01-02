@@ -2,6 +2,7 @@
 yarn.lock
 package-lock.json
 Audio_English(US)_2.3.0.zip
+*.AppImage
 
 /bin
 /dist
