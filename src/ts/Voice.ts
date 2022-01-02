@@ -1,5 +1,5 @@
 import type { VoicePack } from './types/GameData';
-import type { InstalledVoice, VoiceLang } from './types/Voice';
+import type { VoiceInfo, InstalledVoiceInfo, VoiceLang } from './types/Voice';
 
 import constants from './Constants';
 import Game from './Game';
@@ -23,10 +23,11 @@ export default class Voice
     /**
      * Get current installed voice data info
      */
-    public static get current(): Promise<InstalledVoice>
+    public static get current(): Promise<VoiceInfo>
     {
         return new Promise(async (resolve) => {
             const persistentPath = `${await constants.paths.gameDataDir}/Persistent/audio_lang_14`;
+            const voiceDir = await constants.paths.voiceDir;
 
             const langs = {
                 'English(US)': 'en-us',
@@ -35,21 +36,29 @@ export default class Voice
                 'Chinese': 'zn-cn'
             };
 
-            let installedVoice: InstalledVoice = {
+            let installedVoice: VoiceInfo = {
                 installed: [],
                 active: null
             };
             
             // Parse installed voice packages
-            Neutralino.filesystem.readDirectory(await constants.paths.voiceDir)
-                .then((files) => {
+            Neutralino.filesystem.readDirectory(voiceDir)
+                .then(async (files) => {
                     files = files.filter((file) => file.type == 'DIRECTORY')
                         .map((file) => file.entry);
 
-                    Object.keys(langs).forEach((folder) => {
+                    for (const folder of Object.keys(langs))
                         if (files.includes(folder))
-                            installedVoice.installed.push(langs[folder]);
-                    });
+                        {
+                            const voiceFiles: { entry: string, type: string }[] = await Neutralino.filesystem.readDirectory(`${voiceDir}/${folder}`);
+
+                            const latestVoiceFile = voiceFiles.sort((a, b) => a.entry < b.entry ? -1 : 1).pop();
+
+                            installedVoice.installed.push({
+                                lang: langs[folder],
+                                version: latestVoiceFile ? `${/_([\d]*\.[\d]*)_/.exec(latestVoiceFile.entry)![1]}.0` : null
+                            } as InstalledVoiceInfo);
+                        }
 
                     parseActiveVoice();
                 })
@@ -58,14 +67,21 @@ export default class Voice
             // Parse active voice package
             const parseActiveVoice = () => {
                 Neutralino.filesystem.readFile(persistentPath)
-                    .then((lang) => {
-                        installedVoice.active = langs[lang] ?? null;
+                    .then(async (lang) => {
+                        const voiceFiles: { entry: string, type: string }[] = await Neutralino.filesystem.readDirectory(`${voiceDir}/${lang}`);
+
+                        const latestVoiceFile = voiceFiles.sort((a, b) => a.entry < b.entry ? -1 : 1).pop();
+                        
+                        installedVoice.active = {
+                            lang: langs[lang] ?? null,
+                            version: latestVoiceFile ? `${/_([\d]*\.[\d]*)_/.exec(latestVoiceFile.entry)![1]}.0` : null
+                        } as InstalledVoiceInfo;
 
                         Debug.log({
                             function: 'Voice.current',
                             message: {
-                                'active voice': installedVoice.active,
-                                'installed voices': installedVoice.installed.join(', ')
+                                'active voice': `${installedVoice.active.lang} (${installedVoice.active.version})`,
+                                'installed voices': installedVoice.installed.map((voice) => `${voice.lang} (${voice.version})`).join(', ')
                             }
                         });
 

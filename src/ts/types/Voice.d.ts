@@ -4,12 +4,18 @@ type VoiceLang =
     | 'ja-jp'
     | 'ko-kr';
 
-type InstalledVoice = {
-    installed: VoiceLang[];
-    active: VoiceLang|null;
+type InstalledVoiceInfo = {
+    lang: VoiceLang;
+    version: string|null;
+};
+
+type VoiceInfo = {
+    installed: InstalledVoiceInfo[];
+    active: InstalledVoiceInfo|null;
 };
 
 export type {
     VoiceLang,
-    InstalledVoice
+    InstalledVoiceInfo,
+    VoiceInfo
 };
