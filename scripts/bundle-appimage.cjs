@@ -1,6 +1,10 @@
 const path = require('path');
 
-exports.params = {
+// Require bundler
+const { Bundler } = require('neutralino-appimage-bundler');
+
+// Create an object with some params
+const bundler = new Bundler({
     // .desktop file properties
     desktop: {
         // Name field
@@ -23,7 +27,7 @@ exports.params = {
     },
 
     // Should AppImage contain Neutralino's dependencies or not
-    // If true, then AppImage will contain webkit2gtk
+    // If true, then AppImage will contain binary's shared libraries
     includeLibraries: false,
 
     // Some files or folders to copy inside of the the AppImage
@@ -36,4 +40,7 @@ exports.params = {
 
     // Application version
     version: '2.0.0-beta-2'
-};
+});
+
+// Bundle project
+bundler.bundle();
