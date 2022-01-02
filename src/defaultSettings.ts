@@ -29,6 +29,13 @@ promisify(async () => {
          * @default null
          */
         dxvk: null,
+
+        /**
+         * Environment variables
+         * 
+         * @default null
+         */
+        env: null,
     
         /**
          * Launcher theme

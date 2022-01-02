@@ -185,7 +185,7 @@ class Process
             if (options.env)
             {
                 Object.keys(options.env).forEach((key) => {
-                    command = `${key}='${this.addSlashes(options.env![key])}' ${command}`;
+                    command = `${key}='${this.addSlashes(options.env![key].toString())}' ${command}`;
                 });
             }
 

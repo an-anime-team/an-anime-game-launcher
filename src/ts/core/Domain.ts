@@ -22,23 +22,36 @@ export default class Domain
             process.output((outputPart) => {
                 output += outputPart;
 
-                const regex = /PING (.*) \(([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})\) from ([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}) : [\d]+\([\d]+\) bytes of data/gm.exec(output);
-                
-                if (regex !== null || output.includes('Name or service not known'))
-                {
+                const resolveInfo = (info: DomainInfo) => {
                     process.outputInterval = null;
                     process.runningInterval = null;
-                    
-                    const info: DomainInfo = {
-                        uri: regex ? regex[1] : uri,
-                        remoteIp: regex ? regex[2] : undefined,
-                        localIp: regex ? regex[3] : undefined,
-                        available: regex ? regex[2] !== regex[3] : false
-                    };
 
                     debugThread.log({ message: info });
 
                     resolve(info);
+                };
+
+                if (output.includes('Name or service not known'))
+                {
+                    resolveInfo({
+                        uri: uri,
+                        available: false
+                    });
+                }
+
+                else
+                {
+                    const regex = /PING (.*) \(([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})\) from ([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}) : [\d]+\([\d]+\) bytes of data/gm.exec(output);
+
+                    if (regex !== null)
+                    {
+                        resolveInfo({
+                            uri: regex[1],
+                            remoteIp: regex[2],
+                            localIp: regex[3],
+                            available: regex[2] !== regex[3]
+                        });
+                    }
                 }
             });
         });

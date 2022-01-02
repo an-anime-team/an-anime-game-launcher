@@ -124,6 +124,12 @@ export default (): Promise<void> => {
 
             const command = `'${Process.addSlashes(wineExeutable)}' launcher.bat`;
 
+            console.log({
+                WINEPREFIX: await constants.paths.prefix.current,
+                ...env,
+                ...((await Configs.get('env') as object|null) ?? {})
+            });
+
             /**
              * Starting the game
              */
@@ -131,9 +137,9 @@ export default (): Promise<void> => {
 
             const process = await Process.run(command, {
                 env: {
+                    WINEPREFIX: await constants.paths.prefix.current,
                     ...env,
-
-                    WINEPREFIX: await constants.paths.prefix.current
+                    ...((await Configs.get('env') as object|null) ?? {})
                 },
                 cwd: await constants.paths.gameDir
             });
