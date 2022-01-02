@@ -1,7 +1,7 @@
 type DomainInfo = {
     uri: string;
-    remoteIp: string;
-    localIp: string;
+    remoteIp?: string;
+    localIp?: string;
     available: boolean;
 };
 

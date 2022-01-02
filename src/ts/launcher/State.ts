@@ -26,14 +26,15 @@ export default class State
     protected events = {
         'runner-installation-required': import('./states/InstallWine'),
         'dxvk-installation-required': import('./states/InstallDXVK'),
-        'game-launch-available': import('./states/Launch'),
 
         'game-installation-available': import('./states/Install'),
         'game-update-available': import('./states/Install'),
         'game-voice-update-required': import('./states/InstallVoice'),
 
         'test-patch-available': import('./states/ApplyPatch'),
-        'patch-available': import('./states/ApplyPatch')
+        'patch-available': import('./states/ApplyPatch'),
+
+        'game-launch-available': import('./states/Launch')
     };
 
     public constructor(launcher: Launcher)

@@ -24,16 +24,16 @@ export default class Domain
 
                 const regex = /PING (.*) \(([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})\) from ([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}) : [\d]+\([\d]+\) bytes of data/gm.exec(output);
                 
-                if (regex !== null)
+                if (regex !== null || output.includes('Name or service not known'))
                 {
                     process.outputInterval = null;
                     process.runningInterval = null;
                     
                     const info: DomainInfo = {
-                        uri: regex[1],
-                        remoteIp: regex[2],
-                        localIp: regex[3],
-                        available: regex[2] !== regex[3]
+                        uri: regex ? regex[1] : uri,
+                        remoteIp: regex ? regex[2] : undefined,
+                        localIp: regex ? regex[3] : undefined,
+                        available: regex ? regex[2] !== regex[3] : false
                     };
 
                     debugThread.log({ message: info });

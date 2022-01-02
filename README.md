@@ -141,27 +141,25 @@ This is our current roadmap goals. You can find older ones [here](ROADMAP.md)
   * <s>Ability to get current installed patch</s>
   * <s>Ability to get latest available patch</s>
   * <s>Ability to download and install it</s>
-* Add project binaries bundling
-  * <s>AppImage</s> *(seems to be impossible)*
-  * One-time small installation script because then launcher will have auto updates
+* <s>Add project binaries bundling</s>
+  * <s>AppImage</s>
 
 #### Launcher functions
 
-* Make `Launcher` class to manage launcher-related features
+* <s>Make `Launcher` class to manage launcher-related features</s>
   * <s>Downloading progress</s>
-  * Launcher state functionality
+  * <s>Launcher state functionality</s>
     * <s>Game launch available</s>
     * <s>Game update (installation) required</s>
     * <s>Voice data update (installation) required</s>
-    * Patch unavailable
-    * Test patch available
+    * <s>Patch unavailable</s>
+    * <s>Test patch available</s>
 * Make Svelte components
   * <s>Checkbox</s>
   * <s>Selectbox</s>
   * <s>SelectionList</s>
   * SelectableCheckbox
   * PropertiesEditor
-* Rewrite sass code, provide more flexible theming ability
 * <s>Add `svelte-i18n`</s>
 * <s>Telemetry checking</s>
 * <s>Tooltips for some options</s>
@@ -174,6 +172,7 @@ This is our current roadmap goals. You can find older ones [here](ROADMAP.md)
 * Ability to change the temp directory where the launcher should download some files
 * Launcher auto-updates
 * Changelog window
+* Rewrite sass code, provide more flexible theming ability
 
 ### Features
 
