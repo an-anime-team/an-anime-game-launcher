@@ -31,7 +31,9 @@ export default class Configs
                 }
 
                 resolve(config);
-            }).catch(() => resolve(undefined));
+            }).catch(() => {
+                setTimeout(() => resolve(this.get(name)), 100);
+            });
         });
     }
 

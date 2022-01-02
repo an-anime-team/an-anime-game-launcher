@@ -40,7 +40,7 @@ export default class Launcher
                     title: 'Settings',
                     width: 900,
                     height: 600,
-                    enableInspector: true,
+                    // enableInspector: true,
                     exitProcessOnClose: false
                 });
 
