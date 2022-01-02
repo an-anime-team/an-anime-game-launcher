@@ -34,7 +34,7 @@ This launcher is also available as the [an-anime-game-launcher-bin](https://aur.
 
 <img src="repository-pics/stats/2.2.0.png">
 
-### 2.3.0 — 73 total
+### 2.3.0 — 99 total
 
 <img src="repository-pics/stats/2.3.0.png">
 
