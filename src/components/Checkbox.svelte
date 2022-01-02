@@ -2,6 +2,7 @@
     import { _ } from 'svelte-i18n';
 
     export let active: boolean = false;
+    export let disabled: boolean = false;
 
     export let prop: string = '';
     export let lang: string = '';
@@ -27,7 +28,7 @@
     }
 </script>
 
-<div class="checkbox" class:checkbox-active={active}>
+<div class="checkbox" class:checkbox-active={active} class:checkbox-disabled={disabled}>
     <span
         class:hint--bottom={tooltip !== ''}
         class:hint--medium={tooltip !== ''}

@@ -3,6 +3,7 @@
     import { _, locale, locales } from 'svelte-i18n';
 
     import Configs from './ts/Configs';
+    import FPSUnlock from './ts/FPSUnlock';
 
     import Checkbox from './components/Checkbox.svelte';
     import SelectionBox from './components/SelectionBox.svelte';
@@ -102,7 +103,8 @@
     };
 
     let dxvkRecommendable = true,
-        runnersRecommendable = true;
+        runnersRecommendable = true,
+        fpsUnlockerAvailable = true;
 
     // Auto theme switcher
     Configs.get('theme').then((theme) => switchTheme(theme as string));
@@ -168,6 +170,15 @@
                     lang="settings.enhancements.items.fps_unlocker.title"
                     tooltip="settings.enhancements.items.fps_unlocker.tooltip"
                     prop="fps_unlocker"
+                    disabled={!fpsUnlockerAvailable}
+                    valueChanged={async (checked) => {
+                        if (checked && !await FPSUnlock.installed())
+                        {
+                            fpsUnlockerAvailable = false;
+
+                            FPSUnlock.install().then(() => fpsUnlockerAvailable = true);
+                        }
+                    }}
                 />
 
                 <Checkbox

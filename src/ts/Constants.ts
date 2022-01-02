@@ -144,6 +144,18 @@ class Paths
     {
         return new Promise(async (resolve) => resolve(`${await this.gameDataDir}/StreamingAssets/Audio/GeneratedSoundBanks/Windows`));
     }
+
+    /**
+     * FPS Unlock directory
+     * 
+     * @default "~/.local/share/anime-game-launcher/game/drive_c/Program Files/fpsunlock"
+     * 
+     * @returns "[constants.paths.prefix.current]/drive_c/Program Files/fpsunlock"
+     */
+    public static get fpsunlockDir(): Promise<string>
+    {
+        return new Promise(async (resolve) => resolve(`${await this.prefix.current}/drive_c/Program Files/fpsunlock`));
+    }
 }
 
 export default class constants
@@ -175,7 +187,11 @@ export default class constants
             `log-upload-os.${this.placeholders.lowercase.company}.com`,
             'overseauspider.yuanshen.com'
         ],
-        winetricks: 'https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks'
+        winetricks: 'https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks',
+        fpsunlock: {
+            unlocker: `https://github.com/34736384/${this.placeholders.lowercase.first}-fps-unlock/releases/download/v1.4.2/unlockfps.exe`,
+            bat: 'https://dev.kaifa.ch/Maroxy/an-anime-game-aur/raw/branch/fpsunlock/fpsunlock.bat'
+        }
     };
 
     // TODO: cache drops at that dates instead of the 7 days period

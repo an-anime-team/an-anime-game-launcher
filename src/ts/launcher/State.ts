@@ -11,8 +11,6 @@ import { DebugThread } from '../core/Debug';
 import DXVK from '../core/DXVK';
 import IPC from '../core/IPC';
 
-declare const Neutralino;
-
 export default class State
 {
     public launcher: Launcher;
@@ -157,7 +155,7 @@ export default class State
                 break;
 
             case 'patch-unavailable':
-                // todo some warning message
+                // TODO: some warning message
                 this.launchButton.textContent = 'Patch unavailable';
 
                 break;

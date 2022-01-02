@@ -114,15 +114,13 @@ export default (): Promise<void> => {
                 else console.warn(`GPU ${LauncherLib.getConfig('gpu')} not found. Launching on the default GPU`);
             }*/
 
-            // let command = `${wineExeutable} ${LauncherLib.getConfig('fpsunlock') ? 'fpsunlock.bat' : 'launcher.bat'}`;
+            let command = `'${Process.addSlashes(wineExeutable)}' ${await Configs.get('fps_unlocker') ? 'unlockfps.bat' : 'launcher.bat'}`;
 
             /**
              * Gamemode integration
              */
-            /*if (LauncherLib.getConfig('gamemode'))
-                command = `gamemoderun ${command}`;*/
-
-            const command = `'${Process.addSlashes(wineExeutable)}' launcher.bat`;
+            if (await Configs.get('gamemode'))
+                command = `gamemoderun ${command}`;
 
             console.log({
                 WINEPREFIX: await constants.paths.prefix.current,
