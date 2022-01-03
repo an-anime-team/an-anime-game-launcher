@@ -113,6 +113,12 @@ yarn dev
 yarn build
 ```
 
+## Bundle to AppImage
+
+```sh
+yarn bundle
+```
+
 # Roadmap
 
 This is our current roadmap goals. You can find older ones [here](ROADMAP.md)
@@ -168,6 +174,10 @@ This is our current roadmap goals. You can find older ones [here](ROADMAP.md)
 * <s>Theming system</s>
 * <s>Game pre-installation</s>
 * <s>Default runner and DXVK auto-installation</s>
+* Shaders menu
+* Discord RPC settings
+* Ability to hide some runners families
+* Proper wine process monitoring
 * Statistics window
 * Ability to change the temp directory where the launcher should download some files
 * Launcher auto-updates
