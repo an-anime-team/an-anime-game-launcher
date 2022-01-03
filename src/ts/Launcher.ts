@@ -55,7 +55,11 @@ export default class Launcher
                                     Debug.merge(record.pop().data.records);
 
                                 else if (record.data === 'voice-update-required')
+                                {
                                     this.state!.set('game-voice-update-required');
+
+                                    record.pop();
+                                }
                             });
                         });
 
