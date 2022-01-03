@@ -8,6 +8,7 @@ import Configs from './Configs';
 import Debug, { DebugThread } from './core/Debug';
 import Downloader, { Stream as DownloadingStream } from './core/Downloader';
 import Process from './neutralino/Process';
+import promisify from './core/promisify';
 
 declare const Neutralino;
 
@@ -18,8 +19,6 @@ class Stream extends AbstractInstaller
         super(uri, constants.paths.gameDir, predownloaded);
     }
 }
-
-
 
 export default class Voice
 {
@@ -167,14 +166,31 @@ export default class Voice
         const debugThread = new DebugThread('Voice.delete', `Deleting ${this.langs[lang]} (${lang}) voice package`);
         
         return new Promise(async (resolve) => {
-            Process.run(`rm -rf "${Process.addSlashes(await constants.paths.voiceDir + '/' + this.langs[lang])}"`)
-                .then((process) => {
-                    process.finish(() => {
-                        debugThread.log('Voice package deleted');
+            const voiceDir = await constants.paths.voiceDir;
 
-                        resolve();
-                    });
-                });
+            const pipeline = promisify({
+                callbacks: [
+                    () => Neutralino.os.execCommand(`rm -rf "${Process.addSlashes(`${voiceDir}/${this.langs[lang]}`)}"`),
+
+                    (): Promise<void> => new Promise(async (resolve) => {
+                        Neutralino.os.execCommand(`rm -f "${Process.addSlashes(`${await constants.paths.gameDir}/Audio_${this.langs[lang]}_pkg_version`)}"`)
+                            .then(() => resolve());
+                    }),
+
+                    (): Promise<void> => new Promise(async (resolve) => {
+                        Neutralino.os.execCommand(`sed -i '/${this.langs[lang]}/d' "${Process.addSlashes(`${await constants.paths.gameDataDir}/Persistent/audio_lang_14`)}"`)
+                            .then(() => resolve());
+                    })
+                ],
+                interval: 200,
+                callAtOnce: true
+            });
+            
+            pipeline.then(() => {
+                debugThread.log('Voice package deleted');
+
+                resolve();
+            });
         });
     }
 
