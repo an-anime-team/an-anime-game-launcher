@@ -48,6 +48,11 @@ class Stream extends AbstractInstaller
                      * Remove test version restrictions from the main patch
                      */
                     () => Neutralino.os.execCommand(`cd "${patchDir}" && sed -i '/^echo "If you would like to test this patch, modify this script and remove the line below this one."/,+5d' patch.sh`),
+
+                    /**
+                     * Remove /etc/hosts editing due to sudo permissions
+                     */
+                    () => Neutralino.os.execCommand(`cd "${patchDir}" && sed -i '/^# ===========================================================/,+68d' patch.sh`),
                     
                     /**
                      * Remove test version restrictions from the anti-login crash patch
@@ -69,7 +74,7 @@ class Stream extends AbstractInstaller
                      */
                     (): Promise<void> => {
                         return new Promise(async (resolve) => {
-                            Process.run(`fakeroot yes yes | bash "${patchDir}/patch.sh"`, {
+                            Process.run(`yes yes | bash "${patchDir}/patch.sh"`, {
                                 cwd: await constants.paths.gameDir
                             }).then((process) => {
                                 process.finish(() => resolve());
