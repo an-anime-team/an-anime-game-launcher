@@ -191,7 +191,7 @@ class Process
             }
 
             // Set output redirection to the temp file
-            command = `${command} > "${this.addSlashes(tmpFile)}" 2>&1 </dev/null &`;
+            command = `${command} > "${this.addSlashes(tmpFile)}" 2>&1 </dev/null`;
 
             // Set current working directory
             if (options.cwd)

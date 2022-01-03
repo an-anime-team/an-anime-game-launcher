@@ -43,21 +43,7 @@ export default (): Promise<void> => {
             const runner = await Runners.current();
 
             if (runner !== null)
-            {
                 wineExeutable = `${await constants.paths.runnersDir}/${runner.name}/${runner.files.wine}`;
-
-                try
-                {
-                    Neutralino.filesystem.getStats(wineExeutable);
-                }
-
-                catch
-                {
-                    wineExeutable = 'wine';
-
-                    await Configs.set('runner', null);
-                }
-            }
 
             debugThread.log(`Wine executable path: ${wineExeutable}`);
 
@@ -121,12 +107,6 @@ export default (): Promise<void> => {
              */
             if (await Configs.get('gamemode'))
                 command = `gamemoderun ${command}`;
-
-            console.log({
-                WINEPREFIX: await constants.paths.prefix.current,
-                ...env,
-                ...((await Configs.get('env') as object|null) ?? {})
-            });
 
             /**
              * Starting the game
