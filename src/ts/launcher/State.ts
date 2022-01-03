@@ -32,6 +32,8 @@ export default class State
         'test-patch-available': import('./states/ApplyPatch'),
         'patch-available': import('./states/ApplyPatch'),
 
+        'game-pre-installation-available': import('./states/Launch'),
+        'game-voice-pre-installation-available': import('./states/Launch'),
         'game-launch-available': import('./states/Launch')
     };
 
