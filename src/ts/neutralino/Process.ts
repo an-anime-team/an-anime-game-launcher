@@ -180,26 +180,40 @@ class Process
     {
         return new Promise(async (resolve) => {
             const tmpFile = `${await constants.paths.launcherDir}/${10000 + Math.round(Math.random() * 89999)}.tmp`;
+            const originalCommand = command.replaceAll(/\\|"|'/gm, '');
 
             // Set env variables
             if (options.env)
             {
                 Object.keys(options.env).forEach((key) => {
-                    command = `${key}='${this.addSlashes(options.env![key].toString())}' ${command}`;
+                    command = `${key}="${this.addSlashes(options.env![key].toString())}" ${command}`;
                 });
             }
 
             // Set output redirection to the temp file
-            command = `${command} > '${this.addSlashes(tmpFile)}' 2>&1`;
+            command = `${command} > "${this.addSlashes(tmpFile)}" 2>&1 </dev/null &`;
 
             // Set current working directory
             if (options.cwd)
-                command = `cd '${this.addSlashes(options.cwd)}' && ${command} && cd -`;
+                command = `cd "${this.addSlashes(options.cwd)}" && ${command}`;
 
             // And run the command
-            const process = await Neutralino.os.execCommand(command, {
-                background: true
-            });
+            const process = await Neutralino.os.execCommand(command);
+
+            // Because we're redirecting process output to the file
+            // it creates another process and our process.pid is not correct
+            // so we need to find real process id
+            const processes = ((await Neutralino.os.execCommand('ps -a -S')).stdOut as string).split(/\r\n|\r|\n/);
+
+            let processId = process.pid;
+
+            for (const line of processes)
+                if (line.replaceAll(/\\|"|'/gm, '').includes(originalCommand))
+                {
+                    processId = parseInt(line.split(' ').filter((word) => word != '')[0]);
+
+                    break;
+                }
 
             Debug.log({
                 function: 'Process.run',
@@ -210,7 +224,7 @@ class Process
                 }
             });
 
-            resolve(new Process(process.pid, tmpFile));
+            resolve(new Process(processId, tmpFile));
         });
     }
 
@@ -227,7 +241,7 @@ class Process
      */
     public static addSlashes(str: string): string
     {
-        return str.replaceAll('\\', '\\\\').replaceAll('\'', '\\\'');
+        return str.replaceAll('\\', '\\\\').replaceAll('"', '\\"');
     }
 }
 

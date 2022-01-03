@@ -21,7 +21,7 @@ export default (launcher: Launcher): Promise<void> => {
 
             Game.predownloadUpdate(prevGameVersion).then((stream) => {
                 launcher.progressBar?.init({
-                    label: 'Downloading game...',
+                    label: 'Pre-downloading game...',
                     showSpeed: true,
                     showEta: true,
                     showPercents: true,
@@ -37,7 +37,7 @@ export default (launcher: Launcher): Promise<void> => {
                 stream?.finish(() => {
                     // Predownload voice package when the game itself has been downloaded
                     import('./PredownloadVoice').then((module) => {
-                        module.default(launcher, prevGameVersion).then(() => resolve());
+                        module.default(launcher).then(() => resolve());
                     });
                 });
             });

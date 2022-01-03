@@ -6,7 +6,9 @@ promisify(async () => {
     Configs.defaults({
         lang: {
             launcher: 'en-us',
-            voice: 'en-us'
+            voice: [
+                'en-us'
+            ]
         },
     
         /**

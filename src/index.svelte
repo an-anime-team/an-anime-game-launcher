@@ -15,6 +15,7 @@
     import Gear from './assets/images/gear.png';
     import GearActive from './assets/images/gear-active.png';
     import Download from './assets/images/cloud-download.png';
+    import DiscordRPC from './ts/core/DiscordRPC';
 
     Neutralino.events.on('ready', () => {
         Window.open('splash', {
@@ -41,6 +42,22 @@
         Game.latest.then((game) => {
             Window.current.setTitle(`${constants.placeholders.uppercase.full} Linux Launcher - ${game.version}`);
         });
+
+        /*const rpc = new DiscordRPC({
+            id: '901534333360304168',
+            details: 'Aboba',
+            state: 'Amogus',
+            icon: {
+                large: 'kleegame'
+            },
+            time: {
+                start: Math.round(Date.now() / 1000)
+            }
+        });
+
+        setTimeout(() => {
+            rpc.stop(true);
+        }, 10000);*/
 
         /**
          * Add some events to some elements

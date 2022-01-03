@@ -149,7 +149,7 @@ class Runners
             const name = typeof runner !== 'string' ?
                 runner.name : runner;
 
-            Process.run(`rm -rf '${Process.addSlashes(await constants.paths.runnersDir + '/' + name)}'`)
+            Process.run(`rm -rf "${Process.addSlashes(await constants.paths.runnersDir + '/' + name)}"`)
                 .then((process) => {
                     process.finish(() => {
                         debugThread.log('Runner deleted');

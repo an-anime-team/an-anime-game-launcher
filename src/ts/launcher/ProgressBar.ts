@@ -95,7 +95,7 @@ export default class ProgressBar
             this.downloadedLabelElement.textContent = this.options!.label(current, total, difference);
 
         // Otherwise update percents and totals if we should
-        else if (this.options!.showPercents || this.options!.showPercents)
+        else if (this.options!.showPercents || this.options!.showTotals)
         {
             this.downloadedLabelElement.textContent = this.options!.label;
 

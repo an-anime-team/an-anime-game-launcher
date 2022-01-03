@@ -49,7 +49,7 @@ class Stream
         if (this.onStart)
             this.onStart();
 
-        const command = `curl -s -L -N -o '${Process.addSlashes(output)}' '${uri}'`;
+        const command = `curl -s -L -N -o "${Process.addSlashes(output)}" "${uri}"`;
 
         Neutralino.os.execCommand(command, {
             background: true

@@ -35,7 +35,7 @@ export default class FPSUnlock
                     Downloader.download(constants.uri.fpsunlock.bat, fpsunlockBat).then((stream) => {
                         stream.finish(async () => {
                             // sed -i 's/start ..\/GI_FPSUnlocker\/unlockfps.exe \%\*/start ..\/fpsunlock\/unlockfps.exe \%\*/g' unlockfps.bat
-                            Neutralino.os.execCommand(`sed -i 's/start ..\\/GI_FPSUnlocker\\/unlockfps.exe \\%\\*/start ..\\/fpsunlock\\/unlockfps.exe \\%\\*/g' '${Process.addSlashes(fpsunlockBat)}'`)
+                            Neutralino.os.execCommand(`sed -i 's/start ..\\/GI_FPSUnlocker\\/unlockfps.exe \\%\\*/start ..\\/fpsunlock\\/unlockfps.exe \\%\\*/g' "${Process.addSlashes(fpsunlockBat)}"`)
                                 .then(() => resolve());
                         });
                     });

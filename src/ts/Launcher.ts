@@ -9,8 +9,6 @@ import State from './launcher/State';
 import Debug from './core/Debug';
 import IPC from './core/IPC';
 
-declare const Neutralino;
-
 export default class Launcher
 {
     public state?: State;
@@ -40,7 +38,7 @@ export default class Launcher
                     title: 'Settings',
                     width: 900,
                     height: 600,
-                    // enableInspector: true,
+                    enableInspector: true,
                     exitProcessOnClose: false
                 });
 
@@ -55,9 +53,12 @@ export default class Launcher
                             records.forEach((record) => {
                                 if (record.data.type !== undefined && record.data.type === 'log')
                                     Debug.merge(record.pop().data.records);
+
+                                else if (record.data === 'voice-update-required')
+                                    this.state!.set('game-voice-update-required');
                             });
                         });
-                        
+
                         Window.current.show();
                     })
 

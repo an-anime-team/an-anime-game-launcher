@@ -1,0 +1,17 @@
+@use "sass:map"
+
+@mixin themable($theme-name, $theme-map)
+    body[data-theme=#{$theme-name}]
+        .dropdown-checkboxes
+            .select-options
+                .checkbox
+                    height: 28px
+
+                    span
+                        margin-right: 24px
+
+@import "src/sass/themes/light"
+@import "src/sass/themes/dark"
+
+@include themable(light, $light)
+@include themable(dark, $dark)

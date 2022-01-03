@@ -78,12 +78,12 @@ class Stream
                 this.archive = info;
 
                 let command = {
-                    tar: `tar -xvf '${Process.addSlashes(path)}'${unpackDir ? ` -C '${Process.addSlashes(unpackDir)}'` : ''}`,
-                    zip: `unzip -o '${Process.addSlashes(path)}'${unpackDir ? ` -d '${Process.addSlashes(unpackDir)}'` : ''}`
+                    tar: `tar -xvf "${Process.addSlashes(path)}"${unpackDir ? ` -C "${Process.addSlashes(unpackDir)}"` : ''}`,
+                    zip: `unzip -o "${Process.addSlashes(path)}"${unpackDir ? ` -d "${Process.addSlashes(unpackDir)}"` : ''}`
                 }[this.archive.type!];
 
                 if (unpackDir)
-                    command = `mkdir -p '${Process.addSlashes(unpackDir)}' && ${command}`;
+                    command = `mkdir -p "${Process.addSlashes(unpackDir)}" && ${command}`;
 
                 let remainedFiles = this.archive.files;
                 

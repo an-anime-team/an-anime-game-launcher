@@ -1,17 +1,23 @@
+<script context="module" lang="ts">
+    declare const Neutralino;
+</script>
+
 <script lang="ts">
     import { onMount } from 'svelte';
     import { _, locale, locales } from 'svelte-i18n';
 
     import Configs from './ts/Configs';
     import FPSUnlock from './ts/FPSUnlock';
+    import Window from './ts/neutralino/Window';
+    import Debug from './ts/core/Debug';
+    import IPC from './ts/core/IPC';
 
     import Checkbox from './components/Checkbox.svelte';
     import SelectionBox from './components/SelectionBox.svelte';
+    import DropdownCheckboxes from './components/DropdownCheckboxes.svelte';
     import DXVKSelectionList from './components/DXVKSelectionList.svelte';
     import RunnerSelectionList from './components/RunnerSelectionList.svelte';
     import ShadersSelection from './components/ShadersSelection.svelte';
-
-    import Window from './ts/neutralino/Window';
 
     // TODO: somehow simplify all this variables definitions
 
@@ -104,7 +110,8 @@
 
     let dxvkRecommendable = true,
         runnersRecommendable = true,
-        fpsUnlockerAvailable = true;
+        fpsUnlockerAvailable = true,
+        voiceUpdateRequired = false;
 
     // Auto theme switcher
     Configs.get('theme').then((theme) => switchTheme(theme as string));
@@ -112,6 +119,18 @@
     // Do some stuff when all the content will be loaded
     onMount(() => {
         Window.current.show();
+    });
+
+    Neutralino.events.on('windowClose', async () => {
+        await IPC.write({
+            type: 'log',
+            records: Debug.getRecords()
+        });
+
+        if (voiceUpdateRequired)
+            await IPC.write('voice-update-required');
+
+        Neutralino.app.exit();
     });
 </script>
 
@@ -134,11 +153,13 @@
                     valueChanged={(value) => $locale = value}
                 />
 
-                <SelectionBox
+                <DropdownCheckboxes
                     lang="settings.general.items.lang.voice.title"
                     tooltip="settings.general.items.lang.voice.tooltip"
                     prop="lang.voice"
+                    selected={undefined}
                     items={voiceLocales}
+                    selectionUpdated={() => voiceUpdateRequired = true}
                 />
 
                 <SelectionBox

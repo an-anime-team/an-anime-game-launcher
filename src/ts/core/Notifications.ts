@@ -11,11 +11,11 @@ export default class Notifications
      */
     public static show(options: NotificationsOptions)
     {
-        let command = `notify-send '${Process.addSlashes(options.title)}' '${Process.addSlashes(options.body)}'`;
+        let command = `notify-send "${Process.addSlashes(options.title)}" "${Process.addSlashes(options.body)}"`;
 
         // Specify notification icon
         if (options.icon)
-            command += ` -i '${Process.addSlashes(options.icon)}'`;
+            command += ` -i "${Process.addSlashes(options.icon)}"`;
 
         // Specify notification duration
         if (options.duration)

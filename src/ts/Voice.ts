@@ -1,5 +1,5 @@
 import type { VoicePack } from './types/GameData';
-import type { VoiceInfo, InstalledVoiceInfo, VoiceLang } from './types/Voice';
+import type { VoiceLang, InstalledVoice } from './types/Voice';
 
 import constants from './Constants';
 import Game from './Game';
@@ -7,6 +7,7 @@ import AbstractInstaller from './core/AbstractInstaller';
 import Configs from './Configs';
 import Debug, { DebugThread } from './core/Debug';
 import Downloader, { Stream as DownloadingStream } from './core/Downloader';
+import Process from './neutralino/Process';
 
 declare const Neutralino;
 
@@ -18,28 +19,26 @@ class Stream extends AbstractInstaller
     }
 }
 
+
+
 export default class Voice
 {
+    protected static readonly langs = {
+        'en-us': 'English(US)',
+        'ja-jp': 'Japanese',
+        'ko-kr': 'Korean',
+        'zn-cn': 'Chinese'
+    };
+
     /**
-     * Get current installed voice data info
+     * Get the list of the installed voice packages
      */
-    public static get current(): Promise<VoiceInfo>
+    public static get installed(): Promise<InstalledVoice[]>
     {
         return new Promise(async (resolve) => {
-            const persistentPath = `${await constants.paths.gameDataDir}/Persistent/audio_lang_14`;
             const voiceDir = await constants.paths.voiceDir;
 
-            const langs = {
-                'English(US)': 'en-us',
-                'Japanese': 'ja-jp',
-                'Korean': 'ko-kr',
-                'Chinese': 'zn-cn'
-            };
-
-            let installedVoice: VoiceInfo = {
-                installed: [],
-                active: null
-            };
+            let installedVoices: InstalledVoice[] = [];
             
             // Parse installed voice packages
             Neutralino.filesystem.readDirectory(voiceDir)
@@ -47,57 +46,41 @@ export default class Voice
                     files = files.filter((file) => file.type == 'DIRECTORY')
                         .map((file) => file.entry);
 
-                    for (const folder of Object.keys(langs))
+                    for (const folder of Object.values(this.langs))
                         if (files.includes(folder))
                         {
                             const voiceFiles: { entry: string, type: string }[] = await Neutralino.filesystem.readDirectory(`${voiceDir}/${folder}`);
 
                             const latestVoiceFile = voiceFiles.sort((a, b) => a.entry < b.entry ? -1 : 1).pop();
 
-                            installedVoice.installed.push({
-                                lang: langs[folder],
+                            installedVoices.push({
+                                lang: Object.keys(this.langs).find((lang) => this.langs[lang] === folder),
                                 version: latestVoiceFile ? `${/_([\d]*\.[\d]*)_/.exec(latestVoiceFile.entry)![1]}.0` : null
-                            } as InstalledVoiceInfo);
+                            } as InstalledVoice);
                         }
 
-                    parseActiveVoice();
+                        resolveVoices();
                 })
-                .catch(() => parseActiveVoice());
+                .catch(() => resolveVoices());
 
             // Parse active voice package
-            const parseActiveVoice = () => {
-                Neutralino.filesystem.readFile(persistentPath)
-                    .then(async (lang) => {
-                        const voiceFiles: { entry: string, type: string }[] = await Neutralino.filesystem.readDirectory(`${voiceDir}/${lang}`);
+            const resolveVoices = () => {
+                Debug.log({
+                    function: 'Voice.current',
+                    message: `Installed voices: ${installedVoices.map((voice) => `${voice.lang} (${voice.version})`).join(', ')}`
+                });
 
-                        const latestVoiceFile = voiceFiles.sort((a, b) => a.entry < b.entry ? -1 : 1).pop();
-                        
-                        installedVoice.active = {
-                            lang: langs[lang] ?? null,
-                            version: latestVoiceFile ? `${/_([\d]*\.[\d]*)_/.exec(latestVoiceFile.entry)![1]}.0` : null
-                        } as InstalledVoiceInfo;
-
-                        Debug.log({
-                            function: 'Voice.current',
-                            message: {
-                                'active voice': `${installedVoice.active.lang} (${installedVoice.active.version})`,
-                                'installed voices': installedVoice.installed.map((voice) => `${voice.lang} (${voice.version})`).join(', ')
-                            }
-                        });
-
-                        resolve(installedVoice);
-                    })
-                    .catch(() => resolve(installedVoice));
+                resolve(installedVoices);
             };
         });
     }
 
     /**
-     * Get currently selected voice package language according to the config file
+     * Get currently selected voice packages according to the config file
      */
-    public static get selected(): Promise<VoiceLang>
+    public static get selected(): Promise<VoiceLang[]>
     {
-        return Configs.get('lang.voice') as Promise<VoiceLang>;
+        return Configs.get('lang.voice') as Promise<VoiceLang[]>;
     }
 
     /**
@@ -135,13 +118,13 @@ export default class Voice
      * @returns null if the language or the version can't be found
      * @returns rejects Error object if company's servers are unreachable or they responded with an error
      */
-    public static update(lang: string, version: string|null = null): Promise<Stream|null>
+    public static update(lang: VoiceLang, version: string|null = null): Promise<Stream|null>
     {
         Debug.log({
             function: 'Voice.update',
             message: version !== null ?
-                `Updating the voice package from the ${version} version` :
-                'Installing the voice package'
+                `Updating ${lang} voice package from the ${version} version` :
+                `Installing ${lang} voice package`
         });
 
         return new Promise((resolve, reject) => {
@@ -177,6 +160,25 @@ export default class Voice
     }
 
     /**
+     * Delete specified voice package
+     */
+    public static delete(lang: VoiceLang): Promise<void>
+    {
+        const debugThread = new DebugThread('Voice.delete', `Deleting ${this.langs[lang]} (${lang}) voice package`);
+        
+        return new Promise(async (resolve) => {
+            Process.run(`rm -rf "${Process.addSlashes(await constants.paths.voiceDir + '/' + this.langs[lang])}"`)
+                .then((process) => {
+                    process.finish(() => {
+                        debugThread.log('Voice package deleted');
+
+                        resolve();
+                    });
+                });
+        });
+    }
+
+    /**
      * Pre-download the game's voice update
      * 
      * @param version current game version to download difference from
@@ -186,7 +188,7 @@ export default class Voice
      */
     public static predownloadUpdate(lang: string, version: string|null = null): Promise<DownloadingStream|null>
     {
-        const debugThread = new DebugThread('Voice.predownloadUpdate', 'Predownloading game voice data...')
+        const debugThread = new DebugThread('Voice.predownloadUpdate', `Predownloading ${lang} game voice data...`)
 
         return new Promise((resolve) => {
             Game.getLatestData()
@@ -226,12 +228,25 @@ export default class Voice
     /**
      * Checks whether the update was downloaded or not
      */
-    public static isUpdatePredownloaded(lang: string): Promise<boolean>
+    public static isUpdatePredownloaded(lang: VoiceLang|VoiceLang[]): Promise<boolean>
     {
         return new Promise(async (resolve) => {
-            Neutralino.filesystem.getStats(`${await constants.paths.launcherDir}/voice-${lang}-predownloaded.zip`)
-                .then(() => resolve(true))
-                .catch(() => resolve(false));
+            if (typeof lang === 'string')
+            {
+                Neutralino.filesystem.getStats(`${await constants.paths.launcherDir}/voice-${lang}-predownloaded.zip`)
+                    .then(() => resolve(true))
+                    .catch(() => resolve(false));
+            }
+
+            else
+            {
+                let predownloaded = true;
+
+                for (const voiceLang of lang)
+                    predownloaded &&= await this.isUpdatePredownloaded(voiceLang);
+
+                resolve(predownloaded);
+            }
         });
     }
 }

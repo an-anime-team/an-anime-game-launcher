@@ -253,7 +253,22 @@ export default class State
                 const gameCurrent = await Game.current;
                 const gameLatest = await Game.getLatestData();
                 const patch = await Patch.latest;
-                const voiceData = await Voice.current;
+
+                const installedVoices = await Voice.installed;
+                const selectedVoices = await Voice.selected;
+
+                let voiceUpdateRequired = installedVoices.length != selectedVoices.length || installedVoices.length === 0;
+
+                if (!voiceUpdateRequired)
+                {
+                    for (const installedVoice of installedVoices)
+                        if (installedVoice.version != gameCurrent || !selectedVoices.includes(installedVoice.lang))
+                        {
+                            voiceUpdateRequired = true;
+
+                            break;
+                        }
+                }
                 
                 if (gameCurrent === null)
                     state = 'game-installation-available';
@@ -261,8 +276,8 @@ export default class State
                 else if (gameCurrent != gameLatest.game.latest.version)
                     state = 'game-update-available';
 
-                // TODO: update this thing if the user selected another voice language
-                else if (voiceData.installed.length === 0)
+                // TODO: download default voice language if user removed all of them
+                else if (voiceUpdateRequired)
                     state = 'game-voice-update-required';
 
                 else if (!patch.applied)

@@ -52,7 +52,7 @@ export default class Prefix
                 .catch(() => {
                     Downloader.download(constants.uri.winetricks, winetricksPath).then((stream) => {
                         stream.finish(async () => {
-                            await Neutralino.os.execCommand(`chmod +x '${Process.addSlashes(winetricksPath)}'`);
+                            await Neutralino.os.execCommand(`chmod +x "${Process.addSlashes(winetricksPath)}"`);
 
                             resolve(winetricksPath);
                         });
@@ -108,7 +108,7 @@ export default class Prefix
                     this.getWinetricks().then(async (winetricks) => {
                         let installationProgress = 0;
 
-                        const process = await Process.run(`'${Process.addSlashes(winetricks)}' corefonts usetakefocus=n`, {
+                        const process = await Process.run(`"${Process.addSlashes(winetricks)}" corefonts usetakefocus=n`, {
                             env: {
                                 WINE: `${await constants.paths.runnersDir}/${runner.name}/${runner.files.wine}`,
                                 WINESERVER: `${await constants.paths.runnersDir}/${runner.name}/${runner.files.wineserver}`,

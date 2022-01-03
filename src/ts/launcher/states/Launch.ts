@@ -114,7 +114,7 @@ export default (): Promise<void> => {
                 else console.warn(`GPU ${LauncherLib.getConfig('gpu')} not found. Launching on the default GPU`);
             }*/
 
-            let command = `'${Process.addSlashes(wineExeutable)}' ${await Configs.get('fps_unlocker') ? 'unlockfps.bat' : 'launcher.bat'}`;
+            let command = `"${Process.addSlashes(wineExeutable)}" ${await Configs.get('fps_unlocker') ? 'unlockfps.bat' : 'launcher.bat'}`;
 
             /**
              * Gamemode integration

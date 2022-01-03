@@ -28,8 +28,8 @@ export default (launcher: Launcher): Promise<void> => {
                 Prefix.create(prefixDir, (output, current, total) => {
                     progressLabel = output;
 
-                    if (progressLabel.length > 80)
-                        progressLabel = progressLabel.substring(0, 80) + '...';
+                    if (progressLabel.length > 70)
+                        progressLabel = progressLabel.substring(0, 70) + '...';
 
                     launcher.progressBar!.update(current, total, 1);
                 })

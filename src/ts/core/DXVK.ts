@@ -143,7 +143,7 @@ export default class DXVK
             const version = typeof dxvk !== 'string' ?
                 dxvk.version : dxvk;
 
-            Process.run(`rm -rf '${Process.addSlashes(await constants.paths.dxvksDir + '/dxvk-' + version)}'`)
+            Process.run(`rm -rf "${Process.addSlashes(await constants.paths.dxvksDir + '/dxvk-' + version)}"`)
                 .then((process) => {
                     process.finish(() => {
                         debugThread.log('Deletion completed');
@@ -179,15 +179,15 @@ export default class DXVK
                     /**
                      * Make the installation script executable
                      */
-                    () => Neutralino.os.execCommand(`chmod +x '${dxvkDir}/setup_dxvk.sh'`),
+                    () => Neutralino.os.execCommand(`chmod +x "${dxvkDir}/setup_dxvk.sh"`),
 
                     /**
                      * And then run it
                      */
                     (): Promise<void> => new Promise(async (resolve) => {
-                        const alias = runner ? `alias winecfg=\\'${runnerDir}/${runner.files.winecfg}\\'\\n` : '';
+                        const alias = runner ? `alias winecfg=\\"${runnerDir}/${runner.files.winecfg}\\"\\n` : '';
 
-                        Process.run(`eval $'${alias ? alias : ''}./setup_dxvk.sh install'`, {
+                        Process.run(`eval $"${alias ? alias : ''}./setup_dxvk.sh install"`, {
                             cwd: dxvkDir,
                             env: {
                                 WINE: runner ? `${runnerDir}/${runner.files.wine}` : 'wine',
