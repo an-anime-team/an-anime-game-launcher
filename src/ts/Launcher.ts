@@ -109,7 +109,7 @@ export default class Launcher
     
                         icon: {
                             // @ts-expect-error
-                            large: discord.fields.icon
+                            large: state === 'in-launcher' ? 'launcher' : discord.fields.icon
                         },
     
                         time: {
