@@ -105,14 +105,14 @@ export default class Launcher
                         id: '901534333360304168',
 
                         // @ts-expect-error
-                        details: 'in-game' ? discord.fields.details : discord.fields.states['in-launcher'],
+                        details: state === 'in-game' ? discord.fields.details : discord.fields.states['in-launcher'],
     
                         // @ts-expect-error
-                        state: 'in-game' ? discord.fields.states['in-game'] : undefined,
+                        state: state === 'in-game' ? discord.fields.states['in-game'] : false,
     
                         icon: {
                             // @ts-expect-error
-                            large: state == 'in-launcher' ? 'launcher' : discord.fields.icon
+                            large: state === 'in-launcher' ? 'launcher' : discord.fields.icon
                         },
     
                         time: {
