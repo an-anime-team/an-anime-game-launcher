@@ -14,7 +14,7 @@ export default class DiscordRPC
         this.params = params;
 
         let exec = [
-            `"${NL_CWD}/public/discord-rpc/discord-rpc"`,
+            `"${Process.addSlashes(NL_CWD)}/public/discord-rpc/discord-rpc"`,
             `-a ${params.id}`
         ];
 
