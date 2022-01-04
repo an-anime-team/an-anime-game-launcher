@@ -8,7 +8,7 @@ splash:
 
 # Launcher window
 launcher:
-  predownload: Pre-download the game
+  predownload: Pre-download update
 
 # Settings window
 settings:
