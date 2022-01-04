@@ -44,8 +44,15 @@ settings:
           light: Светлая
           dark: Тёмная
       
-      discord: Discord RPC
-      dxvks: DXVK
+      # Discord RPC
+      discord:
+        title: Discord RPC
+        settings:
+          title: Настройки Discord RPC
+          items:
+            timer: Отображать потраченное время
+            in-launcher: Текст в лаунчере
+            in-game: Текст в игре
 
   # Улучшения
   enhancements:

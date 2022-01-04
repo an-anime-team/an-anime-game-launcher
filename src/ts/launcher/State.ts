@@ -152,13 +152,19 @@ export default class State
             case 'test-patch-available':
                 this.launchButton.textContent = 'Apply test patch';
 
+                this.launchButton.classList.add('button-blue');
+
                 this.launchButton.setAttribute('aria-label', 'This game version has an anti-cheat patch, but it is in the testing phase. You can wait a few days until it is stable or apply it at your own risk');
 
                 break;
 
             case 'patch-unavailable':
-                // TODO: some warning message
                 this.launchButton.textContent = 'Patch unavailable';
+
+                this.launchButton.classList.add('button-blue');
+                this.launchButton.setAttribute('disabled', '');
+
+                this.launchButton.setAttribute('aria-label', 'This game version has no anti-cheat patch. Please, wait a few days before there will be a test or stable version');
 
                 break;
         }
@@ -293,13 +299,19 @@ export default class State
                             {
                                 const patch = await Patch.latest;
                                 
-                                if (!patch.applied)
+                                // If the latest game version is, for example, 2.3.0
+                                // and the patch is 2.4.0 preparation, it means that
+                                // 2.4.0 will be released soon, but since it's still not released
+                                // we shouldn't show something about it to user and just let him play the game
+                                if (gameLatest.game.latest.version === patch.version && !patch.applied)
                                 {
                                     state = patch.state == 'preparation' ?
                                         'patch-unavailable' : (patch.state == 'testing' ?
                                         'test-patch-available' : 'patch-available');
                                 }
 
+                                // Patch is more important than game pre-downloading
+                                // because otherwise we will not be able to play the game
                                 else if (gameLatest.pre_download_game && !await Game.isUpdatePredownloaded())
                                     state = 'game-pre-installation-available';
 

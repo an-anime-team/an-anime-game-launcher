@@ -15,6 +15,7 @@
     import Checkbox from './components/Checkbox.svelte';
     import SelectionBox from './components/SelectionBox.svelte';
     import DropdownCheckboxes from './components/DropdownCheckboxes.svelte';
+    import DiscordSettings from './components/DiscordSettings.svelte';
     import DXVKSelectionList from './components/DXVKSelectionList.svelte';
     import RunnerSelectionList from './components/RunnerSelectionList.svelte';
     import ShadersSelection from './components/ShadersSelection.svelte';
@@ -110,8 +111,11 @@
 
     let dxvkRecommendable = true,
         runnersRecommendable = true,
+        discordRpcSettings = false,
         fpsUnlockerAvailable = true,
         voiceUpdateRequired = false;
+
+    Configs.get('discord.enabled').then((enabled) => discordRpcSettings = enabled as boolean);
 
     // Auto theme switcher
     Configs.get('theme').then((theme) => switchTheme(theme as string));
@@ -169,7 +173,13 @@
                     valueChanged={switchTheme}
                 />
 
-                <Checkbox lang="settings.general.items.discord" prop="discord.enabled" />
+                <Checkbox
+                    lang="settings.general.items.discord.title"
+                    prop="discord.enabled"
+                    valueChanged={(value) => discordRpcSettings = value}
+                />
+
+                <DiscordSettings visible={discordRpcSettings} />
             </div>
 
             <div class="settings-item" id="enhancements">

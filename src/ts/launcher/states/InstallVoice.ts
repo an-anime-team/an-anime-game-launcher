@@ -71,6 +71,8 @@ export default (launcher: Launcher): Promise<void> => {
                                     showPercents: true,
                                     showTotals: true
                                 });
+
+                                launcher.progressBar?.show();
                             });
                 
                             stream?.unpackProgress((current: number, total: number, difference: number) => {

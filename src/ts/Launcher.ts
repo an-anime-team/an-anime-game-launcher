@@ -105,10 +105,7 @@ export default class Launcher
                         id: '901534333360304168',
     
                         // @ts-expect-error
-                        details: discord.fields.title,
-    
-                        // @ts-expect-error
-                        state: discord.fields.state[state],
+                        details: discord.fields.states[state],
     
                         icon: {
                             // @ts-expect-error
@@ -117,7 +114,7 @@ export default class Launcher
     
                         time: {
                             // @ts-expect-error
-                            start: discord.fields.time ? Math.round(Date.now() / 1000) : 0
+                            start: discord.fields.timer ? Math.round(Date.now() / 1000) : 0
                         }
                     });
     

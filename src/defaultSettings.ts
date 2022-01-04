@@ -82,23 +82,18 @@ promisify(async () => {
              */
             fields: {
                 /**
-                 * Launcher title
-                 */
-                title: 'An Anime Game Launcher',
-
-                /**
                  * Small messages after title
                  */
-                state: {
-                    /**
-                     * Message showed when you're in game
-                     */
-                    'in-launcher': 'Playing the game',
-
+                states: {
                     /**
                      * Message showed when you're in launcher
                      */
-                    'in-game': 'Preparing to launch'
+                    'in-launcher': 'Preparing to launch',
+
+                    /**
+                     * Message showed when you're in game
+                     */
+                    'in-game': 'Playing the game'
                 },
 
                 /**

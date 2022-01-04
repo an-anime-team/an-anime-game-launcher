@@ -34,12 +34,12 @@ export default class Game
     public static get current(): Promise<string|null>
     {
         return new Promise(async (resolve) => {
-            const persistentPath = `${await constants.paths.gameDataDir}/Persistent/ScriptVersion`;
+            // const persistentPath = `${await constants.paths.gameDataDir}/Persistent/ScriptVersion`;
             const globalGameManagersPath = `${await constants.paths.gameDataDir}/globalgamemanagers`;
 
-            Neutralino.filesystem.readFile(persistentPath)
+            /*Neutralino.filesystem.readFile(persistentPath)
                 .then((version) => resolve(version))
-                .catch(() => {
+                .catch(() => {*/
                     Neutralino.filesystem.readBinaryFile(globalGameManagersPath)
                         .then((config: ArrayBuffer) => {
                             const buffer = new TextDecoder('ascii').decode(new Uint8Array(config));
@@ -53,7 +53,7 @@ export default class Game
                             resolve(version !== null ? version[1] : null);
                         })
                         .catch(() => resolve(null));
-                });
+                // });
         });
     }
 

@@ -192,21 +192,20 @@ export default class Patch
         return new Promise(async (resolve, reject) => {
             const patchUri = constants.uri.patch[source];
 
-            fetch(`${patchUri}/raw/master/${version.replaceAll('.', '')}/patch.sh`, this.fetchTimeout)
-                .then((patcherResponse) => {
+            fetch(`${patchUri}/raw/master/${version.replaceAll('.', '')}/README.txt`, this.fetchTimeout)
+                .then((readmeResponse) => {
                     // Return an error if patch's server is unavailable
-                    if (patcherResponse.status === null)
+                    if (readmeResponse.status === null)
                         reject(new Error(`${source} patch repository is unreachable`));
 
-                    // If [version]/patch.sh file doesn't exist - it means
+                    // If [version]/README.txt file doesn't exist - it means
                     // that patch repo has no [version]
-                    else if (patcherResponse.status === 404)
+                    else if (readmeResponse.status === 404)
                         resolve(null);
 
                     // Otherwise it should be [preparation], [testing] or [stable]
                     else
                     {
-                        
                         fetch(`${patchUri}/raw/master/${version.replaceAll('.', '')}/patch_files/unityplayer_patch.vcdiff`, this.fetchTimeout)
                             .then((response) => {
                                 // Return an error if patch's server is unavailable
@@ -228,46 +227,53 @@ export default class Patch
                                 // Otherwise it's [testing] or [stable]
                                 else
                                 {
-                                    patcherResponse.body(this.fetchTimeout)
-                                        .then((response) => {
+                                    fetch(`${patchUri}/raw/master/${version.replaceAll('.', '')}/patch.sh`, this.fetchTimeout)
+                                        .then((patcherResponse) => {
                                             // Return an error if patch's server is unavailable
-                                            if (response === '')
+                                            if (patcherResponse.status === null)
                                                 reject(new Error(`${source} patch repository is unreachable`));
+                                            
+                                            else patcherResponse.body(this.fetchTimeout)
+                                                .then((response) => {
+                                                    // Return an error if patch's server is unavailable
+                                                    if (response === '')
+                                                        reject(new Error(`${source} patch repository is unreachable`));
 
-                                            // Otherwise - let's prepare [testing] or [stable] output
-                                            else
-                                            {
-                                                // If this line is commented - then it's [stable] version
-                                                // Otherwise it's [testing]
-                                                const stableMark = '#echo "If you would like to test this patch, modify this script and remove the line below this one."';
+                                                    // Otherwise - let's prepare [testing] or [stable] output
+                                                    else
+                                                    {
+                                                        // If this line is commented - then it's [stable] version
+                                                        // Otherwise it's [testing]
+                                                        const stableMark = '#echo "If you would like to test this patch, modify this script and remove the line below this one."';
 
-                                                let patchInfo: PatchInfo = {
-                                                    version: version,
-                                                    state: response.includes(stableMark) ? 'stable' : 'testing',
-                                                    applied: false,
-                                                    source: source
-                                                };
+                                                        let patchInfo: PatchInfo = {
+                                                            version: version,
+                                                            state: response.includes(stableMark) ? 'stable' : 'testing',
+                                                            applied: false,
+                                                            source: source
+                                                        };
 
-                                                const originalPlayer = /if \[ "\${sum}" != "([a-z0-9]{32})" \]; then/mg.exec(response);
+                                                        const originalPlayer = /if \[ "\${sum}" != "([a-z0-9]{32})" \]; then/mg.exec(response);
 
-                                                // If we could get original UnityPlayer.dll hash - then we can
-                                                // compare it with actual UnityPlayer.dll hash and say whether the patch
-                                                // was applied or not
-                                                if (originalPlayer !== null)
-                                                {
-                                                    constants.paths.gameDir.then((gameDir) => {
-                                                        Neutralino.filesystem.readBinaryFile(`${gameDir}/UnityPlayer.dll`)
-                                                            .then((currPlayer: ArrayBuffer) => {
-                                                                patchInfo.applied = md5(currPlayer) != originalPlayer[1];
+                                                        // If we could get original UnityPlayer.dll hash - then we can
+                                                        // compare it with actual UnityPlayer.dll hash and say whether the patch
+                                                        // was applied or not
+                                                        if (originalPlayer !== null)
+                                                        {
+                                                            constants.paths.gameDir.then((gameDir) => {
+                                                                Neutralino.filesystem.readBinaryFile(`${gameDir}/UnityPlayer.dll`)
+                                                                    .then((currPlayer: ArrayBuffer) => {
+                                                                        patchInfo.applied = md5(currPlayer) != originalPlayer[1];
 
-                                                                resolve(patchInfo);
-                                                            })
-                                                            .catch(() => resolve(patchInfo));
-                                                    });
-                                                }
+                                                                        resolve(patchInfo);
+                                                                    })
+                                                                    .catch(() => resolve(patchInfo));
+                                                            });
+                                                        }
 
-                                                else resolve(patchInfo);
-                                            }
+                                                        else resolve(patchInfo);
+                                                    }
+                                                });
                                         });
                                 }
                             });
