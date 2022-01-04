@@ -5,8 +5,22 @@ declare const Neutralino;
 declare const NL_CWD;
 
 type ProcessOptions = {
+    /**
+     * Environment variables
+     */
     env?: object;
+
+    /**
+     * Current working directory for the running process
+     */
     cwd?: string;
+
+    /**
+     * Interval between tries to find started process id
+     * 
+     * @default 50
+     */
+    childInterval?: number;
 };
 
 class Process
@@ -180,7 +194,6 @@ class Process
     {
         return new Promise(async (resolve) => {
             const tmpFile = `${await constants.paths.launcherDir}/${10000 + Math.round(Math.random() * 89999)}.tmp`;
-            const originalCommand = command.replaceAll(/\\|"|'/gm, '');
 
             // Set env variables
             if (options.env)
@@ -191,40 +204,45 @@ class Process
             }
 
             // Set output redirection to the temp file
-            command = `${command} > "${this.addSlashes(tmpFile)}" 2>&1 &`;
+            command = `${command} > "${this.addSlashes(tmpFile)}" 2>&1`;
 
             // Set current working directory
             if (options.cwd)
                 command = `cd "${this.addSlashes(options.cwd)}" && ${command}`;
 
             // And run the command
-            const process = await Neutralino.os.execCommand(command);
-
-            // Because we're redirecting process output to the file
-            // it creates another process and our process.pid is not correct
-            // so we need to find real process id
-            const processes = ((await Neutralino.os.execCommand('ps -a -S')).stdOut as string).split(/\r\n|\r|\n/);
-
-            let processId = process.pid;
-
-            for (const line of processes)
-                if (line.replaceAll(/\\|"|'/gm, '').includes(originalCommand))
-                {
-                    processId = parseInt(line.split(' ').filter((word) => word != '')[0]);
-
-                    break;
-                }
-
-            Debug.log({
-                function: 'Process.run',
-                message: {
-                    'running command': command,
-                    'cwd': options.cwd,
-                    ...options.env
-                }
+            const process = await Neutralino.os.execCommand(command, {
+                background: true
             });
 
-            resolve(new Process(processId, tmpFile));
+            const childFinder = async () => {
+                const childProcess = await Neutralino.os.execCommand(`pgrep -P ${process.pid}`);
+
+                // Child wasn't found
+                if (childProcess.stdOut == '')
+                    setTimeout(childFinder, options.childInterval ?? 50);
+
+                // Otherwise return its id
+                else
+                {
+                    const processId = parseInt(childProcess.stdOut.substring(0, childProcess.stdOut.length - 1));
+
+                    Debug.log({
+                        function: 'Process.run',
+                        message: {
+                            'running command': command,
+                            'cwd': options.cwd,
+                            'initial process id': process.pid,
+                            'real process id': processId,
+                            ...options.env
+                        }
+                    });
+        
+                    resolve(new Process(processId, tmpFile));
+                }
+            };
+
+            setTimeout(childFinder, options.childInterval ?? 50);
         });
     }
 

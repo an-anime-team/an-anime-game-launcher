@@ -16,6 +16,7 @@
     import Debug from './ts/core/Debug';
     import Downloader from './ts/core/Downloader';
     import IPC from './ts/core/IPC';
+    import Process from './ts/neutralino/Process';
 
     import Gear from './assets/images/gear.png';
     import GearActive from './assets/images/gear-active.png';
@@ -45,11 +46,17 @@
         constants.paths.launcherDir.then(async (path) => {
             const time = new Date;
 
+            // Remove IPC file
             await IPC.purge();
 
+            // Turn off Discord RPC
             if (launcher.rpc)
                 await launcher.rpc.stop(true);
 
+            // Remove .tmp files from the launcher folder
+            Neutralino.os.execCommand(`rm -f "${Process.addSlashes(`${path}/*.tmp`)}"`);
+
+            // Create logs folder if it doesn't exist
             Neutralino.filesystem.getStats(`${path}/logs`)
                 .then(() => saveLog())
                 .catch(async () => {
@@ -58,12 +65,14 @@
                     saveLog();
                 });
 
+            // Save logs
             const saveLog = async () => {
                 const log = Debug.get().join("\r\n");
 
                 if (log != '')
                     await Neutralino.filesystem.writeFile(`${path}/logs/${time.getDate()}-${time.getMonth() + 1}-${time.getFullYear()}-${time.getHours()}-${time.getMinutes()}-${time.getSeconds()}.log`, log);
 
+                // And close the launcher when they was saved
                 Neutralino.app.exit();
             };
         });
