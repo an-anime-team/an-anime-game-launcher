@@ -103,13 +103,16 @@ export default class Launcher
                     
                     this.rpc = new DiscordRPC({
                         id: '901534333360304168',
+
+                        // @ts-expect-error
+                        details: 'in-game' ? discord.fields.details : discord.fields.states['in-launcher'],
     
                         // @ts-expect-error
-                        details: discord.fields.states[state],
+                        state: 'in-game' ? ddiscord.fields.states['in-game'] : undefined,
     
                         icon: {
                             // @ts-expect-error
-                            large: discord.fields.icon
+                            large: state === 'in-launcher' ? 'launcher' : discord.fields.icon
                         },
     
                         time: {
