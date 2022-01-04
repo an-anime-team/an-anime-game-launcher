@@ -60,7 +60,7 @@ export default (launcher: Launcher): Promise<void> => {
             switch (await Configs.get('hud'))
             {
                 case 'dxvk':
-                    env['DXVK_HUD'] = 'fps,frametimes';
+                    env['DXVK_HUD'] = 'fps,frametimes,version,gpuload';
 
                     break;
 
