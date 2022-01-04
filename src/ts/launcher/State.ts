@@ -180,7 +180,6 @@ export default class State
             let state: LauncherState|null = null;
 
             const runner = await Runners.current();
-            const dxvk = await DXVK.current();
 
             // Check if the wine is installed
             if (runner === null)
@@ -216,92 +215,108 @@ export default class State
                 }
             }
 
-            // Check if the DXVK is installed
-            else if (dxvk === null)
+            else
             {
-                debugThread.log('DXVK is not specified');
+                const dxvk = await DXVK.current();
 
-                state = 'dxvk-installation-required';
-
-                DXVK.list().then((list) => {
-                    for (const dxvk of list)
-                        if (dxvk.installed && dxvk.recommended)
-                        {
-                            debugThread.log(`Automatically selected DXVK ${dxvk.version}`);
-
-                            state = null;
-
-                            DXVK.current(dxvk).then(() => {
-                                this.update().then(resolve);
-                            });
-
-                            return;
-                        }
-                });
-
-                if (state !== null)
+                // Check if the DXVK is installed
+                if (dxvk === null)
                 {
-                    debugThread.log('No recommended DXVK installed');
+                    debugThread.log('DXVK is not specified');
+
+                    state = 'dxvk-installation-required';
+
+                    DXVK.list().then((list) => {
+                        for (const dxvk of list)
+                            if (dxvk.installed && dxvk.recommended)
+                            {
+                                debugThread.log(`Automatically selected DXVK ${dxvk.version}`);
+
+                                state = null;
+
+                                DXVK.current(dxvk).then(() => {
+                                    this.update().then(resolve);
+                                });
+
+                                return;
+                            }
+                    });
+
+                    if (state !== null)
+                    {
+                        debugThread.log('No recommended DXVK installed');
+
+                        this.set(state);
+
+                        resolve(state);
+                    }
+                }
+
+                // Otherwise select some launcher state
+                else
+                {
+                    const gameCurrent = await Game.current;
+                    
+                    if (gameCurrent === null)
+                        state = 'game-installation-available';
+
+                    else
+                    {
+                        const gameLatest = await Game.getLatestData();
+
+                        if (gameCurrent != gameLatest.game.latest.version)
+                            state = 'game-update-available';
+                        
+                        else
+                        {
+                            const installedVoices = await Voice.installed;
+                            const selectedVoices = await Voice.selected;
+
+                            let voiceUpdateRequired = installedVoices.length != selectedVoices.length || installedVoices.length === 0;
+
+                            if (!voiceUpdateRequired)
+                            {
+                                for (const installedVoice of installedVoices)
+                                    if (installedVoice.version != gameCurrent || !selectedVoices.includes(installedVoice.lang))
+                                    {
+                                        voiceUpdateRequired = true;
+
+                                        break;
+                                    }
+                            }
+
+                            // TODO: download default voice language if user removed all of them
+                            if (voiceUpdateRequired)
+                                state = 'game-voice-update-required';
+
+                            else
+                            {
+                                const patch = await Patch.latest;
+                                
+                                if (!patch.applied)
+                                {
+                                    state = patch.state == 'preparation' ?
+                                        'patch-unavailable' : (patch.state == 'testing' ?
+                                        'test-patch-available' : 'patch-available');
+                                }
+
+                                else if (gameLatest.pre_download_game && !await Game.isUpdatePredownloaded())
+                                    state = 'game-pre-installation-available';
+
+                                else if (gameLatest.pre_download_game && !await Voice.isUpdatePredownloaded(await Voice.selected))
+                                    state = 'game-voice-pre-installation-available';
+
+                                else state = 'game-launch-available'; 
+                            }  
+                        }
+                    }
+
+                    debugThread.log(`Updated state: ${state}`);
 
                     this.set(state);
 
                     resolve(state);
                 }
-            }
-
-            // Otherwise select some launcher state
-            else
-            {
-                const gameCurrent = await Game.current;
-                const gameLatest = await Game.getLatestData();
-                const patch = await Patch.latest;
-
-                const installedVoices = await Voice.installed;
-                const selectedVoices = await Voice.selected;
-
-                let voiceUpdateRequired = installedVoices.length != selectedVoices.length || installedVoices.length === 0;
-
-                if (!voiceUpdateRequired)
-                {
-                    for (const installedVoice of installedVoices)
-                        if (installedVoice.version != gameCurrent || !selectedVoices.includes(installedVoice.lang))
-                        {
-                            voiceUpdateRequired = true;
-
-                            break;
-                        }
-                }
-                
-                if (gameCurrent === null)
-                    state = 'game-installation-available';
-                
-                else if (gameCurrent != gameLatest.game.latest.version)
-                    state = 'game-update-available';
-
-                // TODO: download default voice language if user removed all of them
-                else if (voiceUpdateRequired)
-                    state = 'game-voice-update-required';
-
-                else if (!patch.applied)
-                {
-                    state = patch.state == 'preparation' ?
-                        'patch-unavailable' : (patch.state == 'testing' ?
-                        'test-patch-available' : 'patch-available');
-                }
-
-                else if (gameLatest.pre_download_game && !await Game.isUpdatePredownloaded())
-                    state = 'game-pre-installation-available';
-
-                else if (gameLatest.pre_download_game && !await Voice.isUpdatePredownloaded(await Voice.selected))
-                    state = 'game-voice-pre-installation-available';
-
-                else state = 'game-launch-available';
-
-                debugThread.log(`Updated state: ${state}`);
-
-                this.set(state);
-
-                resolve(state);
             }
         });
     }
