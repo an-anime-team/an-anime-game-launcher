@@ -1,5 +1,6 @@
-import Process from '../neutralino/Process';
 import type { Params } from '../types/DiscordRPC';
+
+import Process from '../neutralino/Process';
 
 declare const NL_CWD;
 
@@ -49,8 +50,6 @@ export default class DiscordRPC
      */
     public stop(forced: boolean = false): Promise<void>
     {
-        console.log(this.process);
-        
         return this.process!.kill(forced);
     }
 };

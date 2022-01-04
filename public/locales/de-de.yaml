@@ -6,6 +6,10 @@ splash:
     - Paimon am ärgern...
     - Versuche Yae zu ziehen...
 
+# Launcher window
+launcher:
+  predownload: Pre-download the game
+
 # Einstellungs Fenster
 settings:
   # General

@@ -77,9 +77,39 @@ promisify(async () => {
              */
             enabled: false,
 
-            // todo
-            texts: {
-                idk: true
+            /**
+             * RPC settings
+             */
+            fields: {
+                /**
+                 * Launcher title
+                 */
+                title: 'An Anime Game Launcher',
+
+                /**
+                 * Small messages after title
+                 */
+                state: {
+                    /**
+                     * Message showed when you're in game
+                     */
+                    'in-launcher': 'Playing the game',
+
+                    /**
+                     * Message showed when you're in launcher
+                     */
+                    'in-game': 'Preparing to launch'
+                },
+
+                /**
+                 * RPC icon name
+                 */
+                icon: 'launcher',
+
+                /**
+                 * Should it display amount of spent time or not
+                 */
+                timer: true
             }
         },
 

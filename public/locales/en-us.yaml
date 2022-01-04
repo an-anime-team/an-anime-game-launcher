@@ -6,6 +6,10 @@ splash:
     - Bullying Paimon...
     - Pulling for Yae...
 
+# Launcher window
+launcher:
+  predownload: Pre-download the game
+
 # Settings window
 settings:
   # General

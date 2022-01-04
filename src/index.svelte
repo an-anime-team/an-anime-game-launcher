@@ -4,6 +4,7 @@
 
 <script lang="ts">
     import { onMount } from 'svelte';
+    import { _, locale } from 'svelte-i18n';
 
     import Window from './ts/neutralino/Window';
 
@@ -11,11 +12,21 @@
     import constants from './ts/Constants';
     import Game from './ts/Game';
     import Background from './ts/launcher/Background';
+    import Archive from './ts/core/Archive';
+    import Debug from './ts/core/Debug';
+    import Downloader from './ts/core/Downloader';
+    import IPC from './ts/core/IPC';
 
     import Gear from './assets/images/gear.png';
     import GearActive from './assets/images/gear-active.png';
     import Download from './assets/images/cloud-download.png';
-    import DiscordRPC from './ts/core/DiscordRPC';
+
+    constants.paths.launcherDir.then((dir) => {
+        Neutralino.filesystem.getStats(dir)
+            .catch(() => Neutralino.filesystem.createDirectory(dir));
+    });
+
+    const launcher = new Launcher(onMount);
 
     Neutralino.events.on('ready', () => {
         Window.open('splash', {
@@ -27,12 +38,36 @@
         });
     });
 
-    constants.paths.launcherDir.then((dir) => {
-        Neutralino.filesystem.getStats(dir)
-            .catch(() => Neutralino.filesystem.createDirectory(dir));
-    });
+    Neutralino.events.on('windowClose', () => {
+        Downloader.closeStreams(true);
+        Archive.closeStreams(true);
 
-    const launcher = new Launcher(onMount);
+        constants.paths.launcherDir.then(async (path) => {
+            const time = new Date;
+
+            await IPC.purge();
+
+            if (launcher.rpc)
+                await launcher.rpc.stop(true);
+
+            Neutralino.filesystem.getStats(`${path}/logs`)
+                .then(() => saveLog())
+                .catch(async () => {
+                    await Neutralino.filesystem.createDirectory(`${path}/logs`);
+
+                    saveLog();
+                });
+
+            const saveLog = async () => {
+                const log = Debug.get().join("\r\n");
+
+                if (log != '')
+                    await Neutralino.filesystem.writeFile(`${path}/logs/${time.getDate()}-${time.getMonth() + 1}-${time.getFullYear()}-${time.getHours()}-${time.getMinutes()}-${time.getSeconds()}.log`, log);
+
+                Neutralino.app.exit();
+            };
+        });
+    });
 
     // Do some stuff when all the content will be loaded
     onMount(() => {
@@ -40,24 +75,8 @@
          * Update launcher's title
          */
         Game.latest.then((game) => {
-            Window.current.setTitle(`${constants.placeholders.uppercase.full} Linux Launcher - ${game.version}`);
+            Window.current.setTitle(`${constants.placeholders.uppercase.full} Linux Launcher - ${game.version} (beta revision)`);
         });
-
-        /*const rpc = new DiscordRPC({
-            id: '901534333360304168',
-            details: 'Aboba',
-            state: 'Amogus',
-            icon: {
-                large: 'kleegame'
-            },
-            time: {
-                start: Math.round(Date.now() / 1000)
-            }
-        });
-
-        setTimeout(() => {
-            rpc.stop(true);
-        }, 10000);*/
 
         /**
          * Add some events to some elements
@@ -105,7 +124,7 @@
         <img src={GearActive} class="active" alt="Settings">
     </div>
     
-    <button class="button hint--left hint--small" aria-label="Pre-download the game" id="predownload">
+    <button class="button hint--left hint--small" aria-label="{typeof $locale === 'string' ? $_('launcher.predownload') : ''}" id="predownload">
         <img src={Download} alt="Download" />
     </button>
 

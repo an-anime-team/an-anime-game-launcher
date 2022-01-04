@@ -8,16 +8,20 @@ import ProgressBar from './launcher/ProgressBar';
 import State from './launcher/State';
 import Debug from './core/Debug';
 import IPC from './core/IPC';
+import DiscordRPC from './core/DiscordRPC';
 
 export default class Launcher
 {
     public state?: State;
     public progressBar?: ProgressBar;
+    public rpc?: DiscordRPC;
 
     protected settingsMenu?: Process;
 
     public constructor(onMount)
     {
+        this.updateDiscordRPC('in-launcher');
+
         onMount(() => {
             this.progressBar = new ProgressBar(this);
             this.state = new State(this);
@@ -38,7 +42,7 @@ export default class Launcher
                     title: 'Settings',
                     width: 900,
                     height: 600,
-                    enableInspector: true,
+                    // enableInspector: true,
                     exitProcessOnClose: false
                 });
 
@@ -81,6 +85,45 @@ export default class Launcher
     {
         return new Promise(async (resolve) => {
             resolve(`https://${constants.placeholders.lowercase.first}.${constants.placeholders.lowercase.company}.com/launcher/10/${await Configs.get('lang.launcher')}?api_url=https%3A%2F%2Fapi-os-takumi.${constants.placeholders.lowercase.company}.com%2Fhk4e_global&key=gcStgarh&prev=false`);
+        });
+    }
+
+    /**
+     * Update Discord RPC notification if it is enabled
+     */
+    public updateDiscordRPC(state: 'in-launcher' | 'in-game'): Promise<void>
+    {
+        return new Promise((resolve) => {
+            Configs.get('discord').then((discord) => {
+                // @ts-expect-error
+                if (discord.enabled)
+                {
+                    if (this.rpc)
+                        this.rpc.stop(true);
+                    
+                    this.rpc = new DiscordRPC({
+                        id: '901534333360304168',
+    
+                        // @ts-expect-error
+                        details: discord.fields.title,
+    
+                        // @ts-expect-error
+                        state: discord.fields.state[state],
+    
+                        icon: {
+                            // @ts-expect-error
+                            large: discord.fields.icon
+                        },
+    
+                        time: {
+                            // @ts-expect-error
+                            start: discord.fields.time ? Math.round(Date.now() / 1000) : 0
+                        }
+                    });
+    
+                    resolve();
+                }
+            });
         });
     }
 };

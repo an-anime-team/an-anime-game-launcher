@@ -1,3 +1,5 @@
+import type Launcher from '../../Launcher';
+
 import Configs from '../../Configs';
 import constants from '../../Constants';
 import { DebugThread } from '../../core/Debug';
@@ -11,7 +13,7 @@ import Baal from '../../../assets/images/baal64-transparent.png';
 
 declare const Neutralino;
 
-export default (): Promise<void> => {
+export default (launcher: Launcher): Promise<void> => {
     return new Promise(async (resolve) => {
         const debugThread = new DebugThread('State/Launch', 'Starting the game');
 
@@ -34,6 +36,8 @@ export default (): Promise<void> => {
         else
         {
             Window.current.hide();
+
+            launcher.updateDiscordRPC('in-game');
 
             /**
              * Selecting wine executable
@@ -127,6 +131,8 @@ export default (): Promise<void> => {
                 const stopTime = Date.now();
 
                 Window.current.show();
+
+                launcher.updateDiscordRPC('in-launcher');
 
                 // TODO
 

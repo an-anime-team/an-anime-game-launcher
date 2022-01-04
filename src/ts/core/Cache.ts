@@ -29,7 +29,7 @@ export default class Cache
                     message: [
                         `Resolved ${this.cache[name].expired ? 'expired' : 'unexpired'} hot cache record`,
                         `[name] ${name}`,
-                        `[value]: ${this.cache[name].value}`
+                        `[value]: ${JSON.stringify(this.cache[name].value)}`
                     ]
                 });
 
