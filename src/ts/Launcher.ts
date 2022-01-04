@@ -103,9 +103,12 @@ export default class Launcher
                     
                     this.rpc = new DiscordRPC({
                         id: '901534333360304168',
+
+                        // @ts-expect-error
+                        details: 'in-game' ? discord.fields.details : undefined,
     
                         // @ts-expect-error
-                        details: discord.fields.states[state],
+                        state: discord.fields.states[state],
     
                         icon: {
                             // @ts-expect-error

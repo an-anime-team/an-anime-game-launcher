@@ -82,7 +82,11 @@ promisify(async () => {
              */
             fields: {
                 /**
-                 * Small messages after title
+                 * Small message after title (only in game)
+                 */
+                details: 'Exploring the landscape of',
+                /**
+                 * Small message after details
                  */
                 states: {
                     /**
@@ -91,9 +95,9 @@ promisify(async () => {
                     'in-launcher': 'Preparing to launch',
 
                     /**
-                     * Message showed when you're in game
+                     * Message shows when your in game
                      */
-                    'in-game': 'Playing the game'
+                    'in-game': 'Teyvat'
                 },
 
                 /**
