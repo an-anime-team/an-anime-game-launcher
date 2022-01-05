@@ -176,10 +176,11 @@ export default class Patch
     public static getPatchInfo(version: string, source: 'origin' | 'additional' = 'origin'): Promise<PatchInfo|null>
     {
         return new Promise(async (resolve, reject) => {
-            const resolveOutput = (output: PatchInfo|null) => {
+            const resolveOutput = (output: PatchInfo|null, unityPlayerHash: string|null = null) => {
                 Cache.set(`Patch.getPatchInfo.${version}.${source}`, {
                     available: true,
-                    output: output
+                    output: output,
+                    playerHash: unityPlayerHash
                 }, 6 * 3600);
 
                 resolve(output);
@@ -202,7 +203,24 @@ export default class Patch
             if (cache && !cache.expired)
             {
                 if (cache.value['available'])
-                    resolve(cache.value['output']);
+                {
+                    // Verify UnityPlayer.dll file hash
+                    // before responding whether the patch applied or not
+                    if (cache.value['playerHash'] !== null)
+                    {
+                        constants.paths.gameDir.then((gameDir) => {
+                            Neutralino.filesystem.readBinaryFile(`${gameDir}/UnityPlayer.dll`)
+                                .then((currPlayer: ArrayBuffer) => {
+                                    cache.value['output']['applied'] = md5(currPlayer) != cache.value['playerHash'];
+
+                                    resolve(cache.value['output']);
+                                })
+                                .catch(() => resolve(cache.value['output']));
+                        });
+                    }
+
+                    else resolve(cache.value['output']);
+                }
 
                 else reject(cache.value['error']);
             }
@@ -285,7 +303,7 @@ export default class Patch
                                                                         .then((currPlayer: ArrayBuffer) => {
                                                                             patchInfo.applied = md5(currPlayer) != originalPlayer[1];
 
-                                                                            resolveOutput(patchInfo);
+                                                                            resolveOutput(patchInfo, originalPlayer[1]);
                                                                         })
                                                                         .catch(() => resolveOutput(patchInfo));
                                                                 });
