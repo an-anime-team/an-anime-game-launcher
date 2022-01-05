@@ -29,7 +29,11 @@ class DebugThread
 
 class Debug
 {
+    public static readonly startedAt = new Date;
+    
     protected static logOutput: LogRecord[] = [];
+
+    protected static onLogHandler?: (record: LogRecord) => void;
     
     protected static formatTime(time: number): string
     {
@@ -86,6 +90,9 @@ class Debug
         console.log(output.log.join('\r\n'));
 
         this.logOutput.push(output);
+
+        if (this.onLogHandler)
+            this.onLogHandler(output);
     }
 
     public static merge(records: LogRecord[])
@@ -108,6 +115,11 @@ class Debug
         });
 
         return output;
+    }
+
+    public static handler(handler: (record: LogRecord) => void)
+    {
+        this.onLogHandler = handler;
     }
 }
 

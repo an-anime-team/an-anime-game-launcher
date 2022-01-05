@@ -23,8 +23,13 @@
     import Download from './assets/images/cloud-download.png';
 
     constants.paths.launcherDir.then((dir) => {
+        // Create launcher folder if it doesn't exist
         Neutralino.filesystem.getStats(dir)
             .catch(() => Neutralino.filesystem.createDirectory(dir));
+
+        // Create logs folder if it doesn't exist
+        Neutralino.filesystem.getStats(`${dir}/logs`)
+            .catch(() => Neutralino.filesystem.createDirectory(`${dir}/logs`));
     });
 
     const launcher = new Launcher(onMount);
@@ -44,8 +49,6 @@
         Archive.closeStreams(true);
 
         constants.paths.launcherDir.then(async (path) => {
-            const time = new Date;
-
             // Remove IPC file
             await IPC.purge();
 
@@ -56,26 +59,34 @@
             // Remove .tmp files from the launcher folder
             await Neutralino.os.execCommand(`rm -f "${Process.addSlashes(`${path}/*.tmp`)}"`);
 
-            // Create logs folder if it doesn't exist
-            Neutralino.filesystem.getStats(`${path}/logs`)
-                .then(() => saveLog())
-                .catch(async () => {
-                    await Neutralino.filesystem.createDirectory(`${path}/logs`);
-
-                    saveLog();
-                });
-
             // Save logs
-            const saveLog = async () => {
-                const log = Debug.get().join("\r\n");
+            const log = Debug.get().join("\r\n");
+
+            if (log != '')
+                await Neutralino.filesystem.writeFile(`${await constants.paths.launcherDir}/logs/${Debug.startedAt.getDate()}-${Debug.startedAt.getMonth() + 1}-${Debug.startedAt.getFullYear()}-${Debug.startedAt.getHours()}-${Debug.startedAt.getMinutes()}-${Debug.startedAt.getSeconds()}.log`, log);
+
+            // And close the launcher when they was saved
+            Neutralino.app.exit();
+        });
+    });
+
+    // Save logs
+    let logSavingStarted = false;
+
+    Debug.handler(() => {
+        if (!logSavingStarted)
+        {
+            logSavingStarted = true;
+
+            setTimeout(async () => {
+                const log = `=== Log can be incomplete ===\r\n\r\n${Debug.get().join("\r\n")}`;
 
                 if (log != '')
-                    await Neutralino.filesystem.writeFile(`${path}/logs/${time.getDate()}-${time.getMonth() + 1}-${time.getFullYear()}-${time.getHours()}-${time.getMinutes()}-${time.getSeconds()}.log`, log);
+                    await Neutralino.filesystem.writeFile(`${await constants.paths.launcherDir}/logs/${Debug.startedAt.getDate()}-${Debug.startedAt.getMonth() + 1}-${Debug.startedAt.getFullYear()}-${Debug.startedAt.getHours()}-${Debug.startedAt.getMinutes()}-${Debug.startedAt.getSeconds()}.log`, log);
 
-                // And close the launcher when they was saved
-                Neutralino.app.exit();
-            };
-        });
+                logSavingStarted = false;
+            }, 5000);
+        }
     });
 
     // Do some stuff when all the content will be loaded
