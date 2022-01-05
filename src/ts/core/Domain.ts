@@ -26,6 +26,8 @@ export default class Domain
                     process.outputInterval = null;
                     process.runningInterval = null;
 
+                    process.kill();
+
                     debugThread.log({ message: info });
 
                     resolve(info);

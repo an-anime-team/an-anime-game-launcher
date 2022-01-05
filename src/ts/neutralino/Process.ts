@@ -170,6 +170,8 @@ class Process
      */
     public kill(forced: boolean = false): Promise<void>
     {
+        Neutralino.filesystem.removeFile(this.outputFile);
+
         return Process.kill(this.id, forced);
     }
 

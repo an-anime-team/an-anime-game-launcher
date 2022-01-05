@@ -126,17 +126,33 @@ export default (launcher: Launcher): Promise<void> => {
                 cwd: await constants.paths.gameDir
             });
 
-            // Game closed event
+            // Game was started by the launcher.bat file
+            // so we just need to wait until GenshinImpact process
+            // will be closed
             process.finish(() => {
-                const stopTime = Date.now();
+                const waiter = async () => {
+                    const processes: string = (await Neutralino.os.execCommand('ps -A')).stdOut;
 
-                Window.current.show();
+                    // Game is still running
+                    if (processes.includes('GenshinImpact'))
+                        setTimeout(waiter, 3000);
 
-                launcher.updateDiscordRPC('in-launcher');
+                    // Game was closed
+                    else
+                    {
+                        const stopTime = Date.now();
 
-                // TODO
+                        Window.current.show();
 
-                resolve();
+                        launcher.updateDiscordRPC('in-launcher');
+
+                        // TODO
+
+                        resolve();
+                    }
+                };
+
+                setTimeout(waiter, 5000);
             });
         }
     });
