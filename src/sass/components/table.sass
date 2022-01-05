@@ -4,7 +4,7 @@
     body[data-theme=#{$theme-name}]
         table.table
             width: calc(100% - 24px)
-            
+
             margin-left: 12px
 
             border-spacing: 0
@@ -21,7 +21,7 @@
                 &:hover
                     background-color: map.get($theme-map, "background1")
 
-                    td input
+                    td input, textarea
                         background-color: map.get($theme-map, "background1")
 
                 td:nth-of-type(1),
@@ -44,7 +44,7 @@
 
                         margin: auto
 
-                    input
+                    input, textarea
                         display: block
 
                         width: calc(100% - 2 * $padding-h)
@@ -57,6 +57,11 @@
                         margin: auto
                         border: unset
                         outline: none
+
+                    textarea
+                        height: auto
+                        resize: none
+                        overflow: hidden
 
 @import "../themes/light"
 @import "../themes/dark"

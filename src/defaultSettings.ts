@@ -78,37 +78,27 @@ promisify(async () => {
             enabled: false,
 
             /**
-             * RPC settings
+             * Should it display amount of spent time or not
+             * 
+             * @default true
              */
-            fields: {
-                /**
-                 * Small message after title (only in game)
-                 */
-                details: 'Exploring the landscape of',
-                /**
-                 * Small message after details
-                 */
-                states: {
-                    /**
-                     * Message showed when you're in launcher
-                     */
-                    'in-launcher': 'Preparing to launch',
+            timer: true,
 
-                    /**
-                     * Message shows when your in game
-                     */
-                    'in-game': 'Teyvat'
+            /**
+             * Discord RPC states
+             */
+            states: {
+                'in-launcher': {
+                    details: 'Preparing to launch',
+                    state: '',
+                    icon: 'launcher'
                 },
 
-                /**
-                 * RPC icon name
-                 */
-                icon: 'launcher',
-
-                /**
-                 * Should it display amount of spent time or not
-                 */
-                timer: true
+                'in-game': {
+                    details: 'Exploring the landscape',
+                    state: 'of Teyvat',
+                    icon: 'game'
+                }
             }
         },
 

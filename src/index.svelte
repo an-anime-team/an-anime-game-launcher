@@ -54,7 +54,7 @@
                 await launcher.rpc.stop(true);
 
             // Remove .tmp files from the launcher folder
-            Neutralino.os.execCommand(`rm -f "${Process.addSlashes(`${path}/*.tmp`)}"`);
+            await Neutralino.os.execCommand(`rm -f "${Process.addSlashes(`${path}/*.tmp`)}"`);
 
             // Create logs folder if it doesn't exist
             Neutralino.filesystem.getStats(`${path}/logs`)

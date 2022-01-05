@@ -80,7 +80,7 @@ export default class Game
 
                     if (json.message == 'OK')
                     {
-                        Cache.set('Game.getLatestData.ServerResponse', json.data, 24 * 3600);
+                        Cache.set('Game.getLatestData.ServerResponse', json.data, 4 * 3600);
 
                         resolve(json.data);
                     }

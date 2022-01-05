@@ -76,6 +76,42 @@
     ];
 
     /**
+     * Some components stuff
+     */
+    let dxvkRecommendable = true,
+        runnersRecommendable = true,
+        fpsUnlockerAvailable = true,
+        voiceUpdateRequired = false;
+
+    let discordSettings: object = {}, discordSettingsUpdater = false;
+
+    Configs.get('discord').then((settings) => discordSettings = settings as object);
+
+    const handleDiscordRpc = (field: 'in-game' | 'in-launcher', value: string) => {
+        const lines = value.split(/\r\n|\r|\n/).filter((line) => line != '');
+
+        discordSettings['states'][field]['details'] = lines[0];
+        discordSettings['states'][field]['state'] = '';
+
+        if (lines[1] !== undefined)
+            discordSettings['states'][field]['state'] = lines[1];
+
+        // This thing will update config file only after a second
+        // so we'll not update it every time user prints some character
+        // in textarea
+        if (!discordSettingsUpdater)
+        {
+            discordSettingsUpdater = true;
+
+            setTimeout(() => {
+                discordSettingsUpdater = false;
+
+                Configs.set('discord', discordSettings);
+            }, 1000);
+        }
+    };
+
+    /**
      * Menu items changing
      */
     let selectedItem: string = 'general';
@@ -108,14 +144,6 @@
 
         document.body.setAttribute('data-theme', theme as string);
     };
-
-    let dxvkRecommendable = true,
-        runnersRecommendable = true,
-        discordRpcSettings = false,
-        fpsUnlockerAvailable = true,
-        voiceUpdateRequired = false;
-
-    Configs.get('discord.enabled').then((enabled) => discordRpcSettings = enabled as boolean);
 
     // Auto theme switcher
     Configs.get('theme').then((theme) => switchTheme(theme as string));
@@ -176,10 +204,10 @@
                 <Checkbox
                     lang="settings.general.items.discord.title"
                     prop="discord.enabled"
-                    valueChanged={(value) => discordRpcSettings = value}
+                    valueChanged={(value) => discordSettings['enabled'] = value}
                 />
 
-                <DiscordSettings visible={discordRpcSettings} />
+                <DiscordSettings visible={discordSettings['enabled']} valueChanged={handleDiscordRpc} />
             </div>
 
             <div class="settings-item" id="enhancements">

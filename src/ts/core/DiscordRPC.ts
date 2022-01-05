@@ -14,7 +14,7 @@ export default class DiscordRPC
         this.params = params;
 
         let exec = [
-            `"${Process.addSlashes(NL_CWD)}/public/discord-rpc/discord-rpc"`,
+            `./discord-rpc`,
             `-a ${params.id}`
         ];
 
@@ -42,7 +42,9 @@ export default class DiscordRPC
                 exec = [...exec, `-et ${params.time.end}`];
         }
 
-        Process.run(exec.join(' ')).then((process) => this.process = process);
+        Process.run(exec.join(' '), {
+            cwd: `${NL_CWD}/public/discord-rpc`
+        }).then((process) => this.process = process);
     }
 
     /**
