@@ -24,17 +24,19 @@ export default class Cache
         return new Promise(async (resolve) => {
             if (this.cache !== null && this.cache[name] !== undefined)
             {
+                const expired = this.cache[name].ttl !== null ? Date.now() > this.cache[name].ttl * 1000 : false;
+
                 Debug.log({
                     function: 'Cache.get',
                     message: [
-                        `Resolved ${this.cache[name].expired ? 'expired' : 'unexpired'} hot cache record`,
+                        `Resolved ${expired ? 'expired' : 'unexpired'} hot cache record`,
                         `[name] ${name}`,
                         `[value]: ${JSON.stringify(this.cache[name].value)}`
                     ]
                 });
 
                 resolve({
-                    expired: this.cache[name].ttl !== null ? Date.now() > this.cache[name].ttl * 1000 : false,
+                    expired: expired,
                     value: this.cache[name].value
                 });
             }
@@ -82,22 +84,6 @@ export default class Cache
     {
         return new Promise((resolve) => {
             constants.paths.cache.then((cacheFile) => {
-                if (this.cache === null)
-                {
-                    Neutralino.filesystem.readFile(cacheFile)
-                        .then((cacheRaw) => 
-                        {
-                            this.cache = JSON.parse(cacheRaw);
-
-                            writeCache();
-                        })
-                        .catch(() => {
-                            this.cache = {};
-
-                            writeCache();
-                        });
-                }
-
                 const writeCache = () => {
                     Debug.log({
                         function: 'Cache.set',
@@ -116,6 +102,24 @@ export default class Cache
                     Neutralino.filesystem.writeFile(cacheFile, JSON.stringify(this.cache))
                         .then(() => resolve());
                 };
+                
+                if (this.cache === null)
+                {
+                    Neutralino.filesystem.readFile(cacheFile)
+                        .then((cacheRaw) => 
+                        {
+                            this.cache = JSON.parse(cacheRaw);
+
+                            writeCache();
+                        })
+                        .catch(() => {
+                            this.cache = {};
+
+                            writeCache();
+                        });
+                }
+
+                else writeCache();
             });
         });
     }
