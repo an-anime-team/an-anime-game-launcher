@@ -16,7 +16,7 @@
     Configs.get('discord.states').then((settings) => {
         states = {
             'in-game': settings!['in-game']['details'],
-            'in-launcher': settings!['in-game']['details']
+            'in-launcher': settings!['in-launcher']['details']
         };
 
         if (settings!['in-game']['state'] != '')
