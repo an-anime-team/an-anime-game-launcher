@@ -66,7 +66,7 @@ class Process
 
     public constructor(pid: number, outputFile: string|null = null)
     {
-        const debugThread = new DebugThread('Process/Stream', 'Opened process stream');
+        const debugThread = new DebugThread('Process/Stream', `Opened process ${pid} stream`);
 
         this.id = pid;
         this.outputFile = outputFile;
