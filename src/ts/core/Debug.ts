@@ -83,6 +83,8 @@ class Debug
             });
         }
 
+        console.log(output.log.join('\r\n'));
+
         this.logOutput.push(output);
     }
 
