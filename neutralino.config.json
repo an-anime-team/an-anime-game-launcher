@@ -1,6 +1,6 @@
 {
   "applicationId": "com.krypt0nn.an-anime-game-launcher",
-  "version": "2.0.0-beta-6",
+  "version": "2.0.0-beta-7",
   "defaultMode": "window",
   "port": 0,
   "documentRoot": "/bundle/",

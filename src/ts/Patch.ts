@@ -9,6 +9,7 @@ import AbstractInstaller from './core/AbstractInstaller';
 import promisify from './core/promisify';
 import Process from './neutralino/Process';
 import Debug, { DebugThread } from './core/Debug';
+import Cache from './core/Cache';
 
 declare const Neutralino;
 
@@ -175,95 +176,130 @@ export default class Patch
     public static getPatchInfo(version: string, source: 'origin' | 'additional' = 'origin'): Promise<PatchInfo|null>
     {
         return new Promise(async (resolve, reject) => {
-            const patchUri = constants.uri.patch[source];
+            const resolveOutput = (output: PatchInfo|null) => {
+                Cache.set(`Patch.getPatchInfo.${version}.${source}`, {
+                    available: true,
+                    output: output
+                }, 6 * 3600);
 
-            fetch(`${patchUri}/raw/master/${version.replaceAll('.', '')}/README.txt`, this.fetchTimeout)
-                .then((readmeResponse) => {
-                    // Return an error if patch's server is unavailable
-                    if (readmeResponse.status === null)
-                        reject(new Error(`${source} patch repository is unreachable`));
+                resolve(output);
+            };
 
-                    // If [version]/README.txt file doesn't exist - it means
-                    // that patch repo has no [version]
-                    else if (readmeResponse.status === 404)
-                        resolve(null);
+            const rejectOutput = (error: Error) => {
+                // Cache this error only on an hour
+                // because then the server can become alive
+                Cache.set(`Patch.getPatchInfo.${version}.${source}`, {
+                    available: false,
+                    error: error
+                }, 3600);
 
-                    // Otherwise it should be [preparation], [testing] or [stable]
-                    else
-                    {
-                        fetch(`${patchUri}/raw/master/${version.replaceAll('.', '')}/patch_files/unityplayer_patch.vcdiff`, this.fetchTimeout)
-                            .then((response) => {
-                                // Return an error if patch's server is unavailable
-                                if (response.status === null)
-                                    reject(new Error(`${source} patch repository is unreachable`));
+                reject(error);
+            };
 
-                                // If [version]/patch_files/unityplayer_patch.vcdiff file doesn't exist
-                                // then it's [preparation] state and Krock just moved patch.sh file to the [version] folder
-                                else if (response.status === 404)
-                                {
-                                    resolve({
-                                        version: version,
-                                        state: 'preparation',
-                                        applied: false,
-                                        source: source
-                                    });
-                                }
+            const cache = await Cache.get(`Patch.getPatchInfo.${version}.${source}`);
 
-                                // Otherwise it's [testing] or [stable]
-                                else
-                                {
-                                    fetch(`${patchUri}/raw/master/${version.replaceAll('.', '')}/patch.sh`, this.fetchTimeout)
-                                        .then((patcherResponse) => {
-                                            // Return an error if patch's server is unavailable
-                                            if (patcherResponse.status === null)
-                                                reject(new Error(`${source} patch repository is unreachable`));
-                                            
-                                            else patcherResponse.body(this.fetchTimeout)
-                                                .then((response) => {
-                                                    // Return an error if patch's server is unavailable
-                                                    if (response === '')
-                                                        reject(new Error(`${source} patch repository is unreachable`));
+            // If we have result cached
+            if (cache && !cache.expired)
+            {
+                if (cache.value['available'])
+                    resolve(cache.value['output']);
 
-                                                    // Otherwise - let's prepare [testing] or [stable] output
-                                                    else
-                                                    {
-                                                        // If this line is commented - then it's [stable] version
-                                                        // Otherwise it's [testing]
-                                                        const stableMark = '#echo "If you would like to test this patch, modify this script and remove the line below this one."';
+                else reject(cache.value['error']);
+            }
 
-                                                        let patchInfo: PatchInfo = {
-                                                            version: version,
-                                                            state: response.includes(stableMark) ? 'stable' : 'testing',
-                                                            applied: false,
-                                                            source: source
-                                                        };
+            // And otherwise
+            else
+            {
+                const patchUri = constants.uri.patch[source];
 
-                                                        const originalPlayer = /if \[ "\${sum}" != "([a-z0-9]{32})" \]; then/mg.exec(response);
+                fetch(`${patchUri}/raw/master/${version.replaceAll('.', '')}/README.txt`, this.fetchTimeout)
+                    .then((readmeResponse) => {
+                        // Return an error if patch's server is unavailable
+                        if (readmeResponse.status === null)
+                            rejectOutput(new Error(`${source} patch repository is unreachable`));
 
-                                                        // If we could get original UnityPlayer.dll hash - then we can
-                                                        // compare it with actual UnityPlayer.dll hash and say whether the patch
-                                                        // was applied or not
-                                                        if (originalPlayer !== null)
-                                                        {
-                                                            constants.paths.gameDir.then((gameDir) => {
-                                                                Neutralino.filesystem.readBinaryFile(`${gameDir}/UnityPlayer.dll`)
-                                                                    .then((currPlayer: ArrayBuffer) => {
-                                                                        patchInfo.applied = md5(currPlayer) != originalPlayer[1];
+                        // If [version]/README.txt file doesn't exist - it means
+                        // that patch repo has no [version]
+                        else if (readmeResponse.status === 404)
+                            resolveOutput(null);
 
-                                                                        resolve(patchInfo);
-                                                                    })
-                                                                    .catch(() => resolve(patchInfo));
-                                                            });
-                                                        }
+                        // Otherwise it should be [preparation], [testing] or [stable]
+                        else
+                        {
+                            fetch(`${patchUri}/raw/master/${version.replaceAll('.', '')}/patch_files/unityplayer_patch.vcdiff`, this.fetchTimeout)
+                                .then((response) => {
+                                    // Return an error if patch's server is unavailable
+                                    if (response.status === null)
+                                        rejectOutput(new Error(`${source} patch repository is unreachable`));
 
-                                                        else resolve(patchInfo);
-                                                    }
-                                                });
+                                    // If [version]/patch_files/unityplayer_patch.vcdiff file doesn't exist
+                                    // then it's [preparation] state and Krock just moved patch.sh file to the [version] folder
+                                    else if (response.status === 404)
+                                    {
+                                        resolveOutput({
+                                            version: version,
+                                            state: 'preparation',
+                                            applied: false,
+                                            source: source
                                         });
-                                }
-                            });
-                    }
-                });
+                                    }
+
+                                    // Otherwise it's [testing] or [stable]
+                                    else
+                                    {
+                                        fetch(`${patchUri}/raw/master/${version.replaceAll('.', '')}/patch.sh`, this.fetchTimeout)
+                                            .then((patcherResponse) => {
+                                                // Return an error if patch's server is unavailable
+                                                if (patcherResponse.status === null)
+                                                    rejectOutput(new Error(`${source} patch repository is unreachable`));
+                                                
+                                                else patcherResponse.body(this.fetchTimeout)
+                                                    .then((response) => {
+                                                        // Return an error if patch's server is unavailable
+                                                        if (response === '')
+                                                            rejectOutput(new Error(`${source} patch repository is unreachable`));
+
+                                                        // Otherwise - let's prepare [testing] or [stable] output
+                                                        else
+                                                        {
+                                                            // If this line is commented - then it's [stable] version
+                                                            // Otherwise it's [testing]
+                                                            const stableMark = '#echo "If you would like to test this patch, modify this script and remove the line below this one."';
+
+                                                            let patchInfo: PatchInfo = {
+                                                                version: version,
+                                                                state: response.includes(stableMark) ? 'stable' : 'testing',
+                                                                applied: false,
+                                                                source: source
+                                                            };
+
+                                                            const originalPlayer = /if \[ "\${sum}" != "([a-z0-9]{32})" \]; then/mg.exec(response);
+
+                                                            // If we could get original UnityPlayer.dll hash - then we can
+                                                            // compare it with actual UnityPlayer.dll hash and say whether the patch
+                                                            // was applied or not
+                                                            if (originalPlayer !== null)
+                                                            {
+                                                                constants.paths.gameDir.then((gameDir) => {
+                                                                    Neutralino.filesystem.readBinaryFile(`${gameDir}/UnityPlayer.dll`)
+                                                                        .then((currPlayer: ArrayBuffer) => {
+                                                                            patchInfo.applied = md5(currPlayer) != originalPlayer[1];
+
+                                                                            resolveOutput(patchInfo);
+                                                                        })
+                                                                        .catch(() => resolveOutput(patchInfo));
+                                                                });
+                                                            }
+
+                                                            else resolveOutput(patchInfo);
+                                                        }
+                                                    });
+                                            });
+                                    }
+                                });
+                        }
+                    });
+            }
         });
     }
 
