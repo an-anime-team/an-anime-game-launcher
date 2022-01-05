@@ -143,14 +143,11 @@ export default class DXVK
             const version = typeof dxvk !== 'string' ?
                 dxvk.version : dxvk;
 
-            Process.run(`rm -rf "${Process.addSlashes(await constants.paths.dxvksDir + '/dxvk-' + version)}"`)
-                .then((process) => {
-                    process.finish(() => {
-                        debugThread.log('Deletion completed');
+            await Neutralino.os.execCommand(`rm -rf "${Process.addSlashes(await constants.paths.dxvksDir)}/dxvk-${version}"`);
 
-                        resolve();
-                    });
-                });
+            debugThread.log('Deletion completed');
+
+            resolve();
         });
     }
 
@@ -185,9 +182,9 @@ export default class DXVK
                      * And then run it
                      */
                     (): Promise<void> => new Promise(async (resolve) => {
-                        const alias = runner ? `alias winecfg=\\"${runnerDir}/${runner.files.winecfg}\\"\\n` : '';
+                        const alias = runner ? `alias winecfg="${runnerDir}/${runner.files.winecfg}"\\n` : '';
 
-                        Process.run(`eval $"${alias ? alias : ''}./setup_dxvk.sh install"`, {
+                        Process.run(`eval $'${alias}./setup_dxvk.sh install'`, {
                             cwd: dxvkDir,
                             env: {
                                 WINE: runner ? `${runnerDir}/${runner.files.wine}` : 'wine',
