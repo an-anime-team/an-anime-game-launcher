@@ -14,7 +14,7 @@
 
 | Game version | Launcher version | Patch version |
 | :---: | :---: | :---: |
-| 2.3.0 | 1.9.1 | 2.3.0 stable ✅ |
+| 2.4.0 | 2.0.0 beta 5 | 2.4.0 preparations ❌ |
 
 We have our own [An Anime Game](https://discord.gg/ck37X6UWBp) discord server where you can ask any questions
 
@@ -174,8 +174,8 @@ This is our current roadmap goals. You can find older ones [here](ROADMAP.md)
 * <s>Theming system</s>
 * <s>Game pre-installation</s>
 * <s>Default runner and DXVK auto-installation</s>
+* <s>Discord RPC settings</s>
 * Shaders menu
-* Discord RPC settings
 * Ability to hide some runners families
 * Proper wine process monitoring
 * Statistics window
