@@ -36,11 +36,11 @@
                 Neutralino.app.exit();
             }
 
-            else setTimeout(isLauncherLoaded, 1000);
+            else setTimeout(isLauncherLoaded, 500);
         });
     };
 
-    Neutralino.events.on('ready', () => setTimeout(isLauncherLoaded, 3000));
+    Neutralino.events.on('ready', () => isLauncherLoaded());
 
     Neutralino.events.on('windowClose', () => {
         Neutralino.app.exit();
