@@ -73,7 +73,7 @@ class Stream extends AbstractInstaller
                     /**
                      * Execute the main patch installation script
                      */
-                    () => Neutralino.os.execCommand(`cd "${Process.addSlashes(gameDir)}" && fakeroot yes yes | bash "${Process.addSlashes(patchDir)}/patch.sh"`),
+                    () => Neutralino.os.execCommand(`cd "${Process.addSlashes(gameDir)}" && yes yes | bash "${Process.addSlashes(patchDir)}/patch.sh"`),
 
                     /**
                      * Execute the anti-login crash patch installation script
