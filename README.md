@@ -14,7 +14,7 @@
 
 | Game version | Launcher version | Patch version |
 | :---: | :---: | :---: |
-| 2.4.0 | 2.0.0 beta 5 | 2.4.0 preparations ❌ |
+| 2.4.0 | 2.0.0 beta 6 | 2.4.0 testing ⚠ |
 
 We have our own [An Anime Game](https://discord.gg/ck37X6UWBp) discord server where you can ask any questions
 
