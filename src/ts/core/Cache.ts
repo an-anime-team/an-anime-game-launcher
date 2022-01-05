@@ -33,7 +33,10 @@ export default class Cache
                     ]
                 });
 
-                resolve(this.cache[name]);
+                resolve({
+                    expired: this.cache[name].ttl !== null ? Date.now() > this.cache[name].ttl * 1000 : false,
+                    value: this.cache[name].value
+                });
             }
             
             else Neutralino.filesystem.readFile(await constants.paths.cache)

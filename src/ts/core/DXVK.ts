@@ -182,7 +182,7 @@ export default class DXVK
                      * And then run it
                      */
                     (): Promise<void> => new Promise(async (resolve) => {
-                        const alias = runner ? `alias winecfg="${runnerDir}/${runner.files.winecfg}"\\n` : '';
+                        const alias = runner ? `alias winecfg="${runnerDir}/${runner.files.winecfg}"\n` : '';
 
                         Process.run(`eval $'${alias}./setup_dxvk.sh install'`, {
                             cwd: dxvkDir,
