@@ -28,8 +28,8 @@ export default (launcher: Launcher): Promise<void> => {
                     label: `Deleting voice packages...`,
                     showSpeed: false,
                     showEta: false,
-                    showPercents: false,
-                    showTotals: true
+                    showPercents: true,
+                    showTotals: false
                 });
 
                 launcher.progressBar?.show();

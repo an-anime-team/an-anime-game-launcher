@@ -273,7 +273,7 @@ export default class Patch
      * @returns null if the latest available patch in preparation state
      * @returns rejects Error object if the patch's repositories are unreachable or they responded with an error
      */
-    public static install(): Promise<Stream|null>
+    public static install(patch: PatchInfo|null = null): Promise<Stream|null>
     {
         Debug.log({
             function: 'Patch.install',
@@ -281,7 +281,7 @@ export default class Patch
         });
 
         return new Promise((resolve, reject) => {
-            this.latest
+            Promise.resolve((patch ?? this.latest))
                 .then((patch) => {
                     if (patch.state === 'preparation')
                         resolve(null);

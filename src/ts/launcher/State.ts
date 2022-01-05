@@ -108,6 +108,9 @@ export default class State
         this.launcher.progressBar!.hide();
         this.predownloadButton.style['display'] = 'none';
 
+        this.launchButton.classList.remove('button-blue');
+        this.launchButton.setAttribute('aria-label', '');
+
         switch(state)
         {
             case 'runner-installation-required':
