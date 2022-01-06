@@ -87,7 +87,7 @@
 
     Configs.get('discord').then((settings) => discordSettings = settings as object);
 
-    const handleDiscordRpc = (field: 'in-game' | 'in-launcher', value: string) => {
+    const handleDiscordRpcText = (field: 'in-game' | 'in-launcher', value: string) => {
         const lines = value.split(/\r\n|\r|\n/).filter((line) => line != '');
 
         discordSettings['states'][field]['details'] = lines[0];
@@ -109,6 +109,12 @@
                 Configs.set('discord', discordSettings);
             }, 1000);
         }
+    };
+
+    const handleDiscordRpcIcon = (field: 'in-game' | 'in-launcher', icon: string) => {
+        discordSettings['states'][field]['icon'] = icon;
+
+        Configs.set('discord', discordSettings);
     };
 
     /**
@@ -151,6 +157,7 @@
     // Do some stuff when all the content will be loaded
     onMount(() => {
         Window.current.show();
+        Window.current.center(900, 600);
     });
 
     Neutralino.events.on('windowClose', async () => {
@@ -207,7 +214,7 @@
                     valueChanged={(value) => discordSettings['enabled'] = value}
                 />
 
-                <DiscordSettings visible={discordSettings['enabled']} valueChanged={handleDiscordRpc} />
+                <DiscordSettings visible={discordSettings['enabled']} valueChanged={handleDiscordRpcText} iconChanged={handleDiscordRpcIcon} />
             </div>
 
             <div class="settings-item" id="enhancements">

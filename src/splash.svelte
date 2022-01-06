@@ -20,6 +20,7 @@
 
     onMount(() => {
         Window.current.show();
+        Window.current.center(300, 400);
     });
 
     const isLauncherLoaded = () => {

@@ -68,6 +68,7 @@ export default class Launcher
                         });
 
                         Window.current.show();
+                        Window.current.center(1280, 700);
                     })
 
                     Window.current.hide();

@@ -38,7 +38,14 @@ class Window
 {
     public static get current(): any
     {
-        return Neutralino.window;
+        return {
+            ...Neutralino.window,
+
+            center(windowWidth: number, windowHeight: number)
+            {
+                Neutralino.window.move((window.screen.width - windowWidth) / 2, (window.screen.height - windowHeight) / 2);
+            }
+        };
     }
 
     public static open(name: string, options: WindowOptions = {}): Promise<WindowOpenResult>

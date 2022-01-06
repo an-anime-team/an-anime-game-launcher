@@ -25,6 +25,9 @@ settings:
             en-us: Englisch (US)
             ru-ru: Russisch
             de-de: Deutsch
+            fr-fr: Français
+            es-es: Español
+            vi-vn: Tiếng Việt
 
         # Spiel sprachpaket auswahl
         voice:
@@ -53,6 +56,7 @@ settings:
             timer: Display spent time
             in-launcher: In-launcher text
             in-game: In-game text
+            selectIcon: Select icon
 
   # Verberssungen
   enhancements:

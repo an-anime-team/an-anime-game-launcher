@@ -25,6 +25,9 @@ settings:
             en-us: English (US)
             ru-ru: Русский
             de-de: Deutsch
+            fr-fr: Français
+            es-es: Español
+            vi-vn: Tiếng Việt
 
         # Язык озвучки в игре
         voice:
@@ -53,6 +56,7 @@ settings:
             timer: Отображать потраченное время
             in-launcher: Текст в лаунчере
             in-game: Текст в игре
+            selectIcon: Выберите иконку
 
   # Улучшения
   enhancements:
