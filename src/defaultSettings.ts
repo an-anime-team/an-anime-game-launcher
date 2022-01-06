@@ -10,13 +10,29 @@ promisify(async () => {
                 'en-us'
             ]
         },
-    
-        /**
-         * Path to wine prefix
-         * 
-         * @default constants.paths.prefix.default
-         */
-        prefix: await constants.paths.prefix.default,
+
+        folders: {
+            /**
+             * Path to wine prefix
+             * 
+             * @default "~/.local/share/anime-game-launcher"
+             */
+            prefix: await constants.paths.prefix.default,
+
+            /**
+             * Path to game installation folder
+             * 
+             * @default "~/.local/share/anime-game-launcher/game/drive_c/Program Files/[An Anime Game]"
+             */
+            game: `${await constants.paths.prefix.default}/game/drive_c/Program Files/${constants.placeholders.uppercase.first} ${constants.placeholders.uppercase.second}`,
+            
+            /**
+             * Path to some temp folder
+             * 
+             * @default "~/.local/share/anime-game-launcher"
+             */
+            temp: await constants.paths.prefix.default
+        },
     
         /**
          * Runner name to use, or null if runner is not specified

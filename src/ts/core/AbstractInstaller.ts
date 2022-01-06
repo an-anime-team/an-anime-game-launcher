@@ -51,8 +51,8 @@ export default abstract class Installer
             }
         });
 
-        constants.paths.launcherDir.then((launcherDir) => {
-            const archivePath = alreadyDownloaded ? uri : `${launcherDir}/${Downloader.fileFromUri(uri)}`;
+        constants.paths.tempDir.then((tempDir) => {
+            const archivePath = alreadyDownloaded ? uri : `${tempDir}/${Downloader.fileFromUri(uri)}`;
 
             // And then unpack it
             const unpackArchive = () => {

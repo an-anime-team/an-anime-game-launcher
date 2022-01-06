@@ -48,7 +48,7 @@
         Downloader.closeStreams(true);
         Archive.closeStreams(true);
 
-        constants.paths.launcherDir.then(async (path) => {
+        constants.paths.tempDir.then(async (tempDir) => {
             // Remove IPC file
             await IPC.purge();
 
@@ -56,8 +56,8 @@
             if (launcher.rpc)
                 await launcher.rpc.stop(true);
 
-            // Remove .tmp files from the launcher folder
-            await Neutralino.os.execCommand(`rm -f "${Process.addSlashes(`${path}/*.tmp`)}"`);
+            // Remove .tmp files from the temp folder
+            await Neutralino.os.execCommand(`rm -f "${Process.addSlashes(`${tempDir}/*.tmp`)}"`);
 
             // Save logs
             const log = Debug.get().join("\r\n");

@@ -43,7 +43,7 @@ class Window
 
             center(windowWidth: number, windowHeight: number)
             {
-                Neutralino.window.move((window.screen.width - windowWidth) / 2, (window.screen.height - windowHeight) / 2);
+                Neutralino.window.move(Math.round((window.screen.width - windowWidth) / 2), Math.round((window.screen.height - windowHeight) / 2));
             }
         };
     }

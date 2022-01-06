@@ -110,15 +110,27 @@ class Paths
     public static readonly prefix = Prefix;
 
     /**
+     * Temp directory
+     * 
+     * @default "~/.local/share/anime-game-launcher"
+     * 
+     * @returns "[folders.temp] config field"
+     */
+    public static get tempDir(): Promise<string>
+    {
+        return new Promise(async (resolve) => resolve(await Configs.get('folders.temp') as string));
+    }
+
+    /**
      * Game directory
      * 
      * @default "~/.local/share/anime-game-launcher/game/drive_c/Program Files/[An Anime Game]"
      * 
-     * @returns "[constants.paths.prefix.current]/drive_c/Program Files/[An Anime Game]"
+     * @returns "[folders.game] config field"
      */
     public static get gameDir(): Promise<string>
     {
-        return new Promise(async (resolve) => resolve(`${await this.prefix.current}/drive_c/Program Files/${constants.placeholders.uppercase.full}`));
+        return new Promise(async (resolve) => resolve(await Configs.get('folders.game') as string));
     }
 
     /**
@@ -126,7 +138,7 @@ class Paths
      * 
      * @default "~/.local/share/anime-game-launcher/game/drive_c/Program Files/[An Anime Game]/[An Anime Game]_Data"
      * 
-     * @returns "[constants.paths.gameDir]/[An Anime Game]_Data"
+     * @returns "[folders.game]/[An Anime Game]_Data"
      */
     public static get gameDataDir(): Promise<string>
     {
@@ -163,15 +175,37 @@ export default class constants
     public static readonly placeholders = {
         uppercase:
         {
+            /**
+             * Anime
+             */
             first: atob('R2Vuc2hpbg=='),
+
+            /**
+             * Game
+             */
             second: atob('SW1wYWN0'),
+
+            /**
+             * Anime Game
+             */
             full: atob('R2Vuc2hpbiBJbXBhY3Q='),
+
+            /**
+             * anAnimeCompany
+             */
             company: atob('bWlIb1lv')
         },
 
         lowercase:
         {
+            /**
+             * anime
+             */
             first: atob('Z2Vuc2hpbg=='),
+
+            /**
+             * animecompany
+             */
             company: atob('bWlob3lv')
         }
     };

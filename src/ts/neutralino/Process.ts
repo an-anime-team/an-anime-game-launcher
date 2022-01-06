@@ -195,7 +195,7 @@ class Process
     public static run(command: string, options: ProcessOptions = {}): Promise<Process>
     {
         return new Promise(async (resolve) => {
-            const tmpFile = `${await constants.paths.launcherDir}/${10000 + Math.round(Math.random() * 89999)}.tmp`;
+            const tmpFile = `${await constants.paths.tempDir}/${10000 + Math.round(Math.random() * 89999)}.tmp`;
 
             // Set env variables
             if (options.env)
