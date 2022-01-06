@@ -51,12 +51,12 @@ settings:
       discord:
         title: Discord RPC
         settings:
-          title: Discord RPC settings
+          title: Discord RPC Einstellung
           items:
-            timer: Display spent time
-            in-launcher: In-launcher text
-            in-game: In-game text
-            selectIcon: Select icon
+            timer: Zeige geschätzte Zeit
+            in-launcher: Launcher text
+            in-game: im Spiel text
+            selectIcon: Icon auswählen
 
   # Verberssungen
   enhancements:
