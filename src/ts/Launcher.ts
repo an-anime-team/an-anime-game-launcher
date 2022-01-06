@@ -123,7 +123,7 @@ export default class Launcher
     
                         time: {
                             // @ts-expect-error
-                            start: discord.timer ? Math.round(Date.now() / 1000) : 0
+                            start: state === 'in-launcher' ? 0 : discord.timer ? Math.round(Date.now() / 1000) : 0
                         }
                     });
     
