@@ -6,7 +6,7 @@
   "scripts": {
     "neu": "neu",
     "dev": "vite build && neu run --disable-auto-reload",
-    "build": "vite build && rm -rf dist/an-anime-game-launcher/public && mkdir dist/an-anime-game-launcher/public && cp public dist/an-anime-game-launcher/public && neu build --release",
+    "build": "vite build && rm -rf dist/an-anime-game-launcher/public && mkdir dist/an-anime-game-launcher/public && cp -r public dist/an-anime-game-launcher/public && neu build --release",
     "bundle": "node scripts/bundle-appimage.cjs",
     "check": "svelte-check --tsconfig ./tsconfig.json"
   },
