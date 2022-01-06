@@ -12,7 +12,7 @@ class Prefix
      */
     public static get current(): Promise<string>
     {
-        return new Promise(async (resolve) => resolve(await Configs.get('prefix') as string));
+        return new Promise(async (resolve) => resolve(await Configs.get('folders.prefix') as string));
     }
 
     /**

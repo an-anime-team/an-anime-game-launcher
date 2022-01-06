@@ -1,25 +1,30 @@
 import Window from './neutralino/Window';
 import Process from './neutralino/Process';
+import Tray from './neutralino/Tray';
 
 import constants from './Constants';
 import Configs from './Configs';
-
-import ProgressBar from './launcher/ProgressBar';
-import State from './launcher/State';
 import Debug from './core/Debug';
 import IPC from './core/IPC';
 import DiscordRPC from './core/DiscordRPC';
+
+import ProgressBar from './launcher/ProgressBar';
+import State from './launcher/State';
 
 export default class Launcher
 {
     public state?: State;
     public progressBar?: ProgressBar;
     public rpc?: DiscordRPC;
+    public tray: Tray;
 
     protected settingsMenu?: Process;
 
     public constructor(onMount)
     {
+        this.tray = new Tray('/public/icons/256x256.png');
+        this.tray.update();
+
         this.updateDiscordRPC('in-launcher');
 
         onMount(() => {

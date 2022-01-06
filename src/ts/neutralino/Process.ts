@@ -199,11 +199,8 @@ class Process
 
             // Set env variables
             if (options.env)
-            {
-                Object.keys(options.env).forEach((key) => {
+                for (const key of Object.keys(options.env))
                     command = `${key}="${this.addSlashes(options.env![key].toString())}" ${command}`;
-                });
-            }
 
             // Set output redirection to the temp file
             command = `${command} > "${this.addSlashes(tmpFile)}" 2>&1`;

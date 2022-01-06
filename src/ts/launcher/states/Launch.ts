@@ -39,6 +39,10 @@ export default (launcher: Launcher): Promise<void> => {
 
             launcher.updateDiscordRPC('in-game');
 
+            launcher.tray.update([
+                { text: 'Starting the game...', disabled: true }
+            ]);
+
             /**
              * Selecting wine executable
              */
@@ -131,15 +135,45 @@ export default (launcher: Launcher): Promise<void> => {
             });
 
             // Game was started by the launcher.bat file
-            // so we just need to wait until GenshinImpact process
+            // so we just need to wait until AnimeGame.e process
             // will be closed
             process.finish(() => {
+                const processName = `${constants.placeholders.uppercase.first + constants.placeholders.uppercase.second}.e`;
+
+                let closeGameCounter = 0;
+
                 const waiter = async () => {
                     const processes: string = (await Neutralino.os.execCommand('ps -A')).stdOut;
 
                     // Game is still running
-                    if (processes.includes('GenshinImpact'))
+                    if (processes.includes(processName))
+                    {
+                        const playtime = Math.round((Date.now() - startTime) / 1000);
+
+                        let hours: string|number = Math.floor(playtime / 3600);
+                        let minutes: string|number = Math.floor((playtime - hours * 3600) / 60);
+                        let seconds: string|number = playtime - hours * 3600 - minutes * 60;
+
+                        if (hours < 10)
+                            hours = `0${hours}`;
+
+                        if (minutes < 10)
+                            minutes = `0${minutes}`;
+
+                        if (seconds < 10)
+                            seconds = `0${seconds}`;
+
+                        launcher.tray.update([
+                            { text: `Playing for ${hours}:${minutes}:${seconds}`, disabled: true },
+                            {
+                                text: `Close game${closeGameCounter > 0 ? ` (${closeGameCounter})` : ''}`,
+
+                                click: () => Neutralino.os.execCommand(`kill ${++closeGameCounter < 3 ? '-15' : '-9'} $(pidof ${processName})`)
+                            }
+                        ]);
+
                         setTimeout(waiter, 3000);
+                    }
 
                     // Game was closed
                     else
@@ -147,8 +181,10 @@ export default (launcher: Launcher): Promise<void> => {
                         const stopTime = Date.now();
 
                         Window.current.show();
+                        Window.current.center(1280, 700);
 
                         launcher.updateDiscordRPC('in-launcher');
+                        launcher.tray.hide();
 
                         // TODO
 
