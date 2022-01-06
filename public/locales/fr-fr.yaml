@@ -1,20 +1,20 @@
 # Splash window
 splash:
-  title: Loading launcher
+  title: Changement en cours
   phrases:
-    - Doing some important stuff...
-    - Bullying Paimon...
-    - Pulling for Yae...
+    - En train de faire des choses importantes...
+    - Cuisson de Paimon en cours...
+    - Invocation en masse pour Yae...
 
 # Launcher window
 launcher:
-  predownload: Pre-download update
+  predownload: Pre-téléchargement de mise à jour
 
 # Settings window
 settings:
   # General
   general:
-    title: General
+    title: Générale
     items:
       # Language selection
       lang:
@@ -31,40 +31,41 @@ settings:
 
         # Game voice pack language
         voice:
-          title: Voice pack
-          tooltip: You will have to manually select the new voice pack in the game
+          title: Pack de voix
+          tooltip: Le choix des voix utilisées sont à modifier 
+                   manuellement dans le jeu
           items:
-            en-us: English (US)
-            ja-jp: Japanese
-            ko-kr: Korean
-            zn-cn: Chinese
+            en-us: Anglaise (US)
+            ja-jp: Japonaise
+            ko-kr: Coréen
+            zn-cn: Chinoise
 
       # Launcher theme
       theme:
-        title: Theme
+        title: Thème
         items:
-          system: System
-          light: Light
-          dark: Dark
+          system: Système
+          light: Lumineux
+          dark: Sombre
       
       # Discord RPC
       discord:
-        title: Discord RPC
+        title: Intégration Discord
         settings:
-          title: Discord RPC settings
+          title: Intégration Discord paramètres
           items:
-            timer: Display spent time
-            in-launcher: In-launcher text
-            in-game: In-game text
-            selectIcon: Select icon
+            timer: Afficher le temps écouler
+            in-launcher: Texte dans le launcher
+            in-game: Texte dans le jeu
+            selectIcon: Sélection d'icone
 
   # Enhancements
   enhancements:
-    title: Enhancements
+    title: Améliorations
     items:
       # HUD
       hud:
-        title: HUD
+        title: Interface
         items:
           none: None
           dxvk: DXVK
@@ -72,43 +73,48 @@ settings:
       
       # GameMode
       gamemode:
-        title: Use GameMode
-        tooltip: It is a software that can improve the game performance
+        title: Utiliser GameMode
+        tooltip: C'est un logiciel qui permet d'améliorer les 
+                 performances en jeu
       
       # Unlock FPS
       fps_unlocker:
-        title: Unlock FPS
-        tooltip: This option will unlock maximum of the 60 fps limitation
+        title: Débloquer les IPS (FPS)
+        tooltip: Cette option permet de débloque le nombre d'image par 
+                 secondes (IPS) au-delà de 60
       
       # Delete DXVK logs
       purge_dxvk_logs:
-        title: Delete DXVK logs
-        tooltip: With this option enabled your launcher will automatically
-                 delete DXVK log files
+        title: Supprimer automatiquement les logs de DXVK
+        tooltip: Cette option supprime automatiquement les 
+                 fichiers logs de DXVK
 
   # Runners
   runners:
-    title: Wine version
+    title: Version de Wine
     items:
       recommended:
-        title: Show recommended only
-        tooltip: This option will hide unplayable wine versions
+        title: Afficher les versions recommandées seulement
+        tooltip: Cette option masque les versions de Wine 
+                 non testées ou qui ne fonctionnent pas
 
   # DXVKs
   dxvks:
     title: DXVK
     items:
       recommended:
-        title: Show recommended only
-        tooltip: This option will hide old DXVK versions
+        title: Afficher les versions recommandées seulement
+        tooltip: Cette option masque les versions de DXVK 
+                 non testées ou qui ne fonctionnent pas
 
   # Shaders
   shaders:
-    title: Shaders
+    title: Effets Visuels
     items:
       shaders:
-        title: Shaders
-        tooltip: Use Home button to toggle shaders in the game
+        title: Effets Visuels
+        tooltip: Utilisez la touche début (home) activer 
+                 ou désactiver les effets visuels
         items:
           none: None
           custom: Custom
