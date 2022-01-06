@@ -14,9 +14,10 @@
     Shaders.list().then((list) => {
         shaders = list;
 
-        list.forEach((shader) => {
+        for (const shader of list)
             shadersOptions[shader.folder] = shader.name;
-        });
+
+        shadersOptions['custom'] = 'settings.shaders.items.shaders.items.custom';
     });
 </script>
 

@@ -107,3 +107,4 @@ settings:
         tooltip: Use Home button to toggle shaders in the game
         items:
           none: None
+          custom: Custom

@@ -77,13 +77,17 @@ export default (launcher: Launcher): Promise<void> => {
 
             if (shaders !== 'none')
             {
-                const userShadersFile = `${constants.paths.shadersDir}/public/${shaders}/vkBasalt.conf`;
                 const launcherShadersFile = `${await constants.paths.launcherDir}/vkBasalt.conf`;
 
                 env['ENABLE_VKBASALT'] = 1;
                 env['VKBASALT_CONFIG_FILE'] = launcherShadersFile;
 
-                await Neutralino.filesystem.writeFile(launcherShadersFile, await Neutralino.filesystem.readFile(userShadersFile));
+                if (shaders !== 'custom')
+                {
+                    const userShadersFile = `${constants.paths.shadersDir}/public/${shaders}/vkBasalt.conf`;
+                    
+                    await Neutralino.filesystem.writeFile(launcherShadersFile, await Neutralino.filesystem.readFile(userShadersFile));
+                }
             }
 
             /**

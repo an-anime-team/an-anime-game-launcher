@@ -108,3 +108,4 @@ settings:
         tooltip: Benutze die Home/POS1 taste um die Shader in-spiel zu togglen
         items:
           none: None
+          custom: Custom
