@@ -24,7 +24,7 @@ promisify(async () => {
              * 
              * @default "~/.local/share/anime-game-launcher/game/drive_c/Program Files/[An Anime Game]"
              */
-            game: `${await constants.paths.prefix.default}/game/drive_c/Program Files/${constants.placeholders.uppercase.first} ${constants.placeholders.uppercase.second}`,
+            game: `${await constants.paths.prefix.default}/drive_c/Program Files/${constants.placeholders.uppercase.first} ${constants.placeholders.uppercase.second}`,
             
             /**
              * Path to some temp folder
