@@ -7,6 +7,7 @@ import Configs from './Configs';
 import Debug from './core/Debug';
 import IPC from './core/IPC';
 import DiscordRPC from './core/DiscordRPC';
+import Locales from './core/Locales';
 
 import ProgressBar from './launcher/ProgressBar';
 import State from './launcher/State';
@@ -22,7 +23,7 @@ export default class Launcher
 
     public constructor(onMount)
     {
-        this.tray = new Tray('/public/icons/256x256.png');
+        this.tray = new Tray(`/public/icons/256x256.png`);
         this.tray.update();
 
         this.updateDiscordRPC('in-launcher');
@@ -90,7 +91,7 @@ export default class Launcher
     public getSocial(): Promise<string>
     {
         return new Promise(async (resolve) => {
-            resolve(`https://${constants.placeholders.lowercase.first}.${constants.placeholders.lowercase.company}.com/launcher/10/${await Configs.get('lang.launcher')}?api_url=https%3A%2F%2Fapi-os-takumi.${constants.placeholders.lowercase.company}.com%2Fhk4e_global&key=gcStgarh&prev=false`);
+            resolve(`https://${constants.placeholders.lowercase.first}.${constants.placeholders.lowercase.company}.com/launcher/10/${Locales.fallback((await Locales.default()) ?? 'en-us')}?api_url=https%3A%2F%2Fapi-os-takumi.${constants.placeholders.lowercase.company}.com%2Fhk4e_global&key=gcStgarh&prev=false`);
         });
     }
 

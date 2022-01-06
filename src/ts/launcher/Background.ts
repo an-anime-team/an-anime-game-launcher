@@ -1,6 +1,6 @@
 import constants from '../Constants';
-import Configs from '../Configs';
 import fetch from '../core/Fetch';
+import Locales from '../core/Locales';
 
 export default class Background
 {
@@ -10,7 +10,7 @@ export default class Background
     public static get(): Promise<string>
     {
         return new Promise(async (resolve) => {
-            fetch(constants.backgroundUri + await Configs.get('lang.launcher'))
+            fetch(constants.backgroundUri + Locales.fallback((await Locales.default()) ?? 'en-us'))
                 .then((header) => header.body().then((body) => {
                     resolve(JSON.parse(body).data.adv.background);
                 }));

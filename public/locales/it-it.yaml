@@ -1,0 +1,113 @@
+# Splash window
+splash:
+  title: Caricando il launcher
+  phrases:
+    - Facendo attività molto importanti...
+    - Bullizzando Paimon...
+    - Pullando per Yae...
+
+# Launcher window
+launcher:
+  predownload: Pre-scarica l'aggiornamento
+  
+# Settings window
+settings:
+  # General
+  general:
+    title: Generale
+    items:
+      # Language selection
+      lang:
+        # Launcher language
+        launcher:
+          title: Launcher
+          items:
+            en-us: English (US)
+            ru-ru: Русский
+            de-de: Deutsch
+            fr-fr: Français
+            es-es: Español
+            it-it: Italiano
+            vi-vn: Tiếng Việt
+
+        # Game voice pack language
+        voice:
+          title: Doppiaggio
+          tooltip: Dovrai manualmente configurare il voice pack in gioco
+          items:
+            en-us: Inglese (US)
+            ja-jp: Giapponese
+            ko-kr: Coreano
+            zn-cn: Cinese
+
+      # Launcher theme
+      theme:
+        title: Tema
+        items:
+          system: Sistema
+          light: Chiaro
+          dark: Scuro
+      
+      # Discord RPC
+      discord:
+        title: Integrazione Discord
+        settings:
+          title: Impostazioni di integrazione con Discord
+          items:
+            timer: Mostra il tempo di gioco
+            in-launcher: Testo nel launcher
+            in-game: Testo in gioco
+
+  # Enhancements
+  enhancements:
+    title: Miglioramenti
+    items:
+      # HUD
+      hud:
+        title: Interfaccia
+        items:
+          none: None
+          dxvk: DXVK
+          mangohud: MangoHUD
+      
+      # GameMode
+      gamemode:
+        title: Usa GameMode
+        tooltip: È un software che può migliorare le prestazioni in gioco
+      
+      # Unlock FPS
+      fps_unlocker:
+        title: Sblocca gli FPS
+        tooltip: Questa opzione rimuoverà la limitazione di 60 FPS in gioco
+      
+      # Delete DXVK logs
+      purge_dxvk_logs:
+        title: Cancella i log DXVK
+        tooltip: Con questa opzione attiva, il launcher cancellerà automaticamente i file di log DXVK
+
+  # Runners
+  runners:
+    title: Versione di Wine
+    items:
+      recommended:
+        title: Mostra solo le consigliate
+        tooltip: Questa opzione nasconderà le versioni di Wine non giocabili
+
+  # DXVKs
+  dxvks:
+    title: DXVK
+    items:
+      recommended:
+        title: Mostra solo le consigliate
+        tooltip: Questa opzione nasconderà le vecchie versioni di DXVK
+
+  # Shaders
+  shaders:
+    title: Shaders
+    items:
+      shaders:
+        title: Shaders
+        tooltip: Usa il bottone Home per attivare/disattivare le shaders in gioco
+        items:
+          none: None
+          custom: Custom

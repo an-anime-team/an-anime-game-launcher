@@ -10,6 +10,7 @@ type AvailableLocales =
     | 'de-de'
     | 'fr-fr'
     | 'es-es'
+    | 'it-it'
     | 'vi-vn';
 
 declare const Neutralino;
@@ -17,14 +18,22 @@ declare const Neutralino;
 export default class Locales
 {
     /**
+     * List of locales supported by the game's API
+     */
+    public static readonly supportedLocales: AvailableLocales[] = [
+        'en-us', 'ru-ru', 'de-de',
+        'fr-fr', 'es-es', 'vi-vn'
+    ];
+
+    /**
      * Get or update the default locale
      */
-    public static default(lang: AvailableLocales|null = null): Promise<string>
+    public static default(lang: AvailableLocales|null = null): Promise<AvailableLocales>
     {
         if (lang !== null)
             Configs.set('lang.launcher', lang);
 
-        return Configs.get('lang.launcher') as Promise<string>;
+        return Configs.get('lang.launcher') as Promise<AvailableLocales>;
     }
 
     /**
@@ -70,4 +79,24 @@ export default class Locales
                 .then((locale) => resolve(YAML.parse(locale)));
         });
     }
+
+    /**
+     * Checks if the specified language supported
+     * by the game's API
+     */
+    public static supported(lang: AvailableLocales): boolean
+    {
+        return this.supportedLocales.includes(lang);
+    }
+
+    /**
+     * Returns provided language if it is supported
+     * by the game's API. Otherwise returns fallback language (en-us by default)
+     */
+    public static fallback(lang: AvailableLocales, fallback: AvailableLocales = 'en-us'): AvailableLocales
+    {
+        return this.supported(lang) ? lang : fallback;
+    }
 };
+
+export type { AvailableLocales };
