@@ -46,14 +46,14 @@ class Paths
     /**
      * Shaders directory
      * 
-     * @default "[constants.paths.app]/public/shaders"
+     * @default "[constants.paths.appDir]/public/shaders"
      */
     public static readonly shadersDir: string = `${this.appDir}/public/shaders`;
 
     /**
      * Locales directory
      * 
-     * @default "[constants.paths.app]/public/locales"
+     * @default "[constants.paths.appDir]/public/locales"
      */
     public static readonly localesDir: string = `${this.appDir}/public/locales`;
 
