@@ -15,7 +15,7 @@ promisify(async () => {
             /**
              * Path to wine prefix
              * 
-             * @default "~/.local/share/anime-game-launcher"
+             * @default "~/.local/share/anime-game-launcher/game"
              */
             prefix: await constants.paths.prefix.default,
 
@@ -31,7 +31,7 @@ promisify(async () => {
              * 
              * @default "~/.local/share/anime-game-launcher"
              */
-            temp: await constants.paths.prefix.default
+            temp: await constants.paths.launcherDir
         },
     
         /**
