@@ -57,7 +57,7 @@
                 await launcher.rpc.stop(true);
 
             // Remove .tmp files from the temp folder
-            await Neutralino.os.execCommand(`rm -f "${Process.addSlashes(`${tempDir}/*.tmp`)}"`);
+            await Neutralino.os.execCommand(`find "${Process.addSlashes(tempDir)}" -maxdepth 1 -type f -name "*.tmp" -delete`);
 
             // Save logs
             const log = Debug.get().join("\r\n");

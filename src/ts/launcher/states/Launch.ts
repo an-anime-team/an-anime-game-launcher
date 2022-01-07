@@ -184,6 +184,20 @@ export default (launcher: Launcher): Promise<void> => {
                         launcher.updateDiscordRPC('in-launcher');
                         launcher.tray.hide();
 
+                        // Purge DXVK logs
+                        Configs.get('purge_dxvk_logs').then(async (purge_logs) => {
+                            if (purge_logs)
+                            {
+                                const gameDir = Process.addSlashes(await constants.paths.gameDir);
+
+                                // Delete .log files (e.g. "ZFGameBrowser_xxxx.log")
+                                Neutralino.os.execCommand(`find "${gameDir}" -maxdepth 1 -type f -name "*.log" -delete`);
+
+                                // Delete .dmp files (e.g. "DumpFile-zfbrowser-xxxxxx.dmp")
+                                Neutralino.os.execCommand(`find "${gameDir}" -maxdepth 1 -type f -name "*.dmp" -delete`);
+                            }
+                        });
+
                         // TODO
 
                         resolve();
