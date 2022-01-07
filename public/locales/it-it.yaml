@@ -62,8 +62,8 @@ settings:
       buttons:
         winetricks: winetricks
         winecfg: winecfg
-        launcher: launcher folder
-        game: game folder
+        launcher: Cartella del launcher
+        game: Cartella del gioco
 
   # Enhancements
   enhancements:
