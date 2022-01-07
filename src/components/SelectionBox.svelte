@@ -68,7 +68,6 @@
     >
         <span>{ $_(items[selectedValue]) }</span>
 
-        <!-- svelte-ignore a11y-missing-attribute -->
-        <img src={Arrow} />
+        <img src={Arrow} alt="" />
     </div>
 </div>

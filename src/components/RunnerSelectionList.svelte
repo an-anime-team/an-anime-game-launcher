@@ -3,16 +3,18 @@
 
     export let recommendable = true;
 
-    import Runners from '../ts/core/Runners';
-
     import type { Runner, RunnerFamily } from '../ts/types/Runners';
+
+    import Runners from '../ts/core/Runners';
 
     import Delete from '../assets/images/delete.png';
     import Download from '../assets/images/download.png';
+    import Arrow from '../assets/svgs/arrow.svg';
     
     let runners: RunnerFamily[] = [],
         installedRunners = {},
         disabledRunners = {},
+        openedFamily,
         selectedVersion;
 
     Runners.list().then((list) => {
@@ -26,7 +28,12 @@
             }
     });
 
-    Runners.current().then((current) => selectedVersion = current?.name);
+    Runners.current().then((current) => {
+        selectedVersion = current;
+
+        if (current)
+            openedFamily = current.family;
+    });
 
     let progress = {}, applying = {};
 
@@ -48,7 +55,7 @@
 
                 progress[runner.name] = undefined;
 
-                selectedVersion = runner.name;
+                selectedVersion = runner;
 
                 Runners.current(runner);
             });
@@ -69,39 +76,49 @@
 
 <div class="list">
     {#each runners as family}
-        <h2>{ family.title }</h2>
+        <div
+            class="list-title"
+            class:list-title-open={openedFamily === family.title}
+            on:click={() => openedFamily = openedFamily != family.title ? family.title : null}
+        >
+            <span>{family.title}</span>
 
-        {#each family.runners as runner}
-            <div
-                class="list-item"
-                class:list-item-downloaded={installedRunners[runner.name]}
-                class:list-item-active={runner.name === selectedVersion}
-                class:list-item-hidden={recommendable && !runner.recommended}
-                class:list-item-downloading={progress[runner.name]}
-                class:list-item-applying={applying[runner.name]}
-                class:list-item-disabled={disabledRunners[runner.name]}
+            <img src={Arrow} alt="" />
+        </div>
 
-                on:click|self={() => {
-                    if (installedRunners[runner.name] && selectedVersion !== runner.name)
-                    {
-                        selectedVersion = runner.name;
+        {#if openedFamily === family.title}
+            {#each family.runners as runner}
+                <div
+                    class="list-item"
+                    class:list-item-downloaded={installedRunners[runner.name]}
+                    class:list-item-active={runner.name === selectedVersion.name}
+                    class:list-item-hidden={recommendable && !runner.recommended}
+                    class:list-item-downloading={progress[runner.name]}
+                    class:list-item-applying={applying[runner.name]}
+                    class:list-item-disabled={disabledRunners[runner.name]}
 
-                        Runners.current(runner);
-                    }
-                }}
-            >
-                { runner.title }
+                    on:click|self={() => {
+                        if (installedRunners[runner.name] && selectedVersion.name !== runner.name)
+                        {
+                            selectedVersion = runner;
 
-                <div>
-                    <span>{progress[runner.name] ?? ''}</span>
+                            Runners.current(runner);
+                        }
+                    }}
+                >
+                    { runner.title }
 
-                    <!-- svelte-ignore a11y-missing-attribute -->
-                    <img class="item-delete" src={Delete} on:click={() => deleteRunner(runner)}>
+                    <div>
+                        <span>{progress[runner.name] ?? ''}</span>
 
-                    <!-- svelte-ignore a11y-missing-attribute -->
-                    <img class="item-download" src={Download} on:click={() => downloadRunner(runner)}>
+                        <!-- svelte-ignore a11y-missing-attribute -->
+                        <img class="item-delete" src={Delete} on:click={() => deleteRunner(runner)}>
+
+                        <!-- svelte-ignore a11y-missing-attribute -->
+                        <img class="item-download" src={Download} on:click={() => downloadRunner(runner)}>
+                    </div>
                 </div>
-            </div>
-        {/each}
+            {/each}
+        {/if}
     {/each}
 </div>
