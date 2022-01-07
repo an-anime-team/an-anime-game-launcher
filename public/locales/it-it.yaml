@@ -89,15 +89,15 @@ settings:
 
         # Launcher logs
         launcher:
-          title: Delete launcher logs
-          tooltip: Amount of time after which launcher will delete its old log files
+          title: Cancella i log del launcher
+          tooltip: Quantità di tempo dopo cui il launcher eliminerà i vecchi file di log
           items:
-            1d: 1 day
-            3d: 3 days
-            5d: 5 days
-            7d: 1 week
-            14d: 2 weeks
-            never: Never
+            1d: 1 giorno
+            3d: 3 giorni
+            5d: 5 giorni
+            7d: 1 settimana
+            14d: 2 settimane
+            never: Mai
 
   # Runners
   runners:
