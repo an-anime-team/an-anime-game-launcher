@@ -3,6 +3,9 @@ import type Launcher from '../../Launcher';
 import Game from '../../Game';
 import Prefix from '../../core/Prefix';
 import constants from '../../Constants';
+import Debug from '../../core/Debug';
+
+declare const Neutralino;
 
 export default (launcher: Launcher): Promise<void> => {
     return new Promise(async (resolve) => {
@@ -46,6 +49,9 @@ export default (launcher: Launcher): Promise<void> => {
                         showTotals: true
                     });
 
+                    // Showing progress bar again
+                    // in case if this update was pre-downloaded
+                    // and we skipped downloadStart event
                     launcher.progressBar?.show();
                 });
     
@@ -53,11 +59,54 @@ export default (launcher: Launcher): Promise<void> => {
                     launcher.progressBar?.update(current, total, difference);
                 });
     
-                stream?.unpackFinish(() => {
+                stream?.unpackFinish(async () => {
+                    const gameDir = await constants.paths.gameDir;
+
+                    // Deleting outdated files
+                    Neutralino.filesystem.readFile(`${gameDir}/deletefiles.txt`)
+                        .then(async (files) => {
+                            files = files.split(/\r\n|\r|\n/).filter((file) => file != '');
+
+                            if (files.length > 0)
+                            {
+                                launcher.progressBar?.init({
+                                    label: 'Deleting outdated files...',
+                                    showSpeed: false,
+                                    showEta: true,
+                                    showPercents: true,
+                                    showTotals: false
+                                });
+
+                                let current = 0, total = files.length;
+
+                                for (const file of files)
+                                {
+                                    await Neutralino.filesystem.removeFile(`${gameDir}/${file}`);
+
+                                    launcher.progressBar?.update(++current, total, 1);
+                                }
+                                
+                                Debug.log({
+                                    function: 'Launcher/States/Install',
+                                    message: [
+                                        'Deleted outdated files:',
+                                        ...files
+                                    ]
+                                });
+                            }
+
+                            await Neutralino.filesystem.removeFile(`${gameDir}/deletefiles.txt`);
+
+                            installVoice();
+                        })
+                        .catch(() => installVoice());
+
                     // Download voice package when the game itself has been installed
-                    import('./InstallVoice').then((module) => {
-                        module.default(launcher).then(() => resolve());
-                    });
+                    const installVoice = () => {
+                        import('./InstallVoice').then((module) => {
+                            module.default(launcher).then(() => resolve());
+                        });
+                    };
                 });
             });
         };

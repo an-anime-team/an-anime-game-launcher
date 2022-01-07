@@ -72,6 +72,9 @@ export default (launcher: Launcher): Promise<void> => {
                                     showTotals: true
                                 });
 
+                                // Showing progress bar again
+                                // in case if this update was pre-downloaded
+                                // and we skipped downloadStart event
                                 launcher.progressBar?.show();
                             });
                 
