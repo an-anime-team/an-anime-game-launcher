@@ -65,6 +65,19 @@
     };
 
     /**
+     * Delete launcher logs options
+     */
+
+    const purgeLauncherLogs = {
+        '1d': 'settings.enhancements.items.purge_logs.launcher.items.1d',
+        '3d': 'settings.enhancements.items.purge_logs.launcher.items.3d',
+        '5d': 'settings.enhancements.items.purge_logs.launcher.items.5d',
+        '7d': 'settings.enhancements.items.purge_logs.launcher.items.7d',
+        '14d': 'settings.enhancements.items.purge_logs.launcher.items.14d',
+        'never': 'settings.enhancements.items.purge_logs.launcher.items.never'
+    };
+
+    /**
      * Menu items
      */
     const menuItems = [
@@ -248,9 +261,16 @@
                 />
 
                 <Checkbox
-                    lang="settings.enhancements.items.purge_dxvk_logs.title"
-                    tooltip="settings.enhancements.items.purge_dxvk_logs.tooltip"
-                    prop="purge_dxvk_logs"
+                    lang="settings.enhancements.items.purge_logs.game.title"
+                    tooltip="settings.enhancements.items.purge_logs.game.tooltip"
+                    prop="purge_logs.game"
+                />
+
+                <SelectionBox
+                    lang="settings.enhancements.items.purge_logs.launcher.title"
+                    tooltip="settings.enhancements.items.purge_logs.launcher.tooltip"
+                    prop="purge_logs.launcher"
+                    items={purgeLauncherLogs}
                 />
             </div>
 

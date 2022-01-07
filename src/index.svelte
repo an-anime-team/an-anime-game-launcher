@@ -17,6 +17,7 @@
     import Downloader from './ts/core/Downloader';
     import IPC from './ts/core/IPC';
     import Process from './ts/neutralino/Process';
+    import Configs from './ts/Configs';
 
     import Gear from './assets/images/gear.png';
     import GearActive from './assets/images/gear-active.png';
@@ -44,30 +45,37 @@
         });
     });
 
-    Neutralino.events.on('windowClose', () => {
+    Neutralino.events.on('windowClose', async () => {
         Downloader.closeStreams(true);
         Archive.closeStreams(true);
 
-        constants.paths.tempDir.then(async (tempDir) => {
-            // Remove IPC file
-            await IPC.purge();
+        const tempDir = await constants.paths.tempDir;
+        const launcherDir = await constants.paths.launcherDir;
 
-            // Turn off Discord RPC
-            if (launcher.rpc)
-                await launcher.rpc.stop(true);
+        // Remove IPC file
+        await IPC.purge();
 
-            // Remove .tmp files from the temp folder
-            await Neutralino.os.execCommand(`find "${Process.addSlashes(tempDir)}" -maxdepth 1 -type f -name "*.tmp" -delete`);
+        // Turn off Discord RPC
+        if (launcher.rpc)
+            await launcher.rpc.stop(true);
 
-            // Save logs
-            const log = Debug.get().join("\r\n");
+        // Remove .tmp files from the temp folder
+        await Neutralino.os.execCommand(`find "${Process.addSlashes(tempDir)}" -maxdepth 1 -type f -name "*.tmp" -delete`);
 
-            if (log != '')
-                await Neutralino.filesystem.writeFile(`${await constants.paths.launcherDir}/logs/${Debug.startedAt.getDate()}-${Debug.startedAt.getMonth() + 1}-${Debug.startedAt.getFullYear()}-${Debug.startedAt.getHours()}-${Debug.startedAt.getMinutes()}-${Debug.startedAt.getSeconds()}.log`, log);
+        // Remove old launcher's log files
+        const purge_logs = await Configs.get('purge_logs.launcher') as string|null;
 
-            // And close the launcher when they was saved
-            Neutralino.app.exit();
-        });
+        if (purge_logs !== null && purge_logs[purge_logs.length - 1] == 'd')
+            await Neutralino.os.execCommand(`find "${Process.addSlashes(launcherDir)}/logs" -maxdepth 1 -mtime +${purge_logs.substring(0, purge_logs.length - 1)} -delete`);
+
+        // Save logs
+        const log = Debug.get().join('\r\n');
+
+        if (log != '')
+            await Neutralino.filesystem.writeFile(`${launcherDir}/logs/${Debug.startedAt.getDate()}-${Debug.startedAt.getMonth() + 1}-${Debug.startedAt.getFullYear()}-${Debug.startedAt.getHours()}-${Debug.startedAt.getMinutes()}-${Debug.startedAt.getSeconds()}.log`, log);
+
+        // And close the launcher when they was saved
+        Neutralino.app.exit();
     });
 
     // Save logs
@@ -79,7 +87,7 @@
             logSavingStarted = true;
 
             setTimeout(async () => {
-                const log = `=== Log can be incomplete ===\r\n\r\n${Debug.get().join("\r\n")}`;
+                const log = `=== Log can be incomplete ===\r\n\r\n${Debug.get().join('\r\n')}`;
 
                 if (log != '')
                     await Neutralino.filesystem.writeFile(`${await constants.paths.launcherDir}/logs/${Debug.startedAt.getDate()}-${Debug.startedAt.getMonth() + 1}-${Debug.startedAt.getFullYear()}-${Debug.startedAt.getHours()}-${Debug.startedAt.getMinutes()}-${Debug.startedAt.getSeconds()}.log`, log);

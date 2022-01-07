@@ -81,11 +81,25 @@ settings:
         title: Entsperre FPS
         tooltip: Diese option entsperrt/entfernt die 60 FPS limiterung
       
-      # Delete DXVK logs
-      purge_dxvk_logs:
-        title: DXVK logs löschen
-        tooltip: When diese option angeschaltet ist löscht
-                 der Launcher automatisch alle DXVK logs
+      # Delete logs
+      purge_logs:
+        # Game logs (DXVK)
+        game:
+          title: DXVK logs löschen
+          tooltip: When diese option angeschaltet ist löscht
+                  der Launcher automatisch alle DXVK logs
+
+        # Launcher logs
+        launcher:
+          title: Launcher logs löschen
+          tooltip: Launcher logs werden nach diese angegebenen Zeit gelöscht
+          items:
+            1d: 1 Tag
+            3d: 3 Tage
+            5d: 5 Tage
+            7d: 1 Woche
+            14d: 2 Wochen
+            never: Niemals
 
   # Runners
   runners:

@@ -184,8 +184,8 @@ export default (launcher: Launcher): Promise<void> => {
                         launcher.updateDiscordRPC('in-launcher');
                         launcher.tray.hide();
 
-                        // Purge DXVK logs
-                        Configs.get('purge_dxvk_logs').then(async (purge_logs) => {
+                        // Purge game logs
+                        Configs.get('purge_logs.game').then(async (purge_logs) => {
                             if (purge_logs)
                             {
                                 const gameDir = Process.addSlashes(await constants.paths.gameDir);

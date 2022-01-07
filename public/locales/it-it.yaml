@@ -81,9 +81,23 @@ settings:
         tooltip: Questa opzione rimuoverà la limitazione di 60 FPS in gioco
       
       # Delete DXVK logs
-      purge_dxvk_logs:
-        title: Cancella i log DXVK
-        tooltip: Con questa opzione attiva, il launcher cancellerà automaticamente i file di log DXVK
+      purge_logs:
+        # Game logs (DXVK)
+        game:
+          title: Cancella i log DXVK
+          tooltip: Con questa opzione attiva, il launcher cancellerà automaticamente i file di log DXVK
+
+        # Launcher logs
+        launcher:
+          title: Delete launcher logs
+          tooltip: Amount of time after which launcher will delete its old log files
+          items:
+            1d: 1 day
+            3d: 3 days
+            5d: 5 days
+            7d: 1 week
+            14d: 2 weeks
+            never: Never
 
   # Runners
   runners:

@@ -133,10 +133,24 @@ promisify(async () => {
         fps_unlocker: false,
 
         /**
-         * If the launcher should automatically delete DXVK log files
-         * 
-         * @default true
+         * If the launcher should automatically delete log files
          */
-        purge_dxvk_logs: true
+        purge_logs: {
+            /**
+             * Should launcher delete some game logs (DXVK .log and .dmp files)
+             * 
+             * @default true
+             */
+            game: true,
+
+            /**
+             * Period of time launcher should delete its logs
+             * 
+             * Can be in "*d" format, where * is amount of days (e.g. 5d = 5 days), or "never" to never delete logs
+             * 
+             * @default "5d"
+             */
+            launcher: '5d'
+        }
     });
 });

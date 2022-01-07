@@ -84,11 +84,25 @@ settings:
         tooltip: Cette option permet de débloque le nombre d'image par 
                  secondes (IPS) au-delà de 60
       
-      # Delete DXVK logs
-      purge_dxvk_logs:
-        title: Supprimer automatiquement les logs de DXVK
-        tooltip: Cette option supprime automatiquement les 
-                 fichiers logs de DXVK
+      # Delete logs
+      purge_logs:
+        # Game logs (DXVK)
+        game:
+          title: Supprimer automatiquement les logs de DXVK
+          tooltip: Cette option supprime automatiquement les 
+                  fichiers logs de DXVK
+
+        # Launcher logs
+        launcher:
+          title: Suppression des fichiers logs
+          tooltip: Amount of time after which launcher will delete its old log files
+          items:
+            1d: Tous les jours
+            3d: Tous les 3 jours
+            5d: Tous les 5 jours
+            7d: Toutes les semaines
+            14d: Toutes les 2 semaines
+            never: Jamais
 
   # Runners
   runners:

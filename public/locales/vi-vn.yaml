@@ -81,11 +81,25 @@ settings:
         title: Unlock FPS
         tooltip: This option will unlock maximum of the 60 fps limitation
       
-      # Delete DXVK logs
-      purge_dxvk_logs:
-        title: Delete DXVK logs
-        tooltip: With this option enabled your launcher will automatically
-                 delete DXVK log files
+      # Delete logs
+      purge_logs:
+        # Game logs (DXVK)
+        game:
+          title: Delete DXVK logs
+          tooltip: With this option enabled your launcher will automatically
+                  delete DXVK log files
+
+        # Launcher logs
+        launcher:
+          title: Delete launcher logs
+          tooltip: Amount of time after which launcher will delete its old log files
+          items:
+            1d: 1 day
+            3d: 3 days
+            5d: 5 days
+            7d: 1 week
+            14d: 2 weeks
+            never: Never
 
   # Runners
   runners:
