@@ -60,6 +60,13 @@ settings:
             in-game: Texte dans le jeu
             selectIcon: Sélection d'icone
 
+      # Some buttons
+      buttons:
+        winetricks: winetricks
+        winecfg: winecfg
+        launcher: Dossier du Launcher
+        game: Dossier du jeu
+
   # Enhancements
   enhancements:
     title: Améliorations

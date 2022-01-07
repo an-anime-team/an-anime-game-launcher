@@ -6,12 +6,16 @@
     import { onMount } from 'svelte';
     import { _, locale, locales } from 'svelte-i18n';
 
+    import constants from './ts/Constants';
     import Configs from './ts/Configs';
     import FPSUnlock from './ts/FPSUnlock';
     import Window from './ts/neutralino/Window';
     import Debug from './ts/core/Debug';
     import IPC from './ts/core/IPC';
+    import Process from './ts/neutralino/Process';
+    import Runners from './ts/core/Runners';
 
+    import Button from './components/Button.svelte';
     import Checkbox from './components/Checkbox.svelte';
     import SelectionBox from './components/SelectionBox.svelte';
     import DropdownCheckboxes from './components/DropdownCheckboxes.svelte';
@@ -228,6 +232,50 @@
                 />
 
                 <DiscordSettings visible={discordSettings['enabled']} valueChanged={handleDiscordRpcText} iconChanged={handleDiscordRpcIcon} />
+
+                <div style="margin-top: 24px">
+                    <Button lang="settings.general.items.buttons.winetricks" click={async () => {
+                        const runner = await Runners.current();
+
+                        const runnersDir = await constants.paths.runnersDir;
+                        
+                        Process.run(`"${Process.addSlashes(await constants.paths.launcherDir)}/winetricks.sh"`, {
+                            env: {
+                                WINE: runner ? `${runnersDir}/${runner.name}/${runner.files.wine}` : 'wine',
+                                WINESERVER: runner ? `${runnersDir}/${runner.name}/${runner.files.wineserver}` : 'wineserver',
+                                WINEPREFIX: await constants.paths.prefix.current
+                            }
+                        });
+                    }} />
+
+                    <Button lang="settings.general.items.buttons.winecfg" click={async () => {
+                        const runner = await Runners.current();
+
+                        const runnerDir = runner ? `${await constants.paths.runnersDir}/${runner.name}` : '';
+                        
+                        Process.run(runner ? `"${Process.addSlashes(`${runnerDir}/${runner.files.wine}`)}" "${Process.addSlashes(`${runnerDir}/${runner.files.winecfg}`)}"` : 'winecfg', {
+                            env: {
+                                WINE: runner ? `${runnerDir}/${runner.files.wine}` : 'wine',
+                                WINESERVER: runner ? `${runnerDir}/${runner.files.wineserver}` : 'wineserver',
+                                WINEPREFIX: await constants.paths.prefix.current
+                            }
+                        });
+                    }} />
+
+                    <!-- svelte-ignore missing-declaration -->
+                    <Button lang="settings.general.items.buttons.launcher" click={async () => {
+                        Neutralino.os.execCommand(`xdg-open "${Process.addSlashes(await constants.paths.launcherDir)}"`, {
+                            background: true
+                        });
+                    }} />
+
+                    <!-- svelte-ignore missing-declaration -->
+                    <Button lang="settings.general.items.buttons.game" click={async () => {
+                        Neutralino.os.execCommand(`xdg-open "${Process.addSlashes(await constants.paths.gameDir)}"`, {
+                            background: true
+                        });
+                    }} />
+                </div>
             </div>
 
             <div class="settings-item" id="enhancements">

@@ -1,0 +1,34 @@
+@use "sass:map"
+
+@mixin themable($theme-name, $theme-map)
+    body[data-theme=#{$theme-name}]
+        .button
+            background-color: map.get($theme-map, "background1")
+            border-radius: 16px
+            border: none
+
+            cursor: pointer
+            font-size: 14px
+            
+            padding: 8px 20px
+
+            color: map.get($theme-map, "text")
+
+            &:hover:not([disabled])
+                background-color: map.get($theme-map, "background2")
+
+            &[disabled]
+                cursor: default
+
+        .button-primary
+            background-color: map.get($theme-map, "background2")
+
+            &:hover
+                background-color: map.get($theme-map, "primary")
+                color: white
+
+@import "src/sass/themes/light"
+@import "src/sass/themes/dark"
+
+@include themable(light, $light)
+@include themable(dark, $dark)

@@ -21,20 +21,20 @@
                 &:hover
                     background-color: map.get($theme-map, "background1")
 
-                    td input, textarea
-                        background-color: map.get($theme-map, "background1")
+                    td
+                        input, textarea
+                            background-color: map.get($theme-map, "background1")
 
                 td:nth-of-type(1),
                 th:nth-of-type(1)
                     width: 40%
 
-                th,
-                td
+                th, td
                     border-bottom: 1px solid map.get($theme-map, "background1")
 
                     &:not(:last-child)
                         border-right: 1px solid map.get($theme-map, "background1")
-                    
+
                 td
                     span
                         display: block
@@ -51,6 +51,9 @@
                         height: calc($cell-height - 2 * $padding-h)
 
                         color: map.get($theme-map, "text")
+
+                        @if $theme-name == "dark"
+                            background-color: #434c5e
 
                         font-size: 15px
 

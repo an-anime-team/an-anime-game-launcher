@@ -59,6 +59,13 @@ settings:
             in-game: Текст в игре
             selectIcon: Выберите иконку
 
+      # Some buttons
+      buttons:
+        winetricks: winetricks
+        winecfg: winecfg
+        launcher: папка лаунчера
+        game: папка игры
+
   # Улучшения
   enhancements:
     title: Улучшения

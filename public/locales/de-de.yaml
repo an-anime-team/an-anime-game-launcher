@@ -59,6 +59,13 @@ settings:
             in-game: im Spiel text
             selectIcon: Icon auswählen
 
+      # Some buttons
+      buttons:
+        winetricks: winetricks
+        winecfg: winecfg
+        launcher: Launcher Ordner öffnen
+        game: Spiel Ordner öffnen
+
   # Verberssungen
   enhancements:
     title: Verbesserungen

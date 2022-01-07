@@ -1,5 +1,6 @@
 @use "sass:map"
 
+@import "components/button"
 @import "components/checkbox"
 @import "components/selectionBox"
 @import "components/dropdownCheckboxes"
@@ -146,33 +147,6 @@
 
                 .button:not(:last-child)
                     margin-right: 8px
-
-        /* Buttons */
-
-        .button
-            background-color: map.get($theme-map, "background1")
-            border-radius: 16px
-            border: none
-
-            cursor: pointer
-            font-size: 16px
-            
-            padding: 8px 20px
-
-            color: map.get($theme-map, "text")
-
-            &:hover:not([disabled])
-                background-color: map.get($theme-map, "background2")
-
-            &[disabled]
-                cursor: default
-
-        .button-primary
-            background-color: map.get($theme-map, "background2")
-
-            &:hover
-                background-color: map.get($theme-map, "primary")
-                color: white
 
 @import "themes/light"
 @import "themes/dark"

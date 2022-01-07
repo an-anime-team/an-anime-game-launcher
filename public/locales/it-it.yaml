@@ -58,6 +58,13 @@ settings:
             in-launcher: Testo nel launcher
             in-game: Testo in gioco
 
+      # Some buttons
+      buttons:
+        winetricks: winetricks
+        winecfg: winecfg
+        launcher: launcher folder
+        game: game folder
+
   # Enhancements
   enhancements:
     title: Miglioramenti
