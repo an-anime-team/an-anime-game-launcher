@@ -1,6 +1,8 @@
 import type Launcher from '../../Launcher';
 
 import Patch from '../../Patch';
+import Notifications from '../../core/Notifications';
+import constants from '../../Constants';
 
 export default (launcher: Launcher): Promise<void> => {
     return new Promise(async (resolve) => {
@@ -56,8 +58,18 @@ export default (launcher: Launcher): Promise<void> => {
                             });
                         });
 
-                        stream.patchFinish(() => {
+                        stream.patchFinish((result) => {
                             launcher.progressBar?.hide();
+
+                            // If for some reasons patch wasn't applied successfully
+                            if (!result)
+                            {
+                                Notifications.show({
+                                    title: 'An Anime Game Launcher',
+                                    body: 'Patch wasn\'t applied successfully. Please, check your log file to find a reason of it, or ask someone in our discord server',
+                                    icon: `${constants.paths.appDir}/public/images/baal64-transparent.png`
+                                });
+                            }
 
                             resolve();
                         });

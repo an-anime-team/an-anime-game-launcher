@@ -9,8 +9,6 @@ import Game from '../../Game';
 import Process from '../../neutralino/Process';
 import Window from '../../neutralino/Window';
 
-import Baal from '../../../assets/images/baal64-transparent.png';
-
 declare const Neutralino;
 
 export default (launcher: Launcher): Promise<void> => {
@@ -25,7 +23,7 @@ export default (launcher: Launcher): Promise<void> => {
             Notifications.show({
                 title: 'An Anime Game Launcher',
                 body: 'Telemetry servers are not disabled',
-                icon: Baal,
+                icon: `${constants.paths.appDir}/public/images/baal64-transparent.png`,
                 importance: 'critical'
             });
 

@@ -16,9 +16,10 @@ declare const Neutralino;
 class Stream extends AbstractInstaller
 {
     protected userUnpackFinishCallback?: () => void;
-    protected onPatchFinish?: () => void;
+    protected onPatchFinish?: (result: boolean) => void;
 
     protected patchFinished: boolean = false;
+    protected patchResult: boolean = false;
 
     public constructor(uri: string, version: string|null = null)
     {
@@ -84,11 +85,21 @@ class Stream extends AbstractInstaller
             });
 
             // When all the things above are done
-            pipeline.then(() => {
+            pipeline.then((outputs) => {
                 this.patchFinished = true;
 
+                Debug.log({
+                    function: 'Patch/Stream',
+                    message: [
+                        'Patch script output:',
+                        ...outputs[5].stdOut.split(/\r\n|\r|\n/)
+                    ]
+                });
+
+                this.patchResult = outputs[5].stdOut.includes('==> Patch applied! Enjoy the game');
+
                 if (this.onPatchFinish)
-                    this.onPatchFinish();
+                    this.onPatchFinish(this.patchResult);
             });
         };
     }
@@ -104,12 +115,12 @@ class Stream extends AbstractInstaller
     /**
      * Specify event that will be called when the patch will be applied
      */
-    public patchFinish(callback: () => void)
+    public patchFinish(callback: (result: boolean) => void)
     {
         this.onPatchFinish = callback;
 
         if (this.patchFinished)
-            callback();
+            callback(this.patchResult);
     }
 }
 
