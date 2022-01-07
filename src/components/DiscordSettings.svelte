@@ -23,6 +23,11 @@
     import KleeGameIcon from '../assets/images/discord/kleegame.jpg';
     import KleeGame2Icon from '../assets/images/discord/kleegame2.jpg';
     import LiyueGameIcon from '../assets/images/discord/liyuegame.jpg';
+    import Inazuma1Icon from '../assets/images/discord/inazuma1.jpg';
+    import Inazuma2Icon from '../assets/images/discord/inazuma2.jpg';
+    import Inazuma3Icon from '../assets/images/discord/inazuma3.jpg';
+    import Inazuma4Icon from '../assets/images/discord/inazuma4.jpg';
+    import Inazuma5Icon from '../assets/images/discord/inazuma5.jpg';
 
     const icons = {
         'launcher': LauncherIcon,
@@ -34,7 +39,12 @@
         'beidougame': BeidouGameIcon,
         'kleegame': KleeGameIcon,
         'kleegame2': KleeGame2Icon,
-        'liyuegame': LiyueGameIcon
+        'liyuegame': LiyueGameIcon,
+        'inazuma1': Inazuma1Icon,
+        'inazuma2': Inazuma2Icon,
+        'inazuma3': Inazuma3Icon,
+        'inazuma4': Inazuma4Icon,
+        'inazuma5': Inazuma5Icon
     };
 
     let iconSelector: 'in-game'|'in-launcher'|null = null;
@@ -135,7 +145,8 @@
 <style lang="sass">
     .icon-selection
         div
-            display: inline-flex
+            display: flex
+            flex-wrap: wrap
 
             width: 100%
 
@@ -145,7 +156,7 @@
 
                 border-radius: 24px
 
-                margin: 0 auto
+                margin: 4px
 
                 cursor: pointer
 
