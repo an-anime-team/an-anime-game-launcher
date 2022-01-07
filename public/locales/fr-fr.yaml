@@ -95,7 +95,7 @@ settings:
         # Launcher logs
         launcher:
           title: Suppression des fichiers logs
-          tooltip: Amount of time after which launcher will delete its old log files
+          tooltip: Intervalle entre chaque suppression de fichier logs du launcher
           items:
             1d: Tous les jours
             3d: Tous les 3 jours
