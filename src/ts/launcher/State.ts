@@ -83,18 +83,27 @@ export default class State
                 });
         };
 
-        this.update().then(() => {
+        this.update().then(async () => {
             IPC.write('launcher-loaded');
 
-            Window.current.show();
+            await Window.current.show();
+            await Window.current.center(1280, 700);
 
-            Window.current.setSize({
-                width: 1280,
-                height: 700,
-                resizable: false
-            });
+            const resizer = () => {
+                if (window.innerWidth < 1000)
+                    setTimeout(resizer, 10);
 
-            Window.current.center(1280, 700);
+                else
+                {
+                    Window.current.setSize({
+                        width: 1280 + (1280 - window.innerWidth),
+                        height: 700 + (700 - window.innerHeight),
+                        resizable: false
+                    });
+                }
+            }
+
+            setTimeout(resizer, 10);
         });
     }
 

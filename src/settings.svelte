@@ -172,16 +172,25 @@
     Configs.get('theme').then((theme) => switchTheme(theme as string));
 
     // Do some stuff when all the content will be loaded
-    onMount(() => {
-        Window.current.show();
-        
-        Window.current.setSize({
-            width: 900,
-            height: 600,
-            resizable: false
-        });
+    onMount(async () => {
+        await Window.current.show();
+        await Window.current.center(900, 600);
 
-        Window.current.center(900, 600);
+        const resizer = () => {
+            if (window.innerWidth < 700)
+                setTimeout(resizer, 10);
+
+            else
+            {
+                Window.current.setSize({
+                    width: 900 + (900 - window.innerWidth),
+                    height: 600 + (600 - window.innerHeight),
+                    resizable: false
+                });
+            }
+        }
+
+        setTimeout(resizer, 10);
     });
 
     Neutralino.events.on('windowClose', async () => {

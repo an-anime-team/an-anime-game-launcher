@@ -36,15 +36,6 @@ declare const Neutralino;
 
 class Window
 {
-    public static waylandUpscales = {
-        width: 46,
-        height: 74
-    };
-
-    public static upscaleOnWayland = true;
-
-    protected static isWaylandSession?: boolean;
-
     public static get current(): any
     {
         return {
@@ -53,11 +44,6 @@ class Window
             center(windowWidth: number, windowHeight: number)
             {
                 Neutralino.window.move(Math.round((window.screen.width - windowWidth) / 2), Math.round((window.screen.height - windowHeight) / 2));
-            },
-
-            setSize(size: WindowSize)
-            {
-                Window.upscaleSize(size).then(Neutralino.window.setSize);
             }
         };
     }
@@ -83,41 +69,6 @@ class Window
                 status: status !== undefined,
                 data: status
             });
-        });
-    }
-
-    public static isWayland(): Promise<boolean>
-    {
-        return new Promise((resolve) => {
-            if (this.isWaylandSession !== undefined)
-                resolve(this.isWaylandSession);
-
-            else Neutralino.os.getEnv('XDG_SESSION_TYPE').then((value) => {
-                this.isWaylandSession = value === 'wayland';
-
-                resolve(this.isWaylandSession);
-            });
-        });
-    }
-
-    public static upscaleSize(size: WindowSize): Promise<WindowSize>
-    {
-        return new Promise(async (resolve) => {
-            // Upscale is required only if the window is not resizable
-            if (Window.upscaleOnWayland && size.resizable !== undefined && !size.resizable && await Window.isWayland())
-            {
-                // Upscale width
-                for (const prop of ['minWidth', 'maxWidth', 'width'])
-                    if (size[prop] !== undefined)
-                        size[prop] += Window.waylandUpscales.width;
-
-                // Upscale height
-                for (const prop of ['minHeight', 'maxHeight', 'height'])
-                    if (size[prop] !== undefined)
-                        size[prop] += Window.waylandUpscales.height;
-            }
-
-            resolve(size);
         });
     }
 }
