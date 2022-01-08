@@ -16,13 +16,29 @@
     import LauncherIcon from '../../public/icons/256x256.png';
     import GameOriginalIcon from '../assets/images/discord/gi-icon.jpg';
     import GameIcon from '../assets/images/discord/game.jpg';
-    import ArtGameIcon from '../assets/images/discord/artgame.jpg';
+
+    import ArtGame1Icon from '../assets/images/discord/artgame.jpg';
     import ArtGame2Icon from '../assets/images/discord/artgame2.jpg';
     import ArtGame3Icon from '../assets/images/discord/artgame3.jpg';
+
+    // Beidou
     import BeidouGameIcon from '../assets/images/discord/beidougame.jpg';
+
+    // Klee
     import KleeGameIcon from '../assets/images/discord/kleegame.jpg';
     import KleeGame2Icon from '../assets/images/discord/kleegame2.jpg';
+
+    // Baal
+    import Baal1Icon from '../assets/images/discord/baal1.jpg';
+
+    // Yae Miko
+    import YaeMiko1Icon from '../assets/images/discord/yaemiko1.jpg';
+    import YaeMiko2Icon from '../assets/images/discord/yaemiko2.jpg';
+
+    // Liyue
     import LiyueGameIcon from '../assets/images/discord/liyuegame.jpg';
+
+    // Inazuma
     import Inazuma1Icon from '../assets/images/discord/inazuma1.jpg';
     import Inazuma2Icon from '../assets/images/discord/inazuma2.jpg';
     import Inazuma3Icon from '../assets/images/discord/inazuma3.jpg';
@@ -33,13 +49,29 @@
         'launcher': LauncherIcon,
         'gi-icon': GameOriginalIcon,
         'game': GameIcon,
-        'artgame': ArtGameIcon,
+
+        'artgame': ArtGame1Icon,
         'artgame2': ArtGame2Icon,
         'artgame3': ArtGame3Icon,
+
+        // Beidou
         'beidougame': BeidouGameIcon,
+
+        // Klee
         'kleegame': KleeGameIcon,
         'kleegame2': KleeGame2Icon,
+
+        // Baal
+        'baal1': Baal1Icon,
+
+        // Yae Miko
+        'yaemiko1': YaeMiko1Icon,
+        'yaemiko2': YaeMiko2Icon,
+
+        // Liyue
         'liyuegame': LiyueGameIcon,
+
+        // Inazuma
         'inazuma1': Inazuma1Icon,
         'inazuma2': Inazuma2Icon,
         'inazuma3': Inazuma3Icon,
