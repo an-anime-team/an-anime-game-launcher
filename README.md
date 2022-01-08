@@ -14,7 +14,7 @@
 
 | Game version | Launcher version | Patch version |
 | :---: | :---: | :---: |
-| 2.4.0 | 2.0.0 beta | 2.4.0 testing ⚠️ |
+| 2.4.0 | 2.0.0 beta | 2.4.0 stable ✅ |
 
 We have our own [An Anime Game](https://discord.gg/ck37X6UWBp) discord server where you can ask any questions
 
@@ -177,10 +177,11 @@ This is our current roadmap goals. You can find older ones [here](ROADMAP.md)
 * <s>Default runner and DXVK auto-installation</s>
 * <s>Discord RPC settings</s>
 * <s>Proper wine process monitoring</s>
+* <s>Ability to hide some runners families</s>
+* <s>Ability to change the temp directory where the launcher should download some files</s>
+* Dark progress bar design
 * Shaders menu
-* Ability to hide some runners families
 * Statistics window
-* Ability to change the temp directory where the launcher should download some files
 * Launcher auto-updates
 * Changelog window
 * Rewrite sass code, provide more flexible theming ability
