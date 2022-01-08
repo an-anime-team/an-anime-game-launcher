@@ -87,6 +87,8 @@ export default class State
             IPC.write('launcher-loaded');
 
             Window.current.show();
+            Window.current.setSize({ width: 1280, height: 700 });
+            Window.current.center(1280, 700);
         });
     }
 
