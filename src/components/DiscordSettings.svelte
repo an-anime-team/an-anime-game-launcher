@@ -10,76 +10,46 @@
 
     import Checkbox from './Checkbox.svelte';
 
+    // TODO: maybe somehow encode these icons names
+
     // Discord RPC icons imports
-    // It's better to do it manually so Vite
-    // will be able to pack them automatically
-    import LauncherIcon from '../../public/icons/256x256.png';
-    import GameOriginalIcon from '../assets/images/discord/gi-icon.jpg';
-    import GameIcon from '../assets/images/discord/game.jpg';
-
-    import ArtGame1Icon from '../assets/images/discord/artgame.jpg';
-    import ArtGame2Icon from '../assets/images/discord/artgame2.jpg';
-    import ArtGame3Icon from '../assets/images/discord/artgame3.jpg';
-
-    // Beidou
-    import BeidouGameIcon from '../assets/images/discord/beidougame.jpg';
-
-    // Klee
-    import KleeGameIcon from '../assets/images/discord/kleegame.jpg';
-    import KleeGame2Icon from '../assets/images/discord/kleegame2.jpg';
-
-    // Baal
-    import Baal1Icon from '../assets/images/discord/baal1.jpg';
-
-    // Yae Miko
-    import YaeMiko1Icon from '../assets/images/discord/yaemiko1.jpg';
-    import YaeMiko2Icon from '../assets/images/discord/yaemiko2.jpg';
-
-    // Liyue
-    import LiyueGameIcon from '../assets/images/discord/liyuegame.jpg';
-
-    // Inazuma
-    import Inazuma1Icon from '../assets/images/discord/inazuma1.jpg';
-    import Inazuma2Icon from '../assets/images/discord/inazuma2.jpg';
-    import Inazuma3Icon from '../assets/images/discord/inazuma3.jpg';
-    import Inazuma4Icon from '../assets/images/discord/inazuma4.jpg';
-    import Inazuma5Icon from '../assets/images/discord/inazuma5.jpg';
-
+    // We must import them manually because otherwise
+    // neutralino won't be able to load them because of its restrictions
     const icons = {
-        'launcher': LauncherIcon,
-        'gi-icon': GameOriginalIcon,
-        'game': GameIcon,
+        'launcher': import('../../public/icons/256x256.png'),
+        'gi-icon': import('../assets/images/discord/gi-icon.jpg'),
+        'game': import('../assets/images/discord/game.jpg'),
 
-        'artgame': ArtGame1Icon,
-        'artgame2': ArtGame2Icon,
-        'artgame3': ArtGame3Icon,
+        'artgame': import('../assets/images/discord/artgame.jpg'),
+        'artgame2': import('../assets/images/discord/artgame2.jpg'),
+        'artgame3': import('../assets/images/discord/artgame3.jpg'),
 
         // Beidou
-        'beidougame': BeidouGameIcon,
+        'beidougame': import('../assets/images/discord/beidougame.jpg'),
 
         // Klee
-        'kleegame': KleeGameIcon,
-        'kleegame2': KleeGame2Icon,
+        'kleegame': import('../assets/images/discord/kleegame.jpg'),
+        'kleegame2': import('../assets/images/discord/kleegame2.jpg'),
 
         // Baal
-        'baal1': Baal1Icon,
+        'baal1': import('../assets/images/discord/baal1.webp'),
 
         // Yae Miko
-        'yaemiko1': YaeMiko1Icon,
-        'yaemiko2': YaeMiko2Icon,
+        'yaemiko1': import('../assets/images/discord/yaemiko1.webp'),
+        'yaemiko2': import('../assets/images/discord/yaemiko2.jpg'),
 
         // Liyue
-        'liyuegame': LiyueGameIcon,
+        'liyuegame': import('../assets/images/discord/liyuegame.jpg'),
 
         // Inazuma
-        'inazuma1': Inazuma1Icon,
-        'inazuma2': Inazuma2Icon,
-        'inazuma3': Inazuma3Icon,
-        'inazuma4': Inazuma4Icon,
-        'inazuma5': Inazuma5Icon
+        'inazuma1': import('../assets/images/discord/inazuma1.jpg'),
+        'inazuma2': import('../assets/images/discord/inazuma2.jpg'),
+        'inazuma3': import('../assets/images/discord/inazuma3.jpg'),
+        'inazuma4': import('../assets/images/discord/inazuma4.jpg'),
+        'inazuma5': import('../assets/images/discord/inazuma5.jpg')
     };
 
-    let iconSelector: 'in-game'|'in-launcher'|null = null;
+    let iconSelector: 'in-game' | 'in-launcher' | null = null;
 
     let states = {
         'in-game': {
@@ -147,7 +117,9 @@
             <td>
                 <textarea rows="2" on:keyup={(e) => textareaHandler(e, 'in-launcher')}>{states['in-launcher']['text']}</textarea>
 
-                <img src={icons[states['in-launcher']['icon']]} alt="" on:click={() => iconSelector = iconSelector ? null : 'in-launcher'} />
+                {#await icons[states['in-launcher']['icon']] then iconUri}
+                    <img src={iconUri.default} alt="" on:click={() => iconSelector = iconSelector ? null : 'in-launcher'} />
+                {/await}
             </td>
         </tr>
         <tr>
@@ -158,7 +130,9 @@
             <td>
                 <textarea rows="2" on:keyup={(e) => textareaHandler(e, 'in-game')}>{states['in-game']['text']}</textarea>
 
-                <img src={icons[states['in-game']['icon']]} alt="" on:click={() => iconSelector = iconSelector ? null : 'in-game'} />
+                {#await icons[states['in-game']['icon']] then iconUri}
+                    <img src={iconUri.default} alt="" on:click={() => iconSelector = iconSelector ? null : 'in-game'} />
+                {/await}
             </td>
         </tr>
     </table>
@@ -168,7 +142,9 @@
 
         <div>
             {#each Object.keys(icons) as icon}
-                <img src={icons[icon]} alt="" on:click={() => selectIcon(icon)} />
+                {#await icons[icon] then iconUri}
+                    <img src={iconUri.default} alt="" on:click={() => selectIcon(icon)} />
+                {/await}
             {/each}
         </div>
     </div>

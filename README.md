@@ -49,6 +49,7 @@ To work this launcher requires
 | Name | Description |
 | --- | --- |
 | webkit2gtk | To run Neutralino apps |
+| libappindicator-gtk3 | To run Neutralino apps |
 | unzip | To unpack zip archives (DXVKs / wines) |
 | tar | To unpack tar archives (DXVKs / wines) |
 | git | To check for new versions of the launcher |
