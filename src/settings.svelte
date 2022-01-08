@@ -174,7 +174,13 @@
     // Do some stuff when all the content will be loaded
     onMount(() => {
         Window.current.show();
-        Window.current.setSize({ width: 900, height: 600 });
+        
+        Window.current.setSize({
+            width: 900,
+            height: 600,
+            resizable: false
+        });
+
         Window.current.center(900, 600);
     });
 

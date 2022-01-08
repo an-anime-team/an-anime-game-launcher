@@ -20,7 +20,13 @@
 
     onMount(() => {
         Window.current.show();
-        Window.current.setSize({ width: 300, height: 400 });
+        
+        Window.current.setSize({
+            width: 300,
+            height: 400,
+            resizable: false
+        });
+
         Window.current.center(300, 400);
     });
 
