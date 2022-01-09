@@ -9,6 +9,7 @@ register('fr-fr', () => Locales.get('fr-fr'));
 register('es-es', () => Locales.get('es-es'));
 register('it-it', () => Locales.get('it-it'));
 register('vi-vn', () => Locales.get('vi-vn'));
+register('uwu', () => Locales.get('uwu'));
 
 Locales.default().then((locale) => {
     init({

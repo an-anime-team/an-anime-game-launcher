@@ -13,7 +13,8 @@ type AvailableLocales =
     | 'fr-fr'
     | 'es-es'
     | 'it-it'
-    | 'vi-vn';
+    | 'vi-vn'
+    | 'uwu';
 
 declare const Neutralino;
 
