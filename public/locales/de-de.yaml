@@ -11,32 +11,32 @@ launcher:
   states:
     # When the game should be installed or updated
     installation:
-      install_wine: Install Wine
-      install_dxvk: Install DXVK
-      install: Install
-      update: Update
+      install_wine: Wine installieren
+      install_dxvk: DXVK installieren
+      install: Installieren
+      update: Updaten
 
     # When the game should be patched
     patching:
       # Patch unavailable
       unavailable:
-        title: Patch unavailable
-        hint: This game version has no anti-cheat patch.
-              Please, wait a few days before there will be a test or stable version
+        title: Patch nicht verfügbar
+        hint: Diese Spielversion hat kein patch zu verfügung.
+              Bitte warte ein paar Tage um zusehen ob ein test oder stabil Patch veröffentlicht worde.
       
       # Patch is in testing
       test:
-        title: Apply test patch
-        hint: This game version has an experimental anti-cheat patch.
-              You can wait a few days until it is stable or apply it at your own risk
+        title: Test Patch anwenden
+        hint: Diese Spielversion hat ein Test Patch verfügbar.
+              Sie können ein paar Tage warten um den Stabilen patch zu installieren oder sie können den Test Patch installieren und ihr Account riskieren.
 
       # Patch is stable
-      stable: Apply patch
+      stable: Patch anwenden
 
     # When the game is ready for playing
     ready:
-      launch: Launch
-      predownload: Pre-download update
+      launch: Starten
+      predownload: Update vorinstallieren
 
 # Einstellungs Fenster
 settings:
@@ -102,7 +102,7 @@ settings:
       hud:
         title: HUD
         items:
-          none: None
+          none: Aus
           dxvk: DXVK
           mangohud: MangoHUD
       
@@ -161,7 +161,7 @@ settings:
         title: Shaders
         tooltip: Benutze die Home/POS1 taste um die Shader in-spiel zu togglen
         items:
-          none: None
+          none: Aus
           custom: Custom
 
       author: 'Autor: {author}'
