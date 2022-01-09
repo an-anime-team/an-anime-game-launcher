@@ -64,10 +64,10 @@ settings:
           title: voice pack
           tooltip: you will have to manuawwy sewect the new voice pack in the game
           items:
-            en-us: English (US)
-            ja-jp: Japanese
-            ko-kr: Korean
-            zn-cn: Chinese
+            en-us: engwish (us)
+            ja-jp: japanese
+            ko-kr: kowean
+            zn-cn: chinese
 
       # Launcher theme
       theme:
