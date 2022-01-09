@@ -1,3 +1,5 @@
+import { dictionary, locale } from 'svelte-i18n';
+
 import YAML from 'yaml';
 
 import constants from '../Constants';
@@ -77,6 +79,38 @@ export default class Locales
 
             else Neutralino.filesystem.readFile(`${constants.paths.localesDir}/${locale}.yaml`)
                 .then((locale) => resolve(YAML.parse(locale)));
+        });
+    }
+
+    /**
+     * Bind some callback to be called every time
+     * the locale will be changed
+     */
+    public static bind(localizer: (message: string|object) => void, localeName: string)
+    {
+        let currentLocale, currentDictionary;
+
+        const updateLocalizer = () => {
+            let message = currentDictionary[currentLocale] ?? currentDictionary['en-us'];
+
+            for (const path of localeName.split('.'))
+                message = message[path];
+
+            localizer(message);
+        };
+
+        locale.subscribe((locale) => {
+            currentLocale = locale;
+
+            if (currentDictionary)
+                updateLocalizer();
+        });
+
+        dictionary.subscribe((dictionary) => {
+            currentDictionary = dictionary;
+
+            if (currentLocale)
+                updateLocalizer();
         });
     }
 

@@ -4,7 +4,7 @@ uri: https://notabug.org/notahuman/presets/raw/master/Resin-Impact/vkBasalt.conf
 images:
   - file: preview.png
     caption:
-      en-us: Characters' faces
+      en-us: Character's faces
       de-de: Gesichter der Charaktere
       ja-jp: キャラクターの顔
       ko-kr: 캐릭터의 얼굴

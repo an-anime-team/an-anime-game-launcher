@@ -8,7 +8,36 @@ splash:
 
 # Launcher window
 launcher:
-  predownload: Pre-téléchargement de mise à jour
+  states:
+    # When the game should be installed or updated
+    installation:
+      install_wine: Installer Wine
+      install_dxvk: Installer DXVK
+      install: Installer
+      update: Mise à jour
+
+    # When the game should be patched
+    patching:
+      # Patch unavailable
+      unavailable:
+        title: Patch non disponible
+        hint: Cette version du jeu n'a pas de patch contre l'anti triche, 
+              merci de bien vouloir patienter quelques jours puis réessayez
+      
+      # Patch is in testing
+      test:
+        title: Appliquer le patch en teste
+        hint: Cette version du jeu a un patch contre l'anti triche, 
+              mais celui-ci est en période de teste. 
+              Vous pouvez patienter ou bien l'utilisé à vos risques et périls.
+
+      # Patch is stable
+      stable: Appliquer le patch
+
+    # When the game is ready for playing
+    ready:
+      launch: Lancer
+      predownload: Pre-téléchargement de mise à jour
 
 # Settings window
 settings:
@@ -140,3 +169,6 @@ settings:
         items:
           none: None
           custom: Custom
+
+      author: 'Auteur: {author}'
+      no_images: Aucune image ajoutée

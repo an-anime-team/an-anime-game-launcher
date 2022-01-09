@@ -125,7 +125,7 @@
 
 <main>
     {#await Background.get() then uri}
-        <img class="background" src="{uri}" alt="">
+        <img class="background" src={uri} alt="">
     {/await}
 
     <div class="downloader-panel" data-theme="light">
@@ -142,7 +142,7 @@
 
     <div id="launcher-content">
         {#await launcher.getSocial() then uri}
-            <iframe title="Launcher-iframe" src="{uri}" scrolling="no" style="position: absolute; border: 0; top: 0; left: 0;" width="100%" height="100%"></iframe>
+            <iframe id="social-iframe" src={uri} title="" scrolling="no" style="position: absolute; border: 0; top: 0; left: 0;" width="100%" height="100%"></iframe>
         {/await}
     </div>
 
@@ -152,7 +152,7 @@
         <img src={GearActive} class="active" alt="Settings">
     </div>
     
-    <button class="button hint--left hint--small" aria-label="{typeof $locale === 'string' ? $_('launcher.predownload') : ''}" id="predownload">
+    <button class="button hint--left hint--small" aria-label="{typeof $locale === 'string' ? $_('launcher.states.ready.predownload') : ''}" id="predownload">
         <img src={Download} alt="Download" />
     </button>
 

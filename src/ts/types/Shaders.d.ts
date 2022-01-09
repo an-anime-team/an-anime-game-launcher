@@ -5,7 +5,7 @@ type Shader = {
     uri?: string;
     images?: {
         file: string;
-        captions?: string[];
+        caption: object;
     }[];
 };
 

@@ -1,3 +1,5 @@
+import { locale } from 'svelte-i18n';
+
 import Window from './neutralino/Window';
 import Process from './neutralino/Process';
 import Tray from './neutralino/Tray';
@@ -11,6 +13,7 @@ import Locales from './core/Locales';
 
 import ProgressBar from './launcher/ProgressBar';
 import State from './launcher/State';
+import Background from './launcher/Background';
 
 export default class Launcher
 {
@@ -61,8 +64,19 @@ export default class Launcher
 
                         IPC.read().then((records) => {
                             records.forEach((record) => {
-                                if (record.data.type !== undefined && record.data.type === 'log')
-                                    Debug.merge(record.pop().data.records);
+                                if (record.data.type !== undefined)
+                                {
+                                    if (record.data.type === 'log')
+                                        Debug.merge(record.pop().data.records);
+
+                                    else if (record.data.type === 'change-locale')
+                                    {
+                                        locale.set(record.pop().data.locale);
+
+                                        Background.get().then((uri) => document.getElementsByClassName('background')[0]!.setAttribute('src', uri));
+                                        this.getSocial().then((uri) => document.getElementById('social-iframe')!.setAttribute('src', uri));
+                                    }
+                                }
 
                                 else if (record.data === 'voice-update-required')
                                 {

@@ -176,6 +176,8 @@
         await Window.current.show();
         await Window.current.center(900, 600);
 
+        // This thing will fix window resizing
+        // in several cases (wayland + gnome + custom theme)
         const resizer = () => {
             if (window.innerWidth < 700)
                 setTimeout(resizer, 10);
@@ -222,7 +224,14 @@
                     lang="settings.general.items.lang.launcher.title"
                     prop="lang.launcher"
                     items={launcherLocales}
-                    valueChanged={(value) => $locale = value}
+                    valueChanged={(value) => {
+                        $locale = value;
+
+                        IPC.write({
+                            type: 'change-locale',
+                            locale: value
+                        });
+                    }}
                 />
 
                 <DropdownCheckboxes

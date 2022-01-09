@@ -1,3 +1,6 @@
+import { get as svelteget } from 'svelte/store';
+import { dictionary, locale } from 'svelte-i18n';
+
 import type Launcher from '../Launcher';
 import type { LauncherState } from '../types/Launcher';
 
@@ -7,9 +10,10 @@ import Game from '../Game';
 import Patch from '../Patch';
 import Voice from '../Voice';
 import Runners from '../core/Runners';
-import { DebugThread } from '../core/Debug';
+import Debug, { DebugThread } from '../core/Debug';
 import DXVK from '../core/DXVK';
 import IPC from '../core/IPC';
+import Locales from '../core/Locales';
 
 export default class State
 {
@@ -89,6 +93,8 @@ export default class State
             await Window.current.show();
             await Window.current.center(1280, 700);
 
+            // This thing will fix window resizing
+            // in several cases (wayland + gnome + custom theme)
             const resizer = () => {
                 if (window.innerWidth < 1000)
                     setTimeout(resizer, 10);
@@ -105,6 +111,8 @@ export default class State
 
             setTimeout(resizer, 10);
         });
+
+        Locales.bind((message) => this.updateLocales(message as object), 'launcher.states');
     }
 
     /**
@@ -128,63 +136,79 @@ export default class State
         this.launchButton.classList.remove('button-blue');
         this.launchButton.setAttribute('aria-label', '');
 
-        switch(state)
+        const currentDictionary = svelteget(dictionary);
+        const currentLocale = svelteget(locale);
+
+        this.updateLocales((currentDictionary[currentLocale ?? 'en-us'] ?? currentDictionary['en-us'])['launcher']!['states'] as object);
+    }
+
+    /**
+     * Update components texts
+     */
+    public updateLocales(dictionary: object)
+    {
+        Debug.log({
+            function: 'State.updateLocales',
+            message: `Updated locales: ${JSON.stringify(dictionary)}`
+        });
+
+        switch(this._state)
         {
             case 'runner-installation-required':
-                this.launchButton.textContent = 'Install wine';
+                this.launchButton.textContent = dictionary['installation']['install_wine'];
 
                 break;
 
             case 'dxvk-installation-required':
-                this.launchButton.textContent = 'Install DXVK';
+                this.launchButton.textContent = dictionary['installation']['install_dxvk'];
 
                 break;
             
             case 'game-launch-available':
-                this.launchButton.textContent = 'Launch';
+                this.launchButton.textContent = dictionary['ready']['launch'];
 
                 break;
 
             case 'game-pre-installation-available':
             case 'game-voice-pre-installation-available':
-                this.launchButton.textContent = 'Launch';
-
                 this.predownloadButton.style['display'] = 'block';
+
+                this.launchButton.textContent = dictionary['ready']['launch'];
 
                 break;
 
             case 'game-installation-available':
-                this.launchButton.textContent = 'Install';
+                this.launchButton.textContent = dictionary['installation']['install'];
 
                 break;
 
             case 'game-update-available':
             case 'game-voice-update-required':
-                this.launchButton.textContent = 'Update';
+                this.launchButton.textContent = dictionary['installation']['update'];
 
                 break;
 
             case 'patch-available':
-                this.launchButton.textContent = 'Apply patch';
+                this.launchButton.textContent = dictionary['patching']['stable'];
 
                 break;
 
             case 'test-patch-available':
-                this.launchButton.textContent = 'Apply test patch';
-
                 this.launchButton.classList.add('button-blue');
 
-                this.launchButton.setAttribute('aria-label', 'This game version has an anti-cheat patch, but it is in the testing phase. You can wait a few days until it is stable or apply it at your own risk');
+                this.launchButton.textContent = dictionary['patching']['test']['title'];
+
+                this.launchButton.setAttribute('aria-label', dictionary['patching']['test']['hint']);
 
                 break;
 
             case 'patch-unavailable':
-                this.launchButton.textContent = 'Patch unavailable';
-
                 this.launchButton.classList.add('button-blue');
                 this.launchButton.setAttribute('disabled', '');
 
-                this.launchButton.setAttribute('aria-label', 'This game version has no anti-cheat patch. Please, wait a few days before there will be a test or stable version');
+                this.launchButton.textContent = dictionary['patching']['unavailable']['title'];
+
+                this.launchButton.setAttribute('aria-label', dictionary['patching']['unavailable']['hint']);
 
                 break;
         }
