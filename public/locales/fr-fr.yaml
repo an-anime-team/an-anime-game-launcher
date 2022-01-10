@@ -123,7 +123,7 @@ settings:
         title: Utiliser GameMode
         tooltip:
           enabled: C'est un logiciel qui permet d'améliorer les performances en jeu
-          disabled: ⚠️ You don't have gamemode package installed
+          disabled: ⚠️ Vous n'avez pas le paquet "gamemode" d'installer
 
       # AMD FSR
       fsr:
@@ -189,7 +189,7 @@ settings:
 
       author: 'Auteur: {author}'
       no_images: Aucune image ajoutée
-      not_installed: You haven't installed vkBasalt and reshade-shaders library
+      not_installed: Vous n'avez les paquets "vkBasalt" et "reshade-shader library" d'installer
 
   # Environmantal variables manager
   environment:
