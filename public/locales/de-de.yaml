@@ -119,12 +119,15 @@ settings:
       # GameMode
       gamemode:
         title: Benutze GameMode
-        tooltip: GameMode ist ein Program welches die Leistung verbessert
+        tooltip:
+          enabled: GameMode ist ein Program welches die Leistung verbessert
+          disabled: ⚠️ Sie haben GameMode nicht installiert
 
       # AMD FSR
       fsr:
         title: AMD FSR
-        tooltip: Diese Option aktiviert AMD FidelityFX Super Resolution (FSR), womit kleine Resolution hochskaliert wird um FPS-verlust zu vermeiden.
+        tooltip: Diese Option aktiviert AMD FidelityFX Super Resolution (FSR),
+                 womit kleine Resolution hochskaliert wird um FPS-verlust zu vermeiden.
       
       # Unlock FPS
       fps_unlocker:
@@ -181,6 +184,7 @@ settings:
 
       author: 'Autor: {author}'
       no_images: Keine Bilder verfügbar
+      not_installed: Sie haben vkBasalt und Reshade-Shader nicht installiert
 
   # Environmantal variables manager
   environment:

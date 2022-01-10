@@ -1,13 +1,13 @@
-import type Launcher from '../../Launcher';
+import Process from '../../neutralino/Process';
+import Window from '../../neutralino/Window';
 
+import Launcher from '../../Launcher';
 import Configs from '../../Configs';
 import constants from '../../Constants';
 import { DebugThread } from '../../core/Debug';
 import Notifications from '../../core/Notifications';
 import Runners from '../../core/Runners';
 import Game from '../../Game';
-import Process from '../../neutralino/Process';
-import Window from '../../neutralino/Window';
 
 declare const Neutralino;
 
@@ -86,7 +86,7 @@ export default (launcher: Launcher): Promise<void> => {
              */
             const shaders = await Configs.get('shaders');
 
-            if (shaders !== 'none')
+            if (shaders !== 'none' && await Launcher.isPackageAvailable('reshade'))
             {
                 const launcherShadersFile = `${await constants.paths.launcherDir}/vkBasalt.conf`;
 
@@ -125,7 +125,7 @@ export default (launcher: Launcher): Promise<void> => {
             /**
              * Gamemode integration
              */
-            if (await Configs.get('gamemode'))
+            if (await Configs.get('gamemode') && await Launcher.isPackageAvailable('gamemoderun'))
                 command = `gamemoderun ${command}`;
 
             /**

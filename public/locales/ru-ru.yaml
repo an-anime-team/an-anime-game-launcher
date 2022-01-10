@@ -119,12 +119,15 @@ settings:
       # GameMode
       gamemode:
         title: Использовать GameMode
-        tooltip: Это программа, которая может улучшить производительность игры
+        tooltip:
+          enabled: Это программа, которая может улучшить производительность игры
+          disabled: ⚠️ У вас не установлен пакет gamemode
 
       # AMD FSR
       fsr:
         title: Включить AMD FSR
-        tooltip: Эта опция включает AMD FidelityFX Super Resolution (FSR), который может увеличить разрешение игры без потери кадров
+        tooltip: Эта опция включает AMD FidelityFX Super Resolution (FSR),
+                 который может увеличить разрешение игры без потери кадров
 
       # Разблокировать FPS
       fps_unlocker:
@@ -179,6 +182,7 @@ settings:
 
       author: 'Автор: {author}'
       no_images: Нет добавленных изображений
+      not_installed: У вас не установлены пакеты vkBasalt и reshade-shaders
 
   # Менеджер переменных среды
   environment:

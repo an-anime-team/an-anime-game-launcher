@@ -6,13 +6,16 @@
     import { onMount } from 'svelte';
     import { _, locale, locales } from 'svelte-i18n';
 
+    import Window from './ts/neutralino/Window';
+    import Process from './ts/neutralino/Process';
+
     import constants from './ts/Constants';
     import Configs from './ts/Configs';
+    import Launcher from './ts/Launcher';
     import FPSUnlock from './ts/FPSUnlock';
-    import Window from './ts/neutralino/Window';
+    
     import Debug from './ts/core/Debug';
     import IPC from './ts/core/IPC';
-    import Process from './ts/neutralino/Process';
     import Runners from './ts/core/Runners';
 
     import Button from './components/Button.svelte';
@@ -135,6 +138,21 @@
 
         Configs.set('discord', discordSettings);
     };
+
+    /**
+     * GameMode option
+     */
+    let gamemode = {
+        disabled: false,
+        tooltip: 'settings.enhancements.items.gamemode.tooltip.enabled'
+    };
+
+    Launcher.isPackageAvailable('gamemoderun').then((available) => {
+        gamemode.disabled = !available;
+
+        if (gamemode.disabled)
+            gamemode.tooltip = 'settings.enhancements.items.gamemode.tooltip.disabled';
+    });
 
     /**
      * Menu items changing
@@ -316,8 +334,9 @@
 
                 <Checkbox
                     lang="settings.enhancements.items.gamemode.title"
-                    tooltip="settings.enhancements.items.gamemode.tooltip"
                     prop="gamemode"
+                    tooltip={gamemode.tooltip}
+                    disabled={gamemode.disabled}
                 />
 
                 <Checkbox

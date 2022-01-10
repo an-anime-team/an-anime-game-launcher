@@ -119,12 +119,15 @@ settings:
       # GameMode
       gamemode:
         title: Use GameMode
-        tooltip: It is a software that can improve the game performance
+        tooltip:
+          enabled: It is a software that can improve the game performance
+          disabled: ⚠️ You don't have gamemode package installed
 
       # AMD FSR
       fsr:
         title: Enable AMD FSR
-        tooltip: This option enables AMD FidelityFX Super Resolution (FSR) which will scale your game resolution without losing FPS
+        tooltip: This option enables AMD FidelityFX Super Resolution (FSR)
+                 which will scale your game resolution without losing FPS
 
       # Unlock FPS
       fps_unlocker:
@@ -180,6 +183,7 @@ settings:
       
       author: 'Author: {author}'
       no_images: No images added
+      not_installed: You haven't installed vkBasalt and reshade-shaders library
 
   # Environmantal variables manager
   environment:

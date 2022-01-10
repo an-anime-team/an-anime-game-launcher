@@ -119,7 +119,9 @@ settings:
       # GameMode
       gamemode:
         title: use G-GameMode
-        tooltip: it i-is a software t-that can impwove the game pewfowmance
+        tooltip:
+          enabled: it i-is a software t-that can impwove the game pewfowmance
+          disabled: ⚠️ You don't have gamemode package installed
 
       # AMD FSR
       fsr:
@@ -180,6 +182,7 @@ settings:
       
       author: 'a-authow: {author}'
       no_images: no images avaiwable
+      not_installed: You haven't installed vkBasalt and reshade-shaders library
 
   # Environmantal variables manager
   environment:
