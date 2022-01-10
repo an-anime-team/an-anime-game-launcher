@@ -46,8 +46,8 @@ launcher:
 
   # Launcher update
   update:
-    title: 'Launcher update available: {from} -> {to}'
-    body: You can download a new version of the launcher from the project's repository at {repository}
+    title: 'Aggiornamento del launcher disponibile: {from} -> {to}'
+    body: Puoi scaricare una nuova versione del launcher dalla repository del progetto {repository}
 
 # Settings window
 settings:
@@ -121,12 +121,13 @@ settings:
         title: Usa GameMode
         tooltip:
           enabled: È un software che può migliorare le prestazioni in gioco
-          disabled: ⚠️ You don't have gamemode package installed
+          disabled: ⚠️ Non hai il pacchetto gamemode installato
       
       # AMD FSR
       fsr:
-        title: Enable AMD FSR
-        tooltip: This option enables AMD FidelityFX Super Resolution (FSR) which will scale your game resolution without losing FPS
+        title: Attiva AMD FSR
+        tooltip: Questa opzione attiva AMD FidelityFX Super Resolution (FSR)
+                 che permetterà di scalare la risoluzione del gioco senza perdere FPS
 
       # Unlock FPS
       fps_unlocker:
@@ -181,7 +182,7 @@ settings:
 
       author: 'Autore: {author}'
       no_images: Nessuna immagine aggiunta
-      not_installed: You haven't installed vkBasalt and reshade-shaders library
+      not_installed: Non hai installato le librerie vkBasalt e reshade-shaders
 
   # Environmantal variables manager
   environment:
