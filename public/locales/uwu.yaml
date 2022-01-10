@@ -44,6 +44,11 @@ launcher:
       launch: launch (◕▿◕✿)
       predownload: pwe-downwoad update
 
+  # Launcher update
+  update:
+    title: 'Launcher update available: {from} -> {to}'
+    body: You can download a new version of the launcher from the project's repository at {repository}
+
 # Settings window
 settings:
   # General

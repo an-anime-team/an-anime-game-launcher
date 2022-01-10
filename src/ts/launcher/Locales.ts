@@ -3,7 +3,7 @@ import { dictionary, locale } from 'svelte-i18n';
 import YAML from 'yaml';
 
 import constants from '../Constants';
-import promisify from './promisify';
+import promisify from '../core/promisify';
 import Configs from '../Configs';
 
 type AvailableLocales =

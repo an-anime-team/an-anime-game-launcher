@@ -29,7 +29,7 @@
 </script>
 
 <div>
-    <table class="table" style="margin-top: 16px">
+    <table class="table properties-table" style="margin-top: 16px">
         <tr>
             <th>{$_('settings.environment.items.table.name')}</th>
             <th>{$_('settings.environment.items.table.value')}</th>

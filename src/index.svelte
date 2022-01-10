@@ -7,6 +7,7 @@
     import { _, locale } from 'svelte-i18n';
 
     import Window from './ts/neutralino/Window';
+    import Process from './ts/neutralino/Process';
 
     import Launcher from './ts/Launcher';
     import constants from './ts/Constants';
@@ -16,7 +17,6 @@
     import Debug from './ts/core/Debug';
     import Downloader from './ts/core/Downloader';
     import IPC from './ts/core/IPC';
-    import Process from './ts/neutralino/Process';
     import Configs from './ts/Configs';
 
     import Gear from './assets/images/gear.png';

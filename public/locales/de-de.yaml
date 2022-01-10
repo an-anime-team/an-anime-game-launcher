@@ -44,6 +44,11 @@ launcher:
       launch: Starten
       predownload: Update vorinstallieren
 
+  # Launcher update
+  update:
+    title: 'Launcher update available: {from} -> {to}'
+    body: You can download a new version of the launcher from the project's repository at {repository}
+
 # Einstellungs Fenster
 settings:
   # General

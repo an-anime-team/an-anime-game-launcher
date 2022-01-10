@@ -1,11 +1,13 @@
 import { get as svelteget } from 'svelte/store';
 import { dictionary, locale } from 'svelte-i18n';
 
-import type Launcher from '../Launcher';
+import semver from 'semver';
+
 import type { LauncherState } from '../types/Launcher';
 
 import Window from '../neutralino/Window';
 
+import Launcher from '../Launcher';
 import Game from '../Game';
 import Patch from '../Patch';
 import Voice from '../Voice';
@@ -13,7 +15,10 @@ import Runners from '../core/Runners';
 import Debug, { DebugThread } from '../core/Debug';
 import DXVK from '../core/DXVK';
 import IPC from '../core/IPC';
-import Locales from '../core/Locales';
+import Locales from './Locales';
+import Git from '../core/Git';
+import constants from '../Constants';
+import Notifications from '../core/Notifications';
 
 export default class State
 {
@@ -92,6 +97,26 @@ export default class State
 
             await Window.current.show();
             await Window.current.center(1280, 700);
+
+            // Check for new versions of the launcher
+            Git.getTags(constants.uri.launcher).then((tags) => {
+                for (const tag of tags.reverse())
+                    if (semver.gt(tag.tag, Launcher.version))
+                    {
+                        const currentDictionary = svelteget(dictionary);
+                        const currentLocale = svelteget(locale);
+
+                        const locales = (currentDictionary[currentLocale ?? 'en-us'] ?? currentDictionary['en-us'])['launcher']!['update'] as object;
+                        
+                        Notifications.show({
+                            title: locales['title'].replace('{from}', Launcher.version).replace('{to}', tag.tag),
+                            body:  locales['body'].replace('{repository}', constants.uri.launcher),
+                            icon: `${constants.paths.appDir}/public/images/baal64-transparent.png`
+                        });
+
+                        break;
+                    }
+            });
 
             // This thing will fix window resizing
             // in several cases (wayland + gnome + custom theme)

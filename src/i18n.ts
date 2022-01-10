@@ -1,6 +1,6 @@
 import { register, init } from 'svelte-i18n';
 
-import Locales from './ts/core/Locales';
+import Locales from './ts/launcher/Locales';
 
 register('en-us', () => Locales.get('en-us'));
 register('ru-ru', () => Locales.get('ru-ru'));

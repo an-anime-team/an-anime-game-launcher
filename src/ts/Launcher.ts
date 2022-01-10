@@ -9,11 +9,13 @@ import Configs from './Configs';
 import Debug from './core/Debug';
 import IPC from './core/IPC';
 import DiscordRPC from './core/DiscordRPC';
-import Locales from './core/Locales';
+import Locales from './launcher/Locales';
 
 import ProgressBar from './launcher/ProgressBar';
 import State from './launcher/State';
 import Background from './launcher/Background';
+
+import { version } from '../../package.json';
 
 export default class Launcher
 {
@@ -21,6 +23,8 @@ export default class Launcher
     public progressBar?: ProgressBar;
     public rpc?: DiscordRPC;
     public tray: Tray;
+
+    public static readonly version: string = version;
 
     protected settingsMenu?: Process;
 

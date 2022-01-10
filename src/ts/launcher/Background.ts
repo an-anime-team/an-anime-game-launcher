@@ -1,6 +1,6 @@
 import constants from '../Constants';
 import fetch from '../core/Fetch';
-import Locales from '../core/Locales';
+import Locales from './Locales';
 
 export default class Background
 {

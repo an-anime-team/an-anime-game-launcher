@@ -2,25 +2,24 @@
 
 @mixin themable($theme-name, $theme-map)
     body[data-theme=#{$theme-name}]
-        table.table
+        table.properties-table tr
             td, th
-                width: auto
+                width: auto !important
+                
+            td input
+                display: none !important
 
-            tr
-                td input
-                    display: none
+            &.selected
+                td
+                    background-color: map.get($theme-map, "background2")
+                    
+                    span
+                        display: none !important
+                    
+                    input
+                        display: block !important
 
-                &.selected
-                    td
                         background-color: map.get($theme-map, "background2")
-                        
-                        span
-                            display: none
-                        
-                        input
-                            display: block
-
-                            background-color: map.get($theme-map, "background2")
 
 @import "../themes/light"
 @import "../themes/dark"
