@@ -321,6 +321,12 @@
                 />
 
                 <Checkbox
+                    lang="settings.enhancements.items.fsr.title"
+                    tooltip="settings.enhancements.items.fsr.tooltip"
+                    prop="fsr"
+                />
+
+                <Checkbox
                     lang="settings.enhancements.items.fps_unlocker.title"
                     tooltip="settings.enhancements.items.fps_unlocker.tooltip"
                     prop="fps_unlocker"

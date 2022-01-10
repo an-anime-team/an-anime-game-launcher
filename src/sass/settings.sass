@@ -11,6 +11,11 @@
     body[data-theme=#{$theme-name}]
         background-color: map.get($theme-map, "background")
 
+        color: map.get($theme-map, "text")
+
+        p, span, div
+            color: map.get($theme-map, "text")
+
         @if $theme-name == dark
             &::-webkit-scrollbar-track
                 background: #2e3440

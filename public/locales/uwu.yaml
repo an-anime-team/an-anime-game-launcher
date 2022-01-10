@@ -46,8 +46,8 @@ launcher:
 
   # Launcher update
   update:
-    title: 'Launcher update available: {from} -> {to}'
-    body: You can download a new version of the launcher from the project's repository at {repository}
+    title: 'waunchew update avaiwable: {from} -> {to}'
+    body: you can downwoad the new vewsion of the waunchew fwom the pwoject's wepositowy at {repository}
 
 # Settings window
 settings:
@@ -120,6 +120,11 @@ settings:
       gamemode:
         title: use G-GameMode
         tooltip: it i-is a software t-that can impwove the game pewfowmance
+
+      # AMD FSR
+      fsr:
+        title: enable amd fsw
+        tooltip: this option enables a-amd fidewityfx s-super wesowution (fsw) which will scale youw game wesowution without wosing fps
       
       # Unlock FPS
       fps_unlocker:

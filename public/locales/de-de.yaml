@@ -46,8 +46,8 @@ launcher:
 
   # Launcher update
   update:
-    title: 'Launcher update available: {from} -> {to}'
-    body: You can download a new version of the launcher from the project's repository at {repository}
+    title: 'Launcher update verfügbar: {from} -> {to}'
+    body: Sie können das update von {repository} herunterladen
 
 # Einstellungs Fenster
 settings:
@@ -120,6 +120,11 @@ settings:
       gamemode:
         title: Benutze GameMode
         tooltip: GameMode ist ein Program welches die Leistung verbessert
+
+      # AMD FSR
+      fsr:
+        title: AMD FSR
+        tooltip: Diese Option aktiviert AMD FidelityFX Super Resolution (FSR), womit kleine Resolution hochskaliert wird um FPS-verlust zu vermeiden.
       
       # Unlock FPS
       fps_unlocker:

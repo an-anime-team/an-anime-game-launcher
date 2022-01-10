@@ -73,6 +73,15 @@ export default (launcher: Launcher): Promise<void> => {
             }
 
             /**
+             * AMD FSR
+             */
+            if (await Configs.get('fsr'))
+            {
+                env['WINE_FULLSCREEN_FSR'] = 1;
+                env['WINE_FULLSCREEN_FSR_STRENGTH'] = 3;
+            }
+
+            /**
              * Shaders
              */
             const shaders = await Configs.get('shaders');
@@ -95,6 +104,7 @@ export default (launcher: Launcher): Promise<void> => {
             /**
              * GPU selection
              */
+            // TODO
             /*if (LauncherLib.getConfig('gpu') != 'default')
             {
                 const gpu = await SwitcherooControl.getGpuByName(LauncherLib.getConfig('gpu'));
@@ -161,6 +171,7 @@ export default (launcher: Launcher): Promise<void> => {
                         if (seconds < 10)
                             seconds = `0${seconds}`;
 
+                        // FIXME: tray doesn't work in AppImage
                         launcher.tray.update([
                             { text: `Playing for ${hours}:${minutes}:${seconds}`, disabled: true },
                             {

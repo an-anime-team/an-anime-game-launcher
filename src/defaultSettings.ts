@@ -51,9 +51,13 @@ promisify(async () => {
         /**
          * Environment variables
          * 
-         * @default null
+         * null to disable any
+         * 
+         * @default { WINEESYNC: 1 }
          */
-        env: null,
+        env: {
+            WINEESYNC: 1
+        },
     
         /**
          * Launcher theme
@@ -124,6 +128,13 @@ promisify(async () => {
          * @default false
          */
         gamemode: false,
+
+        /**
+         * If the launcher should enable AMD FSR
+         * 
+         * @default true
+         */
+        fsr: true,
 
         /**
          * If the launcher should unlock FPS

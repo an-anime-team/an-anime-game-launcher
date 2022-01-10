@@ -121,6 +121,11 @@ settings:
         title: Usa GameMode
         tooltip: È un software che può migliorare le prestazioni in gioco
       
+      # AMD FSR
+      fsr:
+        title: Enable AMD FSR
+        tooltip: This option enables AMD FidelityFX Super Resolution (FSR) which will scale your game resolution without losing FPS
+
       # Unlock FPS
       fps_unlocker:
         title: Sblocca gli FPS
