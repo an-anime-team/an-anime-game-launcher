@@ -165,8 +165,7 @@ This is our current roadmap goals. You can find older ones [here](ROADMAP.md)
   * <s>Checkbox</s>
   * <s>Selectbox</s>
   * <s>SelectionList</s>
-  * SelectableCheckbox
-  * PropertiesEditor
+  * <s>PropertiesEditor</s>
 * <s>Add `svelte-i18n`</s>
 * <s>Telemetry checking</s>
 * <s>Tooltips for some options</s>
@@ -179,8 +178,8 @@ This is our current roadmap goals. You can find older ones [here](ROADMAP.md)
 * <s>Proper wine process monitoring</s>
 * <s>Ability to hide some runners families</s>
 * <s>Ability to change the temp directory where the launcher should download some files</s>
+* <s>Shaders menu</s>
 * Dark progress bar design
-* Shaders menu
 * Statistics window
 * Launcher auto-updates
 * Changelog window
@@ -189,8 +188,8 @@ This is our current roadmap goals. You can find older ones [here](ROADMAP.md)
 ### Features
 
 * <s>Use `LauncherLib.getGameVersion` function instead of the `config.json`'s `version` property</s> *(deprecated due to the new core functions)*
+* <s>Fix button flickering at start when the launcher's state updates</s> *(fixed due to the new framework usage and proper state updating)*
 * Add downloading pause button
-* Fix button flickering at start when the launcher's state updates
 * Screenshots explorer
 * Add Patch category in settings menu with
   - Always participate in patches testing

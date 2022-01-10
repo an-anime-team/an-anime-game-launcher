@@ -11,9 +11,7 @@ type AvailableLocales =
     | 'ru-ru'
     | 'de-de'
     | 'fr-fr'
-    | 'es-es'
     | 'it-it'
-    | 'vi-vn'
     | 'uwu';
 
 declare const Neutralino;
@@ -24,8 +22,7 @@ export default class Locales
      * List of locales supported by the game's API
      */
     public static readonly supportedLocales: AvailableLocales[] = [
-        'en-us', 'ru-ru', 'de-de',
-        'fr-fr', 'es-es', 'vi-vn'
+        'en-us', 'ru-ru', 'de-de', 'fr-fr'
     ];
 
     /**

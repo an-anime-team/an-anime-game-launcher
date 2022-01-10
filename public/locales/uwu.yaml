@@ -5,12 +5,12 @@ splash:
     - d-doing some i-impowtant s-stuff.. (≧◡≦)
     - buwwying p-paimon.. xD
     - p-puwwing fow yae.. (o^▽^o)
-    - Farming materials...
-    - Passing Abyss...
-    - Collecting achievements...
-    - Building phys Qiqi...
-    - Making sacrifices for 5*...
-    - Finding friends for co-op...
+    - fawming matewiaws.. uguu..
+    - passing abyss.. (o^▽^o)
+    - cowwecting achievements...
+    - buiwding phys qiqi.. (* ^ ω ^)
+    - making sacwifices fow 5*...
+    - finding fwiends fow co-op.. (≧◡≦)
 
 # Launcher window
 launcher:
@@ -60,7 +60,6 @@ settings:
             ru-ru: Русский
             de-de: Deutsch
             fr-fr: Français
-            es-es: Español
             it-it: Italiano
             uwu: Engwish
 
@@ -171,3 +170,17 @@ settings:
       
       author: 'a-authow: {author}'
       no_images: no images avaiwable
+
+  # Environmantal variables manager
+  environment:
+    title: enviwonment
+    items:
+      # Table rows
+      table:
+        name: name
+        value: vawue
+      
+      # Table buttons
+      buttons:
+        add: add
+        delete: dewete

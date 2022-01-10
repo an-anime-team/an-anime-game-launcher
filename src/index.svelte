@@ -66,7 +66,7 @@
         const purge_logs = await Configs.get('purge_logs.launcher') as string|null;
 
         if (purge_logs !== null && purge_logs[purge_logs.length - 1] == 'd')
-            await Neutralino.os.execCommand(`find "${Process.addSlashes(launcherDir)}/logs" -maxdepth 1 -mtime +${purge_logs.substring(0, purge_logs.length - 1)} -delete`);
+            await Neutralino.os.execCommand(`find "${Process.addSlashes(launcherDir)}/logs" -maxdepth 1 -mtime ${purge_logs.substring(0, purge_logs.length - 1)} -delete`);
 
         // Save logs
         const log = Debug.get().join('\r\n');

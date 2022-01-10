@@ -60,7 +60,6 @@ settings:
             ru-ru: Русский
             de-de: Deutsch
             fr-fr: Français
-            es-es: Español
             it-it: Italiano
             uwu: Engwish
 
@@ -176,3 +175,12 @@ settings:
   environment:
     title: Environment
     items:
+      # Table rows
+      table:
+        name: Name
+        value: Value
+      
+      # Table buttons
+      buttons:
+        add: Add
+        delete: Delete

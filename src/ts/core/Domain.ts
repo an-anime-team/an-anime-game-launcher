@@ -10,7 +10,7 @@ export default class Domain
         const debugThread = new DebugThread('Domain.getInfo', `Getting info about uri: ${uri}`);
 
         return new Promise(async (resolve) => {
-            const process = await Process.run(`ping -n 1 -w 1 -B "${Process.addSlashes(uri)}"`);
+            const process = await Process.run(`ping -n -4 -w 1 -B "${Process.addSlashes(uri)}"`);
 
             // If something will be wrong - at least we'll have
             // to wait 1.5 seconds instread of 2

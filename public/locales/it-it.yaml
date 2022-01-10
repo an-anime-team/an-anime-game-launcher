@@ -169,3 +169,17 @@ settings:
 
       author: 'Autore: {author}'
       no_images: Nessuna immagine aggiunta
+
+  # Environmantal variables manager
+  environment:
+    title: Environment
+    items:
+      # Table rows
+      table:
+        name: Name
+        value: Value
+      
+      # Table buttons
+      buttons:
+        add: Add
+        delete: Delete
