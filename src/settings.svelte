@@ -23,6 +23,7 @@
     import DXVKSelectionList from './components/DXVKSelectionList.svelte';
     import RunnerSelectionList from './components/RunnerSelectionList.svelte';
     import ShadersSelection from './components/ShadersSelection.svelte';
+    import EnvironmentManager from './components/EnvironmentManager.svelte';
 
     // TODO: somehow simplify all this variables definitions
 
@@ -89,7 +90,8 @@
         'enhancements',
         'runners',
         'dxvks',
-        'shaders'
+        'shaders',
+        'environment'
     ];
 
     /**
@@ -377,6 +379,12 @@
                 <h1>{$_('settings.shaders.title')}</h1>
 
                 <ShadersSelection />
+            </div>
+
+            <div class="settings-item" id="environment">
+                <h1>{$_('settings.environment.title')}</h1>
+
+                <EnvironmentManager />
             </div>
         </div>
     </main>

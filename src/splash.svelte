@@ -16,7 +16,7 @@
 
     const splash = Math.round(Math.random() * 100) < 100 ? Splash : SplashSecret;
 
-    let phrase = Math.round(Math.random() * 2);
+    let phrase = Math.round(Math.random() * 8);
 
     onMount(() => {
         Window.current.show();

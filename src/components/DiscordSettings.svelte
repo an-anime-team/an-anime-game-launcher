@@ -10,43 +10,35 @@
 
     import Checkbox from './Checkbox.svelte';
 
-    // TODO: maybe somehow encode these icons names
-
     // Discord RPC icons imports
     // We must import them manually because otherwise
     // neutralino won't be able to load them because of its restrictions
     const icons = {
-        'launcher': import('../../public/icons/256x256.png'),
-        'gi-icon': import('../assets/images/discord/gi-icon.jpg'),
-        'game': import('../assets/images/discord/game.jpg'),
+        'bGF1bmNoZXI=': import('../../public/icons/256x256.png'),
+        'Z2ktaWNvbg==': import('../assets/images/discord/anime-icon.jpg'),
+        'Z2FtZQ==': import('../assets/images/discord/game.jpg'),
 
-        'artgame': import('../assets/images/discord/artgame.jpg'),
-        'artgame2': import('../assets/images/discord/artgame2.jpg'),
-        'artgame3': import('../assets/images/discord/artgame3.jpg'),
+        'YXJ0Z2FtZQ==': import('../assets/images/discord/chr-ms-ab-1.jpg'),
+        'YXJ0Z2FtZTM=': import('../assets/images/discord/chr-ms-ab-2.jpg'),
 
-        // Beidou
-        'beidougame': import('../assets/images/discord/beidougame.jpg'),
+        'YmVpZG91Z2FtZQ==': import('../assets/images/discord/chr-ly-bd-1.jpg'),
 
-        // Klee
-        'kleegame': import('../assets/images/discord/kleegame.jpg'),
-        'kleegame2': import('../assets/images/discord/kleegame2.jpg'),
+        'a2xlZWdhbWU=': import('../assets/images/discord/chr-ms-kl-1.jpg'),
+        'a2xlZWdhbWUy': import('../assets/images/discord/chr-ms-kl-2.jpg'),
+        'YXJ0Z2FtZTI=': import('../assets/images/discord/chr-ms-kl-3.jpg'),
 
-        // Baal
-        'baal1': import('../assets/images/discord/baal1.webp'),
+        'YmFhbDE=': import('../assets/images/discord/chr-in-rs-1.webp'),
 
-        // Yae Miko
-        'yaemiko1': import('../assets/images/discord/yaemiko1.webp'),
-        'yaemiko2': import('../assets/images/discord/yaemiko2.jpg'),
+        'eWFlbWlrbzE=': import('../assets/images/discord/chr-in-ym-1.webp'),
+        'eWFlbWlrbzI=': import('../assets/images/discord/chr-in-ym-2.jpg'),
 
-        // Liyue
-        'liyuegame': import('../assets/images/discord/liyuegame.jpg'),
+        'bGl5dWVnYW1l': import('../assets/images/discord/loc-ly-1.jpg'),
 
-        // Inazuma
-        'inazuma1': import('../assets/images/discord/inazuma1.jpg'),
-        'inazuma2': import('../assets/images/discord/inazuma2.jpg'),
-        'inazuma3': import('../assets/images/discord/inazuma3.jpg'),
-        'inazuma4': import('../assets/images/discord/inazuma4.jpg'),
-        'inazuma5': import('../assets/images/discord/inazuma5.jpg')
+        'aW5henVtYTE=': import('../assets/images/discord/loc-in-1.jpg'),
+        'aW5henVtYTI=': import('../assets/images/discord/loc-in-2.jpg'),
+        'aW5henVtYTM=': import('../assets/images/discord/loc-in-3.jpg'),
+        'aW5henVtYTQ=': import('../assets/images/discord/loc-in-4.jpg'),
+        'aW5henVtYTU=': import('../assets/images/discord/loc-in-5.jpg')
     };
 
     let iconSelector: 'in-game' | 'in-launcher' | null = null;
@@ -54,11 +46,11 @@
     let states = {
         'in-game': {
             text: '',
-            icon: 'game'
+            icon: 'Z2FtZQ=='
         },
         'in-launcher': {
             text: '',
-            icon: 'launcher'
+            icon: 'bGF1bmNoZXI='
         }
     };
 
@@ -66,11 +58,11 @@
         states = {
             'in-game': {
                 text: settings!['in-game']['details'],
-                icon: settings!['in-game']['icon']
+                icon: btoa(settings!['in-game']['icon'])
             },
             'in-launcher': {
                 text: settings!['in-launcher']['details'],
-                icon: settings!['in-launcher']['icon']
+                icon: btoa(settings!['in-launcher']['icon'])
             }
         };
 
@@ -97,7 +89,7 @@
     const selectIcon = (icon: string) => {
         states[iconSelector!]['icon'] = icon;
 
-        iconChanged(iconSelector!, icon);
+        iconChanged(iconSelector!, atob(icon));
 
         iconSelector = null;
     };
