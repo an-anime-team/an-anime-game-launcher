@@ -157,4 +157,5 @@
     </button>
 
     <button class="button hint--top hint--large" aria-label="" id="launch">Launch</button>
+    <button class="button" id="pause">Pause</button>
 </main>

@@ -14,6 +14,24 @@ splash:
 
 # Окно лаунчера
 launcher:
+  # Прогресс бар
+  progress:
+    pause: Пауза
+    resume: Продолжить
+
+    # Установка игры
+    game:
+      downloading: Скачивание игры...
+      unpacking: Распаковка игры...
+      deleting_outdated: Удаление устаревших файлов...
+
+    # Установка звуковых пакетов
+    voice:
+      deleting: Удаление звуковых пакетов...
+      downloading: Скачивание звукового пакета {voice}...
+      unpacking: Распаковка звукового пакета {voice}...
+
+  # Launcher states
   states:
     # Когда игра должна быть установлена или обновлена
     installation:

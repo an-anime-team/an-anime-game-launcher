@@ -1,3 +1,6 @@
+import { get as svelteget } from 'svelte/store';
+import { _ } from 'svelte-i18n';
+
 import type Launcher from '../../Launcher';
 
 import Game from '../../Game';
@@ -27,12 +30,35 @@ export default (launcher: Launcher): Promise<void> => {
 
             Game.update(prevGameVersion).then((stream) => {
                 launcher.progressBar?.init({
-                    label: 'Downloading game...',
+                    label: svelteget(_)('launcher.progress.game.downloading'),
                     showSpeed: true,
                     showEta: true,
                     showPercents: true,
                     showTotals: true
                 });
+
+                // Show pause/resume button
+                launcher.state!.pauseButton.style['display'] = 'block';
+
+                let paused = false;
+
+                launcher.state!.pauseButton.onclick = () => {
+                    if (!paused)
+                    {
+                        stream?.pauseDownload();
+
+                        launcher.state!.pauseButton.textContent = svelteget(_)('launcher.progress.resume');
+                    }
+
+                    else
+                    {
+                        stream?.resumeDownload();
+
+                        launcher.state!.pauseButton.textContent = svelteget(_)('launcher.progress.pause');
+                    }
+
+                    paused = !paused;
+                };
     
                 stream?.downloadStart(() => launcher.progressBar?.show());
     
@@ -42,7 +68,7 @@ export default (launcher: Launcher): Promise<void> => {
     
                 stream?.unpackStart(() => {
                     launcher.progressBar?.init({
-                        label: 'Unpacking game...',
+                        label: svelteget(_)('launcher.progress.game.unpacking'),
                         showSpeed: true,
                         showEta: true,
                         showPercents: true,
@@ -70,7 +96,7 @@ export default (launcher: Launcher): Promise<void> => {
                             if (files.length > 0)
                             {
                                 launcher.progressBar?.init({
-                                    label: 'Deleting outdated files...',
+                                    label: svelteget(_)('launcher.progress.game.deleting_outdated'),
                                     showSpeed: false,
                                     showEta: true,
                                     showPercents: true,
@@ -103,6 +129,9 @@ export default (launcher: Launcher): Promise<void> => {
 
                     // Download voice package when the game itself has been installed
                     const installVoice = () => {
+                        // Hide pause/resume button
+                        launcher.state!.pauseButton.style['display'] = 'none';
+
                         import('./InstallVoice').then((module) => {
                             module.default(launcher).then(() => resolve());
                         });

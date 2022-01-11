@@ -14,6 +14,24 @@ splash:
 
 # Launcher window
 launcher:
+  # Progress bar
+  progress:
+    pause: Pause
+    resume: Resume
+
+    # Game installation
+    game:
+      downloading: Downloading game...
+      unpacking: Unpacking game...
+      deleting_outdated: Deleting outdated files...
+
+    # Voice packages installation
+    voice:
+      deleting: Deleting voice packages...
+      downloading: Downloading {voice} voice package...
+      unpacking: Unpacking {voice} voice package...
+
+  # Launcher states
   states:
     # When the game should be installed or updated
     installation:

@@ -25,6 +25,7 @@ export default class State
     public launcher: Launcher;
 
     public launchButton: HTMLElement;
+    public pauseButton: HTMLElement;
     public predownloadButton: HTMLElement;
     public settingsButton: HTMLElement;
 
@@ -51,6 +52,7 @@ export default class State
         this.launcher = launcher;
 
         this.launchButton = <HTMLElement>document.getElementById('launch');
+        this.pauseButton = <HTMLElement>document.getElementById('pause');
         this.predownloadButton = <HTMLElement>document.getElementById('predownload');
         this.settingsButton = <HTMLElement>document.getElementById('settings');
 

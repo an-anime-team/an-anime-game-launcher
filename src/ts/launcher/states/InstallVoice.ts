@@ -1,3 +1,6 @@
+import { get as svelteget } from 'svelte/store';
+import { _ } from 'svelte-i18n';
+
 import type Launcher from '../../Launcher';
 import type { VoiceLang } from '../../types/Voice';
 
@@ -25,7 +28,7 @@ export default (launcher: Launcher): Promise<void> => {
             if (packagesToDelete.length > 0)
             {
                 launcher.progressBar?.init({
-                    label: `Deleting voice packages...`,
+                    label: svelteget(_)('launcher.progress.voice.deleting'),
                     showSpeed: false,
                     showEta: false,
                     showPercents: true,
@@ -50,12 +53,35 @@ export default (launcher: Launcher): Promise<void> => {
                         
                         else Voice.update(selectedVoice, packagesVersions[selectedVoice] ?? null).then((stream) => {
                             launcher.progressBar?.init({
-                                label: `Downloading ${selectedVoice} voice package...`,
+                                label: svelteget(_)('launcher.progress.voice.downloading', { values: { voice: selectedVoice } }),
                                 showSpeed: true,
                                 showEta: true,
                                 showPercents: true,
                                 showTotals: true
                             });
+
+                            // Show pause/resume button
+                            launcher.state!.pauseButton.style['display'] = 'block';
+
+                            let paused = false;
+
+                            launcher.state!.pauseButton.onclick = () => {
+                                if (!paused)
+                                {
+                                    stream?.pauseDownload();
+
+                                    launcher.state!.pauseButton.textContent = svelteget(_)('launcher.progress.resume');
+                                }
+
+                                else
+                                {
+                                    stream?.resumeDownload();
+
+                                    launcher.state!.pauseButton.textContent = svelteget(_)('launcher.progress.pause');
+                                }
+
+                                paused = !paused;
+                            };
                 
                             stream?.downloadStart(() => launcher.progressBar?.show());
                 
@@ -65,7 +91,7 @@ export default (launcher: Launcher): Promise<void> => {
                 
                             stream?.unpackStart(() => {
                                 launcher.progressBar?.init({
-                                    label: `Unpacking ${selectedVoice} voice package...`,
+                                    label: svelteget(_)('launcher.progress.voice.unpacking', { values: { voice: selectedVoice } }),
                                     showSpeed: true,
                                     showEta: true,
                                     showPercents: true,
@@ -84,6 +110,9 @@ export default (launcher: Launcher): Promise<void> => {
                 
                             stream?.unpackFinish(() => {
                                 launcher.progressBar?.hide();
+
+                                // Hide pause/resume button
+                                launcher.state!.pauseButton.style['display'] = 'none';
                 
                                 resolve();
                             });

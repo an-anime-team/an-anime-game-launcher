@@ -17,22 +17,20 @@ export default class Domain
             process.runningInterval = 500;
             process.outputInterval = 500;
 
+            const resolveInfo = (info: DomainInfo) => {
+                process.outputInterval = null;
+                process.runningInterval = null;
+
+                process.kill();
+
+                debugThread.log({ message: info });
+
+                resolve(info);
+            };
+
             let output = '';
 
-            process.output((outputPart) => {
-                output += outputPart;
-
-                const resolveInfo = (info: DomainInfo) => {
-                    process.outputInterval = null;
-                    process.runningInterval = null;
-
-                    process.kill();
-
-                    debugThread.log({ message: info });
-
-                    resolve(info);
-                };
-
+            const processOutput = () => {
                 if (output.includes('Name or service not known'))
                 {
                     resolveInfo({
@@ -55,7 +53,15 @@ export default class Domain
                         });
                     }
                 }
+            };
+
+            process.output((outputPart) => {
+                output += outputPart;
+
+                processOutput();
             });
+
+            process.finish(() => processOutput());
         });
     }
 };

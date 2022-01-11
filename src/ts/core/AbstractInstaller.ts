@@ -1,5 +1,5 @@
 import constants from '../Constants';
-import Downloader from './Downloader';
+import Downloader, { Stream as DownloadStream } from './Downloader';
 import Archive from './Archive';
 import { DebugThread } from './Debug';
 
@@ -11,6 +11,11 @@ export default abstract class Installer
      * The interval in ms between progress event calls
      */
     public downloadProgressInterval: number = 200;
+
+    /**
+     * The interval in ms between checking was downloading resumed after pausing
+     */
+    public downloadPauseInterval: number = 500;
 
     /**
      * The interval in ms between progress event calls
@@ -31,6 +36,8 @@ export default abstract class Installer
 
     protected downloadFinished: boolean = false;
     protected unpackFinished: boolean = false;
+
+    protected downloadStream?: DownloadStream;
 
     /**
      * @param uri URI to the archive we need to download
@@ -94,7 +101,10 @@ export default abstract class Installer
             if (!alreadyDownloaded)
             {
                 Downloader.download(uri, archivePath).then((stream) => {
+                    this.downloadStream = stream;
+
                     stream.progressInterval = this.downloadProgressInterval;
+                    stream.pauseInterval = this.downloadPauseInterval;
 
                     stream.start(() => {
                         this.downloadStarted = true;
@@ -193,5 +203,21 @@ export default abstract class Installer
 
         if (this.unpackFinished)
             callback();
+    }
+
+    /**
+     * Pause downloading
+     */
+    public pauseDownload()
+    {
+        this.downloadStream?.pause();
+    }
+
+    /**
+     * Resume downloading
+     */
+    public resumeDownload()
+    {
+        this.downloadStream?.resume();
     }
 };
