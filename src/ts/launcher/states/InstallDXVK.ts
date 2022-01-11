@@ -9,9 +9,9 @@ export default (launcher: Launcher): Promise<void> => {
         import('./CreatePrefix').then((module) => {
             module.default(launcher).then(() => {
                 // And then download the DXVK
-                DXVK.download('1.9.2').then((stream) => {
+                DXVK.download('1.9.3').then((stream) => {
                     launcher.progressBar?.init({
-                        label: 'Downloading DXVK 1.9.2...',
+                        label: 'Downloading DXVK 1.9.3...',
                         showSpeed: true,
                         showEta: true,
                         showPercents: true,
@@ -28,7 +28,7 @@ export default (launcher: Launcher): Promise<void> => {
 
                     stream?.unpackStart(() => {
                         launcher.progressBar?.init({
-                            label: () => unpacking ? 'Unpacking DXVK 1.9.2...' : 'Applying DXVK 1.9.2...',
+                            label: () => unpacking ? 'Unpacking DXVK 1.9.3...' : 'Applying DXVK 1.9.3...',
                             showSpeed: true,
                             showEta: true,
                             showPercents: true,
@@ -41,13 +41,13 @@ export default (launcher: Launcher): Promise<void> => {
                     });
 
                     stream?.unpackFinish(async () => {
-                        unpacking = true;
+                        unpacking = false;
 
                         // Select this DXVK
-                        await DXVK.current('1.9.2');
+                        await DXVK.current('1.9.3');
 
                         // And apply it
-                        DXVK.apply(await constants.paths.prefix.current, '1.9.2').then(() => {
+                        DXVK.apply(await constants.paths.prefix.current, '1.9.3').then(() => {
                             launcher.progressBar?.hide();
 
                             resolve();
