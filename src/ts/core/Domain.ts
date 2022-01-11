@@ -3,6 +3,8 @@ import type { DomainInfo } from '../types/Domain';
 import Process from '../neutralino/Process';
 import { DebugThread } from './Debug';
 
+declare const Neutralino;
+
 export default class Domain
 {
     public static getInfo(uri: string): Promise<DomainInfo>
@@ -10,58 +12,37 @@ export default class Domain
         const debugThread = new DebugThread('Domain.getInfo', `Getting info about uri: ${uri}`);
 
         return new Promise(async (resolve) => {
-            const process = await Process.run(`ping -n -4 -w 1 -B "${Process.addSlashes(uri)}"`);
-
-            // If something will be wrong - at least we'll have
-            // to wait 1.5 seconds instread of 2
-            process.runningInterval = 500;
-            process.outputInterval = 500;
+            const process = await Neutralino.os.execCommand(`ping -n -4 -w 1 -B "${Process.addSlashes(uri)}"`);
+            const output = process.stdOut || process.stdErr;
 
             const resolveInfo = (info: DomainInfo) => {
-                process.outputInterval = null;
-                process.runningInterval = null;
-
-                process.kill();
-
                 debugThread.log({ message: info });
 
                 resolve(info);
             };
 
-            let output = '';
+            if (output.includes('Name or service not known'))
+            {
+                resolveInfo({
+                    uri: uri,
+                    available: false
+                });
+            }
 
-            const processOutput = () => {
-                if (output.includes('Name or service not known'))
+            else
+            {
+                const regex = /PING (.*) \(([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})\) .* ([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}) : [\d]+\([\d]+\)/gm.exec(output);
+
+                if (regex !== null)
                 {
                     resolveInfo({
-                        uri: uri,
-                        available: false
+                        uri: regex[1],
+                        remoteIp: regex[2],
+                        localIp: regex[3],
+                        available: regex[2] !== regex[3]
                     });
                 }
-
-                else
-                {
-                    const regex = /PING (.*) \(([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})\) .* ([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}) : [\d]+\([\d]+\)/gm.exec(output);
-
-                    if (regex !== null)
-                    {
-                        resolveInfo({
-                            uri: regex[1],
-                            remoteIp: regex[2],
-                            localIp: regex[3],
-                            available: regex[2] !== regex[3]
-                        });
-                    }
-                }
-            };
-
-            process.output((outputPart) => {
-                output += outputPart;
-
-                processOutput();
-            });
-
-            process.finish(() => processOutput());
+            }
         });
     }
 };
