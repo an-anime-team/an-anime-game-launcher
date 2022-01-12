@@ -34,6 +34,8 @@ This launcher is also available as the [an-anime-game-launcher-app](https://gitl
 
 ## Usage statistics
 
+This is our current usage statistics. You can find older ones [here](repository/pages/ROADMAP.md)
+
 ### 2.3.0 — 99 total
 
 <img src="repository/pics/stats/2.3.0.png">
@@ -127,7 +129,7 @@ yarn bundle
 
 # Roadmap
 
-This is our current roadmap goals. You can find older ones [here](ROADMAP.md)
+This is our current roadmap goals. You can find older ones [here](repository/pages/ROADMAP.md)
 
 ## ➤ To 3.0.0 release
 
