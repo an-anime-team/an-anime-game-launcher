@@ -8,8 +8,4 @@ Our current statistics you can find in [readme](../../README.md)
 
 <img src="../pics/stats/2.2.0.png">
 
-### 2.3.0 — 99 total
-
-<img src="../pics/stats/2.3.0.png">
-
 > You can suggest colors for your countries
