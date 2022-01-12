@@ -8,7 +8,7 @@ Audio_English(US)_2.3.0.zip
 /dist
 /bundle
 /node_modules
-/repository-pics/**/*.xcf
+/repository/**/*.xcf
 
 neutralino.js
 

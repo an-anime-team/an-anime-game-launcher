@@ -1,8 +1,8 @@
-<img src="repository-pics/logo.jpg">
+<img src="repository/pics/logo.jpg">
 
-<img src="repository-pics/launcher-main.png">
+<img src="repository/pics/launcher-main.png">
 
-<img src="repository-pics/launcher-settings.png">
+<img src="repository/pics/launcher-settings.png">
 
 <br><br>
 
@@ -14,7 +14,7 @@
 
 | Game version | Launcher version | Patch version |
 | :---: | :---: | :---: |
-| 2.4.0 | 2.0.0 beta | 2.4.0 stable ✅ |
+| 2.4.0 | 2.0.0 | 2.4.0 stable ✅ |
 
 We have our own [An Anime Game](https://discord.gg/ck37X6UWBp) discord server where you can ask any questions
 
@@ -24,19 +24,19 @@ Download AppImage from [Releases](https://gitlab.com/KRypt0n_/an-anime-game-laun
 
 ### For arch users
 
-This launcher is also available as the [an-anime-game-launcher-bin](https://aur.archlinux.org/packages/an-anime-game-launcher-bin) AUR repository
+This launcher is also available as the [an-anime-game-launcher-bin](https://aur.archlinux.org/packages/an-anime-game-launcher-bin) AUR package
+
+### Pacstall support
+
+This launcher is also available as the [an-anime-game-launcher-app](https://gitlab.com/KRypt0n_/anime-game-launcher-pacstall) pacstall package
 
 <br>
 
 ## Usage statistics
 
-### 2.2.0 — 29 total
-
-<img src="repository-pics/stats/2.2.0.png">
-
 ### 2.3.0 — 99 total
 
-<img src="repository-pics/stats/2.3.0.png">
+<img src="repository/pics/stats/2.3.0.png">
 
 > You can suggest colors for your countries
 
@@ -131,69 +131,13 @@ This is our current roadmap goals. You can find older ones [here](ROADMAP.md)
 
 ## ➤ To 3.0.0 release
 
-### 2.0.0 release goals - moving launcher to Neutralino
-
-#### Core functionality
-
-* <s>Make `constants` class to store launcher's constants</s>
-* <s>Make `Downloader` class to download files</s>
-* <s>Make `Archive` class to work with archives</s>
-* <s>Make `DXVK` class to manage DXVK installations</s>
-* <s>Make `Runners` class to manage wines installations</s>
-* <s>Make `Configs` class to manage launcher's configs</s>
-* <s>Make `Game` class to control game-related features</s>
-  * <s>Ability to parse current installed version</s>
-  * <s>Ability to get latest available version</s>
-  * <s>Ability to download and install updates</s>
-* <s>Make `Voice` class to control voice packages-related features</s>
-  * <s>Ability to parse current installed voice packs and get selected one</s>
-  * <s>Ability to get latest available voice packs</s>
-  * <s>Ability to download and install updates</s>
-* <s>Make `Patch` class to control patch-related features</s>
-  * <s>Ability to get current installed patch</s>
-  * <s>Ability to get latest available patch</s>
-  * <s>Ability to download and install it</s>
-* <s>Add project binaries bundling</s>
-  * <s>AppImage</s>
-
-#### Launcher functions
-
-* <s>Make `Launcher` class to manage launcher-related features</s>
-  * <s>Downloading progress</s>
-  * <s>Launcher state functionality</s>
-    * <s>Game launch available</s>
-    * <s>Game update (installation) required</s>
-    * <s>Voice data update (installation) required</s>
-    * <s>Patch unavailable</s>
-    * <s>Test patch available</s>
-* Make Svelte components
-  * <s>Checkbox</s>
-  * <s>Selectbox</s>
-  * <s>SelectionList</s>
-  * <s>PropertiesEditor</s>
-* <s>Add `svelte-i18n`</s>
-* <s>Telemetry checking</s>
-* <s>Tooltips for some options</s>
-* <s>Debugger</s>
-* <s>Splash screen</s>
-* <s>Theming system</s>
-* <s>Game pre-installation</s>
-* <s>Default runner and DXVK auto-installation</s>
-* <s>Discord RPC settings</s>
-* <s>Proper wine process monitoring</s>
-* <s>Ability to hide some runners families</s>
-* <s>Ability to change the temp directory where the launcher should download some files</s>
-* <s>Shaders menu</s>
-* Dark progress bar design
-* Statistics window
-* Launcher auto-updates
-* Changelog window
-* Rewrite sass code, provide more flexible theming ability
-
 ### Features
 
 * <s>Use `LauncherLib.getGameVersion` function instead of the `config.json`'s `version` property</s> *(deprecated due to the new core functions)*
 * <s>Fix button flickering at start when the launcher's state updates</s> *(fixed due to the new framework usage and proper state updating)*
+* Dark progress bar design
+* Statistics window
+* Changelog window
 * Add downloading pause button
 * Screenshots explorer
 * Add Patch category in settings menu with

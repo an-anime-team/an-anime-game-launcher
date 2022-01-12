@@ -103,7 +103,7 @@
          * Update launcher's title
          */
         Game.latest.then((game) => {
-            Window.current.setTitle(`${constants.placeholders.uppercase.full} Linux Launcher - ${game.version} (beta revision)`);
+            Window.current.setTitle(`${constants.placeholders.uppercase.full} Linux Launcher - ${game.version}`);
         });
 
         /**

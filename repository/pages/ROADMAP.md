@@ -2,9 +2,9 @@
 
 This file is a roadmap archive. You can see here which journey we made to make the launcher looks like it looks
 
-And that's not a final! Our future goals you can find in [readme](README.md)
+And that's not a final! Our future goals you can find in [readme](../../README.md)
 
-## ✓ <s>To 1.0.0 release</s>
+## ✓ To 1.0.0 release
 
 * <s>Fix AppImage builds</s> *(0.3.0)*
 * <s>Parse background banners from the game's API ([notabug issue #1](https://notabug.org/nobody/an-anime-game-launcher/issues/1), [notabug pull request #2](https://notabug.org/nobody/an-anime-game-launcher/pulls/2))</s> *(0.3.0)*
@@ -18,7 +18,7 @@ And that's not a final! Our future goals you can find in [readme](README.md)
 * <s>Add launcher updates notifications</s> *(1.0.0-rc1)*
 * <s>Make automatic patch state parsing</s> *(1.0.0-rc1)*
 
-## ✓ <s>To 2.0.0 release</s>
+## ✓ To 2.0.0 release
 
 * <s>Add runners environmental variables manager</s> *(1.1.0)*
 * <s>Add outdated files deletion when new game's update releases</s> *(1.1.0)*
@@ -44,3 +44,58 @@ And that's not a final! Our future goals you can find in [readme](README.md)
 * <s>Use `winecfg.exe` from the installed runner in settings menu</s> *(1.9.0, !14)*
 * <s>Fix voice data installation</s> *(1.9.0, !15)*
 * <s>Add fps unlocker option</s> *(1.9.0, !15)*
+
+## ✓ 2.0.0 release goals - moving launcher to Neutralino
+
+#### Core functionality
+
+* <s>Make `constants` class to store launcher's constants</s>
+* <s>Make `Downloader` class to download files</s>
+* <s>Make `Archive` class to work with archives</s>
+* <s>Make `DXVK` class to manage DXVK installations</s>
+* <s>Make `Runners` class to manage wines installations</s>
+* <s>Make `Configs` class to manage launcher's configs</s>
+* <s>Make `Game` class to control game-related features</s>
+  * <s>Ability to parse current installed version</s>
+  * <s>Ability to get latest available version</s>
+  * <s>Ability to download and install updates</s>
+* <s>Make `Voice` class to control voice packages-related features</s>
+  * <s>Ability to parse current installed voice packs and get selected one</s>
+  * <s>Ability to get latest available voice packs</s>
+  * <s>Ability to download and install updates</s>
+* <s>Make `Patch` class to control patch-related features</s>
+  * <s>Ability to get current installed patch</s>
+  * <s>Ability to get latest available patch</s>
+  * <s>Ability to download and install it</s>
+* <s>Add project binaries bundling</s>
+  * <s>AppImage</s>
+
+#### Launcher functions
+
+* <s>Make `Launcher` class to manage launcher-related features</s>
+  * <s>Downloading progress</s>
+  * <s>Launcher state functionality</s>
+    * <s>Game launch available</s>
+    * <s>Game update (installation) required</s>
+    * <s>Voice data update (installation) required</s>
+    * <s>Patch unavailable</s>
+    * <s>Test patch available</s>
+* <s>Make Svelte components</s>
+  * <s>Checkbox</s>
+  * <s>Selectbox</s>
+  * <s>SelectionList</s>
+  * <s>PropertiesEditor</s>
+* <s>Add `svelte-i18n`</s>
+* <s>Telemetry checking</s>
+* <s>Tooltips for some options</s>
+* <s>Debugger</s>
+* <s>Splash screen</s>
+* <s>Theming system</s>
+* <s>Game pre-installation</s>
+* <s>Default runner and DXVK auto-installation</s>
+* <s>Discord RPC settings</s>
+* <s>Proper wine process monitoring</s>
+* <s>Ability to hide some runners families</s>
+* <s>Ability to change the temp directory where the launcher should download some files</s>
+* <s>Shaders menu</s>
+* <s>Launcher auto-updates</s> *(made updates notifications)*
