@@ -1,0 +1,217 @@
+# Splash window
+splash:
+  title: woading waunchew
+  phrases:
+    - d-doing some i-impowtant s-stuff.. (≧◡≦)
+    - buwwying p-paimon.. xD
+    - p-puwwing fow yae.. (o^▽^o)
+    - fawming matewiaws.. uguu..
+    - passing abyss.. (o^▽^o)
+    - cowwecting achievements...
+    - buiwding phys qiqi.. (* ^ ω ^)
+    - making sacwifices fow 5*...
+    - finding fwiends fow co-op.. (≧◡≦)
+
+# Launcher window
+launcher:
+  # Progress bar
+  progress:
+    pause: pause
+    resume: wesume
+
+    # Game installation
+    game:
+      downloading: downwoading game... -.-
+      unpacking: unpacking g-game (o^▽^o)
+      deleting_outdated: deweting outdated fiwes...
+      
+    # Voice packages installation
+    voice:
+      deleting: deweting voice packages...
+      downloading: downwoading {voice} voice package...
+      unpacking: u-unpacking {voice} voice package...
+
+  # Launcher states
+  states:
+    # When the game should be installed or updated
+    installation:
+      install_wine: install wine （＾O＾）
+      install_dxvk: install DXVK (◕ ω ◕✿)
+      install: install
+      update: u-update (／≧ ω＼)
+
+    # When the game should be patched
+    patching:
+      # Patch unavailable
+      unavailable:
+        title: patch unavaiwable
+        hint: this game vewsion has no anti-cheat patch.
+              pwease, w-wait a few days b-before there will b-be a t-test ow s-stable vewsion (⁄⁄>⁄▽⁄<⁄⁄)
+      
+      # Patch is in testing
+      test:
+        title: appwy test patch
+        hint: t-this game vewsion has an expewimentaw anti-cheat p-patch.
+              you can wait a few days untiw i-it is stable ow appwy it at youw own w-wisk
+
+      # Patch is stable
+      stable: appwy patch
+
+    # When the game is ready for playing
+    ready:
+      launch: launch (◕▿◕✿)
+      predownload: pwe-downwoad update
+
+  # Launcher update
+  update:
+    title: 'waunchew update avaiwable: {from} -> {to}'
+    body: you can downwoad the new vewsion of the waunchew fwom the pwoject's wepositowy at {repository}
+
+# Settings window
+settings:
+  # General
+  general:
+    title: genewaw
+    items:
+      # Language selection
+      lang:
+        # Launcher language
+        launcher:
+          title: waunchew
+          items:
+            en-us: English (US)
+            ru-ru: Русский
+            de-de: Deutsch
+            fr-fr: Français
+            it-it: Italiano
+            uwu: Engwish
+
+        # Game voice pack language
+        voice:
+          title: voice pack
+          tooltip: you will have to manuawwy sewect the new voice pack in the game
+          items:
+            en-us: engwish (us)
+            ja-jp: japanese
+            ko-kr: kowean
+            zn-cn: chinese
+
+      # Launcher theme
+      theme:
+        title: theme
+        items:
+          system: system
+          light: wight
+          dark: dawk
+      
+      # Discord RPC
+      discord:
+        title: discowd wpc
+        settings:
+          title: discowd wpc s-settings
+          items:
+            timer: show e-estimated time spent
+            in-launcher: waunchew text
+            in-game: In-game text
+            selectIcon: s-sewect icon
+
+      # Some buttons
+      buttons:
+        winetricks: winetwicks
+        winecfg: winecfg
+        launcher: waunchew f-fowdew
+        game: game f-fowdew
+
+  # Enhancements
+  enhancements:
+    title: enhancements
+    items:
+      # HUD
+      hud:
+        title: h-hud
+        items:
+          none: n-none
+          dxvk: DXVK
+          mangohud: MangoHUD
+      
+      # GameMode
+      gamemode:
+        title: use G-GameMode
+        tooltip:
+          enabled: it i-is a software t-that can impwove the game pewfowmance
+          disabled: ⚠️ you don't h-have g-gamemode package instawwed
+
+      # AMD FSR
+      fsr:
+        title: enable amd fsw
+        tooltip: this option enables a-amd fidewityfx s-super wesowution (fsw) which will scale youw game wesowution without wosing fps
+      
+      # Unlock FPS
+      fps_unlocker:
+        title: unwock FPS
+        tooltip: this option w-will unwock 60 f-fps w-wimitation o-of the game
+      
+      # Delete logs
+      purge_logs:
+        # Game logs (DXVK)
+        game:
+          title: dewete DXVK wogs
+          tooltip: with this option enabwed youw waunchew will a-automaticawwy
+                  dewete dxvk wog f-files
+
+        # Launcher logs
+        launcher:
+          title: dewete w-waunchew wogs
+          tooltip: amount of time after which waunchew will dewete i-it's owd wog files
+          items:
+            1d: 1 day
+            3d: 3 days
+            5d: 5 days
+            7d: 1 week
+            14d: 2 weeks
+            never: Never
+
+  # Runners
+  runners:
+    title: wine vewsion
+    items:
+      recommended:
+        title: show wecommended onwy
+        tooltip: this option will hide unpwayable wine vewsions
+
+  # DXVKs
+  dxvks:
+    title: DXVK
+    items:
+      recommended:
+        title: show wecommended onwy
+        tooltip: this option w-will hide owd dxvk vewsions
+
+  # Shaders
+  shaders:
+    title: s-shaders
+    items:
+      shaders:
+        title: s-shaders
+        tooltip: use home button t-to toggle shaders i-in the game
+        items:
+          none: n-none
+          custom: custom
+      
+      author: 'a-authow: {author}'
+      no_images: no images avaiwable
+      not_installed: you haven't instawwed vkbasawt and weshade-shaders wibwawy
+
+  # Environmantal variables manager
+  environment:
+    title: enviwonment
+    items:
+      # Table rows
+      table:
+        name: name
+        value: vawue
+      
+      # Table buttons
+      buttons:
+        add: add
+        delete: dewete

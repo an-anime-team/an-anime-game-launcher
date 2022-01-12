@@ -1,0 +1,217 @@
+# Окно загрузки
+splash:
+  title: Загрузка лаунчера
+  phrases:
+    - Делаем всякие важные штуки...
+    - Издеваемся над Паймон...
+    - Пытаемся получить Яэ...
+    - Собираем материалы...
+    - Проходим бездну...
+    - Коллекционируем достижения...
+    - Собираем физ чичу...
+    - Делаем жертвоприношения ради 5*...
+    - Ищем друзем для коопа...
+
+# Окно лаунчера
+launcher:
+  # Прогресс бар
+  progress:
+    pause: Пауза
+    resume: Продолжить
+
+    # Установка игры
+    game:
+      downloading: Скачивание игры...
+      unpacking: Распаковка игры...
+      deleting_outdated: Удаление устаревших файлов...
+
+    # Установка звуковых пакетов
+    voice:
+      deleting: Удаление звуковых пакетов...
+      downloading: Скачивание звукового пакета {voice}...
+      unpacking: Распаковка звукового пакета {voice}...
+
+  # Launcher states
+  states:
+    # Когда игра должна быть установлена или обновлена
+    installation:
+      install_wine: Установить Wine
+      install_dxvk: Установить DXVK
+      install: Установить
+      update: Обновить
+
+    # Когда игра должна быть пропатчена
+    patching:
+      # Патч недоступен
+      unavailable:
+        title: Патч недоступен
+        hint: Эта версия игры не имеет патча анти-чита.
+              Пожалуйста, подождите несколько дней пока не будет выпущена тестовая или стабильная версия
+      
+      # Патч тестируется
+      test:
+        title: Применить тестовый патч
+        hint: Эта версия игры имеет экспериментальный патч анти-чита.
+              Вы можете подождать пару дней пока не выйдет стабильная версия, или применить этот патч на свой страх и риск
+
+      # Патч стабилен
+      stable: Применить патч
+
+    # Когда всё готово
+    ready:
+      launch: Запустить
+      predownload: Предзагрузить обновление
+
+  # Обновление лаунчера
+  update:
+    title: 'Доступно обновление лаунчера: {from} -> {to}'
+    body: Вы можете загрузить новую версию лаунчера из репозитория проекта по ссылке {repository}
+
+# Окно настроек
+settings:
+  # Основное
+  general:
+    title: Основное
+    items:
+      # Выбор языка
+      lang:
+        # Лаунчер
+        launcher:
+          title: Лаунчер
+          items:
+            en-us: English (US)
+            ru-ru: Русский
+            de-de: Deutsch
+            fr-fr: Français
+            it-it: Italiano
+            uwu: Engwish
+
+        # Язык озвучки в игре
+        voice:
+          title: Язык озвучки
+          tooltip: Вам будет нужно вручную изменить язык озвучки в игре
+          items:
+            en-us: Английский (США)
+            ja-jp: Японский
+            ko-kr: Корейский
+            zn-cn: Китайский
+
+      # Тема лаунчера
+      theme:
+        title: Тема
+        items:
+          system: Системная
+          light: Светлая
+          dark: Тёмная
+      
+      # Discord RPC
+      discord:
+        title: Discord RPC
+        settings:
+          title: Настройки Discord RPC
+          items:
+            timer: Отображать потраченное время
+            in-launcher: Текст в лаунчере
+            in-game: Текст в игре
+            selectIcon: Выберите иконку
+
+      # Some buttons
+      buttons:
+        winetricks: winetricks
+        winecfg: winecfg
+        launcher: папка лаунчера
+        game: папка игры
+
+  # Улучшения
+  enhancements:
+    title: Улучшения
+    items:
+      # HUD
+      hud:
+        title: HUD
+        items:
+          none: Отключён
+          dxvk: DXVK
+          mangohud: MangoHUD
+      
+      # GameMode
+      gamemode:
+        title: Использовать GameMode
+        tooltip:
+          enabled: Это программа, которая может улучшить производительность игры
+          disabled: ⚠️ У вас не установлен пакет gamemode
+
+      # AMD FSR
+      fsr:
+        title: Включить AMD FSR
+        tooltip: Эта опция включает AMD FidelityFX Super Resolution (FSR),
+                 который может увеличить разрешение игры без потери кадров
+
+      # Разблокировать FPS
+      fps_unlocker:
+        title: Разблокировать FPS
+        tooltip: Эта опция позволит разблокировать лимит на отрисовку не более чем 60 кадров в секунду
+
+      # Удалять логи
+      purge_logs:
+        # Игры (DXVK)
+        game:
+          title: Удалять логи DXVK
+          tooltip: Если включено, лаунчер будет автоматически удалять логи DXVK
+
+        # Лаунчера
+        launcher:
+          title: Удалять логи лаунчера
+          tooltip: Время, после которого удалять старые логи лаунчера
+          items:
+            1d: 1 день
+            3d: 3 дня
+            5d: 5 дней
+            7d: 1 неделя
+            14d: 2 недели
+            never: Никогда
+
+  # Версии Wine
+  runners:
+    title: Версия Wine
+    items:
+      recommended:
+        title: Показывать только рекомендуемое
+        tooltip: Эта опция будет скрывать неиграбельные версии Wine
+  
+  # DXVK
+  dxvks:
+    title: DXVK
+    items:
+      recommended:
+        title: Показывать только рекомендуемое
+        tooltip: Эта опция будет скрывать устаревшие версии DXVK
+
+  # Шейдеры
+  shaders:
+    title: Шейдеры
+    items:
+      shaders:
+        title: Шейдеры
+        tooltip: Используйте кнопку Home чтобы переключать шейдеры в игре
+        items:
+          none: Отключены
+          custom: Кастомные
+
+      author: 'Автор: {author}'
+      no_images: Нет добавленных изображений
+      not_installed: У вас не установлены пакеты vkBasalt и reshade-shaders
+
+  # Менеджер переменных среды
+  environment:
+    title: Переменные среды
+    items:
+      # Столбцы таблицы
+      table:
+        name: Имя
+        value: Значение
+      
+      # Кнопки таблицы
+      buttons:
+        add: Добавить
+        delete: Удалить

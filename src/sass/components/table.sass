@@ -1,0 +1,73 @@
+@use "sass:map"
+
+@mixin themable($theme-name, $theme-map)
+    body[data-theme=#{$theme-name}]
+        table.table
+            width: calc(100% - 24px)
+
+            margin-left: 12px
+
+            border-spacing: 0
+
+            $cell-height: 40px
+            $padding-v: 4px
+            $padding-h: 8px
+
+            tr
+                height: $cell-height
+
+                cursor: pointer
+
+                &:hover
+                    background-color: map.get($theme-map, "background1")
+
+                    td
+                        input, textarea
+                            background-color: map.get($theme-map, "background1")
+
+                td:nth-of-type(1),
+                th:nth-of-type(1)
+                    width: 40%
+
+                th, td
+                    border-bottom: 1px solid map.get($theme-map, "background1")
+
+                    &:not(:last-child)
+                        border-right: 1px solid map.get($theme-map, "background1")
+
+                td
+                    span
+                        display: block
+
+                        width: calc(100% - 2 * $padding-h)
+                        height: calc($cell-height - 2 * $padding-h)
+
+                        margin: auto
+
+                    input, textarea
+                        display: block
+
+                        width: calc(100% - 2 * $padding-h)
+                        height: calc($cell-height - 2 * $padding-h)
+
+                        color: map.get($theme-map, "text")
+
+                        @if $theme-name == "dark"
+                            background-color: #434c5e
+
+                        font-size: 15px
+
+                        margin: auto
+                        border: unset
+                        outline: none
+
+                    textarea
+                        height: auto
+                        resize: none
+                        overflow: hidden
+
+@import "../themes/light"
+@import "../themes/dark"
+
+@include themable(light, $light)
+@include themable(dark, $dark)

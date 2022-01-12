@@ -1,0 +1,219 @@
+# Start Fenster
+splash:
+  title: Starte Launcher
+  phrases:
+    - Bruder, lass uns Genshin Impact spielen...
+    - Paimon am ärgern...
+    - Versuche Yae zu ziehen...
+    - Materialien farmen...
+    - Abyss bewältigen...
+    - Errungenschaften sammeln...
+    - Phys Qiqi erstellen...
+    - Opfer für 5* bringen...
+    - Freunde für Koop finden...
+
+# Launcher window
+launcher:
+  # Progress bar
+  progress:
+    pause: Pausieren
+    resume: Fortsetzen
+    
+    # Game installation
+    game:
+      downloading: Spiel ist am herunterladen...
+      unpacking: Spiel wird entpackt...
+      deleting_outdated: Lösche veraltete dateien...
+    
+    # Voice packages installation
+    voice:
+      deleting: Lösche Sprachpakete...
+      downloading: Sprachpaket {voice} wird heruntergeladen...
+      unpacking: Sprachpaket {voice} wird entpackt..
+
+  # Launcher states
+  states:
+    # When the game should be installed or updated
+    installation:
+      install_wine: Wine installieren
+      install_dxvk: DXVK installieren
+      install: Installieren
+      update: Updaten
+
+    # When the game should be patched
+    patching:
+      # Patch unavailable
+      unavailable:
+        title: Patch nicht verfügbar
+        hint: Diese Spielversion hat kein patch zu verfügung.
+              Bitte warte ein paar Tage um zusehen ob ein test oder stabil Patch veröffentlicht worde.
+      
+      # Patch is in testing
+      test:
+        title: Test Patch anwenden
+        hint: Diese Spielversion hat ein Test Patch verfügbar.
+              Sie können ein paar Tage warten um den Stabilen patch zu installieren oder sie können den Test Patch installieren und ihr Account riskieren.
+
+      # Patch is stable
+      stable: Patch anwenden
+
+    # When the game is ready for playing
+    ready:
+      launch: Starten
+      predownload: Update vorinstallieren
+
+  # Launcher update
+  update:
+    title: 'Launcher update verfügbar: {from} -> {to}'
+    body: Sie können das update von {repository} herunterladen
+
+# Einstellungs Fenster
+settings:
+  # General
+  general:
+    title: General
+    items:
+      # Sprach-Auswahl
+      lang:
+        # Launcher sprache
+        launcher:
+          title: Launcher
+          items:
+            en-us: Englisch (US)
+            ru-ru: Russisch
+            de-de: Deutsch
+            fr-fr: Français
+            it-it: Italiano
+            uwu: Engwish
+
+        # Spiel sprachpaket auswahl
+        voice:
+          title: Sprachpaket
+          tooltip: Bitte wähle im Spiel das Sprachpaket aus um es zu benutzen
+          items:
+            en-us: Englisch (US)
+            ja-jp: Japanisch
+            ko-kr: Koreanische
+            zn-cn: Chinesisch
+
+      # Launcher thema
+      theme:
+        title: Thema
+        items:
+          system: System
+          light: Hell
+          dark: Dunkel
+      
+      # Discord RPC
+      discord:
+        title: Discord RPC
+        settings:
+          title: Discord RPC Einstellung
+          items:
+            timer: Zeige geschätzte Zeit
+            in-launcher: Launcher text
+            in-game: im Spiel text
+            selectIcon: Icon auswählen
+
+      # Some buttons
+      buttons:
+        winetricks: winetricks
+        winecfg: winecfg
+        launcher: Launcher Ordner öffnen
+        game: Spiel Ordner öffnen
+
+  # Verberssungen
+  enhancements:
+    title: Verbesserungen
+    items:
+      # HUD
+      hud:
+        title: HUD
+        items:
+          none: Aus
+          dxvk: DXVK
+          mangohud: MangoHUD
+      
+      # GameMode
+      gamemode:
+        title: Benutze GameMode
+        tooltip:
+          enabled: GameMode ist ein Program welches die Leistung verbessert
+          disabled: ⚠️ Sie haben GameMode nicht installiert
+
+      # AMD FSR
+      fsr:
+        title: AMD FSR
+        tooltip: Diese Option aktiviert AMD FidelityFX Super Resolution (FSR),
+                 womit kleine Resolution hochskaliert wird um FPS-verlust zu vermeiden.
+      
+      # Unlock FPS
+      fps_unlocker:
+        title: Entsperre FPS
+        tooltip: Diese option entsperrt/entfernt die 60 FPS limiterung
+      
+      # Delete logs
+      purge_logs:
+        # Game logs (DXVK)
+        game:
+          title: DXVK logs löschen
+          tooltip: When diese option angeschaltet ist löscht
+                  der Launcher automatisch alle DXVK logs
+
+        # Launcher logs
+        launcher:
+          title: Launcher logs löschen
+          tooltip: Launcher logs werden nach diese angegebenen Zeit gelöscht
+          items:
+            1d: 1 Tag
+            3d: 3 Tage
+            5d: 5 Tage
+            7d: 1 Woche
+            14d: 2 Wochen
+            never: Niemals
+
+  # Runners
+  runners:
+    title: Wine version
+    items:
+      recommended:
+        title: Nur empfohlene anzeigen
+        tooltip: Falls diese option eingeschaltet ist werden nur Wine versionen angezeigt
+                 die funktioneren.
+
+  # DXVKs
+  dxvks:
+    title: DXVK
+    items:
+      recommended:
+        title: Nur empfohlene anzeigen
+        tooltip: Falls diese option eingeschaltet ist werden alte DXVK versionen nicht angezeigt
+
+  # Shaders
+  shaders:
+    title: Shaders
+    items:
+      shaders:
+        title: Shaders
+        tooltip: Benutze die Home/POS1 taste um die Shader in-spiel zu togglen
+        items:
+          none: Aus
+          custom: Custom
+
+      author: 'Autor: {author}'
+      no_images: Keine Bilder verfügbar
+      not_installed: Sie haben vkBasalt und Reshade-Shader nicht installiert
+
+  # Environmantal variables manager
+  environment:
+    title: Umgebungsvariablen
+    items:
+      # Table rows
+      table:
+        name: Name
+        value: Wert
+      
+      # Table buttons
+      buttons:
+        add: Hinzufügen
+        delete: Löschen

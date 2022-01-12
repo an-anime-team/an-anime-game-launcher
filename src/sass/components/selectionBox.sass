@@ -1,0 +1,132 @@
+@use "sass:map"
+
+@mixin themable($theme-name, $theme-map)
+    body[data-theme=#{$theme-name}]
+        .select
+            display: inline-flex
+            align-items: center
+
+            font-size: larger
+
+            width: calc(100% - 24px)
+            height: 48px
+            padding: 0 12px
+
+            border-radius: 12px
+
+            .select-options
+                position: absolute
+                display: none
+
+                max-height: 230px
+                overflow: auto
+
+                background-color: map.get($theme-map, "select-boxes")
+                border-radius: 12px
+
+                box-shadow: 0 1px 8px 0 rgba(0, 0, 0, .2)
+
+                padding: 8px 12px
+                transform: translateY(calc(50% + 32px))
+
+                right: 32px
+
+                cursor: pointer
+
+                z-index: 1
+
+                @if $theme-name == dark
+                    &::-webkit-scrollbar-track
+                        background-color: map.get($theme-map, "background2")
+
+                    &::-webkit-scrollbar-thumb
+                        background: #d8dee9
+
+                        &:hover
+                            background: #e5e9f0
+
+                ul
+                    list-style: none
+
+                    padding: 0
+                    margin: 0
+
+                    li
+                        color: map.get($theme-map, "text")
+                        font-size: smaller
+
+                        border-radius: 8px
+
+                        min-width: 120px
+                        padding: 8px 12px
+
+                        // margin-right: 8px
+
+                        &:hover:not([disabled])
+                            background-color: map.get($theme-map, "background2")
+                            color: map.get($theme-map, "primary")
+
+                        &[disabled]
+                            display: block
+                            color: #b2c0d3
+                            cursor: default
+
+                    li:not(:last-child)
+                        margin-bottom: 4px
+
+                    li.selected
+                        background-color: map.get($theme-map, "background2")
+                        color: map.get($theme-map, "primary")
+
+            .selected-item
+                display: flex
+                align-items: baseline
+
+                font-size: initial
+
+                background-color: map.get($theme-map, "background2")
+
+                border-radius: 16px
+                margin-left: auto
+                padding: 8px 16px
+
+                cursor: pointer
+
+                &:hover
+                    background-color: map.get($theme-map, "primary")
+
+                    span
+                        color: white
+
+                    img
+                        filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(219deg) brightness(102%) contrast(104%)
+
+                img
+                    height: 12px
+                    width: 12px
+
+                    margin-left: 8px
+
+                    transform: rotate(90deg)
+
+                    @if $theme-name == dark
+                        filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(219deg) brightness(102%) contrast(104%)
+
+        .select-active
+            .selected-item
+                background-color: map.get($theme-map, "primary")
+
+                span
+                    color: white
+
+                img
+                    filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(219deg) brightness(102%) contrast(104%)
+
+            .select-options
+                display: block
+
+@import "../themes/light"
+@import "../themes/dark"
+
+@include themable(light, $light)
+@include themable(dark, $dark)

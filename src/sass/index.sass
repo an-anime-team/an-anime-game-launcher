@@ -1,5 +1,11 @@
 @import "basic"
+
+img.background
+    position: absolute
     
+    width: 100%
+    height: 100%
+
 #info
     position: absolute
     
@@ -34,16 +40,35 @@
 .button-blue:hover:not([disabled])
     background-color: #7284b6
 
-#launch
-    width: 238px
-    height: 64px
-    
-    font-size: 22px
-
+#launch, #pause
     position: absolute
 
+    width: 238px
+    height: 64px
+
     right: 128px
-    bottom: 64px
+    bottom: 48px
+
+    font-size: 22px
+
+#pause
+    display: none
+
+#predownload
+    position: absolute
+    display: none
+
+    width: 52px
+    height: 52px
+
+    right: 386px
+    bottom: 54px
+
+    border-radius: 32px
+
+    img
+        width: 60%
+        margin: auto
 
 #settings
     width: 76px
@@ -75,37 +100,14 @@
     .unactive
         display: none
 
-.progress-bar
-    padding: 0
-
-    background-color: rgba(0, 0, 0, .1)
-    border: 1px solid rgba(0, 0, 0, .2)
-    border-radius: 8px
-
-    .progress
-        width: 0
-        height: 100%
-
-        background-color: rgba(255, 255, 255, .7)
-        border-radius: 6px
-
-#downloader-panel
+.downloader-panel
     user-select: none
 
-    #downloader
+    .downloader-label
         position: absolute
 
         left: 48px
-        bottom: 68px
-
-        width: 720px
-        height: 36px
-
-    #downloader-label
-        position: absolute
-
-        left: 48px
-        bottom: 116px
+        bottom: 100px
 
         color: white
         font-size: 18px
@@ -120,7 +122,30 @@
             color: #cccccc
             font-weight: 100
 
-#downloader-panel.dark
+    .progress-bar
+        position: absolute
+
+        padding: 0
+
+        left: 48px
+        bottom: 52px
+
+        width: 720px
+        height: 36px
+
+        background-color: rgba(0, 0, 0, .1)
+        border: 1px solid rgba(0, 0, 0, .2)
+        border-radius: 8px
+
+        .progress
+            width: 0
+            height: 100%
+
+            background-color: rgba(255, 255, 255, .7)
+            border-radius: 6px
+
+
+/*#downloader-panel.dark
     #downloader-label
         #downloaded, #speed, #eta
             color: rgba(0, 0, 0, .7)

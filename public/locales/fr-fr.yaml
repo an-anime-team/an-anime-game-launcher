@@ -1,0 +1,224 @@
+# Splash window
+splash:
+  title: Changement en cours
+  phrases:
+    - En train de faire des choses importantes...
+    - Cuisson de Paimon en cours...
+    - Invocation en masse pour Yae...
+    - Collecte des matériaux...
+    - Passage de l'Abysse..
+    - Collecte des succès...
+    - Équipage de Qiqi qu'en DGT...
+    - Préparation de sacrifices pour un 5*...
+    - Recherche d'amis pour de la Co-op...
+
+# Launcher window
+launcher:
+  # Progress bar
+  progress:
+    pause: Pause
+    resume: Continuer
+
+    # Game installation
+    game:
+      downloading: Téléchargement du jeu...
+      unpacking: Décompression du jeu...
+      deleting_outdated: Suppression des fichiers non à jour...
+
+    # Voice packages installation
+    voice:
+      deleting: Suppression des pack de voix...
+      downloading: 'Téléchargement du pack de voix : {voice}...'
+      unpacking: 'Décompression du pack de voix : {voice}...'
+
+  # Launcher states
+  states:
+    # When the game should be installed or updated
+    installation:
+      install_wine: Installer Wine
+      install_dxvk: Installer DXVK
+      install: Installer
+      update: Mise à jour
+
+    # When the game should be patched
+    patching:
+      # Patch unavailable
+      unavailable:
+        title: Patch non disponible
+        hint: Cette version du jeu n'a pas de patch contre l'anti triche, 
+              merci de bien vouloir patienter quelques jours puis réessayez
+      
+      # Patch is in testing
+      test:
+        title: Appliquer le patch en teste
+        hint: Cette version du jeu a un patch contre l'anti triche, 
+              mais celui-ci est en période de teste. 
+              Vous pouvez patienter ou bien l'utilisé à vos risques et périls.
+
+      # Patch is stable
+      stable: Appliquer le patch
+
+    # When the game is ready for playing
+    ready:
+      launch: Lancer
+      predownload: Pre-téléchargement de mise à jour
+
+  # Launcher update
+  update:
+    title: 'Mise à jour du Launcher disponible: {from} -> {to}'
+    body: Vous pouvez télécharger la nouvelle version du launcher via le dépôt ici {repository}
+
+# Settings window
+settings:
+  # General
+  general:
+    title: Générale
+    items:
+      # Language selection
+      lang:
+        # Launcher language
+        launcher:
+          title: Launcher
+          items:
+            en-us: English (US)
+            ru-ru: Русский
+            de-de: Deutsch
+            fr-fr: Français
+            it-it: Italiano
+            uwu: Engwish
+
+        # Game voice pack language
+        voice:
+          title: Pack de voix
+          tooltip: Le choix des voix utilisées sont à modifier 
+                   manuellement dans le jeu
+          items:
+            en-us: Anglaise (US)
+            ja-jp: Japonaise
+            ko-kr: Coréen
+            zn-cn: Chinoise
+
+      # Launcher theme
+      theme:
+        title: Thème
+        items:
+          system: Système
+          light: Lumineux
+          dark: Sombre
+      
+      # Discord RPC
+      discord:
+        title: Intégration Discord
+        settings:
+          title: Intégration Discord paramètres
+          items:
+            timer: Afficher le temps écouler
+            in-launcher: Texte dans le launcher
+            in-game: Texte dans le jeu
+            selectIcon: Sélection d'icone
+
+      # Some buttons
+      buttons:
+        winetricks: winetricks
+        winecfg: winecfg
+        launcher: Dossier du Launcher
+        game: Dossier du jeu
+
+  # Enhancements
+  enhancements:
+    title: Améliorations
+    items:
+      # HUD
+      hud:
+        title: Interface
+        items:
+          none: None
+          dxvk: DXVK
+          mangohud: MangoHUD
+      
+      # GameMode
+      gamemode:
+        title: Utiliser GameMode
+        tooltip:
+          enabled: C'est un logiciel qui permet d'améliorer les performances en jeu
+          disabled: ⚠️ Vous n'avez pas le paquet "gamemode" d'installer
+
+      # AMD FSR
+      fsr:
+        title: Activer AMD FSR
+        tooltip: Cette option active "AMD FidelityFX Super Resolution" (FSR)
+                 ce qui permet d'augmenter votre résolution sans perdre des FPS (images par secondes)
+      
+      # Unlock FPS
+      fps_unlocker:
+        title: Débloquer les IPS (FPS)
+        tooltip: Cette option permet de débloque le nombre d'image par 
+                 secondes (IPS) au-delà de 60
+      
+      # Delete logs
+      purge_logs:
+        # Game logs (DXVK)
+        game:
+          title: Supprimer automatiquement les logs de DXVK
+          tooltip: Cette option supprime automatiquement les 
+                  fichiers logs de DXVK
+
+        # Launcher logs
+        launcher:
+          title: Suppression des fichiers logs
+          tooltip: Intervalle entre chaque suppression de fichier logs du launcher
+          items:
+            1d: Tous les jours
+            3d: Tous les 3 jours
+            5d: Tous les 5 jours
+            7d: Toutes les semaines
+            14d: Toutes les 2 semaines
+            never: Jamais
+
+  # Runners
+  runners:
+    title: Version de Wine
+    items:
+      recommended:
+        title: Afficher les versions recommandées seulement
+        tooltip: Cette option masque les versions de Wine 
+                 non testées ou qui ne fonctionnent pas
+
+  # DXVKs
+  dxvks:
+    title: DXVK
+    items:
+      recommended:
+        title: Afficher les versions recommandées seulement
+        tooltip: Cette option masque les versions de DXVK 
+                 non testées ou qui ne fonctionnent pas
+
+  # Shaders
+  shaders:
+    title: Effets Visuels
+    items:
+      shaders:
+        title: Effets Visuels
+        tooltip: Utilisez la touche début (home) activer 
+                 ou désactiver les effets visuels
+        items:
+          none: None
+          custom: Custom
+
+      author: 'Auteur: {author}'
+      no_images: Aucune image ajoutée
+      not_installed: Vous n'avez les paquets "vkBasalt" et "reshade-shader library" d'installer
+
+  # Environmantal variables manager
+  environment:
+    title: Environnement
+    items:
+      # Table rows
+      table:
+        name: Nom
+        value: Valeur
+      
+      # Table buttons
+      buttons:
+        add: Ajouter
+        delete: Supprimer

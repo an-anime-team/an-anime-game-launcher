@@ -2,17 +2,19 @@
 
 @import "basic"
 
-@import "themes/light"
-@import "themes/dark"
-
 @mixin themable($theme-name, $theme-map)
     $menu-background: white
 
     @if $theme-name == dark
         $menu-background: #434c5e
 
-    body[theme=#{$theme-name}]
+    body[data-theme=#{$theme-name}]
         background-color: map.get($theme-map, "background")
+
+        color: map.get($theme-map, "text")
+
+        p, span, div
+            color: map.get($theme-map, "text")
 
         @if $theme-name == dark
             &::-webkit-scrollbar-track
@@ -121,6 +123,8 @@
 
                         margin-right: 4px
 
+@import "themes/light"
+@import "themes/dark"
 
 @include themable(light, $light)
 @include themable(dark, $dark)

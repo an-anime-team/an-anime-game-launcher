@@ -1,138 +1,227 @@
 [
     {
+        "title": "Wine-GE",
+        "runners": [
+            {
+                "family": "Wine-GE",
+                "name": "lutris-ge-6.21-1-x86_64",
+                "title": "Wine 6.21 GE 1",
+                "uri": "https://github.com/GloriousEggroll/wine-ge-custom/releases/download/6.21-GE-1/wine-lutris-ge-6.21-1-x86_64.tar.xz",
+                "files": {
+                    "wine": "bin/wine64",
+                    "wineserver": "bin/wineserver",
+                    "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
+                },
+                "recommended": false
+            },
+            {
+                "family": "Wine-GE",
+                "name": "lutris-ge-6.20-1-x86_64",
+                "title": "Wine 6.20 GE 1",
+                "uri": "https://github.com/GloriousEggroll/wine-ge-custom/releases/download/6.20-GE-1/wine-lutris-ge-6.20-1-x86_64.tar.xz",
+                "files": {
+                    "wine": "bin/wine64",
+                    "wineserver": "bin/wineserver",
+                    "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
+                },
+                "recommended": true
+            },
+            {
+                "family": "Wine-GE",
+                "name": "lutris-ge-6.19-1-x86_64",
+                "title": "Wine 6.19 GE 1",
+                "uri": "https://github.com/GloriousEggroll/wine-ge-custom/releases/download/6.19-GE-1/wine-lutris-ge-6.19-1-x86_64.tar.xz",
+                "files": {
+                    "wine": "bin/wine64",
+                    "wineserver": "bin/wineserver",
+                    "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
+                },
+                "recommended": true
+            },
+            {
+                "family": "Wine-GE",
+                "name": "lutris-ge-6.18-1-x86_64",
+                "title": "Wine 6.18 GE 1",
+                "uri": "https://github.com/GloriousEggroll/wine-ge-custom/releases/download/6.18-GE-1/wine-lutris-ge-6.18-1-x86_64.tar.xz",
+                "files": {
+                    "wine": "bin/wine64",
+                    "wineserver": "bin/wineserver",
+                    "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
+                },
+                "recommended": true
+            },
+            {
+                "family": "Wine-GE",
+                "name": "lutris-ge-6.16-1-x86_64",
+                "title": "Wine 6.16 GE 1",
+                "uri": "https://github.com/GloriousEggroll/wine-ge-custom/releases/download/6.16-GE-1/lutris-ge-6.16-1-x86_64.tar.xz",
+                "files": {
+                    "wine": "bin/wine64",
+                    "wineserver": "bin/wineserver",
+                    "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
+                },
+                "recommended": true
+            }
+        ]
+    },
+    {
         "title": "Lutris",
         "runners": [
             {
-                "name": "Lutris 6.21-5",
-                "version": "6.21-5",
+                "family": "Lutris",
+                "name": "lutris-6.21-6-x86_64",
+                "title": "Lutris 6.21-6",
+                "uri": "https://github.com/lutris/wine/releases/download/lutris-6.21-6/wine-lutris-6.21-6-x86_64.tar.xz",
+                "files": {
+                    "wine": "bin/wine64",
+                    "wineserver": "bin/wineserver",
+                    "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
+                },
+                "recommended": true
+            },
+            {
+                "family": "Lutris",
+                "name": "lutris-6.21-5-x86_64",
+                "title": "Lutris 6.21-5",
                 "uri": "https://github.com/lutris/wine/releases/download/lutris-6.21-5/wine-lutris-6.21-5-x86_64.tar.xz",
-                "archive": "tar",
-                "folder": "lutris-6.21-5-x86_64",
-                "makeFolder": false,
-                "executable": "bin/wine64",
-                "winecfg": "lib64/wine/x86_64-windows/winecfg.exe",
-                "recommendable": false
+                "files": {
+                    "wine": "bin/wine64",
+                    "wineserver": "bin/wineserver",
+                    "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
+                },
+                "recommended": true
             },
             {
-                "name": "Lutris 6.21-4",
-                "version": "6.21-4",
+                "family": "Lutris",
+                "name": "lutris-6.21-4-x86_64",
+                "title": "Lutris 6.21-4",
                 "uri": "https://github.com/lutris/wine/releases/download/lutris-6.21-4/wine-lutris-6.21-4-x86_64.tar.xz",
-                "archive": "tar",
-                "folder": "lutris-6.21-4-x86_64",
-                "makeFolder": false,
-                "executable": "bin/wine64",
-                "winecfg": "lib64/wine/x86_64-windows/winecfg.exe",
-                "recommendable": false
+                "files": {
+                    "wine": "bin/wine64",
+                    "wineserver": "bin/wineserver",
+                    "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
+                },
+                "recommended": false
             },
             {
-                "name": "Lutris 6.21-3",
-                "version": "6.21-3",
+                "family": "Lutris",
+                "name": "lutris-6.21-3-x86_64",
+                "title": "Lutris 6.21-3",
                 "uri": "https://github.com/lutris/wine/releases/download/lutris-6.21-3/wine-lutris-6.21-3-x86_64.tar.xz",
-                "archive": "tar",
-                "folder": "lutris-6.21-3-x86_64",
-                "makeFolder": false,
-                "executable": "bin/wine64",
-                "winecfg": "lib64/wine/x86_64-windows/winecfg.exe",
-                "recommendable": false
+                "files": {
+                    "wine": "bin/wine64",
+                    "wineserver": "bin/wineserver",
+                    "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
+                },
+                "recommended": false
             },
             {
-                "name": "Lutris 6.21-2",
-                "version": "6.21-2",
+                "family": "Lutris",
+                "name": "lutris-6.21-2-x86_64",
+                "title": "Lutris 6.21-2",
                 "uri": "https://github.com/lutris/wine/releases/download/lutris-6.21-2/wine-lutris-6.21-2-x86_64.tar.xz",
-                "archive": "tar",
-                "folder": "lutris-6.21-2-x86_64",
-                "makeFolder": false,
-                "executable": "bin/wine64",
-                "winecfg": "lib64/wine/x86_64-windows/winecfg.exe",
-                "recommendable": false
+                "files": {
+                    "wine": "bin/wine64",
+                    "wineserver": "bin/wineserver",
+                    "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
+                },
+                "recommended": false
             },
             {
-                "name": "Lutris 6.21",
-                "version": "6.21",
+                "family": "Lutris",
+                "name": "lutris-6.21-x86_64",
+                "title": "Lutris 6.21",
                 "uri": "https://github.com/lutris/wine/releases/download/lutris-6.21/wine-lutris-6.21-x86_64.tar.xz",
-                "archive": "tar",
-                "folder": "lutris-6.21-x86_64",
-                "makeFolder": false,
-                "executable": "bin/wine64",
-                "winecfg": "lib64/wine/x86_64-windows/winecfg.exe",
-                "recommendable": false
+                "files": {
+                    "wine": "bin/wine64",
+                    "wineserver": "bin/wineserver",
+                    "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
+                },
+                "recommended": false
             },
             {
-                "name": "Lutris 6.14-4",
-                "version": "6.14-4",
+                "family": "Lutris",
+                "name": "lutris-6.14-4-x86_64",
+                "title": "Lutris 6.14-4",
                 "uri": "https://github.com/lutris/wine/releases/download/lutris-6.14-4/wine-lutris-6.14-4-x86_64.tar.xz",
-                "archive": "tar",
-                "folder": "lutris-6.14-4-x86_64",
-                "makeFolder": false,
-                "executable": "bin/wine64",
-                "winecfg": "lib64/wine/x86_64-windows/winecfg.exe",
-                "recommendable": true
+                "files": {
+                    "wine": "bin/wine64",
+                    "wineserver": "bin/wineserver",
+                    "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
+                },
+                "recommended": true
             },
             {
-                "name": "Lutris 6.14-3",
-                "version": "6.14-3",
+                "family": "Lutris",
+                "name": "lutris-6.14-3-x86_64",
+                "title": "Lutris 6.14-3",
                 "uri": "https://github.com/lutris/wine/releases/download/lutris-6.14-3/wine-lutris-6.14-3-x86_64.tar.xz",
-                "archive": "tar",
-                "folder": "lutris-6.14-3-x86_64",
-                "makeFolder": false,
-                "executable": "bin/wine64",
-                "winecfg": "lib64/wine/x86_64-windows/winecfg.exe",
-                "recommendable": true
+                "files": {
+                    "wine": "bin/wine64",
+                    "wineserver": "bin/wineserver",
+                    "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
+                },
+                "recommended": true
             },
             {
-                "name": "Lutris 6.14-2",
-                "version": "6.14-2",
+                "family": "Lutris",
+                "name": "lutris-6.14-2-x86_64",
+                "title": "Lutris 6.14-2",
                 "uri": "https://github.com/lutris/wine/releases/download/lutris-6.14-2/wine-lutris-6.14-2-x86_64.tar.xz",
-                "archive": "tar",
-                "folder": "lutris-6.14-2-x86_64",
-                "makeFolder": false,
-                "executable": "bin/wine64",
-                "winecfg": "lib64/wine/x86_64-windows/winecfg.exe",
-                "recommendable": true
+                "files": {
+                    "wine": "bin/wine64",
+                    "wineserver": "bin/wineserver",
+                    "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
+                },
+                "recommended": true
             },
             {
-                "name": "Lutris 6.14",
-                "version": "6.14",
+                "family": "Lutris",
+                "name": "lutris-6.14-x86_64",
+                "title": "Lutris 6.14",
                 "uri": "https://github.com/lutris/wine/releases/download/lutris-6.14/wine-lutris-6.14-x86_64.tar.xz",
-                "archive": "tar",
-                "folder": "lutris-6.14-x86_64",
-                "makeFolder": false,
-                "executable": "bin/wine64",
-                "winecfg": "lib64/wine/x86_64-windows/winecfg.exe",
-                "recommendable": true
+                "files": {
+                    "wine": "bin/wine64",
+                    "wineserver": "bin/wineserver",
+                    "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
+                },
+                "recommended": true
             },
             {
-                "name": "Lutris 6.13-3",
-                "version": "6.13-3",
+                "family": "Lutris",
+                "name": "lutris-6.13-3-x86_64",
+                "title": "Lutris 6.13-3",
                 "uri": "https://github.com/lutris/wine/releases/download/lutris-6.13-3/wine-lutris-6.13-3-x86_64.tar.xz",
-                "archive": "tar",
-                "folder": "lutris-6.13-3-x86_64",
-                "makeFolder": false,
-                "executable": "bin/wine64",
-                "winecfg": "lib64/wine/x86_64-windows/winecfg.exe",
-                "recommendable": false
+                "files": {
+                    "wine": "bin/wine64",
+                    "wineserver": "bin/wineserver",
+                    "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
+                },
+                "recommended": false
             },
             {
-                "name": "Lutris 6.13-2",
-                "version": "6.13-2",
+                "family": "Lutris",
+                "name": "lutris-6.13-2-x86_64",
+                "title": "Lutris 6.13-2",
                 "uri": "https://github.com/lutris/wine/releases/download/lutris-6.13-2/wine-lutris-6.13-2-x86_64.tar.xz",
-                "archive": "tar",
-                "folder": "lutris-6.13-2-x86_64",
-                "makeFolder": false,
-                "executable": "bin/wine64",
-                "winecfg": "lib64/wine/x86_64-windows/winecfg.exe",
-                "recommendable": false
+                "files": {
+                    "wine": "bin/wine64",
+                    "wineserver": "bin/wineserver",
+                    "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
+                },
+                "recommended": false
             },
             {
-                "name": "Lutris 6.13",
-                "version": "6.13",
+                "family": "Lutris",
+                "name": "lutris-6.13-x86_64",
+                "title": "Lutris 6.13",
                 "uri": "https://github.com/lutris/wine/releases/download/lutris-6.13/wine-lutris-6.13-x86_64.tar.xz",
-                "archive": "tar",
-                "folder": "lutris-6.13-x86_64",
-                "makeFolder": false,
-                "executable": "bin/wine64",
-                "winecfg": "lib64/wine/x86_64-windows/winecfg.exe",
-                "recommendable": false
+                "files": {
+                    "wine": "bin/wine64",
+                    "wineserver": "bin/wineserver",
+                    "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
+                },
+                "recommended": false
             }
         ]
     },
@@ -140,136 +229,88 @@
         "title": "Proton-GE",
         "runners": [
             {
+                "family": "Proton-GE",
                 "name": "Proton-6.21-GE-2",
-                "version": "6.21-GE-2",
+                "title": "Proton 6.21 GE 2",
                 "uri": "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/6.21-GE-2/Proton-6.21-GE-2.tar.gz",
-                "archive": "tar",
-                "folder": "Proton-6.21-GE-2",
-                "makeFolder": false,
-                "executable": "files/bin/wine64",
-                "winecfg": "files/lib64/wine/x86_64-windows/winecfg.exe",
-                "recommendable": false
+                "files": {
+                    "wine": "files/bin/wine64",
+                    "wineserver": "files/bin/wineserver",
+                    "winecfg": "files/lib64/wine/x86_64-windows/winecfg.exe"
+                },
+                "recommended": true
             },
             {
+                "family": "Proton-GE",
                 "name": "Proton-6.20-GE-1",
-                "version": "6.20-GE-1",
+                "title": "Proton 6.20 GE 1",
                 "uri": "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/6.20-GE-1/Proton-6.20-GE-1.tar.gz",
-                "archive": "tar",
-                "folder": "Proton-6.20-GE-1",
-                "makeFolder": false,
-                "executable": "files/bin/wine64",
-                "winecfg": "files/lib64/wine/x86_64-windows/winecfg.exe",
-                "recommendable": true
+                "files": {
+                    "wine": "files/bin/wine64",
+                    "wineserver": "files/bin/wineserver",
+                    "winecfg": "files/lib64/wine/x86_64-windows/winecfg.exe"
+                },
+                "recommended": true
             },
             {
+                "family": "Proton-GE",
                 "name": "Proton-6.19-GE-2",
-                "version": "6.19-GE-2",
+                "title": "Proton 6.19 GE 2",
                 "uri": "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/6.19-GE-2/Proton-6.19-GE-2.tar.gz",
-                "archive": "tar",
-                "folder": "Proton-6.19-GE-2",
-                "makeFolder": false,
-                "executable": "files/bin/wine64",
-                "winecfg": "files/lib64/wine/x86_64-windows/winecfg.exe",
-                "recommendable": false
+                "files": {
+                    "wine": "files/bin/wine64",
+                    "wineserver": "files/bin/wineserver",
+                    "winecfg": "files/lib64/wine/x86_64-windows/winecfg.exe"
+                },
+                "recommended": true
             },
             {
+                "family": "Proton-GE",
                 "name": "Proton-6.19-GE-1",
-                "version": "6.19-GE-1",
+                "title": "Proton 6.19 GE 1",
                 "uri": "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/6.19-GE-1/Proton-6.19-GE-1.tar.gz",
-                "archive": "tar",
-                "folder": "Proton-6.19-GE-1",
-                "makeFolder": false,
-                "executable": "files/bin/wine64",
-                "winecfg": "files/lib64/wine/x86_64-windows/winecfg.exe",
-                "recommendable": false
+                "files": {
+                    "wine": "files/bin/wine64",
+                    "wineserver": "files/bin/wineserver",
+                    "winecfg": "files/lib64/wine/x86_64-windows/winecfg.exe"
+                },
+                "recommended": true
             },
             {
+                "family": "Proton-GE",
                 "name": "Proton-6.18-GE-2",
-                "version": "6.18-GE-2",
+                "title": "Proton 6.18 GE 2",
                 "uri": "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/6.18-GE-2/Proton-6.18-GE-2.tar.gz",
-                "archive": "tar",
-                "folder": "Proton-6.18-GE-2",
-                "makeFolder": false,
-                "executable": "files/bin/wine64",
-                "winecfg": "files/lib64/wine/x86_64-windows/winecfg.exe",
-                "recommendable": false
+                "files": {
+                    "wine": "files/bin/wine64",
+                    "wineserver": "files/bin/wineserver",
+                    "winecfg": "files/lib64/wine/x86_64-windows/winecfg.exe"
+                },
+                "recommended": true
             },
             {
+                "family": "Proton-GE",
                 "name": "Proton-6.18-GE-1",
-                "version": "6.18-GE-1",
+                "title": "Proton 6.18 GE 1",
                 "uri": "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/6.18-GE-1/Proton-6.18-GE-1.tar.gz",
-                "archive": "tar",
-                "folder": "Proton-6.18-GE-1",
-                "makeFolder": false,
-                "executable": "files/bin/wine64",
-                "winecfg": "files/lib64/wine/x86_64-windows/winecfg.exe",
-                "recommendable": false
+                "files": {
+                    "wine": "files/bin/wine64",
+                    "wineserver": "files/bin/wineserver",
+                    "winecfg": "files/lib64/wine/x86_64-windows/winecfg.exe"
+                },
+                "recommended": true
             },
             {
+                "family": "Proton-GE",
                 "name": "Proton-6.16-GE-1",
-                "version": "6.16-GE-1",
+                "title": "Proton 6.16 GE 1",
                 "uri": "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/6.16-GE-1/Proton-6.16-GE-1.tar.gz",
-                "archive": "tar",
-                "folder": "Proton-6.16-GE-1",
-                "makeFolder": false,
-                "executable": "files/bin/wine64",
-                "winecfg": "files/lib64/wine/x86_64-windows/winecfg.exe",
-                "recommendable": false
-            },
-            {
-                "name": "Proton-6.15-GE-2",
-                "version": "6.15-GE-2",
-                "uri": "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/6.15-GE-2/Proton-6.15-GE-2.tar.gz",
-                "archive": "tar",
-                "folder": "Proton-6.15-GE-2",
-                "makeFolder": false,
-                "executable": "files/bin/wine64",
-                "winecfg": "files/lib64/wine/x86_64-windows/winecfg.exe",
-                "recommendable": false
-            },
-            {
-                "name": "Proton-6.15-GE-1",
-                "version": "6.15-GE-1",
-                "uri": "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/6.15-GE-1/Proton-6.15-GE-1.tar.gz",
-                "archive": "tar",
-                "folder": "Proton-6.15-GE-1",
-                "makeFolder": false,
-                "executable": "files/bin/wine64",
-                "winecfg": "files/lib64/wine/x86_64-windows/winecfg.exe",
-                "recommendable": false
-            },
-            {
-                "name": "Proton-6.14-GE-2",
-                "version": "6.14-GE-2",
-                "uri": "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/6.14-GE-2/Proton-6.14-GE-2.tar.gz",
-                "archive": "tar",
-                "folder": "Proton-6.14-GE-2",
-                "makeFolder": false,
-                "executable": "files/bin/wine64",
-                "winecfg": "files/lib64/wine/x86_64-windows/winecfg.exe",
-                "recommendable": false
-            },
-            {
-                "name": "Proton-6.14-GE-1",
-                "version": "6.14-GE-1",
-                "uri": "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/6.14-GE-1/Proton-6.14-GE-1.tar.gz",
-                "archive": "tar",
-                "folder": "Proton-6.14-GE-1",
-                "makeFolder": false,
-                "executable": "files/bin/wine64",
-                "winecfg": "files/lib64/wine/x86_64-windows/winecfg.exe",
-                "recommendable": false
-            },
-            {
-                "name": "Proton-5.21-GE-1",
-                "version": "5.21-GE-1",
-                "uri": "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/5.21-GE-1/Proton-5.21-GE-1.tar.gz",
-                "archive": "tar",
-                "folder": "Proton-5.21-GE-1",
-                "makeFolder": false,
-                "executable": "files/bin/wine64",
-                "winecfg": "files/lib64/wine/x86_64-windows/winecfg.exe",
-                "recommendable": true
+                "files": {
+                    "wine": "files/bin/wine64",
+                    "wineserver": "files/bin/wineserver",
+                    "winecfg": "files/lib64/wine/x86_64-windows/winecfg.exe"
+                },
+                "recommended": true
             }
         ]
     }

@@ -1,0 +1,28 @@
+@use "sass:map"
+
+@mixin themable($theme-name, $theme-map)
+    body[data-theme=#{$theme-name}]
+        table.properties-table tr
+            td, th
+                width: auto !important
+                
+            td input
+                display: none !important
+
+            &.selected
+                td
+                    background-color: map.get($theme-map, "background2")
+                    
+                    span
+                        display: none !important
+                    
+                    input
+                        display: block !important
+
+                        background-color: map.get($theme-map, "background2")
+
+@import "../themes/light"
+@import "../themes/dark"
+
+@include themable(light, $light)
+@include themable(dark, $dark)

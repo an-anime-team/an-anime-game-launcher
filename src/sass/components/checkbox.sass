@@ -1,0 +1,67 @@
+@use "sass:map"
+
+@mixin themable($theme-name, $theme-map)
+    body[data-theme=#{$theme-name}]
+        .checkbox
+            display: inline-flex !important
+            align-items: center
+
+            font-size: larger
+
+            width: calc(100% - 24px)
+            height: 48px
+            padding: 0 12px
+
+            border-radius: 12px
+
+            .checkbox-mark
+                display: flex
+
+                background-color: map.get($theme-map, "background2")
+
+                border-radius: 16px
+                margin-left: auto
+                padding: 8px 16px
+
+                cursor: pointer
+
+                &:hover
+                    background-color: map.get($theme-map, "primary")
+
+                    img
+                        filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(219deg) brightness(102%) contrast(104%)
+
+                img
+                    height: 12px
+                    width: 12px
+
+                    @if $theme-name == dark
+                        filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(219deg) brightness(102%) contrast(104%)
+
+        .checkbox-disabled
+            background-color: map.get($theme-map, "background1")
+
+            .checkbox-mark
+                display: none
+
+        .checkbox-active
+            .checkbox-mark
+                background-color: map.get($theme-map, "primary")
+
+                img
+                    filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(219deg) brightness(102%) contrast(104%)
+
+        .selectable-checkbox
+            cursor: pointer
+
+            &:hover
+                background-color: map.get($theme-map, "background2")
+
+        .checkbox-active:is(.selectable-checkbox)
+            background-color: map.get($theme-map, "background2")
+
+@import "src/sass/themes/light"
+@import "src/sass/themes/dark"
+
+@include themable(light, $light)
+@include themable(dark, $dark)

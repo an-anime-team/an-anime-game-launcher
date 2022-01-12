@@ -1,0 +1,43 @@
+{
+  "applicationId": "com.krypt0nn.an-anime-game-launcher",
+  "version": "2.0.0-rc1",
+  "defaultMode": "window",
+  "port": 0,
+  "documentRoot": "/bundle/",
+  "url": "/",
+  "enableServer": true,
+  "enableNativeAPI": true,
+  "exportAuthInfo": true,
+  "logging": {
+    "enabled": false,
+    "writeToLogFile": false
+  },
+  "nativeBlockList": [],
+  "globalVariables": {},
+  "modes": {
+    "window": {
+      "title": "An Anime Game Launcher",
+      "width": 1280,
+      "height": 700,
+      "fullScreen": false,
+      "alwaysOnTop": false,
+      "icon": "/public/icons/64x64.png",
+      "enableInspector": false,
+      "borderless": false,
+      "maximize": false,
+      "hidden": true,
+      "resizable": false,
+      "exitProcessOnClose": false
+    },
+    "browser": {},
+    "cloud": {}
+  },
+  "cli": {
+    "binaryName": "an-anime-game-launcher",
+    "resourcesPath": "/bundle/",
+    "extensionsPath": "/extensions/",
+    "clientLibrary": "/public/neutralino.js",
+    "binaryVersion": "4.1.0",
+    "clientVersion": "3.0.0"
+  }
+}
