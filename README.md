@@ -34,7 +34,7 @@ This launcher is also available as the [an-anime-game-launcher-app](https://gitl
 
 ## Usage statistics
 
-This is our current usage statistics. You can find older ones [here](repository/pages/ROADMAP.md)
+This is our current usage statistics. You can find older ones [here](repository/pages/STATISTICS.md)
 
 ### 2.3.0 — 99 total
 
