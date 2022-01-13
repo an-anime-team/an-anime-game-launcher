@@ -28,7 +28,11 @@ This launcher is also available as the [an-anime-game-launcher-bin](https://aur.
 
 ### Pacstall support
 
-This launcher is also available as the [an-anime-game-launcher-app](https://gitlab.com/KRypt0n_/anime-game-launcher-pacstall) pacstall package
+This launcher is also available as the pacstall package:
+
+```zsh
+pacstall -I an-anime-game-launcher-bin
+```
 
 <br>
 
