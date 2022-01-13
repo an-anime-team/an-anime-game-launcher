@@ -1,0 +1,218 @@
+# Pantalla de Splash
+splash:
+  title: Cargando launcher
+  phrases:
+    - Haciendo cosas importantes...
+    - Molestando a Paimon...
+    - Tirando por Yae...
+    - Farmeando materiales...
+    - Pasandose el Abyss...
+    - Coleccionando logros...
+    - Buildeando Qiqi full daño...
+    - Haciendo ofrendas para sacar un 5*...
+    - Buscando amigos para co-op...
+
+# Ventana del Launcher
+launcher:
+  # Barra de progreso
+  progress:
+    pause: Pausa
+    resume: Continuar
+
+    # Instalación del juego
+    game:
+      downloading: Descargando el juego...
+      unpacking: Descomprimiendo el juego...
+      deleting_outdated: Borrando archivos viejos...
+
+    # Instalación de paquetes de voz
+    voice:
+      deleting: Borrando paquetes de voz...
+      downloading: Descargando el paquete de voz {voice}...
+      unpacking: Descomprimiendo el paquete de voz {voice}...
+
+  # Estados del launcher
+  states:
+    # Cuando el juego debe ser instalado o actualizado
+    installation:
+      install_wine: Instalar Wine
+      install_dxvk: Instalar DXVK
+      install: Instalar
+      update: Actualizar
+
+    # Cuando el juego debe ser parcheado
+    patching:
+      # Parche no disponible
+      unavailable:
+        title: Parche no disponible
+        hint: Aún no hay un parche disponible para esta versión del juego.
+              Por favor, espera unos días hasta que haya una versión estable o de prueba.
+      
+      # Parche en fase de pruebas
+      test:
+        title: Aplicar parche de prueba
+        hint: Esta versión tiene un parche experimental de anti-cheat.
+              Puedes esperar unos días hasta que sea estable, o aplicarla bajo tu propio riesgo.
+
+      # Parche estable
+      stable: Aplicar parche
+
+    # Cuando el juego esta listo para jugarse
+    ready:
+      launch: Jugar
+      predownload: Pre-descargar actualización
+
+  # Actualización del Launcher
+  update:
+    title: 'Actualización del launcher disponible: {from} -> {to}'
+    body: Puedes descargar una nueva versión del launcher desde el repositorio del proyecto en {repository}
+
+# Ventana de opciones
+settings:
+  # General
+  general:
+    title: General
+    items:
+      # Selección de idioma
+      lang:
+        # Idioma del launcher
+        launcher:
+          title: Launcher
+          items:
+            en-us: Inglés (EEUU)
+            ru-ru: Ruso
+            es-es: Español
+            de-de: Alemán
+            fr-fr: Francés
+            it-it: Italiano
+            uwu: Inglés pero uwu
+
+        # Idioma del paquete de voz
+        voice:
+          title: Paquete de voces
+          tooltip: Tendrás que seleccionar manualmente el nuevo paquete de voces en las opciones del juego.
+          items:
+            en-us: Inglés (EEUU)
+            ja-jp: Japonés
+            ko-kr: Coreano
+            zn-cn: Chino
+
+      # Tema del Launcher
+      theme:
+        title: Tema
+        items:
+          system: Del sistema
+          light: Claro
+          dark: Oscuro
+      
+      # Discord RPC
+      discord:
+        title: Discord RPC
+        settings:
+          title: Opciones de Discord RPC
+          items:
+            timer: Mostrar tiempo transcurrido
+            in-launcher: Texto del launcher
+            in-game: Texto in-game
+            selectIcon: Elegir icono
+
+      # Algunos botones
+      buttons:
+        winetricks: winetricks
+        winecfg: winecfg
+        launcher: carpeta del launcher
+        game: carpeta del juego
+
+  # Mejoras
+  enhancements:
+    title: Mejoras
+    items:
+      # HUD
+      hud:
+        title: HUD
+        items:
+          none: Ninguno
+          dxvk: DXVK
+          mangohud: MangoHUD
+      
+      # GameMode
+      gamemode:
+        title: Usar GameMode
+        tooltip:
+          enabled: GameMode es un software que pemite mejorar el rendimiento de algunos juegos.
+          disabled: ⚠️ No tienes instalado el paquete de gamemode.
+
+      # AMD FSR
+      fsr:
+        title: Activar AMD FSR
+        tooltip: Esta opción activa la AMD FidelityFX Super Resolution (FSR)
+                 que aumentará la resolución de tu juego sin pérdida de FPS.
+
+      # Desbloquear FPS
+      fps_unlocker:
+        title: Desbloquear FPS
+        tooltip: Esta opción anulará el límite máximo de 60 fps.
+      
+      # Borrar logs
+      purge_logs:
+        # Logs del juego (DXVK)
+        game:
+          title: Borrar logs de DXVK
+          tooltip: Con esta opción tu launcher eliminará automáticamente los archivos de registro de DXVK.
+
+        # Logs del Launcher
+        launcher:
+          title: Borrar logs del launcher
+          tooltip: Tiempo que deberá transcurrir hasta que el launcher elimine un log.
+          items:
+            1d: 1 día
+            3d: 3 días
+            5d: 5 días
+            7d: 1 semana
+            14d: 2 semanas
+            never: Nunca
+
+  # Runners
+  runners:
+    title: Versión de Wine
+    items:
+      recommended:
+        title: Sólo mostrar las recomendadas
+        tooltip: Esta opción esconderá las versiones que no funcionan.
+
+  # DXVKs
+  dxvks:
+    title: DXVK
+    items:
+      recommended:
+        title: Sólo mostrar las recomendadas
+        tooltip: Esta opción esconderá las versiones más viejas de DXVK.
+
+  # Shaders
+  shaders:
+    title: Shaders
+    items:
+      shaders:
+        title: Shaders
+        tooltip: Usa el botón de Home para activar o desactivar los shaders dentro del juego.
+        items:
+          none: Ningunos
+          custom: Personalizados
+      
+      author: 'Autor: {author}'
+      no_images: Sin imágenes añadidas
+      not_installed: No has instalado las librerías vkBasalt y reshade-shaders
+
+  # Administrador de variables de entorno
+  environment:
+    title: Variables de Entorno
+    items:
+      # Filas de la tabla
+      table:
+        name: Nombre
+        value: Valor
+      
+      # Botones de la tabla
+      buttons:
+        add: Añadir
+        delete: Borrar

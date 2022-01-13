@@ -9,6 +9,7 @@ import Configs from '../Configs';
 type AvailableLocales =
     | 'en-us'
     | 'ru-ru'
+    | 'es-es'
     | 'de-de'
     | 'fr-fr'
     | 'it-it'
@@ -22,7 +23,7 @@ export default class Locales
      * List of locales supported by the game's API
      */
     public static readonly supportedLocales: AvailableLocales[] = [
-        'en-us', 'ru-ru', 'de-de', 'fr-fr'
+        'en-us', 'ru-ru', 'es-es', 'de-de', 'fr-fr'
     ];
 
     /**

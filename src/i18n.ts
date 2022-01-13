@@ -4,6 +4,7 @@ import Locales from './ts/launcher/Locales';
 
 register('en-us', () => Locales.get('en-us'));
 register('ru-ru', () => Locales.get('ru-ru'));
+register('es-es', () => Locales.get('es-es'));
 register('de-de', () => Locales.get('de-de'));
 register('fr-fr', () => Locales.get('fr-fr'));
 register('it-it', () => Locales.get('it-it'));
