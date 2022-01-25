@@ -368,28 +368,45 @@ export default class State
 
                             else
                             {
-                                const patch = await Patch.latest;
-                                
-                                // If the latest game version is, for example, 2.3.0
-                                // and the patch is 2.4.0 preparation, it means that
-                                // 2.4.0 will be released soon, but since it's still not released
-                                // we shouldn't show something about it to user and just let him play the game
-                                if (gameLatest.game.latest.version === patch.version && !patch.applied)
+                                try
                                 {
-                                    state = patch.state == 'preparation' ?
-                                        'patch-unavailable' : (patch.state == 'testing' ?
-                                        'test-patch-available' : 'patch-available');
+                                    const patch = await Patch.latest;
+
+                                    // If the latest game version is, for example, 2.3.0
+                                    // and the patch is 2.4.0 preparation, it means that
+                                    // 2.4.0 will be released soon, but since it's still not released
+                                    // we shouldn't show something about it to user and just let him play the game
+                                    if (gameLatest.game.latest.version === patch.version && !patch.applied)
+                                    {
+                                        state = patch.state == 'preparation' ?
+                                            'patch-unavailable' : (patch.state == 'testing' ?
+                                            'test-patch-available' : 'patch-available');
+                                    }
+
+                                    // Patch is more important than game pre-downloading
+                                    // because otherwise we will not be able to play the game
+                                    else if (gameLatest.pre_download_game && !await Game.isUpdatePredownloaded())
+                                        state = 'game-pre-installation-available';
+
+                                    else if (gameLatest.pre_download_game && !await Voice.isUpdatePredownloaded(await Voice.selected))
+                                        state = 'game-voice-pre-installation-available';
+
+                                    else state = 'game-launch-available';
                                 }
 
-                                // Patch is more important than game pre-downloading
-                                // because otherwise we will not be able to play the game
-                                else if (gameLatest.pre_download_game && !await Game.isUpdatePredownloaded())
-                                    state = 'game-pre-installation-available';
+                                // Patch.latest can throw an error if all of patch's servers
+                                // are not available, and we must notify user about that
+                                catch
+                                {
+                                    state = 'game-launch-available';
 
-                                else if (gameLatest.pre_download_game && !await Voice.isUpdatePredownloaded(await Voice.selected))
-                                    state = 'game-voice-pre-installation-available';
-
-                                else state = 'game-launch-available'; 
+                                    Notifications.show({
+                                        title: 'An Anime Game Launcher',
+                                        body: 'All the patch repositories are not available. You\'ll be able to run the game, but launcher can\'t be sure is it patched properly',
+                                        icon: `${constants.paths.appDir}/public/images/baal64-transparent.png`,
+                                        importance: 'critical'
+                                    });
+                                }
                             }  
                         }
                     }

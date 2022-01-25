@@ -32,9 +32,13 @@ export default class Locales
     public static default(lang: AvailableLocales|null = null): Promise<AvailableLocales>
     {
         if (lang !== null)
+        {
             Configs.set('lang.launcher', lang);
 
-        return Configs.get('lang.launcher') as Promise<AvailableLocales>;
+            return Promise.resolve(lang);
+        }
+        
+        else return Configs.get('lang.launcher') as Promise<AvailableLocales>;
     }
 
     /**

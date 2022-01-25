@@ -104,7 +104,7 @@ class Paths
      */
     public static get cache(): Promise<string>
     {
-        return new Promise(async (resolve) => resolve(`${await this.launcherDir}/cache.json`));
+        return new Promise(async (resolve) => resolve(`${await this.launcherDir}/.cache.json`));
     }
 
     public static readonly prefix = Prefix;
