@@ -142,6 +142,7 @@ This is our current roadmap goals. You can find older ones [here](repository/pag
 * <s>Use `LauncherLib.getGameVersion` function instead of the `config.json`'s `version` property</s> *(deprecated due to the new core functions)*
 * <s>Fix button flickering at start when the launcher's state updates</s> *(fixed due to the new framework usage and proper state updating)*
 * <s>Add downloading pause button</s> *(2.0.0 release)*
+* Make notifications translations
 * Dark progress bar design
 * Statistics window
 * Changelog window

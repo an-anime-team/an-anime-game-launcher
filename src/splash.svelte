@@ -33,7 +33,6 @@
                     await record.pop();
 
                 Window.current.hide();
-
                 Neutralino.app.exit();
             }
 

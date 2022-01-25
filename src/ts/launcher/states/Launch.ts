@@ -73,6 +73,25 @@ export default (launcher: Launcher): Promise<void> => {
             }
 
             /**
+             * Wine synchronizations
+             * 
+             * @link https://github.com/AdelKS/LinuxGamingGuide#wine-tkg
+             */
+            switch (await Configs.get('winesync'))
+            {
+                case 'esync':
+                    env['WINEESYNC'] = 1;
+
+                    break;
+
+                case 'fsync':
+                    env['WINEESYNC'] = 1;
+                    env['WINEFSYNC'] = 1;
+
+                    break;
+            }
+
+            /**
              * AMD FSR
              */
             if (await Configs.get('fsr'))

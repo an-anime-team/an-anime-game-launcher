@@ -6,6 +6,7 @@
     export let prop: string = '';
     export let lang: string = '';
     export let tooltip: string = '';
+    export let tooltip_size: 'medium' | 'large' = 'medium';
     export let items = {};
 
     export let valueChanged: (value: string) => void = () => {};
@@ -60,9 +61,8 @@
     </div>
 
     <div
-        class="selected-item"
+        class="selected-item {tooltip !== '' ? `hint--${tooltip_size}` : ''}"
         class:hint--left={tooltip !== ''}
-        class:hint--medium={tooltip !== ''}
         aria-label={$_(tooltip)}
         on:click={() => selectionOpen = !selectionOpen}
     >

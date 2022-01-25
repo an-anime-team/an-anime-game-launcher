@@ -73,6 +73,16 @@
     };
 
     /**
+     * Wine synchronizations
+     */
+
+    const winesyncs = {
+        'none': 'settings.enhancements.items.winesync.items.none',
+        'esync': 'settings.enhancements.items.winesync.items.esync',
+        'fsync': 'settings.enhancements.items.winesync.items.fsync'
+    };
+
+    /**
      * Delete launcher logs options
      */
 
@@ -330,6 +340,14 @@
                     lang="settings.enhancements.items.hud.title"
                     prop="hud"
                     items={huds}
+                />
+
+                <SelectionBox
+                    lang="settings.enhancements.items.winesync.title"
+                    prop="winesync"
+                    tooltip="settings.enhancements.items.winesync.tooltip"
+                    tooltip_size="large"
+                    items={winesyncs}
                 />
 
                 <Checkbox

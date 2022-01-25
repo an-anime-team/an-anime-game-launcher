@@ -1,12 +1,24 @@
-import type Launcher from '../../Launcher';
-
+import Launcher from '../../Launcher';
 import Patch from '../../Patch';
 import Notifications from '../../core/Notifications';
 import constants from '../../Constants';
 
 export default (launcher: Launcher): Promise<void> => {
     return new Promise(async (resolve) => {
-        Patch.latest.then((patch) => {
+        // Show an error notification if xdelta3 package is not installed
+        if (!await Launcher.isPackageAvailable('xdelta3'))
+        {
+            Notifications.show({
+                title: 'An Anime Game Launcher',
+                body: 'You must download xdelta3 package to apply the patch',
+                icon: `${constants.paths.appDir}/public/images/baal64-transparent.png`,
+                importance: 'critical'
+            });
+
+            resolve();
+        }
+
+        else Patch.latest.then((patch) => {
             if (patch.applied)
                 resolve();
 
@@ -76,6 +88,15 @@ export default (launcher: Launcher): Promise<void> => {
                     }
                 });
             }
+        }).catch(() => {
+            Notifications.show({
+                title: 'An Anime Game Launcher',
+                body: 'All the patch repositories are not available. You\'ll be able to run the game, but launcher can\'t be sure is it patched properly',
+                icon: `${constants.paths.appDir}/public/images/baal64-transparent.png`,
+                importance: 'critical'
+            });
+
+            resolve();
         });
     });
 };

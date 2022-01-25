@@ -85,6 +85,7 @@ settings:
             de-de: Deutsch
             fr-fr: Français
             it-it: Italiano
+            id-id: Bahasa Indonesia
             uwu: Engwish
 
         # Game voice pack language
@@ -134,6 +135,16 @@ settings:
           none: n-none
           dxvk: DXVK
           mangohud: MangoHUD
+
+      # Wine synchronization
+      winesync:
+        title: wine synchwonization
+        tooltip: Esync is a mechanism of synchwonizing muwti-thwead opewations. it can impwove youw game p-pewfowmance.
+                 Fsync is an impwoved vewsion of esync that wowks on specific k-kewnew vewsions
+        items:
+          none: none
+          esync: Esync
+          fsync: Fsync
       
       # GameMode
       gamemode:

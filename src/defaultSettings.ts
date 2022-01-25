@@ -53,11 +53,9 @@ promisify(async () => {
          * 
          * null to disable any
          * 
-         * @default { WINEESYNC: 1 }
+         * @default null
          */
-        env: {
-            WINEESYNC: 1
-        },
+        env: null,
     
         /**
          * Launcher theme
@@ -76,6 +74,15 @@ promisify(async () => {
          * @default "none"
          */
         hud: 'none',
+
+        /**
+         * Wine synchronization
+         * 
+         * Available options: none, esync, fsync
+         * 
+         * @defaul "esync"
+         */
+        winesync: 'esync',
     
         /**
          * vkBasalt preset to use

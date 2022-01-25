@@ -85,6 +85,7 @@ settings:
             de-de: Deutsch
             fr-fr: Français
             it-it: Italiano
+            id-id: Bahasa Indonesia
             uwu: Engwish
 
         # Game voice pack language
@@ -133,6 +134,16 @@ settings:
           none: None
           dxvk: DXVK
           mangohud: MangoHUD
+
+      # Wine synchronization
+      winesync:
+        title: Wine synchronization
+        tooltip: ESync is a mechanism of synchronizing multi-thread operations. It can improve your game performance.
+                 FSync is an improved version of ESync that works on specific kernel versions
+        items:
+          none: None
+          esync: ESync
+          fsync: FSync
       
       # GameMode
       gamemode:

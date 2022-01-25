@@ -85,6 +85,7 @@ settings:
             de-de: Deutsch
             fr-fr: Français
             it-it: Italiano
+            id-id: Bahasa Indonesia
             uwu: Engwish
 
         # Язык озвучки в игре
@@ -134,6 +135,16 @@ settings:
           none: Отключён
           dxvk: DXVK
           mangohud: MangoHUD
+
+      # Синхронизация Wine
+      winesync:
+        title: Синхронизация Wine
+        tooltip: ESync - это механизм синхронизации многопоточных операций. Он может улучшить производительность игры.
+                 FSync - это улучшенная версия ESync, которая работает на некоторых версиях ядра Linux
+        items:
+          none: Отключена
+          esync: ESync
+          fsync: FSync
       
       # GameMode
       gamemode:
