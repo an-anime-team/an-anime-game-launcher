@@ -140,11 +140,11 @@ settings:
 
       # Wine synchronization
       winesync:
-        title: Wine synchronization
-        tooltip: ESync is a mechanism of synchronizing multi-thread operations. It can improve your game performance.
-                 FSync is an improved version of ESync that works on specific kernel versions
+        title: Synchronisation dans Wine
+        tooltip: ESync est un système de synchronisation des opérations multi-thread. Cela améliore vos performances en jeux.
+                 FSync est une version améliorée de ESync qui fonctionne seulement avec un Kernel spécifique.
         items:
-          none: None
+          none: Aucune
           esync: ESync
           fsync: FSync
       
