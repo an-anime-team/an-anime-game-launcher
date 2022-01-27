@@ -429,6 +429,24 @@
 
                 <EnvironmentManager />
             </div>
+
+            <div class="settings-footer">
+                <span>An Anime Game Launcher {Launcher.version}</span>
+
+                <!-- svelte-ignore missing-declaration -->
+                <span>Licensed under <u on:click={() => Neutralino.os.open('https://www.gnu.org/licenses/gpl-3.0.en.html')}>GNU GPL-3.0</u></span>
+
+                <br>
+
+                <!-- svelte-ignore missing-declaration -->
+                <span><u on:click={() => Neutralino.os.open(constants.uri.launcher)}>GitLab</u></span>
+
+                <!-- svelte-ignore missing-declaration -->
+                <span><u on:click={() => Neutralino.os.open('https://discord.gg/ck37X6UWBp')}>Discord</u></span>
+
+                <!-- svelte-ignore missing-declaration -->
+                <span><u on:click={() => Neutralino.os.open(constants.uri.patch.origin)}>Patch repository</u></span>
+            </div>
         </div>
     </main>
 {/if}
