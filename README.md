@@ -139,6 +139,7 @@ This is our current roadmap goals. You can find older ones [here](repository/pag
 * <s>Add downloading pause button</s> *(2.0.0 release)*
 * Move launcher on [Empathize](https://github.com/empathizejs/framework)
 * Make notifications translations
+* Add `latest.log` file generation
 * Add analytics window
 * Dark progress bar design
 * Statistics window
