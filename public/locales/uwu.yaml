@@ -225,27 +225,19 @@ settings:
 
 # Notifications
 notifications:
-  # Launcher update
-  launcher_update_available:
-    title: 'waunchew update avaiwable: {from} -> {to}'
-    body: you can downwoad the new vewsion of the waunchew fwom the pwoject's wepositowy at {repository}
-
   # When telemetry servers are not disabled
   telemetry_not_disabled:
-    title: An Anime Game Launcher
-    body: Telemetry servers are not disabled
-
+    title: an anime game waunchew
+    body: tewemetwy sewvers are n-not disabwed
   # Before patch applying when xdelta3 package is not downloaded
   xdelta3_package_required:
-    title: An Anime Game Launcher
-    body: You must download xdelta3 package to apply the patch
-
+    title: an anime game waunchew
+    body: you must downwoad xdelta3/xdelta package t-to a-appwy t-the patch
   # If patch wasn't applied because of some error
   patch_applying_error:
-    title: An Anime Game Launcher
-    body: Patch wasn't applied successfully. Please, check your log file to find a reason of it, or ask someone in our discord server
-
+    title: an anime game waunchew
+    body: patch wasn't appwied successfuwwy. pwease, check youw wog file to find a weason of i-it, ow a-ask s-someone in ouw discowd s-sewver
   # Patch repositories are not available
   patch_repos_unavailable:
-    title: An Anime Game Launcher
-    body: All the patch repositories are not available. You'll be able to run the game, but launcher can't be sure is it patched properly
+    title: an anime game waunchew
+    body: a-all the patch wepositowies are not avaiwable. you'll b-be able to wun the game, but waunchew can't be sure is it patched pwopewwy
