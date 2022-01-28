@@ -1,4 +1,4 @@
-import Configs from './Configs';
+import { Configs } from '../empathize';
 
 declare const Neutralino;
 declare const NL_CWD;

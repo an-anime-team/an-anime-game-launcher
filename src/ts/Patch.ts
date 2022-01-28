@@ -2,14 +2,12 @@ import type { PatchInfo } from './types/Patch';
 
 import md5 from 'js-md5';
 
+import { fetch, promisify, Debug, Cache, path } from '../empathize';
+import { DebugThread } from '@empathize/framework/dist/meta/Debug';
+
 import constants from './Constants';
 import Game from './Game';
-import fetch from './core/Fetch';
 import AbstractInstaller from './core/AbstractInstaller';
-import promisify from './core/promisify';
-import Process from './neutralino/Process';
-import Debug, { DebugThread } from './core/Debug';
-import Cache from './core/Cache';
 
 declare const Neutralino;
 
@@ -50,37 +48,37 @@ class Stream extends AbstractInstaller
                     /**
                      * Remove test version restrictions from the main patch
                      */
-                    () => Neutralino.os.execCommand(`cd "${Process.addSlashes(patchDir)}" && sed -i '/^echo "If you would like to test this patch, modify this script and remove the line below this one."/,+5d' patch.sh`),
+                    () => Neutralino.os.execCommand(`cd "${path.addSlashes(patchDir)}" && sed -i '/^echo "If you would like to test this patch, modify this script and remove the line below this one."/,+5d' patch.sh`),
 
                     /**
                      * Remove /etc/hosts editing due to sudo permissions
                      */
-                    () => Neutralino.os.execCommand(`cd "${Process.addSlashes(patchDir)}" && sed -i '/^# ===========================================================/,+68d' patch.sh`),
+                    () => Neutralino.os.execCommand(`cd "${path.addSlashes(patchDir)}" && sed -i '/^# ===========================================================/,+68d' patch.sh`),
                     
                     /**
                      * Remove test version restrictions from the anti-login crash patch
                      */
-                    () => Neutralino.os.execCommand(`cd "${Process.addSlashes(patchDir)}" && sed -i '/^echo "       necessary afterwards (Friday?). If that's the case, comment the line below."/,+2d' patch_anti_logincrash.sh`),
+                    () => Neutralino.os.execCommand(`cd "${path.addSlashes(patchDir)}" && sed -i '/^echo "       necessary afterwards (Friday?). If that's the case, comment the line below."/,+2d' patch_anti_logincrash.sh`),
 
                     /**
                      * Make the main patch executable
                      */
-                    () => Neutralino.os.execCommand(`chmod +x "${Process.addSlashes(patchDir)}/patch.sh"`),
+                    () => Neutralino.os.execCommand(`chmod +x "${path.addSlashes(patchDir)}/patch.sh"`),
 
                     /**
                      * Make the anti-login crash patch executable
                      */
-                    () => Neutralino.os.execCommand(`chmod +x "${Process.addSlashes(patchDir)}/patch_anti_logincrash.sh"`),
+                    () => Neutralino.os.execCommand(`chmod +x "${path.addSlashes(patchDir)}/patch_anti_logincrash.sh"`),
 
                     /**
                      * Execute the main patch installation script
                      */
-                    () => Neutralino.os.execCommand(`cd "${Process.addSlashes(gameDir)}" && yes yes | bash "${Process.addSlashes(patchDir)}/patch.sh"`),
+                    () => Neutralino.os.execCommand(`cd "${path.addSlashes(gameDir)}" && yes yes | bash "${path.addSlashes(patchDir)}/patch.sh"`),
 
                     /**
                      * Execute the anti-login crash patch installation script
                      */
-                    () => Neutralino.os.execCommand(`cd "${Process.addSlashes(gameDir)}" && yes | bash "${Process.addSlashes(patchDir)}/patch_anti_logincrash.sh"`)
+                    () => Neutralino.os.execCommand(`cd "${path.addSlashes(gameDir)}" && yes | bash "${path.addSlashes(patchDir)}/patch_anti_logincrash.sh"`)
                 ]
             });
 

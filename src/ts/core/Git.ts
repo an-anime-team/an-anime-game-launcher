@@ -1,4 +1,4 @@
-import Process from '../neutralino/Process';
+import { path } from '../../empathize';
 
 type Tag = {
     tag: string,
@@ -17,7 +17,7 @@ export default class Git
     public static getTags(repository: string): Promise<Tag[]>
     {
         return new Promise(async (resolve) => {
-            const output = await Neutralino.os.execCommand(`git ls-remote --tags "${Process.addSlashes(repository)}"`);
+            const output = await Neutralino.os.execCommand(`git ls-remote --tags "${path.addSlashes(repository)}"`);
 
             let tags: Tag[] = [];
 

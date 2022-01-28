@@ -1,6 +1,7 @@
+import { Notification } from '../../../empathize';
+
 import Launcher from '../../Launcher';
 import Patch from '../../Patch';
-import Notifications from '../../core/Notifications';
 import constants from '../../Constants';
 
 export default (launcher: Launcher): Promise<void> => {
@@ -8,7 +9,7 @@ export default (launcher: Launcher): Promise<void> => {
         // Show an error notification if xdelta3 package is not installed
         if (!await Launcher.isPackageAvailable('xdelta3'))
         {
-            Notifications.show({
+            Notification.show({
                 title: 'An Anime Game Launcher',
                 body: 'You must download xdelta3 package to apply the patch',
                 icon: `${constants.paths.appDir}/public/images/baal64-transparent.png`,
@@ -76,7 +77,7 @@ export default (launcher: Launcher): Promise<void> => {
                             // If for some reasons patch wasn't applied successfully
                             if (!result)
                             {
-                                Notifications.show({
+                                Notification.show({
                                     title: 'An Anime Game Launcher',
                                     body: 'Patch wasn\'t applied successfully. Please, check your log file to find a reason of it, or ask someone in our discord server',
                                     icon: `${constants.paths.appDir}/public/images/baal64-transparent.png`
@@ -89,7 +90,7 @@ export default (launcher: Launcher): Promise<void> => {
                 });
             }
         }).catch(() => {
-            Notifications.show({
+            Notification.show({
                 title: 'An Anime Game Launcher',
                 body: 'All the patch repositories are not available. You\'ll be able to run the game, but launcher can\'t be sure is it patched properly',
                 icon: `${constants.paths.appDir}/public/images/baal64-transparent.png`,

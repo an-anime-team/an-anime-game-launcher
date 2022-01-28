@@ -1,19 +1,22 @@
 <script lang="ts">
     import { _ } from 'svelte-i18n';
 
-    import Configs from '../ts/Configs';
+    import { Configs } from '../empathize';
 
     import Button from './Button.svelte';
 
     let last_id = 0, variables = {}, selected;
 
     Configs.get('env').then((env) => {
-        for (const key of Object.keys(env as object))
+        if (env)
         {
-            variables[last_id++] = {
-                key: key,
-                value: env![key]
-            };
+            for (const key of Object.keys(env as object))
+            {
+                variables[last_id++] = {
+                    key: key,
+                    value: env![key]
+                };
+            }
         }
     });
 
@@ -29,26 +32,30 @@
 </script>
 
 <div>
-    <table class="table properties-table" style="margin-top: 16px">
-        <tr>
-            <th>{$_('settings.environment.items.table.name')}</th>
-            <th>{$_('settings.environment.items.table.value')}</th>
-        </tr>
-
-        {#each Object.keys(variables) as key}
-            <tr on:click={() => selected = key} class:selected={selected === key}>
-                <td>
-                    <span>{variables[key].key}</span>
-                    <input bind:value={variables[key].key} on:change={updateEnv} />
-                </td>
-        
-                <td>
-                    <span>{variables[key].value}</span>
-                    <input bind:value={variables[key].value} on:change={updateEnv} />
-                </td>
+    {#if Object.keys(variables).length > 0}
+        <table class="table properties-table" style="margin-top: 16px">
+            <tr>
+                <th>{$_('settings.environment.items.table.name')}</th>
+                <th>{$_('settings.environment.items.table.value')}</th>
             </tr>
-        {/each}
-    </table>
+
+            {#each Object.keys(variables) as key}
+                <tr on:click={() => selected = key} class:selected={selected === key}>
+                    <td>
+                        <span>{variables[key].key}</span>
+                        <input bind:value={variables[key].key} on:change={updateEnv} />
+                    </td>
+            
+                    <td>
+                        <span>{variables[key].value}</span>
+                        <input bind:value={variables[key].value} on:change={updateEnv} />
+                    </td>
+                </tr>
+            {/each}
+        </table>
+    {:else}
+        <p>There're no variables here</p>
+    {/if}
 
     <div style="margin-top: 16px">
         <Button lang="settings.environment.items.buttons.add" click={() => variables[last_id++] = { key: '', value: '' }} />

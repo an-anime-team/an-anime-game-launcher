@@ -1,5 +1,6 @@
+import { fetch } from '../../empathize';
+
 import constants from '../Constants';
-import fetch from '../core/Fetch';
 import Locales from './Locales';
 
 export default class Background

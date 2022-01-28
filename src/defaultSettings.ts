@@ -1,6 +1,6 @@
-import Configs from './ts/Configs';
+import { Configs, promisify } from './empathize';
+
 import constants from './ts/Constants';
-import promisify from './ts/core/promisify';
 
 promisify(async () => {
     Configs.defaults({

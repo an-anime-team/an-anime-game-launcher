@@ -1,7 +1,7 @@
 <script lang="ts">
     import { _ } from 'svelte-i18n';
 
-    import Configs from '../ts/Configs';
+    import { Configs } from '../empathize';
 
     export let visible: boolean = false;
 

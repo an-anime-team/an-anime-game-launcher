@@ -5,14 +5,13 @@ import type {
     Diff
 } from './types/GameData';
 
+import type { Stream as DownloadingStream } from '@empathize/framework/dist/network/Downloader';
+
+import { fetch, Domain, promisify, Downloader, Cache, Debug } from '../empathize';
+import { DebugThread } from '@empathize/framework/dist/meta/Debug';
+
 import constants from './Constants';
-import fetch from './core/Fetch';
 import AbstractInstaller from './core/AbstractInstaller';
-import Domain from './core/Domain';
-import promisify from './core/promisify';
-import Debug, { DebugThread } from './core/Debug';
-import Downloader, { Stream as DownloadingStream } from './core/Downloader';
-import Cache from './core/Cache';
 
 declare const Neutralino;
 

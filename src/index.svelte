@@ -6,18 +6,12 @@
     import { onMount } from 'svelte';
     import { _, locale } from 'svelte-i18n';
 
-    import Window from './ts/neutralino/Window';
-    import Process from './ts/neutralino/Process';
+    import { Windows, path, Archive, Debug, Downloader, IPC, Configs } from './empathize';
 
     import Launcher from './ts/Launcher';
     import constants from './ts/Constants';
     import Game from './ts/Game';
     import Background from './ts/launcher/Background';
-    import Archive from './ts/core/Archive';
-    import Debug from './ts/core/Debug';
-    import Downloader from './ts/core/Downloader';
-    import IPC from './ts/core/IPC';
-    import Configs from './ts/Configs';
 
     import Gear from './assets/images/gear.png';
     import GearActive from './assets/images/gear-active.png';
@@ -36,7 +30,7 @@
     const launcher = new Launcher(onMount);
 
     Neutralino.events.on('ready', () => {
-        Window.open('splash', {
+        Windows.open('splash', {
             title: 'Splash',
             width: 300,
             height: 400,
@@ -60,13 +54,13 @@
             await launcher.rpc.stop(true);
 
         // Remove .tmp files from the temp folder
-        await Neutralino.os.execCommand(`find "${Process.addSlashes(tempDir)}" -maxdepth 1 -type f -name "*.tmp" -delete`);
+        await Neutralino.os.execCommand(`find "${path.addSlashes(tempDir)}" -maxdepth 1 -type f -name "*.tmp" -delete`);
 
         // Remove old launcher's log files
         const purge_logs = await Configs.get('purge_logs.launcher') as string|null;
 
         if (purge_logs !== null && purge_logs[purge_logs.length - 1] == 'd')
-            await Neutralino.os.execCommand(`find "${Process.addSlashes(launcherDir)}/logs" -maxdepth 1 -mtime ${purge_logs.substring(0, purge_logs.length - 1)} -delete`);
+            await Neutralino.os.execCommand(`find "${path.addSlashes(launcherDir)}/logs" -maxdepth 1 -mtime ${purge_logs.substring(0, purge_logs.length - 1)} -delete`);
 
         // Save logs
         const log = Debug.get().join('\r\n');
@@ -103,7 +97,7 @@
          * Update launcher's title
          */
         Game.latest.then((game) => {
-            Window.current.setTitle(`${constants.placeholders.uppercase.full} Linux Launcher - ${game.version}`);
+            Windows.current.setTitle(`${constants.placeholders.uppercase.full} Linux Launcher - ${game.version}`);
         });
 
         /**

@@ -1,6 +1,8 @@
 <script lang="ts">
     import { _ } from 'svelte-i18n';
 
+    import { Configs } from '../empathize';
+
     export let active: boolean = false;
     export let disabled: boolean = false;
 
@@ -11,8 +13,6 @@
     export let valueChanged: (value: boolean) => void = () => {};
 
     import Checkmark from '../assets/svgs/checkmark.svg';
-
-    import Configs from '../ts/Configs';
 
     Configs.get(prop).then((value) => active = value as boolean);
 
