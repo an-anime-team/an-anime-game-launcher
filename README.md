@@ -140,6 +140,7 @@ This is our current roadmap goals. You can find older ones [here](repository/pag
 * Move launcher on [Empathize](https://github.com/empathizejs/framework)
 * Make notifications translations
 * Add `latest.log` file generation
+* Implement manual config flushing functionality from the Empathize's API
 * Add analytics window
 * Dark progress bar design
 * Statistics window
