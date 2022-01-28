@@ -1,12 +1,11 @@
 import type { DXVK as TDXVK } from '../types/DXVK';
 
+import { Configs, Process, promisify, path } from '../../empathize';
+import { DebugThread } from '@empathize/framework/dist/meta/Debug';
+
 import constants from '../Constants';
-import Configs from '../Configs';
 import AbstractInstaller from './AbstractInstaller';
-import Process from '../neutralino/Process';
-import promisify from './promisify';
 import Runners from './Runners';
-import { DebugThread } from './Debug';
 
 declare const Neutralino;
 
@@ -143,7 +142,7 @@ export default class DXVK
             const version = typeof dxvk !== 'string' ?
                 dxvk.version : dxvk;
 
-            await Neutralino.os.execCommand(`rm -rf "${Process.addSlashes(await constants.paths.dxvksDir)}/dxvk-${version}"`);
+            await Neutralino.os.execCommand(`rm -rf "${path.addSlashes(await constants.paths.dxvksDir)}/dxvk-${version}"`);
 
             debugThread.log('Deletion completed');
 

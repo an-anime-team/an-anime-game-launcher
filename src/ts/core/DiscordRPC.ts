@@ -1,6 +1,6 @@
 import type { Params } from '../types/DiscordRPC';
 
-import Process from '../neutralino/Process';
+import { Process, path } from '../../empathize';
 
 declare const NL_CWD;
 
@@ -19,10 +19,10 @@ export default class DiscordRPC
         ];
 
         if (params.details)
-            exec = [...exec, `-d "${Process.addSlashes(params.details)}"`];
+            exec = [...exec, `-d "${path.addSlashes(params.details)}"`];
 
         if (params.state)
-            exec = [...exec, `-s "${Process.addSlashes(params.state)}"`];
+            exec = [...exec, `-s "${path.addSlashes(params.state)}"`];
 
         if (params.icon)
         {

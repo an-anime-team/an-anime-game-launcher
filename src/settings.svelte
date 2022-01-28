@@ -6,16 +6,11 @@
     import { onMount } from 'svelte';
     import { _, locale, locales } from 'svelte-i18n';
 
-    import Window from './ts/neutralino/Window';
-    import Process from './ts/neutralino/Process';
+    import { Windows, Configs, Debug, IPC, Process, path } from './empathize';
 
     import constants from './ts/Constants';
-    import Configs from './ts/Configs';
     import Launcher from './ts/Launcher';
     import FPSUnlock from './ts/FPSUnlock';
-    
-    import Debug from './ts/core/Debug';
-    import IPC from './ts/core/IPC';
     import Runners from './ts/core/Runners';
 
     import Button from './components/Button.svelte';
@@ -40,72 +35,6 @@
     });
 
     launcherLocales = launcherLocales;
-
-    /**
-     * Game voice packs languages
-     */
-
-    const voiceLocales = {
-        'en-us': 'settings.general.items.lang.voice.items.en-us',
-        'ja-jp': 'settings.general.items.lang.voice.items.ja-jp',
-        'ko-kr': 'settings.general.items.lang.voice.items.ko-kr',
-        'zn-cn': 'settings.general.items.lang.voice.items.zn-cn'
-    };
-
-    /**
-     * Themes
-     */
-
-    const themes = {
-        'system': 'settings.general.items.theme.items.system',
-        'light': 'settings.general.items.theme.items.light',
-        'dark': 'settings.general.items.theme.items.dark'
-    };
-
-    /**
-     * HUD options
-     */
-
-    const huds = {
-        'none': 'settings.enhancements.items.hud.items.none',
-        'dxvk': 'settings.enhancements.items.hud.items.dxvk',
-        'mangohud': 'settings.enhancements.items.hud.items.mangohud'
-    };
-
-    /**
-     * Wine synchronizations
-     */
-
-    const winesyncs = {
-        'none': 'settings.enhancements.items.winesync.items.none',
-        'esync': 'settings.enhancements.items.winesync.items.esync',
-        'fsync': 'settings.enhancements.items.winesync.items.fsync'
-    };
-
-    /**
-     * Delete launcher logs options
-     */
-
-    const purgeLauncherLogs = {
-        '1d': 'settings.enhancements.items.purge_logs.launcher.items.1d',
-        '3d': 'settings.enhancements.items.purge_logs.launcher.items.3d',
-        '5d': 'settings.enhancements.items.purge_logs.launcher.items.5d',
-        '7d': 'settings.enhancements.items.purge_logs.launcher.items.7d',
-        '14d': 'settings.enhancements.items.purge_logs.launcher.items.14d',
-        'never': 'settings.enhancements.items.purge_logs.launcher.items.never'
-    };
-
-    /**
-     * Menu items
-     */
-    const menuItems = [
-        'general',
-        'enhancements',
-        'runners',
-        'dxvks',
-        'shaders',
-        'environment'
-    ];
 
     /**
      * Some components stuff
@@ -203,8 +132,8 @@
 
     // Do some stuff when all the content will be loaded
     onMount(async () => {
-        await Window.current.show();
-        await Window.current.center(900, 600);
+        await Windows.current.show();
+        // FIXME: await Windows.current.center(900, 600);
 
         // This thing will fix window resizing
         // in several cases (wayland + gnome + custom theme)
@@ -214,7 +143,7 @@
 
             else
             {
-                Window.current.setSize({
+                Windows.current.setSize({
                     width: 900 + (900 - window.innerWidth),
                     height: 600 + (600 - window.innerHeight),
                     resizable: false
@@ -241,8 +170,13 @@
 {#if typeof $locale === 'string'}
     <main>
         <div class="menu">
-            {#each menuItems as item}
-                <div class="menu-item" on:click={changeItem} class:menu-item-active={selectedItem === item} data-anchor={item}>{ $_(`settings.${item}.title`) }</div>
+            {#each ['general', 'enhancements', 'runners', 'dxvks', 'shaders', 'environment'] as item}
+                <div
+                    class="menu-item"
+                    class:menu-item-active={selectedItem === item}
+                    data-anchor={item}
+                    on:click={changeItem}
+                >{$_(`settings.${item}.title`)}</div>
             {/each}
         </div>
 
@@ -269,14 +203,23 @@
                     tooltip="settings.general.items.lang.voice.tooltip"
                     prop="lang.voice"
                     selected={undefined}
-                    items={voiceLocales}
+                    items={{
+                        'en-us': 'settings.general.items.lang.voice.items.en-us',
+                        'ja-jp': 'settings.general.items.lang.voice.items.ja-jp',
+                        'ko-kr': 'settings.general.items.lang.voice.items.ko-kr',
+                        'zn-cn': 'settings.general.items.lang.voice.items.zn-cn'
+                    }}
                     selectionUpdated={() => voiceUpdateRequired = true}
                 />
 
                 <SelectionBox
                     lang="settings.general.items.theme.title"
                     prop="theme"
-                    items={themes}
+                    items={{
+                        'system': 'settings.general.items.theme.items.system',
+                        'light': 'settings.general.items.theme.items.light',
+                        'dark': 'settings.general.items.theme.items.dark'
+                    }}
                     valueChanged={switchTheme}
                 />
 
@@ -294,7 +237,7 @@
 
                         const runnersDir = await constants.paths.runnersDir;
                         
-                        Process.run(`"${Process.addSlashes(await constants.paths.launcherDir)}/winetricks.sh"`, {
+                        Process.run(`"${path.addSlashes(await constants.paths.launcherDir)}/winetricks.sh"`, {
                             env: {
                                 WINE: runner ? `${runnersDir}/${runner.name}/${runner.files.wine}` : 'wine',
                                 WINESERVER: runner ? `${runnersDir}/${runner.name}/${runner.files.wineserver}` : 'wineserver',
@@ -308,7 +251,7 @@
 
                         const runnerDir = runner ? `${await constants.paths.runnersDir}/${runner.name}` : '';
                         
-                        Process.run(runner ? `"${Process.addSlashes(`${runnerDir}/${runner.files.wine}`)}" "${Process.addSlashes(`${runnerDir}/${runner.files.winecfg}`)}"` : 'winecfg', {
+                        Process.run(runner ? `"${path.addSlashes(`${runnerDir}/${runner.files.wine}`)}" "${path.addSlashes(`${runnerDir}/${runner.files.winecfg}`)}"` : 'winecfg', {
                             env: {
                                 WINE: runner ? `${runnerDir}/${runner.files.wine}` : 'wine',
                                 WINESERVER: runner ? `${runnerDir}/${runner.files.wineserver}` : 'wineserver',
@@ -319,14 +262,14 @@
 
                     <!-- svelte-ignore missing-declaration -->
                     <Button lang="settings.general.items.buttons.launcher" click={async () => {
-                        Neutralino.os.execCommand(`xdg-open "${Process.addSlashes(await constants.paths.launcherDir)}"`, {
+                        Neutralino.os.execCommand(`xdg-open "${path.addSlashes(await constants.paths.launcherDir)}"`, {
                             background: true
                         });
                     }} />
 
                     <!-- svelte-ignore missing-declaration -->
                     <Button lang="settings.general.items.buttons.game" click={async () => {
-                        Neutralino.os.execCommand(`xdg-open "${Process.addSlashes(await constants.paths.gameDir)}"`, {
+                        Neutralino.os.execCommand(`xdg-open "${path.addSlashes(await constants.paths.gameDir)}"`, {
                             background: true
                         });
                     }} />
@@ -339,7 +282,11 @@
                 <SelectionBox
                     lang="settings.enhancements.items.hud.title"
                     prop="hud"
-                    items={huds}
+                    items={{
+                        'none': 'settings.enhancements.items.hud.items.none',
+                        'dxvk': 'settings.enhancements.items.hud.items.dxvk',
+                        'mangohud': 'settings.enhancements.items.hud.items.mangohud'
+                    }}
                 />
 
                 <SelectionBox
@@ -347,7 +294,11 @@
                     prop="winesync"
                     tooltip="settings.enhancements.items.winesync.tooltip"
                     tooltip_size="large"
-                    items={winesyncs}
+                    items={{
+                        'none': 'settings.enhancements.items.winesync.items.none',
+                        'esync': 'settings.enhancements.items.winesync.items.esync',
+                        'fsync': 'settings.enhancements.items.winesync.items.fsync'
+                    }}
                 />
 
                 <Checkbox
@@ -388,7 +339,14 @@
                     lang="settings.enhancements.items.purge_logs.launcher.title"
                     tooltip="settings.enhancements.items.purge_logs.launcher.tooltip"
                     prop="purge_logs.launcher"
-                    items={purgeLauncherLogs}
+                    items={{
+                        '1d': 'settings.enhancements.items.purge_logs.launcher.items.1d',
+                        '3d': 'settings.enhancements.items.purge_logs.launcher.items.3d',
+                        '5d': 'settings.enhancements.items.purge_logs.launcher.items.5d',
+                        '7d': 'settings.enhancements.items.purge_logs.launcher.items.7d',
+                        '14d': 'settings.enhancements.items.purge_logs.launcher.items.14d',
+                        'never': 'settings.enhancements.items.purge_logs.launcher.items.never'
+                    }}
                 />
             </div>
 

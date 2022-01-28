@@ -1,13 +1,11 @@
 import { locale } from 'svelte-i18n';
 
-import Window from './neutralino/Window';
-import Process from './neutralino/Process';
-import Tray from './neutralino/Tray';
+import {
+    Windows, Process, Tray,
+    Configs, Debug, IPC
+} from '../empathize';
 
 import constants from './Constants';
-import Configs from './Configs';
-import Debug from './core/Debug';
-import IPC from './core/IPC';
 import DiscordRPC from './core/DiscordRPC';
 import Locales from './launcher/Locales';
 
@@ -56,7 +54,7 @@ export default class Launcher
             {
                 this.settingsMenu = undefined;
 
-                const window = await Window.open('settings', {
+                const window = await Windows.open('settings', {
                     title: 'Settings',
                     width: 900,
                     height: 600,
@@ -96,11 +94,11 @@ export default class Launcher
                             });
                         });
 
-                        Window.current.show();
-                        Window.current.center(1280, 700);
+                        Windows.current.show();
+                        // TODO: Windows.current.center(1280, 700);
                     })
 
-                    Window.current.hide();
+                    Windows.current.hide();
                 }
 
                 resolve(window.status);

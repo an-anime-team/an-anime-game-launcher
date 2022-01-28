@@ -1,7 +1,7 @@
+import { Process, Downloader, Debug, path } from '../../empathize';
+import { DebugThread } from '@empathize/framework/dist/meta/Debug';
+
 import constants from '../Constants';
-import Process from '../neutralino/Process';
-import Debug, { DebugThread } from './Debug';
-import Downloader from './Downloader';
 import Runners from './Runners';
 
 declare const Neutralino;
@@ -52,7 +52,7 @@ export default class Prefix
                 .catch(() => {
                     Downloader.download(constants.uri.winetricks, winetricksPath).then((stream) => {
                         stream.finish(async () => {
-                            await Neutralino.os.execCommand(`chmod +x "${Process.addSlashes(winetricksPath)}"`);
+                            await Neutralino.os.execCommand(`chmod +x "${path.addSlashes(winetricksPath)}"`);
 
                             resolve(winetricksPath);
                         });
@@ -64,12 +64,12 @@ export default class Prefix
     /**
      * Create wine prefix using the current selected wine
      * 
-     * @param path folder to create prefix in
+     * @param folder folder to create prefix in
      * @param progress function that will be called with every creation step
      * 
      * @returns false if there's no selected wine version. Otherwise true
      */
-    public static create(path: string, progress?: (output: string, current: number, total: number) => void): Promise<boolean>
+    public static create(folder: string, progress?: (output: string, current: number, total: number) => void): Promise<boolean>
     {
         const debugThread = new DebugThread('Prefix.create', 'Creating wine prefix');
 
@@ -108,11 +108,11 @@ export default class Prefix
                     this.getWinetricks().then(async (winetricks) => {
                         let installationProgress = 0;
 
-                        const process = await Process.run(`"${Process.addSlashes(winetricks)}" corefonts usetakefocus=n`, {
+                        const process = await Process.run(`"${path.addSlashes(winetricks)}" corefonts usetakefocus=n`, {
                             env: {
                                 WINE: `${await constants.paths.runnersDir}/${runner.name}/${runner.files.wine}`,
                                 WINESERVER: `${await constants.paths.runnersDir}/${runner.name}/${runner.files.wineserver}`,
-                                WINEPREFIX: path
+                                WINEPREFIX: folder
                             }
                         });
 

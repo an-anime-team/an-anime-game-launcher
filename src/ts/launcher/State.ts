@@ -3,22 +3,20 @@ import { dictionary, locale } from 'svelte-i18n';
 
 import semver from 'semver';
 
-import type { LauncherState } from '../types/Launcher';
+import { Windows, Debug, IPC, Notification } from '../../empathize';
+import { DebugThread } from '@empathize/framework/dist/meta/Debug';
 
-import Window from '../neutralino/Window';
+import type { LauncherState } from '../types/Launcher';
 
 import Launcher from '../Launcher';
 import Game from '../Game';
 import Patch from '../Patch';
 import Voice from '../Voice';
 import Runners from '../core/Runners';
-import Debug, { DebugThread } from '../core/Debug';
 import DXVK from '../core/DXVK';
-import IPC from '../core/IPC';
 import Locales from './Locales';
 import Git from '../core/Git';
 import constants from '../Constants';
-import Notifications from '../core/Notifications';
 
 export default class State
 {
@@ -97,8 +95,8 @@ export default class State
         this.update().then(async () => {
             IPC.write('launcher-loaded');
 
-            await Window.current.show();
-            await Window.current.center(1280, 700);
+            await Windows.current.show();
+            // FIXME: await Windows.current.center(1280, 700);
 
             // Check for new versions of the launcher
             Git.getTags(constants.uri.launcher).then((tags) => {
@@ -110,7 +108,7 @@ export default class State
 
                         const locales = (currentDictionary[currentLocale ?? 'en-us'] ?? currentDictionary['en-us'])['launcher']!['update'] as object;
                         
-                        Notifications.show({
+                        Notification.show({
                             title: locales['title'].replace('{from}', Launcher.version).replace('{to}', tag.tag),
                             body:  locales['body'].replace('{repository}', constants.uri.launcher),
                             icon: `${constants.paths.appDir}/public/images/baal64-transparent.png`
@@ -128,7 +126,7 @@ export default class State
 
                 else
                 {
-                    Window.current.setSize({
+                    Windows.current.setSize({
                         width: 1280 + (1280 - window.innerWidth),
                         height: 700 + (700 - window.innerHeight),
                         resizable: false
@@ -400,7 +398,7 @@ export default class State
                                 {
                                     state = 'game-launch-available';
 
-                                    Notifications.show({
+                                    Notification.show({
                                         title: 'An Anime Game Launcher',
                                         body: 'All the patch repositories are not available. You\'ll be able to run the game, but launcher can\'t be sure is it patched properly',
                                         icon: `${constants.paths.appDir}/public/images/baal64-transparent.png`,

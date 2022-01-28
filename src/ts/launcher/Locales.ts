@@ -2,9 +2,9 @@ import { dictionary, locale } from 'svelte-i18n';
 
 import YAML from 'yaml';
 
+import { promisify, Configs } from '../../empathize';
+
 import constants from '../Constants';
-import promisify from '../core/promisify';
-import Configs from '../Configs';
 
 type AvailableLocales =
     | 'en-us'

@@ -6,10 +6,7 @@
     import { onMount } from 'svelte';
     import { _, locale } from 'svelte-i18n';
 
-    import Configs from './ts/Configs';
-    import IPC from './ts/core/IPC';
-
-    import Window from './ts/neutralino/Window';
+    import { Configs, IPC, Windows } from './empathize';
 
     import Splash from './assets/gifs/running-qiqi.gif';
     import SplashSecret from './assets/gifs/loading-marie-please.gif';
@@ -19,8 +16,8 @@
     let phrase = Math.round(Math.random() * 8);
 
     onMount(() => {
-        Window.current.show();
-        Window.current.center(300, 400);
+        Windows.current.show();
+        // FIXME: Windows.current.center(300, 400);
     });
 
     const isLauncherLoaded = () => {
@@ -32,7 +29,7 @@
                 for (const record of launcherLoaded)
                     await record.pop();
 
-                Window.current.hide();
+                Windows.current.hide();
                 Neutralino.app.exit();
             }
 

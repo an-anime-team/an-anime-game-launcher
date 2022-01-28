@@ -1,8 +1,9 @@
 import type Launcher from '../../Launcher';
 import type { VoiceLang } from '../../types/Voice';
 
+import { promisify } from '../../../empathize';
+
 import Voice from '../../Voice';
-import promisify from '../../core/promisify';
 
 export default (launcher: Launcher): Promise<void> => {
     return new Promise(async (resolve) => {

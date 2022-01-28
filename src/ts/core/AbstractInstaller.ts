@@ -1,7 +1,9 @@
+import type { Stream as DownloadStream } from '@empathize/framework/dist/network/Downloader';
+
+import { Downloader, Archive } from '../../empathize';
+import { DebugThread } from '@empathize/framework/dist/meta/Debug';
+
 import constants from '../Constants';
-import Downloader, { Stream as DownloadStream } from './Downloader';
-import Archive from './Archive';
-import { DebugThread } from './Debug';
 
 declare const Neutralino;
 
@@ -68,7 +70,7 @@ export default abstract class Installer
                         if (shouldResolve)
                             debugThread.log(`Resolved unpack dir: ${unpackDir}`);
 
-                        Archive.unpack(archivePath, unpackDir).then((stream) => {
+                        Archive.extract(archivePath, unpackDir).then((stream) => {
                             stream.progressInterval = this.unpackProgressInterval;
         
                             stream.start(() => {

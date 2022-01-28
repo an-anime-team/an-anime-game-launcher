@@ -3,11 +3,11 @@ import type {
     RunnerFamily
 } from '../types/Runners';
 
+import { Configs, Process, path } from '../../empathize';
+import { DebugThread } from '@empathize/framework/dist/meta/Debug';
+
 import constants from '../Constants';
-import Configs from '../Configs';
 import AbstractInstaller from './AbstractInstaller';
-import Process from '../neutralino/Process';
-import { DebugThread } from './Debug';
 
 declare const Neutralino;
 
@@ -149,7 +149,7 @@ class Runners
             const name = typeof runner !== 'string' ?
                 runner.name : runner;
 
-            Process.run(`rm -rf "${Process.addSlashes(await constants.paths.runnersDir + '/' + name)}"`)
+            Process.run(`rm -rf "${path.addSlashes(await constants.paths.runnersDir + '/' + name)}"`)
                 .then((process) => {
                     process.finish(() => {
                         debugThread.log('Runner deleted');

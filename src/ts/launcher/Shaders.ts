@@ -2,9 +2,9 @@ import YAML from 'yaml';
 
 import type { Shader } from '../types/Shaders';
 
-import Configs from '../Configs';
+import { Configs, promisify } from '../../empathize';
+
 import constants from '../Constants';
-import promisify from '../core/promisify';
 
 declare const Neutralino;
 

@@ -1,11 +1,8 @@
-import Process from '../../neutralino/Process';
-import Window from '../../neutralino/Window';
+import { Process, Windows, Configs, Notification, path } from '../../../empathize';
+import { DebugThread } from '@empathize/framework/dist/meta/Debug';
 
 import Launcher from '../../Launcher';
-import Configs from '../../Configs';
 import constants from '../../Constants';
-import { DebugThread } from '../../core/Debug';
-import Notifications from '../../core/Notifications';
 import Runners from '../../core/Runners';
 import Game from '../../Game';
 
@@ -20,7 +17,7 @@ export default (launcher: Launcher): Promise<void> => {
         // If telemetry servers are not disabled
         if (!telemetry)
         {
-            Notifications.show({
+            Notification.show({
                 title: 'An Anime Game Launcher',
                 body: 'Telemetry servers are not disabled',
                 icon: `${constants.paths.appDir}/public/images/baal64-transparent.png`,
@@ -33,7 +30,7 @@ export default (launcher: Launcher): Promise<void> => {
         // Otherwise run the game
         else
         {
-            Window.current.hide();
+            Windows.current.hide();
 
             launcher.updateDiscordRPC('in-game');
 
@@ -139,7 +136,7 @@ export default (launcher: Launcher): Promise<void> => {
                 else console.warn(`GPU ${LauncherLib.getConfig('gpu')} not found. Launching on the default GPU`);
             }*/
 
-            let command = `"${Process.addSlashes(wineExeutable)}" ${await Configs.get('fps_unlocker') ? 'unlockfps.bat' : 'launcher.bat'}`;
+            let command = `"${path.addSlashes(wineExeutable)}" ${await Configs.get('fps_unlocker') ? 'unlockfps.bat' : 'launcher.bat'}`;
 
             /**
              * Gamemode integration
@@ -208,8 +205,8 @@ export default (launcher: Launcher): Promise<void> => {
                     {
                         const stopTime = Date.now();
 
-                        Window.current.show();
-                        Window.current.center(1280, 700);
+                        Windows.current.show();
+                        // FIXME: Windows.current.center(1280, 700);
 
                         launcher.updateDiscordRPC('in-launcher');
                         launcher.tray.hide();
@@ -218,7 +215,7 @@ export default (launcher: Launcher): Promise<void> => {
                         Configs.get('purge_logs.game').then(async (purge_logs) => {
                             if (purge_logs)
                             {
-                                const gameDir = Process.addSlashes(await constants.paths.gameDir);
+                                const gameDir = path.addSlashes(await constants.paths.gameDir);
 
                                 // Delete .log files (e.g. "ZFGameBrowser_xxxx.log")
                                 Neutralino.os.execCommand(`find "${gameDir}" -maxdepth 1 -type f -name "*.log" -delete`);

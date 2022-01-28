@@ -3,10 +3,11 @@ import { _ } from 'svelte-i18n';
 
 import type Launcher from '../../Launcher';
 
+import { Debug } from '../../../empathize';
+
 import Game from '../../Game';
 import Prefix from '../../core/Prefix';
 import constants from '../../Constants';
-import Debug from '../../core/Debug';
 
 declare const Neutralino;
 

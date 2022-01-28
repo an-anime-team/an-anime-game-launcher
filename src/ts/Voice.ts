@@ -1,14 +1,14 @@
 import type { VoicePack } from './types/GameData';
 import type { VoiceLang, InstalledVoice } from './types/Voice';
 
+import type { Stream as DownloadingStream } from '@empathize/framework/dist/network/Downloader';
+
+import { Configs, Debug, Downloader, promisify, path } from '../empathize';
+import { DebugThread } from '@empathize/framework/dist/meta/Debug';
+
 import constants from './Constants';
 import Game from './Game';
 import AbstractInstaller from './core/AbstractInstaller';
-import Configs from './Configs';
-import Debug, { DebugThread } from './core/Debug';
-import Downloader, { Stream as DownloadingStream } from './core/Downloader';
-import Process from './neutralino/Process';
-import promisify from './core/promisify';
 
 declare const Neutralino;
 
@@ -170,15 +170,15 @@ export default class Voice
 
             const pipeline = promisify({
                 callbacks: [
-                    () => Neutralino.os.execCommand(`rm -rf "${Process.addSlashes(`${voiceDir}/${this.langs[lang]}`)}"`),
+                    () => Neutralino.os.execCommand(`rm -rf "${path.addSlashes(`${voiceDir}/${this.langs[lang]}`)}"`),
 
                     (): Promise<void> => new Promise(async (resolve) => {
-                        Neutralino.os.execCommand(`rm -f "${Process.addSlashes(`${await constants.paths.gameDir}/Audio_${this.langs[lang]}_pkg_version`)}"`)
+                        Neutralino.os.execCommand(`rm -f "${path.addSlashes(`${await constants.paths.gameDir}/Audio_${this.langs[lang]}_pkg_version`)}"`)
                             .then(() => resolve());
                     }),
 
                     (): Promise<void> => new Promise(async (resolve) => {
-                        Neutralino.os.execCommand(`sed -i '/${this.langs[lang]}/d' "${Process.addSlashes(`${await constants.paths.gameDataDir}/Persistent/audio_lang_14`)}"`)
+                        Neutralino.os.execCommand(`sed -i '/${this.langs[lang]}/d' "${path.addSlashes(`${await constants.paths.gameDataDir}/Persistent/audio_lang_14`)}"`)
                             .then(() => resolve());
                     })
                 ],

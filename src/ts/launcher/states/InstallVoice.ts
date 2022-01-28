@@ -4,8 +4,9 @@ import { _ } from 'svelte-i18n';
 import type Launcher from '../../Launcher';
 import type { VoiceLang } from '../../types/Voice';
 
+import { promisify } from '../../../empathize';
+
 import Voice from '../../Voice';
-import promisify from '../../core/promisify';
 import Game from '../../Game';
 
 export default (launcher: Launcher): Promise<void> => {
