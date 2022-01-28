@@ -3,6 +3,7 @@ import { Notification } from '../../../empathize';
 import Launcher from '../../Launcher';
 import Patch from '../../Patch';
 import constants from '../../Constants';
+import Locales from '../Locales';
 
 export default (launcher: Launcher): Promise<void> => {
     return new Promise(async (resolve) => {
@@ -10,8 +11,7 @@ export default (launcher: Launcher): Promise<void> => {
         if (!await Launcher.isPackageAvailable('xdelta3'))
         {
             Notification.show({
-                title: 'An Anime Game Launcher',
-                body: 'You must download xdelta3 package to apply the patch',
+                ...(Locales.translate('notifications.xdelta3_package_required') as { title: string, body: string }),
                 icon: `${constants.paths.appDir}/public/images/baal64-transparent.png`,
                 importance: 'critical'
             });
@@ -78,8 +78,7 @@ export default (launcher: Launcher): Promise<void> => {
                             if (!result)
                             {
                                 Notification.show({
-                                    title: 'An Anime Game Launcher',
-                                    body: 'Patch wasn\'t applied successfully. Please, check your log file to find a reason of it, or ask someone in our discord server',
+                                    ...(Locales.translate('notifications.patch_applying_error') as { title: string, body: string }),
                                     icon: `${constants.paths.appDir}/public/images/baal64-transparent.png`
                                 });
                             }
@@ -91,8 +90,7 @@ export default (launcher: Launcher): Promise<void> => {
             }
         }).catch(() => {
             Notification.show({
-                title: 'An Anime Game Launcher',
-                body: 'All the patch repositories are not available. You\'ll be able to run the game, but launcher can\'t be sure is it patched properly',
+                ...(Locales.translate('notifications.patch_repos_unavailable') as { title: string, body: string }),
                 icon: `${constants.paths.appDir}/public/images/baal64-transparent.png`,
                 importance: 'critical'
             });

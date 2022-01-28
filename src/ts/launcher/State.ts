@@ -103,10 +103,7 @@ export default class State
                 for (const tag of tags.reverse())
                     if (semver.gt(tag.tag, Launcher.version))
                     {
-                        const currentDictionary = svelteget(dictionary);
-                        const currentLocale = svelteget(locale);
-
-                        const locales = (currentDictionary[currentLocale ?? 'en-us'] ?? currentDictionary['en-us'])['launcher']!['update'] as object;
+                        const locales = Locales.translate('notifications.launcher_update_available') as object;
                         
                         Notification.show({
                             title: locales['title'].replace('{from}', Launcher.version).replace('{to}', tag.tag),
@@ -399,8 +396,7 @@ export default class State
                                     state = 'game-launch-available';
 
                                     Notification.show({
-                                        title: 'An Anime Game Launcher',
-                                        body: 'All the patch repositories are not available. You\'ll be able to run the game, but launcher can\'t be sure is it patched properly',
+                                        ...(Locales.translate('notifications.patch_repos_unavailable') as { title: string, body: string }),
                                         icon: `${constants.paths.appDir}/public/images/baal64-transparent.png`,
                                         importance: 'critical'
                                     });

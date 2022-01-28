@@ -63,11 +63,6 @@ launcher:
       launch: Lancer
       predownload: Pre-téléchargement de mise à jour
 
-  # Launcher update
-  update:
-    title: 'Mise à jour du Launcher disponible: {from} -> {to}'
-    body: Vous pouvez télécharger la nouvelle version du launcher via le dépôt ici {repository}
-
 # Settings window
 settings:
   # General
@@ -234,3 +229,30 @@ settings:
       buttons:
         add: Ajouter
         delete: Supprimer
+
+# Notifications
+notifications:
+  # Launcher update
+  launcher_update_available:
+    title: 'Mise à jour du Launcher disponible: {from} -> {to}'
+    body: Vous pouvez télécharger la nouvelle version du launcher via le dépôt ici {repository}
+
+  # When telemetry servers are not disabled
+  telemetry_not_disabled:
+    title: An Anime Game Launcher
+    body: Telemetry servers are not disabled
+
+  # Before patch applying when xdelta3 package is not downloaded
+  xdelta3_package_required:
+    title: An Anime Game Launcher
+    body: You must download xdelta3 package to apply the patch
+
+  # If patch wasn't applied because of some error
+  patch_applying_error:
+    title: An Anime Game Launcher
+    body: Patch wasn't applied successfully. Please, check your log file to find a reason of it, or ask someone in our discord server
+
+  # Patch repositories are not available
+  patch_repos_unavailable:
+    title: An Anime Game Launcher
+    body: All the patch repositories are not available. You'll be able to run the game, but launcher can't be sure is it patched properly

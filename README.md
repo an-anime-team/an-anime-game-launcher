@@ -62,31 +62,26 @@ To work this launcher requires
 | curl | To download archives with game, voice data, runners and so on |
 | xdelta3 | To apply the patch to the game |
 | cabextract | To install fonts to the wine prefix |
-| notify-send | To send system notifications |
+| libnotify | To send system notifications |
 
 ## Install
 
 ### apt-get
 
 ```sh
-sudo apt-get install unzip tar git curl xdelta3 cabextract notify-send
+sudo apt-get install unzip tar git curl xdelta3 cabextract libnotify
 ```
 
 ### pacman
 
 ```sh
-sudo pacman -Syu unzip tar git curl xdelta3 cabextract notify-send
+sudo pacman -Syu unzip tar git curl xdelta3 cabextract libnotify
 ```
 
 ### dnf
 
 ```sh
-sudo dnf install unzip tar git curl xdelta cabextract notify-send
-```
-
-### dnf
-```sh
-sudo dnf install unzip tar git xdelta cabextract
+sudo dnf install unzip tar git curl xdelta cabextract libnotify
 ```
 
 # Additional requirements
@@ -142,7 +137,9 @@ This is our current roadmap goals. You can find older ones [here](repository/pag
 * <s>Use `LauncherLib.getGameVersion` function instead of the `config.json`'s `version` property</s> *(deprecated due to the new core functions)*
 * <s>Fix button flickering at start when the launcher's state updates</s> *(fixed due to the new framework usage and proper state updating)*
 * <s>Add downloading pause button</s> *(2.0.0 release)*
+* Move launcher on [Empathize](https://github.com/empathizejs/framework)
 * Make notifications translations
+* Add analytics window
 * Dark progress bar design
 * Statistics window
 * Changelog window

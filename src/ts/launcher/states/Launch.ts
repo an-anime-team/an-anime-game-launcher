@@ -5,6 +5,7 @@ import Launcher from '../../Launcher';
 import constants from '../../Constants';
 import Runners from '../../core/Runners';
 import Game from '../../Game';
+import Locales from '../Locales';
 
 declare const Neutralino;
 
@@ -18,8 +19,7 @@ export default (launcher: Launcher): Promise<void> => {
         if (!telemetry)
         {
             Notification.show({
-                title: 'An Anime Game Launcher',
-                body: 'Telemetry servers are not disabled',
+                ...(Locales.translate('notifications.telemetry_not_disabled') as { title: string, body: string }),
                 icon: `${constants.paths.appDir}/public/images/baal64-transparent.png`,
                 importance: 'critical'
             });

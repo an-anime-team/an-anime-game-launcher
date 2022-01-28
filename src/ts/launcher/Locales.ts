@@ -1,3 +1,4 @@
+import { get as svelteget } from 'svelte/store';
 import { dictionary, locale } from 'svelte-i18n';
 
 import YAML from 'yaml';
@@ -98,7 +99,12 @@ export default class Locales
             let message = currentDictionary[currentLocale] ?? currentDictionary['en-us'];
 
             for (const path of localeName.split('.'))
-                message = message[path];
+            {
+                message = message[path] ?? null;
+
+                if (message === null)
+                    break;
+            }
 
             localizer(message);
         };
@@ -116,6 +122,26 @@ export default class Locales
             if (currentLocale)
                 updateLocalizer();
         });
+    }
+
+    /**
+     * Get translation from the currently selected locale
+     */
+    public static translate(message: string): string|object|null
+    {
+        const currentDictionary = svelteget(dictionary) as object;
+
+        let translation = currentDictionary[svelteget(locale) ?? 'en-us'] ?? currentDictionary['en-us'];
+
+        for (const path of message.split('.'))
+        {
+            translation = translation[path] ?? null;
+
+            if (translation === null)
+                break;
+        }
+
+        return translation;
     }
 
     /**
