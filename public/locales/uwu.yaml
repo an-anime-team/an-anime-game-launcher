@@ -230,15 +230,15 @@ notifications:
     title: 'waunchew update avaiwable: {from} -> {to}'
     body: you can downwoad the new vewsion of the waunchew fwom the pwoject's wepositowy at {repository}
 
+  # Before telemetry check when iputils is not downloaded
+  iputils_package_required:
+    title: an anime game waunchew
+    body: you m-must have iputils instawwed fow tewemetwy checking
+
   # When telemetry servers are not disabled
   telemetry_not_disabled:
     title: an anime game waunchew
     body: tewemetwy sewvers are n-not disabwed
-
-  # Before telemetry check when iputils is not downloaded
-  iputils_package_required:
-    title: An Anime Game Launcher
-    body: You must have iputils installed for telemetry checking
 
   # Before patch applying when xdelta3 package is not downloaded
   xdelta3_package_required:
