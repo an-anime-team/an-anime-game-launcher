@@ -225,18 +225,31 @@ settings:
 
 # Notifications
 notifications:
+  # Launcher update
+  launcher_update_available:
+    title: 'waunchew update avaiwable: {from} -> {to}'
+    body: you can downwoad the new vewsion of the waunchew fwom the pwoject's wepositowy at {repository}
+
   # When telemetry servers are not disabled
   telemetry_not_disabled:
     title: an anime game waunchew
     body: tewemetwy sewvers are n-not disabwed
+
+  # Before telemetry check when iputils is not downloaded
+  iputils_package_required:
+    title: An Anime Game Launcher
+    body: You must have iputils installed for telemetry checking
+
   # Before patch applying when xdelta3 package is not downloaded
   xdelta3_package_required:
     title: an anime game waunchew
     body: you must downwoad xdelta3/xdelta package t-to a-appwy t-the patch
+
   # If patch wasn't applied because of some error
   patch_applying_error:
     title: an anime game waunchew
     body: patch wasn't appwied successfuwwy. pwease, check youw wog file to find a weason of i-it, ow a-ask s-someone in ouw discowd s-sewver
+
   # Patch repositories are not available
   patch_repos_unavailable:
     title: an anime game waunchew

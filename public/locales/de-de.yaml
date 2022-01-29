@@ -227,18 +227,31 @@ settings:
 
 # Notifications
 notifications:
+  # Launcher update
+  launcher_update_available:
+    title: 'Launcher update verfügbar: {from} -> {to}'
+    body: Sie können das update von {repository} herunterladen
+
+  # Before telemetry check when iputils is not downloaded
+  iputils_package_required:
+    title: An Anime Game Launcher
+    body: You must have iputils installed for telemetry checking
+
   # When telemetry servers are not disabled
   telemetry_not_disabled:
     title: An Anime Game Launcher
     body: Telemetry server sind nicht deaktiviert.
+
   # Before patch applying when xdelta3 package is not downloaded
   xdelta3_package_required:
     title: An Anime Game Launcher
     body: Sie müssen xdelta3/xdelta installiert haben um den Patch anzuwenden
+
   # If patch wasn't applied because of some error
   patch_applying_error:
     title: An Anime Game Launcher
     body: Der Patch wurde nicht erfolgreich angewendet. Bitte überprüfen Sie Ihre Log-Datei, um den Grund dafür zu finden, oder fragen Sie jemanden auf unserem Discord-Server
+
   # Patch repositories are not available
   patch_repos_unavailable:
     title: An Anime Game Launcher

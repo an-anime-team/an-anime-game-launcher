@@ -230,6 +230,11 @@ notifications:
     title: 'Actualización del launcher disponible: {from} -> {to}'
     body: Puedes descargar una nueva versión del launcher desde el repositorio del proyecto en {repository}
 
+  # Before telemetry check when iputils is not downloaded
+  iputils_package_required:
+    title: An Anime Game Launcher
+    body: You must have iputils installed for telemetry checking
+
   # When telemetry servers are not disabled
   telemetry_not_disabled:
     title: An Anime Game Launcher

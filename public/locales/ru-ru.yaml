@@ -230,6 +230,11 @@ notifications:
     title: 'Доступно обновление лаунчера: {from} -> {to}'
     body: Вы можете загрузить новую версию лаунчера из репозитория проекта по ссылке {repository}
 
+  # Когда не установлен пакет iputils перед проверкой телеметрии
+  iputils_package_required:
+    title: An Anime Game Launcher
+    body: Вы должны установить пакет iputils для проверки состояния телеметрии со стороны игры
+
   # Когда сервера телеметрии не отключены
   telemetry_not_disabled:
     title: An Anime Game Launcher
@@ -238,7 +243,7 @@ notifications:
   # Перед применением патча когда пакет xdelta3 не установлен
   xdelta3_package_required:
     title: An Anime Game Launcher
-    body: Вы обязаны установить пакет xdelta3 перед применением патча
+    body: Вы должны установить пакет xdelta3 перед применением патча
 
   # Если патч не был применён по какой-то причине
   patch_applying_error:

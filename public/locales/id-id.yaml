@@ -230,6 +230,11 @@ notifications:
     title: 'Pembaruan peluncur tersedia: {from} -> {to}'
     body: Kamu dapat mengunduh versi baru peluncur dari repositori proyek di {repository}
 
+  # Before telemetry check when iputils is not downloaded
+  iputils_package_required:
+    title: An Anime Game Launcher
+    body: You must have iputils installed for telemetry checking
+
   # When telemetry servers are not disabled
   telemetry_not_disabled:
     title: An Anime Game Launcher
