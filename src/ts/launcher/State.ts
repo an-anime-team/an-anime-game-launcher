@@ -96,7 +96,7 @@ export default class State
             IPC.write('launcher-loaded');
 
             await Windows.current.show();
-            // FIXME: await Windows.current.center(1280, 700);
+            await Windows.current.center(1280, 700);
 
             // Check for new versions of the launcher
             Git.getTags(constants.uri.launcher).then((tags) => {

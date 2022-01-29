@@ -142,6 +142,7 @@ This is our current roadmap goals. You can find older ones [here](repository/pag
 * Add `latest.log` file generation
 * Implement manual config flushing functionality from the Empathize's API
 * Add analytics window
+* Add an option to show terminal with the wine's log of the game
 * Dark progress bar design
 * Statistics window
 * Changelog window

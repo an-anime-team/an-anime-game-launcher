@@ -95,7 +95,7 @@ export default class Launcher
                         });
 
                         Windows.current.show();
-                        // TODO: Windows.current.center(1280, 700);
+                        Windows.current.center(1280, 700);
                     })
 
                     Windows.current.hide();

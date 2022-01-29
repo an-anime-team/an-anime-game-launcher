@@ -208,7 +208,7 @@ export default (launcher: Launcher): Promise<void> => {
                                 const stopTime = Date.now();
 
                                 Windows.current.show();
-                                // FIXME: Windows.current.center(1280, 700);
+                                Windows.current.center(1280, 700);
 
                                 launcher.updateDiscordRPC('in-launcher');
                                 launcher.tray.hide();

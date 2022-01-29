@@ -17,7 +17,7 @@
 
     onMount(() => {
         Windows.current.show();
-        // FIXME: Windows.current.center(300, 400);
+        Windows.current.center(300, 400);
     });
 
     const isLauncherLoaded = () => {

@@ -9,7 +9,7 @@
 
             cursor: pointer
             font-size: 14px
-            
+
             padding: 8px 20px
 
             color: map.get($theme-map, "text")
@@ -21,11 +21,11 @@
                 cursor: default
 
         .button-primary
-            background-color: map.get($theme-map, "background2")
+            background-color: map.get($theme-map, "background2") !important
 
-            &:hover
-                background-color: map.get($theme-map, "primary")
-                color: white
+            &:hover:not([disabled])
+                background-color: map.get($theme-map, "primary") !important
+                color: white !important
 
 @import "src/sass/themes/light"
 @import "src/sass/themes/dark"

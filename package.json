@@ -11,7 +11,7 @@
     "check": "svelte-check --tsconfig ./tsconfig.json"
   },
   "dependencies": {
-    "@empathize/framework": "^1.4.0",
+    "@empathize/framework": "^1.4.2",
     "js-md5": "^0.7.3",
     "semver": "^7.3.5",
     "svelte-i18n": "^3.3.13",

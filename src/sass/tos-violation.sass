@@ -1,0 +1,34 @@
+@use "sass:map"
+
+@import "basic"
+
+@import "components/button"
+@import "components/checkbox"
+
+@mixin themable($theme-name, $theme-map)
+    body[data-theme=#{$theme-name}]
+        background-color: map.get($theme-map, "background")
+        color: map.get($theme-map, "text")
+
+        p, span, div
+            color: map.get($theme-map, "text")
+
+        main
+            padding: 16px 64px
+
+            p
+                text-align: justify
+                line-height: 24px
+
+            .action-buttons
+                display: flex
+                margin-top: 28px
+
+                .buttons-right
+                    margin-left: auto
+
+@import "themes/light"
+@import "themes/dark"
+
+@include themable(light, $light)
+@include themable(dark, $dark)

@@ -23,8 +23,6 @@
     import ShadersSelection from './components/ShadersSelection.svelte';
     import EnvironmentManager from './components/EnvironmentManager.svelte';
 
-    // TODO: somehow simplify all this variables definitions
-
     /**
      * Launcher language
      */
@@ -133,7 +131,7 @@
     // Do some stuff when all the content will be loaded
     onMount(async () => {
         await Windows.current.show();
-        // FIXME: await Windows.current.center(900, 600);
+        await Windows.current.center(900, 600);
 
         // This thing will fix window resizing
         // in several cases (wayland + gnome + custom theme)
@@ -400,7 +398,7 @@
                 <span><u on:click={() => Neutralino.os.open(constants.uri.launcher)}>GitLab</u></span>
 
                 <!-- svelte-ignore missing-declaration -->
-                <span><u on:click={() => Neutralino.os.open('https://discord.gg/ck37X6UWBp')}>Discord</u></span>
+                <span><u on:click={() => Neutralino.os.open(constants.uri.discord)}>Discord</u></span>
 
                 <!-- svelte-ignore missing-declaration -->
                 <span><u on:click={() => Neutralino.os.open(constants.uri.patch.origin)}>Patch repository</u></span>

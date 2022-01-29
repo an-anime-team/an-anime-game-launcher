@@ -37,6 +37,14 @@
             borderless: true,
             exitProcessOnClose: false
         });
+
+        /*Windows.open('tos-violation', {
+            title: 'ToS violation warning',
+            width: 700,
+            height: 540,
+            alwaysOnTop: true,
+            enableInspector: true
+        });*/
     });
 
     Neutralino.events.on('windowClose', async () => {

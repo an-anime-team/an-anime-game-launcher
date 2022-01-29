@@ -193,7 +193,12 @@ export default class constants
             /**
              * anAnimeCompany
              */
-            company: atob('bWlIb1lv')
+            company: atob('bWlIb1lv'),
+
+            /**
+             * NOTAREALANIMECOMPANY
+             */
+            company_alterego: atob('Q09HTk9TUEhFUkU=')
         },
 
         lowercase:
@@ -217,6 +222,7 @@ export default class constants
             additional: 'https://dev.kaifa.ch/Maroxy/dawn'
         },
         launcher: 'https://gitlab.com/KRypt0n_/an-anime-game-launcher',
+        discord: 'https://discord.gg/ck37X6UWBp',
         telemetry: [
             `log-upload-os.${this.placeholders.lowercase.company}.com`,
             'overseauspider.yuanshen.com'

@@ -261,3 +261,22 @@ notifications:
   patch_repos_unavailable:
     title: An Anime Game Launcher
     body: Pas tous les dépôts des patchs sont disponibles. Vous pouvez lancer le jeu, mais le Launcher ne peut pas garantir que celui-ci est correctement patcher
+
+# ToS violation warning window
+tos_violation:
+  title: ToS violation warning
+  heading: ⚠️ Be warned
+  body: This launcher is an unofficial tool, in no way related to {company} nor {company_alterego}.
+        This tool is designed to facilitate playing {game} on Linux,
+        and was built with the sole purpose of installing and running the game with less hassle.
+        It does so by using existing components and making the experience simple for the user.
+        However, some components used here likely break the {company} Terms of Service for {game}.
+        If you are using this launcher, your player account could become identified as TOS-non-compliant by {company}/{company_alterego}.
+        If this happens, as your account would be disobeying TOS, {company}/{company_alterego} are free to do what they want. Including banning.
+        If you understand the risk of trying to play the game in an unofficial capacity, press OK and let's go researching the world of Teyvat!
+  buttons:
+    ok:
+      title: I understand the risk
+      tooltip: You really should read this text above. It's important
+    cancel: Cancel
+    discord: Our discord server

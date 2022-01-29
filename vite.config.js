@@ -15,7 +15,9 @@ export default defineConfig({
             input: [
                 'index.html',
                 'settings.html',
-                'splash.html'
+                'splash.html',
+                'analytics.html',
+                'tos-violation.html'
             ]
         }
     }

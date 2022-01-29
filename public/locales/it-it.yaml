@@ -132,11 +132,11 @@ settings:
 
       # Wine synchronization
       winesync:
-        title: Wine synchronization
-        tooltip: ESync is a mechanism of synchronizing multi-thread operations. It can improve your game performance.
-                 FSync is an improved version of ESync that works on specific kernel versions
+        title: Sincronizzazione Wine
+        tooltip: ESync è un meccanismo di sincronizzazione per operazioni multi-thread. Può migliorare le performance di gioco.
+                 FSync è una versione migliorata di ESync che funziona su alcune versioni specifiche del kernel.
         items:
-          none: None
+          none: Nessuno
           esync: ESync
           fsync: FSync
       
@@ -232,24 +232,43 @@ notifications:
   # Before telemetry check when iputils is not downloaded
   iputils_package_required:
     title: An Anime Game Launcher
-    body: You must have iputils installed for telemetry checking
+    body: Devi avere iputils installato per controllare i servizi di telemetria
 
   # When telemetry servers are not disabled
   telemetry_not_disabled:
     title: An Anime Game Launcher
-    body: Telemetry servers are not disabled
+    body: I servizi di telemtria non sono disattivati
 
   # Before patch applying when xdelta3 package is not downloaded
   xdelta3_package_required:
     title: An Anime Game Launcher
-    body: You must download xdelta3 package to apply the patch
+    body: Devi scaricare il package xdelta3 per attivare la patch
 
   # If patch wasn't applied because of some error
   patch_applying_error:
     title: An Anime Game Launcher
-    body: Patch wasn't applied successfully. Please, check your log file to find a reason of it, or ask someone in our discord server
+    body: La patch non è stata applicata con successo. Controlla i file di log per trovare il motivo, o chiedi a qualcuno sul nostro server Discord.
 
   # Patch repositories are not available
   patch_repos_unavailable:
     title: An Anime Game Launcher
-    body: All the patch repositories are not available. You'll be able to run the game, but launcher can't be sure is it patched properly
+    body: Tutte le repository della patch non sono disponibili. Puoi avviare il gioco,
+          ma il launcher non si può assicurare che la patch è stata applicata correttamente
+
+# ToS violation warning window
+tos_violation:
+  title: Avviso di violazione ToS
+  heading: ⚠️ Avviso importante
+           Questo launcher non è ufficiale, non è in alcun modo collegato a {company} o {company_alterego}.
+           Questo mezzo è designato per facilitare l'avvio di {game} su Linux, ed è stato creato con il solo scopo di facilitare l'installazione di {game} su Linux.
+           Può fare questo usando componenti già esistenti e rendendo l'esperienza più semplice per l'utente.
+           Alcuni componenti usati potrebbero infrangere i Termini di Servizio di {game}.
+           Se stai usando questo launcher, il tuo account potrebbe essere identificato come non conforme ai TOS da {company}/{company_alterego}.
+           Se questo succede, {company}/{company_alterego} ha pieno diritto sul tuo account, incluso il ban.
+           Se comprendi il rischio di provare a giocare con un mezzo non ufficiale, premi OK e inizia ad esplorare il mondo di Tevyat!
+  buttons:
+    ok:
+      title: Capisco il rischio
+      tooltip: Dovresti davvero leggere il testo sopra. È importante
+    cancel: Annulla
+    discord: Il nostro server Discord
