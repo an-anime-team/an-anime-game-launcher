@@ -13,6 +13,20 @@ export default (launcher: Launcher): Promise<void> => {
     return new Promise(async (resolve) => {
         const debugThread = new DebugThread('State/Launch', 'Starting the game');
 
+        // Show an error notification if ping is not available
+        if (!await Launcher.isPackageAvailable('ping'))
+        {
+            Notification.show({
+                ...(Locales.translate('notifications.iputils_package_required') as { title: string, body: string }),
+                icon: `${constants.paths.appDir}/public/images/baal64-transparent.png`,
+                importance: 'critical'
+            });
+
+            debugThread.log('iputils package is not installed!');
+            
+            resolve();
+        }
+
         const telemetry = await Game.isTelemetryDisabled();
 
         // If telemetry servers are not disabled
