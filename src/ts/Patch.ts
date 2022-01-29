@@ -52,8 +52,9 @@ class Stream extends AbstractInstaller
 
                     /**
                      * Remove /etc/hosts editing due to sudo permissions
-                     */
+                     * Let's keep the old removal in case of future issues
                     () => Neutralino.os.execCommand(`cd "${path.addSlashes(patchDir)}" && sed -i '/^# ===========================================================/,+68d' patch.sh`),
+                    */
                     
                     /**
                      * Remove test version restrictions from the anti-login crash patch
@@ -73,7 +74,7 @@ class Stream extends AbstractInstaller
                     /**
                      * Execute the main patch installation script
                      */
-                    () => Neutralino.os.execCommand(`cd "${path.addSlashes(gameDir)}" && yes yes | bash "${path.addSlashes(patchDir)}/patch.sh"`),
+                    () => Neutralino.os.execCommand(`cd "${path.addSlashes(gameDir)}" && yes yes | pkexec bash "${path.addSlashes(patchDir)}/patch.sh"`),
 
                     /**
                      * Execute the anti-login crash patch installation script
