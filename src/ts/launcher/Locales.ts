@@ -44,17 +44,31 @@ export default class Locales
     }
 
     /**
-     * Get system-used ($LANG) locale name, or {fallback}
+     * Get system-used ($LC_ALL / $LC_MESSAGES / $LANG) locale name, or {fallback}
      * if system-used locale is not supported
+     * 
+     * From "man locale.7":
+     * 
+     * 1. If there is a non-null environment variable LC_ALL, the value of LC_ALL is used.
+     * 2. If an environment variable with the same name as one of the categories above exists and is non-null, its value is used for that category.
+     * 3. If there is a non-null environment variable LANG, the value of LANG is used.
      */
     public static system(fallback: AvailableLocales = 'en-us'): Promise<AvailableLocales>
     {
         return new Promise(async (resolve) => {
-            let locale = await Neutralino.os.getEnv('LANG');
-            
-            locale = locale.substring(0, locale.indexOf('.')).toLocaleLowerCase().replace('_', '-');
+            let locale = await Neutralino.os.getEnv('LC_ALL');
 
-            resolve(this.fallback(locale as AvailableLocales, fallback));
+            // If $LC_ALL is empty - trying to get $LC_MESSAGES
+            if (!locale)
+                locale = await Neutralino.os.getEnv('LC_MESSAGES');
+
+            // If $LC_MESSAGES is empty - getting $LANG
+            // If it's empty - than {fallback} will be used by the this.fallback() method
+            if (!locale)
+                locale = await Neutralino.os.getEnv('LANG');
+
+            // "en_US.UTF-8" -> "en-us"
+            resolve(this.fallback(locale.substring(0, locale.indexOf('.')).toLowerCase().replace('_', '-') as AvailableLocales, fallback));
         });
     }
 
