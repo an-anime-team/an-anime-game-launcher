@@ -1,11 +1,12 @@
 import { Configs, promisify } from './empathize';
 
 import constants from './ts/Constants';
+import Locales from './ts/launcher/Locales';
 
 promisify(async () => {
     Configs.defaults({
         lang: {
-            launcher: 'en-us',
+            launcher: await Locales.system(),
             voice: [
                 'en-us'
             ]

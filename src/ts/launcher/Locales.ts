@@ -44,6 +44,21 @@ export default class Locales
     }
 
     /**
+     * Get system-used ($LANG) locale name, or {fallback}
+     * if system-used locale is not supported
+     */
+    public static system(fallback: AvailableLocales = 'en-us'): Promise<AvailableLocales>
+    {
+        return new Promise(async (resolve) => {
+            let locale = await Neutralino.os.getEnv('LANG');
+            
+            locale = locale.substring(0, locale.indexOf('.')).toLocaleLowerCase().replace('_', '-');
+
+            resolve(this.fallback(locale as AvailableLocales, fallback));
+        });
+    }
+
+    /**
      * Get locales
      * 
      * @param locale - locale name to get. If null - then will be returned array of all available locales 
