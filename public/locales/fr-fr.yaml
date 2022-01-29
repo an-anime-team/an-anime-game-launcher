@@ -240,7 +240,7 @@ notifications:
   # Before telemetry check when iputils is not downloaded
   iputils_package_required:
     title: An Anime Game Launcher
-    body: You must have iputils installed for telemetry checking
+    body: Vous devez installer "iputils" pour pouvoir vérifier la télémétrie
 
   # When telemetry servers are not disabled
   telemetry_not_disabled:
