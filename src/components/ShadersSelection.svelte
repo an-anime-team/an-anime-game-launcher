@@ -1,10 +1,11 @@
 <script lang="ts">
     import { _, locale } from 'svelte-i18n';
 
+    import { Package } from '../empathize';
+
     import type { Shader } from '../ts/types/Shaders';
 
     import Shaders from '../ts/launcher/Shaders';
-    import Launcher from '../ts/Launcher';
     
     import SelectionBox from './SelectionBox.svelte';
 
@@ -23,7 +24,7 @@
         shadersOptions['custom'] = 'settings.shaders.items.shaders.items.custom';
     });
 
-    Launcher.isPackageAvailable('reshade').then((available) => reshadeInstalled = available);
+    Package.exists('reshade').then((available) => reshadeInstalled = available);
 </script>
 
 <div>

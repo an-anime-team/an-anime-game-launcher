@@ -1,6 +1,7 @@
-import { Notification } from '../../../empathize';
+import { Notification, Package } from '../../../empathize';
 
-import Launcher from '../../Launcher';
+import type Launcher from '../../Launcher';
+
 import Patch from '../../Patch';
 import constants from '../../Constants';
 import Locales from '../Locales';
@@ -8,7 +9,7 @@ import Locales from '../Locales';
 export default (launcher: Launcher): Promise<void> => {
     return new Promise(async (resolve) => {
         // Show an error notification if xdelta3 package is not installed
-        if (!await Launcher.isPackageAvailable('xdelta3'))
+        if (!await Package.exists('xdelta3'))
         {
             Notification.show({
                 ...(Locales.translate('notifications.xdelta3_package_required') as { title: string, body: string }),

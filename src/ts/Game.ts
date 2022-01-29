@@ -7,7 +7,7 @@ import type {
 
 import type { Stream as DownloadingStream } from '@empathize/framework/dist/network/Downloader';
 
-import { fetch, Domain, promisify, Downloader, Cache, Debug } from '../empathize';
+import { fetch, Domain, promisify, Downloader, Cache, Debug, Package } from '../empathize';
 import { DebugThread } from '@empathize/framework/dist/meta/Debug';
 
 import constants from './Constants';
@@ -246,31 +246,45 @@ export default class Game
 
     /**
      * Check if the telemetry servers are disabled
+     * 
+     * @returns throws Error object when iputils package (ping command) is not available
      */
     public static isTelemetryDisabled(): Promise<boolean>
     {
         const debugThread = new DebugThread('Game.isTelemetryDisabled', 'Checking if the telemetry servers are disabled');
 
-        return new Promise(async (resolve) => {
-            const pipeline = promisify({
-                callbacks: await constants.uri.telemetry.map((domain) => {
-                    return new Promise((resolve) => {
-                        Domain.getInfo(domain).then((info) => resolve(info.available));
-                    });
-                }),
-                callAtOnce: true,
-                interval: 500
-            });
+        return new Promise(async (resolve, reject) => {
+            // If ping command is not available - throw an error
+            if (!await Package.exists('ping'))
+            {
+                debugThread.log('iputils package is not installed');
 
-            pipeline.then((result) => {
-                let disabled = false;
+                reject(new Error('iputils package is not installed'));
+            }
 
-                Object.values(result).forEach((value) => disabled ||= value as boolean);
+            // Otherwise - check if telemetry is disabled
+            else 
+            {
+                const pipeline = promisify({
+                    callbacks: await constants.uri.telemetry.map((domain) => {
+                        return new Promise((resolve) => {
+                            Domain.getInfo(domain).then((info) => resolve(info.available));
+                        });
+                    }),
+                    callAtOnce: true,
+                    interval: 500
+                });
 
-                debugThread.log(`Telemetry is ${disabled ? 'not ' : ''}disabled`);
+                pipeline.then((result) => {
+                    let disabled = false;
 
-                resolve(disabled === false);
-            });
+                    Object.values(result).forEach((value) => disabled ||= value as boolean);
+
+                    debugThread.log(`Telemetry is ${disabled ? 'not ' : ''}disabled`);
+
+                    resolve(disabled === false);
+                });
+            }
         });
     }
 }

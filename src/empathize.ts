@@ -9,7 +9,7 @@ import {
     Windows,
 
     // OS API
-    Process, Tray, IPC, Notification, Archive,
+    Process, Tray, IPC, Notification, Archive, Package,
 
     // Network API
     fetch, Domain, Downloader,
@@ -42,7 +42,7 @@ export {
     Windows,
 
     // OS API
-    Process, Tray, IPC, Notification, Archive,
+    Process, Tray, IPC, Notification, Archive, Package,
 
     // Network API
     fetch, Domain, Downloader,

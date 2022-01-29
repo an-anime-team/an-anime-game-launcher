@@ -154,45 +154,4 @@ export default class Launcher
             });
         });
     }
-
-    /**
-     * Check if some binary file or package downloaded
-     */
-    public static isPackageAvailable(name: string): Promise<boolean>
-    {
-        return new Promise(async (resolve) => {
-            let available = false;
-
-            let paths: string[] = (await Neutralino.os.getEnv('PATH')).split(':');
-    
-            // Add "/usr/share" if it is not included
-            // because we use these paths to check if some library exists in system
-            if (!paths.includes('/usr/share'))
-                paths.push('/usr/share');
-    
-            // Sort them by length because obviously
-            // "/usr/bin" more important than some randomly generated
-            // yaml or npm folder for its globally downloaded packages
-            paths = paths.sort((a, b) => a.length - b.length);
-
-            for (const path of paths)
-            {
-                // Becasue await Neutralino.filesystem.getStats will throw an erro
-                // if the specified path doesn't exist
-                try
-                {
-                    if (await Neutralino.filesystem.getStats(`${path}/${name}`))
-                    {
-                        available = true;
-
-                        break;
-                    }
-                }
-
-                catch {}
-            }
-
-            resolve(available);
-        });
-    }
 };

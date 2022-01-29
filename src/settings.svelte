@@ -6,7 +6,7 @@
     import { onMount } from 'svelte';
     import { _, locale, locales } from 'svelte-i18n';
 
-    import { Windows, Configs, Debug, IPC, Process, path } from './empathize';
+    import { Windows, Configs, Debug, IPC, Process, path, Package } from './empathize';
 
     import constants from './ts/Constants';
     import Launcher from './ts/Launcher';
@@ -86,7 +86,7 @@
         tooltip: 'settings.enhancements.items.gamemode.tooltip.enabled'
     };
 
-    Launcher.isPackageAvailable('gamemoderun').then((available) => {
+    Package.exists('gamemoderun').then((available) => {
         gamemode.disabled = !available;
 
         if (gamemode.disabled)
