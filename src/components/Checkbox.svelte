@@ -16,12 +16,12 @@
 
     Configs.get(prop).then((value) => active = value as boolean);
 
-    function updateCheckbox()
+    async function updateCheckbox()
     {
         active = !active;
 
         if (prop)
-            Configs.set(prop, active);
+            await Configs.set(prop, active);
 
         if (valueChanged)
             valueChanged(active);
