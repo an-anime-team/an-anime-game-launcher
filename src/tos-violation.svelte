@@ -6,12 +6,21 @@
     import { onMount } from 'svelte';
     import { _, locale } from 'svelte-i18n';
 
-    import { Configs, Windows } from './empathize';
+    import { Configs, Windows, IPC } from './empathize';
 
     import constants from './ts/Constants';
     import Locales from './ts/launcher/Locales';
 
     import Button from './components/Button.svelte';
+
+    Neutralino.events.on('windowClose', async () => {
+        await IPC.write({
+            type: 'tos-violation',
+            agreed: false
+        });
+
+        Neutralino.app.exit();
+    });
 
     onMount(() => {
         Windows.current.show();
@@ -61,11 +70,25 @@
                 primary={true}
                 disabled={timer > 0}
 
-                click={() => Neutralino.app.exit()}
+                click={async () => {
+                    await IPC.write({
+                        type: 'tos-violation',
+                        agreed: true
+                    });
+
+                    Neutralino.app.exit();
+                }}
             />
 
             <!-- svelte-ignore missing-declaration -->
-            <Button lang="tos_violation.buttons.cancel" primary={true} click={() => Neutralino.app.exit()} />
+            <Button lang="tos_violation.buttons.cancel" primary={true} click={async () => {
+                await IPC.write({
+                    type: 'tos-violation',
+                    agreed: false
+                });
+
+                Neutralino.app.exit();
+            }} />
 
             <div class="buttons-right">
                 <!-- svelte-ignore missing-declaration -->

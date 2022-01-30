@@ -39,9 +39,18 @@ export default class Launcher
         onMount(async () => {
             const launcherDir = await constants.paths.launcherDir;
 
+            // Clear IPC pull if during the prev launcher's run
+            // it wasn't cleared for some reasons (crash?)
+            await IPC.purge();
+
             // Create launcher folder if it doesn't exist
             if (!await fs.exists(launcherDir))
+            {
                 await fs.mkdir(launcherDir);
+
+                // Needs for the ToS violation warning window
+                await fs.write(path.join(launcherDir, '.first-run'), '');
+            }
             
             // Create logs folder if it doesn't exist
             if (!await fs.exists(path.join(launcherDir, 'logs')))

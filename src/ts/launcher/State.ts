@@ -3,7 +3,7 @@ import { dictionary, locale } from 'svelte-i18n';
 
 import semver from 'semver';
 
-import { Windows, Debug, IPC, Notification } from '../../empathize';
+import { Windows, Debug, IPC, Notification, fs, path } from '../../empathize';
 import { DebugThread } from '@empathize/framework/dist/meta/Debug';
 
 import type { LauncherState } from '../types/Launcher';
@@ -17,6 +17,8 @@ import DXVK from '../core/DXVK';
 import Locales from './Locales';
 import Git from '../core/Git';
 import constants from '../Constants';
+
+declare const Neutralino;
 
 export default class State
 {
@@ -92,9 +94,59 @@ export default class State
                 });
         };
 
+        Windows.open('splash', {
+            title: 'Splash',
+            width: 300,
+            height: 400,
+            borderless: true,
+            exitProcessOnClose: false
+        });
+
         this.update().then(async () => {
+            // Close splash screen
             IPC.write('launcher-loaded');
 
+            // If it is the first run - we should show ToS violation warning
+            if (await fs.exists(path.join(await constants.paths.launcherDir, '.first-run')))
+            {
+                Windows.open('tos-violation', {
+                    title: 'ToS violation warning',
+                    width: 700,
+                    height: 500,
+                    alwaysOnTop: true,
+                    exitProcessOnClose: false
+                });
+
+                await new Promise<void>((resolve) => {
+                    const tosWaiter = async () => {
+                        let found = false;
+
+                        for (const record of await IPC.read())
+                            if (record.data['type'] == 'tos-violation')
+                            {
+                                found = true;
+
+                                if (record.pop().data['agreed'])
+                                {
+                                    fs.remove(path.join(await constants.paths.launcherDir, '.first-run'));
+
+                                    resolve();
+                                }
+
+                                else Neutralino.app.exit();
+
+                                break;
+                            }
+
+                        if (!found)
+                            setTimeout(tosWaiter, 1000);
+                    };
+
+                    setTimeout(tosWaiter, 1000);
+                });
+            }
+
+            // Show launcher's window
             await Windows.current.show();
             await Windows.current.center(1280, 700);
 

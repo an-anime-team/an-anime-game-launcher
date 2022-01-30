@@ -19,24 +19,6 @@
 
     const launcher = new Launcher(onMount);
 
-    Neutralino.events.on('ready', () => {
-        Windows.open('splash', {
-            title: 'Splash',
-            width: 300,
-            height: 400,
-            borderless: true,
-            exitProcessOnClose: false
-        });
-
-        /*Windows.open('tos-violation', {
-            title: 'ToS violation warning',
-            width: 700,
-            height: 540,
-            alwaysOnTop: true,
-            enableInspector: true
-        });*/
-    });
-
     Neutralino.events.on('windowClose', async () => {
         Downloader.closeStreams(true);
         Archive.closeStreams(true);
