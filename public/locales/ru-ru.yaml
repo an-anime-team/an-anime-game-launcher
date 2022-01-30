@@ -141,6 +141,15 @@ settings:
           none: Отключена
           esync: ESync
           fsync: FSync
+
+      # Виртуальный рабочий стол Wine
+      winevd:
+        title: Виртуальный рабочий стол
+        settings:
+          title: Настройки виртуального рабочего стола
+          items:
+            height: Высота
+            width: Ширина
       
       # GameMode
       gamemode:

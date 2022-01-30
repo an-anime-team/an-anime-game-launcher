@@ -112,7 +112,7 @@ settings:
             in-launcher: Launcher text
             in-game: In-game text
             selectIcon: Select icon
-
+            
       # Some buttons
       buttons:
         winetricks: winetricks
@@ -141,6 +141,15 @@ settings:
           none: None
           esync: ESync
           fsync: FSync
+
+      # Wine Virtual Desktop
+      winevd:
+        title: Virtual Desktop
+        settings:
+          title: Virtual Desktop settings
+          items:
+            height: Height
+            width: Width
       
       # GameMode
       gamemode:

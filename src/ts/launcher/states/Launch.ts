@@ -138,7 +138,7 @@ export default (launcher: Launcher): Promise<void> => {
                         else console.warn(`GPU ${LauncherLib.getConfig('gpu')} not found. Launching on the default GPU`);
                     }*/
 
-                    let command = `"${path.addSlashes(wineExeutable)}" ${await Configs.get('fps_unlocker') ? 'unlockfps.bat' : 'launcher.bat'}`;
+                    let command = `"${path.addSlashes(wineExeutable)}" ${await Configs.get('winevd.enabled') ? `explorer /desktop=animegame,${await Configs.get('winevd.height')}x${await Configs.get('winevd.width')}` : ''} ${await Configs.get('fps_unlocker') ? 'unlockfps.bat' : 'launcher.bat'}`;
 
                     /**
                      * Gamemode integration

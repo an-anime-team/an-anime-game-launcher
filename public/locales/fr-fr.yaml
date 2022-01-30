@@ -143,6 +143,15 @@ settings:
           none: Aucune
           esync: ESync
           fsync: FSync
+
+      # Wine Virtual Desktop
+      winevd:
+        title: Bureau virtuel
+        settings:
+          title: Paramètres du Bureau virtuel
+          items:
+            height: Hauteur
+            width: Largeur
       
       # GameMode
       gamemode:

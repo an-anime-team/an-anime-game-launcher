@@ -155,6 +155,15 @@ settings:
         tooltip: Ez az opció bekapcsolja az AMD FidelityFX Super Resolution (FSR)-t
                  amely emeli a játékod felbontását FPS vesztése nélkül
 
+      # Wine Virtual Desktop
+      winevd:
+        title: Virtuális Asztal
+        settings:
+          title: Virtuális Asztal beállításai
+          items:
+            height: Magasság
+            width: Szélesség
+
       # Unlock FPS
       fps_unlocker:
         title: FPS limit kikapcsolása

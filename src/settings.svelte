@@ -18,6 +18,7 @@
     import SelectionBox from './components/SelectionBox.svelte';
     import DropdownCheckboxes from './components/DropdownCheckboxes.svelte';
     import DiscordSettings from './components/DiscordSettings.svelte';
+    import WineVDSettings from './components/WineVDSettings.svelte';
     import DXVKSelectionList from './components/DXVKSelectionList.svelte';
     import RunnerSelectionList from './components/RunnerSelectionList.svelte';
     import ShadersSelection from './components/ShadersSelection.svelte';
@@ -41,6 +42,35 @@
         runnersRecommendable = true,
         fpsUnlockerAvailable = true,
         voiceUpdateRequired = false;
+
+    
+    let winevdSettings: object = {}, winevdSettingsUpdater = false;
+
+    Configs.get('winevd').then((settings) => winevdSettings = settings as object);
+
+    const WineVDBox = (value: boolean) => {
+        winevdSettings['enabled'] = value;
+        if (value)
+            Configs.set('fsr', false);
+    }
+
+    const handleWineVD = (field: 'height' | 'width', value: string) => {
+        winevdSettings[field] = parseInt(value);
+
+        // This thing will update config file only after a second
+        // so we'll not update it every time user prints some character
+        // in textarea
+        if (!winevdSettingsUpdater)
+        {
+            winevdSettingsUpdater = true;
+
+            setTimeout(() => {
+                winevdSettingsUpdater = false;
+
+                Configs.set('winevd', winevdSettings);
+            }, 1000);
+        }
+    };
 
     let discordSettings: object = {}, discordSettingsUpdater = false;
 
@@ -300,6 +330,15 @@
                 />
 
                 <Checkbox
+                    lang="settings.enhancements.items.winevd.title"
+                    prop="winevd.enabled"
+                    valueChanged={(value) => WineVDBox(value)}
+                />
+
+                <WineVDSettings visible={winevdSettings['enabled']} valueChanged={handleWineVD} />
+                <br>
+
+                <Checkbox
                     lang="settings.enhancements.items.gamemode.title"
                     prop="gamemode"
                     tooltip={gamemode.tooltip}
@@ -310,6 +349,7 @@
                     lang="settings.enhancements.items.fsr.title"
                     tooltip="settings.enhancements.items.fsr.tooltip"
                     prop="fsr"
+                    disabled={winevdSettings['enabled']}
                 />
 
                 <Checkbox

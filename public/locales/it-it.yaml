@@ -140,6 +140,15 @@ settings:
           none: Nessuno
           esync: ESync
           fsync: FSync
+
+      # Wine Virtual Desktop
+      winevd:
+        title: Desktop virtuale
+        settings:
+          title: Impostazioni del desktop virtuale
+          items:
+            height: Altezza
+            width: Larghezza
       
       # GameMode
       gamemode:
