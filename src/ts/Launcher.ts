@@ -2,7 +2,7 @@ import { locale } from 'svelte-i18n';
 
 import {
     Windows, Process, Tray,
-    Configs, Debug, IPC
+    Configs, Debug, IPC, fs, path
 } from '../empathize';
 
 import constants from './Constants';
@@ -36,11 +36,26 @@ export default class Launcher
         this.tray = new Tray(`/public/icons/256x256.png`);
         this.tray.update();
 
-        this.updateDiscordRPC('in-launcher');
+        onMount(async () => {
+            const launcherDir = await constants.paths.launcherDir;
 
-        onMount(() => {
-            this.progressBar = new ProgressBar(this);
-            this.state = new State(this);
+            // Create launcher folder if it doesn't exist
+            if (!await fs.exists(launcherDir))
+                await fs.mkdir(launcherDir);
+            
+            // Create logs folder if it doesn't exist
+            if (!await fs.exists(path.join(launcherDir, 'logs')))
+                await fs.mkdir(path.join(launcherDir, 'logs'));
+
+            // Applying default settings
+            const defaultSetings = (await import('../defaultSettings')).default;
+
+            defaultSetings.then(() => {
+                this.updateDiscordRPC('in-launcher');
+
+                this.progressBar = new ProgressBar(this);
+                this.state = new State(this);
+            });
         });
     }
 

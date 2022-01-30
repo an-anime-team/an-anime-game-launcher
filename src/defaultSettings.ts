@@ -3,8 +3,8 @@ import { Configs, promisify } from './empathize';
 import constants from './ts/Constants';
 import Locales from './ts/launcher/Locales';
 
-promisify(async () => {
-    Configs.defaults({
+export default new Promise<void>(async (resolve) => {
+    await Configs.defaults({
         lang: {
             launcher: await Locales.system(),
             voice: [
@@ -199,4 +199,6 @@ promisify(async () => {
             launcher: '5d'
         }
     });
+
+    resolve();
 });

@@ -17,16 +17,6 @@
     import GearActive from './assets/images/gear-active.png';
     import Download from './assets/images/cloud-download.png';
 
-    constants.paths.launcherDir.then((dir) => {
-        // Create launcher folder if it doesn't exist
-        Neutralino.filesystem.getStats(dir)
-            .catch(() => Neutralino.filesystem.createDirectory(dir));
-
-        // Create logs folder if it doesn't exist
-        Neutralino.filesystem.getStats(`${dir}/logs`)
-            .catch(() => Neutralino.filesystem.createDirectory(`${dir}/logs`));
-    });
-
     const launcher = new Launcher(onMount);
 
     Neutralino.events.on('ready', () => {
