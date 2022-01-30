@@ -137,8 +137,9 @@ This is our current roadmap goals. You can find older ones [here](repository/pag
 * <s>Use `LauncherLib.getGameVersion` function instead of the `config.json`'s `version` property</s> *(deprecated due to the new core functions)*
 * <s>Fix button flickering at start when the launcher's state updates</s> *(fixed due to the new framework usage and proper state updating)*
 * <s>Add downloading pause button</s> *(2.0.0 release)*
-* Move launcher on [Empathize](https://github.com/empathizejs/framework)
-* Make notifications translations
+* <s>Move launcher on [Empathize](https://github.com/empathizejs/framework)</s>
+* <s>Make notifications translations</s>
+* <s>ToS Violation Window</s>
 * Add `latest.log` file generation
 * Implement manual config flushing functionality from the Empathize's API
 * Add analytics window

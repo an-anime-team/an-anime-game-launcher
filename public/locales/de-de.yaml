@@ -260,7 +260,7 @@ notifications:
 
 # ToS violation warning window
 tos_violation:
-  title: TOS Verletzung Warnung
+  title: ToS-Verletzungswarnung
   heading: ⚠️ Sei gewarnt   
   body: Dieser Launcher ist ein inoffizielles Tool, das in keiner Weise mit {company} oder {company_alterego} in Verbindung steht.
         Dieses Tool wurde entwickelt, um das Spielen von {game} unter Linux zu erleichtern. Es wurde mit dem einzigen Ziel entwickelt, das Spiel mit weniger Aufwand zu installieren und zu starten.
