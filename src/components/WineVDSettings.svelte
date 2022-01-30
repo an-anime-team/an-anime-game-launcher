@@ -27,12 +27,12 @@
     };
 </script>
 <div style="display: {visible ? 'block' : 'none'}">
-    <h3>{$_('settings.general.items.winevd.settings.title')}</h3>
+    <h3>{$_('settings.enhancements.items.winevd.settings.title')}</h3>
     
     <table class="table" style="margin-top: 16px">
         <tr>
             <td>
-                <span>{$_('settings.general.items.winevd.settings.items.height')}</span>
+                <span>{$_('settings.enhancements.items.winevd.settings.items.height')}</span>
             </td>
 
             <td>
@@ -41,7 +41,7 @@
         </tr>
         <tr>
             <td>
-                <span>{$_('settings.general.items.winevd.settings.items.width')}</span>
+                <span>{$_('settings.enhancements.items.winevd.settings.items.width')}</span>
             </td>
 
             <td>

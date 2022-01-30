@@ -112,15 +112,6 @@ settings:
             in-launcher: Launcher text
             in-game: im Spiel text
             selectIcon: Icon auswählen
-      
-      # Wine Virtual Desktop
-      winevd:
-        title: Virtual Desktop
-        settings:
-          title: Virtual Desktop einstellung
-          items:
-            height: Höhe
-            width: Breite
 
       # Some buttons
       buttons:
@@ -150,6 +141,15 @@ settings:
           none: Aus
           esync: Esync
           fsync: Fsync
+
+      # Wine Virtual Desktop
+      winevd:
+        title: Virtual Desktop
+        settings:
+          title: Virtual Desktop einstellung
+          items:
+            height: Höhe
+            width: Breite
       
       # GameMode
       gamemode:

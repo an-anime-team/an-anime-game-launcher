@@ -115,15 +115,6 @@ settings:
             in-game: Texte dans le jeu
             selectIcon: Sélection d'icone
 
-      # Wine Virtual Desktop
-      winevd:
-        title: Bureau virtuel
-        settings:
-          title: Paramètres du Bureau virtuel
-          items:
-            height: Hauteur
-            width: Largeur
-
       # Some buttons
       buttons:
         winetricks: winetricks
@@ -152,6 +143,15 @@ settings:
           none: Aucune
           esync: ESync
           fsync: FSync
+
+      # Wine Virtual Desktop
+      winevd:
+        title: Bureau virtuel
+        settings:
+          title: Paramètres du Bureau virtuel
+          items:
+            height: Hauteur
+            width: Largeur
       
       # GameMode
       gamemode:

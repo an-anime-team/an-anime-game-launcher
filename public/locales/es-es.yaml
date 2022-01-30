@@ -113,15 +113,6 @@ settings:
             in-game: Texto in-game
             selectIcon: Elegir icono
 
-      # Escritorio Virtual de Wine
-      winevd:
-        title: Escritorio Virtual
-        settings:
-          title: Opciones del Escritorio Virtual
-          items:
-            height: Alto
-            width: Ancho
-
       # Algunos botones
       buttons:
         winetricks: winetricks
@@ -150,6 +141,15 @@ settings:
           none: Ninguna
           esync: ESync
           fsync: FSync
+
+      # Escritorio Virtual de Wine
+      winevd:
+        title: Escritorio Virtual
+        settings:
+          title: Opciones del Escritorio Virtual
+          items:
+            height: Alto
+            width: Ancho
       
       # GameMode
       gamemode:

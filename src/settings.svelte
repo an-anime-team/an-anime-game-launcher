@@ -330,7 +330,7 @@
                 />
 
                 <Checkbox
-                    lang="settings.general.items.winevd.title"
+                    lang="settings.enhancements.items.winevd.title"
                     prop="winevd.enabled"
                     valueChanged={(value) => WineVDBox(value)}
                 />
