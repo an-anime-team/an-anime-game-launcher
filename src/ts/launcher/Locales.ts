@@ -8,14 +8,12 @@ import { promisify, Configs } from '../../empathize';
 import constants from '../Constants';
 
 type AvailableLocales =
-    | 'en-us'
-    | 'ru-ru'
-    | 'es-es'
-    | 'de-de'
-    | 'fr-fr'
-    | 'it-it'
-    | 'id-id'
-    | 'uwu';
+    // Supported by the game's API
+    | 'en-us' | 'ru-ru' | 'es-es'
+    | 'de-de' | 'fr-fr' | 'id-id'
+
+    // Unsupported by the game's API
+    | 'it-it' | 'hu-hu' | 'uwu';
 
 declare const Neutralino;
 

@@ -81,6 +81,7 @@ settings:
             de-de: Deutsch
             fr-fr: Français
             it-it: Italiano
+            hu-hu: Magyar
             id-id: Bahasa Indonesia
             uwu: Engwish
 
@@ -250,7 +251,7 @@ notifications:
   # Before patch applying when xdelta3 package is not downloaded
   xdelta3_package_required:
     title: An Anime Game Launcher
-    body: Vous devez télécharger le paquet \"xdelta3\" pour appliquer le patch
+    body: Vous devez télécharger le paquet "xdelta3" pour appliquer le patch
 
   # If patch wasn't applied because of some error
   patch_applying_error:
@@ -264,19 +265,19 @@ notifications:
 
 # ToS violation warning window
 tos_violation:
-  title: ToS violation warning
-  heading: ⚠️ Be warned
-  body: This launcher is an unofficial tool, in no way related to {company} nor {company_alterego}.
-        This tool is designed to facilitate playing {game} on Linux,
-        and was built with the sole purpose of installing and running the game with less hassle.
-        It does so by using existing components and making the experience simple for the user.
-        However, some components used here likely break the {company} Terms of Service for {game}.
-        If you are using this launcher, your player account could become identified as TOS-non-compliant by {company}/{company_alterego}.
-        If this happens, as your account would be disobeying TOS, {company}/{company_alterego} are free to do what they want. Including banning.
-        If you understand the risk of trying to play the game in an unofficial capacity, press OK and let's go researching the world of Teyvat!
+  title: Violation du contrat d'utilisation
+  heading: ⚠️ Attention
+  body: Ce launcher n'est pas un logiciel officiel, il n'est en aucun lier a {company} et/ou {company_alterego}.
+        Ce logiciel est conçu pour faciliter l'accès au jeu {game} sur Linux,
+        et a été crée seulement pour installer et jouer au jeu sans complication.
+        Il fait cela en utilisant les extensions pour facilitée l'utilisation par l'utilisateur.
+        En faisant ça certaines extensions utiliser rompt le contrat d'utilisation de {company} pour le jeu {game}.
+        Si vous utilisez ce logiciel , votre compte utilisateur peut être identifié par {company}/{company_alterego} comme un compte qui a rompu et/ou non accepter le contrat.
+        Si cela arrive, {company}/{company_alterego} a tous les droits sur votre compte ce qui inclut un potentiel Ban.
+        Si vous comprenez et acceptez les risques d'utiliser ce logiciel pour jouer appuyez sur OK et partez à l'exploration de Teyvat !
   buttons:
     ok:
-      title: I understand the risk
-      tooltip: You really should read this text above. It's important
-    cancel: Cancel
-    discord: Our discord server
+      title: Je comprends les risques
+      tooltip: Vous devriez réellement lire le texte ci-dessus, c'est important.
+    cancel: Annuler
+    discord: Notre serveur discord
