@@ -5,19 +5,19 @@
 
     export let visible: boolean = false;
 
-    export let valueChanged: (field: 'height' | 'width', value: string) => void = () => {};
+    export let valueChanged: (field: 'width' | 'height', value: string) => void = () => {};
 
-    let winevdhandw = {
-        height: '0',
-        width: '0'
-    }
+    let virtual_desktop = {
+        width: 0,
+        height: 0
+    };
 
-    Configs.get('winevd.height').then(height => winevdhandw.height = height!.toString());
-    Configs.get('winevd.width').then(width => winevdhandw.width = width!.toString());
+    Configs.get('wine.virtual_desktop').then((desktop) => virtual_desktop = desktop as typeof virtual_desktop);
 
-    const textareaHandler = (event: KeyboardEvent, field: 'height' | 'width') => {
-        const textArea = event.srcElement as HTMLTextAreaElement;
-        const content = textArea.value
+    const inputHandler = (event: KeyboardEvent, field: 'width' | 'height') => {
+        const input = event.srcElement as HTMLInputElement;
+
+        const content = input.value
                 .replace(/\b0+/g, '')
                 .replace(/[^0-9.]/g, '')
                 .replace(/(\..*?)\..*/g, '$1')
@@ -26,26 +26,27 @@
         valueChanged(field, content);
     };
 </script>
+
 <div style="display: {visible ? 'block' : 'none'}">
     <h3>{$_('settings.enhancements.items.winevd.settings.title')}</h3>
     
-    <table class="table" style="margin-top: 16px">
-        <tr>
-            <td>
-                <span>{$_('settings.enhancements.items.winevd.settings.items.height')}</span>
-            </td>
-
-            <td>
-                <textarea rows="2" on:keyup={(e) => textareaHandler(e, 'height')}>{winevdhandw.height}</textarea>
-            </td>
-        </tr>
+    <table class="table" style="margin: 16px 0">
         <tr>
             <td>
                 <span>{$_('settings.enhancements.items.winevd.settings.items.width')}</span>
             </td>
 
             <td>
-                <textarea rows="2" on:keyup={(e) => textareaHandler(e, 'width')}>{winevdhandw.width}</textarea>
+                <input value={virtual_desktop.width} on:keyup={(e) => inputHandler(e, 'width')} />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <span>{$_('settings.enhancements.items.winevd.settings.items.height')}</span>
+            </td>
+
+            <td>
+                <input value={virtual_desktop.height} on:keyup={(e) => inputHandler(e, 'height')} />
             </td>
         </tr>
     </table>

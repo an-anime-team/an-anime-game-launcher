@@ -76,7 +76,7 @@ export default (launcher: Launcher): Promise<void> => {
                      * 
                      * @link https://github.com/AdelKS/LinuxGamingGuide#wine-tkg
                      */
-                    switch (await Configs.get('winesync'))
+                    switch (await Configs.get('wine.sync'))
                     {
                         case 'esync':
                             env['WINEESYNC'] = 1;
@@ -92,8 +92,10 @@ export default (launcher: Launcher): Promise<void> => {
 
                     /**
                      * AMD FSR
+                     * 
+                     * It should be disabled when wine virtual desktop is enabled
                      */
-                    if (await Configs.get('fsr'))
+                    if (await Configs.get('wine.fsr') && !await Configs.get('wine.virtual_desktop.enabled'))
                     {
                         env['WINE_FULLSCREEN_FSR'] = 1;
                         env['WINE_FULLSCREEN_FSR_STRENGTH'] = 3;
@@ -138,7 +140,9 @@ export default (launcher: Launcher): Promise<void> => {
                         else console.warn(`GPU ${LauncherLib.getConfig('gpu')} not found. Launching on the default GPU`);
                     }*/
 
-                    let command = `"${path.addSlashes(wineExeutable)}" ${await Configs.get('winevd.enabled') ? `explorer /desktop=animegame,${await Configs.get('winevd.height')}x${await Configs.get('winevd.width')}` : ''} ${await Configs.get('fps_unlocker') ? 'unlockfps.bat' : 'launcher.bat'}`;
+                    const virtual_desktop = await Configs.get('wine.virtual_desktop') as object;
+
+                    let command = `"${path.addSlashes(wineExeutable)}" ${virtual_desktop['enabled'] ? `explorer /desktop=animegame,${virtual_desktop['width']}x${virtual_desktop['height']}` : ''} ${await Configs.get('fps_unlocker') ? 'unlockfps.bat' : 'launcher.bat'}`;
 
                     /**
                      * Gamemode integration

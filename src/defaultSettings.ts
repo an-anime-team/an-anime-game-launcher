@@ -77,39 +77,50 @@ export default new Promise<void>(async (resolve) => {
         hud: 'none',
 
         /**
-         * Wine synchronization
-         * 
-         * Available options: none, esync, fsync
-         * 
-         * @defaul "esync"
+         * Wine-related configs
          */
-        winesync: 'esync',
-
-
-        /**
-         * Wine Virtual Desktop
-         */
-        winevd: {
+        wine: {
             /**
-             * If it is enabled
+             * Wine synchronization
              * 
-             * @default false
+             * Available options: none, esync, fsync
+             * 
+             * @defaul "esync"
              */
-            enabled: false,
+            sync: 'esync',
 
             /**
-             * Virtual Desktop Height
+             * If the launcher should enable AMD FSR
              * 
-             * @default 1280
+             * @default true
              */
-            height: 1280,
+            fsr: true,
 
             /**
-             * Virtual Desktop Width
-             * 
-             * @default 720
+             * Wine Virtual Desktop
              */
-             width: 720
+            virtual_desktop: {
+                /**
+                 * If it is enabled
+                 * 
+                 * @default false
+                 */
+                enabled: false,
+
+                /**
+                 * Virtual Desktop Width
+                 * 
+                 * @default 720
+                 */
+                width: 720,
+
+                /**
+                 * Virtual Desktop Height
+                 * 
+                 * @default 1280
+                 */
+                height: 1280
+            }
         },
     
         /**
@@ -165,13 +176,6 @@ export default new Promise<void>(async (resolve) => {
         gamemode: false,
 
         /**
-         * If the launcher should enable AMD FSR
-         * 
-         * @default true
-         */
-        fsr: true,
-
-        /**
          * If the launcher should unlock FPS
          * 
          * @default false
@@ -199,6 +203,31 @@ export default new Promise<void>(async (resolve) => {
             launcher: '5d'
         }
     });
+
+    /**
+     * 2.1.0-beta1 -> 2.1.0-beta2
+     */
+    const winesync = await Configs.get('winesync');
+    const fsr = await Configs.get('fsr');
+    const winevd = await Configs.get('winevd');
+
+    if (winesync !== undefined)
+    {
+        await Configs.set('wine.sync', winesync);
+        await Configs.remove('winesync');
+    }
+
+    if (fsr !== undefined)
+    {
+        await Configs.set('wine.fsr', fsr);
+        await Configs.remove('fsr');
+    }
+
+    if (winevd !== undefined)
+    {
+        await Configs.set('wine.virtual_desktop', winevd);
+        await Configs.remove('winevd');
+    }
 
     resolve();
 });

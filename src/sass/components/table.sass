@@ -4,7 +4,6 @@
     body[data-theme=#{$theme-name}]
         table.table
             width: calc(100% - 24px)
-
             margin-left: 12px
 
             border-spacing: 0
@@ -36,19 +35,19 @@
                         border-right: 1px solid map.get($theme-map, "background1")
 
                 td
+                    min-height: $cell-height
+
                     span
                         display: block
+                        margin: auto
 
                         width: calc(100% - 2 * $padding-h)
-                        height: calc($cell-height - 2 * $padding-h)
-
-                        margin: auto
 
                     input, textarea
                         display: block
 
                         width: calc(100% - 2 * $padding-h)
-                        height: calc($cell-height - 2 * $padding-h)
+                        height: calc($cell-height - 2 * $padding-v)
 
                         color: map.get($theme-map, "text")
 

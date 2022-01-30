@@ -44,17 +44,12 @@
         voiceUpdateRequired = false;
 
     
-    let winevdSettings: object = {}, winevdSettingsUpdater = false;
+    let winevdSettings: object = {},
+        winevdSettingsUpdater = false;
 
-    Configs.get('winevd').then((settings) => winevdSettings = settings as object);
+    Configs.get('wine.virtual_desktop').then((settings) => winevdSettings = settings as object);
 
-    const WineVDBox = (value: boolean) => {
-        winevdSettings['enabled'] = value;
-        if (value)
-            Configs.set('fsr', false);
-    }
-
-    const handleWineVD = (field: 'height' | 'width', value: string) => {
+    const handleWineVD = (field: 'width' | 'height', value: string) => {
         winevdSettings[field] = parseInt(value);
 
         // This thing will update config file only after a second
@@ -67,7 +62,7 @@
             setTimeout(() => {
                 winevdSettingsUpdater = false;
 
-                Configs.set('winevd', winevdSettings);
+                Configs.set('wine.virtual_desktop', winevdSettings);
             }, 1000);
         }
     };
@@ -319,7 +314,7 @@
 
                 <SelectionBox
                     lang="settings.enhancements.items.winesync.title"
-                    prop="winesync"
+                    prop="wine.sync"
                     tooltip="settings.enhancements.items.winesync.tooltip"
                     tooltip_size="large"
                     items={{
@@ -331,12 +326,11 @@
 
                 <Checkbox
                     lang="settings.enhancements.items.winevd.title"
-                    prop="winevd.enabled"
-                    valueChanged={(value) => WineVDBox(value)}
+                    prop="wine.virtual_desktop.enabled"
+                    valueChanged={(value) => winevdSettings['enabled'] = value}
                 />
 
                 <WineVDSettings visible={winevdSettings['enabled']} valueChanged={handleWineVD} />
-                <br>
 
                 <Checkbox
                     lang="settings.enhancements.items.gamemode.title"
@@ -348,7 +342,7 @@
                 <Checkbox
                     lang="settings.enhancements.items.fsr.title"
                     tooltip="settings.enhancements.items.fsr.tooltip"
-                    prop="fsr"
+                    prop="wine.fsr"
                     disabled={winevdSettings['enabled']}
                 />
 
