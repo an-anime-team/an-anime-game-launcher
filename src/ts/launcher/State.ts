@@ -94,14 +94,6 @@ export default class State
                 });
         };
 
-        Windows.open('splash', {
-            title: 'Splash',
-            width: 300,
-            height: 400,
-            borderless: true,
-            exitProcessOnClose: false
-        });
-
         this.update().then(async () => {
             // Close splash screen
             IPC.write('launcher-loaded');

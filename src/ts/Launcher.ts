@@ -33,6 +33,14 @@ export default class Launcher
 
     public constructor(onMount)
     {
+        Windows.open('splash', {
+            title: 'Splash',
+            width: 300,
+            height: 400,
+            borderless: true,
+            exitProcessOnClose: false
+        });
+        
         this.tray = new Tray(`/public/icons/256x256.png`);
         this.tray.update();
 
