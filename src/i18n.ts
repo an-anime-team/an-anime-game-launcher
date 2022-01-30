@@ -8,11 +8,9 @@ register('ru-ru', () => Locales.get('ru-ru'));
 register('es-es', () => Locales.get('es-es'));
 register('de-de', () => Locales.get('de-de'));
 register('fr-fr', () => Locales.get('fr-fr'));
-register('id-id', () => Locales.get('id-id'));
-
-// Unsupported by the game's API
 register('it-it', () => Locales.get('it-it'));
 register('hu-hu', () => Locales.get('hu-hu'));
+register('id-id', () => Locales.get('id-id'));
 register('uwu', () => Locales.get('uwu'));
 
 Locales.default().then((locale) => {
