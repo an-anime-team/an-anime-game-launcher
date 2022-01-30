@@ -18,6 +18,7 @@
     import SelectionBox from './components/SelectionBox.svelte';
     import DropdownCheckboxes from './components/DropdownCheckboxes.svelte';
     import DiscordSettings from './components/DiscordSettings.svelte';
+    import WineVDSettings from './components/WineVDSettings.svelte';
     import DXVKSelectionList from './components/DXVKSelectionList.svelte';
     import RunnerSelectionList from './components/RunnerSelectionList.svelte';
     import ShadersSelection from './components/ShadersSelection.svelte';
@@ -41,6 +42,29 @@
         runnersRecommendable = true,
         fpsUnlockerAvailable = true,
         voiceUpdateRequired = false;
+
+    
+    let winevdSettings: object = {}, winevdSettingsUpdater = false;
+
+    Configs.get('winevd').then((settings) => winevdSettings = settings as object);
+
+    const handleWineVD = (field: 'height' | 'width', value: string) => {
+        winevdSettings[field] = parseInt(value);
+
+        // This thing will update config file only after a second
+        // so we'll not update it every time user prints some character
+        // in textarea
+        if (!winevdSettingsUpdater)
+        {
+            winevdSettingsUpdater = true;
+
+            setTimeout(() => {
+                winevdSettingsUpdater = false;
+
+                Configs.set('winevd', winevdSettings);
+            }, 1000);
+        }
+    };
 
     let discordSettings: object = {}, discordSettingsUpdater = false;
 
@@ -298,6 +322,15 @@
                         'fsync': 'settings.enhancements.items.winesync.items.fsync'
                     }}
                 />
+
+                <Checkbox
+                    lang="settings.general.items.winevd.title"
+                    prop="winevd.enabled"
+                    valueChanged={(value) => winevdSettings['enabled'] = value}
+                />
+
+                <WineVDSettings visible={winevdSettings['enabled']} valueChanged={handleWineVD} />
+                <br>
 
                 <Checkbox
                     lang="settings.enhancements.items.gamemode.title"

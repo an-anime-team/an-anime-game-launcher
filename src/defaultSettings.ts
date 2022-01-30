@@ -84,6 +84,33 @@ promisify(async () => {
          * @defaul "esync"
          */
         winesync: 'esync',
+
+
+        /**
+         * Wine Virtual Desktop
+         */
+        winevd: {
+            /**
+             * If it is enabled
+             * 
+             * @default false
+             */
+            enabled: false,
+
+            /**
+             * Virtual Desktop Height
+             * 
+             * @default 1280
+             */
+            height: 1280,
+
+            /**
+             * Virtual Desktop Width
+             * 
+             * @default 720
+             */
+             width: 720
+        },
     
         /**
          * vkBasalt preset to use

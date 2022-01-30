@@ -113,6 +113,15 @@ settings:
             in-game: In-game text
             selectIcon: Select icon
 
+      # Wine Virtual Desktop
+      winevd:
+        title: Virtual Desktop
+        settings:
+          title: Virtual Desktop settings
+          items:
+            height: Height
+            width: Width
+            
       # Some buttons
       buttons:
         winetricks: winetricks
