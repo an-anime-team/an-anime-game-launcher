@@ -113,6 +113,15 @@ settings:
             in-game: Текст в игре
             selectIcon: Выберите иконку
 
+      # Виртуальный рабочий стол Wine
+      winevd:
+        title: Виртуальный рабочий стол
+        settings:
+          title: Настройки виртуального рабочего стола
+          items:
+            height: Высота
+            width: Ширина
+
       # Some buttons
       buttons:
         winetricks: winetricks
