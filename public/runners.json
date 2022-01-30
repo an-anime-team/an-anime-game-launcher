@@ -4,6 +4,18 @@
         "runners": [
             {
                 "family": "Wine-GE",
+                "name": "lutris-ge-7.1-1-x86_64",
+                "title": "Wine 7.1 GE 1",
+                "uri": "https://github.com/GloriousEggroll/wine-ge-custom/releases/download/7.1-GE-1/wine-lutris-ge-7.1-1-x86_64.tar.xz",
+                "files": {
+                    "wine": "bin/wine64",
+                    "wineserver": "bin/wineserver",
+                    "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
+                },
+                "recommended": true
+            },
+            {
+                "family": "Wine-GE",
                 "name": "lutris-ge-6.21-1-x86_64",
                 "title": "Wine 6.21 GE 1",
                 "uri": "https://github.com/GloriousEggroll/wine-ge-custom/releases/download/6.21-GE-1/wine-lutris-ge-6.21-1-x86_64.tar.xz",
@@ -228,6 +240,30 @@
     {
         "title": "Proton-GE",
         "runners": [
+            {
+                "family": "Proton-GE",
+                "name": "Proton-7.1-GE-2",
+                "title": "Proton 7.1 GE 2",
+                "uri": "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/7.1-GE-2/Proton-7.1-GE-2.tar.gz",
+                "files": {
+                    "wine": "files/bin/wine64",
+                    "wineserver": "files/bin/wineserver",
+                    "winecfg": "files/lib64/wine/x86_64-windows/winecfg.exe"
+                },
+                "recommended": true
+            },
+            {
+                "family": "Proton-GE",
+                "name": "Proton-7.1-GE-1",
+                "title": "Proton 7.1 GE 1",
+                "uri": "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/7.1-GE-1/Proton-7.1-GE-1.tar.gz",
+                "files": {
+                    "wine": "files/bin/wine64",
+                    "wineserver": "files/bin/wineserver",
+                    "winecfg": "files/lib64/wine/x86_64-windows/winecfg.exe"
+                },
+                "recommended": true
+            },
             {
                 "family": "Proton-GE",
                 "name": "Proton-6.21-GE-2",
