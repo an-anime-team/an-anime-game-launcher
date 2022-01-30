@@ -224,8 +224,8 @@ export default class constants
         launcher: 'https://gitlab.com/KRypt0n_/an-anime-game-launcher',
         discord: 'https://discord.gg/ck37X6UWBp',
         telemetry: [
-            `log-upload-os.${this.placeholders.lowercase.company}.com`,
-            'overseauspider.yuanshen.com'
+            atob('bG9nLXVwbG9hZC1vcy5taWhveW8uY29t'),
+            atob('b3ZlcnNlYXVzcGlkZXIueXVhbnNoZW4uY29t')
         ],
         winetricks: 'https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks',
         fpsunlock: {

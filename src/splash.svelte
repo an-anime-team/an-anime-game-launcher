@@ -8,6 +8,8 @@
 
     import { Configs, IPC, Windows } from './empathize';
 
+    import constants from './ts/Constants';
+
     import Splash from './assets/gifs/running-qiqi.gif';
     import SplashSecret from './assets/gifs/loading-marie-please.gif';
 
@@ -57,6 +59,11 @@
         <img src={splash} alt="" />
 
         <h2>{$_('splash.title')}</h2>
-        <p>{$_(`splash.phrases.${phrase}`)}</p>
+        <p>{$_(`splash.phrases.${phrase}`, {
+            values: {
+                // Required by de-de locale
+                game: constants.placeholders.uppercase.full
+            }
+        })}</p>
     </main>
 {/if}
