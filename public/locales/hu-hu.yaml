@@ -1,72 +1,72 @@
 # Splash window
 splash:
-  title: Loading launcher
+  title: Launcher betöltése
   phrases:
-    - Doing some important stuff...
-    - Bullying Paimon...
-    - Pulling for Yae...
-    - Farming materials...
-    - Passing Abyss...
-    - Collecting achievements...
-    - Building phys Qiqi...
-    - Making sacrifices for 5*...
-    - Finding friends for co-op...
+    - Fontos dolgok csinálása...
+    - Paimon bosszantása...
+    - Yae húzások folyamatban...
+    - Alapanyagok farmolása...
+    - Abyss végigjátszása...
+    - Achievementek összeszedése...
+    - Phys Qiqi build megcsinálása...
+    - Áldozatok hozása 5*-ért...
+    - Barátok találása co-ophoz...
 
 # Launcher window
 launcher:
   # Progress bar
   progress:
-    pause: Pause
-    resume: Resume
+    pause: Megállítás
+    resume: Folytatás
 
     # Game installation
     game:
-      downloading: Downloading game...
-      unpacking: Unpacking game...
-      deleting_outdated: Deleting outdated files...
+      downloading: Játék letöltése folyamatban...
+      unpacking: Játék kibontása folyamatban...
+      deleting_outdated: Lejárt fájlok kitörlése...
 
     # Voice packages installation
     voice:
-      deleting: Deleting voice packages...
-      downloading: Downloading {voice} voice package...
-      unpacking: Unpacking {voice} voice package...
+      deleting: Hangcsomagok eltávolítása...
+      downloading: {voice} hangcsomag letöltése folyamatban...
+      unpacking: {voice} hangcsomag kibontása folyamatban...
 
   # Launcher states
   states:
     # When the game should be installed or updated
     installation:
-      install_wine: Install Wine
-      install_dxvk: Install DXVK
-      install: Install
-      update: Update
+      install_wine: Wine telepítése
+      install_dxvk: DXVK telepítése
+      install: Telepítés
+      update: Frissítés
 
     # When the game should be patched
     patching:
       # Patch unavailable
       unavailable:
-        title: Patch unavailable
-        hint: This game version has no anti-cheat patch.
-              Please, wait a few days before there will be a test or stable version
+        title: Patch nem elérhető
+        hint: Ennek a játékverziónak még nincs anti-cheat patch-e.
+              Kérlek, várj egy pár napot ameddig kijön egy teszt vagy stabil verzió
       
       # Patch is in testing
       test:
-        title: Apply test patch
-        hint: This game version has an experimental anti-cheat patch.
-              You can wait a few days until it is stable or apply it at your own risk
+        title: Teszt patch alkalmazása
+        hint: Elérhető egy tesztelés alatti patch ehhez a játékverzióhoz.
+              Használd saját felelősségedre vagy várj egy pár napot ameddig stabil lesz!
 
       # Patch is stable
-      stable: Apply patch
+      stable: Patch alkalmazása
 
     # When the game is ready for playing
     ready:
-      launch: Launch
-      predownload: Pre-download update
+      launch: Indítás
+      predownload: Frissítés előtöltése
 
 # Settings window
 settings:
   # General
   general:
-    title: General
+    title: Általános
     items:
       # Language selection
       lang:
@@ -86,8 +86,8 @@ settings:
 
         # Game voice pack language
         voice:
-          title: Voice pack
-          tooltip: You will have to manually select the new voice pack in the game
+          title: Hangcsomag
+          tooltip: A kért hangcsomagot a játékban is manuálisan ki kell választanod
           items:
             en-us: English (US)
             ja-jp: Japanese
@@ -96,182 +96,182 @@ settings:
 
       # Launcher theme
       theme:
-        title: Theme
+        title: Téma
         items:
-          system: System
-          light: Light
-          dark: Dark
+          system: Rendszerbeállítás
+          light: Világos
+          dark: Sötét
       
       # Discord RPC
       discord:
         title: Discord RPC
         settings:
-          title: Discord RPC settings
+          title: Discord RPC beállítások
           items:
-            timer: Show estimated time spent
-            in-launcher: Launcher text
-            in-game: In-game text
-            selectIcon: Select icon
+            timer: Becsült futó időhossz mutatása
+            in-launcher: Launcher szöveg
+            in-game: In-game szöveg
+            selectIcon: Ikon kiválasztása
 
       # Some buttons
       buttons:
         winetricks: winetricks
         winecfg: winecfg
-        launcher: launcher folder
-        game: game folder
+        launcher: launcher mappa
+        game: játékmappa
 
   # Enhancements
   enhancements:
-    title: Enhancements
+    title: Fejlesztések
     items:
       # HUD
       hud:
         title: HUD
         items:
-          none: None
+          none: Nincs
           dxvk: DXVK
           mangohud: MangoHUD
 
       # Wine synchronization
       winesync:
-        title: Wine synchronization
-        tooltip: ESync is a mechanism of synchronizing multi-thread operations. It can improve your game performance.
-                 FSync is an improved version of ESync that works on specific kernel versions
+        title: Wine szinkronizáció
+        tooltip: Az ESync egy többszálú műveleteket szinkronizáló mechanizmus. Javíthatja a játék teljesítményét.
+                 Az FSync az ESync egy továbbfejlesztett változata, amely csak bizonyos kernelverziókon működik 
         items:
-          none: None
+          none: Nincs
           esync: ESync
           fsync: FSync
       
       # GameMode
       gamemode:
-        title: Use GameMode
+        title: GameMode használata
         tooltip:
-          enabled: It is a software that can improve the game performance
-          disabled: ⚠️ You don't have gamemode package installed
+          enabled: Egy program amely javíthatja a játék teljesítményét
+          disabled: ⚠️ Nincs telepítve a gamemode csomag
 
       # AMD FSR
       fsr:
-        title: Enable AMD FSR
-        tooltip: This option enables AMD FidelityFX Super Resolution (FSR)
-                 which will scale your game resolution without losing FPS
+        title: AMD FSR használata
+        tooltip: Ez az opció bekapcsolja az AMD FidelityFX Super Resolution (FSR)-t
+                 amely emeli a játékod felbontását FPS vesztése nélkül
 
       # Unlock FPS
       fps_unlocker:
-        title: Unlock FPS
-        tooltip: This option will unlock maximum of the 60 fps limitation
+        title: FPS limit kikapcsolása
+        tooltip: Ez az opció kikapcsolja a 60 fps-es játéklimitet
       
       # Delete logs
       purge_logs:
         # Game logs (DXVK)
         game:
-          title: Delete DXVK logs
-          tooltip: With this option enabled your launcher will automatically
-                  delete DXVK log files
+          title: DXVK logok törlése
+          tooltip: Ezzel az opcióval a launcher autómatikusan
+                   törölni fogja a DXVK logfájlokat
 
         # Launcher logs
         launcher:
-          title: Delete launcher logs
-          tooltip: Amount of time after which launcher will delete its old log files
+          title: Launcher logok törlése
+          tooltip: Mennyi idő után törölje a launcher a régi logfájlokat
           items:
-            1d: 1 day
-            3d: 3 days
-            5d: 5 days
-            7d: 1 week
-            14d: 2 weeks
-            never: Never
+            1d: 1 nap
+            3d: 3 nap
+            5d: 5 nap
+            7d: 1 hét
+            14d: 2 hét
+            never: Soha
 
   # Runners
   runners:
-    title: Wine version
+    title: Wine verzió
     items:
       recommended:
-        title: Show recommended only
-        tooltip: This option will hide unplayable wine versions
+        title: Csak az ajánlottak mutatása
+        tooltip: Ez az opció elrejti a játszhatatlan wine verziókat
 
   # DXVKs
   dxvks:
     title: DXVK
     items:
       recommended:
-        title: Show recommended only
-        tooltip: This option will hide old DXVK versions
+        title: Csak az ajánlottak mutatása
+        tooltip: Ez az opció elrejti a játszhatatlan DXVK verziókat
 
   # Shaders
   shaders:
-    title: Shaders
+    title: Shader-ek
     items:
       shaders:
-        title: Shaders
-        tooltip: Use Home button to toggle shaders in the game
+        title: Shader-ek
+        tooltip: A Home gomb-bal tudod játékon belül ki/be kapcsolni a shader-eket
         items:
-          none: None
-          custom: Custom
+          none: Nincs
+          custom: Egyedi
       
-      author: 'Author: {author}'
-      no_images: No images added
-      not_installed: You haven't installed vkBasalt and reshade-shaders library
+      author: 'Szerző: {author}'
+      no_images: Nincs kép hozzáadva
+      not_installed: Nem telepítetted a vkBasalt és reshade-shaders könyvtárakat
 
   # Environmantal variables manager
   environment:
-    title: Environment
+    title: Környezet
     items:
       # Table rows
       table:
-        name: Name
-        value: Value
+        name: Név
+        value: Érték
       
       # Table buttons
       buttons:
-        add: Add
-        delete: Delete
+        add: Hozzáadás
+        delete: Törlés
 
 # Notifications
 notifications:
   # Launcher update
   launcher_update_available:
-    title: 'Launcher update available: {from} -> {to}'
-    body: You can download a new version of the launcher from the project's repository at {repository}
+    title: 'Launcher frissítés elérhető: {from} -> {to}'
+    body: 'Újabb launcher verziót tudsz telepíteni a projekt adattárjából itt: {repository}'
 
   # Before telemetry check when iputils is not downloaded
   iputils_package_required:
     title: An Anime Game Launcher
-    body: You must have iputils installed for telemetry checking
+    body: Telepítened kell az iputils csomagot a telemetria-ellenőrzés miatt
 
   # When telemetry servers are not disabled
   telemetry_not_disabled:
     title: An Anime Game Launcher
-    body: Telemetry servers are not disabled
+    body: Telemetria-szerverek nincsenek kikapcsolva
 
   # Before patch applying when xdelta3 package is not downloaded
   xdelta3_package_required:
     title: An Anime Game Launcher
-    body: You must download xdelta3 package to apply the patch
+    body: Telepítened kell az xdelta3 csomagot a patch alkalmazásához
 
   # If patch wasn't applied because of some error
   patch_applying_error:
     title: An Anime Game Launcher
-    body: Patch wasn't applied successfully. Please, check your log file to find a reason of it, or ask someone in our discord server
+    body: A patch alkalmazása sikertelen. Kérlek, nézd meg a logfájlodat az ok felderítése érdekében, vagy kérdezz meg valakit a discord szerverünkön
 
   # Patch repositories are not available
   patch_repos_unavailable:
     title: An Anime Game Launcher
-    body: None of the patch repositories are available. You'll be able to run the game, but launcher can't be sure is it patched properly
+    body: A patch adattárjai nem elérhetőek. Eltudod indítani a játékot, de a launcher nem tudja meghatározni hogy patch-elve van-e
 
 # ToS violation warning window
 tos_violation:
-  title: ToS violation warning
-  heading: ⚠️ Be warned
-  body: This launcher is an unofficial tool, in no way related to {company} nor {company_alterego}.
-        This tool is designed to facilitate playing {game} on Linux,
-        and was built with the sole purpose of installing and running the game with less hassle.
-        It does so by using existing components and making the experience simple for the user.
-        However, some components used here likely break the {company} Terms of Service for {game}.
-        If you are using this launcher, your player account could become identified as TOS-non-compliant by {company}/{company_alterego}.
-        If this happens, as your account would be disobeying TOS, {company}/{company_alterego} are free to do what they want. Including banning.
-        If you understand the risk of trying to play the game in an unofficial capacity, press OK and let's go researching the world of Teyvat!
+  title: Felhasználói feltételek megsértése
+  heading: ⚠️ Figyelem
+  body: 'A launcher nem hivatalos eszköz, semmi köze ezekhez: {company} és {company_alterego}.
+        Ez az eszköz csak a {game} Linux-os futtatására van tervezve,
+        és kizárólag a játék egyszerű telepítésére és használatára lett fejlesztve.
+        Ezt a meglévő komponensek felhasználásával és a felhasználói élmény egyszerűsítésével teszi. 
+        Viszont, egy pár felhasznált komponens megszegi a {company} Felhasználói Feltételeit a következőhöz: {game}.
+        A launcher használatával a fiókod FF-megszegőként lehet azonosítva a következő cég(ek) által: {company}/{company_alterego}.  
+        Ha ez megtörténik, akkor hivatalosan is megszeged a FF-et és {company}/{company_alterego} azt tehet amit kíván. Akár ban-t is jelenthet!
+        Ha megérted a játék nem-hivatalos használatával járó kockázatokat, nyomd meg az OK-t, és menjünk felfedezni Teyvat-ot!'
   buttons:
     ok:
-      title: I understand the risk
-      tooltip: You really should read this text above. It's important
-    cancel: Cancel
-    discord: Our discord server
+      title: Megértem
+      tooltip: A fenti szöveget ajánlott elolvasnod. Tényleg fontos.
+    cancel: Mégse
+    discord: 'Discord szerverünk:'
