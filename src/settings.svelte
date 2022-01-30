@@ -48,6 +48,12 @@
 
     Configs.get('winevd').then((settings) => winevdSettings = settings as object);
 
+    const WineVDBox = (value: boolean) => {
+        winevdSettings['enabled'] = value;
+        if (value)
+            Configs.set('fsr', false);
+    }
+
     const handleWineVD = (field: 'height' | 'width', value: string) => {
         winevdSettings[field] = parseInt(value);
 
@@ -326,7 +332,7 @@
                 <Checkbox
                     lang="settings.general.items.winevd.title"
                     prop="winevd.enabled"
-                    valueChanged={(value) => winevdSettings['enabled'] = value}
+                    valueChanged={(value) => WineVDBox(value)}
                 />
 
                 <WineVDSettings visible={winevdSettings['enabled']} valueChanged={handleWineVD} />
@@ -343,6 +349,7 @@
                     lang="settings.enhancements.items.fsr.title"
                     tooltip="settings.enhancements.items.fsr.tooltip"
                     prop="fsr"
+                    disabled={winevdSettings['enabled']}
                 />
 
                 <Checkbox
