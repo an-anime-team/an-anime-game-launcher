@@ -2,7 +2,6 @@ import { register, init } from 'svelte-i18n';
 
 import Locales from './ts/launcher/Locales';
 
-// Supported by the game's API
 register('en-us', () => Locales.get('en-us'));
 register('ru-ru', () => Locales.get('ru-ru'));
 register('es-es', () => Locales.get('es-es'));

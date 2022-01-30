@@ -28,8 +28,8 @@ launcher:
     # Voice packages installation
     voice:
       deleting: Hangcsomagok eltávolítása...
-      downloading: {voice} hangcsomag letöltése folyamatban...
-      unpacking: {voice} hangcsomag kibontása folyamatban...
+      downloading: '{voice} hangcsomag letöltése folyamatban...'
+      unpacking: '{voice} hangcsomag kibontása folyamatban...'
 
   # Launcher states
   states:
