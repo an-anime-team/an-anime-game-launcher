@@ -113,6 +113,15 @@ settings:
             in-game: In-game text
             selectIcon: s-sewect icon
 
+      # Wine Virtual Desktop
+      winevd:
+        title: viwtuaw desktop
+        settings:
+          title: viwtuaw desktop settings
+          items:
+            height: height
+            width: width
+
       # Some buttons
       buttons:
         winetricks: winetwicks
