@@ -74,7 +74,7 @@ class Stream extends AbstractInstaller
                     /**
                      * Execute the main patch installation script
                      */
-                     () => Neutralino.os.execCommand(`pkexec bash -c 'cd "${path.addSlashes(gameDir)}" ; yes yes | "${path.addSlashes(patchDir)}/patch.sh"'`),
+                     () => Neutralino.os.execCommand(`yes yes | pkexec bash -c 'cd "${path.addSlashes(gameDir)}" ; "${path.addSlashes(patchDir)}/patch.sh"'`),
 
                     /**
                      * Execute the anti-login crash patch installation script
