@@ -8,6 +8,7 @@ import { DebugThread } from '@empathize/framework/dist/meta/Debug';
 import constants from './Constants';
 import Game from './Game';
 import AbstractInstaller from './core/AbstractInstaller';
+import Launcher from './Launcher';
 
 declare const Neutralino;
 
@@ -38,6 +39,7 @@ class Stream extends AbstractInstaller
 
             const patchDir = `${await constants.paths.launcherDir}/dawn/${version.replaceAll('.', '')}`;
             const gameDir = await constants.paths.gameDir;
+            const isFlatpak = await Launcher.isFlatpak();
 
             /**
              * Patch out the testing phase content from the shell files
@@ -51,10 +53,9 @@ class Stream extends AbstractInstaller
                     () => Neutralino.os.execCommand(`cd "${path.addSlashes(patchDir)}" && sed -i '/^echo "If you would like to test this patch, modify this script and remove the line below this one."/,+5d' patch.sh`),
 
                     /**
-                     * Remove /etc/hosts editing due to sudo permissions
-                     * Let's keep the old removal in case of future issues
-                    () => Neutralino.os.execCommand(`cd "${path.addSlashes(patchDir)}" && sed -i '/^# ===========================================================/,+68d' patch.sh`),
-                    */
+                     * Remove /etc/hosts editing if running in Flatpak
+                     */
+                    () => isFlatpak ? Neutralino.os.execCommand(`cd "${path.addSlashes(patchDir)}" && sed -i '/^# ===========================================================/,+68d' patch.sh`) : null,
                     
                     /**
                      * Remove test version restrictions from the anti-login crash patch
@@ -73,8 +74,9 @@ class Stream extends AbstractInstaller
 
                     /**
                      * Execute the main patch installation script
+                     * Use pkexec if not running in Flatpak
                      */
-                     () => Neutralino.os.execCommand(`yes yes | pkexec bash -c 'cd "${path.addSlashes(gameDir)}" ; "${path.addSlashes(patchDir)}/patch.sh"'`),
+                     () => Neutralino.os.execCommand(`yes yes | ${isFlatpak ? '' : 'pkexec'} bash -c 'cd "${path.addSlashes(gameDir)}" ; "${path.addSlashes(patchDir)}/patch.sh"'`),
 
                     /**
                      * Execute the anti-login crash patch installation script
@@ -91,11 +93,11 @@ class Stream extends AbstractInstaller
                     function: 'Patch/Stream',
                     message: [
                         'Patch script output:',
-                        ...outputs[4].stdOut.split(/\r\n|\r|\n/)
+                        ...outputs[5].stdOut.split(/\r\n|\r|\n/)
                     ]
                 });
 
-                this.patchResult = outputs[4].stdOut.includes('==> Patch applied! Enjoy the game');
+                this.patchResult = outputs[5].stdOut.includes('==> Patch applied! Enjoy the game');
 
                 if (this.onPatchFinish)
                     this.onPatchFinish(this.patchResult);
