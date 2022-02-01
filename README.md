@@ -26,9 +26,17 @@ Download AppImage from [Releases](https://gitlab.com/KRypt0n_/an-anime-game-laun
 
 This launcher is also available as the [an-anime-game-launcher-bin](https://aur.archlinux.org/packages/an-anime-game-launcher-bin) AUR package
 
+### Flatpak
+
+This launcher is also available for download as a Flatpak through Flathub:
+
+```zsh
+flatpak install flathub com.gitlab.KRypt0n_.an-anime-game-launcher
+```
+
 ### Pacstall support
 
-This launcher is also available as the pacstall package:
+This launcher is also available as the [Pacstall](https://pacstall.dev) package:
 
 ```zsh
 pacstall -I an-anime-game-launcher-bin
