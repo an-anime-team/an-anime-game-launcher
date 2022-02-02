@@ -128,7 +128,7 @@ export default class Launcher
 
                         Windows.current.show();
                         Windows.current.center(1280, 700);
-                    })
+                    });
 
                     Windows.current.hide();
                 }

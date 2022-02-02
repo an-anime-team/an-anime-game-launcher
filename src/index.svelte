@@ -77,7 +77,7 @@
          * Update launcher's title
          */
         Game.latest.then((game) => {
-            Windows.current.setTitle(`An Anime Game Launcher - ${game.version}`);
+            Windows.current.setTitle(`An Anime Game Launcher - ${game.version} (beta revision)`);
         });
 
         /**

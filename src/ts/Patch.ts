@@ -256,7 +256,7 @@ export default class Patch
                         // Otherwise it should be [preparation], [testing] or [stable]
                         else
                         {
-                            fetch(`${patchUri}/raw/master/${version.replaceAll('.', '')}/patch_files/unityplayer_patch.vcdiff`, this.fetchTimeout)
+                            fetch(`${patchUri}/raw/master/${version.replaceAll('.', '')}/patch_files/unityplayer_patch_os.vcdiff`, this.fetchTimeout)
                                 .then((response) => {
                                     // Return an error if patch's server is unavailable
                                     if (response.status === null)
@@ -303,7 +303,9 @@ export default class Patch
                                                                 source: source
                                                             };
 
-                                                            const originalPlayer = /if \[ "\${sum}" != "([a-z0-9]{32})" \]; then/mg.exec(response);
+                                                            const originalPlayer = /if \[ "\${sum}" == "([a-z0-9]{32})" \]; then/mg.exec(response);
+
+                                                            console.log(originalPlayer);
 
                                                             // If we could get original UnityPlayer.dll hash - then we can
                                                             // compare it with actual UnityPlayer.dll hash and say whether the patch
