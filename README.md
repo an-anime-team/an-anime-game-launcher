@@ -10,6 +10,19 @@
 
 <br><br>
 
+# Download
+
+| Source | Link |
+| --- | --- |
+| AppImage | [Releases](https://gitlab.com/KRypt0n_/an-anime-game-launcher/-/releases) page |
+| AUR | [an-anime-game-launcher-bin](https://aur.archlinux.org/packages/an-anime-game-launcher-bin) |
+| Pacstall | an-anime-game-launcher-bin [(?)](https://pacstall.dev) |
+| Flatpak | [An Anime Game Launcher](https://flathub.org/apps/details/com.gitlab.KRypt0n_.an-anime-game-launcher) |
+
+<a href="https://flathub.org/apps/details/com.gitlab.KRypt0n_.an-anime-game-launcher">
+  <img src="https://flathub.org/assets/badges/flathub-badge-i-en.png" width="160px" />
+</a>
+
 # Status
 
 | Game version | Launcher version | Patch version |
@@ -17,32 +30,6 @@
 | 2.4.0 | 2.1.1 | 2.4.0 stable ✅ |
 
 We have our own [An Anime Game](https://discord.gg/ck37X6UWBp) discord server where you can ask any questions
-
-### AppImage
-
-Download AppImage from [Releases](https://gitlab.com/KRypt0n_/an-anime-game-launcher/-/releases) page
-
-### For arch users
-
-This launcher is also available as the [an-anime-game-launcher-bin](https://aur.archlinux.org/packages/an-anime-game-launcher-bin) AUR package
-
-### Flatpak
-
-This launcher is also available for download as a Flatpak through Flathub:
-
-```zsh
-flatpak install flathub com.gitlab.KRypt0n_.an-anime-game-launcher
-```
-
-### Pacstall support
-
-This launcher is also available as the [Pacstall](https://pacstall.dev) package:
-
-```zsh
-pacstall -I an-anime-game-launcher-bin
-```
-
-<br>
 
 ## Usage statistics
 
@@ -107,7 +94,7 @@ They're required only for some specific functions
 
 # Development
 
-## Download
+## Download source
 
 ```sh
 git clone https://gitlab.com/KRypt0n_/an-anime-game-launcher
