@@ -55,7 +55,7 @@ class Stream extends AbstractInstaller
                     /**
                      * Remove /etc/hosts editing if running in Flatpak
                      */
-                    () => isFlatpak ? Neutralino.os.execCommand(`cd "${path.addSlashes(patchDir)}" && sed -i '/^# ===========================================================/,+68d' patch.sh`) : null,
+                    () => isFlatpak ? Neutralino.os.execCommand(`cd "${path.addSlashes(patchDir)}" && sed -i '/^# ===========================================================/,+79d' patch.sh`) : null,
                     
                     /**
                      * Remove test version restrictions from the anti-login crash patch
