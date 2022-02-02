@@ -186,4 +186,13 @@ export default class Launcher
             });
         });
     }
+  
+    public static async isFlatpak(): Promise<boolean> {
+        try {
+            const stats = await Neutralino.filesystem.getStats("/.flatpak-info");
+            return stats.isFile;
+        } catch (error) {
+            return false;
+        }
+    }
 };
