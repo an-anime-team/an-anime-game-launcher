@@ -135,6 +135,7 @@ This is our current roadmap goals. You can find older ones [here](repository/pag
 * <s>Move launcher on [Empathize](https://github.com/empathizejs/framework)</s> *(2.1.0)*
 * <s>Make notifications translations</s> *(2.1.0)*
 * <s>ToS Violation Window</s> *(2.1.0)*
+* Add Chinese game's version support (due to changes in the Krock's patch)
 * Add `latest.log` file generation
 * Implement manual config flushing functionality from the Empathize's API
 * Add analytics window
