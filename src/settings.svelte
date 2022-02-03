@@ -230,7 +230,7 @@
                         'en-us': 'settings.general.items.lang.voice.items.en-us',
                         'ja-jp': 'settings.general.items.lang.voice.items.ja-jp',
                         'ko-kr': 'settings.general.items.lang.voice.items.ko-kr',
-                        'zn-cn': 'settings.general.items.lang.voice.items.zn-cn'
+                        'zh-cn': 'settings.general.items.lang.voice.items.zh-cn'
                     }}
                     selectionUpdated={() => voiceUpdateRequired = true}
                 />

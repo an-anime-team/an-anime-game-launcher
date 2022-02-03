@@ -92,7 +92,7 @@ settings:
             en-us: Inglés (EEUU)
             ja-jp: Japonés
             ko-kr: Coreano
-            zn-cn: Chino
+            zh-cn: Chino
 
       # Tema del Launcher
       theme:
