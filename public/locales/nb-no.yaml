@@ -1,0 +1,287 @@
+# Splash window
+splash:
+  title: Laster launcher
+  phrases:
+    - Gjør noen viktige ting...
+    - Mobber Paimon...
+    - Tregger for Yae...
+    - Samler materialer...
+    - Passerer Abyss...
+    - Samler prestasjoner...
+    - Bygger phys Qiqi...
+    - Gjør offer for 5*...
+    - Finner venner for co-op...
+
+# Launcher window
+launcher:
+  # Progress bar
+  progress:
+    pause: Pause
+    resume: Fortsett
+
+    # Game installation
+    game:
+      downloading: Laster ned spill...
+      unpacking: Pakker ut spill...
+      deleting_outdated: Fjerner utdaterte filer...
+
+    # Voice packages installation
+    voice:
+      deleting: Sletter stemmepakker...
+      downloading: Laster ned {voice} stemme pakke...
+      unpacking: Pakker ut {voice} stemme pakke...
+
+  # Launcher states
+  states:
+    # When the game should be installed or updated
+    installation:
+      install_wine: Installer Wine
+      install_dxvk: Installer DXVK
+      install: Installer
+      update: Oppdater
+
+    # When the game should be patched
+    patching:
+      # Patch unavailable
+      unavailable:
+        title: Patch utilengelig
+        hint: Denne spill versjonen har ikke en anti-juks patch.
+              Vennligst vent noen dager før det blir en test eller stabil versjon.
+
+      # Patch is in testing
+      test:
+        title: Installer test patch
+        hint: Denne spill versjonen har en eksperimentell anti-juks patch.
+              Du kan vente noen dager til den er stabil, eller installere den på din egen risiko
+
+      # Patch is stable
+      stable: Installer patch
+
+    # When the game is ready for playing
+    ready:
+      launch: Start
+      predownload: Forhånds-nedlast oppdatering
+
+# Settings window
+settings:
+  # General
+  general:
+    title: Generell
+    items:
+      # Language selection
+      lang:
+        # Launcher language
+        launcher:
+          title: Launcher
+          items:
+            en-us: English (US)
+            ru-ru: Русский
+            es-es: Español
+            de-de: Deutsch
+            fr-fr: Français
+            it-it: Italiano
+            hu-hu: Magyar
+            id-id: Bahasa Indonesia
+            nb-no: Norsk
+            uwu: Engwish
+
+        # Game voice pack language
+        voice:
+          title: Stemmepakke
+          tooltip: Du må manuellt velge ny stemmepakke i spillet
+          items:
+            en-us: Engelsk (USA)
+            ja-jp: Japansk
+            ko-kr: Koreansk
+            zh-cn: Kinesisk
+
+      # Launcher theme
+      theme:
+        title: Tema
+        items:
+          system: System
+          light: Lys
+          dark: Mørk
+
+      # Discord RPC
+      discord:
+        title: Discord RPC
+        settings:
+          title: Discord RPC instillinger
+          items:
+            timer: Vis estimert tid brukt
+            in-launcher: Launcher tekst
+            in-game: I-spillet tekst
+            selectIcon: Velg ikon
+
+      # Some buttons
+      buttons:
+        winetricks: winetricks
+        winecfg: winecfg
+        launcher: launcher mappe
+        game: spill mappe
+
+  # Enhancements
+  enhancements:
+    title: Forbedringer
+    items:
+      # HUD
+      hud:
+        title: HUD
+        items:
+          none: None
+          dxvk: DXVK
+          mangohud: MangoHUD
+
+      # Wine synchronization
+      winesync:
+        title: Wine synkronisering
+        tooltip: Esync er en mekanisme av synkroniserende multi-tråd operasjoner. Det kan forbedre din spill ytelse.
+                 FSync er en forbedret versjon av ESync som fungerer på spesifike kjerne versjoner
+        items:
+          none: None
+          esync: ESync
+          fsync: FSync
+          futex2: Futex2
+
+      # Wine Virtual Desktop
+      winevd:
+        title: Virtuell Skrivebord
+        settings:
+          title: Virtuell Skrivebord Instillinger
+          items:
+            height: Høyde
+            width: Bredde
+
+      # GameMode
+      gamemode:
+        title: Bruk GameMode
+        tooltip:
+          enabled: Det er programvare som kan forbedre spill ytelsen
+          disabled: ⚠️ Du har ikke GameMode installert
+      # AMD FSR
+      fsr:
+        title: Skru på AMD FSR
+        tooltip: Denne instillingen skrur på AMD FidelityFX Super Resolution (FSR)
+                 som vil skalere oppløsningen uten å miste FPS
+
+      # Unlock FPS
+      fps_unlocker:
+        title: Lås opp FPS
+        tooltip: Denne instillingen låser opp 60 fps begrensningen
+
+      # Delete logs
+      purge_logs:
+        # Game logs (DXVK)
+        game:
+          title: Slett DXVK loggfiler
+          tooltip: Med denne instillingen skrudd på your launcher will automatically
+                  delete DXVK log files
+
+        # Launcher logs
+        launcher:
+          title: Slett launcher loggfiler
+          tooltip: Mengde med tid før gamle logg filer blir slettet
+          items:
+            1d: 1 dag
+            3d: 3 dager
+            5d: 5 dager
+            7d: 1 uke
+            14d: 2 uker
+            never: Aldri
+
+  # Runners
+  runners:
+    title: Wine versjon
+    items:
+      recommended:
+        title: Bare vis anbefalt
+        tooltip: Denne innstillingen vil gjemme uspillbare wine versjoner
+
+  # DXVKs
+  dxvks:
+    title: DXVK
+    items:
+      recommended:
+        title: Bare vis anbefalt
+        tooltip: Denne innstillingen vil gjemme gamle DXVK versjoner
+
+  # Shaders
+  shaders:
+    title: Shaders
+    items:
+      shaders:
+        title: Shaders
+        tooltip: Bruk Home knappen til å skru shaders av og på
+        items:
+          none: Ingen
+          custom: Egendefinert
+
+      author: 'Forfatter: {author}'
+      no_images: Ingen bilder lagt til
+      not_installed: Du har ikke installert vkBasalt og reshade-shaders
+
+  # Environmantal variables manager
+  environment:
+    title: Miljø
+    items:
+      # Table rows
+      table:
+        name: Navn
+        value: Verdi
+
+      # Table buttons
+      buttons:
+        add: Legg til
+        delete: Fjern
+
+# Notifications
+notifications:
+  # Launcher update
+  launcher_update_available:
+    title: 'Launcher oppdatering tiljengelig: {from} -> {to}'
+    body: Du kan laste ned en versjon av launcher-en fra prosjektet's oppbevaringssted på {repository}
+
+  # Before telemetry check when iputils is not downloaded
+  iputils_package_required:
+    title: An Anime Game Launcher
+    body: Du må ha iputils installert for telemetri sjekking
+
+  # When telemetry servers are not disabled
+  telemetry_not_disabled:
+    title: An Anime Game Launcher
+    body: Telemetri servere er ikke slått av
+
+  # Before patch applying when xdelta3 package is not downloaded
+  xdelta3_package_required:
+    title: An Anime Game Launcher
+    body: Du må laste ned xdelta3 for å installere patch-en
+
+  # If patch wasn't applied because of some error
+  patch_applying_error:
+    title: An Anime Game Launcher
+    body: Patch installasjon feilet. Vennligst sjekk logg filen din for å finne en grunn for det, eller spør noen i vår discord server.
+
+  # Patch repositories are not available
+  patch_repos_unavailable:
+    title: An Anime Game Launcher
+    body: Ingen av patch oppbevaringstedene er tilgjengelig. Det er mulig å kjøre spillet, men det er ikke mulig å forsikre seg at spillet er patchet riktig
+
+# ToS violation warning window
+tos_violation:
+  title: ToS brudd advarsel
+  heading: ⚠️ Vær advart
+  body: Dette er ett uoffisielt værktøy, og er i ingen måter relatert til {company} eller {company_alterego}.
+        Dette værktøyet er laget for å fasilitere å spille {game} på Linux,
+        og var bygt for det eneste formålet av å installere og kjøre spillet med mindre styr.
+        Den gjør dette med å bruke eksisterende komponenter og gjør opplevelsen simpel for brukeren.
+        Derimot, noen komponenter brukt her sannsynligvis bryter {company} Terms of Service for {game}.
+        Hvis du bruker dette verktøyet, kan din bruker bli identifisert som TOS-ikke-kompatibel av {company}/{company_alterego}.
+        Hvis dette skjer, som din konto bryter TOS, er {company}/{company_alterego} fri til å gjøre hva de vil. Inkludert utestenging.
+        Hvis du forstår risikoen av å spille spillet i en uoffisiell kapasitet, trykk OK og la oss gå forske verdenen av Teyvat!
+  buttons:
+    ok:
+      title: Jeg forstår risikoen
+      tooltip: Du burde virkelig lese teksten over. Det er viktig
+    cancel: Avbryt
+    discord: Vår discord server
