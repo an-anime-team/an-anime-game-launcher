@@ -141,6 +141,7 @@ settings:
           none: Отключена
           esync: ESync
           fsync: FSync
+          futex2: Futex2
 
       # Виртуальный рабочий стол Wine
       winevd:

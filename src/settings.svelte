@@ -320,7 +320,8 @@
                     items={{
                         'none': 'settings.enhancements.items.winesync.items.none',
                         'esync': 'settings.enhancements.items.winesync.items.esync',
-                        'fsync': 'settings.enhancements.items.winesync.items.fsync'
+                        'fsync': 'settings.enhancements.items.winesync.items.fsync',
+                        'futex2': 'settings.enhancements.items.winesync.items.futex2'
                     }}
                 />
 

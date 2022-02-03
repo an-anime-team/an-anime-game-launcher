@@ -143,6 +143,7 @@ settings:
           none: Aucune
           esync: ESync
           fsync: FSync
+          futex2: Futex2
 
       # Wine Virtual Desktop
       winevd:

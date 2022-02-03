@@ -141,6 +141,7 @@ settings:
           none: Nincs
           esync: ESync
           fsync: FSync
+          futex2: Futex2
       
       # GameMode
       gamemode:

@@ -88,6 +88,13 @@ export default (launcher: Launcher): Promise<void> => {
                             env['WINEFSYNC'] = 1;
 
                             break;
+
+                        case 'futex2':
+                            env['WINEESYNC'] = 1;
+                            env['WINEFSYNC'] = 1;
+                            env['WINEFSYNC_FUTEX2'] = 1;
+
+                            break;
                     }
 
                     /**
