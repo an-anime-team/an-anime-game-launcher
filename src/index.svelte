@@ -19,6 +19,22 @@
 
     const launcher = new Launcher(onMount);
 
+    const getLogFilename = (date: Date = Debug.startedAt) => {
+        const prefixZero = (num: number) => num < 10 ? `0${num}` : num;
+
+        return `${date.getFullYear()}-${prefixZero(date.getMonth() + 1)}-${prefixZero(date.getDate())}-${prefixZero(date.getHours())}-${prefixZero(date.getMinutes())}-${prefixZero(date.getSeconds())}.log`;
+    };
+
+    constants.paths.launcherDir.then((launcherDir) => {
+        Neutralino.filesystem.getStats(`${launcherDir}/logs/latest.log`)
+            .then(async () => {
+                const created_at = (await Neutralino.os.execCommand(`stat -c '%W' "${path.addSlashes(`${launcherDir}/logs/latest.log`)}"`)).stdOut;
+
+                Neutralino.filesystem.moveFile(`${launcherDir}/logs/latest.log`, `${launcherDir}/logs/${getLogFilename(new Date(created_at * 1000))}`);
+            })
+            .catch(() => {});
+    });
+
     Neutralino.events.on('windowClose', async () => {
         Downloader.closeStreams(true);
         Archive.closeStreams(true);
@@ -46,7 +62,7 @@
         const log = Debug.get().join('\r\n');
 
         if (log != '')
-            await Neutralino.filesystem.writeFile(`${launcherDir}/logs/${Debug.startedAt.getDate()}-${Debug.startedAt.getMonth() + 1}-${Debug.startedAt.getFullYear()}-${Debug.startedAt.getHours()}-${Debug.startedAt.getMinutes()}-${Debug.startedAt.getSeconds()}.log`, log);
+            await Neutralino.filesystem.writeFile(`${launcherDir}/logs/latest.log`, log);
 
         // And close the launcher when they was saved
         Neutralino.app.exit();
@@ -64,7 +80,7 @@
                 const log = `=== Log can be incomplete ===\r\n\r\n${Debug.get().join('\r\n')}`;
 
                 if (log != '')
-                    await Neutralino.filesystem.writeFile(`${await constants.paths.launcherDir}/logs/${Debug.startedAt.getDate()}-${Debug.startedAt.getMonth() + 1}-${Debug.startedAt.getFullYear()}-${Debug.startedAt.getHours()}-${Debug.startedAt.getMinutes()}-${Debug.startedAt.getSeconds()}.log`, log);
+                    await Neutralino.filesystem.writeFile(`${await constants.paths.launcherDir}/logs/latest.log`, log);
 
                 logSavingStarted = false;
             }, 5000);
@@ -77,7 +93,7 @@
          * Update launcher's title
          */
         Game.latest.then((game) => {
-            Windows.current.setTitle(`An Anime Game Launcher - ${game.version} (beta revision)`);
+            Windows.current.setTitle(`An Anime Game Launcher - ${game.version}`);
         });
 
         /**

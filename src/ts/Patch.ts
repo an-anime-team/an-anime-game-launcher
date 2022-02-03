@@ -305,8 +305,6 @@ export default class Patch
 
                                                             const originalPlayer = /if \[ "\${sum}" == "([a-z0-9]{32})" \]; then/mg.exec(response);
 
-                                                            console.log(originalPlayer);
-
                                                             // If we could get original UnityPlayer.dll hash - then we can
                                                             // compare it with actual UnityPlayer.dll hash and say whether the patch
                                                             // was applied or not

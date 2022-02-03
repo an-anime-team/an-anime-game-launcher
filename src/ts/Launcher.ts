@@ -186,13 +186,16 @@ export default class Launcher
             });
         });
     }
-  
-    public static async isFlatpak(): Promise<boolean> {
-        try {
-            const stats = await Neutralino.filesystem.getStats("/.flatpak-info");
-            return stats.isFile;
-        } catch (error) {
-            return false;
-        }
+
+    /**
+     * Check if the launcher is running under flatpak
+     */
+    public static isFlatpak(): Promise<boolean>
+    {
+        return new Promise((resolve) => {
+            Neutralino.filesystem.getStats('/.flatpak-info')
+                .then((stats) => resolve(stats.isFile))
+                .catch(() => resolve(false));
+        });
     }
 };

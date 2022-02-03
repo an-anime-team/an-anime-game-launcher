@@ -100,7 +100,7 @@ class Paths
     /**
      * Cache file
      * 
-     * @default "~/.local/share/anime-game-launcher/cache.json"
+     * @default "~/.local/share/anime-game-launcher/.cache.json"
      */
     public static get cache(): Promise<string>
     {
