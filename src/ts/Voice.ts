@@ -26,7 +26,7 @@ export default class Voice
         'en-us': 'English(US)',
         'ja-jp': 'Japanese',
         'ko-kr': 'Korean',
-        'zn-cn': 'Chinese'
+        'zh-cn': 'Chinese'
     };
 
     /**
