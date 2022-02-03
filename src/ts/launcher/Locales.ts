@@ -13,7 +13,8 @@ type AvailableLocales =
     | 'de-de' | 'fr-fr' | 'id-id'
 
     // Unsupported by the game's API
-    | 'it-it' | 'hu-hu' | 'uwu';
+    | 'it-it' | 'hu-hu' | 'uwu'
+    | 'nb-no';
 
 declare const Neutralino;
 
