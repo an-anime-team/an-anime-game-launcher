@@ -136,10 +136,10 @@ This is our current roadmap goals. You can find older ones [here](repository/pag
 * <s>Make notifications translations</s> *(2.1.0)*
 * <s>ToS Violation Window</s> *(2.1.0)*
 * <s>Add `latest.log` file generation</s> *(2.1.2)*
+* <s>Add an option to show terminal with the wine's log of the game</s> *(7375c743)*
 * Add Chinese game's version support (due to changes in the Krock's patch)
 * Implement manual config flushing functionality from the Empathize's API
 * Add analytics window
-* Add an option to show terminal with the wine's log of the game
 * Dark progress bar design
 * Statistics window
 * Changelog window
