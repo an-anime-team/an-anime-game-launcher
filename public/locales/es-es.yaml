@@ -125,6 +125,13 @@ settings:
   enhancements:
     title: Mejoras
     items:
+
+      # Ventana sin bordes
+      borderless_window:
+        title: Permitir ventana sin bordes
+        tooltip: Eliminar los bordes cuando se juega en modo ventana
+                 Para jugar a pantalla completa sin bordes, debes presionar alt+enter cuando estés en pantalla completa
+
       # HUD
       hud:
         title: HUD
