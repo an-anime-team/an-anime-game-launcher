@@ -128,9 +128,9 @@ settings:
 
       # Borderless Window
       borderless_window:
-        title: Allow borderless window
-        tooltip: Removes the window borders when playing in windowed mode.
-                 To play in a fullscreen borderless window, press alt+enter when playing on fullscreen.
+        title: Использовать безрамочные окна
+        tooltip: Убирает рамки окна во время игры в оконном режиме.
+                 Для игры в полноэкранном режиме без рамок используйте alt+enter
 
       # HUD
       hud:

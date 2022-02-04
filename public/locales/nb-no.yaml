@@ -128,9 +128,9 @@ settings:
 
       # Borderless Window
       borderless_window:
-        title: Allow borderless window
-        tooltip: Removes the window borders when playing in windowed mode.
-                 To play in a fullscreen borderless window, press alt+enter when playing on fullscreen.
+          title: Skru på kantløs vindu
+          tooltip: Fjerner vindu kanter når du ikke spiller i fullskjerm modus.
+                  For å spille i kantløs vindu modus, trykk alt+enter når du spiller i fullskjerm modus.
 
       # HUD
       hud:
