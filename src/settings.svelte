@@ -302,60 +302,64 @@
             <div class="settings-item" id="enhancements">
                 <h1>{$_('settings.enhancements.title')}</h1>
 
+                <h3>{$_('settings.enhancements.wine.title')}</h3>
+
                 <SelectionBox
-                    lang="settings.enhancements.items.hud.title"
+                    lang="settings.enhancements.wine.items.hud.title"
                     prop="hud"
                     items={{
-                        'none': 'settings.enhancements.items.hud.items.none',
-                        'dxvk': 'settings.enhancements.items.hud.items.dxvk',
-                        'mangohud': 'settings.enhancements.items.hud.items.mangohud'
+                        'none': 'settings.enhancements.wine.items.hud.items.none',
+                        'dxvk': 'settings.enhancements.wine.items.hud.items.dxvk',
+                        'mangohud': 'settings.enhancements.wine.items.hud.items.mangohud'
                     }}
                 />
 
                 <SelectionBox
-                    lang="settings.enhancements.items.winesync.title"
+                    lang="settings.enhancements.wine.items.winesync.title"
                     prop="wine.sync"
-                    tooltip="settings.enhancements.items.winesync.tooltip"
+                    tooltip="settings.enhancements.wine.items.winesync.tooltip"
                     tooltip_size="large"
                     items={{
-                        'none': 'settings.enhancements.items.winesync.items.none',
-                        'esync': 'settings.enhancements.items.winesync.items.esync',
-                        'fsync': 'settings.enhancements.items.winesync.items.fsync',
-                        'futex2': 'settings.enhancements.items.winesync.items.futex2'
+                        'none': 'settings.enhancements.wine.items.winesync.items.none',
+                        'esync': 'settings.enhancements.wine.items.winesync.items.esync',
+                        'fsync': 'settings.enhancements.wine.items.winesync.items.fsync',
+                        'futex2': 'settings.enhancements.wine.items.winesync.items.futex2'
                     }}
+                />
+
+                <Checkbox
+                    lang="settings.enhancements.wine.items.fsr.title"
+                    tooltip="settings.enhancements.wine.items.fsr.tooltip"
+                    prop="wine.fsr"
+                    disabled={winevdSettings['enabled']}
+                />
+
+                <Checkbox
+                    lang="settings.enhancements.wine.items.winevd.title"
+                    prop="wine.virtual_desktop.enabled"
+                    valueChanged={(value) => winevdSettings['enabled'] = value}
                 />
 
                 <WineVDSettings visible={winevdSettings['enabled']} valueChanged={handleWineVD} />
 
+                <h3>{$_('settings.enhancements.game.title')}</h3>
+
                 <Checkbox
-                    lang="settings.enhancements.items.gamemode.title"
+                    lang="settings.enhancements.game.items.gamemode.title"
                     prop="gamemode"
                     tooltip={gamemode.tooltip}
                     disabled={gamemode.disabled}
                 />
 
                 <Checkbox
-                    lang="settings.enhancements.items.fsr.title"
-                    tooltip="settings.enhancements.items.fsr.tooltip"
-                    prop="wine.fsr"
-                    disabled={winevdSettings['enabled']}
-                />
-
-                <Checkbox
-                    lang="settings.enhancements.items.winevd.title"
-                    prop="wine.virtual_desktop.enabled"
-                    valueChanged={(value) => winevdSettings['enabled'] = value}
-                />
-
-                <Checkbox
-                    lang="settings.enhancements.items.borderless_window.title"
-                    tooltip="settings.enhancements.items.borderless_window.tooltip"
+                    lang="settings.enhancements.game.items.borderless_window.title"
+                    tooltip="settings.enhancements.game.items.borderless_window.tooltip"
                     prop="borderless_window"
                 />
 
                 <Checkbox
-                    lang="settings.enhancements.items.fps_unlocker.title"
-                    tooltip="settings.enhancements.items.fps_unlocker.tooltip"
+                    lang="settings.enhancements.game.items.fps_unlocker.title"
+                    tooltip="settings.enhancements.game.items.fps_unlocker.tooltip"
                     prop="fps_unlocker"
                     disabled={!fpsUnlockerAvailable}
                     valueChanged={async (checked) => {
@@ -369,22 +373,30 @@
                 />
 
                 <Checkbox
-                    lang="settings.enhancements.items.purge_logs.game.title"
-                    tooltip="settings.enhancements.items.purge_logs.game.tooltip"
+                    lang="settings.enhancements.game.items.use_terminal.title"
+                    tooltip="settings.enhancements.game.items.use_terminal.tooltip"
+                    prop="use_terminal"
+                />
+
+                <h3>{$_('settings.enhancements.launcher.title')}</h3>
+
+                <Checkbox
+                    lang="settings.enhancements.launcher.items.purge_logs.game.title"
+                    tooltip="settings.enhancements.launcher.items.purge_logs.game.tooltip"
                     prop="purge_logs.game"
                 />
 
                 <SelectionBox
-                    lang="settings.enhancements.items.purge_logs.launcher.title"
-                    tooltip="settings.enhancements.items.purge_logs.launcher.tooltip"
+                    lang="settings.enhancements.launcher.items.purge_logs.launcher.title"
+                    tooltip="settings.enhancements.launcher.items.purge_logs.launcher.tooltip"
                     prop="purge_logs.launcher"
                     items={{
-                        '1d': 'settings.enhancements.items.purge_logs.launcher.items.1d',
-                        '3d': 'settings.enhancements.items.purge_logs.launcher.items.3d',
-                        '5d': 'settings.enhancements.items.purge_logs.launcher.items.5d',
-                        '7d': 'settings.enhancements.items.purge_logs.launcher.items.7d',
-                        '14d': 'settings.enhancements.items.purge_logs.launcher.items.14d',
-                        'never': 'settings.enhancements.items.purge_logs.launcher.items.never'
+                        '1d': 'settings.enhancements.launcher.items.purge_logs.launcher.items.1d',
+                        '3d': 'settings.enhancements.launcher.items.purge_logs.launcher.items.3d',
+                        '5d': 'settings.enhancements.launcher.items.purge_logs.launcher.items.5d',
+                        '7d': 'settings.enhancements.launcher.items.purge_logs.launcher.items.7d',
+                        '14d': 'settings.enhancements.launcher.items.purge_logs.launcher.items.14d',
+                        'never': 'settings.enhancements.launcher.items.purge_logs.launcher.items.never'
                     }}
                 />
             </div>

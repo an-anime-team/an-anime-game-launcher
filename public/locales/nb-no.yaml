@@ -124,78 +124,95 @@ settings:
   # Enhancements
   enhancements:
     title: Forbedringer
-    items:
 
-      # Borderless Window
-      borderless_window:
-          title: Skru på kantløs vindu
-          tooltip: Fjerner vindu kanter når du ikke spiller i fullskjerm modus.
-                  For å spille i kantløs vindu modus, trykk alt+enter når du spiller i fullskjerm modus.
-
-      # HUD
-      hud:
-        title: HUD
-        items:
-          none: None
-          dxvk: DXVK
-          mangohud: MangoHUD
-
-      # Wine synchronization
-      winesync:
-        title: Wine synkronisering
-        tooltip: Esync er en mekanisme av synkroniserende multi-tråd operasjoner. Det kan forbedre din spill ytelse.
-                 FSync er en forbedret versjon av ESync som fungerer på spesifike kjerne versjoner
-        items:
-          none: None
-          esync: ESync
-          fsync: FSync
-          futex2: Futex2
-
-      # Wine Virtual Desktop
-      winevd:
-        title: Virtuell Skrivebord
-        settings:
-          title: Virtuell Skrivebord Instillinger
+    # Enhancements related to the wine
+    wine:
+      title: Wine
+      items:
+        # HUD
+        hud:
+          title: HUD
           items:
-            height: Høyde
-            width: Bredde
+            none: None
+            dxvk: DXVK
+            mangohud: MangoHUD
 
-      # GameMode
-      gamemode:
-        title: Bruk GameMode
-        tooltip:
-          enabled: Det er programvare som kan forbedre spill ytelsen
-          disabled: ⚠️ Du har ikke GameMode installert
-      # AMD FSR
-      fsr:
-        title: Skru på AMD FSR
-        tooltip: Denne instillingen skrur på AMD FidelityFX Super Resolution (FSR)
-                 som vil skalere oppløsningen uten å miste FPS
-
-      # Unlock FPS
-      fps_unlocker:
-        title: Lås opp FPS
-        tooltip: Denne instillingen låser opp 60 fps begrensningen
-
-      # Delete logs
-      purge_logs:
-        # Game logs (DXVK)
-        game:
-          title: Slett DXVK loggfiler
-          tooltip: Med denne instillingen skrudd på your launcher will automatically
-                  delete DXVK log files
-
-        # Launcher logs
-        launcher:
-          title: Slett launcher loggfiler
-          tooltip: Mengde med tid før gamle logg filer blir slettet
+        # Wine synchronization
+        winesync:
+          title: Wine synkronisering
+          tooltip: Esync er en mekanisme av synkroniserende multi-tråd operasjoner. Det kan forbedre din spill ytelse.
+                   FSync er en forbedret versjon av ESync som fungerer på spesifike kjerne versjoner
           items:
-            1d: 1 dag
-            3d: 3 dager
-            5d: 5 dager
-            7d: 1 uke
-            14d: 2 uker
-            never: Aldri
+            none: None
+            esync: ESync
+            fsync: FSync
+            futex2: Futex2
+
+        # AMD FSR
+        fsr:
+          title: Skru på AMD FSR
+          tooltip: Denne instillingen skrur på AMD FidelityFX Super Resolution (FSR)
+                   som vil skalere oppløsningen uten å miste FPS
+
+        # Wine Virtual Desktop
+        winevd:
+          title: Virtuell Skrivebord
+          settings:
+            title: Virtuell Skrivebord Instillinger
+            items:
+              width: Bredde
+              height: Høyde
+
+    # Enhancements related to the game
+    game:
+      title: Game
+      items:
+        # GameMode
+        gamemode:
+          title: Bruk GameMode
+          tooltip:
+            enabled: Det er programvare som kan forbedre spill ytelsen
+            disabled: ⚠️ Du har ikke GameMode installert
+
+        # Borderless Window
+        borderless_window:
+            title: Skru på kantløs vindu
+            tooltip: Fjerner vindu kanter når du ikke spiller i fullskjerm modus.
+                    For å spille i kantløs vindu modus, trykk alt+enter når du spiller i fullskjerm modus.
+
+        # Unlock FPS
+        fps_unlocker:
+          title: Lås opp FPS
+          tooltip: Denne instillingen låser opp 60 fps begrensningen
+
+        # Use separate terminal window to run the game
+        use_terminal:
+          title: Use terminal
+          tooltip: With this option enabled launcher will run the wine command in a separate terminal window
+
+    # Enhancements related to the launcher
+    launcher:
+      title: Launcher
+      items:
+        # Delete logs
+        purge_logs:
+          # Game logs (DXVK)
+          game:
+            title: Slett DXVK loggfiler
+            tooltip: Med denne instillingen skrudd på your launcher will automatically
+                     delete DXVK log files
+
+          # Launcher logs
+          launcher:
+            title: Slett launcher loggfiler
+            tooltip: Mengde med tid før gamle logg filer blir slettet
+            items:
+              1d: 1 dag
+              3d: 3 dager
+              5d: 5 dager
+              7d: 1 uke
+              14d: 2 uker
+              never: Aldri
 
   # Runners
   runners:

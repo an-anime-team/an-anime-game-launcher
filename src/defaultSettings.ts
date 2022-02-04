@@ -66,16 +66,6 @@ export default new Promise<void>(async (resolve) => {
          * @default "system"
          */
         theme: 'system',
-
-        /**
-         * Allow Borderless Window
-         * 
-         * Whether the game launches with the parameters "-screen-fullscreen 0 -popupwindow"
-         * This allows the game to be played in a borderless window by selecting fullscreen and pressing alt+enter
-         * 
-         * @default false
-         */
-        borderless_window: false,
     
         /**
          * HUD
@@ -186,11 +176,32 @@ export default new Promise<void>(async (resolve) => {
         gamemode: false,
 
         /**
+         * Allow Borderless Window
+         * 
+         * Whether the game launches with the parameters "-screen-fullscreen 0 -popupwindow"
+         * This allows the game to be played in a borderless window by selecting fullscreen and pressing alt+enter
+         * 
+         * @default false
+         */
+        borderless_window: false,
+
+        /**
          * If the launcher should unlock FPS
          * 
          * @default false
          */
         fps_unlocker: false,
+
+        /**
+         * Use separate terminal window to run the wine command
+         * 
+         * It'll try to use some of the supported default terminal applications. Otherwise the option will not have an effect
+         * 
+         * More details in the `Launch.ts` script
+         * 
+         * @default false
+         */
+        use_terminal: false,
 
         /**
          * If the launcher should automatically delete log files
@@ -215,7 +226,7 @@ export default new Promise<void>(async (resolve) => {
     });
 
     /**
-     * 2.1.0-beta1 -> 2.1.0-beta2
+     * 2.1.0-beta1 -> 2.1.1
      */
     const winesync = await Configs.get('winesync');
     const fsr = await Configs.get('fsr');

@@ -82,7 +82,7 @@ settings:
             it-it: Italiano
             hu-hu: Magyar
             id-id: Bahasa Indonesia
-            nb-no: Norwegian
+            nb-no: Norsk
             uwu: Engwish
 
         # Game voice pack language
@@ -124,78 +124,94 @@ settings:
   # Enhancements
   enhancements:
     title: enhancements
-    items:
 
-      # Borderless Window
-      borderless_window:
-        title: allow bowdewless window
-        tooltip: wemoves the window bowders when playing in windowed mode.
-                 to play in a f-fullscween bowdewless window, press alt+entew when playing on fullscween  ପ(๑•ᴗ•๑)ଓ.
-
-      # HUD
-      hud:
-        title: h-hud
-        items:
-          none: n-none
-          dxvk: DXVK
-          mangohud: MangoHUD
-
-      # Wine synchronization
-      winesync:
-        title: wine synchwonization
-        tooltip: Esync is a mechanism of synchwonizing muwti-thwead opewations. it can impwove youw game p-pewfowmance.
-                 Fsync is an impwoved vewsion of esync that wowks on specific k-kewnew vewsions
-        items:
-          none: none
-          esync: Esync
-          fsync: Fsync
-          futex2: Futex2
-
-      # Wine Virtual Desktop
-      winevd:
-        title: viwtuaw desktop
-        settings:
-          title: viwtuaw desktop settings
+    # Enhancements related to the wine
+    wine:
+      title: wine
+      items:
+        # HUD
+        hud:
+          title: h-hud
           items:
-            height: height
-            width: width
-      
-      # GameMode
-      gamemode:
-        title: use G-GameMode
-        tooltip:
-          enabled: it i-is a software t-that can impwove the game pewfowmance
-          disabled: ⚠️ you don't h-have g-gamemode package instawwed
+            none: n-none
+            dxvk: DXVK
+            mangohud: MangoHUD
 
-      # AMD FSR
-      fsr:
-        title: enable amd fsw
-        tooltip: this option enables a-amd fidewityfx s-super wesowution (fsw) which will scale youw game wesowution without wosing fps
-      
-      # Unlock FPS
-      fps_unlocker:
-        title: unwock FPS
-        tooltip: this option w-will unwock 60 f-fps w-wimitation o-of the game
-      
-      # Delete logs
-      purge_logs:
-        # Game logs (DXVK)
-        game:
-          title: dewete DXVK wogs
-          tooltip: with this option enabwed youw waunchew will a-automaticawwy
-                  dewete dxvk wog f-files
-
-        # Launcher logs
-        launcher:
-          title: dewete w-waunchew wogs
-          tooltip: amount of time after which waunchew will dewete i-it's owd wog files
+        # Wine synchronization
+        winesync:
+          title: wine synchwonization
+          tooltip: Esync is a mechanism of synchwonizing muwti-thwead opewations. it can impwove youw game p-pewfowmance.
+                   Fsync is an impwoved vewsion of esync that wowks on specific k-kewnew vewsions
           items:
-            1d: 1 day
-            3d: 3 days
-            5d: 5 days
-            7d: 1 week
-            14d: 2 weeks
-            never: Never
+            none: none
+            esync: Esync
+            fsync: Fsync
+            futex2: Futex2
+
+        # AMD FSR
+        fsr:
+          title: enable amd fsw
+          tooltip: this option enables a-amd fidewityfx s-super wesowution (fsw) which will scale youw game wesowution without wosing fps
+
+        # Wine Virtual Desktop
+        winevd:
+          title: viwtuaw desktop
+          settings:
+            title: viwtuaw desktop settings
+            items:
+              width: width
+              height: height
+
+    # Enhancements related to the game
+    game:
+      title: game
+      items:
+        # GameMode
+        gamemode:
+          title: use G-GameMode
+          tooltip:
+            enabled: it i-is a software t-that can impwove the game pewfowmance
+            disabled: ⚠️ you don't h-have g-gamemode package instawwed
+
+        # Borderless Window
+        borderless_window:
+          title: allow bowdewless window
+          tooltip: wemoves the window bowders when playing in windowed mode.
+                  to play in a f-fullscween bowdewless window, press alt+entew when playing on fullscween  ପ(๑•ᴗ•๑)ଓ.
+
+        # Unlock FPS
+        fps_unlocker:
+          title: unwock FPS
+          tooltip: this option w-will unwock 60 f-fps w-wimitation o-of the game
+
+        # Use separate terminal window to run the game
+        use_terminal:
+            title: use tewminaw
+            tooltip: with this option enabwed waunchew will wun the w-wine command in a sepawate t-tewminaw window
+
+    # Enhancements related to the launcher
+    launcher:
+      title: waunchew
+      items:
+        # Delete logs
+        purge_logs:
+          # Game logs (DXVK)
+          game:
+            title: dewete DXVK wogs
+            tooltip: with this option enabwed youw waunchew will a-automaticawwy
+                    dewete dxvk wog f-files
+
+          # Launcher logs
+          launcher:
+            title: dewete w-waunchew wogs
+            tooltip: amount of time after which waunchew will dewete i-it's owd wog files
+            items:
+              1d: 1 day
+              3d: 3 days
+              5d: 5 days
+              7d: 1 week
+              14d: 2 weeks
+              never: Never
 
   # Runners
   runners:

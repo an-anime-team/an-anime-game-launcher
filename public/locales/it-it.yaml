@@ -82,7 +82,7 @@ settings:
             it-it: Italiano
             hu-hu: Magyar
             id-id: Bahasa Indonesia
-            nb-no: Norwegian
+            nb-no: Norsk
             uwu: Engwish
 
         # Game voice pack language
@@ -123,78 +123,94 @@ settings:
   # Enhancements
   enhancements:
     title: Miglioramenti
-    items:
 
-      # Borderless Window
-      borderless_window:
-        title: Allow borderless window
-        tooltip: Removes the window borders when playing in windowed mode.
-                 To play in a fullscreen borderless window, press alt+enter when playing on fullscreen.
-
-      # HUD
-      hud:
-        title: Interfaccia
-        items:
-          none: None
-          dxvk: DXVK
-          mangohud: MangoHUD
-
-      # Wine synchronization
-      winesync:
-        title: Sincronizzazione Wine
-        tooltip: ESync è un meccanismo di sincronizzazione per operazioni multi-thread. Può migliorare le performance di gioco.
-                 FSync è una versione migliorata di ESync che funziona su alcune versioni specifiche del kernel.
-        items:
-          none: Nessuno
-          esync: ESync
-          fsync: FSync
-          futex2: Futex2
-
-      # Wine Virtual Desktop
-      winevd:
-        title: Desktop virtuale
-        settings:
-          title: Impostazioni del desktop virtuale
+    # Enhancements related to the wine
+    wine:
+      title: Wine
+      items:
+        # HUD
+        hud:
+          title: Interfaccia
           items:
-            height: Altezza
-            width: Larghezza
-      
-      # GameMode
-      gamemode:
-        title: Usa GameMode
-        tooltip:
-          enabled: È un software che può migliorare le prestazioni in gioco
-          disabled: ⚠️ Non hai il pacchetto gamemode installato
-      
-      # AMD FSR
-      fsr:
-        title: Attiva AMD FSR
-        tooltip: Questa opzione attiva AMD FidelityFX Super Resolution (FSR)
-                 che permetterà di scalare la risoluzione del gioco senza perdere FPS
+            none: None
+            dxvk: DXVK
+            mangohud: MangoHUD
 
-      # Unlock FPS
-      fps_unlocker:
-        title: Sblocca gli FPS
-        tooltip: Questa opzione rimuoverà la limitazione di 60 FPS in gioco
-      
-      # Delete DXVK logs
-      purge_logs:
-        # Game logs (DXVK)
-        game:
-          title: Cancella i log DXVK
-          tooltip: Con questa opzione attiva, il launcher cancellerà automaticamente i file di log DXVK
-
-        # Launcher logs
-        launcher:
-          title: Cancella i log del launcher
-          tooltip: Quantità di tempo dopo cui il launcher eliminerà i vecchi file di log
+        # Wine synchronization
+        winesync:
+          title: Sincronizzazione Wine
+          tooltip: ESync è un meccanismo di sincronizzazione per operazioni multi-thread. Può migliorare le performance di gioco.
+                  FSync è una versione migliorata di ESync che funziona su alcune versioni specifiche del kernel.
           items:
-            1d: 1 giorno
-            3d: 3 giorni
-            5d: 5 giorni
-            7d: 1 settimana
-            14d: 2 settimane
-            never: Mai
+            none: Nessuno
+            esync: ESync
+            fsync: FSync
+            futex2: Futex2
+
+        # AMD FSR
+        fsr:
+          title: Attiva AMD FSR
+          tooltip: Questa opzione attiva AMD FidelityFX Super Resolution (FSR)
+                  che permetterà di scalare la risoluzione del gioco senza perdere FPS
+
+        # Wine Virtual Desktop
+        winevd:
+          title: Desktop virtuale
+          settings:
+            title: Impostazioni del desktop virtuale
+            items:
+              width: Larghezza
+              height: Altezza
+
+    # Enhancements related to the game
+    game:
+      title: Game
+      items:
+        # GameMode
+        gamemode:
+          title: Usa GameMode
+          tooltip:
+            enabled: È un software che può migliorare le prestazioni in gioco
+            disabled: ⚠️ Non hai il pacchetto gamemode installato
+
+        # Borderless Window
+        borderless_window:
+          title: Allow borderless window
+          tooltip: Removes the window borders when playing in windowed mode.
+                   To play in a fullscreen borderless window, press alt+enter when playing on fullscreen.
+
+        # Unlock FPS
+        fps_unlocker:
+          title: Sblocca gli FPS
+          tooltip: Questa opzione rimuoverà la limitazione di 60 FPS in gioco
+
+        # Use separate terminal window to run the game
+        use_terminal:
+          title: Use terminal
+          tooltip: With this option enabled launcher will run the wine command in a separate terminal window
+
+    # Enhancements related to the launcher
+    launcher:
+      title: Launcher
+      items:
+        # Delete DXVK logs
+        purge_logs:
+          # Game logs (DXVK)
+          game:
+            title: Cancella i log DXVK
+            tooltip: Con questa opzione attiva, il launcher cancellerà automaticamente i file di log DXVK
+
+          # Launcher logs
+          launcher:
+            title: Cancella i log del launcher
+            tooltip: Quantità di tempo dopo cui il launcher eliminerà i vecchi file di log
+            items:
+              1d: 1 giorno
+              3d: 3 giorni
+              5d: 5 giorni
+              7d: 1 settimana
+              14d: 2 settimane
+              never: Mai
 
   # Runners
   runners:

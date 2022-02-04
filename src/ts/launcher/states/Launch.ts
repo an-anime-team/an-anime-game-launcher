@@ -158,6 +158,26 @@ export default (launcher: Launcher): Promise<void> => {
                         command = `gamemoderun ${command}`;
 
                     /**
+                     * Use terminal
+                     * 
+                     * bash -c "<command> && bash" is required to keep terminal open
+                     */
+                    if (await Configs.get('use_terminal'))
+                    {
+                        // Gnome
+                        if (await Package.exists('gnome-terminal'))
+                            command = `gnome-terminal -- bash -c "${path.addSlashes(command)} && bash"`;
+
+                        // KDE Plasma
+                        else if (await Package.exists('konsole'))
+                            command = `konsole --hold -e "${path.addSlashes(`bash -c "${path.addSlashes(command)} && bash"`)}"`;
+
+                        // XFCE
+                        else if (await Package.exists('xfce4-terminal'))
+                            command = `xfce4-terminal --hold -e "${path.addSlashes(`bash -c "${path.addSlashes(command)} && bash"`)}"`;
+                    }
+
+                    /**
                      * Starting the game
                      */
                     const startTime = Date.now();
@@ -171,81 +191,83 @@ export default (launcher: Launcher): Promise<void> => {
                         cwd: await constants.paths.gameDir
                     });
 
+                    // Stop monitoring of the process
+                    process.runningInterval = null;
+                    process.outputInterval = null;
+
                     // Game was started by the launcher.bat file
                     // so we just need to wait until AnimeGame.e process
                     // will be closed
-                    process.finish(() => {
-                        const processName = `${constants.placeholders.uppercase.first + constants.placeholders.uppercase.second}.e`;
+                    const processName = `${constants.placeholders.uppercase.first + constants.placeholders.uppercase.second}.e`;
 
-                        let closeGameCounter = 0;
+                    let closeGameCounter = 0;
 
-                        const waiter = async () => {
-                            const processes: string = (await Neutralino.os.execCommand('ps -A')).stdOut;
+                    const waiter = async () => {
+                        const processes: string = (await Neutralino.os.execCommand('ps -A')).stdOut;
 
-                            // Game is still running
-                            if (processes.includes(processName))
-                            {
-                                const playtime = Math.round((Date.now() - startTime) / 1000);
+                        // Game is still running
+                        if (processes.includes(processName))
+                        {
+                            const playtime = Math.round((Date.now() - startTime) / 1000);
 
-                                let hours: string|number = Math.floor(playtime / 3600);
-                                let minutes: string|number = Math.floor((playtime - hours * 3600) / 60);
-                                let seconds: string|number = playtime - hours * 3600 - minutes * 60;
+                            let hours: string|number = Math.floor(playtime / 3600);
+                            let minutes: string|number = Math.floor((playtime - hours * 3600) / 60);
+                            let seconds: string|number = playtime - hours * 3600 - minutes * 60;
 
-                                if (hours < 10)
-                                    hours = `0${hours}`;
+                            if (hours < 10)
+                                hours = `0${hours}`;
 
-                                if (minutes < 10)
-                                    minutes = `0${minutes}`;
+                            if (minutes < 10)
+                                minutes = `0${minutes}`;
 
-                                if (seconds < 10)
-                                    seconds = `0${seconds}`;
+                            if (seconds < 10)
+                                seconds = `0${seconds}`;
 
-                                // FIXME: tray doesn't work in AppImage
-                                launcher.tray.update([
-                                    { text: `Playing for ${hours}:${minutes}:${seconds}`, disabled: true },
-                                    {
-                                        text: `Close game${closeGameCounter > 0 ? ` (${closeGameCounter})` : ''}`,
+                            // FIXME: tray doesn't work in AppImage
+                            launcher.tray.update([
+                                { text: `Playing for ${hours}:${minutes}:${seconds}`, disabled: true },
+                                {
+                                    text: `Close game${closeGameCounter > 0 ? ` (${closeGameCounter})` : ''}`,
 
-                                        click: () => Neutralino.os.execCommand(`kill ${++closeGameCounter < 3 ? '-15' : '-9'} $(pidof ${processName})`)
-                                    }
-                                ]);
+                                    click: () => Neutralino.os.execCommand(`kill ${++closeGameCounter < 3 ? '-15' : '-9'} $(pidof ${processName})`)
+                                }
+                            ]);
 
-                                setTimeout(waiter, 3000);
-                            }
+                            setTimeout(waiter, 3000);
+                        }
 
-                            // Game was closed
-                            else
-                            {
-                                const stopTime = Date.now();
+                        // Game was closed
+                        else
+                        {
+                            const stopTime = Date.now();
 
-                                Windows.current.show();
-                                Windows.current.center(1280, 700);
+                            Windows.current.show();
+                            Windows.current.center(1280, 700);
 
-                                launcher.updateDiscordRPC('in-launcher');
-                                launcher.tray.hide();
+                            launcher.updateDiscordRPC('in-launcher');
+                            launcher.tray.hide();
 
-                                // Purge game logs
-                                Configs.get('purge_logs.game').then(async (purge_logs) => {
-                                    if (purge_logs)
-                                    {
-                                        const gameDir = path.addSlashes(await constants.paths.gameDir);
+                            // Purge game logs
+                            Configs.get('purge_logs.game').then(async (purge_logs) => {
+                                if (purge_logs)
+                                {
+                                    const gameDir = path.addSlashes(await constants.paths.gameDir);
 
-                                        // Delete .log files (e.g. "ZFGameBrowser_xxxx.log")
-                                        Neutralino.os.execCommand(`find "${gameDir}" -maxdepth 1 -type f -name "*.log" -delete`);
+                                    // Delete .log files (e.g. "ZFGameBrowser_xxxx.log")
+                                    Neutralino.os.execCommand(`find "${gameDir}" -maxdepth 1 -type f -name "*.log" -delete`);
 
-                                        // Delete .dmp files (e.g. "DumpFile-zfbrowser-xxxxxx.dmp")
-                                        Neutralino.os.execCommand(`find "${gameDir}" -maxdepth 1 -type f -name "*.dmp" -delete`);
-                                    }
-                                });
+                                    // Delete .dmp files (e.g. "DumpFile-zfbrowser-xxxxxx.dmp")
+                                    Neutralino.os.execCommand(`find "${gameDir}" -maxdepth 1 -type f -name "*.dmp" -delete`);
+                                }
+                            });
 
-                                // TODO
+                            // TODO
 
-                                resolve();
-                            }
-                        };
+                            resolve();
+                        }
+                    };
 
-                        setTimeout(waiter, 5000);
-                    });
+                    setTimeout(waiter, 5000);
                 }
             })
             .catch(() => {

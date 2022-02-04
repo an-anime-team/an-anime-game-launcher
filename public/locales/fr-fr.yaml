@@ -83,7 +83,7 @@ settings:
             it-it: Italiano
             hu-hu: Magyar
             id-id: Bahasa Indonesia
-            nb-no: Norwegian
+            nb-no: Norsk
             uwu: Engwish
 
         # Game voice pack language
@@ -126,80 +126,98 @@ settings:
   # Enhancements
   enhancements:
     title: Améliorations
-    items:
 
-      # Borderless Window
-      borderless_window:
-        title: Allow borderless window
-        tooltip: Removes the window borders when playing in windowed mode.
-                 To play in a fullscreen borderless window, press alt+enter when playing on fullscreen.
-
-      # HUD
-      hud:
-        title: Interface
-        items:
-          none: None
-          dxvk: DXVK
-          mangohud: MangoHUD
-
-      # Wine synchronization
-      winesync:
-        title: Synchronisation dans Wine
-        tooltip: ESync est un système de synchronisation des opérations multi-thread. Cela améliore vos performances en jeux.
-                 FSync est une version améliorée de ESync qui fonctionne seulement avec un Kernel spécifique.
-        items:
-          none: Aucune
-          esync: ESync
-          fsync: FSync
-          futex2: Futex2
-
-      # Wine Virtual Desktop
-      winevd:
-        title: Bureau virtuel
-        settings:
-          title: Paramètres du Bureau virtuel
+    # Enhancements related to the wine
+    wine:
+      title: Wine
+      items:
+        # HUD
+        hud:
+          title: Interface
           items:
-            height: Hauteur
-            width: Largeur
-      
-      # GameMode
-      gamemode:
-        title: Utiliser GameMode
-        tooltip:
-          enabled: C'est un logiciel qui permet d'améliorer les performances en jeu
-          disabled: ⚠️ Vous n'avez pas le paquet "gamemode" d'installer
+            none: None
+            dxvk: DXVK
+            mangohud: MangoHUD
 
-      # AMD FSR
-      fsr:
-        title: Activer AMD FSR
-        tooltip: Cette option active "AMD FidelityFX Super Resolution" (FSR)
-                 ce qui permet d'augmenter votre résolution sans perdre des FPS (images par secondes)
-      
-      # Unlock FPS
-      fps_unlocker:
-        title: Débloquer les IPS (FPS)
-        tooltip: Cette option permet de débloque le nombre d'image par 
-                 secondes (IPS) au-delà de 60
-      
-      # Delete logs
-      purge_logs:
-        # Game logs (DXVK)
-        game:
-          title: Supprimer automatiquement les logs de DXVK
-          tooltip: Cette option supprime automatiquement les 
-                  fichiers logs de DXVK
-
-        # Launcher logs
-        launcher:
-          title: Suppression des fichiers logs
-          tooltip: Intervalle entre chaque suppression de fichier logs du launcher
+        # Wine synchronization
+        winesync:
+          title: Synchronisation dans Wine
+          tooltip: ESync est un système de synchronisation des opérations multi-thread. Cela améliore vos performances en jeux.
+                   FSync est une version améliorée de ESync qui fonctionne seulement avec un Kernel spécifique.
           items:
-            1d: Tous les jours
-            3d: Tous les 3 jours
-            5d: Tous les 5 jours
-            7d: Toutes les semaines
-            14d: Toutes les 2 semaines
-            never: Jamais
+            none: Aucune
+            esync: ESync
+            fsync: FSync
+            futex2: Futex2
+
+        # AMD FSR
+        fsr:
+          title: Activer AMD FSR
+          tooltip: Cette option active "AMD FidelityFX Super Resolution" (FSR)
+                   ce qui permet d'augmenter votre résolution sans perdre des FPS (images par secondes)
+
+        # Wine Virtual Desktop
+        winevd:
+          title: Bureau virtuel
+          settings:
+            title: Paramètres du Bureau virtuel
+            items:
+              width: Largeur
+              height: Hauteur
+
+    # Enhancements related to the game
+    game:
+      title: Jeu
+      items:
+        # GameMode
+        gamemode:
+          title: Utiliser GameMode
+          tooltip:
+            enabled: C'est un logiciel qui permet d'améliorer les performances en jeu
+            disabled: ⚠️ Vous n'avez pas le paquet "gamemode" d'installer
+
+        # Borderless Window
+        borderless_window:
+          title: Fenêtre sans bordures
+          tooltip: Enlève les bordures du jeu quand vous jouez en mode fenêtrer.
+                   Pour jouer en mode fenêtrer ou inversement jouer en 
+                   mode plein écran, appuyez sur alt+entrer pour alterner entre 
+                   les deux modes.
+
+        # Unlock FPS
+        fps_unlocker:
+          title: Débloquer les IPS (FPS)
+          tooltip: Cette option permet de débloque le nombre d'image par 
+                   secondes (IPS) au-delà de 60
+
+        # Use separate terminal window to run the game
+        use_terminal:
+            title: Utiliser Terminal
+            tooltip: Avec cette option activée le Launcher lancera les commandes Wine dans une fenêtre Terminal séparée
+
+    # Enhancements related to the launcher
+    launcher:
+      title: Launcher
+      items:
+        # Delete logs
+        purge_logs:
+          # Game logs (DXVK)
+          game:
+            title: Supprimer automatiquement les logs de DXVK
+            tooltip: Cette option supprime automatiquement les 
+                    fichiers logs de DXVK
+
+          # Launcher logs
+          launcher:
+            title: Suppression des fichiers logs
+            tooltip: Intervalle entre chaque suppression de fichier logs du launcher
+            items:
+              1d: Tous les jours
+              3d: Tous les 3 jours
+              5d: Tous les 5 jours
+              7d: Toutes les semaines
+              14d: Toutes les 2 semaines
+              never: Jamais
 
   # Runners
   runners:

@@ -82,7 +82,7 @@ settings:
             it-it: Italiano
             hu-hu: Magyar
             id-id: Bahasa Indonesia
-            nb-no: Norwegian
+            nb-no: Norsk
             uwu: Engwish
 
         # Язык озвучки в игре
@@ -124,78 +124,94 @@ settings:
   # Улучшения
   enhancements:
     title: Улучшения
-    items:
 
-      # Borderless Window
-      borderless_window:
-        title: Использовать безрамочные окна
-        tooltip: Убирает рамки окна во время игры в оконном режиме.
-                 Для игры в полноэкранном режиме без рамок используйте alt+enter
-
-      # HUD
-      hud:
-        title: HUD
-        items:
-          none: Отключён
-          dxvk: DXVK
-          mangohud: MangoHUD
-
-      # Синхронизация Wine
-      winesync:
-        title: Синхронизация Wine
-        tooltip: ESync - это механизм синхронизации многопоточных операций. Он может улучшить производительность игры.
-                 FSync - это улучшенная версия ESync, которая работает на некоторых версиях ядра Linux
-        items:
-          none: Отключена
-          esync: ESync
-          fsync: FSync
-          futex2: Futex2
-
-      # Виртуальный рабочий стол Wine
-      winevd:
-        title: Виртуальный рабочий стол
-        settings:
-          title: Настройки виртуального рабочего стола
+    # Enhancements related to the wine
+    wine:
+      title: Wine
+      items:
+        # HUD
+        hud:
+          title: HUD
           items:
-            height: Высота
-            width: Ширина
-      
-      # GameMode
-      gamemode:
-        title: Использовать GameMode
-        tooltip:
-          enabled: Это программа, которая может улучшить производительность игры
-          disabled: ⚠️ У вас не установлен пакет gamemode
+            none: Отключён
+            dxvk: DXVK
+            mangohud: MangoHUD
 
-      # AMD FSR
-      fsr:
-        title: Включить AMD FSR
-        tooltip: Эта опция включает AMD FidelityFX Super Resolution (FSR),
-                 который может увеличить разрешение игры без потери кадров
-
-      # Разблокировать FPS
-      fps_unlocker:
-        title: Разблокировать FPS
-        tooltip: Эта опция позволит разблокировать лимит на отрисовку не более чем 60 кадров в секунду
-
-      # Удалять логи
-      purge_logs:
-        # Игры (DXVK)
-        game:
-          title: Удалять логи DXVK
-          tooltip: Если включено, лаунчер будет автоматически удалять логи DXVK
-
-        # Лаунчера
-        launcher:
-          title: Удалять логи лаунчера
-          tooltip: Время, после которого удалять старые логи лаунчера
+        # Синхронизация Wine
+        winesync:
+          title: Синхронизация Wine
+          tooltip: ESync - это механизм синхронизации многопоточных операций. Он может улучшить производительность игры.
+                   FSync - это улучшенная версия ESync, которая работает на некоторых версиях ядра Linux
           items:
-            1d: 1 день
-            3d: 3 дня
-            5d: 5 дней
-            7d: 1 неделя
-            14d: 2 недели
-            never: Никогда
+            none: Отключена
+            esync: ESync
+            fsync: FSync
+            futex2: Futex2
+
+        # AMD FSR
+        fsr:
+          title: Включить AMD FSR
+          tooltip: Эта опция включает AMD FidelityFX Super Resolution (FSR),
+                   который может увеличить разрешение игры без потери кадров
+
+        # Виртуальный рабочий стол Wine
+        winevd:
+          title: Виртуальный рабочий стол
+          settings:
+            title: Настройки виртуального рабочего стола
+            items:
+              width: Ширина
+              height: Высота
+
+    # Enhancements related to the game
+    game:
+      title: Игра
+      items:
+        # GameMode
+        gamemode:
+          title: Использовать GameMode
+          tooltip:
+            enabled: Это программа, которая может улучшить производительность игры
+            disabled: ⚠️ У вас не установлен пакет gamemode
+
+        # Окно без рамок
+        borderless_window:
+          title: Использовать безрамочные окна
+          tooltip: Убирает рамки во время игры в оконном режиме.
+                   Для игры в полноэкранном режиме без рамок используйте alt+enter
+
+        # Разблокировать FPS
+        fps_unlocker:
+          title: Разблокировать FPS
+          tooltip: Эта опция позволит разблокировать лимит на отрисовку не более чем 60 кадров в секунду
+
+        # Использовать отдельное окно терминала для запуска игры
+        use_terminal:
+          title: Использовать терминал
+          tooltip: С этой опцией лаунчер будет запускать команду wine в отдельном окне терминала
+
+    # Enhancements related to the launcher
+    launcher:
+      title: Лаунчер
+      items:
+        # Удалять логи
+        purge_logs:
+          # Игры (DXVK)
+          game:
+            title: Удалять логи DXVK
+            tooltip: Если включено, лаунчер будет автоматически удалять логи DXVK
+
+          # Лаунчера
+          launcher:
+            title: Удалять логи лаунчера
+            tooltip: Время, после которого удалять старые логи лаунчера
+            items:
+              1d: 1 день
+              3d: 3 дня
+              5d: 5 дней
+              7d: 1 неделя
+              14d: 2 недели
+              never: Никогда
 
   # Версии Wine
   runners:
