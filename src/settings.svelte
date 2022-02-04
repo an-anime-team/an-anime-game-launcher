@@ -302,6 +302,12 @@
             <div class="settings-item" id="enhancements">
                 <h1>{$_('settings.enhancements.title')}</h1>
 
+                <Checkbox
+                    lang="settings.enhancements.items.borderless_window.title"
+                    tooltip="settings.enhancements.items.borderless_window.tooltip"
+                    prop="borderless_window"
+                />
+
                 <SelectionBox
                     lang="settings.enhancements.items.hud.title"
                     prop="hud"

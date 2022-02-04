@@ -125,6 +125,13 @@ settings:
   enhancements:
     title: Verbesserungen
     items:
+
+      # Borderless Window
+      borderless_window:
+        title: Allow borderless window
+        tooltip: Removes the window borders when playing in windowed mode.
+                 To play in a fullscreen borderless window, press alt+enter when playing on fullscreen.
+
       # HUD
       hud:
         title: HUD

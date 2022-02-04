@@ -63,9 +63,19 @@ export default new Promise<void>(async (resolve) => {
          * 
          * Can be "system", "light" and "dark"
          * 
-         * @defaul "system"
+         * @default "system"
          */
         theme: 'system',
+
+        /**
+         * Allow Borderless Window
+         * 
+         * Whether the game launches with the parameters "-screen-fullscreen 0 -popupwindow"
+         * This allows the game to be played in a borderless window by selecting fullscreen and pressing alt+enter
+         * 
+         * @default false
+         */
+        borderless_window: false,
     
         /**
          * HUD
@@ -85,7 +95,7 @@ export default new Promise<void>(async (resolve) => {
              * 
              * Available options: none, esync, fsync
              * 
-             * @defaul "esync"
+             * @default "esync"
              */
             sync: 'esync',
 

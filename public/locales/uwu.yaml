@@ -125,6 +125,13 @@ settings:
   enhancements:
     title: enhancements
     items:
+
+      # Borderless Window
+      borderless_window:
+        title: allow bowdewless window
+        tooltip: wemoves the window bowders when playing in windowed mode.
+                 to play in a f-fullscween bowdewless window, press alt+entew when playing on fullscween  ପ(๑•ᴗ•๑)ଓ.
+
       # HUD
       hud:
         title: h-hud
