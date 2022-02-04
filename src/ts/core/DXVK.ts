@@ -136,7 +136,7 @@ export default class DXVK
      */
     public static delete(dxvk: TDXVK|TDXVK['version']): Promise<void>
     {
-        const debugThread = new DebugThread('DXVK.delete', `Deleting dxvk ${typeof dxvk === 'string' ? dxvk : dxvk.version}`);
+        const debugThread = new DebugThread('DXVK.delete', `Deleting DXVK ${typeof dxvk === 'string' ? dxvk : dxvk.version}`);
 
         return new Promise(async (resolve) => {
             const version = typeof dxvk !== 'string' ?
@@ -159,7 +159,7 @@ export default class DXVK
             const version = typeof dxvk !== 'string' ?
                 dxvk.version : dxvk;
 
-            const debugThread = new DebugThread('DXVK.apply', `Applying dxvk ${version}`);
+            const debugThread = new DebugThread('DXVK.apply', `Applying DXVK ${version}`);
             
             const dxvkDir = `${await constants.paths.dxvksDir}/dxvk-${version}`;
             const runner = await Runners.current();
@@ -170,7 +170,7 @@ export default class DXVK
                     /**
                      * Replace all wine entries and remove wineboot -u to make applying dxvk work
                      */
-                    () => Neutralino.os.execCommand(`sed -i 's/wine="wine"/wine="${runnerDir.replaceAll('/', '\\/')}\\/${runner!.files.wine.replace('64', '').replaceAll('/', '\\/')}"/g' ${dxvkDir}/setup_dxvk.sh && sed -i 's/wine64="wine64"/wine64="${runnerDir.replaceAll('/', '\\/')}\\/${runner!.files.wine.replaceAll('/', '\\/')}"/g' ${dxvkDir}/setup_dxvk.sh && sed -i 's/wineboot="wineboot"/wineboot="${runnerDir.replaceAll('/', '\\/')}\\/${runner!.files.wine.replace('64', 'boot').replaceAll('/', '\\/')}"/g' ${dxvkDir}/setup_dxvk.sh && sed -i '/$wineboot -u/d' ${dxvkDir}/setup_dxvk.sh`),
+                    () => Neutralino.os.execCommand(`sed -i 's/wine="wine"/wine="${runnerDir.replaceAll('/', '\\/')}\\/${runner!.files.wine.replace('64', '').replaceAll('/', '\\/')}"/g' "${path.addSlashes(dxvkDir)}/setup_dxvk.sh" && sed -i 's/wine64="wine64"/wine64="${runnerDir.replaceAll('/', '\\/')}\\/${runner!.files.wine.replaceAll('/', '\\/')}"/g' "${path.addSlashes(dxvkDir)}/setup_dxvk.sh" && sed -i 's/wineboot="wineboot"/wineboot="${runnerDir.replaceAll('/', '\\/')}\\/${runner!.files.wine.replace('64', 'boot').replaceAll('/', '\\/')}"/g' "${path.addSlashes(dxvkDir)}/setup_dxvk.sh" && sed -i 's/winever=$($wine --version | grep wine)/winever=$($wine --version | grep "wine\\\\|GE")/g' "${path.addSlashes(dxvkDir)}/setup_dxvk.sh" && sed -i '/$wineboot -u/d' "${path.addSlashes(dxvkDir)}/setup_dxvk.sh"`),
 
                     /**
                      * Make the installation script executable
