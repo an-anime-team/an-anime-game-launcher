@@ -165,7 +165,7 @@ settings:
 
     # Enhancements related to the game
     game:
-      title: Game
+      title: Spill
       items:
         # GameMode
         gamemode:
@@ -187,8 +187,8 @@ settings:
 
         # Use separate terminal window to run the game
         use_terminal:
-          title: Use terminal
-          tooltip: With this option enabled launcher will run the wine command in a separate terminal window
+          title: Bruk terminal
+          tooltip: Når denne instillingen er aktivert, vil wine bli kjørt i ett seperat terminal vindu
 
     # Enhancements related to the launcher
     launcher:
