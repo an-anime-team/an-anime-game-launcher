@@ -1,12 +1,11 @@
 import { Process, Windows, Configs, Notification, path, Package } from '../../../empathize';
 import { DebugThread } from '@empathize/framework/dist/meta/Debug';
 
-import type Launcher from '../../Launcher';
-
 import constants from '../../Constants';
 import Runners from '../../core/Runners';
 import Game from '../../Game';
 import Locales from '../Locales';
+import Launcher from '../../Launcher';
 
 declare const Neutralino;
 
@@ -161,8 +160,10 @@ export default (launcher: Launcher): Promise<void> => {
                      * Use terminal
                      * 
                      * bash -c "<command> && bash" is required to keep terminal open
+                     * 
+                     * Doesn't work in flatpak
                      */
-                    if (await Configs.get('use_terminal'))
+                    if (!await Launcher.isFlatpak() && await Configs.get('use_terminal'))
                     {
                         // Gnome
                         if (await Package.exists('gnome-terminal'))
