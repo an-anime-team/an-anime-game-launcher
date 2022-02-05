@@ -17,11 +17,26 @@
 | AppImage | [Releases](https://gitlab.com/KRypt0n_/an-anime-game-launcher/-/releases) page |
 | AUR | [an-anime-game-launcher-bin](https://aur.archlinux.org/packages/an-anime-game-launcher-bin) |
 | Pacstall | an-anime-game-launcher-bin [(?)](https://pacstall.dev) |
-| Flatpak | [An Anime Game Launcher](https://flathub.org/apps/details/com.gitlab.KRypt0n_.an-anime-game-launcher) |
 
-<a href="https://flathub.org/apps/details/com.gitlab.KRypt0n_.an-anime-game-launcher">
-  <img src="https://flathub.org/assets/badges/flathub-badge-i-en.png" width="160px" />
-</a>
+## Flatpak support
+
+To install the launcher via flatpak you will first have to make sure that you have flathub's remote installed
+
+```zsh
+flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+```
+
+After installing flathub's remote you install launcher.moe's remote
+
+```zsh
+flatpak remote-add --if-not-exists launcher.moe https://gol.launcher.moe/gol.launcher.moe.flatpakrepo
+```
+
+Now the only thing remaining is to install the launcher
+
+```zsh
+flatpak install launcher.moe com.gitlab.KRypt0n_.an-anime-game-launcher
+```
 
 # Status
 
