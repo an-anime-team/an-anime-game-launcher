@@ -125,6 +125,11 @@ export default (launcher: Launcher): Promise<void> => {
                             
                             await Neutralino.filesystem.writeFile(launcherShadersFile, await Neutralino.filesystem.readFile(userShadersFile));
 
+                            /**
+                             * Small workaround for notahuman's shaders
+                             * because they require a file with an absolute path
+                             * and we have to update it
+                             */
                             if (shaders == 'notahuman')
                                 await Neutralino.os.execCommand(`sed -i 's/\\/the\\/absolute\\/path\\/to\\/NFAA.fx/${constants.paths.shadersDir.replaceAll('/', '\\/')}\\/${shaders}\\/NFAA.fx/g' "${path.addSlashes(await constants.paths.launcherDir)}/vkBasalt.conf"`);
                         }

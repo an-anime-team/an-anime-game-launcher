@@ -42,7 +42,7 @@ flatpak install launcher.moe com.gitlab.KRypt0n_.an-anime-game-launcher
 
 | Game version | Launcher version | Patch version |
 | :---: | :---: | :---: |
-| 2.4.0 | 2.1.2 | 2.4.0 stable ✅ |
+| 2.4.0 | 2.1.3 | 2.4.0 stable ✅ |
 
 We have our own [An Anime Game](https://discord.gg/ck37X6UWBp) discord server where you can ask any questions
 
@@ -101,7 +101,6 @@ sudo dnf install unzip tar git curl xdelta cabextract libnotify
 | [MangoHud](https://github.com/flightlessmango/MangoHud) | To use MangoHud |
 | [vkBasalt](https://github.com/DadSchoorse/vkBasalt) | To use shaders |
 | [GameMode](https://github.com/FeralInteractive/gamemode) | To use GameMode (performance optimization) |
-| [switcheroo-control](https://gitlab.freedesktop.org/hadess/switcheroo-control/) | To select the GPU launcher should use to run the game |
 
 These requirements can't be easily installed so you should do it manually
 
@@ -151,7 +150,7 @@ This is our current roadmap goals. You can find older ones [here](repository/pag
 * <s>Make notifications translations</s> *(2.1.0)*
 * <s>ToS Violation Window</s> *(2.1.0)*
 * <s>Add `latest.log` file generation</s> *(2.1.2)*
-* <s>Add an option to show terminal with the wine's log of the game</s> *(7375c743)*
+* <s>Add an option to show terminal with the wine's log of the game</s> *(7375c743, released in 2.1.3)*
 * Add Chinese game's version support (due to changes in the Krock's patch)
 * Implement manual config flushing functionality from the Empathize's API
 * Add analytics window

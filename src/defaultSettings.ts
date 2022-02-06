@@ -225,30 +225,5 @@ export default new Promise<void>(async (resolve) => {
         }
     });
 
-    /**
-     * 2.1.0-beta1 -> 2.1.1
-     */
-    const winesync = await Configs.get('winesync');
-    const fsr = await Configs.get('fsr');
-    const winevd = await Configs.get('winevd');
-
-    if (winesync !== undefined)
-    {
-        await Configs.set('wine.sync', winesync);
-        await Configs.remove('winesync');
-    }
-
-    if (fsr !== undefined)
-    {
-        await Configs.set('wine.fsr', fsr);
-        await Configs.remove('fsr');
-    }
-
-    if (winevd !== undefined)
-    {
-        await Configs.set('wine.virtual_desktop', winevd);
-        await Configs.remove('winevd');
-    }
-
     resolve();
 });
