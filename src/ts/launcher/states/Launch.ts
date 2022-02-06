@@ -124,6 +124,9 @@ export default (launcher: Launcher): Promise<void> => {
                             const userShadersFile = `${constants.paths.shadersDir}/${shaders}/vkBasalt.conf`;
                             
                             await Neutralino.filesystem.writeFile(launcherShadersFile, await Neutralino.filesystem.readFile(userShadersFile));
+
+                            if (shaders == 'notahuman')
+                                await Neutralino.os.execCommand(`sed -i 's/\\/the\\/absolute\\/path\\/to\\/NFAA.fx/${constants.paths.shadersDir.replaceAll('/', '\\/')}\\/${shaders}\\/NFAA.fx/g' "${path.addSlashes(await constants.paths.launcherDir)}/vkBasalt.conf"`);
                         }
                     }
 
