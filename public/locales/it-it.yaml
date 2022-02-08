@@ -164,7 +164,7 @@ settings:
 
     # Enhancements related to the game
     game:
-      title: Game
+      title: Gioco
       items:
         # GameMode
         gamemode:
@@ -175,9 +175,9 @@ settings:
 
         # Borderless Window
         borderless_window:
-          title: Allow borderless window
-          tooltip: Removes the window borders when playing in windowed mode.
-                   To play in a fullscreen borderless window, press alt+enter when playing on fullscreen.
+          title: Atiiva il gioco senza bordi
+          tooltip: Rimuove i bordi quando giocato in modalità a finestra.
+                   Per giocare senza bordi in full screen, premi alt+enter mentre giochi full screen.
 
         # Unlock FPS
         fps_unlocker:
@@ -186,8 +186,8 @@ settings:
 
         # Use separate terminal window to run the game
         use_terminal:
-          title: Use terminal
-          tooltip: With this option enabled launcher will run the wine command in a separate terminal window
+          title: Usa il terminale
+          tooltip: Con questa opzione, il launcher avvierà il gioco con wine in un terminale separato
 
     # Enhancements related to the launcher
     launcher:
