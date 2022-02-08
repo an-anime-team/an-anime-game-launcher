@@ -176,9 +176,9 @@ settings:
 
         # Borderless Window
         borderless_window:
-          title: Allow borderless window
-          tooltip: Removes the window borders when playing in windowed mode.
-                   To play in a fullscreen borderless window, press alt+enter when playing on fullscreen.
+          title: Kerettelen ablak bekapcsolása
+          tooltip: Kikapcsolja az ablak keretét ablakos módban.
+                   Ha teljesképernyős kerettelen ablakban szeretnél játszani, nyomd meg az alt+enter-t teljesképernyős játék közben.
 
         # Unlock FPS
         fps_unlocker:
