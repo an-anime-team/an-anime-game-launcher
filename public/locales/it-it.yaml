@@ -164,7 +164,7 @@ settings:
 
     # Enhancements related to the game
     game:
-      title: Game
+      title: Gioco
       items:
         # GameMode
         gamemode:
