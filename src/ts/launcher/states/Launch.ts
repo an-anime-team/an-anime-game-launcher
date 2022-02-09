@@ -200,8 +200,7 @@ export default (launcher: Launcher): Promise<void> => {
                         cwd: await constants.paths.gameDir
                     });
 
-                    // Stop monitoring of the process
-                    process.runningInterval = null;
+                    // Stop monitoring of the process output
                     process.outputInterval = null;
 
                     // Game was started by the launcher.bat file
@@ -276,7 +275,7 @@ export default (launcher: Launcher): Promise<void> => {
                         }
                     };
 
-                    setTimeout(waiter, 5000);
+                    process.finish(() => waiter());
                 }
             })
             .catch(() => {
