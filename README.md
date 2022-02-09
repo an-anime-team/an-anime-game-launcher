@@ -38,6 +38,8 @@ Now the only thing remaining is to install the launcher
 flatpak install launcher.moe com.gitlab.KRypt0n_.an-anime-game-launcher
 ```
 
+Some additional configuration is possible when using the flatpak. For info about this, see [this page](https://gitlab.com/lane__/an-anime-game-launcher-flatpak/-/blob/master/README.md)
+
 # Status
 
 | Game version | Launcher version | Patch version |
