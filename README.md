@@ -50,11 +50,9 @@ We have our own [An Anime Game](https://discord.gg/ck37X6UWBp) discord server wh
 
 This is our current usage statistics. You can find older ones [here](repository/pages/STATISTICS.md)
 
-### 2.3.0 — 99 total
+### Our discord server — 250 members
 
-<img src="repository/pics/stats/2.3.0.png">
-
-> You can suggest colors for your countries
+<img src="repository/pics/stats/discord.png">
 
 <br>
 
