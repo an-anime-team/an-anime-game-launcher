@@ -106,14 +106,14 @@
      */
     let gamemode = {
         disabled: false,
-        tooltip: 'settings.enhancements.items.gamemode.tooltip.enabled'
+        tooltip: 'settings.enhancements.game.items.gamemode.tooltip.enabled'
     };
 
     Package.exists('gamemoderun').then((available) => {
         gamemode.disabled = !available;
 
         if (gamemode.disabled)
-            gamemode.tooltip = 'settings.enhancements.items.gamemode.tooltip.disabled';
+            gamemode.tooltip = 'settings.enhancements.game.items.gamemode.tooltip.disabled';
     });
 
     /**
