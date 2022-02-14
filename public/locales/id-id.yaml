@@ -52,7 +52,7 @@ launcher:
       test:
         title: Pasang patch uji coba
         hint: Versi game ini memiliki patch anti-cheat versi uji coba
-              Kamu dapat menunggu sampai stabil atau memasang dengan resiko kamu sendiri
+              Kamu dapat menunggu sampai stabil atau memasang dengan risiko kamu sendiri
 
       # Patch is stable
       stable: Pasang patch
@@ -139,11 +139,11 @@ settings:
 
         # Wine synchronization
         winesync:
-          title: Wine synchronization
-          tooltip: ESync is a mechanism of synchronizing multi-thread operations. It can improve your game performance.
-                   FSync is an improved version of ESync that works on specific kernel versions
+          title: Sinkronisasi wine
+          tooltip: ESync adalah sebuah mekanisme untuk menyinkronkan operasi multi-thread. Program ini dapat menambah performa game kamu.
+                   FSync adalah versi ESync yang sudah ditingkatkan yang hanya dapat berjalan di versi kernel tertentu
           items:
-            none: None
+            none: Tidak ada
             esync: ESync
             fsync: FSync
             futex2: Futex2
@@ -158,10 +158,10 @@ settings:
         winevd:
           title: Virtual Desktop
           settings:
-            title: Virtual Desktop settings
+            title: Pengaturan Desktop Virtual
             items:
-              width: Width
-              height: Height
+              width: Lebar
+              height: Tinggi
 
     # Enhancements related to the game
     game:
@@ -176,9 +176,9 @@ settings:
 
         # Borderless Window
         borderless_window:
-          title: Allow borderless window
-          tooltip: Removes the window borders when playing in windowed mode.
-                   To play in a fullscreen borderless window, press alt+enter when playing on fullscreen.
+          title: Perbolehkan jendela tanpa tepi
+          tooltip: Menghilangkan tepian jendela ketika bermain dalam mode jendela.
+                   Untuk bermain dalam mode layar-penuh-jendela-tanpa-tepi, tekan alt+enter ketika bermain di layar penuh.
 
         # Unlock FPS
         fps_unlocker:
@@ -187,8 +187,8 @@ settings:
 
         # Use separate terminal window to run the game
         use_terminal:
-          title: Use terminal
-          tooltip: With this option enabled launcher will run the wine command in a separate terminal window
+          title: Gunakan terminal
+          tooltip: Jika opsi ini dinyalakan peluncur akan menjalankan wine di jendela terpisah
 
     # Enhancements related to the launcher
     launcher:
@@ -269,43 +269,43 @@ notifications:
   # Before telemetry check when iputils is not downloaded
   iputils_package_required:
     title: An Anime Game Launcher
-    body: You must have iputils installed for telemetry checking
+    body: Kamu harus memasang iputils untuk pengecekan telemetri
 
   # When telemetry servers are not disabled
   telemetry_not_disabled:
     title: An Anime Game Launcher
-    body: Telemetry servers are not disabled
+    body: Peladen telemetri tidak dimatikan
 
   # Before patch applying when xdelta3 package is not downloaded
   xdelta3_package_required:
     title: An Anime Game Launcher
-    body: You must download xdelta3 package to apply the patch
+    body: Kamu harus memasang xdelta3 untuk memasang patch
 
   # If patch wasn't applied because of some error
   patch_applying_error:
     title: An Anime Game Launcher
-    body: Patch wasn't applied successfully. Please, check your log file to find a reason of it, or ask someone in our discord server
+    body: Patch gagal dipasang. Mohon cek log file untuk mencari penyebabnya, atau bertanya kepada seseorang di peladen discord kami
 
   # Patch repositories are not available
   patch_repos_unavailable:
     title: An Anime Game Launcher
-    body: All the patch repositories are not available. You'll be able to run the game, but launcher can't be sure is it patched properly
+    body: Semua repositori patch tidak terseidia. Kamu dapat menjalankan game ini, tetapi peluncur tidak tahu secara pasti pakah patch sudah terpasang dengan benar
 
 # ToS violation warning window
 tos_violation:
-  title: ToS violation warning
-  heading: ⚠️ Be warned
-  body: This launcher is an unofficial tool, in no way related to {company} nor {company_alterego}.
-        This tool is designed to facilitate playing {game} on Linux,
-        and was built with the sole purpose of installing and running the game with less hassle.
-        It does so by using existing components and making the experience simple for the user.
-        However, some components used here likely break the {company} Terms of Service for {game}.
-        If you are using this launcher, your player account could become identified as TOS-non-compliant by {company}/{company_alterego}.
-        If this happens, as your account would be disobeying TOS, {company}/{company_alterego} are free to do what they want. Including banning.
-        If you understand the risk of trying to play the game in an unofficial capacity, press OK and let's go researching the world of Teyvat!
+  title: Peringatan pelanggaran Ketentuan Layanan (ToS)
+  heading: ⚠️ Peringatan
+  body: Peluncur ini bukanlah sarana resmi yang tidak berkaitan dengan {company} maupun {company_alterego}.
+        Alat ini di desain untuk memfasilitasi bermain {game} di Linux,
+        dan dibuat hanya untuk memasang dan memainkan game ini tanpa kesulitan.
+        Hal ini dilakukan dengan menggunakan komponen yang ada dan membuat pengalaman menjadi lebih mudah bagi pengguna.
+        Tetapi, hampir semua komponen yang digunakan disini melanggar Ketentuan Layanan {company} untuk {game}.
+        Ketika kamu menggunakan peluncur ini, akun pemain kamu dapat diidentifikasikan sebagai tidak-sesuai-Ketentuan-Layanan oleh {company}/{company_alterego}.
+        Jika ini terjadi, sebagimana akun kamu melanggar Ketentuan Layanan, {company}/{company_alterego} bebas melakukan hal apapun terhadap akun kamu, termasuk banning.
+        Kalau kamu mengerti risiko memainkan game ini secara tidak resmi, tekan OK dan selamat berpetualang di Teyvat!
   buttons:
     ok:
-      title: I understand the risk
-      tooltip: You really should read this text above. It's important
-    cancel: Cancel
-    discord: Our discord server
+      title: Saya mengerti risikonya
+      tooltip: Kamu harus benar benar membaca teks diatas. Sangat Penting
+    cancel: Batalkan
+    discord: Peladen Discord kami
