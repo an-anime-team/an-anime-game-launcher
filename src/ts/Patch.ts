@@ -50,7 +50,7 @@ class Stream extends AbstractInstaller
                     /**
                      * Remove test version restrictions from the main patch
                      */
-                    () => Neutralino.os.execCommand(`cd "${path.addSlashes(patchDir)}" && sed -i '/^echo "If you would like to test this patch, modify this script and remove the line below this one."/,+5d' patch.sh`),
+                    () => Neutralino.os.execCommand(`cd "${path.addSlashes(patchDir)}" && sed -i '/^echo " === !! UNTESTED PATCH. CHECK FOR BANS USING A TRASH ACCOUNT !! ==="/,+5d' patch.sh`),
 
                     /**
                      * Remove /etc/hosts editing if running in Flatpak
@@ -60,7 +60,7 @@ class Stream extends AbstractInstaller
                     /**
                      * Remove test version restrictions from the anti-login crash patch
                      */
-                    () => Neutralino.os.execCommand(`cd "${path.addSlashes(patchDir)}" && sed -i '/^echo "       necessary afterwards (Friday?). If that's the case, comment the line below."/,+2d' patch_anti_logincrash.sh`),
+                    () => Neutralino.os.execCommand(`cd "${path.addSlashes(patchDir)}" && sed -i '/^#echo "       edit this script file to comment\/remove the line below."/,+2d' patch_anti_logincrash.sh`),
 
                     /**
                      * Make the main patch executable
