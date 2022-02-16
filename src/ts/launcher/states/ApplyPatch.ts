@@ -41,28 +41,8 @@ export default (launcher: Launcher): Promise<void> => {
                     else
                     {
                         stream.downloadStart(() => launcher.progressBar?.show());
-
-                        stream.downloadProgress((current: number, total: number, difference: number) => {
-                            launcher.progressBar?.update(current, total, difference);
-                        });
             
-                        stream.unpackStart(() => {
-                            launcher.progressBar?.init({
-                                label: 'Unpacking patch...',
-                                showSpeed: false,
-                                showEta: false,
-                                showPercents: true,
-                                showTotals: true
-                            });
-        
-                            launcher.progressBar?.show();
-                        });
-            
-                        stream.unpackProgress((current: number, total: number, difference: number) => {
-                            launcher.progressBar?.update(current, total, difference);
-                        });
-
-                        stream.unpackFinish(() => {
+                        stream.applyingStart(() => {
                             launcher.progressBar?.init({
                                 label: 'Applying patch...',
                                 showSpeed: false,
@@ -70,9 +50,11 @@ export default (launcher: Launcher): Promise<void> => {
                                 showPercents: false,
                                 showTotals: false
                             });
+        
+                            launcher.progressBar?.show();
                         });
 
-                        stream.patchFinish((result) => {
+                        stream.applyingFinish((result) => {
                             launcher.progressBar?.hide();
 
                             // If for some reasons patch wasn't applied successfully

@@ -245,12 +245,4 @@ export default class constants
 
     public static readonly versionsUri: string = `${this.uri.api}/resource?key=gcStgarh&launcher_id=10`;
     public static readonly backgroundUri: string = `${this.uri.api}/content?filter_adv=true&launcher_id=10&key=gcStgarh&language=`;
-
-    /**
-     * Get a URI to the specified patch repository archive
-     */
-    public static getPatchUri(source: 'origin' | 'additional'): string
-    {
-        return `${this.uri.patch[source]}/archive/master.zip`;
-    }
 }

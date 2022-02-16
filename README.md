@@ -10,10 +10,11 @@
 
 <br>
 
-Used arts sources:
-
-https://www.pinterest.com/pin/on-twitter--380906080991577598
-https://www.pinterest.com/pin/620652392405860328
+> Used arts sources:
+>
+> https://www.pinterest.com/pin/on-twitter--380906080991577598
+>
+> https://www.pinterest.com/pin/620652392405860328
 
 <br><br>
 
@@ -51,7 +52,7 @@ Some additional configuration is possible when using the flatpak. For info about
 
 | Game version | Launcher version | Patch version |
 | :---: | :---: | :---: |
-| 2.5.0 | 2.1.4 | 2.5.0 unreleased ❌ |
+| 2.5.0 | 2.1.5 | 2.5.0 testing ⚠️ |
 
 We have our own [An Anime Game](https://discord.gg/ck37X6UWBp) discord server where you can ask any questions
 
@@ -59,7 +60,7 @@ We have our own [An Anime Game](https://discord.gg/ck37X6UWBp) discord server wh
 
 This is our current usage statistics. You can find older ones [here](repository/pages/STATISTICS.md)
 
-### Our discord server — 264 members
+### Our discord server — 271 member
 
 <img src="repository/pics/stats/discord.png">
 

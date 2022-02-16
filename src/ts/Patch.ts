@@ -1,45 +1,94 @@
-import type { PatchInfo } from './types/Patch';
-
 import md5 from 'js-md5';
 
-import { fetch, promisify, Debug, Cache, path } from '../empathize';
+import type { PatchInfo } from './types/Patch';
+
+import { fetch, promisify, Debug, Cache, path, fs } from '../empathize';
 import { DebugThread } from '@empathize/framework/dist/meta/Debug';
 
 import constants from './Constants';
 import Game from './Game';
-import AbstractInstaller from './core/AbstractInstaller';
 import Launcher from './Launcher';
 
 declare const Neutralino;
 
-class Stream extends AbstractInstaller
+/**
+ * I made a copy of AbstractInstaller here
+ * because really don't want to make changes in AbstractInstaller
+ * 
+ * I tried and it became overcomplicated and messy
+ */
+class Stream
 {
-    protected userUnpackFinishCallback?: () => void;
-    protected onPatchFinish?: (result: boolean) => void;
+    protected onDownloadStart?: () => void;
+    protected onApplyingStart?: () => void;
 
-    protected patchFinished: boolean = false;
+    protected onDownloadFinish?: () => void;
+    protected onApplyingFinish?: (result: boolean) => void;
+
+    protected downloadStarted: boolean = false;
+    protected applyingStarted: boolean = false;
+
+    protected downloadFinished: boolean = false;
+    protected applyingFinished: boolean = false;
+
     protected patchResult: boolean = false;
 
-    public constructor(uri: string, version: string|null = null)
+    /**
+     * @throws Error if the patch can't (or shouldn't) be applied
+     */
+    public constructor(patch: PatchInfo)
     {
-        super(uri, constants.paths.launcherDir);
+        if (patch.applied || patch.source === undefined || patch.state == 'preparation')
+            throw new Error('The patch is either already applied, can\'t be found or in the preparation state');
+        
+        const patchUri = constants.uri.patch[patch.source];
 
-        /**
-         * We'll make our own AbstractInstaller unpacking finish event
-         * and provide some hack to call another user-provided function
-         * if he wants to make something after patch's archive unpacking
-         */
-        this.onUnpackFinish = async () => {
-            if (this.userUnpackFinishCallback)
-                this.userUnpackFinishCallback();
+        const debugThread = new DebugThread('Patch/Stream', {
+            message: {
+                'patch uri': patchUri,
+                'source': patch.source,
+                'version': patch.version,
+                'state': patch.state
+            }
+        });
 
-            // Find patch version if it wasn't provided
-            if (version === null)
-                version = (await Patch.latest).version;
+        constants.paths.launcherDir.then(async (launcherDir) => {
+            debugThread.log('Fetching patch repository...');
 
-            const patchDir = `${await constants.paths.launcherDir}/dawn/${version.replaceAll('.', '')}`;
+            this.downloadStarted = true;
+
+            if (this.onDownloadStart)
+                this.onDownloadStart();
+
+            // Run `git clone` if the patch repo is not downloaded
+            // or `git pull` to fetch changes
+            await fs.exists(`${launcherDir}/patch`) ?
+                await Neutralino.os.execCommand(`cd "${path.addSlashes(launcherDir)}" && git pull`) :
+                await Neutralino.os.execCommand(`git clone "${path.addSlashes(patchUri)}" "${launcherDir}/patch"`);
+
+            this.downloadFinished = true;
+
+            if (this.onDownloadFinish)
+                this.onDownloadFinish();
+
+            debugThread.log('Patch repository fetched');
+
+            const patchDir = `${launcherDir}/.patch-applying`;
+
+            if (await fs.exists(patchDir))
+                await fs.remove(patchDir);
+            
+            await fs.copy(`${launcherDir}/patch/${patch.version.replaceAll('.', '')}`, patchDir);
+
+            this.applyingStarted = true;
+
+            if (this.onApplyingStart)
+                this.onApplyingStart();
+
             const gameDir = await constants.paths.gameDir;
             const isFlatpak = await Launcher.isFlatpak();
+
+            debugThread.log('Applying patch...');
 
             /**
              * Patch out the testing phase content from the shell files
@@ -60,7 +109,7 @@ class Stream extends AbstractInstaller
                     /**
                      * Remove test version restrictions from the anti-login crash patch
                      */
-                    () => Neutralino.os.execCommand(`cd "${path.addSlashes(patchDir)}" && sed -i '/^#echo "       edit this script file to comment\/remove the line below."/,+2d' patch_anti_logincrash.sh`),
+                    () => Neutralino.os.execCommand(`cd "${path.addSlashes(patchDir)}" && sed -i '/^#echo "       edit this script file to comment\\/remove the line below."/,+2d' patch_anti_logincrash.sh`),
 
                     /**
                      * Make the main patch executable
@@ -76,7 +125,7 @@ class Stream extends AbstractInstaller
                      * Execute the main patch installation script
                      * Use pkexec if not running in Flatpak
                      */
-                     () => Neutralino.os.execCommand(`yes yes | ${isFlatpak ? '' : 'pkexec'} bash -c 'cd "${path.addSlashes(gameDir)}" ; "${path.addSlashes(patchDir)}/patch.sh"'`),
+                    () => Neutralino.os.execCommand(`yes yes | ${isFlatpak ? '' : 'pkexec'} bash -c 'cd "${path.addSlashes(gameDir)}" ; "${path.addSlashes(patchDir)}/patch.sh"'`),
 
                     /**
                      * Execute the anti-login crash patch installation script
@@ -86,41 +135,78 @@ class Stream extends AbstractInstaller
             });
 
             // When all the things above are done
-            pipeline.then((outputs) => {
-                this.patchFinished = true;
+            pipeline.then(async (outputs) => {
+                this.applyingFinished = true;
 
-                Debug.log({
-                    function: 'Patch/Stream',
+                debugThread.log({
                     message: [
                         'Patch script output:',
                         ...outputs[5].stdOut.split(/\r\n|\r|\n/)
                     ]
                 });
 
+                // Remove temp patch dir
+                await fs.remove(patchDir);
+
                 this.patchResult = outputs[5].stdOut.includes('==> Patch applied! Enjoy the game');
 
-                if (this.onPatchFinish)
-                    this.onPatchFinish(this.patchResult);
+                debugThread.log(`Patch applying result: ${this.patchResult ? 'success' : 'error'}`);
+
+                if (this.onApplyingFinish)
+                    this.onApplyingFinish(this.patchResult);
             });
-        };
+        });
     }
 
-    public unpackFinish(callback: () => void)
+    /**
+     * Specify event that will be called after download has begun
+     * 
+     * @param callback
+     */
+    public downloadStart(callback: () => void)
     {
-        this.userUnpackFinishCallback = callback;
+        this.onDownloadStart = callback;
 
-        if (this.unpackFinished)
+        if (this.downloadStarted)
             callback();
     }
 
     /**
-     * Specify event that will be called when the patch will be applied
+     * Specify event that will be called after the patch applying has begun
+     * 
+     * @param callback
      */
-    public patchFinish(callback: (result: boolean) => void)
+    public applyingStart(callback: () => void)
     {
-        this.onPatchFinish = callback;
+        this.onApplyingStart = callback;
 
-        if (this.patchFinished)
+        if (this.applyingStarted)
+            callback();
+    }
+
+    /**
+     * Specify event that will be called after download has finished
+     * 
+     * @param callback
+     */
+    public downloadFinish(callback: () => void)
+    {
+        this.onDownloadFinish = callback;
+
+        if (this.downloadFinished)
+            callback();
+    }
+
+    /**
+     * Specify event that will be called after the patch applying has finished
+     * 
+     * @param callback
+     */
+    public applyingFinish(callback: (result: boolean) => void)
+    {
+        this.onApplyingFinish = callback;
+
+        if (this.applyingFinished)
             callback(this.patchResult);
     }
 }
@@ -352,7 +438,7 @@ export default class Patch
                     if (patch.state === 'preparation')
                         resolve(null);
                     
-                    else resolve(new Stream(constants.getPatchUri(patch.source ?? 'origin'), patch.version));
+                    else resolve(new Stream(patch));
                 })
                 .catch((err) => reject(err));
         });
