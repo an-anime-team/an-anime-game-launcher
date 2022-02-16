@@ -1,6 +1,6 @@
 {
   "applicationId": "com.gitlab.KRypt0n_.an-anime-game-launcher",
-  "version": "2.1.3",
+  "version": "2.1.4",
   "defaultMode": "window",
   "port": 0,
   "documentRoot": "/bundle/",
@@ -37,7 +37,7 @@
     "resourcesPath": "/bundle/",
     "extensionsPath": "/extensions/",
     "clientLibrary": "/public/neutralino.js",
-    "binaryVersion": "4.1.0",
+    "binaryVersion": "4.3.0",
     "clientVersion": "3.0.0"
   }
 }

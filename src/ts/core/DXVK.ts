@@ -1,3 +1,5 @@
+import YAML from 'yaml';
+
 import type { DXVK as TDXVK } from '../types/DXVK';
 
 import { Configs, Process, promisify, path } from '../../empathize';
@@ -60,7 +62,7 @@ export default class DXVK
                 .catch(() => resolveList([]));
 
             const resolveList = async (folders: { entry: string, type: string }[]) => {
-                let list: TDXVK[] = JSON.parse(await Neutralino.filesystem.readFile(`${constants.paths.appDir}/public/dxvks.json`));
+                let list: TDXVK[] = YAML.parse(await Neutralino.filesystem.readFile(`${constants.paths.appDir}/public/dxvks.yaml`));
                 let dxvks: TDXVK[] = [];
 
                 list.forEach((dxvk) => {

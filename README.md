@@ -8,6 +8,13 @@
 
 ### Please, try to use "An Anime Game" phrase instead of the real game name to avoid search engines parsing
 
+<br>
+
+Used arts sources:
+
+https://www.pinterest.com/pin/on-twitter--380906080991577598
+https://www.pinterest.com/pin/620652392405860328
+
 <br><br>
 
 # Download
@@ -44,7 +51,7 @@ Some additional configuration is possible when using the flatpak. For info about
 
 | Game version | Launcher version | Patch version |
 | :---: | :---: | :---: |
-| 2.4.0 | 2.1.3 | 2.4.0 stable ✅ |
+| 2.5.0 | 2.1.4 | 2.5.0 unreleased ❌ |
 
 We have our own [An Anime Game](https://discord.gg/ck37X6UWBp) discord server where you can ask any questions
 
@@ -52,7 +59,7 @@ We have our own [An Anime Game](https://discord.gg/ck37X6UWBp) discord server wh
 
 This is our current usage statistics. You can find older ones [here](repository/pages/STATISTICS.md)
 
-### Our discord server — 250 members
+### Our discord server — 264 members
 
 <img src="repository/pics/stats/discord.png">
 
@@ -91,7 +98,7 @@ sudo pacman -Syu unzip tar git curl xdelta3 cabextract libnotify
 ### dnf
 
 ```sh
-sudo dnf install unzip tar git curl xdelta cabextract libnotify
+sudo dnf install unzip tar git curl xdelta cabextract libnotify webkit2gtk libappindicator-gtk3
 ```
 
 # Additional requirements

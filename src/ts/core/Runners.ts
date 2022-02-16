@@ -1,3 +1,5 @@
+import YAML from 'yaml';
+
 import type {
     Runner,
     RunnerFamily
@@ -62,7 +64,7 @@ class Runners
                 .catch(() => resolveList([]));
             
             const resolveList = async (folders: { entry: string, type: string }[]) => {
-                let list: RunnerFamily[] = JSON.parse(await Neutralino.filesystem.readFile(`${constants.paths.appDir}/public/runners.json`));
+                let list: RunnerFamily[] = YAML.parse(await Neutralino.filesystem.readFile(`${constants.paths.appDir}/public/runners.yaml`));
                 let runners: RunnerFamily[] = [];
 
                 list.forEach((family) => {
