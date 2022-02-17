@@ -35,32 +35,32 @@ launcher:
   states:
     # When the game should be installed or updated
     installation:
-      install_wine: Install Wine
-      install_dxvk: Install DXVK
-      install: Install
-      update: Update
+      install_wine: Installa Wine
+      install_dxvk: Installa DXVK
+      install: Installa
+      update: Aggiorna
 
     # When the game should be patched
     patching:
       # Patch unavailable
       unavailable:
-        title: Patch unavailable
-        hint: This game version has no anti-cheat patch.
-              Please, wait a few days before there will be a test or stable version
+        title: Patch non disponibile
+        hint: Questa versione del gioco non ha una patch per l'anti-cheat.
+              Per favore, aspetta qualche giorno finché non ci sia una versione di prova o stabile
       
       # Patch is in testing
       test:
-        title: Apply test patch
-        hint: This game version has an experimental anti-cheat patch.
-              You can wait a few days until it is stable or apply it at your own risk
+        title: Applica patch di prova
+        hint: Questa versione del gioco ha una patch per l'anti-cheat sperimentale.
+              Puoi aspettare qualche giorno finché non sia stabile o applicarla a tuo rischio
 
       # Patch is stable
-      stable: Apply patch
+      stable: Applica patch
 
     # When the game is ready for playing
     ready:
-      launch: Launch
-      predownload: Pre-download update
+      launch: Avvia
+      predownload: Pre-scarica aggiornamento
 
 # Settings window
 settings:
@@ -254,8 +254,8 @@ settings:
       
       # Table buttons
       buttons:
-        add: Add
-        delete: Delete
+        add: Aggiungi
+        delete: Rimuovi
 
 # Notifications
 notifications:
