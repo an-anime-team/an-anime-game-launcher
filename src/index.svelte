@@ -28,7 +28,10 @@
     constants.paths.launcherDir.then((launcherDir) => {
         Neutralino.filesystem.getStats(`${launcherDir}/logs/latest.log`)
             .then(async () => {
-                const created_at = (await Neutralino.os.execCommand(`stat -c '%W' "${path.addSlashes(`${launcherDir}/logs/latest.log`)}"`)).stdOut;
+                let created_at = (await Neutralino.os.execCommand(`stat -c '%W' "${path.addSlashes(`${launcherDir}/logs/latest.log`)}"`)).stdOut;
+
+                if (!created_at)
+                    created_at = Date.now() / 1000;
 
                 Neutralino.filesystem.moveFile(`${launcherDir}/logs/latest.log`, `${launcherDir}/logs/${getLogFilename(new Date(created_at * 1000))}`);
             })
