@@ -74,12 +74,12 @@ To work this launcher requires
 | --- | --- |
 | webkit2gtk | To run Neutralino apps |
 | libappindicator-gtk3 | To run Neutralino apps |
-| unzip | To unpack zip archives (DXVKs / wines) |
-| tar | To unpack tar archives (DXVKs / wines) |
+| unzip | To unpack zip archives (DXVK / Wine) |
+| tar | To unpack tar archives (DXVK / Wine) |
 | git | To check for new versions of the launcher |
-| curl | To download archives with game, voice data, runners and so on |
-| xdelta3 | To apply the patch to the game |
-| cabextract | To install fonts to the wine prefix |
+| curl | For archive downloads: game, voice data, runners and so on |
+| xdelta3 | To apply the patch to the game (compiled with LZMA support) |
+| cabextract | To install fonts to the Wine prefix |
 | libnotify | To send system notifications |
 
 ## Install
