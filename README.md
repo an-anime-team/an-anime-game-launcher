@@ -84,10 +84,10 @@ To work this launcher requires
 
 ## Install
 
-### apt-get
+### apt
 
 ```sh
-sudo apt-get install unzip tar git curl xdelta3 cabextract libnotify
+sudo apt install unzip tar git curl xdelta3 cabextract libnotify
 ```
 
 ### pacman
