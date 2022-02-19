@@ -329,7 +329,9 @@
 
                 <Checkbox
                     lang="settings.enhancements.wine.items.fsr.title"
-                    tooltip="settings.enhancements.wine.items.fsr.tooltip"
+                    tooltip={{
+                        lang: 'settings.enhancements.wine.items.fsr.tooltip'
+                    }}
                     prop="wine.fsr"
                     disabled={winevdSettings['enabled']}
                 />
@@ -347,19 +349,25 @@
                 <Checkbox
                     lang="settings.enhancements.game.items.gamemode.title"
                     prop="gamemode"
-                    tooltip={gamemode.tooltip}
+                    tooltip={{
+                        lang: gamemode.tooltip
+                    }}
                     disabled={gamemode.disabled}
                 />
 
                 <Checkbox
                     lang="settings.enhancements.game.items.borderless_window.title"
-                    tooltip="settings.enhancements.game.items.borderless_window.tooltip"
+                    tooltip={{
+                        lang: 'settings.enhancements.game.items.borderless_window.tooltip'
+                    }}
                     prop="borderless_window"
                 />
 
                 <Checkbox
                     lang="settings.enhancements.game.items.fps_unlocker.title"
-                    tooltip="settings.enhancements.game.items.fps_unlocker.tooltip"
+                    tooltip={{
+                        lang: 'settings.enhancements.game.items.fps_unlocker.tooltip'
+                    }}
                     prop="fps_unlocker"
                     disabled={!fpsUnlockerAvailable}
                     valueChanged={async (checked) => {
@@ -374,7 +382,9 @@
 
                 <Checkbox
                     lang="settings.enhancements.game.items.use_terminal.title"
-                    tooltip="settings.enhancements.game.items.use_terminal.tooltip"
+                    tooltip={{
+                        lang: 'settings.enhancements.game.items.use_terminal.tooltip'
+                    }}
                     prop="use_terminal"
                 />
 
@@ -382,7 +392,9 @@
 
                 <Checkbox
                     lang="settings.enhancements.launcher.items.purge_logs.game.title"
-                    tooltip="settings.enhancements.launcher.items.purge_logs.game.tooltip"
+                    tooltip={{
+                        lang: 'settings.enhancements.launcher.items.purge_logs.game.tooltip'
+                    }}
                     prop="purge_logs.game"
                 />
 
@@ -406,7 +418,9 @@
 
                 <Checkbox
                     lang="settings.runners.items.recommended.title"
-                    tooltip="settings.runners.items.recommended.tooltip"
+                    tooltip={{
+                        lang: 'settings.runners.items.recommended.tooltip'
+                    }}
                     valueChanged={(value) => runnersRecommendable = value}
                 />
 
@@ -418,7 +432,9 @@
 
                 <Checkbox
                     lang="settings.dxvks.items.recommended.title"
-                    tooltip="settings.dxvks.items.recommended.tooltip"
+                    tooltip={{
+                        lang: 'settings.dxvks.items.recommended.tooltip'
+                    }}
                     valueChanged={(value) => dxvkRecommendable = value}
                 />
 

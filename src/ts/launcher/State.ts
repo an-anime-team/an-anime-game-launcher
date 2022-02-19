@@ -107,7 +107,6 @@ export default class State
                     title: 'ToS violation warning',
                     width: 700,
                     height: 500,
-                    alwaysOnTop: true,
                     exitProcessOnClose: false
                 });
 
@@ -137,6 +136,46 @@ export default class State
                     };
 
                     setTimeout(tosWaiter, 1000);
+                });
+            }
+
+            // If there's analytics window waits for its time
+            else if (await fs.exists(path.join(await constants.paths.launcherDir, '.analytics')))
+            {
+                Windows.open('analytics', {
+                    title: Locales.translate('analytics.title') as string,
+                    width: 700,
+                    height: 460,
+                    exitProcessOnClose: false
+                });
+                
+                await new Promise<void>((resolve) => {
+                    const analyticsWaiter = async () => {
+                        let closed = false;
+
+                        for (const record of await IPC.read())
+                            if (record.data == 'analytics-close')
+                            {
+                                closed = true;
+
+                                record.pop();
+
+                                break;
+                            }
+
+                        if (closed)
+                            resolve();
+                        
+                        else
+                        {
+                            if (await fs.exists(path.join(await constants.paths.launcherDir, '.analytics')))
+                                setTimeout(analyticsWaiter, 1000);
+
+                            else resolve();
+                        }
+                    };
+
+                    setTimeout(analyticsWaiter, 1000);
                 });
             }
 

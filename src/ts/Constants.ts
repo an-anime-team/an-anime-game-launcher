@@ -231,7 +231,8 @@ export default class constants
         fpsunlock: {
             unlocker: `https://github.com/34736384/${this.placeholders.lowercase.first}-fps-unlock/releases/download/v1.4.2/unlockfps.exe`,
             bat: 'https://dev.kaifa.ch/Maroxy/an-anime-game-aur/raw/branch/fpsunlock/fpsunlock.bat'
-        }
+        },
+        analytics: 'https://aagl.launcher.moe/stat/'
     };
 
     // TODO: cache drops at that dates instead of the 7 days period

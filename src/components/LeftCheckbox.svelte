@@ -31,13 +31,19 @@
 </script>
 
 <div class="checkbox" class:checkbox-active={active} class:checkbox-disabled={disabled}>
-    <span
-        class="{tooltip === undefined ? '' : `hint--${tooltip.direction ?? 'bottom'} hint--${tooltip.size ?? 'medium'}`}"
-        aria-label={tooltip ? $_(tooltip.lang) : null}
-    >{$_(lang)}</span>
-
     <div class="checkbox-mark" on:click={updateCheckbox}>
         <!-- svelte-ignore a11y-missing-attribute -->
         <img src={Checkmark} />
     </div>
+
+    <span
+        class="{tooltip === undefined ? '' : `hint--${tooltip.direction ?? 'bottom'} hint--${tooltip.size ?? 'medium'}`}"
+        aria-label={tooltip ? $_(tooltip.lang) : null}
+    >{$_(lang)}</span>
 </div>
+
+<style lang="sass">
+    .checkbox-mark
+        margin-left: 0 !important
+        margin-right: 16px !important
+</style>

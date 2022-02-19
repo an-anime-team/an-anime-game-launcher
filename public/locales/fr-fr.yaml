@@ -23,7 +23,7 @@ launcher:
     game:
       downloading: Téléchargement du jeu...
       unpacking: Décompression du jeu...
-      applying_changes: Applying changes...
+      applying_changes: Application des changements...
       deleting_outdated: Suppression des fichiers non à jour...
 
     # Voice packages installation
@@ -42,12 +42,14 @@ launcher:
       update: Mise à jour
       
       apply_changes:
-        title: Apply changes
-        hint: Apply hdiff changes to the game files
+        # There you may want to do it with a line break "Appliquer" may look better ?
+        title: Appliquer les changements
+        hint: Appliquer le patch hdiff sur les fichiers du jeu
 
       remove_outdated:
-        title: Remove outdated
-        hint: Remove outdated game files
+        # Same as "Appliquer" to keep a consistency if the previous one has a line break this one should else none but welcome long button I guess.
+        title: Supprimer les obsolètes
+        hint: Supprimer les fichiers du jeu qui sont devenus obsolètes
 
     # When the game should be patched
     patching:
@@ -310,8 +312,8 @@ notifications:
 
   # HDiffPatch couldn't successfully apply game files changes
   game_changes_applying_error:
-    title: An error occurred during game updating
-    body: '{files} files couldn''t be updated by the hdiff patch'
+    title: Une erreur a été détectée pendant la mise à jour du jeu
+    body: '{files} fichiers n''ont pas pu être mise à jour avec le patch hdiff'
 
 # ToS violation warning window
 tos_violation:
@@ -331,3 +333,22 @@ tos_violation:
       tooltip: Vous devriez réellement lire le texte ci-dessus, c'est important.
     cancel: Annuler
     discord: Notre serveur discord
+
+# Analytics window
+analytics:
+  title: Commission de Yanfei...
+  header: Participer a la collecte des données anonymement
+
+  body:
+    - Pour comptabiliser le nombre d'utilisateurs sur Linux, Yanfei aimerait collecter votre adresse IP à chaque mise à jour du jeu
+    - Votre adresse IP sera cryptée (méthode Hash) pour des raisons de sécurités
+
+  actions:
+    share_country:
+      title: Partage du Pays
+      hint: Autoriser Yanfei a sauvegardé votre Pays avec votre IP pour rendre les statistiques plus détaillées.
+            Aucune autre donnée que votre pays sera sauvegardé
+
+    participate: Participer
+    skip: Passer
+    skip_forever: Passer et ne plus demander

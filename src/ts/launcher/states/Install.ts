@@ -1,10 +1,13 @@
 import type Launcher from '../../Launcher';
 
+import { promisify, Configs } from '../../../empathize';
+
 import Game from '../../Game';
 import Prefix from '../../core/Prefix';
 import constants from '../../Constants';
 import Locales from '../Locales';
-import { promisify } from '@empathize/framework';
+
+declare const Neutralino;
 
 export default (launcher: Launcher): Promise<void> => {
     return new Promise(async (resolve) => {
@@ -102,6 +105,9 @@ export default (launcher: Launcher): Promise<void> => {
                             })
                         ]
                     });
+
+                    if (!await Configs.get('skip_analytics'))
+                        await Neutralino.filesystem.writeFile(`${await constants.paths.launcherDir}/.analytics`, '');
 
                     // Download voice package when the game itself has been installed
                     import('./InstallVoice').then((module) => {

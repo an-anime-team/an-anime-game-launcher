@@ -323,3 +323,21 @@ tos_violation:
       tooltip: Kamu harus benar benar membaca teks diatas. Sangat Penting
     cancel: Batalkan
     discord: Peladen Discord kami
+
+# Analytics window
+analytics:
+  title: Yanfei's commission...
+  header: Participate in anonymous data collection
+
+  body:
+    - To count the active user base for Linux, Yanfei would like to collect your IP address everytime the game updates
+    - The IP address will be hashed for security purpose
+
+  actions:
+    share_country:
+      title: Share country
+      hint: Allow Yanfei to store the country your IP address registered in to make statistics more detailed. No other data than the country will be stored
+
+    participate: Participate
+    skip: Skip
+    skip_forever: Skip and don't ask again

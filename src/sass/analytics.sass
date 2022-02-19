@@ -1,37 +1,57 @@
+@use "sass:map"
+
 @import "basic"
 
-body
-    padding: 32px 64px
+@import "components/button"
+@import "components/checkbox"
 
-.header
-    display: inline-flex
+@mixin themable($theme-name, $theme-map)
+    body[data-theme=#{$theme-name}]
+        padding: 32px 64px
 
-    img
-        width: 96px
-        height: 96px
-        margin-right: 32px
+        background-color: map.get($theme-map, "background")
 
-.footer
-    position: absolute
+        color: map.get($theme-map, "text")
 
-    bottom: 0
-    margin-bottom: 32px
+        p, span, div
+            color: map.get($theme-map, "text")
 
-    width: calc(100% - 128px)
+    main
+        .header
+            display: inline-flex
 
-    > div
-        width: 100%
+            img
+                width: 96px
+                height: 96px
+                margin-right: 32px
 
-    div.checkbox
-        font-size: medium
+        .footer
+            position: absolute
 
-    .actions
-        display: inline-flex
+            bottom: 0
+            margin-bottom: 32px
 
-        margin-top: 48px
+            width: calc(100% - 128px)
 
-        .actions-right
-            margin-left: auto
+            > div
+                width: 100%
 
-            .button:not(:last-child)
-                margin-right: 12px
+            div.checkbox
+                font-size: medium
+
+            .actions
+                display: inline-flex
+
+                margin-top: 48px
+
+                .actions-right
+                    margin-left: auto
+
+                    .button:not(:last-child)
+                        margin-right: 12px
+
+@import "themes/light"
+@import "themes/dark"
+
+@include themable(light, $light)
+@include themable(dark, $dark)

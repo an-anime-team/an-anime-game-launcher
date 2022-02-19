@@ -323,3 +323,22 @@ tos_violation:
       tooltip: Sie sollten diesen Text wirklich lesen, Er ist sehr wichtig.
     cancel: Abbrechen
     discord: Unser Discord Server
+
+# Analytics window
+analytics:
+  title: Yanfeis Kommission...
+  header: Teilnahme an der anonymen Datenerhebung
+
+  body:
+    - Um die aktive Nutzerbasis für Linux zu zählen, möchte Yanfei bei jedem Update des Spiels Ihre IP-Adresse erfassen
+    - Die IP-Adresse wird zu Sicherheitszwecken gehasht
+
+  actions:
+    share_country:
+      title: Land teilen
+      hint: Erlauben Sie Yanfei das Land zu speichern das Ihre IP-Adresse anzeigt, um die Statistiken detaillierter zu gestalten.
+            Es werden keine anderen Daten als das Land gespeichert
+
+    participate: Teilnehmen
+    skip: Überspringen
+    skip_forever: Überspringen und nicht mehr nach fragen
