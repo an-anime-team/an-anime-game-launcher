@@ -23,6 +23,7 @@ launcher:
     game:
       downloading: Скачивание игры...
       unpacking: Распаковка игры...
+      applying_changes: Применение изменений...
       deleting_outdated: Удаление устаревших файлов...
 
     # Установка звуковых пакетов
@@ -39,6 +40,14 @@ launcher:
       install_dxvk: Установить DXVK
       install: Установить
       update: Обновить
+
+      apply_changes:
+        title: Применить изменения
+        hint: Применить hdiff изменения к файлам игры
+
+      remove_outdated:
+        title: Удалить устаревшее
+        hint: Удалить устаревшие файлы игры
 
     # Когда игра должна быть пропатчена
     patching:
@@ -289,6 +298,11 @@ notifications:
   patch_repos_unavailable:
     title: An Anime Game Launcher
     body: Все репозитории патча недоступны. Вы сможете запустить игру, однако лаунчер не может знать пропатчена ли она корректно
+
+  # HDiffPatch не смог успешно применить hdiff патчи к файлам игры
+  game_changes_applying_error:
+    title: Возникла ошибка во время обновления игры
+    body: '{files} файлов не смогли быть обновлены с помощью hdiff патча'
 
 # Окно предупреждения о нарушении условий использования
 tos_violation:

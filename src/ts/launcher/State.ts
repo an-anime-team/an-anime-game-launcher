@@ -38,6 +38,8 @@ export default class State
         'game-installation-available': import('./states/Install'),
         'game-update-available': import('./states/Install'),
         'game-voice-update-required': import('./states/InstallVoice'),
+        'game-files-changes-applying-required': import('./states/ApplyChanges'),
+        'game-outdated-files-deletion-required': import('./states/RemoveOutdated'),
 
         'test-patch-available': import('./states/ApplyPatch'),
         'patch-available': import('./states/ApplyPatch'),
@@ -254,6 +256,20 @@ export default class State
 
                 break;
 
+            case 'game-files-changes-applying-required':
+                this.launchButton.textContent = dictionary['installation']['apply_changes']['title'];
+
+                this.launchButton.setAttribute('aria-label', dictionary['installation']['apply_changes']['hint']);
+
+                break;
+
+            case 'game-outdated-files-deletion-required':
+                this.launchButton.textContent = dictionary['installation']['remove_outdated']['title'];
+
+                this.launchButton.setAttribute('aria-label', dictionary['installation']['remove_outdated']['hint']);
+
+                break;
+
             case 'patch-available':
                 this.launchButton.textContent = dictionary['patching']['stable'];
 
@@ -385,67 +401,78 @@ export default class State
                         
                         else
                         {
-                            const installedVoices = await Voice.installed;
-                            const selectedVoices = await Voice.selected;
+                            const gameDir = await constants.paths.gameDir;
 
-                            let voiceUpdateRequired = installedVoices.length != selectedVoices.length || installedVoices.length === 0;
+                            if (await fs.exists(`${gameDir}/hdifffiles.txt`))
+                                state = 'game-files-changes-applying-required';
 
-                            if (!voiceUpdateRequired)
-                            {
-                                for (const installedVoice of installedVoices)
-                                    if (installedVoice.version != gameCurrent || !selectedVoices.includes(installedVoice.lang))
-                                    {
-                                        voiceUpdateRequired = true;
-
-                                        break;
-                                    }
-                            }
-
-                            // TODO: download default voice language if user removed all of them
-                            if (voiceUpdateRequired)
-                                state = 'game-voice-update-required';
+                            else if (await fs.exists(`${gameDir}/deletefiles.txt`))
+                                state = 'game-outdated-files-deletion-required';
 
                             else
                             {
-                                try
-                                {
-                                    const patch = await Patch.latest;
+                                const installedVoices = await Voice.installed;
+                                const selectedVoices = await Voice.selected;
 
-                                    // If the latest game version is, for example, 2.3.0
-                                    // and the patch is 2.4.0 preparation, it means that
-                                    // 2.4.0 will be released soon, but since it's still not released
-                                    // we shouldn't show something about it to user and just let him play the game
-                                    if (gameLatest.game.latest.version === patch.version && !patch.applied)
+                                let voiceUpdateRequired = installedVoices.length != selectedVoices.length || installedVoices.length === 0;
+
+                                if (!voiceUpdateRequired)
+                                {
+                                    for (const installedVoice of installedVoices)
+                                        if (installedVoice.version != gameCurrent || !selectedVoices.includes(installedVoice.lang))
+                                        {
+                                            voiceUpdateRequired = true;
+
+                                            break;
+                                        }
+                                }
+
+                                // TODO: download default voice language if user removed all of them
+                                if (voiceUpdateRequired)
+                                    state = 'game-voice-update-required';
+
+                                else
+                                {
+                                    try
                                     {
-                                        state = patch.state == 'preparation' ?
-                                            'patch-unavailable' : (patch.state == 'testing' ?
-                                            'test-patch-available' : 'patch-available');
+                                        const patch = await Patch.latest;
+
+                                        // If the latest game version is, for example, 2.3.0
+                                        // and the patch is 2.4.0 preparation, it means that
+                                        // 2.4.0 will be released soon, but since it's still not released
+                                        // we shouldn't show something about it to user and just let him play the game
+                                        if (gameLatest.game.latest.version === patch.version && !patch.applied)
+                                        {
+                                            state = patch.state == 'preparation' ?
+                                                'patch-unavailable' : (patch.state == 'testing' ?
+                                                'test-patch-available' : 'patch-available');
+                                        }
+
+                                        // Patch is more important than game pre-downloading
+                                        // because otherwise we will not be able to play the game
+                                        else if (gameLatest.pre_download_game && !await Game.isUpdatePredownloaded())
+                                            state = 'game-pre-installation-available';
+
+                                        else if (gameLatest.pre_download_game && !await Voice.isUpdatePredownloaded(await Voice.selected))
+                                            state = 'game-voice-pre-installation-available';
+
+                                        else state = 'game-launch-available';
                                     }
 
-                                    // Patch is more important than game pre-downloading
-                                    // because otherwise we will not be able to play the game
-                                    else if (gameLatest.pre_download_game && !await Game.isUpdatePredownloaded())
-                                        state = 'game-pre-installation-available';
+                                    // Patch.latest can throw an error if all of patch's servers
+                                    // are not available, and we must notify user about that
+                                    catch
+                                    {
+                                        state = 'game-launch-available';
 
-                                    else if (gameLatest.pre_download_game && !await Voice.isUpdatePredownloaded(await Voice.selected))
-                                        state = 'game-voice-pre-installation-available';
-
-                                    else state = 'game-launch-available';
+                                        Notification.show({
+                                            ...(Locales.translate('notifications.patch_repos_unavailable') as { title: string, body: string }),
+                                            icon: `${constants.paths.appDir}/public/images/baal64-transparent.png`,
+                                            importance: 'critical'
+                                        });
+                                    }
                                 }
-
-                                // Patch.latest can throw an error if all of patch's servers
-                                // are not available, and we must notify user about that
-                                catch
-                                {
-                                    state = 'game-launch-available';
-
-                                    Notification.show({
-                                        ...(Locales.translate('notifications.patch_repos_unavailable') as { title: string, body: string }),
-                                        icon: `${constants.paths.appDir}/public/images/baal64-transparent.png`,
-                                        importance: 'critical'
-                                    });
-                                }
-                            }  
+                            }
                         }
                     }
 

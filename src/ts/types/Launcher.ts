@@ -21,6 +21,8 @@ type LauncherState =
     | 'game-installation-available'
     | 'game-update-available'
     | 'game-voice-update-required'
+    | 'game-files-changes-applying-required'
+    | 'game-outdated-files-deletion-required'
     | 'game-pre-installation-available'
     | 'game-voice-pre-installation-available'
     | 'game-launch-available';

@@ -23,6 +23,7 @@ launcher:
     game:
       downloading: downwoading game... -.-
       unpacking: unpacking g-game (o^▽^o)
+      applying_changes: appwying changes...
       deleting_outdated: deweting outdated fiwes...
       
     # Voice packages installation
@@ -39,6 +40,14 @@ launcher:
       install_dxvk: install DXVK (◕ ω ◕✿)
       install: install
       update: u-update (／≧ ω＼)
+      
+      apply_changes:
+        title: appwy changes
+        hint: appwy hdiff changes to the game files
+
+      remove_outdated:
+        title: wemove outdated
+        hint: wemove outdated game files
 
     # When the game should be patched
     patching:
@@ -289,6 +298,11 @@ notifications:
   patch_repos_unavailable:
     title: an anime game waunchew
     body: a-all the patch wepositowies are not avaiwable. you'll b-be able to wun the game, but waunchew can't be sure is it patched pwopewwy
+
+  # HDiffPatch couldn't successfully apply game files changes
+  game_changes_applying_error:
+    title: an ewwow o-occuwwed duwing game updating
+    body: '{files} files couwdn''t b-be updated b-by the hdiff patch'
 
 # ToS violation warning window
 tos_violation:

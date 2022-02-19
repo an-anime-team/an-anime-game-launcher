@@ -23,6 +23,7 @@ launcher:
     game:
       downloading: Játék letöltése folyamatban...
       unpacking: Játék kibontása folyamatban...
+      applying_changes: Applying changes...
       deleting_outdated: Lejárt fájlok kitörlése...
 
     # Voice packages installation
@@ -39,6 +40,14 @@ launcher:
       install_dxvk: DXVK telepítése
       install: Telepítés
       update: Frissítés
+      
+      apply_changes:
+        title: Apply changes
+        hint: Apply hdiff changes to the game files
+
+      remove_outdated:
+        title: Remove outdated
+        hint: Remove outdated game files
 
     # When the game should be patched
     patching:
@@ -290,6 +299,11 @@ notifications:
   patch_repos_unavailable:
     title: An Anime Game Launcher
     body: A patch adattárjai nem elérhetőek. Eltudod indítani a játékot, de a launcher nem tudja meghatározni hogy patch-elve van-e
+
+  # HDiffPatch couldn't successfully apply game files changes
+  game_changes_applying_error:
+    title: An error occurred during game updating
+    body: '{files} files couldn''t be updated by the hdiff patch'
 
 # ToS violation warning window
 tos_violation:

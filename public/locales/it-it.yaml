@@ -23,6 +23,7 @@ launcher:
     game:
       downloading: Scaricando il gioco...
       unpacking: Decomprimendo il gioco...
+      applying_changes: Applying changes...
       deleting_outdated: Cancellando file vecchi...
 
     # Voice packages installation
@@ -39,6 +40,14 @@ launcher:
       install_dxvk: Installa DXVK
       install: Installa
       update: Aggiorna
+      
+      apply_changes:
+        title: Apply changes
+        hint: Apply hdiff changes to the game files
+
+      remove_outdated:
+        title: Remove outdated
+        hint: Remove outdated game files
 
     # When the game should be patched
     patching:
@@ -289,6 +298,11 @@ notifications:
     title: An Anime Game Launcher
     body: Tutte le repository della patch non sono disponibili. Puoi avviare il gioco,
           ma il launcher non si può assicurare che la patch è stata applicata correttamente
+
+  # HDiffPatch couldn't successfully apply game files changes
+  game_changes_applying_error:
+    title: An error occurred during game updating
+    body: '{files} files couldn''t be updated by the hdiff patch'
 
 # ToS violation warning window
 tos_violation:
