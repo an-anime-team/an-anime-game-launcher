@@ -52,7 +52,7 @@ Some additional configuration is possible when using the flatpak. For info about
 
 | Game version | Launcher version | Patch version |
 | :---: | :---: | :---: |
-| 2.5.0 | 2.1.5 | 2.5.0 testing ⚠️ |
+| 2.5.0 | 2.1.5 | 2.5.0 stable ✅ |
 
 We have our own [An Anime Game](https://discord.gg/ck37X6UWBp) discord server where you can ask any questions
 
@@ -60,7 +60,7 @@ We have our own [An Anime Game](https://discord.gg/ck37X6UWBp) discord server wh
 
 This is our current usage statistics. You can find older ones [here](repository/pages/STATISTICS.md)
 
-### Our discord server — 271 member
+### Our discord server — 292 member
 
 <img src="repository/pics/stats/discord.png">
 
