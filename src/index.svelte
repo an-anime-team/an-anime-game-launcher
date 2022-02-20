@@ -13,10 +13,10 @@
     import Game from './ts/Game';
     import Background from './ts/launcher/Background';
 
-    import Gear from './assets/images/gear.png';
-    import GearActive from './assets/images/gear-active.png';
-    import Download from './assets/images/cloud-download.png';
-    import Integrity from './assets/images/integrity.png';
+    import GearIcon from './assets/images/gear.png';
+    import GearActiveIcon from './assets/images/gear-active.png';
+    import DownloadIcon from './assets/images/cloud-download.png';
+    import WrenchIcon from './assets/images/wrench.png';
 
     const launcher = new Launcher(onMount);
 
@@ -141,17 +141,17 @@
     </div>
 
     <div id="settings">
-        <img src={Gear} class="unactive" alt="Settings">
+        <img src={GearIcon} class="unactive" alt="Settings">
 
-        <img src={GearActive} class="active" alt="Settings">
+        <img src={GearActiveIcon} class="active" alt="Settings">
     </div>
     
     <button class="button hint--left hint--small" aria-label="{typeof $locale === 'string' ? $_('launcher.states.ready.integrity') : ''}" id="integrity">
-        <img src={Integrity} alt="Integrity" />
+        <img src={WrenchIcon} alt="Integrity" />
     </button>
 
     <button class="button hint--left hint--small" aria-label="{typeof $locale === 'string' ? $_('launcher.states.ready.predownload') : ''}" id="predownload">
-        <img src={Download} alt="Download" />
+        <img src={DownloadIcon} alt="Download" />
     </button>
 
     <button class="button hint--top hint--large" aria-label="" id="launch">Launch</button>

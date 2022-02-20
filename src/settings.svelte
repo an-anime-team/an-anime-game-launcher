@@ -42,7 +42,6 @@
         runnersRecommendable = true,
         fpsUnlockerAvailable = true,
         voiceUpdateRequired = false;
-
     
     let winevdSettings: object = {},
         winevdSettingsUpdater = false;
@@ -292,6 +291,13 @@
 
                     <!-- svelte-ignore missing-declaration -->
                     <Button lang="settings.general.items.buttons.game" click={async () => {
+                        Neutralino.os.execCommand(`xdg-open "${path.addSlashes(await constants.paths.gameDir)}"`, {
+                            background: true
+                        });
+                    }} />
+
+                    <!-- svelte-ignore missing-declaration -->
+                    <Button lang="check files integrity" click={async () => {
                         Neutralino.os.execCommand(`xdg-open "${path.addSlashes(await constants.paths.gameDir)}"`, {
                             background: true
                         });
