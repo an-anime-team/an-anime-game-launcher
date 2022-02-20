@@ -228,7 +228,7 @@ export default class constants
         }
     };
 
-    protected static readonly api = {
+    public static readonly api = {
         key: {
             global: 'gcStgarh',
             cn: 'eYd89JmJ'

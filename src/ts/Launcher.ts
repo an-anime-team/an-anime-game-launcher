@@ -12,6 +12,7 @@ import Locales from './launcher/Locales';
 import ProgressBar from './launcher/ProgressBar';
 import State from './launcher/State';
 import Background from './launcher/Background';
+import Game from './Game';
 
 import { version } from '../../package.json';
 
@@ -161,13 +162,15 @@ export default class Launcher
 
     /**
      * Get launcher social buttons uri
-     * 
-     * TODO: Chinese URI
      */
     public getSocial(): Promise<string>
     {
         return new Promise(async (resolve) => {
-            resolve(`https://${constants.placeholders.lowercase.first}.${constants.placeholders.lowercase.company}.com/launcher/10/${Locales.fallback((await Locales.default()) ?? 'en-us')}?api_url=https%3A%2F%2Fapi-os-takumi.${constants.placeholders.lowercase.company}.com%2Fhk4e_global&key=gcStgarh&prev=false`);
+            const uri = await Game.server == 'global' ?
+                `https://${constants.placeholders.lowercase.first}.${constants.placeholders.lowercase.company}.com/launcher/${constants.api.launcher_id.global}/${Locales.fallback((await Locales.default()) ?? 'en-us')}?api_url=https%3A%2F%2Fapi-os-takumi.${constants.placeholders.lowercase.company}.com%2Fhk4e_global&key=${constants.api.key.global}&prev=false` :
+                `https://ys.${constants.placeholders.lowercase.company}.com/launcher/${constants.api.launcher_id.cn}/?api_url=https%3A%2F%2Fapi-sdk.${constants.placeholders.lowercase.company}.com%2Fhk4e_cn&key=${constants.api.key.cn}&prev=false`;
+
+            resolve(uri);
         });
     }
 

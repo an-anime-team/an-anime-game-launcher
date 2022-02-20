@@ -136,7 +136,7 @@ settings:
         winecfg: winecfg
         launcher: Dossier du Launcher
         game: Dossier du jeu
-        repair_game: repair game files
+        repair_game: Corriger les fichiers du jeu
 
   # Enhancements
   enhancements:
