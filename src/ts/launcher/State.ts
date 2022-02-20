@@ -103,20 +103,14 @@ export default class State
             this.integrityButton.style['display'] = 'none';
             this.settingsButton.style['display'] = 'none';
 
-            // We must specify this files here directly
-            // because otherwise Vite will not bundle 'em
-            const integrityModule = import('./states/CheckIntegrity');
-
-            (this._state === 'game-launch-available' ? integrityModule : null!)
-                .then((module) => {
-                    module.default(this.launcher).then(() => {
-                        this.update().then(() => {
-                            this.launchButton.style['display'] = 'block';
-                            this.integrityButton.style['display'] = 'block';
-                            this.settingsButton.style['display'] = 'block';
-                        });
+            import('./states/CheckIntegrity').then((module) => {
+                module.default(this.launcher).then(() => {
+                    this.update().then(() => {
+                        this.launchButton.style['display'] = 'block';
+                        this.settingsButton.style['display'] = 'block';
                     });
                 });
+            });
         };
 
         this.update().then(async () => {
