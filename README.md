@@ -169,10 +169,10 @@ This is our current roadmap goals. You can find older ones [here](repository/pag
 * <s>ToS Violation Window</s> *(2.1.0)*
 * <s>Add `latest.log` file generation</s> *(2.1.2)*
 * <s>Add an option to show terminal with the wine's log of the game</s> *(7375c743, released in 2.1.3)*
-* <s>Statistics window</s> *(e0a09323)*
-* <s>Add Chinese game's version support (due to changes in the Krock's patch)</s>
+* <s>Add analytics window</s> *(e0a09323)*
+* <s>Add Chinese game's version support (due to changes in the Krock's patch)</s> *(75f2ad66)*
 * Implement manual config flushing functionality from the Empathize's API
-* Add analytics window
+* Game statistics window
 * Dark progress bar design
 * Changelog window
 * Screenshots explorer
