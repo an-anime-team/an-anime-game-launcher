@@ -25,6 +25,8 @@ launcher:
       unpacking: Pakker ut spill...
       applying_changes: Applying changes...
       deleting_outdated: Fjerner utdaterte filer...
+      integrity_check: Verifying Files...
+      download_mismatch_files: Downloading mismatched files...
 
     # Voice packages installation
     voice:
@@ -70,6 +72,7 @@ launcher:
     ready:
       launch: Start
       predownload: Forhånds-nedlast oppdatering
+      integrity: Verify Files & Repair
 
 # Settings window
 settings:

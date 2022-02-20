@@ -25,6 +25,8 @@ launcher:
       unpacking: Распаковка игры...
       applying_changes: Применение изменений...
       deleting_outdated: Удаление устаревших файлов...
+      integrity_check: Verifying Files...
+      download_mismatch_files: Downloading mismatched files...
 
     # Установка звуковых пакетов
     voice:
@@ -70,6 +72,7 @@ launcher:
     ready:
       launch: Запустить
       predownload: Предзагрузить обновление
+      integrity: Verify Files & Repair
 
 # Окно настроек
 settings:
