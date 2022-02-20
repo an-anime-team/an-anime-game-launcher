@@ -153,7 +153,7 @@ settings:
         winesync:
           title: Wine 同步
           tooltip: ESync 是一种同步多线程操作的机制。它可以提高你的游戏性能。
-                  FSync 是 ESync 的改进版，可用于特定的内核版本
+                   FSync 是 ESync 的改进版，可用于特定的内核版本
           items:
             none: 无
             esync: ESync
@@ -164,7 +164,7 @@ settings:
         fsr:
           title: 开启 AMD FSR
           tooltip: 这个选项开启 AMD FidelityFX Super Resolution (FSR)
-                  它可以在不掉帧的情况下提高游戏分辨率
+                   它可以在不掉帧的情况下提高游戏分辨率
 
         # Wine Virtual Desktop
         winevd:
@@ -190,7 +190,7 @@ settings:
         borderless_window:
           title: 允许无边框窗口
           tooltip: 移除窗口模式下的窗口边框。
-                   To play in a fullscreen borderless window, press alt+enter when playing on fullscreen
+                   为了以全屏无边框窗口游玩，请在全屏游戏时按下 alt+enter
 
         # Unlock FPS
         fps_unlocker:
