@@ -2,19 +2,41 @@ import { fetch } from '../../empathize';
 
 import constants from '../Constants';
 import Locales from './Locales';
+import Game from '../Game';
 
 export default class Background
 {
     /**
      * Get background uri
+     * 
+     * @return null if uri is not available
      */
-    public static get(): Promise<string>
+    public static get(): Promise<string|null>
     {
         return new Promise(async (resolve) => {
-            fetch(constants.backgroundUri + Locales.fallback((await Locales.default()) ?? 'en-us'))
-                .then((header) => header.body().then((body) => {
-                    resolve(JSON.parse(body).data.adv.background);
-                }));
+            const server = await Game.server;
+            const locale = Locales.fallback((await Locales.default()) ?? 'en-us');
+
+            const tryToFetch = (server: 'global' | 'cn'): Promise<string|null> => {
+                return new Promise((resolve) => {
+                    fetch(constants.backgroundUri(server, locale))
+                        .then((header) => header.body().then((body) => {
+                            const data = JSON.parse(body);
+
+                            if (data.message !== 'OK' || data.data.adv === null)
+                            {
+                                if (server === 'global')
+                                    resolve(null);
+
+                                else tryToFetch('global').then(resolve);
+                            }
+
+                            else resolve(data.data.adv.background);
+                        }));
+                });
+            };
+
+            tryToFetch(server).then(resolve);
         });
     }
 

@@ -1,0 +1,343 @@
+# Splash window
+splash:
+  title: 启动器加载中
+  phrases:
+    - 一些重要的事情...
+    - 抽神子...
+    - 捡材料...
+    - 凹深渊...
+    - 收集成就...
+    - 培养武神七七...
+    - 为五星献祭...
+    - 寻找联机好友...
+
+# Launcher window
+launcher:
+  # Progress bar
+  progress:
+    pause: 暂停
+    resume: 恢复
+
+    # Game installation
+    game:
+      downloading: 下载游戏中...
+      unpacking: 解压游戏中...
+      applying_changes: 应用更改...
+      deleting_outdated: 删除过期文件...
+
+    # Voice packages installation
+    voice:
+      deleting: 删除语音包...
+      downloading: 下载 {voice} 语音包中...
+      unpacking: 解压 {voice} 语音包中...
+
+  # Launcher states
+  states:
+    # When the game should be installed or updated
+    installation:
+      install_wine: 安装 Wine
+      install_dxvk: 安装 DXVK
+      install: 安装
+      update: 更新
+      
+      apply_changes:
+        title: 应用更改
+        hint: 对游戏文件应用 hdiff 更改
+
+      remove_outdated:
+        title: 移除过期
+        hint: 移除过期的游戏文件
+
+    # When the game should be patched
+    patching:
+      # Patch unavailable
+      unavailable:
+        title: 补丁不可用
+        hint: 这个游戏版本还没有反作弊补丁。
+              请稍等几天，会有稳定或者测试版本的补丁
+      
+      # Patch is in testing
+      test:
+        title: 应用测试版补丁
+        hint: 这个游戏版本有一个实验性的反作弊补丁。
+              你可以在它稳定之前等上几天，或者自担风险地应用测试补丁
+
+      # Patch is stable
+      stable: 应用补丁
+
+    # When the game is ready for playing
+    ready:
+      launch: 启动
+      predownload: 预下载更新
+
+# Settings window
+settings:
+  # General
+  general:
+    title: 通用
+    items:
+      # Language selection
+      lang:
+        # Launcher language
+        launcher:
+          title: 启动器
+          items:
+            en-us: English (US)
+            ru-ru: Русский
+            es-es: Español
+            de-de: Deutsch
+            fr-fr: Français
+            it-it: Italiano
+            hu-hu: Magyar
+            id-id: Bahasa Indonesia
+            nb-no: Norsk
+            zh-cn: 简体中文
+            uwu: Engwish
+
+        # Game voice pack language
+        voice:
+          title: 语音包
+          tooltip: 你只能在游戏中手动选择新的语音包
+          items:
+            en-us: 英语（美国）
+            ja-jp: 日语
+            ko-kr: 汉语
+            zh-cn: 中文
+
+      # Launcher theme
+      theme:
+        title: 主题
+        items:
+          system: 跟随系统
+          light: 明亮
+          dark: 暗色
+      
+      # Discord RPC
+      discord:
+        title: Discord RPC
+        settings:
+          title: Discord RPC 设置
+          items:
+            timer: 显示预估耗时
+            in-launcher: 启动器内文本
+            in-game: 游戏内文本
+            selectIcon: 选择图标
+            
+      # Some buttons
+      buttons:
+        winetricks: winetricks
+        winecfg: winecfg
+        launcher: 启动器文件夹
+        game: 游戏文件夹
+
+  # Enhancements
+  enhancements:
+    title: 增强功能
+
+    # Enhancements related to the wine
+    wine:
+      title: Wine
+      items:
+        # HUD
+        hud:
+          title: HUD
+          items:
+            none: 无
+            dxvk: DXVK
+            mangohud: MangoHUD
+
+        # Wine synchronization
+        winesync:
+          title: Wine 同步
+          tooltip: ESync 是一种同步多线程操作的机制。它可以提高你的游戏性能。
+                  FSync 是 ESync 的改进版，可用于特定的内核版本
+          items:
+            none: 无
+            esync: ESync
+            fsync: FSync
+            futex2: Futex2
+
+        # AMD FSR
+        fsr:
+          title: 开启 AMD FSR
+          tooltip: 这个选项开启 AMD FidelityFX Super Resolution (FSR)
+                  它可以在不掉帧的情况下提高游戏分辨率
+
+        # Wine Virtual Desktop
+        winevd:
+          title: 虚拟桌面
+          settings:
+            title: 虚拟桌面设置
+            items:
+              width: 宽
+              height: 高
+
+    # Enhancements related to the game
+    game:
+      title: 游戏
+      items:
+        # GameMode
+        gamemode:
+          title: 使用 GameMode
+          tooltip:
+            enabled: 这是一个能够提高游戏性能的软件
+            disabled: ⚠️ 你没有安装 gamemode 软件包
+
+        # Borderless Window
+        borderless_window:
+          title: 允许无边框窗口
+          tooltip: 移除窗口模式下的窗口边框。
+                  To play in a fullscreen borderless window, press alt+enter when playing on fullscreen
+
+        # Unlock FPS
+        fps_unlocker:
+          title: 解锁帧率
+          tooltip: 这个选项将会解锁最高 60 帧的限制
+
+        # Use separate terminal window to run the game
+        use_terminal:
+          title: 使用终端
+          tooltip: 启用该选项后，启动器将在一个单独的终端窗口中运行 wine 命令
+
+    # Enhancements related to the launcher
+    launcher:
+      title: 启动器
+      items:
+        # Delete logs
+        purge_logs:
+          # Game logs (DXVK)
+          game:
+            title: 删除 DXVK 日志
+            tooltip: 启用该选项后，您的启动器将自动
+                    删除 DXVK 日志文件。
+
+          # Launcher logs
+          launcher:
+            title: 删除启动器日志
+            tooltip: 日志保留时间
+            items:
+              1d: 1 天
+              3d: 3 天
+              5d: 5 天
+              7d: 1 周
+              14d: 2 周
+              never: 永久
+
+  # Runners
+  runners:
+    title: Wine 版本
+    items:
+      recommended:
+        title: 只显示推荐
+        tooltip: 这个选项会隐藏不能正常游玩的 wine 版本
+
+  # DXVKs
+  dxvks:
+    title: DXVK
+    items:
+      recommended:
+        title: 只显示推荐
+        tooltip: 这个选先会隐藏老的 DXVK 版本
+
+  # Shaders
+  shaders:
+    title: 着色器
+    items:
+      shaders:
+        title: 着色器
+        tooltip: 在游戏中使用 HOME 键切换着色器
+        items:
+          none: 无
+          custom: 自定义
+      
+      author: '作者：{author}'
+      no_images: 无图片
+      not_installed: 你还没有安装 vkBasalt 和 reshade-shaders 库
+
+  # Environmantal variables manager
+  environment:
+    title: 环境变量
+    items:
+      # Table rows
+      table:
+        name: 键
+        value: 值
+      
+      # Table buttons
+      buttons:
+        add: 添加
+        delete: 删除
+
+# Notifications
+notifications:
+  # Launcher update
+  launcher_update_available:
+    title: '启动器更新可用：{from} -> {to}'
+    body: 你可以从位于 {repository} 的项目仓库下载新版本的启动器
+
+  # Before telemetry check when iputils is not downloaded
+  iputils_package_required:
+    title: 二次元游戏启动器
+    body: 为了检查遥测服务的状态你必须安装 iputils
+
+  # When telemetry servers are not disabled
+  telemetry_not_disabled:
+    title: 二次元游戏启动器
+    body: 遥测服务未禁用
+
+  # Before patch applying when xdelta3 package is not downloaded
+  xdelta3_package_required:
+    title: 二次元游戏启动器
+    body: 为了应用补丁你必须安装 xdelta3
+
+  # If patch wasn't applied because of some error
+  patch_applying_error:
+    title: 二次元游戏启动器
+    body: 补丁安装失败。请检查日志以找到原因，或者在我们的 discord 服务器上获取帮助
+
+  # Patch repositories are not available
+  patch_repos_unavailable:
+    title: 二次元游戏启动器
+    body: 没有可用的补丁仓库。你可以运行游戏，但启动器不能确定它是否打了补丁。
+
+  # HDiffPatch couldn't successfully apply game files changes
+  game_changes_applying_error:
+    title: 游戏更新中发生了一个错误
+    body: '{files} 文件没有被 hdiff 不补丁更新'
+
+# ToS violation warning window
+tos_violation:
+  title: 违反服务条款警告
+  heading: ⚠️ 请注意
+  body: 这个启动器是一个非官方工具，与 {company} 和 {company_alterego} 无关。
+        设计这个工具是为了在 Linux 上更方便的游玩 {game}，
+        构建它的唯一目的是减少安装和运行游戏中的麻烦。
+        它通过结合现有的项目并简化用户操作来达到上述目标。
+        然而，这里使用的一些组件可能违反了 {company} 对于 {game} 的服务条款。
+        如果你使用这个启动器， 你的游戏帐号可能被 {company}/{company_alterego} 认定为违反服务条款。
+        如果发生这种情况，因为你违反了服务条款, {company}/{company_alterego} 可以采取任何他们认为合适的措施， 包括封禁帐号。
+        如果你理解使用非官方客户端游玩的风险， 按下确定来探索提瓦特吧！
+  buttons:
+    ok:
+      title: 我理解风险
+      tooltip: 你真的应该阅读上述文字。这很重要
+    cancel: 取消
+    discord: 我们的 discord 服务器
+
+# Analytics window
+analytics:
+  title: 烟绯的委托...
+  header: 参与匿名数据收集
+
+  body:
+    - 为了统计 Linux 的用户活跃数据，烟绯想在每次游戏更新时收集你的 IP 地址。
+    - 安全起见，  IP 地址将被加密。
+
+  actions:
+    share_country:
+      title: 分享地区
+      hint: 为使统计数据更加详细，允许烟绯存储你的 IP 地址注册国家。除了国家之外，没有其他数据会被存储
+
+    participate: 加入
+    skip: 跳过
+    skip_forever: 跳过并不再询问

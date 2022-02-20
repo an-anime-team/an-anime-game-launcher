@@ -343,7 +343,7 @@ export default class Patch
                         else
                         {
                             fetch(`${patchUri}/raw/master/${version.replaceAll('.', '')}/patch_files/unityplayer_patch_os.vcdiff`, this.fetchTimeout)
-                                .then((response) => {
+                                .then(async (response) => {
                                     // Return an error if patch's server is unavailable
                                     if (response.status === null)
                                         rejectOutput(new Error(`${source} patch repository is unreachable`));
@@ -356,7 +356,8 @@ export default class Patch
                                             version: version,
                                             state: 'preparation',
                                             applied: false,
-                                            source: source
+                                            source: source,
+                                            server: await Game.server
                                         });
                                     }
 
@@ -370,7 +371,7 @@ export default class Patch
                                                     rejectOutput(new Error(`${source} patch repository is unreachable`));
                                                 
                                                 else patcherResponse.body(this.fetchTimeout)
-                                                    .then((response) => {
+                                                    .then(async (response) => {
                                                         // Return an error if patch's server is unavailable
                                                         if (response === '')
                                                             rejectOutput(new Error(`${source} patch repository is unreachable`));
@@ -386,22 +387,28 @@ export default class Patch
                                                                 version: version,
                                                                 state: response.includes(stableMark) ? 'stable' : 'testing',
                                                                 applied: false,
-                                                                source: source
+                                                                source: source,
+                                                                server: await Game.server
                                                             };
 
-                                                            const originalPlayer = /if \[ "\${sum}" == "([a-z0-9]{32})" \]; then/mg.exec(response);
+                                                            const hashesMatches = [...response.matchAll(/if \[ "\${sum}" == "([a-z0-9]{32})" \]; then/mg)];
 
                                                             // If we could get original UnityPlayer.dll hash - then we can
                                                             // compare it with actual UnityPlayer.dll hash and say whether the patch
                                                             // was applied or not
-                                                            if (originalPlayer !== null)
+                                                            if (hashesMatches.length === 2)
                                                             {
+                                                                const originalPlayer = {
+                                                                    global: hashesMatches[0][1],
+                                                                    cn: hashesMatches[1][1]
+                                                                }[patchInfo.server];
+
                                                                 constants.paths.gameDir.then((gameDir) => {
                                                                     Neutralino.filesystem.readBinaryFile(`${gameDir}/UnityPlayer.dll`)
                                                                         .then((currPlayer: ArrayBuffer) => {
-                                                                            patchInfo.applied = md5(currPlayer) != originalPlayer[1];
+                                                                            patchInfo.applied = md5(currPlayer) != originalPlayer;
 
-                                                                            resolveOutput(patchInfo, originalPlayer[1]);
+                                                                            resolveOutput(patchInfo, originalPlayer);
                                                                         })
                                                                         .catch(() => resolveOutput(patchInfo));
                                                                 });

@@ -48,6 +48,16 @@ flatpak install launcher.moe com.gitlab.KRypt0n_.an-anime-game-launcher
 
 Some additional configuration is possible when using the flatpak. For info about this, see [this page](https://gitlab.com/lane__/an-anime-game-launcher-flatpak/-/blob/master/README.md)
 
+## Chinese version
+
+To use Chinese version of the game make sure that you have
+
+```yaml
+server: cn
+```
+
+field in your `config.yaml` file (settings -> launcher folder). If your system uses the Chinese language - then it should be selected automatically. If not, then close the launcher, replace `server: global` with `server: cn`, and run it again. After that launcher will download the Chinese version of the game and the patch
+
 # Status
 
 | Game version | Launcher version | Patch version |
@@ -159,10 +169,10 @@ This is our current roadmap goals. You can find older ones [here](repository/pag
 * <s>ToS Violation Window</s> *(2.1.0)*
 * <s>Add `latest.log` file generation</s> *(2.1.2)*
 * <s>Add an option to show terminal with the wine's log of the game</s> *(7375c743, released in 2.1.3)*
-* <s>Statistics window</s>
-* Add Chinese game's version support (due to changes in the Krock's patch)
+* <s>Add analytics window</s> *(e0a09323)*
+* <s>Add Chinese game's version support (due to changes in the Krock's patch)</s> *(75f2ad66)*
 * Implement manual config flushing functionality from the Empathize's API
-* Add analytics window
+* Game statistics window
 * Dark progress bar design
 * Changelog window
 * Screenshots explorer

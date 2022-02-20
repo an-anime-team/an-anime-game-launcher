@@ -11,6 +11,7 @@ register('it-it', () => Locales.get('it-it'));
 register('hu-hu', () => Locales.get('hu-hu'));
 register('id-id', () => Locales.get('id-id'));
 register('nb-no', () => Locales.get('nb-no'));
+register('zh-cn', () => Locales.get('zh-cn'));
 register('uwu', () => Locales.get('uwu'));
 
 Locales.default().then((locale) => {

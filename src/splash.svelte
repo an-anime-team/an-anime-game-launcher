@@ -62,7 +62,7 @@
         <p>{$_(`splash.phrases.${phrase}`, {
             values: {
                 // Required by de-de locale
-                game: constants.placeholders.uppercase.full
+                game: constants.placeholders.uppercase.full.global
             }
         })}</p>
     </main>

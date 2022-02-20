@@ -7,7 +7,7 @@ import type {
 
 import type { Stream as DownloadingStream } from '@empathize/framework/dist/network/Downloader';
 
-import { fetch, Domain, promisify, Downloader, Cache, Debug, Package } from '../empathize';
+import { fetch, Domain, promisify, Downloader, Cache, Debug, Package, Configs } from '../empathize';
 import { DebugThread } from '@empathize/framework/dist/meta/Debug';
 
 import constants from './Constants';
@@ -25,6 +25,18 @@ class Stream extends AbstractInstaller
 
 export default class Game
 {
+    protected static _server: 'global' | 'cn' | null = null;
+
+    public static get server(): Promise<'global' | 'cn'>
+    {
+        return new Promise(async (resolve) => {
+            if (!this._server)
+                this._server = (await Configs.get('server')) as 'global' | 'cn';
+
+            resolve(this._server);
+        })
+    }
+
     /**
      * Get current installed game version
      * 
@@ -64,7 +76,7 @@ export default class Game
     public static getLatestData(): Promise<Data>
     {
         return new Promise(async (resolve, reject) => {
-            const response = await fetch(constants.versionsUri);
+            const response = await fetch(constants.versionsUri(await this.server));
 
             if (response.ok)
             {
@@ -266,7 +278,7 @@ export default class Game
             else 
             {
                 const pipeline = promisify({
-                    callbacks: await constants.uri.telemetry.map((domain) => {
+                    callbacks: await constants.uri.telemetry[await this.server].map((domain) => {
                         return new Promise((resolve) => {
                             Domain.getInfo(domain).then((info) => resolve(info.available));
                         });

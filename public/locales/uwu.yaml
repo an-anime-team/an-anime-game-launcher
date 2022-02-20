@@ -95,6 +95,7 @@ settings:
             hu-hu: Magyar
             id-id: Bahasa Indonesia
             nb-no: Norsk
+            zh-cn: 简体中文
             uwu: Engwish
 
         # Game voice pack language
@@ -328,18 +329,18 @@ tos_violation:
 
 # Analytics window
 analytics:
-  title: Yanfei's commission...
-  header: Participate in anonymous data collection
+  title: Yanfei's commission... (≧◡≦)
+  header: pawticipate in a-anonymous data cowwection
 
   body:
-    - To count the active user base for Linux, Yanfei would like to collect your IP address everytime the game updates
-    - The IP address will be hashed for security purpose
+    - to count the active u-user base fow winux, yanfei wouwd wike to c-cowwect youw ip addwess evewytime the g-game updates
+    - the ip addwess will be hashed f-fow secuwity puwpose
 
   actions:
     share_country:
-      title: Share country
-      hint: Allow Yanfei to store the country your IP address registered in to make statistics more detailed. No other data than the country will be stored
+      title: share countwy
+      hint: awwow yanfei t-to store the countwy y-youw ip addwess w-wegistewed in to make statistics more detaiwed (* ^ ω ^) n-no other data than the countwy will be stowed
 
-    participate: Participate
-    skip: Skip
-    skip_forever: Skip and don't ask again
+    participate: pawticipate
+    skip: skip
+    skip_forever: skip and don't ask again
