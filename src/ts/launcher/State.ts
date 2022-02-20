@@ -87,7 +87,7 @@ export default class State
             const predownloadModule = import('./states/Predownload');
             const predownloadVoiceModule = import('./states/PredownloadVoice');
 
-            (this._state === 'game-launch-available' ? predownloadModule : predownloadVoiceModule)
+            (this._state === 'game-pre-installation-available' ? predownloadModule : predownloadVoiceModule)
                 .then((module) => {
                     module.default(this.launcher).then(() => {
                         this.update().then(() => {
