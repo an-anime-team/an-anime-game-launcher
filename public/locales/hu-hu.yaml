@@ -72,7 +72,6 @@ launcher:
     ready:
       launch: Indítás
       predownload: Frissítés előtöltése
-      integrity: Verify and repair files
 
 # Settings window
 settings:
@@ -133,6 +132,7 @@ settings:
         winecfg: winecfg
         launcher: launcher mappa
         game: játékmappa
+        repair_game: Játékfájlok javítása
 
   # Enhancements
   enhancements:

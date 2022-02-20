@@ -72,7 +72,6 @@ launcher:
     ready:
       launch: Start
       predownload: Forhånds-nedlast oppdatering
-      integrity: Verify and repair files
 
 # Settings window
 settings:
@@ -133,6 +132,7 @@ settings:
         winecfg: winecfg
         launcher: launcher mappe
         game: spill mappe
+        repair_game: repair game files
 
   # Enhancements
   enhancements:

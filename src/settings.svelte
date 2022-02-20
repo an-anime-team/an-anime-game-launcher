@@ -295,6 +295,16 @@
                             background: true
                         });
                     }} />
+
+                    <!-- svelte-ignore missing-declaration -->
+                    <Button
+                        lang="settings.general.items.buttons.repair_game"
+                        click={async () => {
+                            await IPC.write('check-files-integrity');
+
+                            Neutralino.app.exit();
+                        }}
+                    />
                 </div>
             </div>
 

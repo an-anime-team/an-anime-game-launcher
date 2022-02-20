@@ -72,7 +72,6 @@ launcher:
     ready:
       launch: 启动
       predownload: 预下载更新
-      integrity: 验证并修复文件
 
 # Settings window
 settings:
@@ -133,6 +132,7 @@ settings:
         winecfg: winecfg
         launcher: 启动器文件夹
         game: 游戏文件夹
+        repair_game: repair game files
 
   # Enhancements
   enhancements:

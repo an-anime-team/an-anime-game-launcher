@@ -16,7 +16,6 @@
     import GearIcon from './assets/images/gear.png';
     import GearActiveIcon from './assets/images/gear-active.png';
     import DownloadIcon from './assets/images/cloud-download.png';
-    import WrenchIcon from './assets/images/wrench.png';
 
     const launcher = new Launcher(onMount);
 
@@ -145,10 +144,6 @@
 
         <img src={GearActiveIcon} class="active" alt="Settings">
     </div>
-    
-    <button class="button hint--left hint--small" aria-label="{typeof $locale === 'string' ? $_('launcher.states.ready.integrity') : ''}" id="integrity">
-        <img src={WrenchIcon} alt="Integrity" />
-    </button>
 
     <button class="button hint--left hint--small" aria-label="{typeof $locale === 'string' ? $_('launcher.states.ready.predownload') : ''}" id="predownload">
         <img src={DownloadIcon} alt="Download" />

@@ -367,8 +367,12 @@ export default (launcher: Launcher): Promise<void> => {
                                 resolve();
                             });
                         }
+
+                        else resolve();
                     });
                 }
+
+                else resolve();
             })
             .catch(() => {
                 debugThread.log('No pkg_version file provided');

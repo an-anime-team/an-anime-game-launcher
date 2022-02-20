@@ -127,6 +127,23 @@ export default class Launcher
 
                                     record.pop();
                                 }
+
+                                else if (record.data === 'check-files-integrity')
+                                {
+                                    this.state!.launchButton.style['display'] = 'none';
+                                    this.state!.settingsButton.style['display'] = 'none';
+
+                                    import('./launcher/states/CheckIntegrity').then((module) => {
+                                        module.default(this).then(() => {
+                                            this.state!.update().then(() => {
+                                                this.state!.launchButton.style['display'] = 'block';
+                                                this.state!.settingsButton.style['display'] = 'block';
+                                            });
+                                        });
+                                    });
+
+                                    record.pop();
+                                }
                             });
                         });
 

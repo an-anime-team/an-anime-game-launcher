@@ -72,7 +72,6 @@ launcher:
     ready:
       launch: launch (◕▿◕✿)
       predownload: pwe-downwoad update
-      integrity: vewify files & wepaiw
 
 # Settings window
 settings:
@@ -133,6 +132,7 @@ settings:
         winecfg: winecfg
         launcher: waunchew f-fowdew
         game: game f-fowdew
+        repair_game: wepaiw game fiwes
 
   # Enhancements
   enhancements:

@@ -72,7 +72,6 @@ launcher:
     ready:
       launch: Запустить
       predownload: Предзагрузить обновление
-      integrity: Проверить и исправить файлы
 
 # Окно настроек
 settings:
@@ -133,6 +132,7 @@ settings:
         winecfg: winecfg
         launcher: папка лаунчера
         game: папка игры
+        repair_game: исправить файлы игры
 
   # Улучшения
   enhancements:

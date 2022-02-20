@@ -72,7 +72,6 @@ launcher:
     ready:
       launch: Starten
       predownload: Update vorinstallieren
-      integrity: Dateien verifizieren und reparieren
 
 # Einstellungs Fenster
 settings:
@@ -133,6 +132,7 @@ settings:
         winecfg: winecfg
         launcher: Launcher Ordner öffnen
         game: Spiel Ordner öffnen
+        repair_game: spiel-dateien reparieren
 
   # Verberssungen
   enhancements:
