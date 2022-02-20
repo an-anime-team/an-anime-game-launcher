@@ -16,6 +16,7 @@
     import Gear from './assets/images/gear.png';
     import GearActive from './assets/images/gear-active.png';
     import Download from './assets/images/cloud-download.png';
+    import Integrity from './assets/images/integrity.png';
 
     const launcher = new Launcher(onMount);
 
@@ -145,6 +146,10 @@
         <img src={GearActive} class="active" alt="Settings">
     </div>
     
+    <button class="button hint--left hint--small" aria-label="{typeof $locale === 'string' ? $_('launcher.states.ready.integrity') : ''}" id="integrity">
+        <img src={Integrity} alt="Integrity" />
+    </button>
+
     <button class="button hint--left hint--small" aria-label="{typeof $locale === 'string' ? $_('launcher.states.ready.predownload') : ''}" id="predownload">
         <img src={Download} alt="Download" />
     </button>

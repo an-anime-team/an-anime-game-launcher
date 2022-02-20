@@ -27,6 +27,7 @@ export default class State
     public launchButton: HTMLElement;
     public pauseButton: HTMLElement;
     public predownloadButton: HTMLElement;
+    public integrityButton: HTMLElement;
     public settingsButton: HTMLElement;
 
     protected _state: LauncherState = 'game-launch-available';
@@ -56,6 +57,7 @@ export default class State
         this.launchButton = <HTMLElement>document.getElementById('launch');
         this.pauseButton = <HTMLElement>document.getElementById('pause');
         this.predownloadButton = <HTMLElement>document.getElementById('predownload');
+        this.integrityButton = <HTMLElement>document.getElementById('integrity');
         this.settingsButton = <HTMLElement>document.getElementById('settings');
 
         this.launchButton.onclick = () => {
@@ -85,11 +87,32 @@ export default class State
             const predownloadModule = import('./states/Predownload');
             const predownloadVoiceModule = import('./states/PredownloadVoice');
 
-            (this._state === 'game-pre-installation-available' ? predownloadModule : predownloadVoiceModule)
+            (this._state === 'game-launch-available' ? predownloadModule : predownloadVoiceModule)
                 .then((module) => {
                     module.default(this.launcher).then(() => {
                         this.update().then(() => {
                             this.launchButton.style['display'] = 'block';
+                            this.settingsButton.style['display'] = 'block';
+                        });
+                    });
+                });
+        };
+
+        this.integrityButton.onclick = () => {
+            this.launchButton.style['display'] = 'none';
+            this.integrityButton.style['display'] = 'none';
+            this.settingsButton.style['display'] = 'none';
+
+            // We must specify this files here directly
+            // because otherwise Vite will not bundle 'em
+            const integrityModule = import('./states/CheckIntegrity');
+
+            (this._state === 'game-launch-available' ? integrityModule : null!)
+                .then((module) => {
+                    module.default(this.launcher).then(() => {
+                        this.update().then(() => {
+                            this.launchButton.style['display'] = 'block';
+                            this.integrityButton.style['display'] = 'block';
                             this.settingsButton.style['display'] = 'block';
                         });
                     });
@@ -239,6 +262,7 @@ export default class State
 
         this.launcher.progressBar!.hide();
         this.predownloadButton.style['display'] = 'none';
+        this.integrityButton.style['display'] = 'none';
 
         this.launchButton.classList.remove('button-blue');
         this.launchButton.setAttribute('aria-label', '');
@@ -272,6 +296,8 @@ export default class State
                 break;
             
             case 'game-launch-available':
+                this.integrityButton.style['display'] = 'block';
+
                 this.launchButton.textContent = dictionary['ready']['launch'];
 
                 break;
