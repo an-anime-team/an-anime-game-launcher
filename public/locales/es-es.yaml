@@ -23,10 +23,10 @@ launcher:
     game:
       downloading: Descargando el juego...
       unpacking: Descomprimiendo el juego...
-      applying_changes: Applying changes...
+      applying_changes: Aplicando cambios...
       deleting_outdated: Borrando archivos viejos...
-      integrity_check: Verifying files...
-      download_mismatch_files: Downloading mismatched files...
+      integrity_check: Verificando archivos...
+      download_mismatch_files: Reparando archivos defectuosos...
 
     # Instalación de paquetes de voz
     voice:
@@ -44,12 +44,12 @@ launcher:
       update: Actualizar
       
       apply_changes:
-        title: Apply changes
-        hint: Apply hdiff changes to the game files
+        title: Aplicar cambios
+        hint: Aplicar los cambios de hdiff a los archivos del juego
 
       remove_outdated:
-        title: Remove outdated
-        hint: Remove outdated game files
+        title: Eliminar viejos
+        hint: Eliminar archivos desactualizados del juego
 
     # Cuando el juego debe ser parcheado
     patching:
@@ -72,7 +72,7 @@ launcher:
     ready:
       launch: Jugar
       predownload: Pre-descargar actualización
-      integrity: Verify and repair files
+      integrity: Verificar y reparar archivos
 
 # Ventana de opciones
 settings:
@@ -303,10 +303,10 @@ notifications:
     title: An Anime Game Launcher
     body: Ninguno de los repositorios del parche está disponible. Podrás ejecutar el juego, pero no podemos asegurar que el parche esté aplicado correctamente
 
-  # HDiffPatch couldn't successfully apply game files changes
+  # HDiffPatch no pudo aplicar los cambios en los archivos del juego correctamente
   game_changes_applying_error:
-    title: An error occurred during game updating
-    body: '{files} files couldn''t be updated by the hdiff patch'
+    title: Ocurrió un error al actualizar el juego
+    body: 'El parche de hdiff no pudo actualizar {files} archivos'
 
 # ToS violation warning window
 tos_violation:
@@ -326,20 +326,20 @@ tos_violation:
     cancel: Cancelar
     discord: Nuestro servidor de Discord
 
-# Analytics window
+# Ventana de analíticas
 analytics:
-  title: Yanfei's commission...
-  header: Participate in anonymous data collection
+  title: La comisión de Yanfei...
+  header: Participar en recolección anónima de datos
 
   body:
-    - To count the active user base for Linux, Yanfei would like to collect your IP address everytime the game updates
-    - The IP address will be hashed for security purpose
+    - Para poder contar la cantidad de usuarios activos en Linux, Yanfei necesita registrar tu IP cada vez que el juego se actualice
+    - La dirección IP será cifrada para mayor seguridad
 
   actions:
     share_country:
-      title: Share country
-      hint: Allow Yanfei to store the country your IP address registered in to make statistics more detailed. No other data than the country will be stored
+      title: Compartir Pais
+      hint: Permite que Yanfei registre el pais asociado a tu IP para hacer generar estadísticas más detalladas. No se guardará ningún dato más que el pais.
 
-    participate: Participate
-    skip: Skip
-    skip_forever: Skip and don't ask again
+    participate: Participar
+    skip: Saltear
+    skip_forever: Saltear y no preguntar de nuevo
