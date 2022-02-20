@@ -17,7 +17,7 @@ export default (launcher: Launcher): Promise<void> => {
         Game.isTelemetryDisabled()
             .then(async (telemetryDisabled) => {
                 // If telemetry servers are not disabled
-                if (telemetryDisabled)
+                if (!telemetryDisabled)
                 {
                     Notification.show({
                         ...Locales.translate('notifications.telemetry_not_disabled'),
