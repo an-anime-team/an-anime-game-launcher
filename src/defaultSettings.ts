@@ -3,9 +3,9 @@ import { Configs } from './empathize';
 import constants from './ts/Constants';
 import Locales from './ts/launcher/Locales';
 
-const systemLocale = await Locales.system();
-
 export default new Promise<void>(async (resolve) => {
+    const systemLocale = await Locales.system();
+    
     await Configs.defaults({
         lang: {
             launcher: systemLocale,
