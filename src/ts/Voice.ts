@@ -22,7 +22,7 @@ class Stream extends AbstractInstaller
 
 export default class Voice
 {
-    protected static readonly langs = {
+    public static readonly langs = {
         'en-us': 'English(US)',
         'ja-jp': 'Japanese',
         'ko-kr': 'Korean',
