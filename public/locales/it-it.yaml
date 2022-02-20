@@ -23,7 +23,7 @@ launcher:
     game:
       downloading: Scaricando il gioco...
       unpacking: Decomprimendo il gioco...
-      applying_changes: Applying changes...
+      applying_changes: Applicando i cambiamenti...
       deleting_outdated: Cancellando file vecchi...
 
     # Voice packages installation
@@ -42,12 +42,12 @@ launcher:
       update: Aggiorna
       
       apply_changes:
-        title: Apply changes
-        hint: Apply hdiff changes to the game files
+        title: Applica cambiamenti
+        hint: Applica i cambiamenti di hdiff ai file di gioco
 
       remove_outdated:
-        title: Remove outdated
-        hint: Remove outdated game files
+        title: Elimina file vecchi
+        hint: Elimina file di gioco vecchi
 
     # When the game should be patched
     patching:
@@ -301,8 +301,8 @@ notifications:
 
   # HDiffPatch couldn't successfully apply game files changes
   game_changes_applying_error:
-    title: An error occurred during game updating
-    body: '{files} files couldn''t be updated by the hdiff patch'
+    title: Si è verificato un errore nell'aggiornamento del gioco
+    body: '{files} files non sono stati aggiornati dalla patch hdiff
 
 # ToS violation warning window
 tos_violation:
@@ -324,18 +324,19 @@ tos_violation:
 
 # Analytics window
 analytics:
-  title: Yanfei's commission...
-  header: Participate in anonymous data collection
+  title: La commissione di Yanfei...
+  header: Partecipa nella collezione di dati anonimi
 
   body:
-    - To count the active user base for Linux, Yanfei would like to collect your IP address everytime the game updates
-    - The IP address will be hashed for security purpose
+    - Per contare il numero di giocatori      attivi su Linux, Yanfei vorrebbe          collezionare il tuo indirizzo IP ogni     volta che il gioco si aggiorna
+    - L'indirizzo IP sarà hashato per           motivi di sicurezza
 
   actions:
     share_country:
-      title: Share country
-      hint: Allow Yanfei to store the country your IP address registered in to make statistics more detailed. No other data than the country will be stored
+      title: Condividi paese
+      hint: Permetti a Yanfei di registrare lo stato del tuo indirizzo IP per raccogliere statistiche più dettagliate.
+            Nessun''altro dato oltre al paese verrà registrato.
 
-    participate: Participate
-    skip: Skip
-    skip_forever: Skip and don't ask again
+    participate: Partecipa
+    skip: Rifiuta
+    skip_forever: Rifiuta e non chiedere più
