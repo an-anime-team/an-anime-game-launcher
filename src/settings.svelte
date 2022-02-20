@@ -295,13 +295,6 @@
                             background: true
                         });
                     }} />
-
-                    <!-- svelte-ignore missing-declaration -->
-                    <Button lang="check files integrity" click={async () => {
-                        Neutralino.os.execCommand(`xdg-open "${path.addSlashes(await constants.paths.gameDir)}"`, {
-                            background: true
-                        });
-                    }} />
                 </div>
             </div>
 
