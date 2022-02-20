@@ -25,6 +25,8 @@ launcher:
       unpacking: Décompression du jeu...
       applying_changes: Application des changements...
       deleting_outdated: Suppression des fichiers non à jour...
+      integrity_check: Verifying Files...
+      download_mismatch_files: Downloading mismatched files...
 
     # Voice packages installation
     voice:
@@ -73,6 +75,7 @@ launcher:
     ready:
       launch: Lancer
       predownload: Pre-téléchargement de mise à jour
+      integrity: Verify Files & Repair
 
 # Settings window
 settings:

@@ -1,13 +1,42 @@
 import type Launcher from '../../Launcher';
 
-import { Debug, fs, path } from '../../../empathize';
+import { Debug, fs, path, Cache, Downloader } from '../../../empathize';
 
 import constants from '../../Constants';
 import Patch from "../../Patch";
 import Locales from '../Locales';
-import Voice from "../../Voice"
+import Voice from "../../Voice";
 
 declare const Neutralino;
+
+async function download(fileInfo): Promise<boolean>
+{
+    return new Promise(async (resolve) => {
+        const gameDir = await constants.paths.gameDir;
+        const cache = await Cache.get('Game.getLatestData.ServerResponse');
+
+        let uri = `${cache!.value['game']['latest']['decompressed_path']}/${fileInfo.remoteName}`;
+
+        Downloader.download(uri, `${gameDir}/${fileInfo.remoteName}.new`).then((stream) => {
+            stream.finish(async () => {
+                const process = await Neutralino.os.execCommand(`md5sum "${path.addSlashes(`${gameDir}/${fileInfo.remoteName}.new`)}"`);
+                const fileHash = (process.stdOut || process.stdErr).split(' ')[0];
+
+                if (fileHash == fileInfo.md5)
+                {
+                    await fs.remove(`${gameDir}/${fileInfo.remoteName}`);
+                    await fs.move(`${gameDir}/${fileInfo.remoteName}.new`, `${gameDir}/${fileInfo.remoteName}`);
+                    resolve(true);
+                }
+                else
+                {
+                    await fs.remove(`${gameDir}/${fileInfo.remoteName}.new`);
+                    resolve(false);
+                }
+            });
+        });
+    });
+}
 
 export default (launcher: Launcher): Promise<void> => {
     return new Promise(async (resolve) => {
@@ -74,7 +103,7 @@ export default (launcher: Launcher): Promise<void> => {
                             `Checked ${total} files with ${mismatchedFiles.length} mismatches` :
                             [
                                 `Checked ${total} files with ${mismatchedFiles.length} mismatch(es):`,
-                                ...mismatchedFiles
+                                ...mismatchedFiles.map(e => `[${e.md5}] ${e.remoteName}`)
                             ]
                     });
                 }
@@ -83,10 +112,24 @@ export default (launcher: Launcher): Promise<void> => {
 
                 // Replace mismatched files
 
-                for (const file of mismatchedFiles)
+                mismatchedFiles.forEach(async (fileInfo: { remoteName: string, md5: string, fileSize: number }) =>
                 {
-                    const fileInfo = JSON.parse(file) as { remoteName: string, md5: string, fileSize: number };
-                }
+                    launcher.progressBar?.init({
+                        label: Locales.translate('launcher.progress.game.download_mismatch_files') as string,
+                        showSpeed: false,
+                        showEta: false,
+                        showPercents: false,
+                        showTotals: false
+                    });
+
+                    download(fileInfo).then(async (success) => {
+                        if (!success)
+                            Debug.log({
+                                function: 'Launcher/States/Integrity',
+                                message: `Download of ${fileInfo.remoteName} failed`
+                            });
+                    });
+                })
 
                 resolve();
             })

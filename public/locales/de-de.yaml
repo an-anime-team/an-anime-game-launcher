@@ -25,6 +25,8 @@ launcher:
       unpacking: Spiel wird entpackt...
       applying_changes: Änderungen werden angewandt...
       deleting_outdated: Lösche veraltete dateien...
+      integrity_check: Verifiziere Dateien...
+      download_mismatch_files: Lade nicht übereinstimmenden Dateien herunter...
     
     # Voice packages installation
     voice:
@@ -70,6 +72,7 @@ launcher:
     ready:
       launch: Starten
       predownload: Update vorinstallieren
+      integrity: Dateien verifizieren und reparieren
 
 # Einstellungs Fenster
 settings:
