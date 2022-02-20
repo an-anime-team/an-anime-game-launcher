@@ -26,7 +26,7 @@
         Windows.current.show();
         Windows.current.center();
 
-        const title = Locales.translate('tos_violation.title') as string|null;
+        const title = Locales.translate<string|null>('tos_violation.title');
 
         if (title)
             Windows.current.setTitle(title);

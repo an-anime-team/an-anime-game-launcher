@@ -21,7 +21,7 @@ export default (launcher: Launcher): Promise<void> => {
                 if (files.length > 0)
                 {
                     launcher.progressBar?.init({
-                        label: Locales.translate('launcher.progress.game.applying_changes') as string,
+                        label: Locales.translate<string>('launcher.progress.game.applying_changes'),
                         showSpeed: false,
                         showEta: true,
                         showPercents: true,
@@ -64,7 +64,7 @@ export default (launcher: Launcher): Promise<void> => {
 
                     if (patchErrors > 0)
                     {
-                        const locale = Locales.translate('notifications.game_changes_applying_error') as { title: string, body: string };
+                        const locale = Locales.translate<{ title: string, body: string }>('notifications.game_changes_applying_error');
                         
                         Notification.show({
                             title: locale.title,

@@ -156,7 +156,7 @@ export default class Locales
     /**
      * Get translation from the currently selected locale
      */
-    public static translate(message: string): string|object|null
+    public static translate<T>(message: string): T
     {
         const currentDictionary = svelteget(dictionary) as object;
 
@@ -170,7 +170,7 @@ export default class Locales
                 break;
         }
 
-        return translation;
+        return translation as T;
     }
 
     /**

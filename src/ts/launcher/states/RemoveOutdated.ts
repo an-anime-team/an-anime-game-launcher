@@ -18,7 +18,7 @@ export default (launcher: Launcher): Promise<void> => {
                 if (files.length > 0)
                 {
                     launcher.progressBar?.init({
-                        label: Locales.translate('launcher.progress.game.deleting_outdated') as string,
+                        label: Locales.translate<string>('launcher.progress.game.deleting_outdated'),
                         showSpeed: false,
                         showEta: true,
                         showPercents: true,

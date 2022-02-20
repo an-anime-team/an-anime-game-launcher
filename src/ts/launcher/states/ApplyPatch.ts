@@ -12,7 +12,7 @@ export default (launcher: Launcher): Promise<void> => {
         if (!await Package.exists('xdelta3'))
         {
             Notification.show({
-                ...(Locales.translate('notifications.xdelta3_package_required') as { title: string, body: string }),
+                ...Locales.translate('notifications.xdelta3_package_required'),
                 icon: `${constants.paths.appDir}/public/images/baal64-transparent.png`,
                 importance: 'critical'
             });
@@ -61,7 +61,7 @@ export default (launcher: Launcher): Promise<void> => {
                             if (!result)
                             {
                                 Notification.show({
-                                    ...(Locales.translate('notifications.patch_applying_error') as { title: string, body: string }),
+                                    ...Locales.translate('notifications.patch_applying_error'),
                                     icon: `${constants.paths.appDir}/public/images/baal64-transparent.png`
                                 });
                             }
@@ -73,7 +73,7 @@ export default (launcher: Launcher): Promise<void> => {
             }
         }).catch(() => {
             Notification.show({
-                ...(Locales.translate('notifications.patch_repos_unavailable') as { title: string, body: string }),
+                ...Locales.translate('notifications.patch_repos_unavailable'),
                 icon: `${constants.paths.appDir}/public/images/baal64-transparent.png`,
                 importance: 'critical'
             });

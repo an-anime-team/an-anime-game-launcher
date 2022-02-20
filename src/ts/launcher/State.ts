@@ -143,7 +143,7 @@ export default class State
             else if (await fs.exists(path.join(await constants.paths.launcherDir, '.analytics')))
             {
                 Windows.open('analytics', {
-                    title: Locales.translate('analytics.title') as string,
+                    title: Locales.translate<string>('analytics.title'),
                     width: 700,
                     height: 460,
                     exitProcessOnClose: false
@@ -188,7 +188,7 @@ export default class State
                 for (const tag of tags.reverse())
                     if (semver.gt(tag.tag, Launcher.version))
                     {
-                        const locales = Locales.translate('notifications.launcher_update_available') as object;
+                        const locales = Locales.translate<object>('notifications.launcher_update_available');
                         
                         Notification.show({
                             title: locales['title'].replace('{from}', Launcher.version).replace('{to}', tag.tag),
@@ -505,7 +505,7 @@ export default class State
                                         state = 'game-launch-available';
 
                                         Notification.show({
-                                            ...(Locales.translate('notifications.patch_repos_unavailable') as { title: string, body: string }),
+                                            ...Locales.translate('notifications.patch_repos_unavailable'),
                                             icon: `${constants.paths.appDir}/public/images/baal64-transparent.png`,
                                             importance: 'critical'
                                         });

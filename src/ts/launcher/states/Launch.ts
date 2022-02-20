@@ -17,15 +17,17 @@ export default (launcher: Launcher): Promise<void> => {
         Game.isTelemetryDisabled()
             .then(async (telemetryDisabled) => {
                 // If telemetry servers are not disabled
-                if (!telemetryDisabled)
+                if (telemetryDisabled)
                 {
                     Notification.show({
-                        ...(Locales.translate('notifications.telemetry_not_disabled') as { title: string, body: string }),
+                        ...Locales.translate('notifications.telemetry_not_disabled'),
                         icon: `${constants.paths.appDir}/public/images/baal64-transparent.png`,
                         importance: 'critical'
                     });
 
                     debugThread.log('Telemetry is not disabled!');
+
+                    resolve();
                 }
                 
                 // Otherwise run the game
@@ -280,10 +282,12 @@ export default (launcher: Launcher): Promise<void> => {
             })
             .catch(() => {
                 Notification.show({
-                    ...(Locales.translate('notifications.iputils_package_required') as { title: string, body: string }),
+                    ...Locales.translate('notifications.iputils_package_required'),
                     icon: `${constants.paths.appDir}/public/images/baal64-transparent.png`,
                     importance: 'critical'
                 });
+
+                resolve();
             });
     });
 };

@@ -29,7 +29,7 @@ export default (launcher: Launcher): Promise<void> => {
 
             Game.update(prevGameVersion).then((stream) => {
                 launcher.progressBar?.init({
-                    label: Locales.translate('launcher.progress.game.downloading') as string,
+                    label: Locales.translate('launcher.progress.game.downloading'),
                     showSpeed: true,
                     showEta: true,
                     showPercents: true,
@@ -46,14 +46,14 @@ export default (launcher: Launcher): Promise<void> => {
                     {
                         stream?.pauseDownload();
 
-                        launcher.state!.pauseButton.textContent = Locales.translate('launcher.progress.resume') as string;
+                        launcher.state!.pauseButton.textContent = Locales.translate('launcher.progress.resume');
                     }
 
                     else
                     {
                         stream?.resumeDownload();
 
-                        launcher.state!.pauseButton.textContent = Locales.translate('launcher.progress.pause') as string;
+                        launcher.state!.pauseButton.textContent = Locales.translate('launcher.progress.pause');
                     }
 
                     paused = !paused;
@@ -67,7 +67,7 @@ export default (launcher: Launcher): Promise<void> => {
     
                 stream?.unpackStart(() => {
                     launcher.progressBar?.init({
-                        label: Locales.translate('launcher.progress.game.unpacking') as string,
+                        label: Locales.translate('launcher.progress.game.unpacking'),
                         showSpeed: true,
                         showEta: true,
                         showPercents: true,
