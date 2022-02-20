@@ -5,6 +5,7 @@ import { Debug, fs, path } from '../../../empathize';
 import constants from '../../Constants';
 import Patch from "../../Patch";
 import Locales from '../Locales';
+import Voice from "../../Voice"
 
 declare const Neutralino;
 
@@ -14,9 +15,22 @@ export default (launcher: Launcher): Promise<void> => {
 
         Neutralino.filesystem.readFile(`${gameDir}/pkg_version`)
             .then(async (files) => {
-                let mismatchedFiles = [];
+                // Check Game and Voice Pack Integrity
+
+                let mismatchedFiles = new Array();
 
                 files = files.split(/\r\n|\r|\n/).filter((file) => file != '');
+
+                const InstalledVoices = await Voice.installed;
+
+                for (const voice of InstalledVoices)
+                {
+                    Neutralino.filesystem.readFile(`${gameDir}/Audio_${Voice.langs[voice.lang]}_pkg_version`)
+                        .then(async (vfiles) => {
+                            vfiles = vfiles.split(/\r\n|\r|\n/).filter((file) => file != '');
+                            files.push(...vfiles);
+                        })
+                }
 
                 if (files.length > 0)
                 {
@@ -39,8 +53,8 @@ export default (launcher: Launcher): Promise<void> => {
                         // {"remoteName": "AnAnimeGame_Data/StreamingAssets/AssetBundles/blocks/00/16567284.blk", "md5": "79ab71cfff894edeaaef025ef1152b77", "fileSize": 3232361}
                         const fileCheckInfo = JSON.parse(file) as { remoteName: string, md5: string, fileSize: number };
 
-                        // If this file exists, it's not UnityPlayer.dll,
-                        // or if it's UnityPlayer.dll, but patch wasn't applied
+                        // If the file exists and it's not UnityPlayer.dll
+                        // or if it's UnityPlayer.dll but the patch wasn't applied
                         if (await fs.exists(`${gameDir}/${fileCheckInfo.remoteName}`) &&
                             (!fileCheckInfo.remoteName.includes('UnityPlayer.dll') || !patch.applied))
                         {
@@ -59,13 +73,20 @@ export default (launcher: Launcher): Promise<void> => {
                         message: mismatchedFiles.length == 0 ?
                             `Checked ${total} files with ${mismatchedFiles.length} mismatches` :
                             [
-                                `Checked ${total} files with ${mismatchedFiles.length} mismatches:`,
+                                `Checked ${total} files with ${mismatchedFiles.length} mismatch(es):`,
                                 ...mismatchedFiles
                             ]
                     });
                 }
 
                 launcher.progressBar?.hide();
+
+                // Replace mismatched files
+
+                for (const file of mismatchedFiles)
+                {
+                    const fileInfo = JSON.parse(file) as { remoteName: string, md5: string, fileSize: number };
+                }
 
                 resolve();
             })
