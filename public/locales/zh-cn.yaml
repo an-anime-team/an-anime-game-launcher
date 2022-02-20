@@ -104,8 +104,8 @@ settings:
           items:
             en-us: 英语（美国）
             ja-jp: 日语
-            ko-kr: 汉语
-            zh-cn: 中文
+            ko-kr: 韩语
+            zh-cn: 汉语
 
       # Launcher theme
       theme:
@@ -190,7 +190,7 @@ settings:
         borderless_window:
           title: 允许无边框窗口
           tooltip: 移除窗口模式下的窗口边框。
-                  To play in a fullscreen borderless window, press alt+enter when playing on fullscreen
+                   To play in a fullscreen borderless window, press alt+enter when playing on fullscreen
 
         # Unlock FPS
         fps_unlocker:
@@ -212,7 +212,7 @@ settings:
           game:
             title: 删除 DXVK 日志
             tooltip: 启用该选项后，您的启动器将自动
-                    删除 DXVK 日志文件。
+                     删除 DXVK 日志文件。
 
           # Launcher logs
           launcher:
