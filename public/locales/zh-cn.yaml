@@ -24,6 +24,8 @@ launcher:
       unpacking: 解压游戏中...
       applying_changes: 应用更改...
       deleting_outdated: 删除过期文件...
+      integrity_check: Verifying Files...
+      download_mismatch_files: Downloading mismatched files...
 
     # Voice packages installation
     voice:
@@ -69,6 +71,7 @@ launcher:
     ready:
       launch: 启动
       predownload: 预下载更新
+      integrity: Verify Files & Repair
 
 # Settings window
 settings:
