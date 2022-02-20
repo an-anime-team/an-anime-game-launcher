@@ -112,7 +112,11 @@ export default class Launcher
                                     {
                                         locale.set(record.pop().data.locale);
 
-                                        Background.get().then((uri) => document.getElementsByClassName('background')[0]!.setAttribute('src', uri));
+                                        Background.get().then((uri) => {
+                                            if (uri)
+                                                document.getElementsByClassName('background')[0]!.setAttribute('src', uri);
+                                        });
+
                                         this.getSocial().then((uri) => document.getElementById('social-iframe')!.setAttribute('src', uri));
                                     }
                                 }
@@ -140,6 +144,8 @@ export default class Launcher
 
     /**
      * Get launcher social buttons uri
+     * 
+     * TODO: Chinese URI
      */
     public getSocial(): Promise<string>
     {

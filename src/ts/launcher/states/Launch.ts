@@ -247,7 +247,7 @@ export default (launcher: Launcher): Promise<void> => {
                         // Game was closed
                         else
                         {
-                            const stopTime = Date.now();
+                            // const stopTime = Date.now();
 
                             Windows.current.show();
                             Windows.current.center(1280, 700);

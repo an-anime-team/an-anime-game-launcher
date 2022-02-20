@@ -58,7 +58,7 @@
             values: {
                 company: constants.placeholders.uppercase.company,
                 company_alterego: constants.placeholders.uppercase.company_alterego,
-                game: constants.placeholders.uppercase.full
+                game: constants.placeholders.uppercase.full.global
             }
         })}</p>
 

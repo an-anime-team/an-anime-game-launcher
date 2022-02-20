@@ -1,4 +1,8 @@
+import type { AvailableLocales } from './launcher/Locales';
+
 import { Configs } from '../empathize';
+
+import Game from './Game';
 
 declare const Neutralino;
 declare const NL_CWD;
@@ -142,7 +146,13 @@ class Paths
      */
     public static get gameDataDir(): Promise<string>
     {
-        return new Promise(async (resolve) => resolve(`${await this.gameDir}/${constants.placeholders.uppercase.first + constants.placeholders.uppercase.second}_Data`));
+        return new Promise(async (resolve) => {
+            const folder = await Game.server === 'global' ?
+                constants.placeholders.uppercase.first + constants.placeholders.uppercase.second :
+                constants.placeholders.uppercase.full.cn;
+
+            resolve(`${await this.gameDir}/${folder}_Data`);
+        });
     }
 
     /**
@@ -188,7 +198,10 @@ export default class constants
             /**
              * Anime Game
              */
-            full: atob('R2Vuc2hpbiBJbXBhY3Q='),
+            full: {
+                global: atob('R2Vuc2hpbiBJbXBhY3Q='),
+                cn: atob('WXVhblNoZW4=')
+            },
 
             /**
              * anAnimeCompany
@@ -215,35 +228,55 @@ export default class constants
         }
     };
 
+    protected static readonly api = {
+        key: {
+            global: 'gcStgarh',
+            cn: 'eYd89JmJ'
+        },
+        launcher_id: {
+            global: 10,
+            cn: 18
+        }
+    };
+
     public static readonly uri = {
-        api: `https://sdk-os-static.${this.placeholders.lowercase.company}.com/hk4e_global/mdk/launcher/api`,
+        api: {
+            global: `https://sdk-os-static.${this.placeholders.lowercase.company}.com/hk4e_global/mdk/launcher/api`,
+            cn: `https://sdk-static.${this.placeholders.lowercase.company}.com/hk4e_cn/mdk/launcher/api`
+        },
         patch: {
             origin: 'https://notabug.org/Krock/dawn',
             additional: 'https://dev.kaifa.ch/Maroxy/dawn'
         },
-        launcher: 'https://gitlab.com/KRypt0n_/an-anime-game-launcher',
-        discord: 'https://discord.gg/ck37X6UWBp',
-        telemetry: [
-            atob('bG9nLXVwbG9hZC1vcy5taWhveW8uY29t'),
-            atob('b3ZlcnNlYXVzcGlkZXIueXVhbnNoZW4uY29t')
-        ],
+        telemetry: {
+            global: [
+                atob('bG9nLXVwbG9hZC1vcy5taWhveW8uY29t'),
+                atob('b3ZlcnNlYXVzcGlkZXIueXVhbnNoZW4uY29t')
+            ],
+            cn: [
+                atob('bG9nLXVwbG9hZC5taWhveW8uY29t'),
+                atob('dXNwaWRlci55dWFuc2hlbi5jb20=')
+            ]
+        },
         winetricks: 'https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks',
         fpsunlock: {
             unlocker: `https://github.com/34736384/${this.placeholders.lowercase.first}-fps-unlock/releases/download/v1.4.2/unlockfps.exe`,
             bat: 'https://dev.kaifa.ch/Maroxy/an-anime-game-aur/raw/branch/fpsunlock/fpsunlock.bat'
         },
+        launcher: 'https://gitlab.com/KRypt0n_/an-anime-game-launcher',
+        discord: 'https://discord.gg/ck37X6UWBp',
         analytics: 'https://aagl.launcher.moe/stat/'
     };
 
-    // TODO: cache drops at that dates instead of the 7 days period
-    /*public static readonly cacheDropDates = [
-        new Date('November 24, 2021').getTime(), // 2.3.0 half 1 release
-        new Date('December 15, 2021').getTime(), // 2.3.0 half 2 release
-        new Date('January 5, 2022').getTime() // 2.4.0 half 1 release
-    ];*/
-
     public static readonly paths = Paths;
 
-    public static readonly versionsUri: string = `${this.uri.api}/resource?key=gcStgarh&launcher_id=10`;
-    public static readonly backgroundUri: string = `${this.uri.api}/content?filter_adv=true&launcher_id=10&key=gcStgarh&language=`;
+    public static versionsUri(server: 'global' | 'cn'): string
+    {
+        return `${this.uri.api[server]}/resource?key=${this.api.key[server]}&launcher_id=${this.api.launcher_id[server]}`;
+    }
+
+    public static backgroundUri(server: 'global' | 'cn', lang: AvailableLocales): string
+    {
+        return `${this.uri.api[server]}/content?filter_adv=true&key=${this.api.key[server]}&launcher_id=${this.api.launcher_id[server]}&language=${lang}`;
+    }
 }

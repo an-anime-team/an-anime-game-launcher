@@ -1,16 +1,25 @@
-import { Configs, promisify } from './empathize';
+import { Configs } from './empathize';
 
 import constants from './ts/Constants';
 import Locales from './ts/launcher/Locales';
 
+const systemLocale = await Locales.system();
+
 export default new Promise<void>(async (resolve) => {
     await Configs.defaults({
         lang: {
-            launcher: await Locales.system(),
+            launcher: systemLocale,
             voice: [
                 'en-us'
             ]
         },
+
+        /**
+         * Game server
+         * 
+         * Available options: "global" and "cn"
+         */
+        server: systemLocale === 'zh-cn' ? 'cn' : 'global',
 
         folders: {
             /**

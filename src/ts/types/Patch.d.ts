@@ -19,6 +19,11 @@ type PatchInfo = {
      * Source where this info was got from
      */
     source?: 'origin' | 'additional';
+
+    /**
+     * Used game server
+     */
+    server: 'global' | 'cn';
 };
 
 export type {
