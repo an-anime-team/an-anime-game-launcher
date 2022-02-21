@@ -23,10 +23,10 @@ launcher:
     game:
       downloading: Laster ned spill...
       unpacking: Pakker ut spill...
-      applying_changes: Applying changes...
+      applying_changes: Installerer endringer...
       deleting_outdated: Fjerner utdaterte filer...
-      integrity_check: Verifying files...
-      download_mismatch_files: Downloading mismatched files...
+      integrity_check: Verifiserer filer...
+      download_mismatch_files: Laster ned feilaktige filer...
 
     # Voice packages installation
     voice:
@@ -44,12 +44,12 @@ launcher:
       update: Oppdater
       
       apply_changes:
-        title: Apply changes
-        hint: Apply hdiff changes to the game files
+        title: Installer endringer
+        hint: Installer hdiff endringer til spillfilene
 
       remove_outdated:
-        title: Remove outdated
-        hint: Remove outdated game files
+        title: Fjern utdatert
+        hint: Fjern utdaterte spillfiler
 
     # When the game should be patched
     patching:
@@ -132,7 +132,7 @@ settings:
         winecfg: winecfg
         launcher: launcher mappe
         game: spill mappe
-        repair_game: repair game files
+        repair_game: reparer spillfiler
 
   # Enhancements
   enhancements:
@@ -306,8 +306,8 @@ notifications:
 
   # HDiffPatch couldn't successfully apply game files changes
   game_changes_applying_error:
-    title: An error occurred during game updating
-    body: '{files} files couldn''t be updated by the hdiff patch'
+    title: Spilloppdatering mislykket
+    body: '{files} filer kunne ikke bli oppdatert av hdiff oppdateringen'
 
 # ToS violation warning window
 tos_violation:
@@ -330,18 +330,18 @@ tos_violation:
 
 # Analytics window
 analytics:
-  title: Yanfei's commission...
-  header: Participate in anonymous data collection
+  title: Yanfei sin kommisjon
+  header: Delta i anonym datainnhenting
 
   body:
-    - To count the active user base for Linux, Yanfei would like to collect your IP address everytime the game updates
-    - The IP address will be hashed for security purpose
+    - For å telle den aktive brukerbasen for linux, vil Yanfei samle din IP addresse hver gang spillet oppdaterer
+    - IP adressen vil bli kryptert for sikkerhetsformål
 
   actions:
     share_country:
-      title: Share country
-      hint: Allow Yanfei to store the country your IP address registered in to make statistics more detailed. No other data than the country will be stored
+      title: Del land
+      hint: Tillat Yanfei å lagre landet IP adressen din er registrert i for å gjøre statistikkene mer detaljert. Ingen annen data enn landet ditt vil bli lagret
 
-    participate: Participate
-    skip: Skip
-    skip_forever: Skip and don't ask again
+    participate: Delta
+    skip: Skipp
+    skip_forever: Skipp og ikke spør igjen

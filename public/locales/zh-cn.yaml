@@ -132,7 +132,7 @@ settings:
         winecfg: winecfg
         launcher: 启动器文件夹
         game: 游戏文件夹
-        repair_game: repair game files
+        repair_game: 修复游戏文件
 
   # Enhancements
   enhancements:
