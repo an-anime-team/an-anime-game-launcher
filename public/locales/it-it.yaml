@@ -8,7 +8,7 @@ splash:
     - Farmando materiali...
     - Superando l'Abisso...
     - Collezionando trofei...
-    - Buildando Qiqi fisico...
+    - Buildando Qiqi fisica...
     - Facendo sacrifici per un 5*...
     - Cercando amici per co-op...
 
@@ -25,14 +25,14 @@ launcher:
       unpacking: Decomprimendo il gioco...
       applying_changes: Applicando i cambiamenti...
       deleting_outdated: Cancellando file vecchi...
-      integrity_check: Verifying files...
-      download_mismatch_files: Downloading mismatched files...
+      integrity_check: Verficando file...
+      download_mismatch_files: Scaricando file mancanti...
 
     # Voice packages installation
     voice:
       deleting: Cancellando pacchetto voci...
-      downloading: Scaricando {voice} pacchetto voci...
-      unpacking: Decomprimendo {voice} pacchetto voci...
+      downloading: Scaricando pacchetto voci {voice}...
+      unpacking: Decomprimendo pacchetto voci {voice}...
 
   # Launcher states
   states:
@@ -100,7 +100,7 @@ settings:
         # Game voice pack language
         voice:
           title: Doppiaggio
-          tooltip: Dovrai manualmente configurare il voice pack in gioco
+          tooltip: Dovrai configurare manualmente il voice pack in gioco
           items:
             en-us: Inglese (US)
             ja-jp: Giapponese
@@ -131,7 +131,7 @@ settings:
         winecfg: winecfg
         launcher: Cartella del launcher
         game: Cartella del gioco
-        repair_game: repair game files
+        repair_game: Ripara file di gioco
 
   # Enhancements
   enhancements:
@@ -188,7 +188,7 @@ settings:
 
         # Borderless Window
         borderless_window:
-          title: Atiiva il gioco senza bordi
+          title: Attiva il gioco senza bordi
           tooltip: Rimuove i bordi quando giocato in modalità a finestra.
                    Per giocare senza bordi in full screen, premi alt+enter mentre giochi full screen.
 
@@ -306,7 +306,7 @@ notifications:
   # HDiffPatch couldn't successfully apply game files changes
   game_changes_applying_error:
     title: Si è verificato un errore nell'aggiornamento del gioco
-    body: '{files} files non sono stati aggiornati dalla patch hdiff
+    body: '{files} file non sono stati aggiornati dalla patch hdiff
 
 # ToS violation warning window
 tos_violation:
@@ -314,7 +314,7 @@ tos_violation:
   heading: ⚠️ Avviso importante
            Questo launcher non è ufficiale, non è in alcun modo collegato a {company} o {company_alterego}.
            Questo mezzo è designato per facilitare l'avvio di {game} su Linux, ed è stato creato con il solo scopo di facilitare l'installazione di {game} su Linux.
-           Può fare questo usando componenti già esistenti e rendendo l'esperienza più semplice per l'utente.
+           Può fare ciò usando componenti già esistenti e rendendo l'esperienza più semplice per l'utente.
            Alcuni componenti usati potrebbero infrangere i Termini di Servizio di {game}.
            Se stai usando questo launcher, il tuo account potrebbe essere identificato come non conforme ai TOS da {company}/{company_alterego}.
            Se questo succede, {company}/{company_alterego} ha pieno diritto sul tuo account, incluso il ban.
@@ -339,7 +339,7 @@ analytics:
     share_country:
       title: Condividi paese
       hint: Permetti a Yanfei di registrare lo stato del tuo indirizzo IP per raccogliere statistiche più dettagliate.
-            Nessun''altro dato oltre al paese verrà registrato.
+            Nessun altro dato oltre al paese verrà registrato.
 
     participate: Partecipa
     skip: Rifiuta
