@@ -11,7 +11,6 @@
     import Launcher from './ts/Launcher';
     import constants from './ts/Constants';
     import Game from './ts/Game';
-    import Background from './ts/launcher/Background';
 
     import GearIcon from './assets/images/gear.png';
     import GearActiveIcon from './assets/images/gear-active.png';
@@ -117,9 +116,7 @@
 </script>
 
 <main>
-    {#await Background.get() then uri}
-        <img class="background" src={uri} alt="">
-    {/await}
+    <img id="background" src="" alt="">
 
     <div class="downloader-panel" data-theme="light">
         <div class="downloader-label">
@@ -134,9 +131,7 @@
     </div>
 
     <div id="launcher-content">
-        {#await launcher.getSocial() then uri}
-            <iframe id="social-iframe" src={uri} title="" scrolling="no" style="position: absolute; border: 0; top: 0; left: 0;" width="100%" height="100%"></iframe>
-        {/await}
+        <iframe id="social-iframe" src="" title="" scrolling="no" style="position: absolute; border: 0; top: 0; left: 0;" width="100%" height="100%"></iframe>
     </div>
 
     <div id="settings">

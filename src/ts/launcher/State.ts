@@ -17,12 +17,16 @@ import DXVK from '../core/DXVK';
 import Locales from './Locales';
 import Git from '../core/Git';
 import constants from '../Constants';
+import Background from './Background';
 
 declare const Neutralino;
 
 export default class State
 {
     public launcher: Launcher;
+
+    public backgroundImage: HTMLElement;
+    public socialsIframe: HTMLElement;
 
     public launchButton: HTMLElement;
     public pauseButton: HTMLElement;
@@ -53,10 +57,20 @@ export default class State
     {
         this.launcher = launcher;
 
+        this.backgroundImage = <HTMLElement>document.getElementById('background');
+        this.socialsIframe = <HTMLElement>document.getElementById('social-iframe');
+
         this.launchButton = <HTMLElement>document.getElementById('launch');
         this.pauseButton = <HTMLElement>document.getElementById('pause');
         this.predownloadButton = <HTMLElement>document.getElementById('predownload');
         this.settingsButton = <HTMLElement>document.getElementById('settings');
+
+        Background.get().then((uri) => {
+            if (uri)
+                this.backgroundImage.setAttribute('src', uri);
+        });
+
+        launcher.getSocial().then((uri) => this.socialsIframe.setAttribute('src', uri));
 
         this.launchButton.onclick = () => {
             if (this.events[this._state])
