@@ -342,7 +342,7 @@
                         lang: 'settings.enhancements.wine.items.fsr.tooltip'
                     }}
                     prop="wine.fsr"
-                    disabled={winevdSettings['enabled']}
+                    disabled={winevdSettings['enabled'] || Configs.get('borderless_window')}
                 />
 
                 <Checkbox
