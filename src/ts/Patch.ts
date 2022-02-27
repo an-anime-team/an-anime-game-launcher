@@ -63,8 +63,8 @@ class Stream
             // Run `git clone` if the patch repo is not downloaded
             // or `git pull` to fetch changes
             await fs.exists(`${launcherDir}/patch`) ?
-                await Neutralino.os.execCommand(`cd "${path.addSlashes(launcherDir)}" && git pull`) :
-                await Neutralino.os.execCommand(`git clone "${path.addSlashes(patchUri)}" "${launcherDir}/patch"`);
+                await Neutralino.os.execCommand(`cd "${path.addSlashes(launcherDir)}/patch" && git pull`) :
+                await Neutralino.os.execCommand(`git clone "${path.addSlashes(patchUri)}" "${path.addSlashes(launcherDir)}/patch"`);
 
             this.downloadFinished = true;
 
