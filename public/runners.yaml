@@ -246,11 +246,63 @@
       winecfg: lib64/wine/x86_64-windows/winecfg.exe
     recommended: false
 
-# Proton-GE versions
-- title: Proton-GE
+# GE-Proton versions
+- title: GE-Proton
   runners:
+  # GE-Proton 7-4
+  - family: GE-Proton
+    name: GE-Proton7-4
+    title: GE-Proton 7-4
+    uri: https://github.com/GloriousEggroll/proton-ge-custom/releases/download/GE-Proton7-4/GE-Proton7-4.tar.gz
+    files:
+      wine: files/bin/wine64
+      wineserver: files/bin/wineserver
+      winecfg: files/lib64/wine/x86_64-windows/winecfg.exe
+    recommended: true
+
+  # GE-Proton 7-3
+  - family: GE-Proton
+    name: GE-Proton7-3
+    title: GE-Proton 7-3
+    uri: https://github.com/GloriousEggroll/proton-ge-custom/releases/download/GE-Proton7-3/GE-Proton7-3.tar.gz
+    files:
+      wine: files/bin/wine64
+      wineserver: files/bin/wineserver
+      winecfg: files/lib64/wine/x86_64-windows/winecfg.exe
+    recommended: true
+
+  # GE-Proton 7-2
+  - family: GE-Proton
+    name: GE-Proton7-2
+    title: GE-Proton 7-2
+    uri: https://github.com/GloriousEggroll/proton-ge-custom/releases/download/GE-Proton7-2/GE-Proton7-2.tar.gz
+    files:
+      wine: dist/bin/wine64
+      wineserver: dist/bin/wineserver
+      winecfg: dist/lib64/wine/x86_64-windows/winecfg.exe
+    recommended: true
+
+  # GE-Proton 7-1
+  - family: GE-Proton
+    name: GE-Proton7-1
+    title: GE-Proton 7-1
+    uri: https://github.com/GloriousEggroll/proton-ge-custom/releases/download/GE-Proton7-1/GE-Proton7-1.tar.gz
+    files:
+      wine: dist/bin/wine64
+      wineserver: dist/bin/wineserver
+      winecfg: dist/lib64/wine/x86_64-windows/winecfg.exe
+
+    # From 7-2 (above) changelog:
+    # Fixed broken controller input on clean game prefix creations
+    # So this version can be broken for controller users
+    recommended: false
+
+  # Project versioning (and name) was changed
+  # https://github.com/GloriousEggroll/proton-ge-custom/releases/tag/GE-Proton7-1
+  # https://www.patreon.com/posts/63101415
+
   # Proton-GE 7.2-2
-  - family: Proton-GE
+  - family: GE-Proton
     name: Proton-7.2-GE-2
     title: Proton 7.2 GE 2
     uri: https://github.com/GloriousEggroll/proton-ge-custom/releases/download/7.2-GE-2/Proton-7.2-GE-2.tar.gz
@@ -261,7 +313,7 @@
     recommended: true
 
   # Proton-GE 7.2-1
-  - family: Proton-GE
+  - family: GE-Proton
     name: Proton-7.2-GE-1
     title: Proton 7.2 GE 1
     uri: https://github.com/GloriousEggroll/proton-ge-custom/releases/download/7.2-GE-1/Proton-7.2-GE-1.tar.gz
@@ -272,7 +324,7 @@
     recommended: true
 
   # Proton-GE 7.1-2
-  - family: Proton-GE
+  - family: GE-Proton
     name: Proton-7.1-GE-2
     title: Proton 7.1 GE 2
     uri: https://github.com/GloriousEggroll/proton-ge-custom/releases/download/7.1-GE-2/Proton-7.1-GE-2.tar.gz
@@ -283,7 +335,7 @@
     recommended: true
 
   # Proton-GE 7.1-1
-  - family: Proton-GE
+  - family: GE-Proton
     name: Proton-7.1-GE-1
     title: Proton 7.1 GE 1
     uri: https://github.com/GloriousEggroll/proton-ge-custom/releases/download/7.1-GE-1/Proton-7.1-GE-1.tar.gz
@@ -294,7 +346,7 @@
     recommended: true
 
   # Proton-GE 6.21-2
-  - family: Proton-GE
+  - family: GE-Proton
     name: Proton-6.21-GE-2
     title: Proton 6.21 GE 2
     uri: https://github.com/GloriousEggroll/proton-ge-custom/releases/download/6.21-GE-2/Proton-6.21-GE-2.tar.gz
@@ -302,10 +354,10 @@
       wine: files/bin/wine64
       wineserver: files/bin/wineserver
       winecfg: files/lib64/wine/x86_64-windows/winecfg.exe
-    recommended: true
+    recommended: false # works, but outdated
 
   # Proton-GE 6.20-1
-  - family: Proton-GE
+  - family: GE-Proton
     name: Proton-6.20-GE-1
     title: Proton 6.20 GE 1
     uri: https://github.com/GloriousEggroll/proton-ge-custom/releases/download/6.20-GE-1/Proton-6.20-GE-1.tar.gz
@@ -313,10 +365,10 @@
       wine: files/bin/wine64
       wineserver: files/bin/wineserver
       winecfg: files/lib64/wine/x86_64-windows/winecfg.exe
-    recommended: true
+    recommended: false # works, but outdated
 
   # Proton-GE 6.19-2
-  - family: Proton-GE
+  - family: GE-Proton
     name: Proton-6.19-GE-2
     title: Proton 6.19 GE 2
     uri: https://github.com/GloriousEggroll/proton-ge-custom/releases/download/6.19-GE-2/Proton-6.19-GE-2.tar.gz
@@ -327,7 +379,7 @@
     recommended: false # works, but outdated
 
   # Proton-GE 6.19-1
-  - family: Proton-GE
+  - family: GE-Proton
     name: Proton-6.19-GE-1
     title: Proton 6.19 GE 1
     uri: https://github.com/GloriousEggroll/proton-ge-custom/releases/download/6.19-GE-1/Proton-6.19-GE-1.tar.gz
@@ -338,7 +390,7 @@
     recommended: false # works, but outdated
 
   # Proton-GE 6.18-2
-  - family: Proton-GE
+  - family: GE-Proton
     name: Proton-6.18-GE-2
     title: Proton 6.18 GE 2
     uri: https://github.com/GloriousEggroll/proton-ge-custom/releases/download/6.18-GE-2/Proton-6.18-GE-2.tar.gz
@@ -349,7 +401,7 @@
     recommended: false # works, but outdated
 
   # Proton-GE 6.18-1
-  - family: Proton-GE
+  - family: GE-Proton
     name: Proton-6.18-GE-1
     title: Proton 6.18 GE 1
     uri: https://github.com/GloriousEggroll/proton-ge-custom/releases/download/6.18-GE-1/Proton-6.18-GE-1.tar.gz
@@ -360,7 +412,7 @@
     recommended: false # works, but outdated
 
   # Proton-GE 6.16-1
-  - family: Proton-GE
+  - family: GE-Proton
     name: Proton-6.16-GE-1
     title: Proton 6.16 GE 1
     uri: https://github.com/GloriousEggroll/proton-ge-custom/releases/download/6.16-GE-1/Proton-6.16-GE-1.tar.gz

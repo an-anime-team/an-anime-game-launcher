@@ -157,8 +157,15 @@ export default (launcher: Launcher): Promise<void> => {
                     }*/
 
                     const virtual_desktop = await Configs.get('wine.virtual_desktop') as object;
+                    const borderless_window = await Configs.get('borderless_window') as boolean;
 
-                    let command = `"${path.addSlashes(wineExeutable)}" ${virtual_desktop['enabled'] ? `explorer /desktop=animegame,${virtual_desktop['width']}x${virtual_desktop['height']}` : ''} ${await Configs.get('fps_unlocker') ? 'unlockfps.bat' : 'launcher.bat'} ${await Configs.get('borderless_window') ? '-screen-fullscreen 0 -popupwindow' : ''} ${await Configs.get('wine.fsr') && (!await Configs.get('borderless_window') || !virtual_desktop['enabled']) ? '-window-mode exclusive' : ''}`;
+                    let command: string = [
+                        `"${path.addSlashes(wineExeutable)}"`,
+                        `${virtual_desktop['enabled'] ? `explorer /desktop=animegame,${virtual_desktop['width']}x${virtual_desktop['height']}` : ''}`,
+                        `${await Configs.get('fps_unlocker') ? 'unlockfps.bat' : 'launcher.bat'}`,
+                        `${borderless_window ? '-screen-fullscreen 0 -popupwindow' : ''}`,
+                        `${await Configs.get('wine.fsr') && (!borderless_window || !virtual_desktop['enabled']) ? '-window-mode exclusive' : ''}`
+                    ].join(' ');
 
                     /**
                      * Gamemode integration
