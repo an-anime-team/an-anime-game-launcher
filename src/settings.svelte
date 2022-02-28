@@ -115,6 +115,8 @@
             gamemode.tooltip = 'settings.enhancements.game.items.gamemode.tooltip.disabled';
     });
 
+    let borderless_active = Configs.get('borderless_window').then((val) => borderless_active = val);
+
     /**
      * Menu items changing
      */
@@ -342,7 +344,7 @@
                         lang: 'settings.enhancements.wine.items.fsr.tooltip'
                     }}
                     prop="wine.fsr"
-                    disabled={winevdSettings['enabled']}
+                    disabled={winevdSettings['enabled'] || borderless_active}
                 />
 
                 <Checkbox
@@ -370,6 +372,7 @@
                         lang: 'settings.enhancements.game.items.borderless_window.tooltip'
                     }}
                     prop="borderless_window"
+                    valueChanged={(value) => borderless_active = value}
                 />
 
                 <Checkbox
