@@ -245,8 +245,8 @@ export default class constants
             cn: `https://sdk-static.${this.placeholders.lowercase.company}.com/hk4e_cn/mdk/launcher/api`
         },
         patch: {
-            origin: 'https://notabug.org/Krock/dawn',
-            additional: 'https://dev.kaifa.ch/Maroxy/dawn'
+            origin: atob('aHR0cHM6Ly9ub3RhYnVnLm9yZy9Lcm9jay9kYXdu'),
+            additional: atob('aHR0cHM6Ly9kZXYua2FpZmEuY2gvTWFyb3h5L2Rhd24=')
         },
         telemetry: {
             global: [
