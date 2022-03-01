@@ -261,7 +261,7 @@ export default class constants
         winetricks: 'https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks',
         fpsunlock: {
             unlocker: `https://github.com/34736384/${this.placeholders.lowercase.first}-fps-unlock/releases/download/v1.4.2/unlockfps.exe`,
-            bat: 'https://dev.kaifa.ch/Maroxy/an-anime-game-aur/raw/branch/fpsunlock/fpsunlock.bat'
+            bat: 'https://aagl.launcher.moe/dl/unlockfps.bat'
         },
         launcher: 'https://gitlab.com/KRypt0n_/an-anime-game-launcher',
         discord: 'https://discord.gg/ck37X6UWBp',
