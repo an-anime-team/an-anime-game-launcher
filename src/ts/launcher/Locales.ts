@@ -11,7 +11,7 @@ type AvailableLocales =
     // Supported by the game's API
     | 'en-us' | 'ru-ru' | 'es-es'
     | 'de-de' | 'fr-fr' | 'id-id'
-    | 'zh-cn'
+    | 'ja-jp' | 'zh-cn'
 
     // Unsupported by the game's API
     | 'it-it' | 'hu-hu' | 'uwu'
@@ -25,7 +25,7 @@ export default class Locales
      * List of locales supported by the game's API
      */
     public static readonly supportedLocales: AvailableLocales[] = [
-        'en-us', 'ru-ru', 'es-es', 'de-de', 'fr-fr', 'id-id', 'zh-cn'
+        'en-us', 'ru-ru', 'es-es', 'de-de', 'fr-fr', 'id-id', 'ja-jp', 'zh-cn'
     ];
 
     /**

@@ -1,0 +1,348 @@
+# Splash window
+splash:
+  title: 起動中
+  phrases:
+    - 重要なことを行っています...
+    - パイモンをイジっています...
+    - 八重様を引いています...
+    - 材料を採集しています...
+    - 深境螺旋を回しています...
+    - 実績を集めています...
+    - 物理ビルドの七七を育てています...
+    - ★5 のために捧げています...
+    - マルチプレイのフレンドを探しています...
+
+# Launcher window
+launcher:
+  # Progress bar
+  progress:
+    pause: 一時停止
+    resume: 再開
+
+    # Game installation
+    game:
+      downloading: ゲームをダウンロード中...
+      unpacking: ゲームファイルを展開中...
+      applying_changes: 変更を適用中...
+      deleting_outdated: 不必要になったファイルを削除中...
+      integrity_check: ファイルを検証中...
+      download_mismatch_files: 検証が失敗したファイルを再ダウンロード中...
+
+    # Voice packages installation
+    voice:
+      deleting: ボイスパックを削除中...
+      downloading: ボイスパック ({voice}) をダウンロード中...
+      unpacking: ボイスパック ({voice}) を展開中...
+
+  # Launcher states
+  states:
+    # When the game should be installed or updated
+    installation:
+      install_wine: Wine をインストール
+      install_dxvk: DXVK をインストール
+      install: インストール
+      update: アップデート
+      
+      apply_changes:
+        title: 変更を適用
+        hint: HDiff の変更をゲームファイルに適用します
+
+      remove_outdated:
+        title: 古いファイルを削除
+        hint: 不必要になったゲームファイルを削除します
+
+    # When the game should be patched
+    patching:
+      # Patch unavailable
+      unavailable:
+        title: パッチ利用不可
+        hint: このゲームのバージョン向けのアンチチートパッチがありません。
+              テスト版または安定板のパッチがリリースされるまでお待ちください
+      
+      # Patch is in testing
+      test:
+        title: テスト版パッチを適用
+        hint: このゲームのバージョンには実験的なテスト版パッチがあります。
+              パッチが安定版になるまでに数日待つか、自己責任で適用してください
+
+      # Patch is stable
+      stable: パッチを適用
+
+    # When the game is ready for playing
+    ready:
+      launch: ゲーム開始
+      predownload: 事前ダウンロード
+
+# Settings window
+settings:
+  # General
+  general:
+    title: 一般
+    items:
+      # Language selection
+      lang:
+        # Launcher language
+        launcher:
+          title: ランチャー
+          items:
+            en-us: English (US)
+            ru-ru: Русский
+            es-es: Español
+            de-de: Deutsch
+            fr-fr: Français
+            it-it: Italiano
+            ja-jp: 日本語
+            hu-hu: Magyar
+            id-id: Bahasa Indonesia
+            nb-no: Norsk
+            zh-cn: 简体中文
+            uwu: Engwish
+
+        # Game voice pack language
+        voice:
+          title: ボイスパック
+          tooltip: 追加したボイスパックは、ゲーム内設定で変更する必要があります
+          items:
+            en-us: 英語 (US)
+            ja-jp: 日本語
+            ko-kr: 韓国語
+            zh-cn: 中国語
+
+      # Launcher theme
+      theme:
+        title: テーマ
+        items:
+          system: システム
+          light: ライト
+          dark: ダーク
+      
+      # Discord RPC
+      discord:
+        title: Discord RPC
+        settings:
+          title: Discord RPC 設定
+          items:
+            timer: 経過時間を表示
+            in-launcher: ゲーム開始前のテキスト
+            in-game: ゲーム中のテキスト
+            selectIcon: アイコンを選択
+            
+      # Some buttons
+      buttons:
+        winetricks: winetricks
+        winecfg: winecfg
+        launcher: ランチャーディレクトリ
+        game: ゲームディレクトリ
+        repair_game: ゲームファイルを修復
+
+  # Enhancements
+  enhancements:
+    title: 詳細設定
+
+    # Enhancements related to the wine
+    wine:
+      title: Wine
+      items:
+        # HUD
+        hud:
+          title: HUD
+          items:
+            none: なし
+            dxvk: DXVK
+            mangohud: MangoHUD
+
+        # Wine synchronization
+        winesync:
+          title: Wine 同期
+          tooltip: ESync はマルチスレッド操作を同期させる仕組みです。ゲームのパフォーマンスを向上させることができます。
+                  FSync は ESync の強化版で、いくつかのカーネルバージョンで動作します。
+          items:
+            none: None
+            esync: ESync
+            fsync: FSync
+            futex2: Futex2
+
+        # AMD FSR
+        fsr:
+          title: AMD FSR を有効化
+          tooltip: FPS が低下することなくゲームの解像度を引き上げる
+                  AMD FidelityFX Super Resolution (FSR) を有効化します
+
+        # Wine Virtual Desktop
+        winevd:
+          title: 仮想デスクトップ
+          settings:
+            title: 仮想デスクトップ設定
+            items:
+              width: 横幅
+              height: 縦幅
+
+    # Enhancements related to the game
+    game:
+      title: ゲーム
+      items:
+        # GameMode
+        gamemode:
+          title: GameMode を使用
+          tooltip:
+            enabled: ゲームのパフォーマンスが上昇します
+            disabled: ⚠️ gamemode がインストールされていません
+
+        # Borderless Window
+        borderless_window:
+          title: ボーダーレスウィンドウを許可
+          tooltip: ウィンドウモードで遊ぶときにウィンドウのボーダーを削除します。
+                  フルスクリーンのボーダーレスウィンドウを使う場合は、
+                  フルスクリーンでプレイ中に alt+enter を押してください
+
+        # Unlock FPS
+        fps_unlocker:
+          title: FPS をアンロック
+          tooltip: 有効化すると最大 60fps のリミッターが解除されます
+
+        # Use separate terminal window to run the game
+        use_terminal:
+          title: ターミナルを表示
+          tooltip: 有効化すると別のターミナルウィンドウを開いて Wine コマンドを実行します
+
+    # Enhancements related to the launcher
+    launcher:
+      title: ランチャー
+      items:
+        # Delete logs
+        purge_logs:
+          # Game logs (DXVK)
+          game:
+            title: 自動的に DXVK ログを削除
+            tooltip: 有効化するとランチャーが DXVK ログファイルを自動的に削除します
+
+          # Launcher logs
+          launcher:
+            title: ランチャーログを削除
+            tooltip: 古いログファイルの削除範囲
+            items:
+              1d: 1日
+              3d: 3日
+              5d: 5日
+              7d: 1週間
+              14d: 2週間
+              never: なし
+
+  # Runners
+  runners:
+    title: Wine バージョン
+    items:
+      recommended:
+        title: 推奨バージョンのみ表示
+        tooltip: 有効化するとゲームが動かない Wine バージョンを非表示にします
+
+  # DXVKs
+  dxvks:
+    title: DXVK
+    items:
+      recommended:
+        title: 推奨バージョンのみ表示
+        tooltip: 有効化すると古い DXVK バージョンを非表示にします
+
+  # Shaders
+  shaders:
+    title: シェーダー
+    items:
+      shaders:
+        title: シェーダー
+        tooltip: ホームボタンでゲーム内シェーダーを切り替えできます
+        items:
+          none: なし
+          custom: カスタム
+      
+      author: '作者: {author}'
+      no_images: 画像はありません
+      not_installed: vkBasalt と reshade-shaders ライブラリがインストールされていません
+
+  # Environmantal variables manager
+  environment:
+    title: 環境変数
+    items:
+      # Table rows
+      table:
+        name: 変数名
+        value: 値
+      
+      # Table buttons
+      buttons:
+        add: 追加
+        delete: 削除
+
+# Notifications
+notifications:
+  # Launcher update
+  launcher_update_available:
+    title: 'ランチャーのアップデートが利用可能: {from} -> {to}'
+    body: ランチャーの新しいバージョンは、プロジェクトのリポジトリ ({repository}) からダウンロードできます。
+
+  # Before telemetry check when iputils is not downloaded
+  iputils_package_required:
+    title: An Anime Game Launcher
+    body: テレメトリーが無効化されているか確認するには iputils が必要です
+
+  # When telemetry servers are not disabled
+  telemetry_not_disabled:
+    title: An Anime Game Launcher
+    body: テレメトリーサーバーが無効化されていません
+
+  # Before patch applying when xdelta3 package is not downloaded
+  xdelta3_package_required:
+    title: An Anime Game Launcher
+    body: パッチを適用するには xdelta3 が必要です
+
+  # If patch wasn't applied because of some error
+  patch_applying_error:
+    title: An Anime Game Launcher
+    body: パッチが正常に適用されませんでした。ログファイルを確認して原因を調査するか、Discord サーバーで誰かに聞いてみてください。
+
+  # Patch repositories are not available
+  patch_repos_unavailable:
+    title: An Anime Game Launcher
+    body: どのパッチリポジトリも利用できません。ゲームを開始することはできますが、ランチャーはパッチが正常に適用されているかどうかを判断できません。
+
+  # HDiffPatch couldn't successfully apply game files changes
+  game_changes_applying_error:
+    title: アップデート中にエラーが発生しました
+    body: 'hdiff パッチを使用した {files} のアップデートに失敗しました'
+
+# ToS violation warning window
+tos_violation:
+  title: 利用規約違反の警告
+  heading: ⚠️ ご注意ください
+  body: このランチャーは非公式ツールであり、 {company} や {company_alterego} とは一切関係がありません。
+        このツールは Linux 上で {game} をプレイすることを容易にするために設計されており、
+        より少ない手間でゲームを遊ぶことを唯一の目的としています。
+        また、既存のコンポーネントを使用し、ユーザーにとってシンプルな体験を楽しめるようにしています。
+        しかし、ここで使用されているいくつかのコンポーネントは、 {game} の {company} 利用規約に違反している可能性があります。
+        このランチャーを使用している場合、あなたのアカウントは利用規約に違反していることになり、
+        アカウント停止を含む処罰が入る可能性があります。
+        非公式ランチャーでゲームをプレイすることのリスクを理解した上で、 テイワットの世界に羽を広げよう！
+  buttons:
+    ok:
+      title: リスクを理解して続ける
+      tooltip: 重要なため、テキストをよく読んでください
+    cancel: キャンセル
+    discord: 私達の Discord サーバー
+
+# Analytics window
+analytics:
+  title: 煙緋からのお願い...
+  header: 匿名データ収集に参加する
+
+  body:
+    - アクティブな Linux ユーザーを収集するため、煙緋はゲーム更新の度に IP アドレスを収集したいようです。
+    - IP アドレスはセキュリティー保護のためハッシュ化されます。
+
+  actions:
+    share_country:
+      title: 国情報を共有する
+      hint: より詳細な統計を取るために、あなたの IP アドレスが登録された国を煙緋が保存できるようにします。国以外のデータは保存されません。
+
+    participate: 参加
+    skip: スキップ
+    skip_forever: スキップして再質問しない
