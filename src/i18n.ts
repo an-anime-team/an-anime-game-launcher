@@ -7,6 +7,7 @@ register('ru-ru', () => Locales.get('ru-ru'));
 register('es-es', () => Locales.get('es-es'));
 register('de-de', () => Locales.get('de-de'));
 register('fr-fr', () => Locales.get('fr-fr'));
+register('ja-jp', () => Locales.get('ja-jp'));
 register('it-it', () => Locales.get('it-it'));
 register('hu-hu', () => Locales.get('hu-hu'));
 register('id-id', () => Locales.get('id-id'));
