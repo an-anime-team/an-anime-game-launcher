@@ -1,8 +1,71 @@
-# Wine-GE versions
-- title: Wine-GE
+# Wine-GE-Proton versions
+- title: Wine-GE-Proton
   runners:
+  # Wine-GE-Proton 7-5
+  - family: Wine-GE-Proton
+    name: lutris-GE-Proton7-5-x86_64
+    title: Wine-GE-Proton 7-5
+    uri: https://github.com/GloriousEggroll/wine-ge-custom/releases/download/GE-Proton7-5/wine-lutris-GE-Proton7-5-x86_64.tar.xz
+    files:
+      wine: bin/wine64
+      wineserver: bin/wineserver
+      winecfg: lib64/wine/x86_64-windows/winecfg.exe
+    recommended: true
+
+  # Wine-GE-Proton 7-4
+  - family: Wine-GE-Proton
+    name: lutris-GE-Proton7-4-x86_64
+    title: Wine-GE-Proton 7-4
+    uri: https://github.com/GloriousEggroll/wine-ge-custom/releases/download/GE-Proton7-4/wine-lutris-GE-Proton7-4-x86_64.tar.xz
+    files:
+      wine: bin/wine64
+      wineserver: bin/wineserver
+      winecfg: lib64/wine/x86_64-windows/winecfg.exe
+
+    # Wine-GE-Proton 7-5 includes hotfix, so 7-4 is hidden
+    recommended: false
+
+  # Wine-GE-Proton 7-3
+  - family: Wine-GE-Proton
+    name: lutris-GE-Proton7-3-x86_64
+    title: Wine-GE-Proton 7-3
+    uri: https://github.com/GloriousEggroll/wine-ge-custom/releases/download/GE-Proton7-3/wine-lutris-GE-Proton7-3-x86_64.tar.xz
+    files:
+      wine: bin/wine64
+      wineserver: bin/wineserver
+      winecfg: lib64/wine/x86_64-windows/winecfg.exe
+
+    # Wine-GE-Proton 7-4 includes hotfix, so 7-3 is hidden
+    recommended: false
+
+  # Wine-GE-Proton 7-2
+  - family: Wine-GE-Proton
+    name: lutris-GE-Proton7-2-x86_64
+    title: Wine-GE-Proton 7-2
+    uri: https://github.com/GloriousEggroll/wine-ge-custom/releases/download/GE-Proton7-2/wine-lutris-GE-Proton7-2-x86_64.tar.xz
+    files:
+      wine: bin/wine64
+      wineserver: bin/wineserver
+      winecfg: lib64/wine/x86_64-windows/winecfg.exe
+    recommended: true
+
+  # Wine-GE-Proton 7-1
+  - family: Wine-GE-Proton
+    name: lutris-GE-Proton7-1-x86_64
+    title: Wine-GE-Proton 7-1
+    uri: https://github.com/GloriousEggroll/wine-ge-custom/releases/download/GE-Proton7-1/wine-lutris-GE-Proton7-1-x86_64.tar.xz
+    files:
+      wine: bin/wine64
+      wineserver: bin/wineserver
+      winecfg: lib64/wine/x86_64-windows/winecfg.exe
+    recommended: true
+
+  # Project versioning (and name) was changed
+  # https://github.com/GloriousEggroll/wine-ge-custom/releases/tag/GE-Proton7-1
+  # https://www.patreon.com/posts/changing-wine-63101415
+
   # Wine-GE 7.2-2
-  - family: Wine-GE
+  - family: Wine-GE-Proton
     name: lutris-ge-7.2-2-x86_64
     title: Wine 7.2 GE 2
     uri: https://github.com/GloriousEggroll/wine-ge-custom/releases/download/7.2-GE-2/wine-lutris-ge-7.2-2-x86_64.tar.xz
@@ -13,7 +76,7 @@
     recommended: true
 
   # Wine-GE 7.2-1
-  - family: Wine-GE
+  - family: Wine-GE-Proton
     name: lutris-ge-7.2-1-x86_64
     title: Wine 7.2 GE 1
     uri: https://github.com/GloriousEggroll/wine-ge-custom/releases/download/7.2-GE-1/wine-lutris-ge-7.2-1-x86_64.tar.xz
@@ -24,7 +87,7 @@
     recommended: true
 
   # Wine-GE 7.1-1
-  - family: Wine-GE
+  - family: Wine-GE-Proton
     name: lutris-ge-7.1-1-x86_64
     title: Wine 7.1 GE 1
     uri: https://github.com/GloriousEggroll/wine-ge-custom/releases/download/7.1-GE-1/wine-lutris-ge-7.1-1-x86_64.tar.xz
@@ -35,7 +98,7 @@
     recommended: true
 
   # Wine-GE 6.21-1
-  - family: Wine-GE
+  - family: Wine-GE-Proton
     name: lutris-ge-6.21-1-x86_64
     title: Wine 6.21 GE 1
     uri: https://github.com/GloriousEggroll/wine-ge-custom/releases/download/6.21-GE-1/wine-lutris-ge-6.21-1-x86_64.tar.xz
@@ -46,7 +109,7 @@
     recommended: false
 
   # Wine-GE 6.20-1
-  - family: Wine-GE
+  - family: Wine-GE-Proton
     name: lutris-ge-6.20-1-x86_64
     title: Wine 6.20 GE 1
     uri: https://github.com/GloriousEggroll/wine-ge-custom/releases/download/6.20-GE-1/wine-lutris-ge-6.20-1-x86_64.tar.xz
@@ -54,10 +117,10 @@
       wine: bin/wine64
       wineserver: bin/wineserver
       winecfg: lib64/wine/x86_64-windows/winecfg.exe
-    recommended: true
+    recommended: false # works, but outdated
 
   # Wine-GE 6.19-1
-  - family: Wine-GE
+  - family: Wine-GE-Proton
     name: lutris-ge-6.19-1-x86_64
     title: Wine 6.19 GE 1
     uri: https://github.com/GloriousEggroll/wine-ge-custom/releases/download/6.19-GE-1/wine-lutris-ge-6.19-1-x86_64.tar.xz
@@ -65,10 +128,10 @@
       wine: bin/wine64
       wineserver: bin/wineserver
       winecfg: lib64/wine/x86_64-windows/winecfg.exe
-    recommended: true
+    recommended: false # works, but outdated
 
   # Wine-GE 6.18-1
-  - family: Wine-GE
+  - family: Wine-GE-Proton
     name: lutris-ge-6.18-1-x86_64
     title: Wine 6.18 GE 1
     uri: https://github.com/GloriousEggroll/wine-ge-custom/releases/download/6.18-GE-1/wine-lutris-ge-6.18-1-x86_64.tar.xz
@@ -76,10 +139,10 @@
       wine: bin/wine64
       wineserver: bin/wineserver
       winecfg: lib64/wine/x86_64-windows/winecfg.exe
-    recommended: true
+    recommended: false # works, but outdated
 
   # Wine-GE 6.16-1
-  - family: Wine-GE
+  - family: Wine-GE-Proton
     name: lutris-ge-6.16-1-x86_64
     title: Wine 6.16 GE 1
     uri: https://github.com/GloriousEggroll/wine-ge-custom/releases/download/6.16-GE-1/lutris-ge-6.16-1-x86_64.tar.xz
@@ -249,6 +312,54 @@
 # GE-Proton versions
 - title: GE-Proton
   runners:
+  # GE-Proton 7-8
+  - family: GE-Proton
+    name: GE-Proton7-8
+    title: GE-Proton 7-8
+    uri: https://github.com/GloriousEggroll/proton-ge-custom/releases/download/GE-Proton7-8/GE-Proton7-8.tar.gz
+    files:
+      wine: files/bin/wine64
+      wineserver: files/bin/wineserver
+      winecfg: files/lib64/wine/x86_64-windows/winecfg.exe
+    recommended: true
+
+  # GE-Proton 7-7
+  - family: GE-Proton
+    name: GE-Proton7-7
+    title: GE-Proton 7-7
+    uri: https://github.com/GloriousEggroll/proton-ge-custom/releases/download/GE-Proton7-7/GE-Proton7-7.tar.gz
+    files:
+      wine: files/bin/wine64
+      wineserver: files/bin/wineserver
+      winecfg: files/lib64/wine/x86_64-windows/winecfg.exe
+
+    # GE-Proton 7-8 includes hotfix, so 7-7 is hidden
+    recommended: false
+
+  # GE-Proton 7-6
+  - family: GE-Proton
+    name: GE-Proton7-6
+    title: GE-Proton 7-6
+    uri: https://github.com/GloriousEggroll/proton-ge-custom/releases/download/GE-Proton7-6/GE-Proton7-6.tar.gz
+    files:
+      wine: files/bin/wine64
+      wineserver: files/bin/wineserver
+      winecfg: files/lib64/wine/x86_64-windows/winecfg.exe
+
+    # GE-Proton 7-7 includes hotfix, so 7-6 is hidden
+    recommended: false
+
+  # GE-Proton 7-5
+  - family: GE-Proton
+    name: GE-Proton7-5
+    title: GE-Proton 7-5
+    uri: https://github.com/GloriousEggroll/proton-ge-custom/releases/download/GE-Proton7-5/GE-Proton7-5.tar.gz
+    files:
+      wine: files/bin/wine64
+      wineserver: files/bin/wineserver
+      winecfg: files/lib64/wine/x86_64-windows/winecfg.exe
+    recommended: true
+
   # GE-Proton 7-4
   - family: GE-Proton
     name: GE-Proton7-4
@@ -310,7 +421,7 @@
       wine: files/bin/wine64
       wineserver: files/bin/wineserver
       winecfg: files/lib64/wine/x86_64-windows/winecfg.exe
-    recommended: true
+    recommended: false # works, but outdated
 
   # Proton-GE 7.2-1
   - family: GE-Proton
@@ -321,7 +432,7 @@
       wine: files/bin/wine64
       wineserver: files/bin/wineserver
       winecfg: files/lib64/wine/x86_64-windows/winecfg.exe
-    recommended: true
+    recommended: false # works, but outdated
 
   # Proton-GE 7.1-2
   - family: GE-Proton
@@ -332,7 +443,7 @@
       wine: files/bin/wine64
       wineserver: files/bin/wineserver
       winecfg: files/lib64/wine/x86_64-windows/winecfg.exe
-    recommended: true
+    recommended: false # works, but outdated
 
   # Proton-GE 7.1-1
   - family: GE-Proton
@@ -343,7 +454,7 @@
       wine: files/bin/wine64
       wineserver: files/bin/wineserver
       winecfg: files/lib64/wine/x86_64-windows/winecfg.exe
-    recommended: true
+    recommended: false # works, but outdated
 
   # Proton-GE 6.21-2
   - family: GE-Proton
