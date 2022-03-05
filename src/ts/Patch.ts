@@ -450,6 +450,28 @@ export default class Patch
                 .catch((err) => reject(err));
         });
     }
+
+    /**
+     * Try to revert applied patch
+     * 
+     * @returns false if the locally installed patch repository is not available or the patch is not applied
+     */
+    public static revert(patch: PatchInfo): Promise<boolean>
+    {
+        return new Promise(async (resolve) => {
+            const patchRevertFile = `${await constants.paths.launcherDir}/patch/${patch.version.replaceAll('.', '')}/patch_revert.sh`;
+
+            if (!await fs.exists(patchRevertFile))
+                resolve(false);
+
+            else
+            {
+                const result = await Neutralino.os.execCommand(`chmod +x "${path.addSlashes(patchRevertFile)}" && cd "${path.addSlashes(await constants.paths.gameDir)}" && yes yes yes | bash "${path.addSlashes(patchRevertFile)}"`);
+
+                resolve(result.stdOut.includes('==> Patch reverted'));
+            }
+        });
+    }
 }
 
 export { Stream };

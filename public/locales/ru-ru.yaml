@@ -272,6 +272,17 @@ settings:
         add: Добавить
         delete: Удалить
 
+  # Настроки патча
+  patch:
+    title: Патч
+    items:
+      patch_version: 'Версия патча:'
+      updating_info: 'Обновление информации о патче...'
+      buttons:
+        revert_patch: отменить патч
+        apply_patch: применить патч
+        reapply_patch: переприменить патч
+
 # Уведомления
 notifications:
   # Обновление лаунчера

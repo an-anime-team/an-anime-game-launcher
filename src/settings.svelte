@@ -12,6 +12,9 @@
     import Launcher from './ts/Launcher';
     import FPSUnlock from './ts/FPSUnlock';
     import Runners from './ts/core/Runners';
+    import Patch from './ts/Patch';
+
+    import type { PatchInfo } from './ts/types/Patch';
 
     import Button from './components/Button.svelte';
     import Checkbox from './components/Checkbox.svelte';
@@ -115,7 +118,14 @@
             gamemode.tooltip = 'settings.enhancements.game.items.gamemode.tooltip.disabled';
     });
 
-    let borderless_active = Configs.get('borderless_window').then((val) => borderless_active = val);
+    let borderless_active = Configs.get('borderless_window').then((value) => borderless_active = value);
+
+    /**
+     * Patch info
+     */
+    let patchInfo: PatchInfo|null = null;
+
+    Patch.latest.then((value) => patchInfo = value);
 
     /**
      * Menu items changing
@@ -185,7 +195,7 @@
         });
 
         if (voiceUpdateRequired)
-            await IPC.write('voice-update-required');
+            await IPC.write('update-state');
 
         Neutralino.app.exit();
     });
@@ -194,7 +204,7 @@
 {#if typeof $locale === 'string'}
     <main>
         <div class="menu">
-            {#each ['general', 'enhancements', 'runners', 'dxvks', 'shaders', 'environment'] as item}
+            {#each ['general', 'enhancements', 'runners', 'dxvks', 'shaders', 'environment', 'patch'] as item}
                 <div
                     class="menu-item"
                     class:menu-item-active={selectedItem === item}
@@ -465,6 +475,74 @@
                 <h1>{$_('settings.environment.title')}</h1>
 
                 <EnvironmentManager />
+            </div>
+
+            <div class="settings-item" id="patch">
+                <h1>{$_('settings.patch.title')}</h1>
+
+                {#if patchInfo !== null}
+                    <div class="patch-version">
+                        {$_('settings.patch.items.patch_version')}
+                        
+                        <span class:warning={!patchInfo.applied}>
+                            { `${patchInfo.version} ${patchInfo.state}` }
+                        </span>
+                    </div>
+
+                    <div style="margin-top: 24px">
+                        {#if patchInfo.applied}
+                            <!-- svelte-ignore missing-declaration -->
+                            <Button
+                                lang="settings.patch.items.buttons.revert_patch"
+                                click={async () => {
+                                    if (patchInfo)
+                                    {
+                                        const prevPatchInfo = patchInfo;
+
+                                        patchInfo = null;
+
+                                        patchInfo = await Patch.revert(prevPatchInfo) ?
+                                            await Patch.latest : prevPatchInfo;
+                                    }
+                                }}
+                            />
+
+                            <!-- svelte-ignore missing-declaration -->
+                            <Button
+                                lang="settings.patch.items.buttons.reapply_patch"
+                                click={async () => {
+                                    if (patchInfo)
+                                    {
+                                        const prevPatchInfo = patchInfo;
+
+                                        patchInfo = null;
+
+                                        if (await Patch.revert(prevPatchInfo))
+                                        {
+                                            await IPC.write('update-state');
+
+                                            Neutralino.app.exit();
+                                        }
+
+                                        else patchInfo = prevPatchInfo;
+                                    }
+                                }}
+                            />
+                        {:else}
+                            <!-- svelte-ignore missing-declaration -->
+                            <Button
+                                lang="settings.patch.items.buttons.apply_patch"
+                                click={async () => {
+                                    await IPC.write('update-state');
+
+                                    Neutralino.app.exit();
+                                }}
+                            />
+                        {/if}
+                    </div>
+                {:else}
+                    <p>Updating patch info...</p>
+                {/if}
             </div>
 
             <div class="settings-footer">

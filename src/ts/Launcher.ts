@@ -122,9 +122,9 @@ export default class Launcher
                                     }
                                 }
 
-                                else if (record.data === 'voice-update-required')
+                                else if (record.data === 'update-state')
                                 {
-                                    this.state!.set('game-voice-update-required');
+                                    this.state?.update();
 
                                     record.pop();
                                 }
