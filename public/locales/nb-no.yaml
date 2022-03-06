@@ -135,6 +135,17 @@ settings:
         game: spill mappe
         repair_game: reparer spillfiler
 
+      # Patch-related settings
+      patch:
+        title: Patch
+        items:
+          patch_version: 'Patch version:'
+          updating_info: 'Updating patch info...'
+          buttons:
+            revert_patch: revert patch
+            apply_patch: apply patch
+            reapply_patch: re-apply patch
+
   # Enhancements
   enhancements:
     title: Forbedringer
@@ -272,17 +283,6 @@ settings:
       buttons:
         add: Legg til
         delete: Fjern
-
-  # Patch-related settings
-  patch:
-    title: Patch
-    items:
-      patch_version: 'Patch version:'
-      updating_info: 'Updating patch info...'
-      buttons:
-        revert_patch: revert patch
-        apply_patch: apply patch
-        reapply_patch: re-apply patch
 
 # Notifications
 notifications:

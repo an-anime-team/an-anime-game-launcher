@@ -135,6 +135,17 @@ settings:
         game: 游戏文件夹
         repair_game: 修复游戏文件
 
+      # Patch-related settings
+      patch:
+        title: Patch
+        items:
+          patch_version: 'Patch version:'
+          updating_info: 'Updating patch info...'
+          buttons:
+            revert_patch: revert patch
+            apply_patch: apply patch
+            reapply_patch: re-apply patch
+
   # Enhancements
   enhancements:
     title: 增强功能
@@ -272,17 +283,6 @@ settings:
       buttons:
         add: 添加
         delete: 删除
-
-  # Patch-related settings
-  patch:
-    title: Patch
-    items:
-      patch_version: 'Patch version:'
-      updating_info: 'Updating patch info...'
-      buttons:
-        revert_patch: revert patch
-        apply_patch: apply patch
-        reapply_patch: re-apply patch
 
 # Notifications
 notifications:

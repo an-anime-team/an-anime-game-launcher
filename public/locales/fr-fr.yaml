@@ -139,6 +139,17 @@ settings:
         game: Dossier du jeu
         repair_game: Corriger les fichiers du jeu
 
+      # Patch-related settings
+      patch:
+        title: Patch
+        items:
+          patch_version: 'Version du patch:'
+          updating_info: 'Mise à jour des informations du patch...'
+          buttons:
+            revert_patch: Désinstaller
+            apply_patch: Installer
+            reapply_patch: Réinstaller
+
   # Enhancements
   enhancements:
     title: Améliorations
@@ -282,17 +293,6 @@ settings:
       buttons:
         add: Ajouter
         delete: Supprimer
-
-  # Patch-related settings
-  patch:
-    title: Patch
-    items:
-      patch_version: 'Patch version:'
-      updating_info: 'Updating patch info...'
-      buttons:
-        revert_patch: revert patch
-        apply_patch: apply patch
-        reapply_patch: re-apply patch
 
 # Notifications
 notifications:

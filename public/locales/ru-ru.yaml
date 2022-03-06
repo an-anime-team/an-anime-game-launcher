@@ -34,7 +34,7 @@ launcher:
       downloading: Скачивание звукового пакета {voice}...
       unpacking: Распаковка звукового пакета {voice}...
 
-  # Launcher states
+  # Состояния лаунчера
   states:
     # Когда игра должна быть установлена или обновлена
     installation:
@@ -127,7 +127,7 @@ settings:
             in-game: Текст в игре
             selectIcon: Выберите иконку
 
-      # Some buttons
+      # Всякие кнопки
       buttons:
         winetricks: winetricks
         winecfg: winecfg
@@ -135,11 +135,22 @@ settings:
         game: папка игры
         repair_game: исправить файлы игры
 
+      # Настроки патча
+      patch:
+        title: Патч
+        items:
+          patch_version: 'Версия патча:'
+          updating_info: 'Обновление информации о патче...'
+          buttons:
+            revert_patch: отменить патч
+            apply_patch: применить патч
+            reapply_patch: переприменить патч
+
   # Улучшения
   enhancements:
     title: Улучшения
 
-    # Enhancements related to the wine
+    # Улучшения, связанные с Wine
     wine:
       title: Wine
       items:
@@ -177,7 +188,7 @@ settings:
               width: Ширина
               height: Высота
 
-    # Enhancements related to the game
+    # Улучшения, связанные с игрой
     game:
       title: Игра
       items:
@@ -204,7 +215,7 @@ settings:
           title: Использовать терминал
           tooltip: С этой опцией лаунчер будет запускать команду wine в отдельном окне терминала
 
-    # Enhancements related to the launcher
+    # Улучшения, связанные с лаунчером
     launcher:
       title: Лаунчер
       items:
@@ -272,17 +283,6 @@ settings:
         add: Добавить
         delete: Удалить
 
-  # Настроки патча
-  patch:
-    title: Патч
-    items:
-      patch_version: 'Версия патча:'
-      updating_info: 'Обновление информации о патче...'
-      buttons:
-        revert_patch: отменить патч
-        apply_patch: применить патч
-        reapply_patch: переприменить патч
-
 # Уведомления
 notifications:
   # Обновление лаунчера
@@ -339,7 +339,7 @@ tos_violation:
     cancel: Отменить
     discord: Наш Discord сервер
 
-# Analytics window
+# Окно аналитики
 analytics:
   title: Просьба Янь Фэй...
   header: Примите участие в анонимном сборе данных

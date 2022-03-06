@@ -135,6 +135,17 @@ settings:
         game: game f-fowdew
         repair_game: wepaiw game fiwes
 
+      # Patch-related settings
+      patch:
+        title: patch
+        items:
+          patch_version: 'patch vewsion:'
+          updating_info: 'updating patch info...'
+          buttons:
+            revert_patch: wevewt patch
+            apply_patch: appwy patch
+            reapply_patch: we-appwy patch
+
   # Enhancements
   enhancements:
     title: enhancements
@@ -271,17 +282,6 @@ settings:
       buttons:
         add: add
         delete: dewete
-
-  # Patch-related settings
-  patch:
-    title: patch
-    items:
-      patch_version: 'patch vewsion:'
-      updating_info: 'updating patch info...'
-      buttons:
-        revert_patch: wevewt patch
-        apply_patch: appwy patch
-        reapply_patch: we-appwy patch
 
 # Notifications
 notifications:
