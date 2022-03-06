@@ -274,14 +274,14 @@ settings:
 
   # Patch-related settings
   patch:
-    title: Patch
+    title: patch
     items:
-      patch_version: 'Patch version:'
-      updating_info: 'Updating patch info...'
+      patch_version: 'patch vewsion:'
+      updating_info: 'updating patch info...'
       buttons:
-        revert_patch: revert patch
-        apply_patch: apply patch
-        reapply_patch: re-apply patch
+        revert_patch: wevewt patch
+        apply_patch: appwy patch
+        reapply_patch: we-appwy patch
 
 # Notifications
 notifications:

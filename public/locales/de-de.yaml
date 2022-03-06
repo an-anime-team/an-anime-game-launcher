@@ -279,11 +279,11 @@ settings:
     title: Patch
     items:
       patch_version: 'Patch version:'
-      updating_info: 'Updating patch info...'
+      updating_info: 'Aktualisiere Patch-Informationen...'
       buttons:
-        revert_patch: revert patch
-        apply_patch: apply patch
-        reapply_patch: re-apply patch
+        revert_patch: Patch rückgängig machen
+        apply_patch: Patch anwenden
+        reapply_patch: Patch erneut anwenden
 
 # Notifications
 notifications:
