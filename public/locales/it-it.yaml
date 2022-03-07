@@ -318,7 +318,7 @@ notifications:
   # HDiffPatch couldn't successfully apply game files changes
   game_changes_applying_error:
     title: Si è verificato un errore nell'aggiornamento del gioco
-    body: '{files} file non sono stati aggiornati dalla patch hdiff
+    body: '{files} file non sono stati aggiornati dalla patch hdiff'
 
 # ToS violation warning window
 tos_violation:
