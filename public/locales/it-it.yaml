@@ -138,12 +138,12 @@ settings:
       patch:
         title: Patch
         items:
-          patch_version: 'Patch version:'
-          updating_info: 'Updating patch info...'
+          patch_version: 'Versione della patch:'
+          updating_info: 'Aggiornando le informazioni della patch...'
           buttons:
-            revert_patch: revert patch
-            apply_patch: apply patch
-            reapply_patch: re-apply patch
+            revert_patch: Annulla la patch
+            apply_patch: Applica la patch
+            reapply_patch: Riapplica la patch
 
   # Enhancements
   enhancements:

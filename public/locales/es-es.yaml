@@ -135,16 +135,16 @@ settings:
         game: carpeta del juego
         repair_game: reparar archivos del juego
 
-      # Patch-related settings
+      # Opciones sobre el parche
       patch:
-        title: Patch
+        title: Parche
         items:
-          patch_version: 'Patch version:'
-          updating_info: 'Updating patch info...'
+          patch_version: 'Versión del Parche:'
+          updating_info: 'Actualizando información del parche...'
           buttons:
-            revert_patch: revert patch
-            apply_patch: apply patch
-            reapply_patch: re-apply patch
+            revert_patch: revertir parche
+            apply_patch: aplicar parche
+            reapply_patch: re-aplicar parche
 
   # Mejoras
   enhancements:
