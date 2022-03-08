@@ -139,12 +139,12 @@ settings:
       patch:
         title: Patch
         items:
-          patch_version: 'Patch version:'
-          updating_info: 'Updating patch info...'
+          patch_version: 'Versi patch'
+          updating_info: 'Memperbarui info patch...'
           buttons:
-            revert_patch: revert patch
-            apply_patch: apply patch
-            reapply_patch: re-apply patch
+            revert_patch: kembalikan patch
+            apply_patch: pasang patch
+            reapply_patch: pasang ulang patch
 
   # Enhancements
   enhancements:
@@ -318,8 +318,8 @@ notifications:
 
   # HDiffPatch couldn't successfully apply game files changes
   game_changes_applying_error:
-    title: An error occurred during game updating
-    body: '{files} files couldn''t be updated by the hdiff patch'
+    title: Terjadi kesalahan saat memperbarui game
+    body: 'file {files} tidak dapat diperbarui poleh patch hdiff'
 
 # ToS violation warning window
 tos_violation:
@@ -342,18 +342,18 @@ tos_violation:
 
 # Analytics window
 analytics:
-  title: Yanfei's commission...
-  header: Participate in anonymous data collection
+  title: Komisi Yanfei...
+  header: Berpartisipasi dalam pengambilan data secara anonim
 
   body:
-    - To count the active user base for Linux, Yanfei would like to collect your IP address everytime the game updates
-    - The IP address will be hashed for security purpose
+    - Untuk menghitung pengguna aktif di Linux, Yanfei ingin mengumpulkan alamat IP tiap kali Game diperbarui
+    - Alamat IP akan diacak(hashed) untuk tujuan keamanan
 
   actions:
     share_country:
-      title: Share country
-      hint: Allow Yanfei to store the country your IP address registered in to make statistics more detailed. No other data than the country will be stored
+      title: Bagikan negara
+      hint: Memperbolehkan Yanfei untuk menyimpan lokasi negara dimana alamat IP kamu terdaftar untuk membantu melengkapi statistik kami. Tidak ada data lain yang akan disimpan.
 
-    participate: Participate
-    skip: Skip
-    skip_forever: Skip and don't ask again
+    participate: Berpartisipasi
+    skip: Lewati
+    skip_forever: Lewati dan jangan tanya lagi
