@@ -1,6 +1,17 @@
 # Wine-GE-Proton versions
 - title: Wine-GE-Proton
   runners:
+  # Wine-GE-Proton 7-6
+  - family: Wine-GE-Proton
+    name: lutris-GE-Proton7-6-x86_64
+    title: Wine-GE-Proton 7-6
+    uri: https://github.com/GloriousEggroll/wine-ge-custom/releases/download/GE-Proton7-6/wine-lutris-GE-Proton7-6-x86_64.tar.xz
+    files:
+      wine: bin/wine64
+      wineserver: bin/wineserver
+      winecfg: lib64/wine/x86_64-windows/winecfg.exe
+    recommended: true
+
   # Wine-GE-Proton 7-5
   - family: Wine-GE-Proton
     name: lutris-GE-Proton7-5-x86_64
@@ -152,166 +163,20 @@
       winecfg: lib64/wine/x86_64-windows/winecfg.exe
     recommended: false
 
-# Lutris versions
-- title: Lutris
-  runners:
-  # Lutris 7.1
-  - family: Lutris
-    name: lutris-7.1-x86_64
-    title: Lutris 7.1
-    uri: https://github.com/lutris/wine/releases/download/lutris-7.1/wine-lutris-7.1-x86_64.tar.xz
-    files:
-      wine: bin/wine64
-      wineserver: bin/wineserver
-      winecfg: lib64/wine/x86_64-windows/winecfg.exe
-    recommended: true
-
-  # Lutris 6.21-6
-  - family: Lutris
-    name: lutris-6.21-6-x86_64
-    title: Lutris 6.21-6
-    uri: https://github.com/lutris/wine/releases/download/lutris-6.21-6/wine-lutris-6.21-6-x86_64.tar.xz
-    files:
-      wine: bin/wine64
-      wineserver: bin/wineserver
-      winecfg: lib64/wine/x86_64-windows/winecfg.exe
-    recommended: true
-
-  # Lutris 6.21-5
-  - family: Lutris
-    name: lutris-6.21-5-x86_64
-    title: Lutris 6.21-5
-    uri: https://github.com/lutris/wine/releases/download/lutris-6.21-5/wine-lutris-6.21-5-x86_64.tar.xz
-    files:
-      wine: bin/wine64
-      wineserver: bin/wineserver
-      winecfg: lib64/wine/x86_64-windows/winecfg.exe
-    recommended: true
-
-  # Lutris 6.21-4
-  - family: Lutris
-    name: lutris-6.21-4-x86_64
-    title: Lutris 6.21-4
-    uri: https://github.com/lutris/wine/releases/download/lutris-6.21-4/wine-lutris-6.21-4-x86_64.tar.xz
-    files:
-      wine: bin/wine64
-      wineserver: bin/wineserver
-      winecfg: lib64/wine/x86_64-windows/winecfg.exe
-    recommended: false
-
-  # Lutris 6.21-3
-  - family: Lutris
-    name: lutris-6.21-3-x86_64
-    title: Lutris 6.21-3
-    uri: https://github.com/lutris/wine/releases/download/lutris-6.21-3/wine-lutris-6.21-3-x86_64.tar.xz
-    files:
-      wine: bin/wine64
-      wineserver: bin/wineserver
-      winecfg: lib64/wine/x86_64-windows/winecfg.exe
-    recommended: false
-
-  # Lutris 6.21-2
-  - family: Lutris
-    name: lutris-6.21-2-x86_64
-    title: Lutris 6.21-2
-    uri: https://github.com/lutris/wine/releases/download/lutris-6.21-2/wine-lutris-6.21-2-x86_64.tar.xz
-    files:
-      wine: bin/wine64
-      wineserver: bin/wineserver
-      winecfg: lib64/wine/x86_64-windows/winecfg.exe
-    recommended: false
-
-  # Lutris 6.21
-  - family: Lutris
-    name: lutris-6.21-x86_64
-    title: Lutris 6.21
-    uri: https://github.com/lutris/wine/releases/download/lutris-6.21/wine-lutris-6.21-x86_64.tar.xz
-    files:
-      wine: bin/wine64
-      wineserver: bin/wineserver
-      winecfg: lib64/wine/x86_64-windows/winecfg.exe
-    recommended: false
-
-  # Lutris 6.14-4
-  - family: Lutris
-    name: lutris-6.14-4-x86_64
-    title: Lutris 6.14-4
-    uri: https://github.com/lutris/wine/releases/download/lutris-6.14-4/wine-lutris-6.14-4-x86_64.tar.xz
-    files:
-      wine: bin/wine64
-      wineserver: bin/wineserver
-      winecfg: lib64/wine/x86_64-windows/winecfg.exe
-    recommended: true
-
-  # Lutris 6.14-3
-  - family: Lutris
-    name: lutris-6.14-3-x86_64
-    title: Lutris 6.14-3
-    uri: https://github.com/lutris/wine/releases/download/lutris-6.14-3/wine-lutris-6.14-3-x86_64.tar.xz
-    files:
-      wine: bin/wine64
-      wineserver: bin/wineserver
-      winecfg: lib64/wine/x86_64-windows/winecfg.exe
-    recommended: true
-
-  # Lutris 6.14-2
-  - family: Lutris
-    name: lutris-6.14-2-x86_64
-    title: Lutris 6.14-2
-    uri: https://github.com/lutris/wine/releases/download/lutris-6.14-2/wine-lutris-6.14-2-x86_64.tar.xz
-    files:
-      wine: bin/wine64
-      wineserver: bin/wineserver
-      winecfg: lib64/wine/x86_64-windows/winecfg.exe
-    recommended: false # works, but outdated
-
-  # Lutris 6.14
-  - family: Lutris
-    name: lutris-6.14-x86_64
-    title: Lutris 6.14
-    uri: https://github.com/lutris/wine/releases/download/lutris-6.14/wine-lutris-6.14-x86_64.tar.xz
-    files:
-      wine: bin/wine64
-      wineserver: bin/wineserver
-      winecfg: lib64/wine/x86_64-windows/winecfg.exe
-    recommended: false # works, but outdated
-
-  # Lutris 6.13-3
-  - family: Lutris
-    name: lutris-6.13-3-x86_64
-    title: Lutris 6.13-3
-    uri: https://github.com/lutris/wine/releases/download/lutris-6.13-3/wine-lutris-6.13-3-x86_64.tar.xz
-    files:
-      wine: bin/wine64
-      wineserver: bin/wineserver
-      winecfg: lib64/wine/x86_64-windows/winecfg.exe
-    recommended: false
-
-  # Lutris 6.13-2
-  - family: Lutris
-    name: lutris-6.13-2-x86_64
-    title: Lutris 6.13-2
-    uri: https://github.com/lutris/wine/releases/download/lutris-6.13-2/wine-lutris-6.13-2-x86_64.tar.xz
-    files:
-      wine: bin/wine64
-      wineserver: bin/wineserver
-      winecfg: lib64/wine/x86_64-windows/winecfg.exe
-    recommended: false
-
-  # Lutris 6.13
-  - family: Lutris
-    name: lutris-6.13-x86_64
-    title: Lutris 6.13
-    uri: https://github.com/lutris/wine/releases/download/lutris-6.13/wine-lutris-6.13-x86_64.tar.xz
-    files:
-      wine: bin/wine64
-      wineserver: bin/wineserver
-      winecfg: lib64/wine/x86_64-windows/winecfg.exe
-    recommended: false
-
 # GE-Proton versions
 - title: GE-Proton
   runners:
+  # GE-Proton 7-9
+  - family: GE-Proton
+    name: GE-Proton7-9
+    title: GE-Proton 7-9
+    uri: https://github.com/GloriousEggroll/proton-ge-custom/releases/download/GE-Proton7-9/GE-Proton7-9.tar.gz
+    files:
+      wine: files/bin/wine64
+      wineserver: files/bin/wineserver
+      winecfg: files/lib64/wine/x86_64-windows/winecfg.exe
+    recommended: true
+
   # GE-Proton 7-8
   - family: GE-Proton
     name: GE-Proton7-8
@@ -532,3 +397,160 @@
       wineserver: files/bin/wineserver
       winecfg: files/lib64/wine/x86_64-windows/winecfg.exe
     recommended: false # works, but outdated
+
+# Lutris versions
+- title: Lutris
+  runners:
+  # Lutris 7.1
+  - family: Lutris
+    name: lutris-7.1-x86_64
+    title: Lutris 7.1
+    uri: https://github.com/lutris/wine/releases/download/lutris-7.1/wine-lutris-7.1-x86_64.tar.xz
+    files:
+      wine: bin/wine64
+      wineserver: bin/wineserver
+      winecfg: lib64/wine/x86_64-windows/winecfg.exe
+    recommended: true
+
+  # Lutris 6.21-6
+  - family: Lutris
+    name: lutris-6.21-6-x86_64
+    title: Lutris 6.21-6
+    uri: https://github.com/lutris/wine/releases/download/lutris-6.21-6/wine-lutris-6.21-6-x86_64.tar.xz
+    files:
+      wine: bin/wine64
+      wineserver: bin/wineserver
+      winecfg: lib64/wine/x86_64-windows/winecfg.exe
+    recommended: true
+
+  # Lutris 6.21-5
+  - family: Lutris
+    name: lutris-6.21-5-x86_64
+    title: Lutris 6.21-5
+    uri: https://github.com/lutris/wine/releases/download/lutris-6.21-5/wine-lutris-6.21-5-x86_64.tar.xz
+    files:
+      wine: bin/wine64
+      wineserver: bin/wineserver
+      winecfg: lib64/wine/x86_64-windows/winecfg.exe
+    recommended: true
+
+  # Lutris 6.21-4
+  - family: Lutris
+    name: lutris-6.21-4-x86_64
+    title: Lutris 6.21-4
+    uri: https://github.com/lutris/wine/releases/download/lutris-6.21-4/wine-lutris-6.21-4-x86_64.tar.xz
+    files:
+      wine: bin/wine64
+      wineserver: bin/wineserver
+      winecfg: lib64/wine/x86_64-windows/winecfg.exe
+    recommended: false
+
+  # Lutris 6.21-3
+  - family: Lutris
+    name: lutris-6.21-3-x86_64
+    title: Lutris 6.21-3
+    uri: https://github.com/lutris/wine/releases/download/lutris-6.21-3/wine-lutris-6.21-3-x86_64.tar.xz
+    files:
+      wine: bin/wine64
+      wineserver: bin/wineserver
+      winecfg: lib64/wine/x86_64-windows/winecfg.exe
+    recommended: false
+
+  # Lutris 6.21-2
+  - family: Lutris
+    name: lutris-6.21-2-x86_64
+    title: Lutris 6.21-2
+    uri: https://github.com/lutris/wine/releases/download/lutris-6.21-2/wine-lutris-6.21-2-x86_64.tar.xz
+    files:
+      wine: bin/wine64
+      wineserver: bin/wineserver
+      winecfg: lib64/wine/x86_64-windows/winecfg.exe
+    recommended: false
+
+  # Lutris 6.21
+  - family: Lutris
+    name: lutris-6.21-x86_64
+    title: Lutris 6.21
+    uri: https://github.com/lutris/wine/releases/download/lutris-6.21/wine-lutris-6.21-x86_64.tar.xz
+    files:
+      wine: bin/wine64
+      wineserver: bin/wineserver
+      winecfg: lib64/wine/x86_64-windows/winecfg.exe
+    recommended: false
+
+  # Lutris 6.14-4
+  - family: Lutris
+    name: lutris-6.14-4-x86_64
+    title: Lutris 6.14-4
+    uri: https://github.com/lutris/wine/releases/download/lutris-6.14-4/wine-lutris-6.14-4-x86_64.tar.xz
+    files:
+      wine: bin/wine64
+      wineserver: bin/wineserver
+      winecfg: lib64/wine/x86_64-windows/winecfg.exe
+    recommended: true
+
+  # Lutris 6.14-3
+  - family: Lutris
+    name: lutris-6.14-3-x86_64
+    title: Lutris 6.14-3
+    uri: https://github.com/lutris/wine/releases/download/lutris-6.14-3/wine-lutris-6.14-3-x86_64.tar.xz
+    files:
+      wine: bin/wine64
+      wineserver: bin/wineserver
+      winecfg: lib64/wine/x86_64-windows/winecfg.exe
+    recommended: true
+
+  # Lutris 6.14-2
+  - family: Lutris
+    name: lutris-6.14-2-x86_64
+    title: Lutris 6.14-2
+    uri: https://github.com/lutris/wine/releases/download/lutris-6.14-2/wine-lutris-6.14-2-x86_64.tar.xz
+    files:
+      wine: bin/wine64
+      wineserver: bin/wineserver
+      winecfg: lib64/wine/x86_64-windows/winecfg.exe
+    recommended: false # works, but outdated
+
+  # Lutris 6.14
+  - family: Lutris
+    name: lutris-6.14-x86_64
+    title: Lutris 6.14
+    uri: https://github.com/lutris/wine/releases/download/lutris-6.14/wine-lutris-6.14-x86_64.tar.xz
+    files:
+      wine: bin/wine64
+      wineserver: bin/wineserver
+      winecfg: lib64/wine/x86_64-windows/winecfg.exe
+    recommended: false # works, but outdated
+
+  # Lutris 6.13-3
+  - family: Lutris
+    name: lutris-6.13-3-x86_64
+    title: Lutris 6.13-3
+    uri: https://github.com/lutris/wine/releases/download/lutris-6.13-3/wine-lutris-6.13-3-x86_64.tar.xz
+    files:
+      wine: bin/wine64
+      wineserver: bin/wineserver
+      winecfg: lib64/wine/x86_64-windows/winecfg.exe
+    recommended: false
+
+  # Lutris 6.13-2
+  - family: Lutris
+    name: lutris-6.13-2-x86_64
+    title: Lutris 6.13-2
+    uri: https://github.com/lutris/wine/releases/download/lutris-6.13-2/wine-lutris-6.13-2-x86_64.tar.xz
+    files:
+      wine: bin/wine64
+      wineserver: bin/wineserver
+      winecfg: lib64/wine/x86_64-windows/winecfg.exe
+    recommended: false
+
+  # Lutris 6.13
+  - family: Lutris
+    name: lutris-6.13-x86_64
+    title: Lutris 6.13
+    uri: https://github.com/lutris/wine/releases/download/lutris-6.13/wine-lutris-6.13-x86_64.tar.xz
+    files:
+      wine: bin/wine64
+      wineserver: bin/wineserver
+      winecfg: lib64/wine/x86_64-windows/winecfg.exe
+    recommended: false
