@@ -163,12 +163,9 @@ This is our current roadmap goals. You can find older ones [here](repository/pag
 * <s>Add an option to show terminal with the wine's log of the game</s> *(7375c743, released in 2.1.3)*
 * <s>Add analytics window</s> *(e0a09323, released in 2.2.0)*
 * <s>Add Chinese game's version support (due to changes in the Krock's patch)</s> *(75f2ad66, released in 2.2.0)*
+* <s>Add Patch category to the settings menu</s> *(07b32ada, 8a29d4a5, released in 2.2.1)*
 * Implement manual config flushing functionality from the Empathize's API
 * Game statistics window
 * Dark progress bar design
 * Changelog window
 * Screenshots explorer
-* Add Patch category in settings menu with
-  - Always participate in patches testing
-  - Applying anti login crash patch
-  - Remove patch
