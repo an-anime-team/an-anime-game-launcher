@@ -6,15 +6,7 @@
 
 <br><br>
 
-### Please, try to use "An Anime Game" phrase instead of the real game name to avoid search engines parsing
-
-<br>
-
-> Used arts sources:
->
-> https://www.pinterest.com/pin/on-twitter--380906080991577598
->
-> https://www.pinterest.com/pin/620652392405860328
+<h2 align="center">Please, try to use "An Anime Game" phrase instead of the real game name to avoid search engines parsing</h2>
 
 <br><br>
 
@@ -70,7 +62,7 @@ We have our own [An Anime Game](https://discord.gg/ck37X6UWBp) discord server wh
 
 This is our current usage statistics. You can find older ones [here](repository/pages/STATISTICS.md)
 
-### Our discord server — 320 member
+### Our discord server — 343 member
 
 <img src="repository/pics/stats/discord.png">
 
