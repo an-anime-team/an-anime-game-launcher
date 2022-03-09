@@ -139,12 +139,12 @@ settings:
       patch:
         title: Patch
         items:
-          patch_version: 'Patch version:'
-          updating_info: 'Updating patch info...'
+          patch_version: 'Patch versjon:'
+          updating_info: 'Oppdaterer patch informasjon...'
           buttons:
-            revert_patch: revert patch
-            apply_patch: apply patch
-            reapply_patch: re-apply patch
+            revert_patch: avinstaller patch
+            apply_patch: installer patch
+            reapply_patch: re-onstaller patch
 
   # Enhancements
   enhancements:
