@@ -37,7 +37,7 @@
     "resourcesPath": "/bundle/",
     "extensionsPath": "/extensions/",
     "clientLibrary": "/public/neutralino.js",
-    "binaryVersion": "4.3.0",
+    "binaryVersion": "4.4.0",
     "clientVersion": "3.0.0"
   }
 }

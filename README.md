@@ -75,7 +75,7 @@ To work this launcher requires
 | Name | Description |
 | --- | --- |
 | webkit2gtk | To run Neutralino apps |
-| libappindicator-gtk3 | To run Neutralino apps |
+| libayatana-appindicator3-1 | To run Neutralino apps |
 | unzip | To unpack zip archives (DXVK / Wine) |
 | tar | To unpack tar archives (DXVK / Wine) |
 | git | To check for new versions of the launcher |
@@ -89,7 +89,7 @@ To work this launcher requires
 ### apt
 
 ```sh
-sudo apt install unzip tar git curl xdelta3 cabextract libnotify
+sudo apt install unzip tar git curl xdelta3 cabextract libnotify libayatana-appindicator3-1
 ```
 
 ### pacman
@@ -101,8 +101,10 @@ sudo pacman -Syu unzip tar git curl xdelta3 cabextract libnotify
 ### dnf
 
 ```sh
-sudo dnf install unzip tar git curl xdelta cabextract libnotify webkit2gtk libappindicator-gtk3
+sudo dnf install unzip tar git curl xdelta cabextract libnotify webkit2gtk
 ```
+
+[libayatana-appindicator3-1 RPM](https://downloadcontent.opensuse.org/repositories/X11:/Unity/openSUSE_Tumbleweed/x86_64/libayatana-appindicator3-1-0.5.90-13.4.x86_64.rpm)
 
 # Additional requirements
 
