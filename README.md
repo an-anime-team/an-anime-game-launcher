@@ -89,7 +89,7 @@ To work this launcher requires
 ### apt
 
 ```sh
-sudo apt install unzip tar git curl xdelta3 cabextract libnotify libayatana-appindicator3-1
+sudo apt install unzip tar git curl xdelta3 cabextract libnotify-bin libayatana-appindicator3-1
 ```
 
 ### pacman
