@@ -1,5 +1,3 @@
-import md5 from 'js-md5';
-
 import type { PatchInfo } from './types/Patch';
 
 import { fetch, promisify, Debug, Cache, path, fs } from '../empathize';
@@ -8,6 +6,7 @@ import { DebugThread } from '@empathize/framework/dist/meta/Debug';
 import constants from './Constants';
 import Game from './Game';
 import Launcher from './Launcher';
+import md5 from './core/md5';
 
 declare const Neutralino;
 
@@ -306,18 +305,13 @@ export default class Patch
                     // before responding whether the patch applied or not
                     if (cache.value['playerHash'] !== null)
                     {
-                        constants.paths.gameDir.then((gameDir) => {
-                            Neutralino.filesystem.readBinaryFile(`${gameDir}/UnityPlayer.dll`)
-                                .then((currPlayer: ArrayBuffer) => {
-                                    cache.value['output']['applied'] = md5(currPlayer) != cache.value['playerHash'];
+                        const playerHash = await md5(`${await constants.paths.gameDir}/UnityPlayer.dll`);
 
-                                    resolve(cache.value['output']);
-                                })
-                                .catch(() => resolve(cache.value['output']));
-                        });
+                        if (playerHash !== null)
+                            cache.value['output']['applied'] = playerHash != cache.value['playerHash'];
                     }
 
-                    else resolve(cache.value['output']);
+                    resolve(cache.value['output']);
                 }
 
                 else reject(cache.value['error']);
@@ -403,15 +397,12 @@ export default class Patch
                                                                     cn: hashesMatches[1][1]
                                                                 }[patchInfo.server];
 
-                                                                constants.paths.gameDir.then((gameDir) => {
-                                                                    Neutralino.filesystem.readBinaryFile(`${gameDir}/UnityPlayer.dll`)
-                                                                        .then((currPlayer: ArrayBuffer) => {
-                                                                            patchInfo.applied = md5(currPlayer) != originalPlayer;
+                                                                const playerHash = await md5(`${await constants.paths.gameDir}/UnityPlayer.dll`);
 
-                                                                            resolveOutput(patchInfo, originalPlayer);
-                                                                        })
-                                                                        .catch(() => resolveOutput(patchInfo));
-                                                                });
+                                                                if (playerHash !== null)
+                                                                    patchInfo.applied = playerHash != originalPlayer;
+
+                                                                resolveOutput(patchInfo, originalPlayer);
                                                             }
 
                                                             else resolveOutput(patchInfo);

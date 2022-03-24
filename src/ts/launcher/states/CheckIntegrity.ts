@@ -1,7 +1,7 @@
 import type Launcher from '../../Launcher';
 import type { PatchInfo } from '../../types/Patch';
 
-import { fs, path, Downloader } from '../../../empathize';
+import { fs, Downloader } from '../../../empathize';
 import { DebugThread } from '@empathize/framework/dist/meta/Debug';
 
 import constants from '../../Constants';
@@ -9,6 +9,7 @@ import Patch from '../../Patch';
 import Locales from '../Locales';
 import Voice from '../../Voice';
 import Game from '../../Game';
+import md5 from '../../core/md5';
 
 declare const Neutralino;
 
@@ -108,8 +109,7 @@ class FilesVerifier
 
                 else if (!fileCheckInfo.remoteName.includes('UnityPlayer.dll') || !this.patch.applied)
                 {
-                    const process = await Neutralino.os.execCommand(`md5sum "${path.addSlashes(`${this.gameDir}/${fileCheckInfo.remoteName}`)}"`);
-                    const fileHash = (process.stdOut || process.stdErr).split(' ')[0];
+                    const fileHash = await md5(`${this.gameDir}/${fileCheckInfo.remoteName}`);
 
                     if (fileHash != fileCheckInfo.md5)
                     {
@@ -223,9 +223,7 @@ class FilesRepairer
 
             Downloader.download(fileUri, `${gameDir}/${fileInfo.remoteName}.new`).then((stream) => {
                 stream.finish(async () => {
-                    const process = await Neutralino.os.execCommand(`md5sum "${path.addSlashes(`${gameDir}/${fileInfo.remoteName}.new`)}"`);
-
-                    if ((process.stdOut || process.stdErr).split(' ')[0] == fileInfo.md5)
+                    if (await md5(`${gameDir}/${fileInfo.remoteName}.new`) == fileInfo.md5)
                     {
                         await fs.remove(`${gameDir}/${fileInfo.remoteName}`);
                         await fs.move(`${gameDir}/${fileInfo.remoteName}.new`, `${gameDir}/${fileInfo.remoteName}`);
