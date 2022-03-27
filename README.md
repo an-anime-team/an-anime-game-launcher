@@ -101,7 +101,7 @@ sudo pacman -Syu unzip tar git curl xdelta3 cabextract libnotify
 ### dnf
 
 ```sh
-sudo dnf install unzip tar git curl xdelta cabextract libnotify webkit2gtk
+sudo dnf install unzip tar git curl xdelta cabextract libnotify webkit2gtk3
 ```
 
 And `libayatana-appindicator` package with its requirements (since they haven't been pushed to the fedora's repos):
