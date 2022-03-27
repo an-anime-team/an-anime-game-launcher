@@ -5,7 +5,7 @@ import type {
     RunnerFamily
 } from '../types/Runners';
 
-import { Configs, Process, path } from '../../empathize';
+import { Configs, Process, path, Cache, fetch } from '../../empathize';
 import { DebugThread } from '@empathize/framework/dist/meta/Debug';
 
 import constants from '../Constants';
@@ -64,8 +64,40 @@ class Runners
                 .catch(() => resolveList([]));
             
             const resolveList = async (folders: { entry: string, type: string }[]) => {
-                let list: RunnerFamily[] = YAML.parse(await Neutralino.filesystem.readFile(`${constants.paths.appDir}/public/runners.yaml`));
+                let list: RunnerFamily[] = [];
                 let runners: RunnerFamily[] = [];
+
+                const runners_list = await Cache.get('Runners.list.remote');
+
+                // If the runners cache is no expired - return it
+                if (runners_list && !runners_list.expired)
+                    list = runners_list.value['list'];
+
+                else
+                {
+                    // Otherwise fetch remote list
+                    const response = await fetch(constants.uri.runners_list);
+
+                    // If it wasn't fetched - load locally stored one
+                    if (!response.ok)
+                        list = YAML.parse(await Neutralino.filesystem.readFile(`${constants.paths.appDir}/public/runners.yaml`));
+
+                    else
+                    {
+                        // Otherwise if the fetched list have the same content length as cached one
+                        // then ignore it and use the cached one because they're the same
+                        // otherwise load remote one
+                        list = runners_list && runners_list.value['length'] == response.length ?
+                            runners_list.value['list'] :
+                            YAML.parse(await response.body());
+
+                        // Update the cache record for the next 24 hours
+                        Cache.set('Runners.list.remote', {
+                            length: response.length,
+                            list: list
+                        }, 3600 * 24);
+                    }
+                }
 
                 list.forEach((family) => {
                     let newFamily: RunnerFamily = {

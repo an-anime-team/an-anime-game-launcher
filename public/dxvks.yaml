@@ -1,3 +1,7 @@
+- version: '1.10.1'
+  uri: https://github.com/doitsujin/dxvk/releases/download/v1.10.1/dxvk-1.10.1.tar.gz
+  recommended: true
+
 - version: '1.10'
   uri: https://github.com/doitsujin/dxvk/releases/download/v1.10/dxvk-1.10.tar.gz
   recommended: true

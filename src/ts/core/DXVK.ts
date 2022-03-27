@@ -2,7 +2,7 @@ import YAML from 'yaml';
 
 import type { DXVK as TDXVK } from '../types/DXVK';
 
-import { Configs, Process, promisify, path } from '../../empathize';
+import { Configs, Process, promisify, path, Cache, fetch } from '../../empathize';
 import { DebugThread } from '@empathize/framework/dist/meta/Debug';
 
 import constants from '../Constants';
@@ -62,8 +62,40 @@ export default class DXVK
                 .catch(() => resolveList([]));
 
             const resolveList = async (folders: { entry: string, type: string }[]) => {
-                let list: TDXVK[] = YAML.parse(await Neutralino.filesystem.readFile(`${constants.paths.appDir}/public/dxvks.yaml`));
+                let list: TDXVK[] = [];
                 let dxvks: TDXVK[] = [];
+
+                const dxvk_list = await Cache.get('DXVK.list.remote');
+
+                // If the dxvks cache is no expired - return it
+                if (dxvk_list && !dxvk_list.expired)
+                    list = dxvk_list.value['list'];
+
+                else
+                {
+                    // Otherwise fetch remote list
+                    const response = await fetch(constants.uri.dxvk_list);
+
+                    // If it wasn't fetched - load locally stored one
+                    if (!response.ok)
+                        list = YAML.parse(await Neutralino.filesystem.readFile(`${constants.paths.appDir}/public/dxvks.yaml`));
+
+                    else
+                    {
+                        // Otherwise if the fetched list have the same content length as cached one
+                        // then ignore it and use the cached one because they're the same
+                        // otherwise load remote one
+                        list = dxvk_list && dxvk_list.value['length'] == response.length ?
+                            dxvk_list.value['list'] :
+                            YAML.parse(await response.body());
+
+                        // Update the cache record for the next 24 hours
+                        Cache.set('DXVK.list.remote', {
+                            length: response.length,
+                            list: list
+                        }, 3600 * 24);
+                    }
+                }
 
                 list.forEach((dxvk) => {
                     let inst = false;

@@ -265,7 +265,9 @@ export default class constants
         },
         launcher: 'https://gitlab.com/KRypt0n_/an-anime-game-launcher',
         discord: 'https://discord.gg/ck37X6UWBp',
-        analytics: 'https://aagl.launcher.moe/stat/'
+        analytics: 'https://aagl.launcher.moe/stat/',
+        dxvk_list: 'https://gitlab.com/KRypt0n_/an-anime-game-launcher/-/raw/main/public/dxvks.yaml',
+        runners_list: 'https://gitlab.com/KRypt0n_/an-anime-game-launcher/-/raw/main/public/runners.yaml'
     };
 
     public static readonly paths = Paths;
