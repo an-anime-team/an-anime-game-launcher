@@ -94,6 +94,7 @@ class FilesVerifier
 
             if (!skipping)
             {
+                // If the file doesn't exist - we should download it
                 if (!await fs.exists(`${this.gameDir}/${fileCheckInfo.remoteName}`))
                 {
                     this.mismatches.push(fileCheckInfo);
@@ -107,7 +108,10 @@ class FilesVerifier
                     });
                 }
 
-                else if (!fileCheckInfo.remoteName.includes('UnityPlayer.dll') || !this.patch.applied)
+                // If the file exists, and the patch is not applied - verify its hash
+                // Otherwise if the patch is applied and the file doesn't contain unityplayer / xlua in its name - verify its hash
+                // because we shouldn't fix patched files
+                else if (!this.patch.applied || (!fileCheckInfo.remoteName.includes('UnityPlayer.dll') && !fileCheckInfo.remoteName.includes('xlua.dll')))
                 {
                     const fileHash = await md5(`${this.gameDir}/${fileCheckInfo.remoteName}`);
 
