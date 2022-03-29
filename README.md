@@ -9,15 +9,16 @@ that you refrain from publically sharing links to this repository, or to any of 
 
 Or share them and ruin it for the dozens of Linux players. It's up to you.
 
+## If you're going to share it anyway
+
+Do what you must, but we would respectfully request that you try to label the game as "An Anime Game"
+instead of the actual name of the game, to avoid search engine parsing.
+
 <img src="repository/pics/logo.jpg">
 
 <img src="repository/pics/launcher-main.png">
 
 <img src="repository/pics/launcher-settings.png">
-
-<br><br>
-
-<h2 align="center">Please, try to use "An Anime Game" phrase instead of the real game name to avoid search engines parsing</h2>
 
 <br><br>
 
