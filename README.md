@@ -1,3 +1,14 @@
+# Please don't link to this repository
+
+We understand you want to help people run An Anime Game on Linux. The issue is, the more people know
+of the tools involved in it, the higher the chances The Anime Game Company will notice them, and then
+fix the flaws that let us do the needful.
+
+While sharing in your self-managed chat services and through private messaging is fine, we humbly ask
+that you refrain from publically sharing links to this repository, or to any of the tools involved.
+
+Or share them and ruin it for the dozens of Linux players. It's up to you.
+
 <img src="repository/pics/logo.jpg">
 
 <img src="repository/pics/launcher-main.png">
