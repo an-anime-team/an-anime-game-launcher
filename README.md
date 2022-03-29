@@ -1,3 +1,11 @@
+<img src="repository/pics/logo.jpg">
+
+<img src="repository/pics/launcher-main.png">
+
+<img src="repository/pics/launcher-settings.png">
+
+<br><br>
+
 # Please don't link to this repository
 
 We understand you want to help people run An Anime Game on Linux. The issue is, the more people know
@@ -13,13 +21,6 @@ Or share them and ruin it for the dozens of Linux players. It's up to you.
 
 Do what you must, but we would respectfully request that you try to label the game as "An Anime Game"
 instead of the actual name of the game, to avoid search engine parsing.
-
-<img src="repository/pics/logo.jpg">
-
-<img src="repository/pics/launcher-main.png">
-
-<img src="repository/pics/launcher-settings.png">
-
 <br><br>
 
 # Download
@@ -74,7 +75,7 @@ We have our own [An Anime Game](https://discord.gg/ck37X6UWBp) discord server wh
 
 This is our current usage statistics. You can find older ones [here](repository/pages/STATISTICS.md)
 
-### Our discord server — 386 member
+### Our discord server — 386 members
 
 <img src="repository/pics/stats/2022/mar-apr.png">
 
