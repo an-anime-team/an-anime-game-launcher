@@ -6,6 +6,13 @@
 
 <br><br>
 
+> Arts sources:
+> 
+> Venti: https://genshin-impact.fandom.com/wiki/Venti/Media?file=Icon_Emoji_029_Venti_Shocked.png
+> Ayato: https://www.pinterest.com/pin/715931672024388513
+
+<br><br>
+
 # Please don't link to this repository
 
 We understand you want to help people run An Anime Game on Linux. The issue is, the more people know
@@ -67,7 +74,7 @@ field in your `config.yaml` file (settings -> launcher folder). If your system u
 
 | Game version | Launcher version | Patch version |
 | :---: | :---: | :---: |
-| 2.5.0 | 2.2.1 | 2.5.0 stable ✅ |
+| 2.5.0 | 2.2.1 | 2.6.0 testing ⚠️ |
 
 We have our own [An Anime Game](https://discord.gg/ck37X6UWBp) discord server where you can ask any questions
 
@@ -75,9 +82,15 @@ We have our own [An Anime Game](https://discord.gg/ck37X6UWBp) discord server wh
 
 This is our current usage statistics. You can find older ones [here](repository/pages/STATISTICS.md)
 
-### Our discord server — 386 members
+### Our discord server — 434 members
 
 <img src="repository/pics/stats/2022/mar-apr.png">
+
+### 2.5.0 launcher users
+
+> Note that this statistics was gathered only from newcomers, so it actually means 154 new users of the launcher. This issue is fixed and 2.6.0 statistics will be more precise
+
+<img src="repository/pics/stats/2.5.0.png">
 
 <br>
 
