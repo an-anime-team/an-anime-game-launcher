@@ -74,7 +74,7 @@ field in your `config.yaml` file (settings -> launcher folder). If your system u
 
 | Game version | Launcher version | Patch version |
 | :---: | :---: | :---: |
-| 2.5.0 | 2.2.1 | 2.6.0 testing ⚠️ |
+| 2.6.0 | 2.2.2 | 2.6.0 testing ⚠️ |
 
 We have our own [An Anime Game](https://discord.gg/ck37X6UWBp) discord server where you can ask any questions
 
