@@ -8,7 +8,7 @@
 
 > Arts sources:
 > 
-> Venti: https://genshin-impact.fandom.com/wiki/Venti/Media?file=Icon_Emoji_029_Venti_Shocked.png
+> Venti: https://genshin-impact.fandom.com/wiki/Venti/Media?file=Icon_Emoji_029_Venti_Shocked.png <br>
 > Ayato: https://www.pinterest.com/pin/715931672024388513
 
 <br><br>
@@ -86,7 +86,7 @@ This is our current usage statistics. You can find older ones [here](repository/
 
 <img src="repository/pics/stats/2022/mar-apr.png">
 
-### 2.5.0 launcher users
+### 2.5.0 launcher users — 154 newcomers
 
 > Note that this statistics was gathered only from newcomers, so it actually means 154 new users of the launcher. This issue is fixed and 2.6.0 statistics will be more precise
 
