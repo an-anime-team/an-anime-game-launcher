@@ -1,7 +1,7 @@
 import type Launcher from '../../Launcher';
 import type { PatchInfo } from '../../types/Patch';
 
-import { fs, Downloader } from '../../../empathize';
+import { fs, Downloader, fetch } from '../../../empathize';
 import { DebugThread } from '@empathize/framework/dist/meta/Debug';
 
 import constants from '../../Constants';
@@ -246,6 +246,29 @@ class FilesRepairer
         });
     }
 
+    /**
+     * Try to download game file
+     */
+    public static downloadFile(file: string): Promise<boolean>
+    {
+        return new Promise(async (resolve) => {
+            const gameDir = await constants.paths.gameDir;
+            const fileUri = `${(await Game.getLatestData()).game.latest.decompressed_path}/${file}`;
+
+            fetch(fileUri).then((header) => {
+                if (!header.ok)
+                    resolve(false);
+
+                else
+                {
+                    Downloader.download(fileUri, `${gameDir}/${file}`).then((stream) => {
+                        stream.finish(() => resolve(true));
+                    });
+                }
+            });
+        });
+    }
+
     protected async process()
     {
         if (this.mismatches[this.current] === undefined)
@@ -303,6 +326,12 @@ export default (launcher: Launcher): Promise<void> => {
 
         const debugThread = new DebugThread('Launcher/State/CheckIntegrity', 'Checking files integrity...');
 
+        if (!await fs.exists(`${gameDir}/pkg_version`))
+        {
+            debugThread.log('No pkg_version file provided. Downloading...');
+            debugThread.log(`pkg_version downloading result: ${await FilesRepairer.downloadFile('pkg_version') ? 'ok' : 'failed'}`);
+        }
+
         // Check Game and Voice Pack integrity
         Neutralino.filesystem.readFile(`${gameDir}/pkg_version`)
             .then(async (files) => {
@@ -310,10 +339,19 @@ export default (launcher: Launcher): Promise<void> => {
 
                 // Add voice packages integrity info
                 for (const voice of await Voice.installed)
-                    Neutralino.filesystem.readFile(`${gameDir}/Audio_${Voice.langs[voice.lang]}_pkg_version`)
-                        .then(async (voiceFiles) => {
-                            files.push(...voiceFiles.split(/\r\n|\r|\n/));
-                        });
+                {
+                    const voicePkgFile = `Audio_${Voice.langs[voice.lang]}_pkg_version`;
+
+                    if (!await fs.exists(`${gameDir}/${voicePkgFile}`))
+                    {
+                        debugThread.log(`No ${voicePkgFile} file provided. Downloading...`);
+                        debugThread.log(`${voicePkgFile} downloading result: ${await FilesRepairer.downloadFile(voicePkgFile) ? 'ok' : 'failed'}`);
+                    }
+
+                    Neutralino.filesystem.readFile(`${gameDir}/${voicePkgFile}`)
+                        .then(async (voiceFiles) => files.push(...voiceFiles.split(/\r\n|\r|\n/)))
+                        .catch(() => debugThread.log(`Failed to read ${voicePkgFile} file`));
+                }
 
                 files = files
                     .map((file) => file.trim())
@@ -377,7 +415,7 @@ export default (launcher: Launcher): Promise<void> => {
                 else resolve();
             })
             .catch(() => {
-                debugThread.log('No pkg_version file provided');
+                debugThread.log('Failed to read pkg_version file');
 
                 resolve();
             });
