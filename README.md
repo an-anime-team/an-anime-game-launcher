@@ -74,7 +74,7 @@ field in your `config.yaml` file (settings -> launcher folder). If your system u
 
 | Game version | Launcher version | Patch version |
 | :---: | :---: | :---: |
-| 2.6.0 | 2.2.2 | 2.6.0 testing ⚠️ |
+| 2.6.0 | 2.2.2 | 2.6.0 stable ✅ |
 
 We have our own [An Anime Game](https://discord.gg/ck37X6UWBp) discord server where you can ask any questions
 
@@ -86,11 +86,9 @@ This is our current usage statistics. You can find older ones [here](repository/
 
 <img src="repository/pics/stats/2022/mar-apr.png">
 
-### 2.5.0 launcher users — 154 newcomers
+### 2.6.0 launcher users — 94 total
 
-> Note that this statistics was gathered only from newcomers, so it actually means 154 new users of the launcher. This issue is fixed and 2.6.0 statistics will be more precise
-
-<img src="repository/pics/stats/2.5.0.png">
+<img src="repository/pics/stats/2.6.0.png">
 
 <br>
 
