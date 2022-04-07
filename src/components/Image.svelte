@@ -13,6 +13,7 @@
     data-originalURI={orignialURI}
     width={width}
     height={height}
+    class="img-hover"
     alt="no image"
     on:click={click}
 />

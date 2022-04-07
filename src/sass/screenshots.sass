@@ -6,6 +6,14 @@
     body[data-theme=#{$theme-name}]
         background-color: map.get($theme-map, "background")
 
+    .img-hover 
+        opacity: 0.9
+        transition: all 0.2s
+    
+    .img-hover:hover 
+        opacity: 1
+        transform: scale(1.02)
+
 @import "themes/light"
 @import "themes/dark"
 
