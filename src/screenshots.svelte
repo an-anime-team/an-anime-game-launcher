@@ -16,42 +16,68 @@
         return btoa(
             bytes.reduce((acc, current) => acc + String.fromCharCode(current), "")
         );
-    }
+    };
 
-    const images = [
-        { src: 'https://source.unsplash.com/random', width: 600, height: 400 }
-    ];
+    //@ts-expect-error
+    String.prototype.insertAt = function(index, str){
+        return this.slice(0,index) + str + this.slice(index);
+    };
+
+    const images = new Array();
 
     onMount(async () => {
-        await Windows.current.show();
-        await Windows.current.center(900, 600);
-        
-        // Auto theme switcher
-        Configs.get('theme').then((theme) => {
-            if (theme === 'system')
-                theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        // This exists as you can't make an for loop asynchronus causing the window to load before every image is loaded into the HTML content.
+        const fakewait = () => new Promise(resolve =>
+            setTimeout(() => resolve(true), 500)
+        );
 
-            document.body.setAttribute('data-theme', theme as string);
-        });
+        Neutralino.filesystem.readDirectory(await constants.paths.gameDir + '/ScreenShot').then(async imgs => {
+            // Filter by FILES and sort by latest to oldest
+            const sortedimgs = imgs.filter(img => img.type == "FILE")
+                .sort(function(x, y){
+                    let f1date = x.entry.replace('.png', '').insertAt(4, '-').insertAt(7, '-').substring(0, 10);
+                    let f2date = y.entry.replace('.png', '').insertAt(4, '-').insertAt(7, '-').substring(0, 10);
+                    const f1time = new Date(f1date).getTime();
+                    const f2time = new Date(f2date).getTime();
+                    return f2time - f1time;
+                });
 
-        Neutralino.filesystem.readBinaryFile(await constants.paths.gameDir + '/ScreenShot/20220317130153.png').then(async img => {
-            let uintdata = new Uint8Array(img);
-            images.push({
-                src: 'data:image/png;base64,' + encodeBase64Bytes(uintdata),
-                // @ts-expect-error
-                orginialURI: await constants.paths.gameDir + '/ScreenShot/20220317130153.png',
-                width: 600,
-                height: 400,
-                click: async (e) => {
-                    Neutralino.os.execCommand(`xdg-open "${path.addSlashes(e.target.getAttribute('data-originalURI'))}"`, {
-                        background: true
+            for (let index = 0, len = 4; index < len && !(index > sortedimgs.length); ++index) {
+                Neutralino.filesystem.readBinaryFile(await constants.paths.gameDir + '/ScreenShot/' + sortedimgs[index].entry).then(async img => {
+                    let uintdata = new Uint8Array(img);
+                    
+                    images.push({
+                        src: 'data:image/png;base64,' + encodeBase64Bytes(uintdata),
+                        orignialURI: await constants.paths.gameDir + '/ScreenShot/' + sortedimgs[index].entry,
+                        width: 480,
+                        height: 270,
+                        click: async (e) => {
+                            Neutralino.os.execCommand(`xdg-open "${path.addSlashes(e.target.getAttribute('data-originalURI'))}"`, {
+                                background: true
+                            });
+                        }
                     });
-                }
+                });
+            }
+
+            await fakewait();
+
+            await Windows.current.show();
+            await Windows.current.center(900, 600);
+
+            // Auto theme switcher
+            Configs.get('theme').then((theme) => {
+                if (theme === 'system')
+                    theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+
+                document.body.setAttribute('data-theme', theme as string);
             });
-        });
+        })
     });
 </script>
 
 <main>
-    <Gallery imageComponent={Image} {images} />
+    <div style="width: 95%; padding-left: 2.4%; padding-top: 1.5%;">
+        <Gallery imageComponent={Image} gutter={6} {images} />
+    </div>
 </main>
