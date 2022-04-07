@@ -1,1 +1,13 @@
+@use "sass:map"
+
 @import "basic"
+
+@mixin themable($theme-name, $theme-map)
+    body[data-theme=#{$theme-name}]
+        background-color: map.get($theme-map, "background")
+
+@import "themes/light"
+@import "themes/dark"
+
+@include themable(light, $light)
+@include themable(dark, $dark)
