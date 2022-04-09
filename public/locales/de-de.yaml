@@ -358,3 +358,12 @@ analytics:
     participate: Teilnehmen
     skip: Überspringen
     skip_forever: Überspringen und nicht mehr nach fragen
+
+# Screenshots window
+screenshots:
+  heading: Schnappschüsse
+  info:
+    - In diesem Fenster werden nur bis zu 4 Bilder angezeigt. Klicken Sie auf die Schaltfläche am unteren Rand, um Ihren Ordner anzuzeigen.
+    - Klicken Sie auf ein Schnappschuss, um es zu öffnen.
+  button: Öffne Schnappschüsse
+  noimages: Keine Schnappschüsee verfügbar
