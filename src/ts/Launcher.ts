@@ -31,6 +31,7 @@ export default class Launcher
     public static readonly version: string = version;
 
     protected settingsMenu?: Process;
+    protected screenshotsWindow?: Process;
 
     public constructor(onMount)
     {
@@ -75,6 +76,41 @@ export default class Launcher
                 this.state = new State(this);
             });
         });
+    }
+
+    public showScreenshots(): Promise<boolean>
+    {
+        return new Promise(async (resolve) => {
+            if (this.screenshotsWindow)
+                resolve(false);
+            
+            else
+            {
+                this.screenshotsWindow = undefined;
+
+                const window = await Windows.open('screenshots', {
+                    title: 'Screenshots',
+                    width: 900,
+                    height: 600,
+                    // enableInspector: true,
+                    exitProcessOnClose: false
+                });
+
+                if (window.status)
+                {
+                    this.screenshotsWindow = new Process(window.data!.pid);
+
+                    this.screenshotsWindow.finish(async () => {
+                        Windows.current.show();
+                        Windows.current.center(1280, 700);
+                    })
+
+                    Windows.current.hide();
+                }
+                
+                resolve(window.status);
+            }
+        })
     }
 
     public showSettings(): Promise<boolean>
