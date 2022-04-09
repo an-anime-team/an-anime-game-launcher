@@ -76,7 +76,7 @@ class Runners
                 else
                 {
                     // Otherwise fetch remote list
-                    const response = await fetch(constants.uri.runners_list);
+                    const response = await fetch(constants.uri.runners_list, 2000);
 
                     // If it wasn't fetched - load locally stored one
                     if (!response.ok)
