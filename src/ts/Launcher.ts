@@ -99,8 +99,10 @@ export default class Launcher
                 {
                     this.settingsMenu = new Process(window.data!.pid);
 
-                    this.settingsMenu.finish(() => {
+                    this.settingsMenu.finish(async () => {
                         this.settingsMenu = undefined;
+
+                        await Configs.load();
 
                         IPC.read().then((records) => {
                             records.forEach((record) => {

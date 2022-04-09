@@ -197,6 +197,8 @@
         if (voiceUpdateRequired)
             await IPC.write('update-state');
 
+        await Configs.flush();
+
         Neutralino.app.exit();
     });
 </script>

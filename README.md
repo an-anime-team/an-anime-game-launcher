@@ -202,8 +202,9 @@ This is our current roadmap goals. You can find older ones [here](repository/pag
 * <s>Add analytics window</s> *(e0a09323, released in 2.2.0)*
 * <s>Add Chinese game's version support (due to changes in the Krock's patch)</s> *(75f2ad66, released in 2.2.0)*
 * <s>Add Patch category to the settings menu</s> *(07b32ada, 8a29d4a5, released in 2.2.1)*
-* Implement manual config flushing functionality from the Empathize's API
+* <s>Implement manual config flushing functionality from the Empathize's API</s>
+* Screenshots explorer
 * Game statistics window
 * Dark progress bar design
 * Changelog window
-* Screenshots explorer
+* Check `deprecated_packages` to automatically update earlier versions of the game
