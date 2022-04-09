@@ -368,3 +368,12 @@ analytics:
     participate: Participer
     skip: Passer
     skip_forever: Passer et ne plus demander
+
+# Screenshots window
+screenshots:
+  heading: Screenshots
+  info:
+    - This window only shows up to 4 images, Click the button on the bottom to view your folder.
+    - Click on a screenshot to open it up.
+  button: Open Screenshots
+  noimages: No Screenshots available
