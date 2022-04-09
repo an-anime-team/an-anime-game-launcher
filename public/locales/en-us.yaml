@@ -357,3 +357,12 @@ analytics:
     participate: Participate
     skip: Skip
     skip_forever: Skip and don't ask again
+
+# Screenshots window
+screenshots:
+  heading: Screenshots
+  info:
+    - This window only shows up to 4 images, Click the button on the bottom to view your folder.
+    - Click on a screenshot to open it up.
+  button: Open Screenshots
+  noimages: No Screenshots available
