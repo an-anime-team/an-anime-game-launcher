@@ -112,6 +112,18 @@
         settingsButton!.onmouseleave = () => {
             settingsButton?.classList.remove('hovered');
         };
+
+        const screenshotsButton = document.getElementById('screenshots');
+
+        screenshotsButton!.onclick = () => launcher.showScreenshots();
+
+        screenshotsButton!.onmouseenter = () => {
+            screenshotsButton?.classList.add('hovered');
+        };
+
+        screenshotsButton!.onmouseleave = () => {
+            screenshotsButton?.classList.remove('hovered');
+        };
     });
 </script>
 
@@ -132,6 +144,12 @@
 
     <div id="launcher-content">
         <iframe id="social-iframe" src="" title="" scrolling="no" style="position: absolute; border: 0; top: 0; left: 0;" width="100%" height="100%"></iframe>
+    </div>
+
+    <div id="screenshots">
+        <img src={GearIcon} class="unactive" alt="Screenshots">
+
+        <img src={GearActiveIcon} class="active" alt="Screenshots">
     </div>
 
     <div id="settings">

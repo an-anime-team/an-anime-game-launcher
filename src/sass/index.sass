@@ -100,6 +100,36 @@
     .unactive
         display: none
 
+#screenshots
+    width: 76px
+    height: 128px
+
+    position: absolute
+
+    right: 0
+    bottom: 0
+
+    cursor: pointer
+
+    > img
+        width: 40px
+        height: 40px
+        
+        margin: 18px
+
+    .active
+        display: none
+
+    .unactive
+        display: block
+
+#screenshots.hovered
+    .active
+        display: block
+
+    .unactive
+        display: none
+
 .downloader-panel
     user-select: none
 
