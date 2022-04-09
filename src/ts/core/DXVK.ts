@@ -74,7 +74,7 @@ export default class DXVK
                 else
                 {
                     // Otherwise fetch remote list
-                    const response = await fetch(constants.uri.dxvk_list);
+                    const response = await fetch(constants.uri.dxvk_list, 1500);
 
                     // If it wasn't fetched - load locally stored one
                     if (!response.ok)

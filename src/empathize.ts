@@ -31,6 +31,8 @@ Cache.file = constants.paths.cache;
 Configs.serialize = YAML.stringify;
 Configs.unserialize = YAML.parse;
 
+Configs.autoFlush = false;
+
 export {
     // Paths API
     path, dir,

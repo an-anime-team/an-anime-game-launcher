@@ -1,6 +1,17 @@
 # Wine-GE-Proton versions
 - title: Wine-GE-Proton
   runners:
+  # Wine-GE-Proton 7-8
+  - family: Wine-GE-Proton
+    name: lutris-GE-Proton7-8-x86_64
+    title: Wine-GE-Proton 7-8
+    uri: https://github.com/GloriousEggroll/wine-ge-custom/releases/download/GE-Proton7-8/wine-lutris-GE-Proton7-8-x86_64.tar.xz
+    files:
+      wine: bin/wine64
+      wineserver: bin/wineserver
+      winecfg: lib64/wine/x86_64-windows/winecfg.exe
+    recommended: true
+  
   # Wine-GE-Proton 7-7
   - family: Wine-GE-Proton
     name: lutris-GE-Proton7-7-x86_64
@@ -177,6 +188,18 @@
 # GE-Proton versions
 - title: GE-Proton
   runners:
+  # GE-Proton 7-13
+  # there were multiple hotfixes after 7-11 so all the broken versions were skipped and only the proper fixed version got added
+  - family: GE-Proton
+    name: GE-Proton7-13
+    title: GE-Proton 7-13
+    uri: https://github.com/GloriousEggroll/proton-ge-custom/releases/download/GE-Proton7-13/GE-Proton7-13.tar.gz
+    files:
+      wine: files/bin/wine64
+      wineserver: files/bin/wineserver
+      winecfg: files/lib64/wine/x86_64-windows/winecfg.exe
+    recommended: true
+
   # GE-Proton 7-10
   - family: GE-Proton
     name: GE-Proton7-10
