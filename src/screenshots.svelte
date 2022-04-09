@@ -83,7 +83,11 @@
 
                 document.body.setAttribute('data-theme', theme as string);
             });
-        })
+        });
+    });
+
+    Neutralino.events.on('windowClose', async () => {
+        Neutralino.app.exit();
     });
 </script>
 
