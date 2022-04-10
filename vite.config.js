@@ -17,7 +17,8 @@ export default defineConfig({
                 'settings.html',
                 'splash.html',
                 'analytics.html',
-                'tos-violation.html'
+                'tos-violation.html',
+                'screenshots.html'
             ]
         }
     }

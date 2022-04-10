@@ -14,6 +14,8 @@
 
     import GearIcon from './assets/images/gear.png';
     import GearActiveIcon from './assets/images/gear-active.png';
+    import ScreenshotsIcon from './assets/images/camera.png';
+    import ScreenshotsActiveIcon from './assets/images/camera-active.png';
     import DownloadIcon from './assets/images/cloud-download.png';
 
     const launcher = new Launcher(onMount);
@@ -112,6 +114,18 @@
         settingsButton!.onmouseleave = () => {
             settingsButton?.classList.remove('hovered');
         };
+
+        const screenshotsButton = document.getElementById('screenshots');
+
+        screenshotsButton!.onclick = () => launcher.showScreenshots();
+
+        screenshotsButton!.onmouseenter = () => {
+            screenshotsButton?.classList.add('hovered');
+        };
+
+        screenshotsButton!.onmouseleave = () => {
+            screenshotsButton?.classList.remove('hovered');
+        };
     });
 </script>
 
@@ -132,6 +146,12 @@
 
     <div id="launcher-content">
         <iframe id="social-iframe" src="" title="" scrolling="no" style="position: absolute; border: 0; top: 0; left: 0;" width="100%" height="100%"></iframe>
+    </div>
+
+    <div id="screenshots">
+        <img src={ScreenshotsIcon} class="unactive" alt="Screenshots">
+
+        <img src={ScreenshotsActiveIcon} class="active" alt="Screenshots">
     </div>
 
     <div id="settings">

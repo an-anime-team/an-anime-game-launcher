@@ -357,3 +357,12 @@ analytics:
     participate: Delta
     skip: Skipp
     skip_forever: Skipp og ikke spør igjen
+
+# Screenshots window
+screenshots:
+  heading: Screenshots
+  info:
+    - This window only shows up to 4 images, Click the button on the bottom to view your folder.
+    - Click on a screenshot to open it up.
+  button: Open Screenshots
+  noimages: No Screenshots available

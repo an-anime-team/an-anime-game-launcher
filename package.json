@@ -13,6 +13,7 @@
   "dependencies": {
     "@empathize/framework": "^1.4.10",
     "semver": "^7.3.5",
+    "svelte-gallery": "^1.3.5",
     "svelte-i18n": "^3.3.13",
     "yaml": "^1.10.2"
   },
