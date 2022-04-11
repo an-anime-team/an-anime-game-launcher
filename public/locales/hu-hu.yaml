@@ -360,9 +360,9 @@ analytics:
 
 # Screenshots window
 screenshots:
-  heading: Screenshots
-  info: Click on a screenshot to open it up
+  heading: Screenshotok
+  info: Nyomj egy screenshot-ra hogy megtekintsd
   buttons:
-    more: Load more
-    folder: Open screenshots
-  no_images: No screenshots available
+    more: Több betöltése 
+    folder: Screenshot mappa megnyitása 
+  no_images: Nincsenek elérhető screenshotok
