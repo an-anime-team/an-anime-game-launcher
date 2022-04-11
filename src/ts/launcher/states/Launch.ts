@@ -9,7 +9,7 @@ import Launcher from '../../Launcher';
 
 declare const Neutralino;
 
-export default (launcher: Launcher): Promise<void> => {
+export default (launcher: Launcher|null): Promise<void> => {
     return new Promise(async (resolve) => {
         const debugThread = new DebugThread('State/Launch', 'Starting the game');
 
@@ -35,9 +35,9 @@ export default (launcher: Launcher): Promise<void> => {
                 {
                     Windows.current.hide();
 
-                    launcher.updateDiscordRPC('in-game');
+                    launcher?.updateDiscordRPC('in-game');
 
-                    launcher.tray.update([
+                    launcher?.tray.update([
                         { text: 'Starting the game...', disabled: true }
                     ]);
 
@@ -241,7 +241,7 @@ export default (launcher: Launcher): Promise<void> => {
                                 seconds = `0${seconds}`;
 
                             // FIXME: tray doesn't work in AppImage
-                            launcher.tray.update([
+                            launcher?.tray.update([
                                 { text: `Playing for ${hours}:${minutes}:${seconds}`, disabled: true },
                                 {
                                     text: `Close game${closeGameCounter > 0 ? ` (${closeGameCounter})` : ''}`,
@@ -261,8 +261,8 @@ export default (launcher: Launcher): Promise<void> => {
                             Windows.current.show();
                             Windows.current.center(1280, 700);
 
-                            launcher.updateDiscordRPC('in-launcher');
-                            launcher.tray.hide();
+                            launcher?.updateDiscordRPC('in-launcher');
+                            launcher?.tray.hide();
 
                             // Purge game logs
                             Configs.get('purge_logs.game').then(async (purge_logs) => {

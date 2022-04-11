@@ -1,5 +1,6 @@
 <script context="module" lang="ts">
     declare const Neutralino;
+    declare const NL_ARGS: string[];
 </script>
 
 <script lang="ts">
@@ -18,115 +19,129 @@
     import ScreenshotsActiveIcon from './assets/images/camera-active.png';
     import DownloadIcon from './assets/images/cloud-download.png';
 
-    const launcher = new Launcher(onMount);
+    // Steam Deck users asked me to add something like that
+    if (NL_ARGS.includes('--run-game'))
+    {
+        import('./ts/launcher/states/Launch').then((module) => {
+            module.default(null).then(() => {
+                Neutralino.app.exit();
+            });
+        });
+    }
 
-    const getLogFilename = (date: Date = Debug.startedAt) => {
-        const prefixZero = (num: number) => num < 10 ? `0${num}` : num;
+    // Otherwise just open the launcher as always
+    else
+    {
+        const launcher = new Launcher(onMount);
 
-        return `${date.getFullYear()}-${prefixZero(date.getMonth() + 1)}-${prefixZero(date.getDate())}-${prefixZero(date.getHours())}-${prefixZero(date.getMinutes())}-${prefixZero(date.getSeconds())}.log`;
-    };
+        const getLogFilename = (date: Date = Debug.startedAt) => {
+            const prefixZero = (num: number) => num < 10 ? `0${num}` : num;
 
-    constants.paths.launcherDir.then((launcherDir) => {
-        Neutralino.filesystem.getStats(`${launcherDir}/logs/latest.log`)
-            .then(async () => {
-                let created_at = (await Neutralino.os.execCommand(`stat -c '%W' "${path.addSlashes(`${launcherDir}/logs/latest.log`)}"`)).stdOut;
+            return `${date.getFullYear()}-${prefixZero(date.getMonth() + 1)}-${prefixZero(date.getDate())}-${prefixZero(date.getHours())}-${prefixZero(date.getMinutes())}-${prefixZero(date.getSeconds())}.log`;
+        };
 
-                if (!created_at)
-                    created_at = Date.now() / 1000;
+        constants.paths.launcherDir.then((launcherDir) => {
+            Neutralino.filesystem.getStats(`${launcherDir}/logs/latest.log`)
+                .then(async () => {
+                    let created_at = (await Neutralino.os.execCommand(`stat -c '%W' "${path.addSlashes(`${launcherDir}/logs/latest.log`)}"`)).stdOut;
 
-                Neutralino.filesystem.moveFile(`${launcherDir}/logs/latest.log`, `${launcherDir}/logs/${getLogFilename(new Date(created_at * 1000))}`);
-            })
-            .catch(() => {});
-    });
+                    if (!created_at)
+                        created_at = Date.now() / 1000;
 
-    Neutralino.events.on('windowClose', async () => {
-        Downloader.closeStreams(true);
-        Archive.closeStreams(true);
-
-        const tempDir = await constants.paths.tempDir;
-        const launcherDir = await constants.paths.launcherDir;
-
-        // Remove IPC file
-        await IPC.purge();
-
-        // Turn off Discord RPC
-        if (launcher.rpc)
-            await launcher.rpc.stop(true);
-
-        // Remove .tmp files from the temp folder
-        await Neutralino.os.execCommand(`find "${path.addSlashes(tempDir)}" -maxdepth 1 -type f -name "*.tmp" -delete`);
-
-        // Remove old launcher's log files
-        const purge_logs = await Configs.get('purge_logs.launcher') as string|null;
-
-        if (purge_logs !== null && purge_logs[purge_logs.length - 1] == 'd')
-            await Neutralino.os.execCommand(`find "${path.addSlashes(launcherDir)}/logs" -maxdepth 1 -mtime +${purge_logs.substring(0, purge_logs.length - 1)} -delete`);
-
-        // Save logs
-        const log = Debug.get().join('\r\n');
-
-        if (log != '')
-            await Neutralino.filesystem.writeFile(`${launcherDir}/logs/latest.log`, log);
-
-        // And close the launcher when they was saved
-        Neutralino.app.exit();
-    });
-
-    // Save logs
-    let logSavingStarted = false;
-
-    Debug.handler(() => {
-        if (!logSavingStarted)
-        {
-            logSavingStarted = true;
-
-            setTimeout(async () => {
-                const log = `=== Log can be incomplete ===\r\n\r\n${Debug.get().join('\r\n')}`;
-
-                if (log != '')
-                    await Neutralino.filesystem.writeFile(`${await constants.paths.launcherDir}/logs/latest.log`, log);
-
-                logSavingStarted = false;
-            }, 5000);
-        }
-    });
-
-    // Do some stuff when all the content will be loaded
-    onMount(() => {
-        /**
-         * Update launcher's title
-         */
-        Game.latest.then((game) => {
-            Windows.current.setTitle(`An Anime Game Launcher - ${game.version}`);
+                    Neutralino.filesystem.moveFile(`${launcherDir}/logs/latest.log`, `${launcherDir}/logs/${getLogFilename(new Date(created_at * 1000))}`);
+                })
+                .catch(() => {});
         });
 
-        /**
-         * Add some events to some elements
-         */
-        const settingsButton = document.getElementById('settings');
+        Neutralino.events.on('windowClose', async () => {
+            Downloader.closeStreams(true);
+            Archive.closeStreams(true);
 
-        settingsButton!.onclick = () => launcher.showSettings();
+            const tempDir = await constants.paths.tempDir;
+            const launcherDir = await constants.paths.launcherDir;
 
-        settingsButton!.onmouseenter = () => {
-            settingsButton?.classList.add('hovered');
-        };
+            // Remove IPC file
+            await IPC.purge();
 
-        settingsButton!.onmouseleave = () => {
-            settingsButton?.classList.remove('hovered');
-        };
+            // Turn off Discord RPC
+            if (launcher.rpc)
+                await launcher.rpc.stop(true);
 
-        const screenshotsButton = document.getElementById('screenshots');
+            // Remove .tmp files from the temp folder
+            await Neutralino.os.execCommand(`find "${path.addSlashes(tempDir)}" -maxdepth 1 -type f -name "*.tmp" -delete`);
 
-        screenshotsButton!.onclick = () => launcher.showScreenshots();
+            // Remove old launcher's log files
+            const purge_logs = await Configs.get('purge_logs.launcher') as string|null;
 
-        screenshotsButton!.onmouseenter = () => {
-            screenshotsButton?.classList.add('hovered');
-        };
+            if (purge_logs !== null && purge_logs[purge_logs.length - 1] == 'd')
+                await Neutralino.os.execCommand(`find "${path.addSlashes(launcherDir)}/logs" -maxdepth 1 -mtime +${purge_logs.substring(0, purge_logs.length - 1)} -delete`);
 
-        screenshotsButton!.onmouseleave = () => {
-            screenshotsButton?.classList.remove('hovered');
-        };
-    });
+            // Save logs
+            const log = Debug.get().join('\r\n');
+
+            if (log != '')
+                await Neutralino.filesystem.writeFile(`${launcherDir}/logs/latest.log`, log);
+
+            // And close the launcher when they was saved
+            Neutralino.app.exit();
+        });
+
+        // Save logs
+        let logSavingStarted = false;
+
+        Debug.handler(() => {
+            if (!logSavingStarted)
+            {
+                logSavingStarted = true;
+
+                setTimeout(async () => {
+                    const log = `=== Log can be incomplete ===\r\n\r\n${Debug.get().join('\r\n')}`;
+
+                    if (log != '')
+                        await Neutralino.filesystem.writeFile(`${await constants.paths.launcherDir}/logs/latest.log`, log);
+
+                    logSavingStarted = false;
+                }, 5000);
+            }
+        });
+
+        // Do some stuff when all the content will be loaded
+        onMount(() => {
+            /**
+             * Update launcher's title
+             */
+            Game.latest.then((game) => {
+                Windows.current.setTitle(`An Anime Game Launcher - ${game.version}`);
+            });
+
+            /**
+             * Add some events to some elements
+             */
+            const settingsButton = document.getElementById('settings');
+
+            settingsButton!.onclick = () => launcher.showSettings();
+
+            settingsButton!.onmouseenter = () => {
+                settingsButton?.classList.add('hovered');
+            };
+
+            settingsButton!.onmouseleave = () => {
+                settingsButton?.classList.remove('hovered');
+            };
+
+            const screenshotsButton = document.getElementById('screenshots');
+
+            screenshotsButton!.onclick = () => launcher.showScreenshots();
+
+            screenshotsButton!.onmouseenter = () => {
+                screenshotsButton?.classList.add('hovered');
+            };
+
+            screenshotsButton!.onmouseleave = () => {
+                screenshotsButton?.classList.remove('hovered');
+            };
+        });
+    }
 </script>
 
 <main>
