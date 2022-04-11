@@ -362,8 +362,8 @@ analytics:
 # Screenshots window
 screenshots:
   heading: Schnappschüsse
-  info:
-    - In diesem Fenster werden nur bis zu 4 Bilder angezeigt. Klicken Sie auf die Schaltfläche am unteren Rand, um Ihren Ordner anzuzeigen.
-    - Klicken Sie auf ein Schnappschuss, um es zu öffnen.
-  button: Öffne Schnappschüsse
-  noimages: Keine Schnappschüsee verfügbar
+  info: Klicken Sie auf ein Schnappschuss, um es zu öffnen.
+  buttons:
+    more: Load more
+    folder: Öffne Schnappschüsse
+  no_images: Keine Schnappschüsee verfügbar

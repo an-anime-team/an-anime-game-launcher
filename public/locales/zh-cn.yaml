@@ -135,16 +135,16 @@ settings:
         game: 游戏文件夹
         repair_game: 修复游戏文件
 
-      # Patch-related settings
+      # 补丁相关设置
       patch:
-        title: Patch
+        title: 补丁
         items:
-          patch_version: 'Patch version:'
-          updating_info: 'Updating patch info...'
+          patch_version: '补丁版本：'
+          updating_info: '更新补丁信息...'
           buttons:
-            revert_patch: revert patch
-            apply_patch: apply patch
-            reapply_patch: re-apply patch
+            revert_patch: 撤销补丁
+            apply_patch: 应用补丁
+            reapply_patch: 重新应用补丁
 
   # Enhancements
   enhancements:
@@ -361,8 +361,8 @@ analytics:
 # Screenshots window
 screenshots:
   heading: Screenshots
-  info:
-    - This window only shows up to 4 images, Click the button on the bottom to view your folder.
-    - Click on a screenshot to open it up.
-  button: Open Screenshots
-  noimages: No Screenshots available
+  info: Click on a screenshot to open it up
+  buttons:
+    more: Load more
+    folder: Open screenshots
+  no_images: No screenshots available

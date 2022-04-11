@@ -6,35 +6,68 @@
 @mixin themable($theme-name, $theme-map)
     body[data-theme=#{$theme-name}]
         background-color: map.get($theme-map, "background")
-
         color: map.get($theme-map, "text")
 
         p, span, div
             color: map.get($theme-map, "text")
+            
+            text-align: center
 
         @if $theme-name == dark
             &::-webkit-scrollbar-track
                 background: #2e3440
 
-    .img-hover 
-        opacity: 0.9
-        transition: all 0.2s
-    
-    .img-hover:hover 
-        opacity: 1
-        transform: scale(1.02)
+        .loader
+            width: 128px
+            margin: 0 auto
+            padding: 64px
 
-    .centtext
-        text-align: center
+            display: block
 
-    .galleryholder
-        width: 95%
-        padding-left: 2.4%
-    
-    .buttons
-        padding-top: 1%
-        padding-bottom: 0.5%
-        padding-left: 41.3%
+        .images
+            display: flex
+            flex-wrap: wrap
+
+            padding: 0 4px
+
+            .column
+                flex: 30%
+
+                max-width: 30%
+                padding: 0 4px
+
+                &:first-of-type
+                    margin-left: auto
+
+                &:last-of-type
+                    margin-right: auto
+
+                img
+                    margin-top: 8px
+                    vertical-align: middle
+                    width: 100%
+
+                    cursor: pointer
+
+                    transition: all 0.2s
+
+                    &:hover
+                        transform: scale(1.02)
+
+            @media screen and (max-width: 800px)
+                .column
+                    flex: 50%
+                    max-width: 50%
+
+            @media screen and (max-width: 600px)
+                .column
+                    flex: 100%
+                    max-width: 100%
+
+        .buttons
+            display: flex
+            justify-content: center
+            padding: 16px 0
         
 
 @import "themes/light"

@@ -360,8 +360,8 @@ analytics:
 # Screenshots window
 screenshots:
   heading: scweenshots
-  info:
-    - this window onwy shows u-up to 4 i-images, c-cwick t-the button on the bottom to view youw fowdew
-    - cwick on a s-scweenshot to open it up.
-  button: open scweenshots
-  noimages: no scweenshots avaiwable
+  info: cwick on a s-scweenshot to open it up.
+  buttons:
+    more: lowad mowe
+    folder: open scweenshots
+  no_images: no scweenshots avaiwable

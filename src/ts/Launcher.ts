@@ -92,6 +92,7 @@ export default class Launcher
                     title: 'Screenshots',
                     width: 900,
                     height: 600,
+                    resizable: true,
                     // enableInspector: true,
                     exitProcessOnClose: false
                 });

@@ -6,73 +6,110 @@
     import { onMount } from 'svelte';
     import { _, locale } from 'svelte-i18n';
 
-    import { Configs, Windows, path } from './empathize';
+    import { Configs, Windows, path, fs } from './empathize';
+    import type { Entry } from '@empathize/framework/dist/fs/fs';
 
-    import Gallery from 'svelte-gallery';
-    import Image from './components/Image.svelte';
     import Button from './components/Button.svelte';
+
+    import LoaderImage from './assets/gifs/loading-marie-please.gif';
 
     import constants from './ts/Constants';
 
-    function encodeBase64Bytes(bytes: Uint8Array): string {
-        return btoa(
-            bytes.reduce((acc, current) => acc + String.fromCharCode(current), "")
-        );
+    type Image = {
+        src: string,
+        path: string
     };
 
-    //@ts-expect-error
-    String.prototype.insertAt = function(index, str){
-        return this.slice(0,index) + str + this.slice(index);
+    type RequestedImages = {
+        images: Promise<Image[]>,
+        hasMore: boolean
     };
 
-    const images = new Array();
+    let totalImages: Entry[] = [];
 
-    // Svelte did a haha funny and didn't want to fucking bother working with the images array so use this as an jank alternative.
-    let arrayempty = true;
+    let images: Image[] = [];
+    let columns: Image[][] = [[], [], []];
 
-    onMount(async () => {
-        // This exists as you can't make an for loop asynchronus causing the window to load before every image is loaded into the HTML content.
-        const fakewait = () => new Promise(resolve =>
-            setTimeout(() => resolve(true), 500)
-        );
+    let lastLoaded = 0;
+    let loading = true;
 
-        Neutralino.filesystem.readDirectory(await constants.paths.gameDir + '/ScreenShot').then(async imgs => {
-            // Filter by FILES and sort by latest to oldest
-            const sortedimgs = imgs.filter(img => img.type == "FILE")
-                .sort(function(x, y){
-                    let f1date = x.entry.replace('.png', '').insertAt(4, '-').insertAt(7, '-').substring(0, 10);
-                    let f2date = y.entry.replace('.png', '').insertAt(4, '-').insertAt(7, '-').substring(0, 10);
-                    const f1time = new Date(f1date).getTime();
-                    const f2time = new Date(f2date).getTime();
-                    return f2time - f1time;
-                });
-            
-            if (sortedimgs.length > 0) {
-                // Only let 4 items be in the array by modifying the length which is quicker than splicing.
-                sortedimgs.length = 4;
-                arrayempty = false;
+    let can_load_more = true;
+
+    const encodeBase64Bytes = (bytes: Uint8Array) => btoa(bytes.reduce((acc, current) => acc + String.fromCharCode(current), ''));
+
+    const requestImages = (amount: number = 9): RequestedImages|null => {
+        if (images.length == totalImages.length)
+            return null;
+
+        else return {
+            images: new Promise(async (resolve) => {
+                let newImages: Image[] = [];
+
+                for (let i = 0; lastLoaded < totalImages.length && i < amount; ++lastLoaded, ++i)
+                {
+                    const imagePath = `${await constants.paths.gameDir}/ScreenShot/${totalImages[lastLoaded].name}`;
+                    const binaryData = await Neutralino.filesystem.readBinaryFile(imagePath);
+
+                    // TODO: optimize images resolution
+                    newImages.push({
+                        src: 'data:image/png;base64,' + encodeBase64Bytes(new Uint8Array(binaryData)),
+                        path: imagePath
+                    });
+                }
+
+                resolve(newImages);
+            }),
+            hasMore: (lastLoaded + amount + 1) < totalImages.length
+        };
+    };
+
+    const updateColumns = (): Promise<void> => {
+        return new Promise(async (resolve) => {
+            const requestedImages = requestImages();
+
+            if (requestedImages !== null)
+            {
+                loading = true;
+                can_load_more = requestedImages.hasMore;
+
+                const columnsElements = document.getElementsByClassName('column');
+
+                for (const newImage of await requestedImages.images)
+                {
+                    columns[images.length % 3].push(newImage);
+
+                    const newImg = document.createElement('img');
+                    newImg.src = newImage.src;
+
+                    newImg.onclick = () => {
+                        Neutralino.os.execCommand(`xdg-open "${path.addSlashes(newImage.path)}"`, {
+                            background: true
+                        });
+                    };
+
+                    columnsElements[images.length % 3].appendChild(newImg);
+                    
+                    images.push(newImage);
+                }
+
+                // TODO: scroll to the (last - 2) element
+                (columnsElements[0].lastChild as HTMLElement).onload = (e) => (e.target as HTMLElement).scrollIntoView();
+
+                loading = false;
             }
 
-            sortedimgs.forEach(async img => {
-                Neutralino.filesystem.readBinaryFile(await constants.paths.gameDir + '/ScreenShot/' + img.entry).then(async img => {
-                    let uintdata = new Uint8Array(img);
-                    
-                    images.push({
-                        src: 'data:image/png;base64,' + encodeBase64Bytes(uintdata),
-                        orignialURI: await constants.paths.gameDir + '/ScreenShot/' + img.entry,
-                        width: 480,
-                        height: 270,
-                        click: async (e) => {
-                            Neutralino.os.execCommand(`xdg-open "${path.addSlashes(e.target.getAttribute('data-originalURI'))}"`, {
-                                background: true
-                            });
-                        }
-                    });
-                });
-            });
+            resolve();
+        });
+    };
 
-            await fakewait();
+    onMount(async () => {
+        fs.files(`${await constants.paths.gameDir}/ScreenShot`).then(async (files) => {
+            totalImages = files
+                .filter((file) => file.type == 'file')
+                .sort((a, b) => a.name < b.name ? 1 : (a.name > b.name ? -1 : 0));
 
+            updateColumns();
+            
             await Windows.current.show();
             await Windows.current.center(900, 600);
 
@@ -93,22 +130,31 @@
 
 {#if typeof $locale === 'string'}
     <main>
-        <h2 class="centtext">{$_('screenshots.heading')}</h2>
+        <h2>{$_('screenshots.heading')}</h2>
 
-        <p class="centtext">{$_('screenshots.info.0')}</p>
-        <p class="centtext">{$_('screenshots.info.1')}</p>
+        <p>{$_('screenshots.info')}</p>
 
-        {#if !arrayempty}
-            <div class="galleryholder">
-                <Gallery imageComponent={Image} gutter={6} {images} />
-            </div>
-        {:else}
-            <p class="centtext">{$_('screenshots.noimages')}</p>
+        <div class="images" style="display: {loading || images.length == 0 ? 'none' : 'flex'}">
+            <div class="column"></div>
+            <div class="column"></div>
+            <div class="column"></div>
+        </div>
+
+        {#if loading}
+            <img class="loader" src={LoaderImage} alt="">
+        {:else if images.length == 0}
+            <p>{$_('screenshots.no_images')}</p>
         {/if}
 
         <div class="buttons">
+            {#if !loading && can_load_more}
+                <Button lang="screenshots.buttons.more" click={() => {
+                    updateColumns();
+                }} />
+            {/if}
+            
             <!-- svelte-ignore missing-declaration -->
-            <Button lang="screenshots.button" click={async () => {
+            <Button lang="screenshots.buttons.folder" click={async () => {
                 Neutralino.os.execCommand(`xdg-open "${path.addSlashes(await constants.paths.gameDir + '/ScreenShot/')}"`, {
                     background: true
                 });

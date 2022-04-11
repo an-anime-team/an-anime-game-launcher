@@ -139,12 +139,12 @@ settings:
       patch:
         title: Patch
         items:
-          patch_version: 'Patch version:'
-          updating_info: 'Updating patch info...'
+          patch_version: 'Patch verzió:'
+          updating_info: 'Patch információk frissítése…'
           buttons:
-            revert_patch: revert patch
-            apply_patch: apply patch
-            reapply_patch: re-apply patch
+            revert_patch: patch visszaállítása
+            apply_patch: patch alkalmazása
+            reapply_patch: patch újratelepítése
 
   # Enhancements
   enhancements:
@@ -361,8 +361,8 @@ analytics:
 # Screenshots window
 screenshots:
   heading: Screenshots
-  info:
-    - This window only shows up to 4 images, Click the button on the bottom to view your folder.
-    - Click on a screenshot to open it up.
-  button: Open Screenshots
-  noimages: No Screenshots available
+  info: Click on a screenshot to open it up
+  buttons:
+    more: Load more
+    folder: Open screenshots
+  no_images: No screenshots available
