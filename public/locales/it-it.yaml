@@ -360,8 +360,8 @@ analytics:
 # Screenshots window
 screenshots:
   heading: Screenshots
-  info: Click on a screenshot to open it up
+  info: Clicca su uno screenshot per aprirlo
   buttons:
-    more: Load more
-    folder: Open screenshots
-  no_images: No screenshots available
+    more: Carica altro
+    folder: Apri screenshot
+  no_images: Nessuno screenshot disponibile

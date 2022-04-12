@@ -360,9 +360,9 @@ analytics:
 
 # Screenshots window
 screenshots:
-  heading: Screenshots
-  info: Click on a screenshot to open it up
+  heading: Skjermbilder
+  info: Klikk på ett skjermbilde for å åpne den
   buttons:
-    more: Load more
-    folder: Open screenshots
-  no_images: No screenshots available
+    more: Last mer
+    folder: Åpne skjermbilder
+  no_images: Ingen skjermbilder tilgjengelig
