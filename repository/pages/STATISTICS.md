@@ -10,7 +10,8 @@ Our current statistics you can find in [readme](../../README.md)
 
 | Period | Source | Data |
 | - | - | - |
-| 10 Mar — ? | Discord server | <img src="../pics/stats/2022/mar-apr.png" height="400px"> |
+| 10 Mar — 30 Mar | Discord server | <img src="../pics/stats/2022/mar-apr.png" height="400px"> |
+| 30 Mar — ? | Discord server | <img src="../pics/stats/2022/apr-may.png" height="400px"> |
 
 ## 2.5.0
 

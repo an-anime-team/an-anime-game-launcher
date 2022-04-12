@@ -74,7 +74,7 @@ field in your `config.yaml` file (settings -> launcher folder). If your system u
 
 | Game version | Launcher version | Patch version |
 | :---: | :---: | :---: |
-| 2.6.0 | 2.2.2 | 2.6.0 stable ✅ |
+| 2.6.0 | 2.3.0 | 2.6.0 stable ✅ |
 
 We have our own [An Anime Game](https://discord.gg/ck37X6UWBp) discord server where you can ask any questions
 
@@ -82,11 +82,11 @@ We have our own [An Anime Game](https://discord.gg/ck37X6UWBp) discord server wh
 
 This is our current usage statistics. You can find older ones [here](repository/pages/STATISTICS.md)
 
-### Our discord server — 434 members
+### Our discord server — 508 members
 
-<img src="repository/pics/stats/2022/mar-apr.png">
+<img src="repository/pics/stats/2022/apr-may.png">
 
-### 2.6.0 launcher users — 94 total
+### 2.6.0 launcher users — 182 total
 
 <img src="repository/pics/stats/2.6.0.png">
 
@@ -202,9 +202,9 @@ This is our current roadmap goals. You can find older ones [here](repository/pag
 * <s>Add analytics window</s> *(e0a09323, released in 2.2.0)*
 * <s>Add Chinese game's version support (due to changes in the Krock's patch)</s> *(75f2ad66, released in 2.2.0)*
 * <s>Add Patch category to the settings menu</s> *(07b32ada, 8a29d4a5, released in 2.2.1)*
-* <s>Implement manual config flushing functionality from the Empathize's API</s> *(4ba169f9)*
-* <s>Screenshots explorer</s> *(!61, 00d2d165)*
-* <s>Add cli argument to load the game automatically</s> (`--run-game`, 850afd97)
+* <s>Implement manual config flushing functionality from the Empathize's API</s> *(4ba169f9, released in 2.3.0)*
+* <s>Screenshots explorer</s> *(!61, 00d2d165, released in 2.3.0)*
+* <s>Add cli argument to load the game automatically</s> (`--run-game`, 850afd97, released in 2.3.0)
 * Game statistics window
 * Dark progress bar design
 * Changelog window

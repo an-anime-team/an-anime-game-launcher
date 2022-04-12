@@ -356,11 +356,11 @@ analytics:
     skip: Saltear
     skip_forever: Saltear y no preguntar de nuevo
 
-# Screenshots window
+# Ventana de Screenshots
 screenshots:
   heading: Screenshots
-  info: Click on a screenshot to open it up
+  info: Haz click en una screenshot para abrirla
   buttons:
-    more: Load more
-    folder: Open screenshots
-  no_images: No screenshots available
+    more: Cargar más
+    folder: Abrir screenshots
+  no_images: No hay screenshots disponibles

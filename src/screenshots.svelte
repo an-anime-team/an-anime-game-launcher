@@ -9,11 +9,11 @@
     import { Configs, Windows, path, fs } from './empathize';
     import type { Entry } from '@empathize/framework/dist/fs/fs';
 
+    import constants from './ts/Constants';
+
     import Button from './components/Button.svelte';
 
     import LoaderImage from './assets/gifs/loading-marie-please.gif';
-
-    import constants from './ts/Constants';
 
     type Image = {
         src: string,
