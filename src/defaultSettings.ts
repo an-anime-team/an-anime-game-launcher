@@ -241,5 +241,7 @@ export default new Promise<void>(async (resolve) => {
         skip_analytics: false
     });
 
+    await Configs.flush();
+
     resolve();
 });
