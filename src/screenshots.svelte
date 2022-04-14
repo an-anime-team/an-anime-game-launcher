@@ -109,22 +109,18 @@
                 .sort((a, b) => a.name < b.name ? 1 : (a.name > b.name ? -1 : 0));
 
             updateColumns();
-            
-            await Windows.current.show();
-            await Windows.current.center(900, 600);
+        }).catch(() => loading = false);
 
-            // Auto theme switcher
-            Configs.get('theme').then((theme) => {
-                if (theme === 'system')
-                    theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        // Auto theme switcher
+        Configs.get('theme').then((theme) => {
+            if (theme === 'system')
+                theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 
-                document.body.setAttribute('data-theme', theme as string);
-            });
+            document.body.setAttribute('data-theme', theme as string);
         });
-    });
 
-    Neutralino.events.on('windowClose', async () => {
-        Neutralino.app.exit();
+        await Windows.current.show();
+        await Windows.current.center(900, 600);
     });
 </script>
 

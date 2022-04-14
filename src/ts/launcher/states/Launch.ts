@@ -5,7 +5,8 @@ import constants from '../../Constants';
 import Runners from '../../core/Runners';
 import Game from '../../Game';
 import Locales from '../Locales';
-import Launcher from '../../Launcher';
+
+import type Launcher from '../../Launcher';
 
 declare const Neutralino;
 
@@ -177,10 +178,8 @@ export default (launcher: Launcher|null): Promise<void> => {
                      * Use terminal
                      * 
                      * bash -c "<command> && bash" is required to keep terminal open
-                     * 
-                     * Doesn't work in flatpak
                      */
-                    if (!await Launcher.isFlatpak() && await Configs.get('use_terminal'))
+                    if (await Configs.get('use_terminal'))
                     {
                         // Gnome
                         if (await Package.exists('gnome-terminal'))

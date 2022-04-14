@@ -94,7 +94,7 @@ export default class Launcher
                     height: 600,
                     resizable: true,
                     // enableInspector: true,
-                    exitProcessOnClose: false
+                    exitProcessOnClose: true
                 });
 
                 if (window.status)
@@ -102,9 +102,11 @@ export default class Launcher
                     this.screenshotsWindow = new Process(window.data!.pid);
 
                     this.screenshotsWindow.finish(async () => {
-                        Windows.current.show();
-                        Windows.current.center(1280, 700);
-                    })
+                        this.screenshotsWindow = undefined;
+
+                        await Windows.current.show();
+                        await Windows.current.center(1280, 700);
+                    });
 
                     Windows.current.hide();
                 }
