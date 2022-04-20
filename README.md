@@ -36,7 +36,7 @@ instead of the actual name of the game, to avoid search engine parsing.
 | --- | --- |
 | AppImage | [Releases](https://gitlab.com/KRypt0n_/an-anime-game-launcher/-/releases) page |
 | AUR | [an-anime-game-launcher-bin](https://aur.archlinux.org/packages/an-anime-game-launcher-bin) |
-| Pacstall | an-anime-game-launcher-bin [(?)](https://pacstall.dev) |
+| Pacstall | [an-anime-game-launcher-bin](https://pacstall.dev/packages/an-anime-game-launcher-bin) |
 
 ## Flatpak support
 
