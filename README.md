@@ -8,8 +8,7 @@
 
 > Arts sources:
 > 
-> Venti: https://genshin-impact.fandom.com/wiki/Venti/Media?file=Icon_Emoji_029_Venti_Shocked.png <br>
-> Ayato: https://www.pinterest.com/pin/715931672024388513
+> Ayaka: https://genshin-impact.fandom.com/wiki/Kamisato_Ayaka/Media?file=Icon_Emoji_Paimon%2527s_Paintings_Kamisato_Ayaka_1.png
 
 <br><br>
 
