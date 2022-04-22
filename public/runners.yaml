@@ -188,6 +188,17 @@
 # GE-Proton versions
 - title: GE-Proton
   runners:
+  # GE-Proton 7-15
+  - family: GE-Proton
+    name: GE-Proton7-15
+    title: GE-Proton 7-15
+    uri: https://github.com/GloriousEggroll/proton-ge-custom/releases/download/GE-Proton7-15/GE-Proton7-15.tar.gz
+    files:
+      wine: files/bin/wine64
+      wineserver: files/bin/wineserver
+      winecfg: files/lib64/wine/x86_64-windows/winecfg.exe
+    recommended: true
+  
   # GE-Proton 7-13
   # there were multiple hotfixes after 7-11 so all the broken versions were skipped and only the proper fixed version got added
   - family: GE-Proton
