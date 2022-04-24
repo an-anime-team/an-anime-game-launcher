@@ -1,0 +1,32 @@
+image: node:latest
+
+stages:
+  - build
+  - pack
+
+cache:
+  key: $CI_COMMIT_SHA
+  paths:
+    - dist
+    - node_modules/
+
+build-job:
+  stage: build
+  script:
+    - npm install; npm run neu update; npm run build
+
+package-job:
+  stage: pack
+  needs:
+    - build-job
+  artifacts:
+    paths:
+      - artifacts
+    expire_in: 2 weeks
+  script:
+    - find . -name "an-anime-game-launcher-linux_x64" | xargs chmod 755
+    - apt update; apt install -y curl gnupg appstream file
+    - npm run bundle; ${CI_PROJECT_DIR}/scripts/ci-appimage-prep.sh; npm run bundle
+  after_script:
+    - mkdir -p artifacts
+    - find ${CI_PROJECT_DIR} -name "An_Anime_Game_Launcher*.AppImage" | xargs -I '{}' mv "{}" artifacts/
