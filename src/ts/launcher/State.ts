@@ -31,6 +31,7 @@ export default class State
     public launchButton: HTMLElement;
     public pauseButton: HTMLElement;
     public predownloadButton: HTMLElement;
+    public screenshotsButton: HTMLElement;
     public settingsButton: HTMLElement;
 
     protected _state: LauncherState = 'game-launch-available';
@@ -57,13 +58,14 @@ export default class State
     {
         this.launcher = launcher;
 
-        this.backgroundImage = <HTMLElement>document.getElementById('background');
-        this.socialsIframe = <HTMLElement>document.getElementById('social-iframe');
+        this.backgroundImage = <HTMLElement> document.getElementById('background');
+        this.socialsIframe   = <HTMLElement> document.getElementById('social-iframe');
 
-        this.launchButton = <HTMLElement>document.getElementById('launch');
-        this.pauseButton = <HTMLElement>document.getElementById('pause');
-        this.predownloadButton = <HTMLElement>document.getElementById('predownload');
-        this.settingsButton = <HTMLElement>document.getElementById('settings');
+        this.launchButton      = <HTMLElement> document.getElementById('launch');
+        this.pauseButton       = <HTMLElement> document.getElementById('pause');
+        this.predownloadButton = <HTMLElement> document.getElementById('predownload');
+        this.screenshotsButton = <HTMLElement> document.getElementById('screenshots');
+        this.settingsButton    = <HTMLElement> document.getElementById('settings');
 
         Background.get().then((uri) => {
             if (uri)
@@ -76,12 +78,14 @@ export default class State
             if (this.events[this._state])
             {
                 this.launchButton.style['display'] = 'none';
+                this.screenshotsButton.style['display'] = 'none';
                 this.settingsButton.style['display'] = 'none';
 
                 this.events[this._state].then((event) => {
                     event.default(this.launcher).then(() => {
                         this.update().then(() => {
                             this.launchButton.style['display'] = 'block';
+                            this.screenshotsButton.style['display'] = 'block';
                             this.settingsButton.style['display'] = 'block';
                         });
                     });
@@ -92,6 +96,7 @@ export default class State
         this.predownloadButton.onclick = () => {
             this.launchButton.style['display'] = 'none';
             this.predownloadButton.style['display'] = 'none';
+            this.screenshotsButton.style['display'] = 'none';
             this.settingsButton.style['display'] = 'none';
 
             // We must specify this files here directly
@@ -104,6 +109,7 @@ export default class State
                     module.default(this.launcher).then(() => {
                         this.update().then(() => {
                             this.launchButton.style['display'] = 'block';
+                            this.screenshotsButton.style['display'] = 'block';
                             this.settingsButton.style['display'] = 'block';
                         });
                     });
