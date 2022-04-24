@@ -268,10 +268,10 @@ export default class State
      */
     public updateLocales(dictionary: object)
     {
-        Debug.log({
+        /*Debug.log({
             function: 'State.updateLocales',
             message: `Updated locales: ${JSON.stringify(dictionary)}`
-        });
+        });*/
 
         switch(this._state)
         {

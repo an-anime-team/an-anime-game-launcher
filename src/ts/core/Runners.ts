@@ -42,8 +42,10 @@ class Runners
 
             else
             {
-                Configs.set('runner', typeof runner === 'string' ?
+                await Configs.set('runner', typeof runner === 'string' ?
                     runner : runner.name);
+
+                await Configs.flush();
 
                 resolve(typeof runner === 'string' ?
                     await this.get(runner) : runner);

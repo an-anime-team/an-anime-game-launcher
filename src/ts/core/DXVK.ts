@@ -40,8 +40,10 @@ export default class DXVK
             
             else
             {
-                Configs.set('dxvk', typeof dxvk === 'string' ?
+                await Configs.set('dxvk', typeof dxvk === 'string' ?
                     dxvk : dxvk.version);
+
+                await Configs.flush();
 
                 resolve(typeof dxvk === 'string' ?
                     await this.get(dxvk) : dxvk);
