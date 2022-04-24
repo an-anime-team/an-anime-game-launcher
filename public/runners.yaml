@@ -1,6 +1,17 @@
 # Wine-GE-Proton versions
 - title: Wine-GE-Proton
   runners:
+  # Wine-GE-Proton 7-9
+  - family: Wine-GE-Proton
+    name: lutris-GE-Proton7-9-x86_64
+    title: Wine-GE-Proton 7-9
+    uri: https://github.com/GloriousEggroll/wine-ge-custom/releases/download/GE-Proton7-9/wine-lutris-GE-Proton7-9-x86_64.tar.xz
+    files:
+      wine: bin/wine64
+      wineserver: bin/wineserver
+      winecfg: lib64/wine/x86_64-windows/winecfg.exe
+    recommended: true
+  
   # Wine-GE-Proton 7-8
   - family: Wine-GE-Proton
     name: lutris-GE-Proton7-8-x86_64
