@@ -212,9 +212,9 @@ export default (launcher: Launcher|null): Promise<void> => {
                     process.outputInterval = null;
 
                     // Game was started by the launcher.bat file
-                    // so we just need to wait until AnimeGame.e process
+                    // so we just need to wait until AnimeGame.e process or unlockfps.exe process
                     // will be closed
-                    const processName = `${constants.placeholders.uppercase.first + constants.placeholders.uppercase.second}.e`;
+                    const processName = await Configs.get('fps_unlocker') ? `unlockfps.exe` : `${constants.placeholders.uppercase.first + constants.placeholders.uppercase.second}.e`;
 
                     let closeGameCounter = 0;
 
