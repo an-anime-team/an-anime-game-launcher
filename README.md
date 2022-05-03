@@ -75,7 +75,7 @@ field in your `config.yaml` file (settings -> launcher folder). If your system u
 
 | Game version | Launcher version | Patch version |
 | :---: | :---: | :---: |
-| 2.6.0 | 2.3.1 | 2.6.0 stable ✅ |
+| 2.6.0 | 2.3.2 | 2.6.0 stable ✅ |
 
 We have our own [An Anime Game](https://discord.gg/ck37X6UWBp) discord server where you can ask any questions
 
@@ -83,11 +83,11 @@ We have our own [An Anime Game](https://discord.gg/ck37X6UWBp) discord server wh
 
 This is our current usage statistics. You can find older ones [here](repository/pages/STATISTICS.md)
 
-### Our discord server — 549 members
+### Our discord server — 647 members
 
 <img src="repository/pics/stats/2022/apr-may.png">
 
-### 2.6.0 launcher users — 231 total
+### 2.6.0 launcher users — 337 total
 
 <img src="repository/pics/stats/2.6.0.png">
 

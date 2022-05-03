@@ -1,12 +1,12 @@
 {
   "name": "an-anime-game-launcher",
-  "version": "2.3.1",
+  "version": "2.3.2",
   "license": "GPL-3.0",
   "type": "module",
   "scripts": {
     "neu": "neu",
     "dev": "vite build && neu run --disable-auto-reload",
-    "build": "vite build && rm -rf dist/an-anime-game-launcher/public && mkdir -p dist/an-anime-game-launcher/public && cp -r public dist/an-anime-game-launcher && neu build --release",
+    "build": "vite build && rm -rf dist/an-anime-game-launcher/public && mkdir -p dist/an-anime-game-launcher/public && cp -r public dist/an-anime-game-launcher && neu build --release && chmod +x dist/an-anime-game-launcher/an-anime-game-launcher-linux_x64",
     "bundle": "node scripts/bundle-appimage.cjs",
     "check": "svelte-check --tsconfig ./tsconfig.json"
   },
