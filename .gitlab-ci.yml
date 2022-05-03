@@ -10,15 +10,15 @@ cache:
     - dist
     - node_modules/
 
-build-job:
+build-jerb:
   stage: build
   script:
     - npm install; npm run neu update; npm run build
 
-package-job:
+package-jerb:
   stage: pack
   needs:
-    - build-job
+    - build-jerb
   artifacts:
     paths:
       - artifacts
