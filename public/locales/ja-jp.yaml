@@ -137,14 +137,14 @@ settings:
 
       # Patch-related settings
       patch:
-        title: Patch
+        title: パッチ
         items:
-          patch_version: 'Patch version:'
-          updating_info: 'Updating patch info...'
+          patch_version: 'パッチのバージョン:'
+          updating_info: 'パッチの情報を更新しています...'
           buttons:
-            revert_patch: revert patch
-            apply_patch: apply patch
-            reapply_patch: re-apply patch
+            revert_patch: パッチを元に戻す
+            apply_patch: パッチを適用
+            reapply_patch: パッチを適用しなおす
 
   # Enhancements
   enhancements:
@@ -168,7 +168,7 @@ settings:
           tooltip: ESync はマルチスレッド操作を同期させる仕組みです。ゲームのパフォーマンスを向上させることができます。
                   FSync は ESync の強化版で、いくつかのカーネルバージョンで動作します。
           items:
-            none: None
+            none: なし
             esync: ESync
             fsync: FSync
             futex2: Futex2
@@ -197,7 +197,7 @@ settings:
           title: GameMode を使用
           tooltip:
             enabled: ゲームのパフォーマンスが上昇します
-            disabled: ⚠️ gamemode がインストールされていません
+            disabled: ⚠️ gamemode パッケージがインストールされていません
 
         # Borderless Window
         borderless_window:
@@ -209,12 +209,12 @@ settings:
         # Unlock FPS
         fps_unlocker:
           title: FPS をアンロック
-          tooltip: 有効化すると最大 60fps のリミッターが解除されます
+          tooltip: 有効化すると最大 60fps の制限が解除されます
 
         # Use separate terminal window to run the game
         use_terminal:
           title: ターミナルを表示
-          tooltip: 有効化すると別のターミナルウィンドウを開いて Wine コマンドを実行します
+          tooltip: 有効化すると別のターミナルウィンドウを開いて Wine コマンドを実行するようになります
 
     # Enhancements related to the launcher
     launcher:
@@ -289,7 +289,7 @@ notifications:
   # Launcher update
   launcher_update_available:
     title: 'ランチャーのアップデートが利用可能: {from} -> {to}'
-    body: ランチャーの新しいバージョンは、プロジェクトのリポジトリ ({repository}) からダウンロードできます。
+    body: ランチャーの新しいバージョンは、プロジェクトのリポジトリ ({repository}) からダウンロードできます
 
   # Before telemetry check when iputils is not downloaded
   iputils_package_required:
@@ -309,12 +309,12 @@ notifications:
   # If patch wasn't applied because of some error
   patch_applying_error:
     title: An Anime Game Launcher
-    body: パッチが正常に適用されませんでした。ログファイルを確認して原因を調査するか、Discord サーバーで誰かに聞いてみてください。
+    body: パッチが正常に適用されませんでした。ログファイルを確認して原因を調査するか、Discord サーバーで誰かに聞いてみてください
 
   # Patch repositories are not available
   patch_repos_unavailable:
     title: An Anime Game Launcher
-    body: どのパッチリポジトリも利用できません。ゲームを開始することはできますが、ランチャーはパッチが正常に適用されているかどうかを判断できません。
+    body: どのパッチリポジトリも利用できません。ゲームを開始することはできますが、ランチャーはパッチが正常に適用されているかどうかを判断できません
 
   # HDiffPatch couldn't successfully apply game files changes
   game_changes_applying_error:
@@ -329,8 +329,8 @@ tos_violation:
         このツールは Linux 上で {game} をプレイすることを容易にするために設計されており、
         より少ない手間でゲームを遊ぶことを唯一の目的としています。
         また、既存のコンポーネントを使用し、ユーザーにとってシンプルな体験を楽しめるようにしています。
-        しかし、ここで使用されているいくつかのコンポーネントは、 {game} の {company} 利用規約に違反している可能性があります。
-        このランチャーを使用している場合、あなたのアカウントは利用規約に違反していることになり、
+        しかし、ここで使用されているいくつかのコンポーネントは、 {company} による {game} の利用規約に違反している可能性があります。
+        このランチャーを使用している場合、あなたのアカウントは利用規約に違反しているとみなされ、
         アカウント停止を含む処罰が入る可能性があります。
         非公式ランチャーでゲームをプレイすることのリスクを理解した上で、 テイワットの世界に羽を広げよう！
   buttons:
@@ -347,12 +347,12 @@ analytics:
 
   body:
     - アクティブな Linux ユーザーを収集するため、煙緋はゲーム更新の度に IP アドレスを収集したいようです。
-    - IP アドレスはセキュリティー保護のためハッシュ化されます。
+    - IP アドレスはセキュリティー保護のためハッシュ化されます
 
   actions:
     share_country:
       title: 国情報を共有する
-      hint: より詳細な統計を取るために、あなたの IP アドレスが登録された国を煙緋が保存できるようにします。国以外のデータは保存されません。
+      hint: より詳細な統計を取るために、あなたの IP アドレスが登録された国を収集できるようにします。国以外のデータは保存されません。
 
     participate: 参加
     skip: スキップ
@@ -360,9 +360,9 @@ analytics:
 
 # Screenshots window
 screenshots:
-  heading: Screenshots
-  info: Click on a screenshot to open it up
+  heading: スクリーンショット
+  info: スクリーンショットをクリックして開く
   buttons:
-    more: Load more
-    folder: Open screenshots
-  no_images: No screenshots available
+    more: さらに表示
+    folder: スクリーンショットの保存先を開く
+  no_images: スクリーンショットはありません
