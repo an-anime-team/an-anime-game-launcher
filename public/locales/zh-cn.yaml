@@ -360,9 +360,9 @@ analytics:
 
 # Screenshots window
 screenshots:
-  heading: Screenshots
-  info: Click on a screenshot to open it up
+  heading: 截图
+  info: 点击截图以打开
   buttons:
-    more: Load more
-    folder: Open screenshots
-  no_images: No screenshots available
+    more: 加载更多
+    folder: 打开文件夹
+  no_images: 没有可用的截图
