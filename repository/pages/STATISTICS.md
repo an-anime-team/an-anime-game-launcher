@@ -10,16 +10,16 @@ Our current statistics you can find in [readme](../../README.md)
 
 | Period | Source | Data |
 | - | - | - |
-| 16 Mar — 30 Mar | Discord server | <img src="../pics/stats/2022/mar-apr.png" height="400px"> |
-| 6 Apr — 20 Apr | Discord server | <img src="../pics/stats/2022/apr-may.png" height="400px"> |
-| 20 Apr — ? | Discord server | <img src="../pics/stats/2022/may-jun.png" height="400px"> |
+| 6 Apr — 20 Apr | Discord server | <img src="../pics/stats/2022/apr6-apr20.png" height="400px"> |
+| 20 Apr — 2 May | Discord server | <img src="../pics/stats/2022/apr20-may2.png" height="400px"> |
+| 10 May — 22 May | Discord server | <img src="../pics/stats/2022/may10-may22.png" height="400px"> |
 
 ## 2.5.0
 
 | Period | Source | Data |
 | - | - | - |
-| 20 Feb — 10 Mar | Discord server | <img src="../pics/stats/2022/feb-mar.png" height="400px"> |
-| 10 Mar — ? | Discord server | <img src="../pics/stats/2022/mar-apr.png" height="400px"> |
+| 24 Feb — 8 Mar | Discord server | <img src="../pics/stats/2022/feb24-mar8.png" height="400px"> |
+| 16 Mar — Mar 30 | Discord server | <img src="../pics/stats/2022/mar16-mar30.png" height="400px"> |
 
 ### In-launcher analytics
 
