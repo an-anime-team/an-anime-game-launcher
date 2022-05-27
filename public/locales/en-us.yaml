@@ -57,13 +57,13 @@ launcher:
       unavailable:
         title: Patch unavailable
         hint: This game version has no anti-cheat patch.
-              Please, wait a few days before there will be a test or stable version
+              Please wait a few days until there is a test or stable version available
       
       # Patch is in testing
       test:
         title: Apply test patch
         hint: This game version has an experimental anti-cheat patch.
-              You can wait a few days until it is stable or apply it at your own risk
+              You can wait a few days until it is stable, or apply it at your own risk
 
       # Patch is stable
       stable: Apply patch
@@ -208,7 +208,7 @@ settings:
         # Unlock FPS
         fps_unlocker:
           title: Unlock FPS
-          tooltip: This option will unlock maximum of the 60 fps limitation
+          tooltip: This option will unlock the 60 FPS limit
 
         # Use separate terminal window to run the game
         use_terminal:
@@ -304,7 +304,7 @@ notifications:
   # Before patch applying when xdelta3 package is not downloaded
   xdelta3_package_required:
     title: An Anime Game Launcher
-    body: You must download xdelta3 package to apply the patch
+    body: You must download the xdelta3 package to apply the patch
 
   # If patch wasn't applied because of some error
   patch_applying_error:
@@ -314,7 +314,7 @@ notifications:
   # Patch repositories are not available
   patch_repos_unavailable:
     title: An Anime Game Launcher
-    body: None of the patch repositories are available. You'll be able to run the game, but launcher can't be sure is it patched properly
+    body: None of the patch repositories are available. You'll be able to run the game, but launcher can't be sure it is patched properly
 
   # HDiffPatch couldn't successfully apply game files changes
   game_changes_applying_error:
