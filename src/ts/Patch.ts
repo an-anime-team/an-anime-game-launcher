@@ -325,7 +325,7 @@ export default class Patch
                 fetch(`${patchUri}/raw/master/${version.replaceAll('.', '')}/README.txt`, this.fetchTimeout)
                     .then((readmeResponse) => {
                         // Return an error if patch's server is unavailable
-                        if (readmeResponse.status === null)
+                        if (!readmeResponse.ok)
                             rejectOutput(new Error(`${source} patch repository is unreachable`));
 
                         // If [version]/README.txt file doesn't exist - it means
@@ -361,7 +361,7 @@ export default class Patch
                                         fetch(`${patchUri}/raw/master/${version.replaceAll('.', '')}/patch.sh`, this.fetchTimeout)
                                             .then((patcherResponse) => {
                                                 // Return an error if patch's server is unavailable
-                                                if (patcherResponse.status === null)
+                                                if (!patcherResponse.ok)
                                                     rejectOutput(new Error(`${source} patch repository is unreachable`));
                                                 
                                                 else patcherResponse.body(this.fetchTimeout)
