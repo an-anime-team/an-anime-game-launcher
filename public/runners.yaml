@@ -1,6 +1,28 @@
 # Wine-GE-Proton versions
 - title: Wine-GE-Proton
   runners:
+  # Wine-GE-Proton 7-15
+  - family: Wine-GE-Proton
+    name: lutris-GE-Proton7-15-x86_64
+    title: Wine-GE-Proton 7-15
+    uri: https://github.com/GloriousEggroll/wine-ge-custom/releases/download/GE-Proton7-14/wine-lutris-GE-Proton7-15-x86_64.tar.xz
+    files:
+      wine: bin/wine64
+      wineserver: bin/wineserver
+      winecfg: lib64/wine/x86_64-windows/winecfg.exe
+    recommended: true
+
+  # Wine-GE-Proton 7-14 (skipped 7-13 due to it being completely borked)
+  - family: Wine-GE-Proton
+    name: lutris-GE-Proton7-14-x86_64
+    title: Wine-GE-Proton 7-14
+    uri: https://github.com/GloriousEggroll/wine-ge-custom/releases/download/GE-Proton7-14/wine-lutris-GE-Proton7-14-x86_64.tar.xz
+    files:
+      wine: bin/wine64
+      wineserver: bin/wineserver
+      winecfg: lib64/wine/x86_64-windows/winecfg.exe
+    recommended: true
+  
   # Wine-GE-Proton 7-12
   - family: Wine-GE-Proton
     name: lutris-GE-Proton7-12-x86_64
@@ -87,7 +109,7 @@
       wine: bin/wine64
       wineserver: bin/wineserver
       winecfg: lib64/wine/x86_64-windows/winecfg.exe
-    recommended: true
+    recommended: false # works, but quite outdated as of 29th May 2022
 
   # Wine-GE-Proton 7-4
   - family: Wine-GE-Proton
@@ -124,6 +146,8 @@
       wine: bin/wine64
       wineserver: bin/wineserver
       winecfg: lib64/wine/x86_64-windows/winecfg.exe
+
+    # works, but quite outdated as of 29th May 2022 will stay recommended since its the most stable version
     recommended: true
 
   # Wine-GE-Proton 7-1
@@ -135,7 +159,7 @@
       wine: bin/wine64
       wineserver: bin/wineserver
       winecfg: lib64/wine/x86_64-windows/winecfg.exe
-    recommended: true
+    recommended: false # works, but quite outdated as of 29th May 2022
 
   # Project versioning (and name) was changed
   # https://github.com/GloriousEggroll/wine-ge-custom/releases/tag/GE-Proton7-1
@@ -232,6 +256,17 @@
 # GE-Proton versions
 - title: GE-Proton
   runners:
+  # GE-Proton 7-19
+  - family: GE-Proton
+    name: GE-Proton7-19
+    title: GE-Proton 7-19
+    uri: https://github.com/GloriousEggroll/proton-ge-custom/releases/download/GE-Proton7-18/GE-Proton7-19.tar.gz
+    files:
+      wine: files/bin/wine64
+      wineserver: files/bin/wineserver
+      winecfg: files/lib64/wine/x86_64-windows/winecfg.exe
+    recommended: true
+
   # GE-Proton 7-18
   - family: GE-Proton
     name: GE-Proton7-18
