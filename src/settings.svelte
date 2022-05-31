@@ -372,7 +372,7 @@
                                         }
                                     }}
                                 />
-                            {:else}
+                            {:else if patchInfo.state != 'preparation'}
                                 <!-- svelte-ignore missing-declaration -->
                                 <Button
                                     lang="settings.general.items.patch.items.buttons.apply_patch"

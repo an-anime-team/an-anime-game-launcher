@@ -11,6 +11,10 @@ import { DebugThread } from '@empathize/framework/dist/meta/Debug';
 import constants from '../Constants';
 import AbstractInstaller from './AbstractInstaller';
 
+// If true, runners list will be loaded directly from the file
+// instead of the repository. Should always be false for release builds
+const LOAD_DIRECTLY = false;
+
 declare const Neutralino;
 
 class Stream extends AbstractInstaller
@@ -72,7 +76,7 @@ class Runners
                 const runners_list = await Cache.get('Runners.list.remote');
 
                 // If the runners cache is no expired - return it
-                if (runners_list && !runners_list.expired)
+                if (!LOAD_DIRECTLY && runners_list && !runners_list.expired)
                     list = runners_list.value['list'];
 
                 else
@@ -81,7 +85,7 @@ class Runners
                     const response = await fetch(constants.uri.runners_list, 2000);
 
                     // If it wasn't fetched - load locally stored one
-                    if (!response.ok)
+                    if (!response.ok || LOAD_DIRECTLY)
                         list = YAML.parse(await Neutralino.filesystem.readFile(`${constants.paths.appDir}/public/runners.yaml`));
 
                     else

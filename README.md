@@ -6,12 +6,6 @@
 
 <br><br>
 
-> Arts sources:
-> 
-> Ayaka: https://genshin-impact.fandom.com/wiki/Kamisato_Ayaka/Media?file=Icon_Emoji_Paimon%2527s_Paintings_Kamisato_Ayaka_1.png
-
-<br><br>
-
 # Please don't link to this repository
 
 We understand you want to help people run An Anime Game on Linux. The issue is, the more people know
@@ -75,7 +69,7 @@ field in your `config.yaml` file (settings -> launcher folder). If your system u
 
 | Game version | Launcher version | Patch version |
 | :---: | :---: | :---: |
-| 2.6.0 | 2.3.3 | 2.6.0 stable ✅ |
+| 2.7.0 | 2.3.4 | 2.7.0 unavailable ❌ |
 
 We have our own [An Anime Game](https://discord.gg/ck37X6UWBp) discord server where you can ask any questions
 
@@ -83,13 +77,13 @@ We have our own [An Anime Game](https://discord.gg/ck37X6UWBp) discord server wh
 
 This is our current usage statistics. You can find older ones [here](repository/pages/STATISTICS.md)
 
-### Our discord server — 742 members
+### Our discord server — 865 members
 
-<img src="repository/pics/stats/2022/may10-may22.png">
+<img src="repository/pics/stats/2022/may17-may31.png">
 
-### 2.6.0 launcher users — 495 total
+### 2.7.0 launcher users — 55 total
 
-<img src="repository/pics/stats/2.6.0.png">
+<img src="repository/pics/stats/2.7.0.png">
 
 <br>
 

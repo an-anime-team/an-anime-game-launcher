@@ -39,7 +39,7 @@ const bundler = new Bundler({
     output: path.join(__dirname, '../dist/An Anime Game Launcher.AppImage'),
 
     // Application version
-    version: '2.3.3'
+    version: '2.3.4'
 });
 
 // Bundle project
