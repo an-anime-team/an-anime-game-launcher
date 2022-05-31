@@ -3,6 +3,7 @@ type VoicePack = {
     name: string;
     path: string;
     size: string;
+    package_size: string;
     md5: string;
 }
 

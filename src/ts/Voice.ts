@@ -34,43 +34,98 @@ export default class Voice
      */
     public static get installed(): Promise<InstalledVoice[]>
     {
-        return new Promise(async (resolve) => {
-            const voiceDir = await constants.paths.voiceDir;
+        return new Promise((resolve) => {
+            Game.getLatestData()
+                .then(async (data) => {
+                    const voiceDir = await constants.paths.voiceDir;
 
-            let installedVoices: InstalledVoice[] = [];
-            
-            // Parse installed voice packages
-            Neutralino.filesystem.readDirectory(voiceDir)
-                .then(async (files) => {
-                    files = files.filter((file) => file.type == 'DIRECTORY')
-                        .map((file) => file.entry);
+                    let installedVoices: InstalledVoice[] = [];
 
-                    for (const folder of Object.values(this.langs))
-                        if (files.includes(folder))
-                        {
-                            const voiceFiles: { entry: string, type: string }[] = await Neutralino.filesystem.readDirectory(`${voiceDir}/${folder}`);
+                    // Parse installed voice packages
+                    Neutralino.filesystem.readDirectory(voiceDir)
+                        .then(async (files) => {
+                            files = files.filter((file) => file.type == 'DIRECTORY')
+                                .map((file) => file.entry);
 
-                            const latestVoiceFile = voiceFiles.sort((a, b) => a.entry < b.entry ? -1 : 1).pop();
+                            for (const folder of Object.values(this.langs))
+                                if (files.includes(folder))
+                                {
+                                    // Since anime company changed the way they store voice packages data
+                                    // now to identify its version I want to calculate the actual
+                                    // size of the voice package directory and compare it with all the
+                                    // remotely available voice packages sizes. The closest one is the actual version of the package
 
-                            installedVoices.push({
-                                lang: Object.keys(this.langs).find((lang) => this.langs[lang] === folder),
-                                version: latestVoiceFile ? `${/_([\d]*\.[\d]*)_/.exec(latestVoiceFile.entry)![1]}.0` : null
-                            } as InstalledVoice);
-                        }
+                                    const actualSize = parseInt((await Neutralino.os.execCommand(`du -b "${path.addSlashes(`${voiceDir}/${folder}`)}"`))
+                                        .stdOut.split('\t')[0]);
 
-                        resolveVoices();
+                                    const locale = Object.keys(this.langs).find((lang) => this.langs[lang] === folder);
+
+                                    let version: { version: string | null, size: number, diff: number } = {
+                                        version: null,
+                                        size: 0,
+                                        diff: actualSize
+                                    };
+
+                                    for (const voicePackage of data.game.latest.voice_packs)
+                                        if (voicePackage.language == locale)
+                                        {
+                                            const packageSize = parseInt(voicePackage.package_size);
+
+                                            version = {
+                                                version: data.game.latest.version,
+                                                size: packageSize,
+                                                diff: Math.abs(packageSize - actualSize)
+                                            };
+
+                                            break;
+                                        }
+
+                                    for (const diff of data.game.diffs)
+                                        for (const voicePackage of diff.voice_packs)
+                                            if (voicePackage.language == locale)
+                                            {
+                                                const packageSize = parseInt(voicePackage.package_size);
+                                                const sizesDiff = Math.abs(packageSize - actualSize);
+
+                                                // If this version size closer to the actual size
+                                                if (sizesDiff < version.diff)
+                                                {
+                                                    version = {
+                                                        version: data.game.latest.version,
+                                                        size: packageSize,
+                                                        diff: sizesDiff
+                                                    };
+                                                }
+                                                
+                                                break;
+                                            }
+
+                                    installedVoices.push({
+                                        lang: locale,
+
+                                        // If the difference is too big - we expect this voice package
+                                        // to be like really old, and we can't predict its version
+                                        // for now this difference is 3 GB. Idk which value is better
+                                        // This one should work fine for 2.5.0 - 2.7.0 versions window
+                                        version: version.diff < 3072000000 ? version.version : null
+                                    } as InstalledVoice);
+                                }
+
+                                resolveVoices();
+                        })
+                        .catch(() => resolveVoices());
+
+                    // Parse active voice package
+                    const resolveVoices = () => {
+                        Debug.log({
+                            function: 'Voice.current',
+                            message: `Installed voices: ${installedVoices.map((voice) => `${voice.lang} (${voice.version})`).join(', ')}`
+                        });
+
+                        resolve(installedVoices);
+                    };
                 })
-                .catch(() => resolveVoices());
-
-            // Parse active voice package
-            const resolveVoices = () => {
-                Debug.log({
-                    function: 'Voice.current',
-                    message: `Installed voices: ${installedVoices.map((voice) => `${voice.lang} (${voice.version})`).join(', ')}`
-                });
-
-                resolve(installedVoices);
-            };
+                .catch(() => resolve([]));
         });
     }
 
