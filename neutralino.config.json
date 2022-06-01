@@ -1,6 +1,6 @@
 {
   "applicationId": "com.gitlab.KRypt0n_.an-anime-game-launcher",
-  "version": "2.3.5-beta1",
+  "version": "2.3.5",
   "defaultMode": "window",
   "port": 0,
   "documentRoot": "/bundle/",
