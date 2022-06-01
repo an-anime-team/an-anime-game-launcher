@@ -5,6 +5,7 @@ import constants from '../../Constants';
 import Runners from '../../core/Runners';
 import Game from '../../Game';
 import Locales from '../Locales';
+import DXVK from '../../core/DXVK';
 
 import type Launcher from '../../Launcher';
 
@@ -56,6 +57,10 @@ export default (launcher: Launcher|null): Promise<void> => {
 
                     // Some special variables
                     let env: any = {};
+
+                    // If we're running dxvk-async
+                    if ((await DXVK.current())?.version.includes('async'))
+                        env['DXVK_ASYNC'] = 1;
 
                     /**
                      * HUD

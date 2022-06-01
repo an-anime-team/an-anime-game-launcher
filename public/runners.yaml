@@ -5,7 +5,7 @@
   - family: Wine-GE-Proton
     name: lutris-GE-Proton7-16-x86_64
     title: Wine-GE-Proton 7-16
-    uri: https://github.com/GloriousEggroll/wine-ge-custom/releases/download/GE-Proton7-15/wine-lutris-GE-Proton7-15-x86_64.tar.xz
+    uri: https://github.com/GloriousEggroll/wine-ge-custom/releases/download/GE-Proton7-16/wine-lutris-GE-Proton7-16-x86_64.tar.xz
     files:
       wine: bin/wine64
       wineserver: bin/wineserver

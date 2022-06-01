@@ -60,9 +60,9 @@ class Stream
                 this.onDownloadStart();
 
             // Run `git clone` if the patch repo is not downloaded
-            // or `git pull` to fetch changes
+            // or `git fetch --all` to fetch changes
             await fs.exists(`${launcherDir}/patch`) ?
-                await Neutralino.os.execCommand(`cd "${path.addSlashes(launcherDir)}/patch" && git fetch --all && git reset --hard origin/master`) :
+                await Neutralino.os.execCommand(`cd "${path.addSlashes(launcherDir)}/patch" && git remote set-url origin "${path.addSlashes(patchUri)}" && git fetch --all && git reset --hard origin/master`) :
                 await Neutralino.os.execCommand(`git clone "${path.addSlashes(patchUri)}" "${path.addSlashes(launcherDir)}/patch"`);
 
             this.downloadFinished = true;
@@ -273,8 +273,8 @@ export default class Patch
     public static getPatchInfo(version: string, source: 'origin' | 'additional' = 'origin'): Promise<PatchInfo|null>
     {
         return new Promise(async (resolve, reject) => {
-            const resolveOutput = (output: PatchInfo|null, unityPlayerHash: string|null = null) => {
-                Cache.set(`Patch.getPatchInfo.${version}.${source}`, {
+            const resolveOutput = async (output: PatchInfo|null, unityPlayerHash: string|null = null) => {
+                await Cache.set(`Patch.getPatchInfo.${version}.${source}`, {
                     available: true,
                     output: output,
                     playerHash: unityPlayerHash
@@ -283,12 +283,12 @@ export default class Patch
                 resolve(output);
             };
 
-            const rejectOutput = (error: Error) => {
+            const rejectOutput = async (error: Error) => {
                 // Cache this error only on an hour
                 // because then the server can become alive
-                Cache.set(`Patch.getPatchInfo.${version}.${source}`, {
+                await Cache.set(`Patch.getPatchInfo.${version}.${source}`, {
                     available: false,
-                    error: error
+                    error: error.message
                 }, 3600);
 
                 reject(error);
@@ -385,24 +385,31 @@ export default class Patch
                                                                 server: await Game.server
                                                             };
 
-                                                            const hashesMatches = [...response.matchAll(/if \[ "\${sum}" == "([a-z0-9]{32})" \]; then/mg)];
+                                                            const hashesMatches = [...response.matchAll(/if \[ "\${sum}" == "(.*)" \]; then/mg)];
 
                                                             // If we could get original UnityPlayer.dll hash - then we can
                                                             // compare it with actual UnityPlayer.dll hash and say whether the patch
                                                             // was applied or not
                                                             if (hashesMatches.length === 2)
                                                             {
+                                                                // Sometimes patch can contain "<TODO>" lines in hashes indicating
+                                                                // that something is not done yet
                                                                 const originalPlayer = {
-                                                                    global: hashesMatches[0][1],
-                                                                    cn: hashesMatches[1][1]
+                                                                    global: hashesMatches[0][1].length == 32 ? hashesMatches[0][1] : null,
+                                                                    cn:     hashesMatches[1][1].length == 32 ? hashesMatches[1][1] : null
                                                                 }[patchInfo.server];
 
-                                                                const playerHash = await md5(`${await constants.paths.gameDir}/UnityPlayer.dll`);
+                                                                if (originalPlayer !== null)
+                                                                {
+                                                                    const playerHash = await md5(`${await constants.paths.gameDir}/UnityPlayer.dll`);
 
-                                                                if (playerHash !== null)
-                                                                    patchInfo.applied = playerHash != originalPlayer;
+                                                                    if (playerHash !== null)
+                                                                        patchInfo.applied = playerHash != originalPlayer;
 
-                                                                resolveOutput(patchInfo, originalPlayer);
+                                                                    resolveOutput(patchInfo, originalPlayer);
+                                                                }
+
+                                                                else rejectOutput(new Error('Patch is not available for your region'));
                                                             }
 
                                                             else resolveOutput(patchInfo);

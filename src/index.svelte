@@ -7,7 +7,9 @@
     import { onMount } from 'svelte';
     import { _, locale } from 'svelte-i18n';
 
-    import { Windows, path, Archive, Debug, Downloader, IPC, Configs } from './empathize';
+    import { Windows, path, Archive, Debug, Downloader, IPC, Configs, promisify } from './empathize';
+
+    import { version } from '../package.json';
 
     import Launcher from './ts/Launcher';
     import constants from './ts/Constants';
@@ -18,6 +20,14 @@
     import ScreenshotsIcon from './assets/images/camera.png';
     import ScreenshotsActiveIcon from './assets/images/camera-active.png';
     import DownloadIcon from './assets/images/cloud-download.png';
+
+    promisify(async () => {
+        Debug.log([
+            'An Anime Game Launcher',
+            `Version: ${version}`,
+            `Sandboxed (flatpak): ${await Launcher.isFlatpak() ? 'yes' : 'no'}`
+        ].join('\r\n - '));
+    });
 
     // Steam Deck users asked me to add something like that
     if (NL_ARGS.includes('--run-game'))
@@ -97,7 +107,7 @@
                 setTimeout(async () => {
                     const log = `=== Log can be incomplete ===\r\n\r\n${Debug.get().join('\r\n')}`;
 
-                    if (log != '')
+                    if (log.length > 35)
                         await Neutralino.filesystem.writeFile(`${await constants.paths.launcherDir}/logs/latest.log`, log);
 
                     logSavingStarted = false;

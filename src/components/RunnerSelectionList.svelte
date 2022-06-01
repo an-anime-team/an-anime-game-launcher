@@ -92,7 +92,7 @@
                     class="list-item"
                     class:list-item-downloaded={installedRunners[runner.name]}
                     class:list-item-active={runner.name === selectedVersion.name}
-                    class:list-item-hidden={recommendable && !runner.recommended}
+                    class:list-item-hidden={recommendable && !runner.recommended && runner.name !== selectedVersion.name}
                     class:list-item-downloading={progress[runner.name]}
                     class:list-item-applying={applying[runner.name]}
                     class:list-item-disabled={disabledRunners[runner.name]}

@@ -94,7 +94,7 @@
             class="list-item"
             class:list-item-downloaded={installedDxvks[dxvk.version]}
             class:list-item-active={dxvk.version === selectedVersion}
-            class:list-item-hidden={recommendable && !dxvk.recommended}
+            class:list-item-hidden={recommendable && !dxvk.recommended && dxvk.version !== selectedVersion}
             class:list-item-downloading={progress[dxvk.version]}
             class:list-item-applying={applying[dxvk.version]}
             class:list-item-disabled={disabledDxvks[dxvk.version]}

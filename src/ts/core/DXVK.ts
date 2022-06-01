@@ -9,6 +9,10 @@ import constants from '../Constants';
 import AbstractInstaller from './AbstractInstaller';
 import Runners from './Runners';
 
+// If true, dxvk list will be loaded directly from the file
+// instead of the repository. Should always be false for release builds
+const LOAD_DIRECTLY = false;
+
 declare const Neutralino;
 
 class Stream extends AbstractInstaller
@@ -70,7 +74,7 @@ export default class DXVK
                 const dxvk_list = await Cache.get('DXVK.list.remote');
 
                 // If the dxvks cache is no expired - return it
-                if (dxvk_list && !dxvk_list.expired)
+                if (!LOAD_DIRECTLY && dxvk_list && !dxvk_list.expired)
                     list = dxvk_list.value['list'];
 
                 else
@@ -79,7 +83,7 @@ export default class DXVK
                     const response = await fetch(constants.uri.dxvk_list, 1500);
 
                     // If it wasn't fetched - load locally stored one
-                    if (!response.ok)
+                    if (!response.ok || LOAD_DIRECTLY)
                         list = YAML.parse(await Neutralino.filesystem.readFile(`${constants.paths.appDir}/public/dxvks.yaml`));
 
                     else
