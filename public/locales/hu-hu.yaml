@@ -134,7 +134,7 @@ settings:
         launcher: launcher mappa
         game: játékmappa
         repair_game: Játékfájlok javítása
-        clear_cache: clear cache
+        clear_cache: gyorsítótár törlése
 
       # Patch-related settings
       patch:

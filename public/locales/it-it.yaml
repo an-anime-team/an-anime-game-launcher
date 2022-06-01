@@ -133,7 +133,7 @@ settings:
         launcher: Cartella del launcher
         game: Cartella del gioco
         repair_game: Ripara file di gioco
-        clear_cache: clear cache
+        clear_cache: Cancella cache
 
       # Patch-related settings
       patch:
