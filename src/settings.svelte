@@ -319,6 +319,16 @@
                             Neutralino.app.exit();
                         }}
                     />
+
+                    <!-- svelte-ignore missing-declaration -->
+                    <Button
+                        lang="settings.general.items.buttons.clear_cache"
+                        click={async () => {
+                            await IPC.write('clear-cache');
+
+                            Neutralino.app.exit();
+                        }}
+                    />
                 </div>
 
                 <div class="patch">

@@ -1,6 +1,6 @@
 {
   "name": "an-anime-game-launcher",
-  "version": "2.3.4",
+  "version": "2.3.5-beta1",
   "license": "GPL-3.0",
   "type": "module",
   "scripts": {
@@ -11,7 +11,7 @@
     "check": "svelte-check --tsconfig ./tsconfig.json"
   },
   "dependencies": {
-    "@empathize/framework": "^1.4.12",
+    "@empathize/framework": "^1.4.13",
     "semver": "^7.3.5",
     "svelte-i18n": "^3.3.13",
     "yaml": "^1.10.2"

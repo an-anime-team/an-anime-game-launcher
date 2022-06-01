@@ -134,6 +134,7 @@ settings:
         launcher: folder peluncur
         game: folder game
         repair_game: repair game files
+        clear_cache: clear cache
 
       # Patch-related settings
       patch:

@@ -134,6 +134,7 @@ settings:
         launcher: carpeta del launcher
         game: carpeta del juego
         repair_game: reparar archivos del juego
+        clear_cache: clear cache
 
       # Opciones sobre el parche
       patch:

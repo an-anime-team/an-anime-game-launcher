@@ -2,7 +2,8 @@ import { locale } from 'svelte-i18n';
 
 import {
     Windows, Process, Tray,
-    Configs, Debug, IPC, fs, path
+    Configs, Debug, IPC, fs, path,
+    Cache
 } from '../empathize';
 
 import constants from './Constants';
@@ -163,26 +164,35 @@ export default class Launcher
                                     }
                                 }
 
-                                else if (record.data === 'update-state')
+                                else
                                 {
-                                    this.state?.update();
+                                    switch (record.data)
+                                    {
+                                        case 'update-state':
+                                            this.state?.update();
 
-                                    record.pop();
-                                }
+                                            break;
 
-                                else if (record.data === 'check-files-integrity')
-                                {
-                                    this.state!.launchButton.style['display'] = 'none';
-                                    this.state!.settingsButton.style['display'] = 'none';
+                                        case 'clear-cache':
+                                            Cache.clear(true);
 
-                                    import('./launcher/states/CheckIntegrity').then((module) => {
-                                        module.default(this).then(() => {
-                                            this.state!.update().then(() => {
-                                                this.state!.launchButton.style['display'] = 'block';
-                                                this.state!.settingsButton.style['display'] = 'block';
+                                            break;
+
+                                        case 'check-files-integrity':
+                                            this.state!.launchButton.style['display'] = 'none';
+                                            this.state!.settingsButton.style['display'] = 'none';
+
+                                            import('./launcher/states/CheckIntegrity').then((module) => {
+                                                module.default(this).then(() => {
+                                                    this.state!.update().then(() => {
+                                                        this.state!.launchButton.style['display'] = 'block';
+                                                        this.state!.settingsButton.style['display'] = 'block';
+                                                    });
+                                                });
                                             });
-                                        });
-                                    });
+
+                                            break;
+                                    }
 
                                     record.pop();
                                 }

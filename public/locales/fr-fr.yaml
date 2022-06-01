@@ -138,6 +138,7 @@ settings:
         launcher: Dossier du Launcher
         game: Dossier du jeu
         repair_game: Corriger les fichiers du jeu
+        clear_cache: nettoyer le cache
 
       # Patch-related settings
       patch:

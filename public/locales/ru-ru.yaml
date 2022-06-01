@@ -134,6 +134,7 @@ settings:
         launcher: папка лаунчера
         game: папка игры
         repair_game: исправить файлы игры
+        clear_cache: очистить кэш
 
       # Настроки патча
       patch:

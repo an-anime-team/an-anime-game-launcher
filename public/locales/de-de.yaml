@@ -134,6 +134,7 @@ settings:
         launcher: Launcher Ordner öffnen
         game: Spiel Ordner öffnen
         repair_game: spiel-dateien reparieren
+        clear_cache: cache leeren
 
       # Patch-related settings
       patch:

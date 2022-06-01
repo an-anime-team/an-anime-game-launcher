@@ -134,6 +134,7 @@ settings:
         launcher: ランチャーディレクトリ
         game: ゲームディレクトリ
         repair_game: ゲームファイルを修復
+        clear_cache: clear cache
 
       # Patch-related settings
       patch:

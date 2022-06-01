@@ -134,6 +134,7 @@ settings:
         launcher: waunchew f-fowdew
         game: game f-fowdew
         repair_game: wepaiw game fiwes
+        clear_cache: cweaw cache
 
       # Patch-related settings
       patch:

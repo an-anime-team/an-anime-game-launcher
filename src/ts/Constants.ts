@@ -250,7 +250,7 @@ export default class constants
         },
         telemetry: {
             global: [
-                atob('bG9nLXVwbG9hZC1vcy5taWhveW8uY29t'),
+                atob('bG9nLXVwbG9hZC1vcy5ob3lvdmVyc2UuY29t'),
                 atob('b3ZlcnNlYXVzcGlkZXIueXVhbnNoZW4uY29t')
             ],
             cn: [

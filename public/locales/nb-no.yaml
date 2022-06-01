@@ -134,6 +134,7 @@ settings:
         launcher: launcher mappe
         game: spill mappe
         repair_game: reparer spillfiler
+        clear_cache: clear cache
 
       # Patch-related settings
       patch:

@@ -134,6 +134,7 @@ settings:
         launcher: 启动器文件夹
         game: 游戏文件夹
         repair_game: 修复游戏文件
+        clear_cache: clear cache
 
       # 补丁相关设置
       patch:
