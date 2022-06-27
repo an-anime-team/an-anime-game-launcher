@@ -14,6 +14,7 @@ Start date: May 31, 2022
 | - | - |
 | 17 May — 31 May | <img src="../pics/stats/2022/may17-may31.png" height="400px"> |
 | 26 May — 9 June | <img src="../pics/stats/2022/may26-jun9.png" height="400px"> |
+| 13 June — 27 June | <img src="../pics/stats/2022/jun13-jun27.png" height="400px"> |
 
 ### Launcher analytics (by users choice)
 
