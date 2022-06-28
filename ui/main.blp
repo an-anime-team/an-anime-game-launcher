@@ -1,0 +1,78 @@
+using Gtk 4.0;
+using Adw 1;
+
+Adw.ApplicationWindow window {
+    default-width: 900;
+    default-height: 600;
+
+    styles ["devel"]
+
+    content: Gtk.Box {
+        orientation: vertical;
+
+        Adw.Leaflet leaflet {
+            can-navigate-back: true;
+            can-unfold: false;
+
+            Gtk.Box {
+                orientation: vertical;
+                hexpand: true;
+
+                name: "main";
+
+                Adw.HeaderBar {
+                    title-widget: Adw.WindowTitle {
+                        title: "An Anime Game Launcher";
+                    };
+                }
+
+                Adw.PreferencesPage {
+                    Adw.PreferencesGroup {
+                        Gtk.Image {
+                            file: "assets/icon.png";
+                            vexpand: true;
+                            margin-top: 48;
+                        }
+
+                        Gtk.Label {
+                            label: "An Anime Game Launcher";
+                            margin-top: 32;
+
+                            styles ["title-1"]
+                        }
+                    }
+
+                    Adw.PreferencesGroup {
+                        vexpand: true;
+                        valign: center;
+
+                        Gtk.Box {
+                            halign: center;
+                            margin-top: 64;
+                            spacing: 8;
+
+                            Adw.SplitButton launch_game {
+                                label: "Launch";
+
+                                hexpand: false;
+                                width-request: 200;
+
+                                styles ["suggested-action"]
+
+                                popover: Gtk.Popover {
+                                    Gtk.Button {
+                                        label: "Launch in debug mode";
+                                    }
+                                };
+                            }
+
+                            Gtk.Button open_preferences {
+                                icon-name: "preferences-system-symbolic";
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    };
+}
