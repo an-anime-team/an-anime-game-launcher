@@ -3,7 +3,7 @@ use std::fs::{self, read_dir, create_dir_all};
 use std::path::Path;
 
 fn compile_blueprint<T: ToString>(path: T) -> Result<String, String> {
-    // python3 blueprint-compiler/blueprint-compiler.py compile ui/main.blp
+    // python blueprint-compiler/blueprint-compiler.py compile ui/main.blp
     let output = Command::new("python3")
         .arg("blueprint-compiler/blueprint-compiler.py")
         .arg("compile")
