@@ -4,7 +4,7 @@ use std::path::Path;
 
 fn compile_blueprint<T: ToString>(path: T) -> Result<String, String> {
     // python blueprint-compiler/blueprint-compiler.py compile ui/main.blp
-    let output = Command::new("python")
+    let output = Command::new("python3")
         .arg("blueprint-compiler/blueprint-compiler.py")
         .arg("compile")
         .arg(path.to_string())
