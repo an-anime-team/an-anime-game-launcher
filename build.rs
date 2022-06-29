@@ -1,10 +1,10 @@
 use std::process::{Command, Stdio};
-use std::fs::{self, read_dir, create_dir};
+use std::fs::{self, read_dir, create_dir_all};
 use std::path::Path;
 
 fn compile_blueprint<T: ToString>(path: T) -> Result<String, String> {
-    // python blueprint-compiler/blueprint-compiler.py compile ui/main.blp
-    let output = Command::new("python")
+    // python3 blueprint-compiler/blueprint-compiler.py compile ui/main.blp
+    let output = Command::new("python3")
         .arg("blueprint-compiler/blueprint-compiler.py")
         .arg("compile")
         .arg(path.to_string())
@@ -27,9 +27,9 @@ fn compile_blueprint<T: ToString>(path: T) -> Result<String, String> {
 }
 
 fn main() {
-    if let Ok(entries) = read_dir("ui") {
-        if let Err(_) = read_dir("ui/.dist") {
-            create_dir("ui/.dist").expect("UI dist dir couldn't be created");
+    if let Ok(entries) = read_dir("assets/ui") {
+        if let Err(_) = read_dir("assets/ui/.dist") {
+            create_dir_all("assets/ui/.dist").expect("UI dist dir couldn't be created");
         }
 
         for entry in entries {
@@ -39,7 +39,7 @@ fn main() {
                         let entry_path = entry.path().to_str().unwrap().to_string();
                         let entry_filename = entry.file_name().to_str().unwrap().to_string();
 
-                        let entry_dist_path = format!("ui/.dist/{}.ui", &entry_filename[..entry_filename.len() - 4]);
+                        let entry_dist_path = format!("assets/ui/.dist/{}.ui", &entry_filename[..entry_filename.len() - 4]);
 
                         match compile_blueprint(&entry_path) {
                             Ok(xml) => {
