@@ -1,0 +1,209 @@
+using Gtk 4.0;
+using Adw 1;
+
+Adw.PreferencesPage general_page {
+    Adw.PreferencesGroup {
+        title: "General";
+
+        Adw.ComboRow {
+            title: "Launcher language";
+
+            model: Gtk.StringList {
+                strings [
+                    "English",
+                    "German",
+                    "Russian",
+                    "French",
+                    "Chinese"
+                ]
+            };
+        }
+    }
+
+    Adw.PreferencesGroup {
+        title: "Status";
+
+        Adw.ActionRow {
+            title: "Game version";
+
+            Gtk.Label {
+                label: "2.7.0";
+
+                styles ["success"]
+            }
+        }
+
+        Adw.ActionRow {
+            title: "Patch version";
+
+            Gtk.Label {
+                label: "2.7.0";
+
+                styles ["success"]
+            }
+        }
+
+        Gtk.Box {
+            orientation: horizontal;
+            spacing: 8;
+            margin-top: 16;
+
+            Gtk.Button {
+                label: "Revert patch";
+            }
+
+            Gtk.Button {
+                label: "Re-apply patch";
+            }
+        }
+    }
+
+    Adw.PreferencesGroup {
+        title: "Wine version";
+
+        Adw.ExpanderRow {
+            title: "Wine-GE";
+
+            Adw.ActionRow {
+                title: "7-16";
+            }
+
+            Adw.ActionRow {
+                title: "7-15";
+            }
+
+            Adw.ActionRow {
+                title: "7-14";
+            }
+
+            Adw.ActionRow {
+                title: "7-12";
+            }
+
+            Adw.ActionRow {
+                title: "7-10";
+            }
+
+            Adw.ActionRow {
+                title: "7-9";
+            }
+        }
+
+        Adw.ExpanderRow {
+            title: "Proton-GE";
+
+            Adw.ActionRow {
+                title: "7-16";
+            }
+
+            Adw.ActionRow {
+                title: "7-15";
+            }
+
+            Adw.ActionRow {
+                title: "7-14";
+            }
+
+            Adw.ActionRow {
+                title: "7-12";
+            }
+
+            Adw.ActionRow {
+                title: "7-10";
+            }
+
+            Adw.ActionRow {
+                title: "7-9";
+            }
+        }
+
+        Adw.ExpanderRow {
+            title: "Lutris";
+
+            Adw.ActionRow {
+                title: "7-16";
+            }
+
+            Adw.ActionRow {
+                title: "7-15";
+            }
+
+            Adw.ActionRow {
+                title: "7-14";
+            }
+
+            Adw.ActionRow {
+                title: "7-12";
+            }
+
+            Adw.ActionRow {
+                title: "7-10";
+            }
+
+            Adw.ActionRow {
+                title: "7-9";
+            }
+        }
+    }
+
+    Adw.PreferencesGroup {
+        title: "DXVK version";
+
+        Adw.ExpanderRow {
+            title: "Vanilla";
+
+            Adw.ActionRow {
+                title: "1.10.1";
+            }
+
+            Adw.ActionRow {
+                title: "1.10";
+            }
+
+            Adw.ActionRow {
+                title: "1.9.4";
+            }
+
+            Adw.ActionRow {
+                title: "1.9.3";
+            }
+
+            Adw.ActionRow {
+                title: "1.9.2";
+            }
+
+            Adw.ActionRow {
+                title: "1.9.1";
+            }
+        }
+
+        Adw.ExpanderRow {
+            title: "Async";
+            subtitle: "This version is not recommended for usage as can lead to anti-cheat detection";
+
+            Adw.ActionRow {
+                title: "1.10.1";
+            }
+
+            Adw.ActionRow {
+                title: "1.10";
+            }
+
+            Adw.ActionRow {
+                title: "1.9.4";
+            }
+
+            Adw.ActionRow {
+                title: "1.9.3";
+            }
+
+            Adw.ActionRow {
+                title: "1.9.2";
+            }
+
+            Adw.ActionRow {
+                title: "1.9.1";
+            }
+        }
+    }
+}

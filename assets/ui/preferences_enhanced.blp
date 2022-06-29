@@ -1,0 +1,67 @@
+using Gtk 4.0;
+using Adw 1;
+
+Adw.PreferencesPage enhanced_page {
+    title: "Enhancements";
+
+    Adw.PreferencesGroup {
+        title: "Wine";
+
+        Adw.ComboRow {
+            title: "HUD";
+
+            model: Gtk.StringList {
+                strings [
+                    "None",
+                    "DXVK",
+                    "MangoHUD"
+                ]
+            };
+        }
+
+        Adw.ComboRow {
+            title: "Synchronization";
+            subtitle: "Technology used to synchronize inner wine events";
+
+            model: Gtk.StringList {
+                strings [
+                    "None",
+                    "ESync",
+                    "FSync",
+                    "Futex2"
+                ]
+            };
+        }
+
+        Adw.ComboRow {
+            title: "FSR";
+            subtitle: "AMD FSR scales game resolution while rendering the game with the lower one";
+
+            model: Gtk.StringList {
+                strings [
+                    "Ultra Quality",
+                    "Quality",
+                    "Performance",
+                    "Balanced"
+                ]
+            };
+
+            Gtk.Switch {
+                valign: center;
+            }
+        }
+    }
+
+    Adw.PreferencesGroup {
+        title: "Game";
+
+        Adw.ActionRow {
+            title: "Gamemode";
+            subtitle: "This prioritizes the game over the rest of the processes";
+
+            Gtk.Switch {
+                valign: center;
+            }
+        }
+    }
+}

@@ -17,7 +17,7 @@ fn main() {
 
     // Init app window and show it
     application.connect_activate(|app| {
-        let app = MainApp::new(app);
+        let app = MainApp::new(app).unwrap();
 
         app.open_preferences.connect_clicked(move |_| {
             app.leaflet.set_visible_child_name("preferences_page");
