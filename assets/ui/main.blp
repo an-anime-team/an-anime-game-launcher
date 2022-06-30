@@ -18,8 +18,6 @@ Adw.ApplicationWindow window {
                 orientation: vertical;
                 hexpand: true;
 
-                name: "main";
-
                 Adw.HeaderBar {
                     title-widget: Adw.WindowTitle {
                         title: "An Anime Game Launcher";
@@ -72,6 +70,8 @@ Adw.ApplicationWindow window {
                         }
                     }
                 }
+
+                Adw.ToastOverlay toast_overlay {}
             }
         }
     };

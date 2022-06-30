@@ -10,4 +10,10 @@ build = "build.rs"
 [dependencies]
 gtk4 = "0.4"
 libadwaita = "0.1"
+
 anime-game-core = { path = "anime-game-core", features = ["all"] }
+
+serde = { version = "1.0", features = ["derive"] }
+toml = "0.5.9"
+
+dirs = "4.0.0"
