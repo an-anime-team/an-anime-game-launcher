@@ -5,7 +5,7 @@ use std::io::{Error, ErrorKind, Write};
 
 use serde::{Serialize, Deserialize};
 
-use super::consts::config_file;
+use super::consts::*;
 
 pub fn get() -> Result<Config, Error> {
     match config_file() {
@@ -13,13 +13,13 @@ pub fn get() -> Result<Config, Error> {
             // Try to read config if the file exists
             if Path::new(&path).exists() {
                 let mut file = File::open(path)?;
-                let mut toml = String::new();
+                let mut json = String::new();
 
-                file.read_to_string(&mut toml)?;
+                file.read_to_string(&mut json)?;
 
-                match toml::from_str::<Config>(&toml) {
-                    Ok(toml) => Ok(toml),
-                    Err(err) => Err(Error::new(ErrorKind::InvalidData, format!("Failed to decode data from toml format: {}", err.to_string())))
+                match serde_json::from_str::<Config>(&json) {
+                    Ok(json) => Ok(json),
+                    Err(err) => Err(Error::new(ErrorKind::InvalidData, format!("Failed to decode data from json format: {}", err.to_string())))
                 }
             }
 
@@ -39,13 +39,13 @@ pub fn update(config: Config) -> Result<(), Error> {
         Some(path) => {
             let mut file = File::create(&path)?;
 
-            match toml::to_string(&config) {
-                Ok(toml) => {
-                    file.write_all(&mut toml.as_bytes())?;
+            match serde_json::to_string_pretty(&config) {
+                Ok(json) => {
+                    file.write_all(&mut json.as_bytes())?;
 
                     Ok(())
                 },
-                Err(err) => Err(Error::new(ErrorKind::InvalidData, format!("Failed to encode data into toml format: {}", err.to_string())))
+                Err(err) => Err(Error::new(ErrorKind::InvalidData, format!("Failed to encode data into json format: {}", err.to_string())))
             }
         },
         None => Err(Error::new(ErrorKind::NotFound, format!("Failed to get config file path")))
@@ -54,35 +54,137 @@ pub fn update(config: Config) -> Result<(), Error> {
 
 #[derive(Debug, Serialize, Deserialize, Default)]
 pub struct Config {
-    pub paths: Paths,
-    pub patch: Patch,
-    pub wine: Wine
+    pub launcher: Launcher,
+    pub game: Game,
+    pub patch: Patch
 }
 
-#[derive(Debug, Serialize, Deserialize, Default)]
-pub struct Paths {
-    pub game: String,
-    pub patch: String
+impl Config {
+    /// Try to get a path to the wine executable based on `game.wine.builds` and `game.wine.selected`
+    pub fn try_get_wine_executable(&self) -> Option<String> {
+        match &self.game.wine.selected {
+            Some(selected) => {
+                // Most of wine builds
+                let path = format!("{}/{}/bin/wine", &self.game.wine.builds, &selected);
+
+                if Path::new(&path).exists() {
+                    return Some(path);
+                }
+
+                // Proton-based builds
+                let path = format!("{}/{}/files/bin/wine", &self.game.wine.builds, &selected);
+
+                if Path::new(&path).exists() {
+                    return Some(path);
+                }
+
+                // ????
+                None
+            },
+            None => None
+        }
+    }
 }
 
-#[derive(Debug, Serialize, Deserialize, Default)]
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Launcher {
+    pub language: String
+}
+
+impl Default for Launcher {
+    fn default() -> Self {
+        Self {
+            language: String::from("en-us")
+        }
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Patch {
-    pub hosts: Vec<String>
+    pub path: String,
+    pub servers: Vec<String>
+}
+
+impl Default for Patch {
+    fn default() -> Self {
+        Self {
+            path: match launcher_dir() {
+                Some(dir) => format!("{}/patch", dir),
+                None => String::new()
+            },
+            servers: Vec::new()
+        }
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Game {
+    pub path: String,
+    pub voices: Vec<String>,
+    pub wine: Wine,
+    pub enhancements: Enhancements,
+    pub environment: HashMap<String, String>
+}
+
+impl Default for Game {
+    fn default() -> Self {
+        Self {
+            path: match launcher_dir() {
+                Some(dir) => format!("{}/game/drive_c/Program Files/Genshin Impact", dir),
+                None => String::new()
+            },
+            voices: vec![
+                String::from("en-us")
+            ],
+            wine: Wine::default(),
+            enhancements: Enhancements::default(),
+            environment: HashMap::new()
+        }
+    }
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Wine {
     pub prefix: String,
-    pub executable: String,
-    pub environment: HashMap<String, String>
+    pub builds: String,
+    pub selected: Option<String>,
+    pub sync: String
 }
 
 impl Default for Wine {
     fn default() -> Self {
         Self {
-            prefix: String::new(),
-            executable: String::new(),
-            environment: HashMap::new()
+            prefix: match launcher_dir() {
+                Some(dir) => format!("{}/game", dir),
+                None => String::new()
+            },
+            builds: match launcher_dir() {
+                Some(dir) => format!("{}/runners", dir),
+                None => String::new()
+            },
+            selected: None,
+            sync: String::from("esync")
+        }
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize, Default)]
+pub struct Enhancements {
+    pub fsr: Fsr,
+    pub gamemode: bool
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Fsr {
+    pub strength: u8,
+    pub enabled: bool
+}
+
+impl Default for Fsr {
+    fn default() -> Self {
+        Self {
+            strength: 3,
+            enabled: false
         }
     }
 }

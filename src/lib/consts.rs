@@ -25,7 +25,7 @@ pub fn config_file() -> Option<String> {
             Some(value) => value.clone(),
             None => {
                 let value = match launcher_dir() {
-                    Some(dir) => Some(format!("{}/config.toml", dir)),
+                    Some(dir) => Some(format!("{}/config.json", dir)),
                     None => None
                 };
 
