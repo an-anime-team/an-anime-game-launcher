@@ -27,6 +27,22 @@ impl Terminal {
             Terminal::Xfce4Terminal
         ].into_iter()
     }
+
+    pub fn get_args(&self, bash_command: &str) -> Vec<String> {
+        match self {
+            Terminal::GnomeTerminal => vec![
+                String::from("--"),
+                String::from("bash"),
+                String::from("-c"),
+                format!("{} && bash", bash_command)
+            ],
+            Terminal::Konsole | Terminal::Xfce4Terminal => vec![
+                String::from("--hold"),
+                String::from("-e"),
+                format!("\"bash -c '{} && bash'\"", bash_command)
+            ]
+        }
+    }
 }
 
 /// Try to get GUI terminal installed in system
@@ -43,7 +59,9 @@ pub fn try_get_terminal() -> Option<Terminal> {
 }
 
 /// Try to run the game
-pub fn run() -> Result<(), Error> {
+/// 
+/// If `debug = true`, then the game will be run in the new terminal window
+pub fn run(debug: bool) -> Result<(), Error> {
     let config = config::get()?;
 
     if !Path::new(&config.game.path).exists() {
@@ -57,12 +75,31 @@ pub fn run() -> Result<(), Error> {
 
     let mut command = Command::new(wine_executable);
 
+    if debug {
+        // Is not supported now because new spawned terminal needs
+        // to have cwd and env variables specified directly
+        // which is kinda difficult
+        todo!();
+
+        match try_get_terminal() {
+            Some(terminal) => {
+                command = Command::new(terminal.get_command());
+
+                command.args(terminal.get_args("launcher.bat"));
+            },
+            None => return Err(Error::new(ErrorKind::Other, "Couldn't find terminal application"))
+        }
+    }
+
+    else {
+        command.arg("launcher.bat");
+    }
+
     command.env("WINEPREFIX", &config.game.wine.prefix);
     command.envs(config.get_wine_sync_env_vars());
 
     command.envs(config.game.environment)
         .current_dir(config.game.path)
-        .arg("launcher.bat")
         .spawn()?;
     
     Ok(())

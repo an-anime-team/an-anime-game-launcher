@@ -20,8 +20,12 @@ fn main() {
     application.connect_activate(|app| {
         let app = MainApp::new(app).unwrap();
 
+        let app_copy = app.clone();
+
         app.open_preferences.connect_clicked(move |_| {
-            app.leaflet.set_visible_child_name("preferences_page");
+            if let Err(err) = app_copy.open_preferences_page() {
+                app_copy.toast_error("Failed to open settings page", err);
+            }
         });
 
         app.window.show();

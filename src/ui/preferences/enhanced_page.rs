@@ -3,13 +3,18 @@ use libadwaita::{self as adw, prelude::*};
 
 use crate::ui::get_object;
 
-pub struct Page;
+#[derive(Clone)]
+pub struct Page {
+    pub page: adw::PreferencesPage
+}
 
 impl Page {
-    pub fn get() -> Result<adw::PreferencesPage, String> {
+    pub fn new() -> Result<Self, String> {
         let builder = gtk::Builder::from_string(include_str!("../../../assets/ui/.dist/preferences_enhanced.ui"));
 
-        Ok(get_object(&builder, "enhanced_page")?)
+        Ok(Self {
+            page: get_object(&builder, "enhanced_page")?
+        })
     }
 
     pub fn title() -> String {
