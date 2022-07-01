@@ -31,8 +31,8 @@ impl TryFrom<u32> for HUD {
 impl Into<u32> for HUD {
     fn into(self) -> u32 {
         match self {
-            Self::None => 0,
-            Self::DXVK => 1,
+            Self::None     => 0,
+            Self::DXVK     => 1,
             Self::MangoHUD => 2
         }
     }

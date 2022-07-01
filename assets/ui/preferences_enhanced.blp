@@ -7,18 +7,6 @@ Adw.PreferencesPage enhanced_page {
     Adw.PreferencesGroup {
         title: "Wine";
 
-        Adw.ComboRow hud_combo {
-            title: "HUD";
-
-            model: Gtk.StringList {
-                strings [
-                    "None",
-                    "DXVK",
-                    "MangoHUD"
-                ]
-            };
-        }
-
         Adw.ComboRow sync_combo {
             title: "Synchronization";
             subtitle: "Technology used to synchronize inner wine events";
@@ -50,16 +38,48 @@ Adw.PreferencesPage enhanced_page {
                 valign: center;
             }
         }
+
+        Adw.ComboRow wine_lang {
+            title: "Language";
+            subtitle: "Choose the language to use in wine environment. Can fix keyboard layout detection in-game";
+
+            model: Gtk.StringList {
+                strings [
+                    "System",
+                    "English",
+                    "German",
+                    "Russian",
+                    "Portuguese",
+                    "French",
+                    "Chinese",
+                    "Spanish",
+                    "Japanese",
+                    "Korean"
+                ]
+            };
+        }
     }
 
     Adw.PreferencesGroup {
         title: "Game";
 
+        Adw.ComboRow hud_combo {
+            title: "HUD";
+
+            model: Gtk.StringList {
+                strings [
+                    "None",
+                    "DXVK",
+                    "MangoHUD"
+                ]
+            };
+        }
+
         Adw.ActionRow {
             title: "Gamemode";
             subtitle: "This prioritizes the game over the rest of the processes";
 
-            Gtk.Switch {
+            Gtk.Switch gamemode_switcher {
                 valign: center;
             }
         }

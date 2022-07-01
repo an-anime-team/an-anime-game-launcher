@@ -100,6 +100,7 @@ pub fn run(debug: bool) -> Result<(), Error> {
     command.envs(config.game.wine.sync.get_env_vars());
     command.envs(config.game.enhancements.hud.get_env_vars());
     command.envs(config.game.enhancements.fsr.get_env_vars());
+    command.envs(config.game.wine.language.get_env_vars());
 
     command.envs(config.game.environment)
         .current_dir(config.game.path)

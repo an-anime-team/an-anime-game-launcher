@@ -33,9 +33,9 @@ impl TryFrom<u32> for WineSync {
 impl Into<u32> for WineSync {
     fn into(self) -> u32 {
         match self {
-            Self::None => 0,
-            Self::ESync => 1,
-            Self::FSync => 2,
+            Self::None   => 0,
+            Self::ESync  => 1,
+            Self::FSync  => 2,
             Self::Futex2 => 3
         }
     }

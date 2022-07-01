@@ -9,9 +9,11 @@ use super::consts::*;
 
 mod hud;
 mod wine_sync;
+mod wine_lang;
 
 pub use hud::HUD;
 pub use wine_sync::WineSync;
+pub use wine_lang::WineLang;
 
 pub fn get() -> Result<Config, Error> {
     match config_file() {
@@ -154,7 +156,8 @@ pub struct Wine {
     pub prefix: String,
     pub builds: String,
     pub selected: Option<String>,
-    pub sync: WineSync
+    pub sync: WineSync,
+    pub language: WineLang
 }
 
 impl Default for Wine {
@@ -169,7 +172,8 @@ impl Default for Wine {
                 None => String::new()
             },
             selected: None,
-            sync: WineSync::default()
+            sync: WineSync::default(),
+            language: WineLang::default()
         }
     }
 }
