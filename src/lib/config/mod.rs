@@ -7,6 +7,12 @@ use serde::{Serialize, Deserialize};
 
 use super::consts::*;
 
+mod wine_hud;
+mod wine_sync;
+
+pub use wine_hud::WineHUD;
+pub use wine_sync::WineSync;
+
 pub fn get() -> Result<Config, Error> {
     match config_file() {
         Some(path) => {
@@ -52,42 +58,6 @@ pub fn update(config: Config) -> Result<(), Error> {
     }
 }
 
-#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
-pub enum WineHUD {
-    None,
-    DXVK,
-    MangoHUD
-}
-
-impl Default for WineHUD {
-    fn default() -> Self {
-        Self::None
-    }
-}
-
-impl TryFrom<u32> for WineHUD {
-    type Error = String;
-
-    fn try_from(value: u32) -> Result<Self, Self::Error> {
-        match value {
-            0 => Ok(Self::None),
-            1 => Ok(Self::DXVK),
-            2 => Ok(Self::MangoHUD),
-            _ => Err(String::from("Failed to convert number to HUD enum"))
-        }
-    }
-}
-
-impl Into<u32> for WineHUD {
-    fn into(self) -> u32 {
-        match self {
-            WineHUD::None => 0,
-            WineHUD::DXVK => 1,
-            WineHUD::MangoHUD => 2
-        }
-    }
-}
-
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct Config {
     pub launcher: Launcher,
@@ -118,25 +88,6 @@ impl Config {
                 None
             },
             None => None
-        }
-    }
-
-    /// Get environment variables corresponding to used wine sync
-    pub fn get_wine_sync_env_vars(&self) -> HashMap<&str, &str> {
-        match self.game.wine.sync.as_str() {
-            "esync" => HashMap::from([
-                ("WINEESYNC", "1")
-            ]),
-            "fsync" => HashMap::from([
-                ("WINEESYNC", "1"),
-                ("WINEFSYNC", "1")
-            ]),
-            "futex2" => HashMap::from([
-                ("WINEESYNC", "1"),
-                ("WINEFSYNC", "1"),
-                ("WINEFSYNC_FUTEX2", "1")
-            ]),
-            _ => HashMap::new()
         }
     }
 }
@@ -203,7 +154,7 @@ pub struct Wine {
     pub prefix: String,
     pub builds: String,
     pub selected: Option<String>,
-    pub sync: String
+    pub sync: WineSync
 }
 
 impl Default for Wine {
@@ -218,7 +169,7 @@ impl Default for Wine {
                 None => String::new()
             },
             selected: None,
-            sync: String::from("esync")
+            sync: WineSync::default()
         }
     }
 }
@@ -232,7 +183,7 @@ pub struct Enhancements {
 
 #[derive(Debug, Clone, Copy, Serialize, Deserialize)]
 pub struct Fsr {
-    pub strength: u8,
+    pub strength: u32,
     pub enabled: bool
 }
 
