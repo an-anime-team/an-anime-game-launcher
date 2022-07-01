@@ -7,10 +7,10 @@ use serde::{Serialize, Deserialize};
 
 use super::consts::*;
 
-mod wine_hud;
+mod hud;
 mod wine_sync;
 
-pub use wine_hud::WineHUD;
+pub use hud::HUD;
 pub use wine_sync::WineSync;
 
 pub fn get() -> Result<Config, Error> {
@@ -178,7 +178,7 @@ impl Default for Wine {
 pub struct Enhancements {
     pub fsr: Fsr,
     pub gamemode: bool,
-    pub hud: WineHUD
+    pub hud: HUD
 }
 
 #[derive(Debug, Clone, Copy, Serialize, Deserialize)]

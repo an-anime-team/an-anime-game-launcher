@@ -33,7 +33,7 @@ impl Page {
         result.hud_combo.connect_selected_notify(|hud| {
             if let Ok(mut config) = config::get() {
                 // TODO: show toast
-                config.game.enhancements.hud = config::WineHUD::try_from(hud.selected()).unwrap();
+                config.game.enhancements.hud = config::HUD::try_from(hud.selected()).unwrap();
 
                 config::update(config).unwrap();
             }
