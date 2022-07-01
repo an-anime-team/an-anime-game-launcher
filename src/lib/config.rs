@@ -52,7 +52,43 @@ pub fn update(config: Config) -> Result<(), Error> {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize, Default)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
+pub enum WineHUD {
+    None,
+    DXVK,
+    MangoHUD
+}
+
+impl Default for WineHUD {
+    fn default() -> Self {
+        Self::None
+    }
+}
+
+impl TryFrom<u32> for WineHUD {
+    type Error = String;
+
+    fn try_from(value: u32) -> Result<Self, Self::Error> {
+        match value {
+            0 => Ok(Self::None),
+            1 => Ok(Self::DXVK),
+            2 => Ok(Self::MangoHUD),
+            _ => Err(String::from("Failed to convert number to HUD enum"))
+        }
+    }
+}
+
+impl Into<u32> for WineHUD {
+    fn into(self) -> u32 {
+        match self {
+            WineHUD::None => 0,
+            WineHUD::DXVK => 1,
+            WineHUD::MangoHUD => 2
+        }
+    }
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct Config {
     pub launcher: Launcher,
     pub game: Game,
@@ -105,7 +141,7 @@ impl Config {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Launcher {
     pub language: String
 }
@@ -118,7 +154,7 @@ impl Default for Launcher {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Patch {
     pub path: String,
     pub servers: Vec<String>
@@ -136,7 +172,7 @@ impl Default for Patch {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Game {
     pub path: String,
     pub voices: Vec<String>,
@@ -162,7 +198,7 @@ impl Default for Game {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Wine {
     pub prefix: String,
     pub builds: String,
@@ -187,13 +223,14 @@ impl Default for Wine {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize, Default)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, Default)]
 pub struct Enhancements {
     pub fsr: Fsr,
-    pub gamemode: bool
+    pub gamemode: bool,
+    pub hud: WineHUD
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
 pub struct Fsr {
     pub strength: u8,
     pub enabled: bool

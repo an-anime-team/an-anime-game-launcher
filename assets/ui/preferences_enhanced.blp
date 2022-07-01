@@ -7,7 +7,7 @@ Adw.PreferencesPage enhanced_page {
     Adw.PreferencesGroup {
         title: "Wine";
 
-        Adw.ComboRow {
+        Adw.ComboRow hud_combo {
             title: "HUD";
 
             model: Gtk.StringList {
@@ -19,7 +19,7 @@ Adw.PreferencesPage enhanced_page {
             };
         }
 
-        Adw.ComboRow {
+        Adw.ComboRow sync_combo {
             title: "Synchronization";
             subtitle: "Technology used to synchronize inner wine events";
 
@@ -33,7 +33,7 @@ Adw.PreferencesPage enhanced_page {
             };
         }
 
-        Adw.ComboRow {
+        Adw.ComboRow fsr_combo {
             title: "FSR";
             subtitle: "AMD FSR scales game resolution while rendering the game with the lower one";
 

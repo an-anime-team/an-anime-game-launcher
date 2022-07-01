@@ -3,10 +3,7 @@ use libadwaita::{self as adw, prelude::*};
 
 use std::io::Error;
 
-use anime_game_core::prelude::*;
-
 use crate::ui::get_object;
-use crate::lib::config;
 
 mod general_page;
 mod enhanced_page;
@@ -20,7 +17,9 @@ pub mod pages {
 pub struct PreferencesStack {
     pub preferences: gtk::Box,
     pub preferences_go_back: gtk::Button,
+
     pub stack: gtk::Stack,
+
     pub general_page: pages::GeneralPage,
     pub enhanced_page: pages::EnhancedPage
 }
@@ -47,66 +46,10 @@ impl PreferencesStack {
     /// 
     /// Being called from the `MainApp` struct
     /// 
-    /// TODO: do it asynchronously
+    /// TODO: do it asynchronously. The problem is that I somehow need to handle this function's error to display it as a toast
     pub fn update(&self) -> Result<(), Error> {
-        let config = config::get()?;
-        let game = Game::new(config.game.path);
-
-        self.general_page.game_version.set_tooltip_text(None);
-        self.general_page.patch_version.set_tooltip_text(None);
-
-        match game.try_get_diff()? {
-            VersionDiff::Latest(version) => {
-                self.general_page.game_version.set_label(&version.to_string());
-            },
-            VersionDiff::Diff { current, latest, .. } => {
-                self.general_page.game_version.set_label(&current.to_string());
-                self.general_page.game_version.set_css_classes(&["warning"]);
-
-                self.general_page.game_version.set_tooltip_text(Some(&format!("Game update available: {} -> {}", current, latest)));
-            },
-            VersionDiff::Outdated { current, latest } => {
-                self.general_page.game_version.set_label(&current.to_string());
-                self.general_page.game_version.set_css_classes(&["error"]);
-
-                self.general_page.game_version.set_tooltip_text(Some(&format!("Game is too outdated and can't be updated. Latest version: {}", latest)));
-            },
-            VersionDiff::NotInstalled { .. } => {
-                self.general_page.game_version.set_label("not installed");
-                self.general_page.game_version.set_css_classes(&[]);
-            }
-        }
-
-        match Patch::try_fetch(config.patch.servers)? {
-            Patch::NotAvailable => {
-                self.general_page.patch_version.set_label("not available");
-                self.general_page.patch_version.set_css_classes(&["error"]);
-
-                self.general_page.patch_version.set_tooltip_text(Some("Patch is not available"));
-            },
-            Patch::Outdated { current, latest, .. } => {
-                self.general_page.patch_version.set_label("outdated");
-                self.general_page.patch_version.set_css_classes(&["warning"]);
-
-                self.general_page.patch_version.set_tooltip_text(Some(&format!("Patch is outdated ({} -> {})", current, latest)));
-            },
-            Patch::Preparation { .. } => {
-                self.general_page.patch_version.set_label("preparation");
-                self.general_page.patch_version.set_css_classes(&["warning"]);
-
-                self.general_page.patch_version.set_tooltip_text(Some("Patch is in preparation state and will be available later"));
-            },
-            Patch::Testing { version, .. } => {
-                self.general_page.patch_version.set_label(&version.to_string());
-                self.general_page.patch_version.set_css_classes(&["warning"]);
-
-                self.general_page.patch_version.set_tooltip_text(Some("Patch is in testing phase"));
-            },
-            Patch::Available { version, .. } => {
-                self.general_page.patch_version.set_label(&version.to_string());
-                self.general_page.patch_version.set_css_classes(&["success"]);
-            }
-        }
+        self.general_page.update()?;
+        self.enhanced_page.update()?;
 
         Ok(())
     }
