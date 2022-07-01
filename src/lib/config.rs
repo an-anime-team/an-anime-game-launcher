@@ -84,6 +84,25 @@ impl Config {
             None => None
         }
     }
+
+    /// Get environment variables corresponding to used wine sync
+    pub fn get_wine_sync_env_vars(&self) -> HashMap<&str, &str> {
+        match self.game.wine.sync.as_str() {
+            "esync" => HashMap::from([
+                ("WINEESYNC", "1")
+            ]),
+            "fsync" => HashMap::from([
+                ("WINEESYNC", "1"),
+                ("WINEFSYNC", "1")
+            ]),
+            "futex2" => HashMap::from([
+                ("WINEESYNC", "1"),
+                ("WINEFSYNC", "1"),
+                ("WINEFSYNC_FUTEX2", "1")
+            ]),
+            _ => HashMap::new()
+        }
+    }
 }
 
 #[derive(Debug, Serialize, Deserialize)]
