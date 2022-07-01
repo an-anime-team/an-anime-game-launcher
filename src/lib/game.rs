@@ -96,9 +96,10 @@ pub fn run(debug: bool) -> Result<(), Error> {
     }
 
     command.env("WINEPREFIX", &config.game.wine.prefix);
-    
+
     command.envs(config.game.wine.sync.get_env_vars());
     command.envs(config.game.enhancements.hud.get_env_vars());
+    command.envs(config.game.enhancements.fsr.get_env_vars());
 
     command.envs(config.game.environment)
         .current_dir(config.game.path)

@@ -195,3 +195,19 @@ impl Default for Fsr {
         }
     }
 }
+
+impl Fsr {
+    /// Get environment variables corresponding to used amd fsr options
+    pub fn get_env_vars(&self) -> HashMap<&str, String> {
+        if self.enabled {
+            HashMap::from([
+                ("WINE_FULLSCREEN_FSR", String::from("1")),
+                ("WINE_FULLSCREEN_FSR_STRENGTH", self.strength.to_string())
+            ])
+        }
+        
+        else {
+            HashMap::new()
+        }
+    }
+}
