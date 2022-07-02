@@ -73,8 +73,6 @@ impl PreferencesStack {
         self.status_page.set_visible(false);
         self.flap.set_visible(true);
 
-        self.toast_error("Aboba amogus", Error::last_os_error());
-
         Ok(())
     }
 }

@@ -18,6 +18,47 @@ Adw.PreferencesPage general_page {
                 ]
             };
         }
+
+        Adw.ExpanderRow {
+            title: "Game voiceovers";
+            subtitle: "Select voice packages used in game";
+
+            Adw.ActionRow {
+                title: "English";
+
+                Gtk.Button {
+                    icon-name: "document-save-symbolic";
+                    valign: center;
+                }
+            }
+
+            Adw.ActionRow {
+                title: "Japanese";
+
+                Gtk.Button {
+                    icon-name: "user-trash-symbolic";
+                    valign: center;
+                }
+            }
+
+            Adw.ActionRow {
+                title: "Korean";
+
+                Gtk.Button {
+                    icon-name: "document-save-symbolic";
+                    valign: center;
+                }
+            }
+
+            Adw.ActionRow {
+                title: "Chinese";
+
+                Gtk.Button {
+                    icon-name: "document-save-symbolic";
+                    valign: center;
+                }
+            }
+        }
     }
 
     Adw.PreferencesGroup {

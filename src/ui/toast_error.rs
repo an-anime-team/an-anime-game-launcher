@@ -1,8 +1,6 @@
 use gtk4::{self as gtk, prelude::*};
 use libadwaita::{self as adw, prelude::*};
 
-use std::io::Error;
-
 use super::add_action;
 
 pub trait ToastError {
@@ -11,7 +9,7 @@ pub trait ToastError {
     /// Show toast with `toast` title and `See message` button
     /// 
     /// This button will show message dialog with error message
-    fn toast_error(&self, toast: &str, err: Error) {
+    fn toast_error<T: ToString + 'static>(&self, toast: &str, err: T) {
         let toast = adw::Toast::new(toast);
 
         toast.set_button_label(Some("See message"));

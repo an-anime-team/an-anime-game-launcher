@@ -6,6 +6,7 @@ pub mod lib;
 
 use ui::*;
 
+// #[tokio::main]
 fn main() {
     gtk::init().expect("GTK initialization failed");
     adw::init();
@@ -23,9 +24,7 @@ fn main() {
         let app_copy = app.clone();
 
         app.open_preferences.connect_clicked(move |_| {
-            if let Err(err) = app_copy.open_preferences_page() {
-                app_copy.toast_error("Failed to open settings page", err);
-            }
+            app_copy.open_preferences_page();
         });
 
         app.window.show();

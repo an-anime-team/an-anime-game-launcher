@@ -1,8 +1,6 @@
 use gtk4::{self as gtk, prelude::*};
 use libadwaita::{self as adw, prelude::*};
 
-use std::io::Error;
-
 use super::get_object;
 use super::preferences::PreferencesStack;
 use super::ToastError;
@@ -93,12 +91,12 @@ impl App {
         Ok(result)
     }
 
-    pub fn open_preferences_page(&self) -> Result<(), Error> {
-        self.preferences_stack.update()?;
-        
+    pub fn open_preferences_page(&self) {
         self.leaflet.set_visible_child_name("preferences_page");
 
-        Ok(())
+        if let Err(err) = self.preferences_stack.update() {
+            self.toast_error("Failed to update preferences", err);
+        }
     }
 
     pub fn update_state(&self, state: AppState) {
