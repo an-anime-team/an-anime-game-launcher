@@ -7,9 +7,7 @@ Adw.ApplicationWindow window {
 
     styles ["devel"]
 
-    content: Gtk.Box {
-        orientation: vertical;
-
+    content: Adw.ToastOverlay toast_overlay {
         Adw.Leaflet leaflet {
             can-navigate-back: true;
             can-unfold: false;
@@ -40,7 +38,7 @@ Adw.ApplicationWindow window {
                         }
                     }
 
-                    Adw.PreferencesGroup {
+                    Adw.PreferencesGroup launch_game_group {
                         vexpand: true;
                         valign: center;
 
@@ -69,9 +67,32 @@ Adw.ApplicationWindow window {
                             }
                         }
                     }
-                }
 
-                Adw.ToastOverlay toast_overlay {}
+                    Adw.PreferencesGroup progress_bar_group {
+                        vexpand: true;
+                        valign: center;
+                        visible: false;
+
+                        Gtk.Box {
+                            halign: center;
+                            margin-top: 64;
+                            spacing: 20;
+
+                            Gtk.ProgressBar progress_bar {
+                                text: "Downloading: 37% (3.7 of 10 GB)\n";
+                                show-text: true;
+
+                                width-request: 260;
+                                fraction: 0.37;
+                                valign: center;
+                            }
+
+                            Gtk.Button {
+                                label: "Pause";
+                            }
+                        }
+                    }
+                }
             }
         }
     };

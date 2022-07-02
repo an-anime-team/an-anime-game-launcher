@@ -3,8 +3,14 @@ use libadwaita::{self as adw, prelude::*};
 
 mod main;
 mod preferences;
+mod toast_error;
 
-pub use main::App as MainApp;
+pub use main::{
+    App as MainApp,
+    AppState as MainAppState,
+};
+
+pub use toast_error::ToastError;
 
 /// This function loads object from builder or panics if it doesn't exist
 pub fn get_object<T: IsA<gtk::glib::Object>>(builder: &gtk::Builder, name: &str) -> Result<T, String> {

@@ -32,12 +32,14 @@ impl Page {
     }
 
     /// This method is being called by the `PreferencesStack::update`
-    pub fn update(&self) -> Result<(), Error> {
+    pub fn update(&self, status_page: &adw::StatusPage) -> Result<(), Error> {
         let config = config::get()?;
         let game = Game::new(config.game.path);
 
         self.game_version.set_tooltip_text(None);
         self.patch_version.set_tooltip_text(None);
+
+        status_page.set_description(Some("Updating game info..."));
 
         match game.try_get_diff()? {
             VersionDiff::Latest(version) => {
@@ -60,6 +62,8 @@ impl Page {
                 self.game_version.set_css_classes(&[]);
             }
         }
+
+        status_page.set_description(Some("Updating patch info..."));
 
         match Patch::try_fetch(config.patch.servers)? {
             Patch::NotAvailable => {

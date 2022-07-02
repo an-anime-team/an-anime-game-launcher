@@ -4,7 +4,7 @@ use libadwaita::{self as adw, prelude::*};
 pub mod ui;
 pub mod lib;
 
-use ui::MainApp;
+use ui::*;
 
 fn main() {
     gtk::init().expect("GTK initialization failed");

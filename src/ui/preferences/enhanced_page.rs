@@ -103,8 +103,10 @@ impl Page {
     }
 
     /// This method is being called by the `PreferencesStack::update`
-    pub fn update(&self) -> Result<(), Error> {
+    pub fn update(&self, status_page: &adw::StatusPage) -> Result<(), Error> {
         let config = config::get()?;
+
+        status_page.set_description(Some("Loading preferences..."));
 
         // Update Wine sync
         self.sync_combo.set_selected(config.game.wine.sync.into());

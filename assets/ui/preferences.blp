@@ -15,8 +15,16 @@ Gtk.Box preferences {
         }
     }
 
-    Adw.Flap {
+    Adw.StatusPage status_page {
+        icon-name: "image-loading-symbolic";
+        title: "Loading data";
+
         vexpand: true;
+    }
+
+    Adw.Flap flap {
+        vexpand: true;
+        visible: false;
         
         flap: Gtk.StackSidebar {
             width-request: 200;

@@ -3,10 +3,19 @@ use libadwaita::{self as adw, prelude::*};
 
 use std::io::Error;
 
-use super::{get_object, add_action};
+use super::get_object;
 use super::preferences::PreferencesStack;
+use super::ToastError;
 
 use crate::lib::game;
+
+pub enum AppState {
+    Launch,
+    Progress {
+        title: String,
+        progress: f64
+    }
+}
 
 #[derive(Clone)]
 pub struct App {
@@ -17,6 +26,10 @@ pub struct App {
     pub open_preferences: gtk::Button,
     pub toast_overlay: adw::ToastOverlay,
 
+    pub launch_game_group: adw::PreferencesGroup,
+    pub progress_bar_group: adw::PreferencesGroup,
+    pub progress_bar: gtk::ProgressBar,
+
     pub preferences_stack: PreferencesStack
 }
 
@@ -25,16 +38,23 @@ impl App {
         // Create builder from UI file
         let builder = gtk::Builder::from_string(include_str!("../../assets/ui/.dist/main.ui"));
 
+        let window = get_object::<adw::ApplicationWindow>(&builder, "window")?;
+        let toast_overlay = get_object::<adw::ToastOverlay>(&builder, "toast_overlay")?;
+
         // Parse objects from builder
         let result = Self {
-            window: get_object(&builder, "window")?,
+            window: window.clone(),
             leaflet: get_object(&builder, "leaflet")?,
             launch_game: get_object(&builder, "launch_game")?,
             launch_game_debug: get_object(&builder, "launch_game_debug")?,
             open_preferences: get_object(&builder, "open_preferences")?,
-            toast_overlay: get_object(&builder, "toast_overlay")?,
+            toast_overlay: toast_overlay.clone(),
 
-            preferences_stack: PreferencesStack::new()?
+            launch_game_group: get_object(&builder, "launch_game_group")?,
+            progress_bar_group: get_object(&builder, "progress_bar_group")?,
+            progress_bar: get_object(&builder, "progress_bar")?,
+
+            preferences_stack: PreferencesStack::new(window, toast_overlay)?
         };
 
         // Add preferences page to the leaflet
@@ -73,42 +93,33 @@ impl App {
         Ok(result)
     }
 
-    /// Show toast with `toast` title and `See message` button
-    /// 
-    /// This button will show message dialog with error message
-    pub fn toast_error(&self, toast: &str, err: std::io::Error) {
-        let toast = adw::Toast::new(toast);
-
-        toast.set_button_label(Some("See message"));
-        toast.set_action_name(Some("see-message.see-message"));
-
-        let window_copy = self.window.clone();
-
-        // Show error message in a dialog window
-        add_action(&self.toast_overlay, "see-message", move || {
-            let dialog = gtk::MessageDialog::new(
-                Some(&window_copy),
-                gtk::DialogFlags::all(),
-                gtk::MessageType::Info,
-                gtk::ButtonsType::Close,
-                &err.to_string()
-            );
-
-            dialog.connect_response(move |dialog, _| {
-                dialog.close();
-            });
-
-            dialog.show();
-        });
-
-        self.toast_overlay.add_toast(&toast);
-    }
-
     pub fn open_preferences_page(&self) -> Result<(), Error> {
         self.preferences_stack.update()?;
         
         self.leaflet.set_visible_child_name("preferences_page");
 
         Ok(())
+    }
+
+    pub fn update_state(&self, state: AppState) {
+        match state {
+            AppState::Launch => {
+                self.launch_game_group.set_visible(true);
+                self.progress_bar_group.set_visible(false);
+            },
+            AppState::Progress { title, progress } => {
+                self.launch_game_group.set_visible(false);
+                self.progress_bar_group.set_visible(true);
+
+                self.progress_bar.set_text(Some(&title));
+                self.progress_bar.set_fraction(progress);
+            }
+        }
+    }
+}
+
+impl ToastError for App {
+    fn get_toast_widgets(&self) -> (adw::ApplicationWindow, adw::ToastOverlay) {
+        (self.window.clone(), self.toast_overlay.clone())
     }
 }

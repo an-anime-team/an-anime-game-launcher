@@ -4,6 +4,7 @@ use libadwaita::{self as adw, prelude::*};
 use std::io::Error;
 
 use crate::ui::get_object;
+use crate::ui::ToastError;
 
 mod general_page;
 mod enhanced_page;
@@ -15,8 +16,14 @@ pub mod pages {
 
 #[derive(Clone)]
 pub struct PreferencesStack {
+    pub window: adw::ApplicationWindow,
+    pub toast_overlay: adw::ToastOverlay,
+
     pub preferences: gtk::Box,
     pub preferences_go_back: gtk::Button,
+
+    pub status_page: adw::StatusPage,
+    pub flap: adw::Flap,
 
     pub stack: gtk::Stack,
 
@@ -25,13 +32,21 @@ pub struct PreferencesStack {
 }
 
 impl PreferencesStack {
-    pub fn new() -> Result<Self, String> {
+    pub fn new(window: adw::ApplicationWindow, toast_overlay: adw::ToastOverlay) -> Result<Self, String> {
         let builder = gtk::Builder::from_string(include_str!("../../../assets/ui/.dist/preferences.ui"));
 
         let result = Self {
+            window,
+            toast_overlay,
+
             preferences: get_object(&builder, "preferences")?,
             preferences_go_back: get_object(&builder, "preferences_go_back")?,
+
+            status_page: get_object(&builder, "status_page")?,
+            flap: get_object(&builder, "flap")?,
+
             stack: get_object(&builder, "stack")?,
+            
             general_page: pages::GeneralPage::new()?,
             enhanced_page: pages::EnhancedPage::new()?
         };
@@ -48,9 +63,24 @@ impl PreferencesStack {
     /// 
     /// TODO: do it asynchronously. The problem is that I somehow need to handle this function's error to display it as a toast
     pub fn update(&self) -> Result<(), Error> {
-        self.general_page.update()?;
-        self.enhanced_page.update()?;
+        self.status_page.set_visible(true);
+        self.status_page.set_description(None);
+        self.flap.set_visible(false);
+
+        self.general_page.update(&self.status_page)?;
+        self.enhanced_page.update(&self.status_page)?;
+
+        self.status_page.set_visible(false);
+        self.flap.set_visible(true);
+
+        self.toast_error("Aboba amogus", Error::last_os_error());
 
         Ok(())
+    }
+}
+
+impl ToastError for PreferencesStack {
+    fn get_toast_widgets(&self) -> (adw::ApplicationWindow, adw::ToastOverlay) {
+        (self.window.clone(), self.toast_overlay.clone())
     }
 }
