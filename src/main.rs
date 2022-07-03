@@ -19,15 +19,9 @@ fn main() {
 
     // Init app window and show it
     application.connect_activate(|app| {
-        let app = MainApp::new(app).unwrap();
+        let app = MainApp::new(app).expect("Failed to init MainApp");
 
-        let app_copy = app.clone();
-
-        app.open_preferences.connect_clicked(move |_| {
-            app_copy.open_preferences_page();
-        });
-
-        app.window.show();
+        app.show();
     });
 
     // Run app

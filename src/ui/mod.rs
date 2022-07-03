@@ -7,7 +7,7 @@ mod toast_error;
 
 pub use main::{
     App as MainApp,
-    AppState as MainAppState,
+    // AppState as MainAppState,
 };
 
 pub use toast_error::ToastError;
