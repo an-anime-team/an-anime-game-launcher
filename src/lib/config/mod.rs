@@ -194,7 +194,7 @@ pub struct Fsr {
 impl Default for Fsr {
     fn default() -> Self {
         Self {
-            strength: 3,
+            strength: 2,
             enabled: false
         }
     }

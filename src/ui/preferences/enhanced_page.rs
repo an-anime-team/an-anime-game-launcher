@@ -49,7 +49,14 @@ impl Page {
         result.fsr_combo.connect_selected_notify(|hud| {
             if let Ok(mut config) = config::get() {
                 // TODO: show toast
-                config.game.enhancements.fsr.strength = hud.selected();
+
+                // Ultra Quality = 5
+                // Quality       = 4
+                // Balanced      = 3
+                // Performance   = 2
+                // 
+                // Source: Bottles (https://github.com/bottlesdevs/Bottles/blob/22fa3573a13f4e9b9c429e4cdfe4ca29787a2832/src/ui/details-preferences.ui#L88)
+                config.game.enhancements.fsr.strength = 5 - hud.selected();
 
                 config::update(config).unwrap();
             }
@@ -112,7 +119,7 @@ impl Page {
         self.sync_combo.set_selected(config.game.wine.sync.into());
 
         // FSR strength selection
-        self.fsr_combo.set_selected(config.game.enhancements.fsr.strength);
+        self.fsr_combo.set_selected(5 - config.game.enhancements.fsr.strength);
 
         // FSR switching
         self.fsr_switcher.set_state(config.game.enhancements.fsr.enabled);

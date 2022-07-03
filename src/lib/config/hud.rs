@@ -44,7 +44,7 @@ impl HUD {
         match self {
             Self::None => HashMap::new(),
             Self::DXVK => HashMap::from([
-                ("DXVK_HUD", "1")
+                ("DXVK_HUD", "fps,frametimes,version,gpuload")
             ]),
             Self::MangoHUD => HashMap::from([
                 ("MANGOHUD", "1")
