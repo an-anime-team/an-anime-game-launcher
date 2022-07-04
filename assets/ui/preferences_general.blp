@@ -29,6 +29,7 @@ Adw.PreferencesPage general_page {
                 Gtk.Button {
                     icon-name: "document-save-symbolic";
                     valign: center;
+                    styles ["flat"]
                 }
             }
 
@@ -38,6 +39,7 @@ Adw.PreferencesPage general_page {
                 Gtk.Button {
                     icon-name: "user-trash-symbolic";
                     valign: center;
+                    styles ["flat"]
                 }
             }
 
@@ -47,6 +49,7 @@ Adw.PreferencesPage general_page {
                 Gtk.Button {
                     icon-name: "document-save-symbolic";
                     valign: center;
+                    styles ["flat"]
                 }
             }
 
@@ -56,6 +59,7 @@ Adw.PreferencesPage general_page {
                 Gtk.Button {
                     icon-name: "document-save-symbolic";
                     valign: center;
+                    styles ["flat"]
                 }
             }
         }
@@ -101,6 +105,19 @@ Adw.PreferencesPage general_page {
 
     Adw.PreferencesGroup {
         title: "Wine version";
+
+        Adw.ComboRow {
+            title: "Selected version";
+
+            model: Gtk.StringList {
+                strings [
+                    "Wine-GE 7-16",
+                    "Wine-GE 7-15",
+                    "Proton-GE 7-15",
+                    "Lutris 7-14"
+                ]
+            };
+        }
 
         Adw.ExpanderRow {
             title: "Wine-GE";
@@ -190,6 +207,19 @@ Adw.PreferencesPage general_page {
 
     Adw.PreferencesGroup {
         title: "DXVK version";
+
+        Adw.ComboRow {
+            title: "Selected version";
+
+            model: Gtk.StringList {
+                strings [
+                    "Vanilla 1.10.1",
+                    "Vanilla 1.10",
+                    "Vanilla 1.9.4",
+                    "Async 1.10.1"
+                ]
+            };
+        }
 
         Adw.ExpanderRow {
             title: "Vanilla";

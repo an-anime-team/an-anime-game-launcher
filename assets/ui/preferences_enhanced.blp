@@ -21,24 +21,6 @@ Adw.PreferencesPage enhanced_page {
             };
         }
 
-        Adw.ComboRow fsr_combo {
-            title: "FSR";
-            subtitle: "AMD FSR scales game resolution while rendering the game with the lower one";
-
-            model: Gtk.StringList {
-                strings [
-                    "Ultra Quality",
-                    "Quality",
-                    "Balanced",
-                    "Performance"
-                ]
-            };
-
-            Gtk.Switch fsr_switcher {
-                valign: center;
-            }
-        }
-
         Adw.ComboRow wine_lang {
             title: "Language";
             subtitle: "Choose the language to use in wine environment. Can fix keyboard layout detection in-game";
@@ -73,6 +55,24 @@ Adw.PreferencesPage enhanced_page {
                     "MangoHUD"
                 ]
             };
+        }
+
+        Adw.ComboRow fsr_combo {
+            title: "FSR";
+            subtitle: "AMD FSR scales game resolution while rendering the game with the lower one";
+
+            model: Gtk.StringList {
+                strings [
+                    "Ultra Quality",
+                    "Quality",
+                    "Balanced",
+                    "Performance"
+                ]
+            };
+
+            Gtk.Switch fsr_switcher {
+                valign: center;
+            }
         }
 
         Adw.ActionRow {

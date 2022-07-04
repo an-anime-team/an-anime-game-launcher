@@ -11,11 +11,11 @@ pub struct Page {
     pub page: adw::PreferencesPage,
 
     pub sync_combo: adw::ComboRow,
-    pub fsr_combo: adw::ComboRow,
-    pub fsr_switcher: gtk::Switch,
     pub wine_lang: adw::ComboRow,
 
     pub hud_combo: adw::ComboRow,
+    pub fsr_combo: adw::ComboRow,
+    pub fsr_switcher: gtk::Switch,
     pub gamemode_switcher: gtk::Switch
 }
 
@@ -27,12 +27,12 @@ impl Page {
             page: get_object(&builder, "enhanced_page")?,
 
             sync_combo: get_object(&builder, "sync_combo")?,
-            fsr_combo: get_object(&builder, "fsr_combo")?,
-            fsr_switcher: get_object(&builder, "fsr_switcher")?,
+            wine_lang: get_object(&builder, "wine_lang")?,
 
             hud_combo: get_object(&builder, "hud_combo")?,
-            gamemode_switcher: get_object(&builder, "gamemode_switcher")?,
-            wine_lang: get_object(&builder, "wine_lang")?
+            fsr_combo: get_object(&builder, "fsr_combo")?,
+            fsr_switcher: get_object(&builder, "fsr_switcher")?,
+            gamemode_switcher: get_object(&builder, "gamemode_switcher")?
         };
 
         // Wine sync selection
@@ -40,6 +40,26 @@ impl Page {
             if let Ok(mut config) = config::get() {
                 // TODO: show toast
                 config.game.wine.sync = config::WineSync::try_from(hud.selected()).unwrap();
+
+                config::update(config).unwrap();
+            }
+        });
+
+        // Wine language selection
+        result.wine_lang.connect_selected_notify(|hud| {
+            if let Ok(mut config) = config::get() {
+                // TODO: show toast
+                config.game.wine.language = config::WineLang::try_from(hud.selected()).unwrap();
+
+                config::update(config).unwrap();
+            }
+        });
+
+        // HUD selection
+        result.hud_combo.connect_selected_notify(|hud| {
+            if let Ok(mut config) = config::get() {
+                // TODO: show toast
+                config.game.enhancements.hud = config::HUD::try_from(hud.selected()).unwrap();
 
                 config::update(config).unwrap();
             }
@@ -71,26 +91,6 @@ impl Page {
                 config::update(config).unwrap();
             }
         });
-
-        // Wine language selection
-        result.wine_lang.connect_selected_notify(|hud| {
-            if let Ok(mut config) = config::get() {
-                // TODO: show toast
-                config.game.wine.language = config::WineLang::try_from(hud.selected()).unwrap();
-
-                config::update(config).unwrap();
-            }
-        });
-
-        // HUD selection
-        result.hud_combo.connect_selected_notify(|hud| {
-            if let Ok(mut config) = config::get() {
-                // TODO: show toast
-                config.game.enhancements.hud = config::HUD::try_from(hud.selected()).unwrap();
-
-                config::update(config).unwrap();
-            }
-        });
         
         // Gamemode switching
         result.gamemode_switcher.connect_state_notify(|switcher| {
@@ -118,17 +118,17 @@ impl Page {
         // Update Wine sync
         self.sync_combo.set_selected(config.game.wine.sync.into());
 
-        // FSR strength selection
-        self.fsr_combo.set_selected(5 - config.game.enhancements.fsr.strength);
-
-        // FSR switching
-        self.fsr_switcher.set_state(config.game.enhancements.fsr.enabled);
-
         // Update wine language
         self.wine_lang.set_selected(config.game.wine.language.into());
 
         // Update HUD
         self.hud_combo.set_selected(config.game.enhancements.hud.into());
+
+        // FSR strength selection
+        self.fsr_combo.set_selected(5 - config.game.enhancements.fsr.strength);
+
+        // FSR switching
+        self.fsr_switcher.set_state(config.game.enhancements.fsr.enabled);
 
         // Gamemode switching
         self.fsr_switcher.set_state(config.game.enhancements.gamemode);
