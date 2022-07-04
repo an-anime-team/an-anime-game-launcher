@@ -1,6 +1,9 @@
 use gtk4::{self as gtk, prelude::*};
 use libadwaita::{self as adw, prelude::*};
 
+use gtk4::glib;
+use gtk4::glib::clone;
+
 use std::rc::Rc;
 use std::cell::Cell;
 
@@ -16,7 +19,7 @@ use crate::lib::game;
 /// `AppWidgets::try_get` function loads UI file from `.assets/ui/.dist` folder and returns structure with references to its widgets
 /// 
 /// This function does not implement events
-#[derive(Clone)]
+#[derive(Clone, glib::Downgrade)]
 pub struct AppWidgets {
     pub window: adw::ApplicationWindow,
     pub toast_overlay: adw::ToastOverlay,
@@ -80,7 +83,7 @@ pub enum Actions {
 /// In this example we store a counter here to know what should we increment or decrement
 /// 
 /// This must implement `Default` trait
-#[derive(Debug, Default)]
+#[derive(Debug, Default, glib::Downgrade)]
 pub struct Values;
 
 /// The main application structure
@@ -94,7 +97,7 @@ pub struct Values;
 /// 
 /// So we have a shared reference to some value that can be changed without mutable reference.
 /// That's what we need and what we use in `App::update` method
-#[derive(Clone)]
+#[derive(Clone, glib::Downgrade)]
 pub struct App {
     widgets: AppWidgets,
     values: Rc<Cell<Values>>
@@ -117,25 +120,19 @@ impl App {
     /// Add default events and values to the widgets
     fn init_events(self) -> Self {
         // Open preferences page
-        let self_copy = self.clone();
-
-        self.widgets.open_preferences.connect_clicked(move |_| {
-            self_copy.update(Actions::OpenPreferencesPage);
-        });
+        self.widgets.open_preferences.connect_clicked(clone!(@strong self as this => move |_| {
+            this.update(Actions::OpenPreferencesPage);
+        }));
 
         // Go back button for preferences page
-        let self_copy = self.clone();
-
-        self.widgets.preferences_stack.preferences_go_back.connect_clicked(move |_| {
-            self_copy.update(Actions::PreferencesGoBack);
-        });
+        self.widgets.preferences_stack.preferences_go_back.connect_clicked(clone!(@strong self as this => move |_| {
+            this.update(Actions::PreferencesGoBack);
+        }));
 
         // Launch game
-        let self_copy = self.clone();
-        
-        self.widgets.launch_game.connect_clicked(move |_| {
-            self_copy.update(Actions::LaunchGame);
-        });
+        self.widgets.launch_game.connect_clicked(clone!(@strong self as this => move |_| {
+            this.update(Actions::LaunchGame);
+        }));
 
         self
     }

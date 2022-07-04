@@ -1,6 +1,8 @@
 use gtk4::{self as gtk, prelude::*};
 use libadwaita::{self as adw, prelude::*};
 
+use gtk4::glib;
+
 use std::io::Error;
 
 use crate::ui::get_object;
@@ -10,11 +12,11 @@ mod general_page;
 mod enhanced_page;
 
 pub mod pages {
-    pub use super::general_page::Page as GeneralPage;
-    pub use super::enhanced_page::Page as EnhancedPage;
+    pub use super::general_page::App as GeneralPage;
+    pub use super::enhanced_page::App as EnhancedPage;
 }
 
-#[derive(Clone)]
+#[derive(Clone, glib::Downgrade)]
 pub struct PreferencesStack {
     pub window: adw::ApplicationWindow,
     pub toast_overlay: adw::ToastOverlay,
@@ -51,8 +53,8 @@ impl PreferencesStack {
             enhanced_page: pages::EnhancedPage::new()?
         };
 
-        result.stack.add_titled(&result.general_page.page, None, &pages::GeneralPage::title());
-        result.stack.add_titled(&result.enhanced_page.page, None, &pages::EnhancedPage::title());
+        result.stack.add_titled(&result.general_page.get_page(), None, &pages::GeneralPage::title());
+        result.stack.add_titled(&result.enhanced_page.get_page(), None, &pages::EnhancedPage::title());
 
         Ok(result)
     }
@@ -67,8 +69,8 @@ impl PreferencesStack {
         self.status_page.set_description(None);
         self.flap.set_visible(false);
 
-        self.general_page.update(&self.status_page)?;
-        self.enhanced_page.update(&self.status_page)?;
+        self.general_page.prepare(&self.status_page)?;
+        self.enhanced_page.prepare(&self.status_page)?;
 
         self.status_page.set_visible(false);
         self.flap.set_visible(true);
