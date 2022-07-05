@@ -30,7 +30,7 @@ launcher:
 
     # Voice packages installation
     voice:
-      deleting: Suppression des pack de voix...
+      deleting: Suppression des packs de voix...
       downloading: 'Téléchargement du pack de voix : {voice}...'
       unpacking: 'Décompression du pack de voix : {voice}...'
 
@@ -41,7 +41,7 @@ launcher:
       install_wine: Installer Wine
       install_dxvk: Installer DXVK
       install: Installer
-      update: Mise à jour
+      update: Mettre à jour
       
       apply_changes:
         # There you may want to do it with a line break "Appliquer" may look better ?
@@ -50,7 +50,7 @@ launcher:
 
       remove_outdated:
         # Same as "Appliquer" to keep a consistency if the previous one has a line break this one should else none but welcome long button I guess.
-        title: Supprimer les obsolètes
+        title: Supprimer les fichiers obsolètes
         hint: Supprimer les fichiers du jeu qui sont devenus obsolètes
 
     # When the game should be patched
@@ -58,15 +58,15 @@ launcher:
       # Patch unavailable
       unavailable:
         title: Patch non disponible
-        hint: Cette version du jeu n'a pas de patch contre l'anti triche, 
+        hint: Cette version du jeu n'a pas de patch contre l'anti-triche, 
               merci de bien vouloir patienter quelques jours puis réessayez
       
       # Patch is in testing
       test:
-        title: Appliquer le patch en teste
-        hint: Cette version du jeu a un patch contre l'anti triche, 
-              mais celui-ci est en période de teste. 
-              Vous pouvez patienter ou bien l'utilisé à vos risques et périls.
+        title: Appliquer le patch en test
+        hint: Cette version du jeu a un patch contre l'anti-triche, 
+              mais celui-ci est en période de test. 
+              Vous pouvez patienter ou bien l'utiliser à vos risques et périls.
 
       # Patch is stable
       stable: Appliquer le patch
@@ -74,13 +74,13 @@ launcher:
     # When the game is ready for playing
     ready:
       launch: Lancer
-      predownload: Pre-téléchargement de mise à jour
+      predownload: Pré-téléchargement de la mise à jour
 
 # Settings window
 settings:
   # General
   general:
-    title: Générale
+    title: Général
     items:
       # Language selection
       lang:
@@ -103,9 +103,9 @@ settings:
 
         # Game voice pack language
         voice:
-          title: Pack de voix
-          tooltip: Le choix des voix utilisées sont à modifier 
-                   manuellement dans le jeu
+          title: Packs de voix
+          tooltip: Le choix des voix utilisées se fait 
+                   manuellement en jeu
           items:
             en-us: Anglaise (US)
             ja-jp: Japonaise
@@ -124,21 +124,21 @@ settings:
       discord:
         title: Intégration Discord
         settings:
-          title: Intégration Discord paramètres
+          title: Paramètres de l'intégration Discord
           items:
-            timer: Afficher le temps écouler
+            timer: Afficher le temps écoulé
             in-launcher: Texte dans le launcher
-            in-game: Texte dans le jeu
-            selectIcon: Sélection d'icone
+            in-game: Texte en jeu
+            selectIcon: Sélection d'icône
 
       # Some buttons
       buttons:
         winetricks: winetricks
         winecfg: winecfg
-        launcher: Dossier du Launcher
+        launcher: Dossier du launcher
         game: Dossier du jeu
         repair_game: Corriger les fichiers du jeu
-        clear_cache: nettoyer le cache
+        clear_cache: Nettoyer le cache
 
       # Patch-related settings
       patch:
@@ -163,15 +163,15 @@ settings:
         hud:
           title: Interface
           items:
-            none: None
+            none: Aucune
             dxvk: DXVK
             mangohud: MangoHUD
 
         # Wine synchronization
         winesync:
-          title: Synchronisation dans Wine
-          tooltip: ESync est un système de synchronisation des opérations multi-thread. Cela améliore vos performances en jeux.
-                   FSync est une version améliorée de ESync qui fonctionne seulement avec un Kernel spécifique.
+          title: Synchronisation Wine
+          tooltip: ESync est un système de synchronisation des opérations multi-thread. Il peut améliorer vos performances en jeu.
+                   FSync est une version améliorée d'ESync qui fonctionne seulement avec un Kernel spécifique.
           items:
             none: Aucune
             esync: ESync
@@ -182,13 +182,13 @@ settings:
         fsr:
           title: Activer AMD FSR
           tooltip: Cette option active "AMD FidelityFX Super Resolution" (FSR)
-                   ce qui permet d'augmenter votre résolution sans perdre des FPS (images par secondes)
+                   ce qui permet d'augmenter votre résolution sans perdre d'FPS (images par secondes)
 
         # Wine Virtual Desktop
         winevd:
           title: Bureau virtuel
           settings:
-            title: Paramètres du Bureau virtuel
+            title: Paramètres du bureau virtuel
             items:
               width: Largeur
               height: Hauteur
@@ -202,26 +202,25 @@ settings:
           title: Utiliser GameMode
           tooltip:
             enabled: C'est un logiciel qui permet d'améliorer les performances en jeu
-            disabled: ⚠️ Vous n'avez pas le paquet "gamemode" d'installer
+            disabled: ⚠️ Vous n'avez pas installé le paquet "gamemode"
 
         # Borderless Window
         borderless_window:
-          title: Fenêtre sans bordures
-          tooltip: Enlève les bordures du jeu quand vous jouez en mode fenêtrer.
-                   Pour jouer en mode fenêtrer ou inversement jouer en 
-                   mode plein écran, appuyez sur alt+entrer pour alterner entre 
-                   les deux modes.
+          title: Fenêtré sans bordures
+          tooltip: Enlève les bordures du jeu quand vous jouez en mode fenêtré.
+                   Appuyez sur Alt + Entrée pour basculer entre le mode fenêtré
+                   et le mode plein écran.
 
         # Unlock FPS
         fps_unlocker:
-          title: Débloquer les IPS (FPS)
+          title: Débloquer les FPS
           tooltip: Cette option permet de débloque le nombre d'image par 
-                   secondes (IPS) au-delà de 60
+                   secondes (FPS) au-delà de 60
 
         # Use separate terminal window to run the game
         use_terminal:
-            title: Utiliser Terminal
-            tooltip: Avec cette option activée le Launcher lancera les commandes Wine dans une fenêtre Terminal séparée
+            title: Utiliser le terminal
+            tooltip: Avec cette option activé, le launcher lancera les commandes Wine dans un terminal séparé
 
     # Enhancements related to the launcher
     launcher:
@@ -238,7 +237,7 @@ settings:
           # Launcher logs
           launcher:
             title: Suppression des fichiers logs
-            tooltip: Intervalle entre chaque suppression de fichier logs du launcher
+            tooltip: Intervalle entre chaque suppression des fichiers logs du launcher
             items:
               1d: Tous les jours
               3d: Tous les 3 jours
@@ -252,7 +251,7 @@ settings:
     title: Version de Wine
     items:
       recommended:
-        title: Afficher les versions recommandées seulement
+        title: Afficher les versions recommandées uniquement
         tooltip: Cette option masque les versions de Wine 
                  non testées ou qui ne fonctionnent pas
 
@@ -261,7 +260,7 @@ settings:
     title: DXVK
     items:
       recommended:
-        title: Afficher les versions recommandées seulement
+        title: Afficher les versions recommandées uniquement
         tooltip: Cette option masque les versions de DXVK 
                  non testées ou qui ne fonctionnent pas
 
@@ -271,15 +270,15 @@ settings:
     items:
       shaders:
         title: Effets Visuels
-        tooltip: Utilisez la touche début (home) activer 
+        tooltip: Utilisez la touche Début (Home) pour activer 
                  ou désactiver les effets visuels
         items:
-          none: None
-          custom: Custom
+          none: Aucun
+          custom: Personalisé
 
       author: 'Auteur: {author}'
       no_images: Aucune image ajoutée
-      not_installed: Vous n'avez les paquets "vkBasalt" et "reshade-shader library" d'installer
+      not_installed: Vous n'avez pas installé les paquets "vkBasalt" et "reshade-shader library"
 
   # Environmantal variables manager
   environment:
@@ -299,13 +298,13 @@ settings:
 notifications:
   # Launcher update
   launcher_update_available:
-    title: 'Mise à jour du Launcher disponible: {from} -> {to}'
-    body: Vous pouvez télécharger la nouvelle version du launcher via le dépôt ici {repository}
+    title: 'Mise à jour du launcher disponible: {from} -> {to}'
+    body: Vous pouvez télécharger la nouvelle version du launcher depuis le dépôt {repository}
 
   # Before telemetry check when iputils is not downloaded
   iputils_package_required:
     title: An Anime Game Launcher
-    body: Vous devez installer "iputils" pour pouvoir vérifier la télémétrie
+    body: Vous devez installer le paquet "iputils" pour vérifier le bloquage serveurs de télémétrie
 
   # When telemetry servers are not disabled
   telemetry_not_disabled:
@@ -315,17 +314,17 @@ notifications:
   # Before patch applying when xdelta3 package is not downloaded
   xdelta3_package_required:
     title: An Anime Game Launcher
-    body: Vous devez télécharger le paquet "xdelta3" pour appliquer le patch
+    body: Vous devez installer le paquet "xdelta3" pour appliquer le patch
 
   # If patch wasn't applied because of some error
   patch_applying_error:
     title: An Anime Game Launcher
-    body: Le patch n'a pas été appliquer. Vérifiez le fichier log pour en connaitre la raison, ou demandez de l'aide sur le serveur discord.
+    body: Le patch n'a pas pu être appliqué. Vérifiez le fichier log pour en connaitre la raison, ou demandez de l'aide sur le serveur discord.
 
   # Patch repositories are not available
   patch_repos_unavailable:
     title: An Anime Game Launcher
-    body: Pas tous les dépôts des patchs sont disponibles. Vous pouvez lancer le jeu, mais le Launcher ne peut pas garantir que celui-ci est correctement patcher
+    body: Aucun dépôt de patch disponible. Vous pouvez lancer le jeu, mais le launcher ne peut pas garantir que celui-ci est correctement patché
 
   # HDiffPatch couldn't successfully apply game files changes
   game_changes_applying_error:
@@ -336,14 +335,16 @@ notifications:
 tos_violation:
   title: Violation du contrat d'utilisation
   heading: ⚠️ Attention
-  body: Ce launcher n'est pas un logiciel officiel, il n'est en aucun lier a {company} et/ou {company_alterego}.
+  body: Ce launcher n'est pas un logiciel officiel, il n'est en aucun cas lié a {company} et/ou {company_alterego}.
         Ce logiciel est conçu pour faciliter l'accès au jeu {game} sur Linux,
-        et a été crée seulement pour installer et jouer au jeu sans complication.
-        Il fait cela en utilisant les extensions pour facilitée l'utilisation par l'utilisateur.
-        En faisant ça certaines extensions utiliser rompt le contrat d'utilisation de {company} pour le jeu {game}.
-        Si vous utilisez ce logiciel , votre compte utilisateur peut être identifié par {company}/{company_alterego} comme un compte qui a rompu et/ou non accepter le contrat.
-        Si cela arrive, {company}/{company_alterego} a tous les droits sur votre compte ce qui inclut un potentiel Ban.
-        Si vous comprenez et acceptez les risques d'utiliser ce logiciel pour jouer appuyez sur OK et partez à l'exploration de Teyvat !
+        et a été crée seulement pour installer et jouer au jeu facilement.
+        Pour cela, le launcher utilise des extensions pour faciliter l'utilisation du jeu par l'utilisateur.
+        Cependent, certaines extensions utilisées sont contraires aux conditions générales d'utilisations de {company} pour le jeu {game}.
+        Si vous utilisez ce logiciel, votre compte utilisateur peut être identifié par {company}/{company_alterego} comme un compte qui ne respecte pas les conditions
+        générales d'utilisation.
+        Ainsi, {company}/{company_alterego} se réserve le droit de vous bannir pour l'utilisation de ce logiciel à sa discrétion.
+        Si vous comprenez et acceptez les risques énoncés ci-dessus, appuyez sur « Je comprends les risques »
+        pour commencer à jouer et partir à l'exploration de Teyvat !
   buttons:
     ok:
       title: Je comprends les risques
@@ -354,17 +355,17 @@ tos_violation:
 # Analytics window
 analytics:
   title: Commission de Yanfei...
-  header: Participer a la collecte des données anonymement
+  header: Participer à la collecte anonyme de données
 
   body:
     - Pour comptabiliser le nombre d'utilisateurs sur Linux, Yanfei aimerait collecter votre adresse IP à chaque mise à jour du jeu
-    - Votre adresse IP sera cryptée (méthode Hash) pour des raisons de sécurités
+    - Votre adresse IP sera hashé pour votre sécurité
 
   actions:
     share_country:
-      title: Partage du Pays
-      hint: Autoriser Yanfei a sauvegardé votre Pays avec votre IP pour rendre les statistiques plus détaillées.
-            Aucune autre donnée que votre pays sera sauvegardé
+      title: Partager le pays
+      hint: Autoriser Yanfei à sauvegarder votre pays avec votre IP pour rendre les statistiques plus détaillées.
+            Aucune autre donnée que votre pays ne sera sauvegardée
 
     participate: Participer
     skip: Passer
@@ -376,5 +377,5 @@ screenshots:
   info: Cliquez sur une capture d'écran pour l'ouvrir
   buttons:
     more: Charger plus
-    folder: Ouvrir le dossier des captures d'écran
-  no_images: Aucunes captures d'écran prise
+    folder: Ouvrir le dossier de captures d'écran
+  no_images: Aucunes captures d'écran n'a été prise
