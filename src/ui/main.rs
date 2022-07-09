@@ -71,11 +71,19 @@ impl AppWidgets {
 /// This enum is used to describe an action inside of this application
 /// 
 /// It may be helpful if you want to add the same event for several widgets, or call an action inside of another action
-#[derive(Debug)]
+#[derive(Debug, glib::Downgrade)]
 pub enum Actions {
     OpenPreferencesPage,
     PreferencesGoBack,
     LaunchGame
+}
+
+impl Actions {
+    pub fn into_fn<T: gtk::glib::IsA<gtk::Widget>>(&self, app: &App) -> Box<dyn Fn(&T)> {
+        Box::new(clone!(@weak self as action, @strong app => move |_| {
+            app.update(action);
+        }))
+    }
 }
 
 /// This enum is used to store some of this application data
@@ -100,7 +108,8 @@ pub struct Values;
 #[derive(Clone, glib::Downgrade)]
 pub struct App {
     widgets: AppWidgets,
-    values: Rc<Cell<Values>>
+    values: Rc<Cell<Values>>,
+    actions: Rc<Cell<Option<glib::Sender<Actions>>>>
 }
 
 impl App {
@@ -108,8 +117,9 @@ impl App {
     pub fn new(app: &gtk::Application) -> Result<Self, String> {
         let result = Self {
             widgets: AppWidgets::try_get()?,
-            values: Default::default()
-        }.init_events();
+            values: Default::default(),
+            actions: Default::default()
+        }.init_events().init_actions();
 
         // Bind app to the window
         result.widgets.window.set_application(Some(app));
@@ -120,51 +130,72 @@ impl App {
     /// Add default events and values to the widgets
     fn init_events(self) -> Self {
         // Open preferences page
-        self.widgets.open_preferences.connect_clicked(clone!(@strong self as this => move |_| {
-            this.update(Actions::OpenPreferencesPage);
-        }));
+        self.widgets.open_preferences.connect_clicked(Actions::OpenPreferencesPage.into_fn(&self));
 
         // Go back button for preferences page
-        self.widgets.preferences_stack.preferences_go_back.connect_clicked(clone!(@strong self as this => move |_| {
-            this.update(Actions::PreferencesGoBack);
-        }));
+        self.widgets.preferences_stack.preferences_go_back.connect_clicked(Actions::PreferencesGoBack.into_fn(&self));
 
         // Launch game
-        self.widgets.launch_game.connect_clicked(clone!(@strong self as this => move |_| {
-            this.update(Actions::LaunchGame);
+        self.widgets.launch_game.connect_clicked(Actions::LaunchGame.into_fn(&self));
+
+        self
+    }
+
+    /// Add actions processors
+    /// 
+    /// Changes will happen in the main thread so you can call `update` method from separate thread
+    pub fn init_actions(self) -> Self {
+        let (sender, receiver) = glib::MainContext::channel::<Actions>(glib::PRIORITY_DEFAULT);
+
+        receiver.attach(None, clone!(@strong self as this => move |action| {
+            let values = this.values.take();
+
+            // Some debug output
+            println!("[update] action: {:?}, values: {:?}", &action, &values);
+
+            match action {
+                Actions::OpenPreferencesPage => {
+                    this.widgets.leaflet.set_visible_child_name("preferences_page");
+    
+                    if let Err(err) = this.widgets.preferences_stack.update() {
+                        this.toast_error("Failed to update preferences", err);
+                    }
+                }
+
+                Actions::PreferencesGoBack => {
+                    this.widgets.leaflet.navigate(adw::NavigationDirection::Back);
+                }
+
+                Actions::LaunchGame => {
+                    // Display toast message if the game is failed to run
+                    if let Err(err) = game::run(false) {
+                        this.toast_error("Failed to run game", err);
+                    }
+                }
+            }
+
+            this.values.set(values);
+
+            glib::Continue(true)
         }));
+
+        self.actions.set(Some(sender));
 
         self
     }
 
     /// Update widgets state by calling some action
-    pub fn update(&self, action: Actions) {
-        let values = self.values.take();
+    pub fn update(&self, action: Actions) -> Result<(), std::sync::mpsc::SendError<Actions>> {
+        let actions = self.actions.take();
+        
+        let result = match &actions {
+            Some(sender) => Ok(sender.send(action)?),
+            None => Ok(())
+        };
 
-        println!("[update] action: {:?}, counter: {:?}", &action, &values);
+        self.actions.set(actions);
 
-        match action {
-            Actions::OpenPreferencesPage => {
-                self.widgets.leaflet.set_visible_child_name("preferences_page");
-
-                if let Err(err) = self.widgets.preferences_stack.update() {
-                    self.toast_error("Failed to update preferences", err);
-                }
-            }
-
-            Actions::PreferencesGoBack => {
-                self.widgets.leaflet.navigate(adw::NavigationDirection::Back);
-            }
-
-            Actions::LaunchGame => {
-                // Display toast message if the game is failed to run
-                if let Err(err) = game::run(false) {
-                    self.toast_error("Failed to run game", err);
-                }
-            }
-        }
-
-        self.values.set(values);
+        result
     }
 
     /// Show application window

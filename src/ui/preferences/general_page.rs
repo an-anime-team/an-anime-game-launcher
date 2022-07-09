@@ -1,8 +1,9 @@
 use gtk4::{self as gtk, prelude::*};
 use libadwaita::{self as adw, prelude::*};
 
-use gtk4::glib;
-use gtk4::glib::clone;
+use gtk::glib;
+use gtk::glib::clone;
+use gtk::Align;
 
 use std::rc::Rc;
 use std::cell::Cell;
@@ -30,7 +31,7 @@ pub struct AppWidgets {
     pub dxvk_vanilla: adw::ExpanderRow,
     pub dxvk_async: adw::ExpanderRow,
 
-    pub dxvk_components: Rc<Vec<(adw::ActionRow, dxvk::Version)>>
+    pub dxvk_components: Rc<Vec<(adw::ActionRow, gtk::Button, dxvk::Version)>>
 }
 
 impl AppWidgets {
@@ -58,38 +59,28 @@ impl AppWidgets {
 
         let mut components = Vec::new();
 
-        for version in list.vanilla {
-            let row = adw::ActionRow::new();
-            let button = gtk::Button::new();
+        for (i, versions) in [list.vanilla, list.r#async].into_iter().enumerate() {
+            for version in versions {
+                let row = adw::ActionRow::new();
+                let button = gtk::Button::new();
 
-            row.set_title(&version.version);
-            row.set_visible(version.recommended);
+                row.set_title(&version.version);
+                row.set_visible(version.recommended);
 
-            button.set_icon_name("document-save-symbolic");
-            button.set_valign(gtk::Align::Center);
-            button.add_css_class("flat");
+                button.set_icon_name("document-save-symbolic");
+                button.set_valign(gtk::Align::Center);
+                button.add_css_class("flat");
 
-            row.add_suffix(&button);
+                row.add_suffix(&button);
 
-            result.dxvk_vanilla.add_row(&row);
-            components.push((row, version));
-        }
+                match i {
+                    0 => result.dxvk_vanilla.add_row(&row),
+                    1 => result.dxvk_async.add_row(&row),
+                    _ => ()
+                }
 
-        for version in list.r#async {
-            let row = adw::ActionRow::new();
-            let button = gtk::Button::new();
-
-            row.set_title(&version.version);
-            row.set_visible(version.recommended);
-
-            button.set_icon_name("document-save-symbolic");
-            button.set_valign(gtk::Align::Center);
-            button.add_css_class("flat");
-
-            row.add_suffix(&button);
-
-            result.dxvk_async.add_row(&row);
-            components.push((row, version));
+                components.push((row, button, version));
+            }
         }
 
         result.dxvk_components = Rc::new(components);
@@ -101,9 +92,17 @@ impl AppWidgets {
 /// This enum is used to describe an action inside of this application
 /// 
 /// It may be helpful if you want to add the same event for several widgets, or call an action inside of another action
-#[derive(Debug)]
+#[derive(Debug, glib::Downgrade)]
 pub enum Actions {
+    DownloadDXVK(Rc<usize>)
+}
 
+impl Actions {
+    pub fn into_fn<T: gtk::glib::IsA<gtk::Widget>>(&self, app: &App) -> Box<dyn Fn(&T)> {
+        Box::new(clone!(@weak self as action, @strong app => move |_| {
+            app.update(action);
+        }))
+    }
 }
 
 /// This enum is used to store some of this application data
@@ -128,7 +127,8 @@ pub struct Values;
 #[derive(Clone, glib::Downgrade)]
 pub struct App {
     widgets: AppWidgets,
-    values: Rc<Cell<Values>>
+    values: Rc<Cell<Values>>,
+    actions: Rc<Cell<Option<glib::Sender<Actions>>>>
 }
 
 impl App {
@@ -136,8 +136,9 @@ impl App {
     pub fn new() -> Result<Self, String> {
         let result = Self {
             widgets: AppWidgets::try_get()?,
-            values: Default::default()
-        }.init_events();
+            values: Default::default(),
+            actions: Default::default()
+        }.init_events().init_actions();
 
         Ok(result)
     }
@@ -145,8 +146,8 @@ impl App {
     /// Add default events and values to the widgets
     fn init_events(self) -> Self {
         // Set DXVK recommended only switcher event
-        self.widgets.dxvk_recommended_only.connect_state_notify(clone!(@weak self as this => move |switcher| {
-            for (component, version) in &*this.widgets.dxvk_components {
+        self.widgets.dxvk_recommended_only.connect_state_notify(clone!(@strong self as this => move |switcher| {
+            for (component, _, version) in &*this.widgets.dxvk_components {
                 component.set_visible(if switcher.state() {
                     version.recommended
                 } else {
@@ -155,18 +156,73 @@ impl App {
             }
         }));
 
+        // DXVK install/remove buttons
+        let components = (*self.widgets.dxvk_components).clone();
+
+        for (i, (_, button, _)) in components.into_iter().enumerate() {
+            button.connect_clicked(Actions::DownloadDXVK(Rc::new(i)).into_fn(&self));
+        }
+
+        self
+    }
+
+    /// Add actions processors
+    /// 
+    /// Changes will happen in the main thread so you can call `update` method from separate thread
+    pub fn init_actions(self) -> Self {
+        let (sender, receiver) = glib::MainContext::channel::<Actions>(glib::PRIORITY_DEFAULT);
+
+        receiver.attach(None, clone!(@strong self as this => move |action| {
+            let values = this.values.take();
+
+            // Some debug output
+            println!("[update] action: {:?}, values: {:?}", &action, &values);
+
+            match action {
+                Actions::DownloadDXVK(i) => {
+                    println!("123");
+
+                    let (row, button, version) = &this.widgets.dxvk_components[*i];
+    
+                    let progress_bar = gtk::ProgressBar::new();
+    
+                    progress_bar.set_text(Some("Downloading: 0%"));
+                    progress_bar.set_show_text(true);
+                    
+                    progress_bar.set_width_request(200);
+                    progress_bar.set_valign(Align::Center);
+    
+                    button.set_visible(false);
+    
+                    row.add_suffix(&progress_bar);
+    
+                    row.remove(&progress_bar);
+                    button.set_visible(true);
+                }
+            }
+
+            this.values.set(values);
+
+            glib::Continue(true)
+        }));
+
+        self.actions.set(Some(sender));
+
         self
     }
 
     /// Update widgets state by calling some action
-    pub fn update(&self, action: Actions) {
-        /*let values = self.values.take();
+    pub fn update(&self, action: Actions) -> Result<(), std::sync::mpsc::SendError<Actions>> {
+        let actions = self.actions.take();
+        
+        let result = match &actions {
+            Some(sender) => Ok(sender.send(action)?),
+            None => Ok(())
+        };
 
-        match action {
-            
-        }
+        self.actions.set(actions);
 
-        self.values.set(values);*/
+        result
     }
 
     pub fn title() -> String {
@@ -247,3 +303,5 @@ impl App {
         Ok(())
     }
 }
+
+unsafe impl Send for App {}
