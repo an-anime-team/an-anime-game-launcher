@@ -1,7 +1,7 @@
 use gtk4::{self as gtk, prelude::*};
 use libadwaita::{self as adw, prelude::*};
 
-use gtk4::glib;
+use gtk::glib;
 
 use std::io::Error;
 
@@ -84,3 +84,6 @@ impl ToastError for PreferencesStack {
         (self.window.clone(), self.toast_overlay.clone())
     }
 }
+
+unsafe impl Send for PreferencesStack {}
+unsafe impl Sync for PreferencesStack {}

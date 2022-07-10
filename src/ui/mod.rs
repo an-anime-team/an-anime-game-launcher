@@ -5,6 +5,8 @@ mod main;
 mod preferences;
 mod toast_error;
 
+pub mod components;
+
 pub use main::{
     App as MainApp,
     // AppState as MainAppState,

@@ -198,3 +198,6 @@ impl App {
         Ok(())
     }
 }
+
+unsafe impl Send for App {}
+unsafe impl Sync for App {}

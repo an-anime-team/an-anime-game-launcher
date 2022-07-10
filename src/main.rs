@@ -24,7 +24,7 @@ fn main() {
         // Apply CSS styles to the application
         let provider = CssProvider::new();
 
-        provider.load_from_data(include_bytes!("styles.css"));
+        provider.load_from_data(include_bytes!("../assets/styles.css"));
         
         StyleContext::add_provider_for_display(
             &Display::default().expect("Could not connect to a display"),

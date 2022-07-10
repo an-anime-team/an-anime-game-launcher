@@ -15,6 +15,8 @@ use crate::ui::get_object;
 use crate::lib::config;
 use crate::lib::dxvk;
 
+use crate::ui::components::dxvk_row::DxvkRow;
+
 /// This structure is used to describe widgets used in application
 /// 
 /// `AppWidgets::try_get` function loads UI file from `.assets/ui/.dist` folder and returns structure with references to its widgets
@@ -31,7 +33,7 @@ pub struct AppWidgets {
     pub dxvk_vanilla: adw::ExpanderRow,
     pub dxvk_async: adw::ExpanderRow,
 
-    pub dxvk_components: Rc<Vec<(adw::ActionRow, gtk::Button, dxvk::Version)>>
+    pub dxvk_components: Rc<Vec<DxvkRow>>
 }
 
 impl AppWidgets {
@@ -61,25 +63,15 @@ impl AppWidgets {
 
         for (i, versions) in [list.vanilla, list.r#async].into_iter().enumerate() {
             for version in versions {
-                let row = adw::ActionRow::new();
-                let button = gtk::Button::new();
-
-                row.set_title(&version.version);
-                row.set_visible(version.recommended);
-
-                button.set_icon_name("document-save-symbolic");
-                button.set_valign(gtk::Align::Center);
-                button.add_css_class("flat");
-
-                row.add_suffix(&button);
+                let row = DxvkRow::new(version);
 
                 match i {
-                    0 => result.dxvk_vanilla.add_row(&row),
-                    1 => result.dxvk_async.add_row(&row),
+                    0 => result.dxvk_vanilla.add_row(&row.row),
+                    1 => result.dxvk_async.add_row(&row.row),
                     _ => ()
                 }
 
-                components.push((row, button, version));
+                components.push(row);
             }
         }
 
@@ -92,15 +84,15 @@ impl AppWidgets {
 /// This enum is used to describe an action inside of this application
 /// 
 /// It may be helpful if you want to add the same event for several widgets, or call an action inside of another action
-#[derive(Debug, glib::Downgrade)]
+#[derive(Debug, Clone, glib::Downgrade)]
 pub enum Actions {
     DownloadDXVK(Rc<usize>)
 }
 
 impl Actions {
     pub fn into_fn<T: gtk::glib::IsA<gtk::Widget>>(&self, app: &App) -> Box<dyn Fn(&T)> {
-        Box::new(clone!(@weak self as action, @strong app => move |_| {
-            app.update(action);
+        Box::new(clone!(@strong self as action, @strong app => move |_| {
+            app.update(action.clone());
         }))
     }
 }
@@ -147,9 +139,9 @@ impl App {
     fn init_events(self) -> Self {
         // Set DXVK recommended only switcher event
         self.widgets.dxvk_recommended_only.connect_state_notify(clone!(@strong self as this => move |switcher| {
-            for (component, _, version) in &*this.widgets.dxvk_components {
-                component.set_visible(if switcher.state() {
-                    version.recommended
+            for component in &*this.widgets.dxvk_components {
+                component.row.set_visible(if switcher.state() {
+                    component.version.recommended
                 } else {
                     true
                 });
@@ -157,10 +149,10 @@ impl App {
         }));
 
         // DXVK install/remove buttons
-        let components = (*self.widgets.dxvk_components).clone();
+        let components = &*self.widgets.dxvk_components;
 
-        for (i, (_, button, _)) in components.into_iter().enumerate() {
-            button.connect_clicked(Actions::DownloadDXVK(Rc::new(i)).into_fn(&self));
+        for (i, component) in components.into_iter().enumerate() {
+            component.button.connect_clicked(Actions::DownloadDXVK(Rc::new(i)).into_fn(&self));
         }
 
         self
@@ -172,7 +164,10 @@ impl App {
     pub fn init_actions(self) -> Self {
         let (sender, receiver) = glib::MainContext::channel::<Actions>(glib::PRIORITY_DEFAULT);
 
-        receiver.attach(None, clone!(@strong self as this => move |action| {
+        // I prefer to avoid using clone! here because it breaks my code autocompletion
+        let this = self.clone();
+
+        receiver.attach(None, move |action| {
             let values = this.values.take();
 
             // Some debug output
@@ -180,31 +175,18 @@ impl App {
 
             match action {
                 Actions::DownloadDXVK(i) => {
-                    println!("123");
+                    let component = &this.widgets.dxvk_components[*i];
 
-                    let (row, button, version) = &this.widgets.dxvk_components[*i];
-    
-                    let progress_bar = gtk::ProgressBar::new();
-    
-                    progress_bar.set_text(Some("Downloading: 0%"));
-                    progress_bar.set_show_text(true);
-                    
-                    progress_bar.set_width_request(200);
-                    progress_bar.set_valign(Align::Center);
-    
-                    button.set_visible(false);
-    
-                    row.add_suffix(&progress_bar);
-    
-                    row.remove(&progress_bar);
-                    button.set_visible(true);
+                    println!("Download DXVK: {:?}", &component.version);
+
+                    component.download();
                 }
             }
 
             this.values.set(values);
 
             glib::Continue(true)
-        }));
+        });
 
         self.actions.set(Some(sender));
 
@@ -305,3 +287,4 @@ impl App {
 }
 
 unsafe impl Send for App {}
+unsafe impl Sync for App {}

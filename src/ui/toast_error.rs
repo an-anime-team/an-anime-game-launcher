@@ -9,8 +9,8 @@ pub trait ToastError {
     /// Show toast with `toast` title and `See message` button
     /// 
     /// This button will show message dialog with error message
-    fn toast_error<T: ToString + 'static>(&self, toast: &str, err: T) {
-        let toast = adw::Toast::new(toast);
+    fn toast_error<T: ToString, F: std::fmt::Display + 'static>(&self, toast: T, err: F) {
+        let toast = adw::Toast::new(toast.to_string().as_str());
 
         toast.set_button_label(Some("See message"));
         toast.set_action_name(Some("see-message.see-message"));
@@ -25,7 +25,7 @@ pub trait ToastError {
                 gtk::DialogFlags::all(),
                 gtk::MessageType::Info,
                 gtk::ButtonsType::Close,
-                &err.to_string()
+                &format!("{}", err)
             );
 
             dialog.connect_response(move |dialog, _| {

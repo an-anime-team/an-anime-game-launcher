@@ -147,7 +147,10 @@ impl App {
     pub fn init_actions(self) -> Self {
         let (sender, receiver) = glib::MainContext::channel::<Actions>(glib::PRIORITY_DEFAULT);
 
-        receiver.attach(None, clone!(@strong self as this => move |action| {
+        // I prefer to avoid using clone! here because it breaks my code autocompletion
+        let this = self.clone();
+
+        receiver.attach(None, move |action| {
             let values = this.values.take();
 
             // Some debug output
@@ -156,10 +159,16 @@ impl App {
             match action {
                 Actions::OpenPreferencesPage => {
                     this.widgets.leaflet.set_visible_child_name("preferences_page");
-    
+
                     if let Err(err) = this.widgets.preferences_stack.update() {
                         this.toast_error("Failed to update preferences", err);
                     }
+
+                    /*tokio::task::spawn(async {
+                        if let Err(err) = this.widgets.preferences_stack.update().await {
+                            // this.update(Actions::ToastError(Rc::new((String::from("Failed to update preferences"), err))));
+                        }
+                    });*/
                 }
 
                 Actions::PreferencesGoBack => {
@@ -177,7 +186,7 @@ impl App {
             this.values.set(values);
 
             glib::Continue(true)
-        }));
+        });
 
         self.actions.set(Some(sender));
 
@@ -209,6 +218,9 @@ impl ToastError for App {
         (self.widgets.window.clone(), self.widgets.toast_overlay.clone())
     }
 }
+
+unsafe impl Send for App {}
+unsafe impl Sync for App {}
 
 /*
 pub enum AppState {
