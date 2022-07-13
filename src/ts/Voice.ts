@@ -58,7 +58,7 @@ export default class Voice
                                     const actualSize = parseInt((await Neutralino.os.execCommand(`du -b "${path.addSlashes(`${voiceDir}/${folder}`)}"`))
                                         .stdOut.split('\t')[0]);
 
-                                    const locale = Object.keys(this.langs).find((lang) => this.langs[lang] === folder);
+                                    const locale = Object.keys(this.langs).find((lang) => this.langs[lang] === folder) as string;
 
                                     // This constant found its origin in the change of the voice packages format.
                                     // When the Anime Company decided that they know better how their game should work
@@ -68,27 +68,13 @@ export default class Voice
                                     // But Company's API returns double of this size, so like 18 GB, because their API also
                                     // messed folder where they store unpacked voice packages.
                                     // That's why we have to substract this approximate value from all the packages sizes
-                                    const CONSTANT_OF_STUPIDITY = 9.37 * 1024.0 * 1024.0 * 1024.0;
 
-                                    let version: { version: string | null, size: number, diff: number } = {
-                                        version: null,
-                                        size: 0,
-                                        diff: actualSize
-                                    };
-
-                                    for (const voicePackage of data.game.latest.voice_packs)
-                                        if (voicePackage.language == locale)
-                                        {
-                                            const packageSize = parseInt(voicePackage.size) - CONSTANT_OF_STUPIDITY;
-
-                                            version = {
-                                                version: data.game.latest.version,
-                                                size: packageSize,
-                                                diff: Math.abs(packageSize - actualSize)
-                                            };
-
-                                            break;
-                                        }
+                                    const CONSTANT_OF_STUPIDITY = {
+                                        'en-us': 8593687434, // 8 GB
+                                        'ja-jp': 9373182378, // 8.72 GB
+                                        'ko-kr': 8804682956, // 8.2 GB, not calculated (approximation)
+                                        'zh-cn': 8804682956  // 8.2 GB, not calculated (approximation)
+                                    }[locale] as number;
 
                                     // API works this way:
                                     // We have [latest] field that contains absolute voice package with its real, absolute size
@@ -98,7 +84,22 @@ export default class Voice
                                     // Since this is not an option in the API we have second approximation: lets say
                                     // that absolute [2.6.0] version size is [latest (2.8.0)] absolute size - [2.7.0] relative size - [2.6.0] relative size
                                     // That's being said we need to substract each diff.size from the latest.size
-                                    let packageSize = version.size;
+
+                                    let packageSize = 0;
+                                    let packages: { version: string, size: number }[] = [];
+
+                                    for (const voicePackage of data.game.latest.voice_packs)
+                                        if (voicePackage.language == locale)
+                                        {
+                                            packageSize = parseInt(voicePackage.size) - CONSTANT_OF_STUPIDITY;
+
+                                            packages.push({
+                                                version: data.game.latest.version,
+                                                size: packageSize
+                                            });
+
+                                            break;
+                                        }
 
                                     // List through other versions of the game
                                     for (const diff of data.game.diffs)
@@ -122,30 +123,28 @@ export default class Voice
 
                                                 else packageSize = Math.abs(relativeSize - CONSTANT_OF_STUPIDITY);
 
-                                                // Calculate diff with an actual folder
-                                                const sizesDiff = Math.abs(packageSize - actualSize);
-
-                                                // If this version size closer to the actual size
-                                                if (sizesDiff < version.diff)
-                                                {
-                                                    version = {
-                                                        version: diff.version,
-                                                        size: packageSize,
-                                                        diff: sizesDiff
-                                                    };
-                                                }
+                                                packages.push({
+                                                    version: diff.version,
+                                                    size: packageSize
+                                                });
                                                 
                                                 break;
                                             }
 
+                                    // To approximate the version let's say if an actual folder weights less
+                                    // than API says some version should weight - then it's definitely not this version
+                                    let packageVersion: string|null = null;
+
+                                    for (const packageData of packages.reverse()) {
+                                        // Actual folder size can be +- the same as in API response
+                                        // Let's say +-250 MB is ok
+                                        if (actualSize > packageData.size - 250 * 1024 * 1024)
+                                            packageVersion = packageData.version;
+                                    }
+
                                     installedVoices.push({
                                         lang: locale,
-
-                                        // If the difference is too big - we expect this voice package
-                                        // to be like really old, and we can't predict its version
-                                        // for now this difference is 8 GB. Idk which value is better
-                                        // This one should work fine for 2.5.0 - 2.8.0 versions window
-                                        version: version.diff < 8 * 1024 * 1024 * 1024 ? version.version : null
+                                        version: packageVersion
                                     } as InstalledVoice);
                                 }
 
