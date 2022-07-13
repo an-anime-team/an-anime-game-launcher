@@ -21,10 +21,10 @@ launcher:
     
     # Game installation
     game:
-      downloading: Spiel ist am herunterladen...
+      downloading: Spiel ist am Herunterladen...
       unpacking: Spiel wird entpackt...
       applying_changes: Änderungen werden angewandt...
-      deleting_outdated: Lösche veraltete dateien...
+      deleting_outdated: Lösche veraltete Dateien...
       integrity_check: Verifiziere Dateien...
       download_mismatch_files: Lade nicht übereinstimmenden Dateien herunter...
     
@@ -56,14 +56,14 @@ launcher:
       # Patch unavailable
       unavailable:
         title: Patch nicht verfügbar
-        hint: Diese Spielversion hat kein patch zu verfügung.
-              Bitte warte ein paar Tage um zusehen ob ein test oder stabil Patch veröffentlicht worde.
+        hint: Diese Spielversion hat noch keinen Patch.
+              Bitte warte ein paar Tage, um zu sehen, ob ein Test Patch oder stabiler Patch veröffentlicht wurde.
       
       # Patch is in testing
       test:
         title: Test Patch anwenden
         hint: Diese Spielversion hat ein Test Patch verfügbar.
-              Sie können ein paar Tage warten um den Stabilen patch zu installieren oder sie können den Test Patch installieren und ihr Account riskieren.
+              Sie können ein paar Tage warten, um den stabilen Patch zu installieren oder Sie können den Test Patch installieren und Ihren Account riskieren.
 
       # Patch is stable
       stable: Patch anwenden
@@ -77,7 +77,7 @@ launcher:
 settings:
   # General
   general:
-    title: General
+    title: Allgemein
     items:
       # Sprach-Auswahl
       lang:
@@ -101,7 +101,7 @@ settings:
         # Spiel sprachpaket auswahl
         voice:
           title: Sprachpaket
-          tooltip: Bitte wähle im Spiel das Sprachpaket aus um es zu benutzen
+          tooltip: Bitte wähle im Spiel das Sprachpaket aus, um es zu benutzen
           items:
             en-us: Englisch (US)
             ja-jp: Japanisch
@@ -133,14 +133,14 @@ settings:
         winecfg: winecfg
         launcher: Launcher Ordner öffnen
         game: Spiel Ordner öffnen
-        repair_game: spiel-dateien reparieren
-        clear_cache: cache leeren
+        repair_game: Spieldaten reparieren
+        clear_cache: Cache leeren
 
       # Patch-related settings
       patch:
         title: Patch
         items:
-          patch_version: 'Patch version:'
+          patch_version: 'Patch Version:'
           updating_info: 'Aktualisiere Patch-Informationen...'
           buttons:
             revert_patch: Patch rückgängig machen
@@ -166,8 +166,8 @@ settings:
         # Wine synchronization
         winesync:
           title: Wine Synchronisation
-          tooltip: Esync ist ein Mechanismus zur Synchronisierung von Multi-Thread-Operationen womit die Leistung Ihres Spiels verbessert wird.
-                  Fsync ist eine verbesserte Version von Esync, die auf bestimmten Kernel-Versionen funktioniert
+          tooltip: Esync ist ein Mechanismus zur Synchronisierung von Multi-Thread-Operationen, womit die Leistung Ihres Spiels verbessert wird.
+                  Fsync ist eine verbesserte Version von Esync, die auf bestimmten Kernel-Versionen funktioniert.
           items:
             none: Aus
             esync: Esync
@@ -178,13 +178,13 @@ settings:
         fsr:
           title: AMD FSR
           tooltip: Diese Option aktiviert AMD FidelityFX Super Resolution (FSR),
-                  womit kleine Resolution hochskaliert wird um FPS-verlust zu vermeiden.
+                  womit eine kleine Auflösung hochskaliert wird, um FPS-Verlust zu vermeiden.
 
         # Wine Virtual Desktop
         winevd:
           title: Virtual Desktop
           settings:
-            title: Virtual Desktop einstellung
+            title: Virtual Desktop Einstellung
             items:
               width: Breite
               height: Höhe
@@ -197,19 +197,19 @@ settings:
         gamemode:
           title: Benutze GameMode
           tooltip:
-            enabled: GameMode ist ein Program welches die Leistung verbessert
+            enabled: GameMode ist ein Programm, welches die Leistung verbessert
             disabled: ⚠️ Sie haben GameMode nicht installiert
 
         # Borderless Window
         borderless_window:
           title: Als randloses Fenster starten
           tooltip: Entfernt die Fensterränder beim Spielen im Fenstermodus.
-                   Um in einem randlosen Fenster im Vollbildmodus zu spielen, drücken Sie die Tastenkombination alt+enter.
+                   Um in einem randlosen Fenster im Vollbildmodus zu spielen, drücken Sie die Tastenkombination ALT+Enter.
 
         # Unlock FPS
         fps_unlocker:
           title: Entsperre FPS
-          tooltip: Diese option entsperrt/entfernt die 60 FPS limiterung
+          tooltip: Diese Option entsperrt/entfernt die 60 FPS Limiterung
 
         # Use separate terminal window to run the game
         use_terminal:
@@ -224,14 +224,14 @@ settings:
         purge_logs:
           # Game logs (DXVK)
           game:
-            title: DXVK logs löschen
-            tooltip: When diese option angeschaltet ist löscht
-                    der Launcher automatisch alle DXVK logs
+            title: DXVK Logs löschen
+            tooltip: Wenn diese Option aktiviert ist löscht
+                    der Launcher automatisch alle DXVK Logs
 
           # Launcher logs
           launcher:
-            title: Launcher logs löschen
-            tooltip: Launcher logs werden nach diese angegebenen Zeit gelöscht
+            title: Launcher Logs löschen
+            tooltip: Launcher Logs werden nach der angegebenen Zeit gelöscht
             items:
               1d: 1 Tag
               3d: 3 Tage
@@ -242,12 +242,12 @@ settings:
 
   # Runners
   runners:
-    title: Wine version
+    title: Wine Version
     items:
       recommended:
         title: Nur empfohlene anzeigen
-        tooltip: Falls diese option eingeschaltet ist werden nur Wine versionen angezeigt
-                 die funktioneren.
+        tooltip: Falls diese Option aktiviert ist, werden nur Wine Versionen angezeigt,
+                 die funktionieren.
 
   # DXVKs
   dxvks:
@@ -255,7 +255,7 @@ settings:
     items:
       recommended:
         title: Nur empfohlene anzeigen
-        tooltip: Falls diese option eingeschaltet ist werden alte DXVK versionen nicht angezeigt
+        tooltip: Falls diese Option aktiviert ist, werden alte DXVK Versionen nicht angezeigt
 
   # Shaders
   shaders:
@@ -263,10 +263,10 @@ settings:
     items:
       shaders:
         title: Shaders
-        tooltip: Benutze die Home/POS1 taste um die Shader in-spiel zu togglen
+        tooltip: Benutze die Home/POS1 Taste, um die Shader im Spiel zu togglen
         items:
           none: Aus
-          custom: Custom
+          custom: Benutzerdefiniert
 
       author: 'Autor: {author}'
       no_images: Keine Bilder verfügbar
@@ -290,8 +290,8 @@ settings:
 notifications:
   # Launcher update
   launcher_update_available:
-    title: 'Launcher update verfügbar: {from} -> {to}'
-    body: Sie können das update von {repository} herunterladen
+    title: 'Launcher Update verfügbar: {from} -> {to}'
+    body: Sie können das Update von {repository} herunterladen
 
   # Before telemetry check when iputils is not downloaded
   iputils_package_required:
@@ -301,12 +301,12 @@ notifications:
   # When telemetry servers are not disabled
   telemetry_not_disabled:
     title: An Anime Game Launcher
-    body: Telemetry server sind nicht deaktiviert.
+    body: Telemetry Server sind nicht deaktiviert.
 
   # Before patch applying when xdelta3 package is not downloaded
   xdelta3_package_required:
     title: An Anime Game Launcher
-    body: Sie müssen xdelta3/xdelta installiert haben um den Patch anzuwenden
+    body: Sie müssen xdelta3/xdelta installiert haben, um den Patch anzuwenden
 
   # If patch wasn't applied because of some error
   patch_applying_error:
@@ -316,11 +316,11 @@ notifications:
   # Patch repositories are not available
   patch_repos_unavailable:
     title: An Anime Game Launcher
-    body: Alle Patch-Repositories sind nicht verfügbar. Sie können das Spiel starten aber der Launcher kann sich nicht sicher sein dass es gepatcht ist.
+    body: Alle Patch-Repositories sind nicht verfügbar. Sie können das Spiel starten, jedoch kann nicht sichergestellt werden, dass das Spiel gepatched ist.
 
   # HDiffPatch couldn't successfully apply game files changes
   game_changes_applying_error:
-    title: Ein Fehler geschah, während das Spiel aktualisiert wurde
+    title: Ein Fehler ist aufgetreten, während das Spiel aktualisiert wurde
     body: '{files} Dateien konnten nicht aktualisiert werden'
 
 # ToS violation warning window
@@ -332,12 +332,12 @@ tos_violation:
         Dies geschieht durch die Verwendung vorhandener Komponenten und vereinfacht die Erfahrung für den Benutzer.
         Einige der hier verwendeten Komponenten verstoßen jedoch wahrscheinlich gegen die {company}-Nutzungsbedingungen für {game}.
         Wenn Sie diesen Launcher verwenden, könnte ihr Spielerkonto von {company}/{company_alterego} als nicht TOS-konform identifiziert werden.
-        Wenn dies geschieht, da Ihr Konto gegen die TOS verstößt kann {company}/{company_alterego} entscheiden, was Sie tun wollen Inklusive Sperre.
-        Wenn Sie des Risikos bewusst sind, dass Sie versuchen das Spiel inoffiziell zu spielen, drücke "Ich verstehe das Risiko" und lass uns die Welt von Teyvat erforschen!
+        Wenn dies geschieht, kann {company}/{company_alterego} entscheiden, was mit Ihrem Konto passiert. Im schlimmsten Fall könnte dies in einem Ban enden.
+        Wenn Ihnen dieses Risiko bewusst ist, dass sie womöglich gegen die ToS verstoßen, drücken Sie "Ich akzeptiere das Risiko" und lass uns die Welt von Teyvat erforschen!
   buttons:
     ok:
-      title: Ich verstehe das Risiko
-      tooltip: Sie sollten diesen Text wirklich lesen, Er ist sehr wichtig.
+      title: Ich akzeptiere das Risiko
+      tooltip: Sie sollten diesen Text wirklich lesen, er ist sehr wichtig.
     cancel: Abbrechen
     discord: Unser Discord Server
 
@@ -353,7 +353,7 @@ analytics:
   actions:
     share_country:
       title: Land teilen
-      hint: Erlauben Sie Yanfei das Land zu speichern das Ihre IP-Adresse anzeigt, um die Statistiken detaillierter zu gestalten.
+      hint: Erlauben Sie Yanfei das Land zu speichern, welches mithilfe Ihrer IP-Adresse ermittelt wird, um die Statistiken detaillierter zu gestalten?
             Es werden keine anderen Daten als das Land gespeichert
 
     participate: Teilnehmen
@@ -363,8 +363,8 @@ analytics:
 # Screenshots window
 screenshots:
   heading: Schnappschüsse
-  info: Klicken Sie auf ein Schnappschuss, um es zu öffnen.
+  info: Klicken Sie auf einen Schnappschuss, um ihn zu öffnen.
   buttons:
     more: Mehr laden
     folder: Öffne Schnappschüsse
-  no_images: Keine Schnappschüsee verfügbar
+  no_images: Keine Schnappschüsse verfügbar
