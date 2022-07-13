@@ -114,8 +114,16 @@ export default (launcher: Launcher): Promise<void> => {
 
                                 // Hide pause/resume button
                                 launcher.state!.pauseButton.style['display'] = 'none';
-                
-                                resolve();
+
+                                // Apply hdiff changes
+                                import('./ApplyChanges').then((module) => {
+                                    module.default(launcher).then(() => {
+                                        // Remove outdated files
+                                        import('./RemoveOutdated').then((module) => {
+                                            module.default(launcher).then(() => resolve());
+                                        });
+                                    });
+                                });
                             });
                         });
                     });
