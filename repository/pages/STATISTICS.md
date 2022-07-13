@@ -6,15 +6,22 @@ Our current statistics you can find in [readme](../../README.md)
 
 > You can suggest colors for your countries
 
+## 2.8.0
+
+Start date: July 13, 2022
+
+<br>
+
 ## 2.7.0
 
 Start date: May 31, 2022
 
 | Period | Data |
 | - | - |
-| 17 May — 31 May | <img src="../pics/stats/2022/may17-may31.png" height="400px"> |
-| 26 May — 9 June | <img src="../pics/stats/2022/may26-jun9.png" height="400px"> |
-| 13 June — 27 June | <img src="../pics/stats/2022/jun13-jun27.png" height="400px"> |
+| May 17 — May 31 | <img src="../pics/stats/2022/may17-may31.png" height="400px"> |
+| May 26 — June 9 | <img src="../pics/stats/2022/may26-jun9.png" height="400px"> |
+| June 13 — June 27 | <img src="../pics/stats/2022/jun13-jun27.png" height="400px"> |
+| June 29 — July 13 | <img src="../pics/stats/2022/jun29-jul13.png" height="400px"> |
 
 ### Launcher analytics (by users choice)
 
@@ -40,8 +47,8 @@ Start date: May 31, 2022
 
 | Period | Data |
 | - | - |
-| 24 Feb — 8 Mar | <img src="../pics/stats/2022/feb24-mar8.png" height="400px"> |
-| 16 Mar — Mar 30 | <img src="../pics/stats/2022/mar16-mar30.png" height="400px"> |
+| Feb 24 — Mar 8 | <img src="../pics/stats/2022/feb24-mar8.png" height="400px"> |
+| Mar 16 — Mar 30 | <img src="../pics/stats/2022/mar16-mar30.png" height="400px"> |
 
 ### Launcher analytics (by users choice)
 

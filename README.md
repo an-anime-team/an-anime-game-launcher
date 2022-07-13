@@ -77,9 +77,9 @@ We have our own [An Anime Game](https://discord.gg/ck37X6UWBp) discord server wh
 
 This is our current usage statistics. You can find older ones [here](repository/pages/STATISTICS.md)
 
-### Our discord server — 1,151 members
+### Our discord server — 1,273 members
 
-<img src="repository/pics/stats/2022/jun13-jun27.png">
+<img src="repository/pics/stats/2022/jun29-jul13.png">
 
 ### 2.7.0 launcher users — 524 total
 
