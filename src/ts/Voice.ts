@@ -60,6 +60,16 @@ export default class Voice
 
                                     const locale = Object.keys(this.langs).find((lang) => this.langs[lang] === folder);
 
+                                    // This constant found its origin in the change of the voice packages format.
+                                    // When the Anime Company decided that they know better how their game should work
+                                    // and changed voice files names to some random numbers it caused issue when
+                                    // old files aren't being replaced by the new ones, obviously because now they have
+                                    // different names. When you download new voice package - its size will be something like 9 GB.
+                                    // But Company's API returns double of this size, so like 18 GB, because their API also
+                                    // messed folder where they store unpacked voice packages.
+                                    // That's why we have to substract this approximate value from all the packages sizes
+                                    const CONSTANT_OF_STUPIDITY = 9.37 * 1024.0 * 1024.0 * 1024.0;
+
                                     let version: { version: string | null, size: number, diff: number } = {
                                         version: null,
                                         size: 0,
@@ -69,7 +79,7 @@ export default class Voice
                                     for (const voicePackage of data.game.latest.voice_packs)
                                         if (voicePackage.language == locale)
                                         {
-                                            const packageSize = parseInt(voicePackage.package_size);
+                                            const packageSize = parseInt(voicePackage.size) - CONSTANT_OF_STUPIDITY;
 
                                             version = {
                                                 version: data.game.latest.version,
@@ -84,14 +94,14 @@ export default class Voice
                                         for (const voicePackage of diff.voice_packs)
                                             if (voicePackage.language == locale)
                                             {
-                                                const packageSize = parseInt(voicePackage.package_size);
+                                                const packageSize = parseInt(voicePackage.size) - CONSTANT_OF_STUPIDITY;
                                                 const sizesDiff = Math.abs(packageSize - actualSize);
 
                                                 // If this version size closer to the actual size
                                                 if (sizesDiff < version.diff)
                                                 {
                                                     version = {
-                                                        version: data.game.latest.version,
+                                                        version: diff.version,
                                                         size: packageSize,
                                                         diff: sizesDiff
                                                     };
@@ -105,9 +115,9 @@ export default class Voice
 
                                         // If the difference is too big - we expect this voice package
                                         // to be like really old, and we can't predict its version
-                                        // for now this difference is 3 GB. Idk which value is better
-                                        // This one should work fine for 2.5.0 - 2.7.0 versions window
-                                        version: version.diff < 3072000000 ? version.version : null
+                                        // for now this difference is 8 GB. Idk which value is better
+                                        // This one should work fine for 2.5.0 - 2.8.0 versions window
+                                        version: version.diff < 8 * 1024 * 1024 * 1024 ? version.version : null
                                     } as InstalledVoice);
                                 }
 
