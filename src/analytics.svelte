@@ -15,11 +15,6 @@
     import LeftCheckbox from './components/LeftCheckbox.svelte';
     import Button from './components/Button.svelte';
 
-    onMount(() => {
-        Windows.current.show();
-        Windows.current.center(700, 460);
-    });
-
     let shareCountry = true;
 
     const closeWindow = async () => {
@@ -28,18 +23,43 @@
         Neutralino.app.exit();
     };
 
-    Neutralino.events.on('windowClose', async () => {
-        await IPC.write('analytics-close');
-
-        Neutralino.app.exit();
-    });
-
-    // Auto theme switcher
-    Configs.get('theme').then((theme) => {
+    const switchTheme = (theme: string) => {
         if (theme === 'system')
             theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 
         document.body.setAttribute('data-theme', theme as string);
+    };
+
+    // Auto theme switcher
+    Configs.get('theme').then((theme) => switchTheme(theme as string));
+
+    onMount(async () => {
+        await Windows.current.show();
+        await Windows.current.center(700, 460);
+
+        // This thing will fix window resizing
+        // in several cases (wayland + gnome + custom theme)
+        const resizer = () => {
+            if (window.innerWidth < 640)
+                setTimeout(resizer, 10);
+
+            else
+            {
+                Windows.current.setSize({
+                    width: 700 + (700 - window.innerWidth),
+                    height: 460 + (460 - window.innerHeight),
+                    resizable: false
+                });
+            }
+        }
+
+        setTimeout(resizer, 10);
+    });
+
+    Neutralino.events.on('windowClose', async () => {
+        await IPC.write('analytics-close');
+
+        Neutralino.app.exit();
     });
 </script>
 

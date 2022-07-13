@@ -5,9 +5,9 @@ import DXVK from '../../core/DXVK';
 
 export default (launcher: Launcher): Promise<void> => {
     return new Promise(async (resolve) => {
-        Runners.download('lutris-GE-Proton7-16-x86_64').then((stream) => {
+        Runners.download('lutris-GE-Proton7-20-x86_64').then((stream) => {
             launcher.progressBar?.init({
-                label: 'Downloading Wine-GE-Proton 7-16...',
+                label: 'Downloading Wine-GE-Proton 7-20...',
                 showSpeed: true,
                 showEta: true,
                 showPercents: true,
@@ -22,7 +22,7 @@ export default (launcher: Launcher): Promise<void> => {
 
             stream?.unpackStart(() => {
                 launcher.progressBar?.init({
-                    label: 'Unpacking Wine-GE-Proton 7-16...',
+                    label: 'Unpacking Wine-GE-Proton 7-20...',
                     showSpeed: true,
                     showEta: true,
                     showPercents: true,
@@ -36,7 +36,7 @@ export default (launcher: Launcher): Promise<void> => {
 
             stream?.unpackFinish(async () => {
                 // Select this runner
-                await Runners.current('lutris-GE-Proton7-16-x86_64');
+                await Runners.current('lutris-GE-Proton7-20-x86_64');
 
                 // Create prefix if it is not created
                 import('./CreatePrefix').then((module) => {

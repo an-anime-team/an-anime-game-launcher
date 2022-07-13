@@ -12,7 +12,9 @@ import constants from '../Constants';
 import AbstractInstaller from './AbstractInstaller';
 
 // If true, runners list will be loaded directly from the file
-// instead of the repository. Should always be false for release builds
+// instead of the repository
+// 
+// ! Should always be false for release builds
 const LOAD_DIRECTLY = false;
 
 declare const Neutralino;

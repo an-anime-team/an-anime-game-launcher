@@ -224,7 +224,12 @@ export default class constants
             /**
              * animecompany
              */
-            company: atob('bWlob3lv')
+            company: atob('bWlob3lv'),
+
+            /**
+             * newanimecompany
+             */
+            company_new: atob('aG95b3ZlcnNl')
         }
     };
 
@@ -241,8 +246,8 @@ export default class constants
 
     public static readonly uri = {
         api: {
-            global: `https://sdk-os-static.${this.placeholders.lowercase.company}.com/hk4e_global/mdk/launcher/api`,
-            cn: `https://sdk-static.${this.placeholders.lowercase.company}.com/hk4e_cn/mdk/launcher/api`
+            global: `https://sdk-os-static.${this.placeholders.lowercase.company_new}.com/hk4e_global/mdk/launcher/api`,
+            cn: `https://sdk-static.${this.placeholders.lowercase.company_new}.com/hk4e_cn/mdk/launcher/api`
         },
         patch: {
             origin: atob('aHR0cHM6Ly9ub3RhYnVnLm9yZy9Lcm9jay9kYXdu'),
@@ -260,7 +265,7 @@ export default class constants
         },
         winetricks: 'https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks',
         fpsunlock: {
-            unlocker: `https://github.com/34736384/${this.placeholders.lowercase.first}-fps-unlock/releases/download/v1.4.2/unlockfps.exe`,
+            unlocker: `https://github.com/34736384/${this.placeholders.lowercase.first}-fps-unlock/releases/download/v2.0.0/unlockfps_clr.exe`,
             bat: 'https://aagl.launcher.moe/dl/unlockfps.bat'
         },
         launcher: 'https://gitlab.com/KRypt0n_/an-anime-game-launcher',
