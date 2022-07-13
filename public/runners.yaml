@@ -265,6 +265,17 @@
 # GE-Proton versions
 - title: GE-Proton
   runners:
+  # GE-Proton 7-24
+  - family: GE-Proton
+    name: GE-Proton7-24
+    title: GE-Proton 7-24
+    uri: https://github.com/GloriousEggroll/proton-ge-custom/releases/download/GE-Proton7-24/GE-Proton7-24.tar.gz
+    files:
+      wine: files/bin/wine64
+      wineserver: files/bin/wineserver
+      winecfg: files/lib64/wine/x86_64-windows/winecfg.exe
+    recommended: true
+
   # GE-Proton 7-20
   - family: GE-Proton
     name: GE-Proton7-20
