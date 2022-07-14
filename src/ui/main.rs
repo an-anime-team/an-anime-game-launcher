@@ -10,7 +10,7 @@ use std::cell::Cell;
 use crate::ui::*;
 
 use super::preferences::PreferencesStack;
-use super::ToastError;
+use super::traits::toast_error::ToastError;
 
 use crate::lib::game;
 use crate::lib::tasks;

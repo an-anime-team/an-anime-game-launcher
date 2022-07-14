@@ -1,7 +1,7 @@
 use gtk4::{self as gtk, prelude::*};
 use libadwaita::{self as adw, prelude::*};
 
-use super::add_action;
+use crate::ui::add_action;
 
 pub trait ToastError {
     fn get_toast_widgets(&self) -> (adw::ApplicationWindow, adw::ToastOverlay);

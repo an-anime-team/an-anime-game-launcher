@@ -5,8 +5,8 @@ use gtk::glib;
 
 use std::io::Error;
 
-use crate::ui::get_object;
-use crate::ui::ToastError;
+use crate::ui::*;
+use crate::ui::traits::prelude::*;
 
 mod general_page;
 mod enhanced_page;
