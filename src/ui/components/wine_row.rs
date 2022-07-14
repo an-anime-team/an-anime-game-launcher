@@ -77,7 +77,7 @@ impl WineRow {
     /// Download wine
     /// 
     /// This method doesn't update components states, so you need to call `update_state` method manually
-    pub fn download<T: ToString>(&self, runners_folder: T) -> Result<Await<DownloadingResult>, std::io::Error> {
+    pub fn download<T: ToString>(&self, runners_folder: T) -> std::io::Result<Await<DownloadingResult>> {
         let (sender, receiver) = glib::MainContext::channel::<InstallerUpdate>(glib::PRIORITY_DEFAULT);
         let this = self.clone();
 
@@ -143,6 +143,10 @@ impl WineRow {
         Ok(Await::new(move || {
             downl_recv.recv().unwrap()
         }))
+    }
+
+    pub fn delete<T: ToString>(&self, runners_folder: T) -> std::io::Result<()> {
+        std::fs::remove_dir_all(format!("{}/{}", runners_folder.to_string(), self.version.name))
     }
 }
 

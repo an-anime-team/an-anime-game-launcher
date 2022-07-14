@@ -3,7 +3,6 @@ use libadwaita::{self as adw, prelude::*};
 
 use gtk::glib;
 use gtk::glib::clone;
-use gtk::Align;
 
 use std::rc::Rc;
 use std::cell::Cell;
@@ -11,11 +10,11 @@ use std::io::Error;
 
 use anime_game_core::prelude::*;
 
-use crate::ui::get_object;
 use crate::lib::config;
 use crate::lib::dxvk;
 use crate::lib::wine;
 
+use crate::ui::*;
 use crate::ui::components::dxvk_row::DxvkRow;
 use crate::ui::components::wine_group::WineGroup;
 
@@ -26,6 +25,9 @@ use crate::ui::components::wine_group::WineGroup;
 /// This function does not implement events
 #[derive(Clone, glib::Downgrade)]
 pub struct AppWidgets {
+    pub window: adw::ApplicationWindow,
+    pub toast_overlay: adw::ToastOverlay,
+
     pub page: adw::PreferencesPage,
 
     pub game_version: gtk::Label,
@@ -44,10 +46,13 @@ pub struct AppWidgets {
 }
 
 impl AppWidgets {
-    fn try_get() -> Result<Self, String> {
+    fn try_get(window: adw::ApplicationWindow, toast_overlay: adw::ToastOverlay) -> Result<Self, String> {
         let builder = gtk::Builder::from_string(include_str!("../../../assets/ui/.dist/preferences_general.ui"));
 
         let mut result = Self {
+            window,
+            toast_overlay,
+
             page: get_object(&builder, "general_page")?,
 
             game_version: get_object(&builder, "game_version")?,
@@ -124,7 +129,7 @@ impl AppWidgets {
 #[derive(Debug, Clone, glib::Downgrade)]
 pub enum Actions {
     DownloadDXVK(Rc<usize>),
-    DownloadWine(Rc<(usize, usize)>)
+    WinePerformAction(Rc<(usize, usize)>)
 }
 
 impl Actions {
@@ -163,9 +168,9 @@ pub struct App {
 
 impl App {
     /// Create new application
-    pub fn new() -> Result<Self, String> {
+    pub fn new(window: adw::ApplicationWindow, toast_overlay: adw::ToastOverlay) -> Result<Self, String> {
         let result = Self {
-            widgets: AppWidgets::try_get()?,
+            widgets: AppWidgets::try_get(window, toast_overlay)?,
             values: Default::default(),
             actions: Default::default()
         }.init_events().init_actions();
@@ -193,7 +198,7 @@ impl App {
 
         for (i, group) in components.into_iter().enumerate() {
             for (j, component) in (&group.version_components).into_iter().enumerate() {
-                component.button.connect_clicked(Actions::DownloadWine(Rc::new((i, j))).into_fn(&self));
+                component.button.connect_clicked(Actions::WinePerformAction(Rc::new((i, j))).into_fn(&self));
             }
         }
 
@@ -238,17 +243,27 @@ impl App {
                     this.widgets.dxvk_components[*i].download();
                 }
 
-                Actions::DownloadWine(version) => {
+                Actions::WinePerformAction(version) => {
                     let config = config::get().expect("Failed to load config");
 
                     let component = this.widgets
                         .wine_components[version.0]
                         .version_components[version.1].clone();
 
-                    if let Ok(awaiter) = component.download(&config.game.wine.builds) {
-                        awaiter.then(move |_| {
-                            component.update_state(&config.game.wine.builds);
-                        });
+                    if component.is_downloaded(&config.game.wine.builds) {
+                        if let Err(err) = component.delete(&config.game.wine.builds) {
+                            this.toast_error("Failed to delete wine", err);
+                        }
+
+                        component.update_state(&config.game.wine.builds);
+                    }
+
+                    else {
+                        if let Ok(awaiter) = component.download(&config.game.wine.builds) {
+                            awaiter.then(move |_| {
+                                component.update_state(&config.game.wine.builds);
+                            });
+                        }
                     }
                 }
             }
@@ -353,6 +368,12 @@ impl App {
         }
 
         Ok(())
+    }
+}
+
+impl ToastError for App {
+    fn get_toast_widgets(&self) -> (adw::ApplicationWindow, adw::ToastOverlay) {
+        (self.widgets.window.clone(), self.widgets.toast_overlay.clone())
     }
 }
 

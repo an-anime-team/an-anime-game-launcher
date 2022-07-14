@@ -38,8 +38,8 @@ impl PreferencesStack {
         let builder = gtk::Builder::from_string(include_str!("../../../assets/ui/.dist/preferences.ui"));
 
         let result = Self {
-            window,
-            toast_overlay,
+            window: window.clone(),
+            toast_overlay: toast_overlay.clone(),
 
             preferences: get_object(&builder, "preferences")?,
             preferences_go_back: get_object(&builder, "preferences_go_back")?,
@@ -49,7 +49,7 @@ impl PreferencesStack {
 
             stack: get_object(&builder, "stack")?,
             
-            general_page: pages::GeneralPage::new()?,
+            general_page: pages::GeneralPage::new(window, toast_overlay)?,
             enhanced_page: pages::EnhancedPage::new()?
         };
 
