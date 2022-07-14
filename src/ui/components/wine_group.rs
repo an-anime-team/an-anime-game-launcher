@@ -38,4 +38,10 @@ impl WineGroup {
             expander_row
         }
     }
+
+    pub fn update_states<T: ToString>(&self, runners_folder: T) {
+        for component in &self.version_components {
+            component.update_state(runners_folder.to_string());
+        }
+    }
 }

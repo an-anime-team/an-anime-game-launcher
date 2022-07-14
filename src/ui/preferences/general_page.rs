@@ -65,6 +65,11 @@ impl AppWidgets {
             dxvk_components: Default::default()
         };
 
+        let config = match config::get() {
+            Ok(config) => config,
+            Err(err) => return Err(err.to_string())
+        };
+
         // Update wine versions lists
         let groups = match wine::List::get() {
             Ok(list) => list,
@@ -75,6 +80,8 @@ impl AppWidgets {
 
         for group in groups {
             let group = WineGroup::new(group);
+
+            group.update_states(&config.game.wine.builds);
 
             result.wine_groups.add(&group.expander_row);
 
@@ -116,7 +123,8 @@ impl AppWidgets {
 /// It may be helpful if you want to add the same event for several widgets, or call an action inside of another action
 #[derive(Debug, Clone, glib::Downgrade)]
 pub enum Actions {
-    DownloadDXVK(Rc<usize>)
+    DownloadDXVK(Rc<usize>),
+    DownloadWine(Rc<(usize, usize)>)
 }
 
 impl Actions {
@@ -180,6 +188,15 @@ impl App {
             }
         }));
 
+        // Wine install/remove buttons
+        let components = &*self.widgets.wine_components;
+
+        for (i, group) in components.into_iter().enumerate() {
+            for (j, component) in (&group.version_components).into_iter().enumerate() {
+                component.button.connect_clicked(Actions::DownloadWine(Rc::new((i, j))).into_fn(&self));
+            }
+        }
+
         // Set DXVK recommended only switcher event
         self.widgets.dxvk_recommended_only.connect_state_notify(clone!(@strong self as this => move |switcher| {
             for component in &*this.widgets.dxvk_components {
@@ -218,11 +235,19 @@ impl App {
 
             match action {
                 Actions::DownloadDXVK(i) => {
-                    let component = &this.widgets.dxvk_components[*i];
+                    this.widgets.dxvk_components[*i].download();
+                }
 
-                    println!("Download DXVK: {:?}", &component.version);
+                Actions::DownloadWine(version) => {
+                    let config = config::get().expect("Failed to load config");
 
-                    component.download();
+                    let component = &this.widgets
+                        .wine_components[version.0]
+                        .version_components[version.1];
+
+                    if let Ok(_) = component.download(&config.game.wine.builds) {
+                        component.update_state(&config.game.wine.builds);
+                    }
                 }
             }
 

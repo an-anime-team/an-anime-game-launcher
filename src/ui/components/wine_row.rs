@@ -4,6 +4,10 @@ use libadwaita::{self as adw, prelude::*};
 use gtk::glib;
 use gtk::Align;
 
+use std::path::Path;
+
+use anime_game_core::prelude::*;
+
 use crate::lib::wine::Version;
 
 #[derive(Debug, Clone)]
@@ -48,31 +52,78 @@ impl WineRow {
         }
     }
 
-    pub fn download(&self) {
-        let (sender, receiver) = glib::MainContext::channel::<i32>(glib::PRIORITY_DEFAULT);
+    pub fn is_downloaded<T: ToString>(&self, runners_folder: T) -> bool {
+        Path::new(&format!("{}/{}", runners_folder.to_string(), self.version.name)).exists()
+    }
+
+    pub fn update_state<T: ToString>(&self, runners_folder: T) {
+        if self.is_downloaded(runners_folder) {
+            self.button.set_icon_name("user-trash-symbolic");
+        }
+
+        else {
+            self.button.set_icon_name("document-save-symbolic");
+        }
+    }
+
+    /// Download wine
+    /// 
+    /// This method doesn't update components states, so you need to call `update_state` method manually
+    pub fn download<T: ToString>(&self, runners_folder: T) -> Result<(), std::io::Error> {
+        let (sender, receiver) = glib::MainContext::channel::<InstallerUpdate>(glib::PRIORITY_DEFAULT);
         let this = self.clone();
 
         this.progress_bar.set_visible(true);
         this.button.set_visible(false);
 
-        receiver.attach(None, move |fraction| {
-            this.progress_bar.set_fraction(fraction as f64 / 100f64);
-            this.progress_bar.set_text(Some(&format!("Downloading: {}%", fraction)));
+        receiver.attach(None, move |state| {
+            match state {
+                InstallerUpdate::DownloadingStarted(_) => (),
+                InstallerUpdate::DownloadingFinished => (),
+                InstallerUpdate::UnpackingStarted(_) => (),
 
-            if fraction == 100 {
-                this.progress_bar.set_visible(false);
-                this.button.set_visible(true);
+                InstallerUpdate::DownloadingProgress(curr, total) => {
+                    let progress = curr as f64 / total as f64;
+
+                    this.progress_bar.set_fraction(progress);
+                    this.progress_bar.set_text(Some(&format!("Downloading: {}%", (progress * 100.0) as u64)));
+                },
+
+                InstallerUpdate::UnpackingProgress(curr, total) => {
+                    let progress = curr as f64 / total as f64;
+
+                    this.progress_bar.set_fraction(progress);
+                    this.progress_bar.set_text(Some(&format!("Unpacking: {}%", (progress * 100.0) as u64)));
+                },
+
+                InstallerUpdate::UnpackingFinished => {
+                    this.progress_bar.set_visible(false);
+                    this.button.set_visible(true);
+                },
+
+                // TODO: proper handling
+                InstallerUpdate::DownloadingError(err) => panic!("Failed to download wine: {}", err),
+                InstallerUpdate::UnpackingError => panic!("Failed to unpack wine")
             }
 
             glib::Continue(true)
         });
 
-        std::thread::spawn(move || {
-            for i in 1..101 {
-                std::thread::sleep(std::time::Duration::from_millis(150));
+        let (send, recv) = std::sync::mpsc::channel();
 
-                sender.send(i);
-            }
+        let installer = Installer::new(&self.version.uri)?;
+        let runners_folder = runners_folder.to_string();
+
+        send.send(installer);
+
+        std::thread::spawn(move || {
+            let mut installer = recv.recv().unwrap();
+
+            installer.install(runners_folder, move |state| {
+                sender.send(state);
+            });
         });
+
+        Ok(())
     }
 }
