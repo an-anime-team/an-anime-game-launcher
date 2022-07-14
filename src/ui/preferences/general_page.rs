@@ -14,8 +14,10 @@ use anime_game_core::prelude::*;
 use crate::ui::get_object;
 use crate::lib::config;
 use crate::lib::dxvk;
+use crate::lib::wine;
 
 use crate::ui::components::dxvk_row::DxvkRow;
+use crate::ui::components::wine_group::WineGroup;
 
 /// This structure is used to describe widgets used in application
 /// 
@@ -28,6 +30,11 @@ pub struct AppWidgets {
 
     pub game_version: gtk::Label,
     pub patch_version: gtk::Label,
+
+    pub wine_groups: adw::PreferencesGroup,
+    pub wine_recommended_only: gtk::Switch,
+
+    pub wine_components: Rc<Vec<WineGroup>>,
 
     pub dxvk_recommended_only: gtk::Switch,
     pub dxvk_vanilla: adw::ExpanderRow,
@@ -46,12 +53,35 @@ impl AppWidgets {
             game_version: get_object(&builder, "game_version")?,
             patch_version: get_object(&builder, "patch_version")?,
 
+            wine_groups: get_object(&builder, "wine_groups")?,
+            wine_recommended_only: get_object(&builder, "wine_recommended_only")?,
+
+            wine_components: Default::default(),
+
             dxvk_recommended_only: get_object(&builder, "dxvk_recommended_only")?,
             dxvk_vanilla: get_object(&builder, "dxvk_vanilla")?,
             dxvk_async: get_object(&builder, "dxvk_async")?,
 
             dxvk_components: Default::default()
         };
+
+        // Update wine versions lists
+        let groups = match wine::List::get() {
+            Ok(list) => list,
+            Err(err) => return Err(err.to_string())
+        };
+
+        let mut components = Vec::new();
+
+        for group in groups {
+            let group = WineGroup::new(group);
+
+            result.wine_groups.add(&group.expander_row);
+
+            components.push(group);
+        }
+
+        result.wine_components = Rc::new(components);
 
         // Update DXVK list
         let list = match dxvk::List::get() {
@@ -137,6 +167,19 @@ impl App {
 
     /// Add default events and values to the widgets
     fn init_events(self) -> Self {
+        // Set wine recommended only switcher event
+        self.widgets.wine_recommended_only.connect_state_notify(clone!(@strong self as this => move |switcher| {
+            for group in &*this.widgets.wine_components {
+                for component in &group.version_components {
+                    component.row.set_visible(if switcher.state() {
+                        component.version.recommended
+                    } else {
+                        true
+                    });
+                }
+            }
+        }));
+
         // Set DXVK recommended only switcher event
         self.widgets.dxvk_recommended_only.connect_state_notify(clone!(@strong self as this => move |switcher| {
             for component in &*this.widgets.dxvk_components {

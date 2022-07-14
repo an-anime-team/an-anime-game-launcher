@@ -123,99 +123,14 @@ Adw.PreferencesPage general_page {
             title: "Recommended only";
             subtitle: "Show only recommended wine versions";
 
-            Gtk.Switch {
+            Gtk.Switch wine_recommended_only {
                 valign: center;
                 state: true;
             }
         }
     }
 
-    Adw.PreferencesGroup {
-        Adw.ExpanderRow {
-            title: "Wine-GE";
-
-            Adw.ActionRow {
-                title: "7-16";
-            }
-
-            Adw.ActionRow {
-                title: "7-15";
-            }
-
-            Adw.ActionRow {
-                title: "7-14";
-            }
-
-            Adw.ActionRow {
-                title: "7-12";
-            }
-
-            Adw.ActionRow {
-                title: "7-10";
-            }
-
-            Adw.ActionRow {
-                title: "7-9";
-            }
-        }
-
-        Adw.ExpanderRow {
-            title: "Proton-GE";
-            subtitle: "This version includes its own DXVK builds and you can use DXVK_ASYNC variable";
-
-            Adw.ActionRow {
-                title: "7-16";
-            }
-
-            Adw.ActionRow {
-                title: "7-15";
-            }
-
-            Adw.ActionRow {
-                title: "7-14";
-            }
-
-            Adw.ActionRow {
-                title: "7-12";
-            }
-
-            Adw.ActionRow {
-                title: "7-10";
-            }
-
-            Adw.ActionRow {
-                title: "7-9";
-            }
-        }
-
-        Adw.ExpanderRow {
-            title: "Lutris";
-
-            Adw.ActionRow {
-                title: "7-16";
-            }
-
-            Adw.ActionRow {
-                title: "7-15";
-            }
-
-            Adw.ActionRow {
-                title: "7-14";
-            }
-
-            Adw.ActionRow {
-                title: "7-12";
-            }
-
-            Adw.ActionRow {
-                title: "7-10";
-            }
-
-            Adw.ActionRow {
-                title: "7-9";
-            }
-        }
-    }
+    Adw.PreferencesGroup wine_groups {}
 
     Adw.PreferencesGroup {
         title: "DXVK version";
