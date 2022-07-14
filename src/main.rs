@@ -8,8 +8,8 @@ pub mod lib;
 
 use ui::*;
 
-// #[tokio::main]
-fn main() {
+#[tokio::main]
+async fn main() {
     gtk::init().expect("GTK initialization failed");
     adw::init();
 

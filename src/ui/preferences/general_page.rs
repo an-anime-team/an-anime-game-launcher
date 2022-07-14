@@ -171,7 +171,7 @@ impl App {
             let values = this.values.take();
 
             // Some debug output
-            println!("[update] action: {:?}, values: {:?}", &action, &values);
+            println!("[general page] [update] action: {:?}, values: {:?}", &action, &values);
 
             match action {
                 Actions::DownloadDXVK(i) => {

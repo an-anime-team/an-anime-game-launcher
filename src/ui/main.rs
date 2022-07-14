@@ -13,6 +13,7 @@ use super::preferences::PreferencesStack;
 use super::ToastError;
 
 use crate::lib::game;
+use crate::lib::tasks;
 
 /// This structure is used to describe widgets used in application
 /// 
@@ -154,21 +155,20 @@ impl App {
             let values = this.values.take();
 
             // Some debug output
-            println!("[update] action: {:?}, values: {:?}", &action, &values);
+            println!("[main] [update] action: {:?}, values: {:?}", &action, &values);
 
             match action {
                 Actions::OpenPreferencesPage => {
                     this.widgets.leaflet.set_visible_child_name("preferences_page");
 
-                    if let Err(err) = this.widgets.preferences_stack.update() {
-                        this.toast_error("Failed to update preferences", err);
-                    }
-
-                    /*tokio::task::spawn(async {
-                        if let Err(err) = this.widgets.preferences_stack.update().await {
-                            // this.update(Actions::ToastError(Rc::new((String::from("Failed to update preferences"), err))));
+                    tasks::run(clone!(@strong this => async move {
+                        if let Err(err) = this.widgets.preferences_stack.update() {
+                            glib::MainContext::default().invoke(move || {
+                                this.update(Actions::PreferencesGoBack);
+                                this.toast_error("Failed to update preferences", err);
+                            });
                         }
-                    });*/
+                    }));
                 }
 
                 Actions::PreferencesGoBack => {
