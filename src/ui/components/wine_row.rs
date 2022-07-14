@@ -7,8 +7,16 @@ use gtk::Align;
 use std::path::Path;
 
 use anime_game_core::prelude::*;
+use wait_not_await::Await;
 
 use crate::lib::wine::Version;
+
+#[derive(Debug)]
+pub enum DownloadingResult {
+    DownloadingError(std::io::Error),
+    UnpackingError,
+    Done
+}
 
 #[derive(Debug, Clone)]
 pub struct WineRow {
@@ -69,12 +77,14 @@ impl WineRow {
     /// Download wine
     /// 
     /// This method doesn't update components states, so you need to call `update_state` method manually
-    pub fn download<T: ToString>(&self, runners_folder: T) -> Result<(), std::io::Error> {
+    pub fn download<T: ToString>(&self, runners_folder: T) -> Result<Await<DownloadingResult>, std::io::Error> {
         let (sender, receiver) = glib::MainContext::channel::<InstallerUpdate>(glib::PRIORITY_DEFAULT);
         let this = self.clone();
 
         this.progress_bar.set_visible(true);
         this.button.set_visible(false);
+
+        let (downl_send, downl_recv) = std::sync::mpsc::channel();
 
         receiver.attach(None, move |state| {
             match state {
@@ -99,11 +109,17 @@ impl WineRow {
                 InstallerUpdate::UnpackingFinished => {
                     this.progress_bar.set_visible(false);
                     this.button.set_visible(true);
+
+                    downl_send.send(DownloadingResult::Done);
                 },
 
-                // TODO: proper handling
-                InstallerUpdate::DownloadingError(err) => panic!("Failed to download wine: {}", err),
-                InstallerUpdate::UnpackingError => panic!("Failed to unpack wine")
+                InstallerUpdate::DownloadingError(err) => {
+                    downl_send.send(DownloadingResult::DownloadingError(err.into()));
+                },
+
+                InstallerUpdate::UnpackingError => {
+                    downl_send.send(DownloadingResult::UnpackingError);
+                }
             }
 
             glib::Continue(true)
@@ -124,6 +140,11 @@ impl WineRow {
             });
         });
 
-        Ok(())
+        Ok(Await::new(move || {
+            downl_recv.recv().unwrap()
+        }))
     }
 }
+
+unsafe impl Send for WineRow {}
+unsafe impl Sync for WineRow {}

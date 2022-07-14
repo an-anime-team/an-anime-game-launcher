@@ -241,12 +241,14 @@ impl App {
                 Actions::DownloadWine(version) => {
                     let config = config::get().expect("Failed to load config");
 
-                    let component = &this.widgets
+                    let component = this.widgets
                         .wine_components[version.0]
-                        .version_components[version.1];
+                        .version_components[version.1].clone();
 
-                    if let Ok(_) = component.download(&config.game.wine.builds) {
-                        component.update_state(&config.game.wine.builds);
+                    if let Ok(awaiter) = component.download(&config.game.wine.builds) {
+                        awaiter.then(move |_| {
+                            component.update_state(&config.game.wine.builds);
+                        });
                     }
                 }
             }
