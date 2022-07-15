@@ -1,10 +1,10 @@
 use gtk4::{self as gtk, prelude::*};
 use libadwaita::{self as adw, prelude::*};
 
-use gtk::glib;
 use gtk::Align;
 
 use crate::lib::dxvk::Version;
+use crate::ui::traits::download_component::*;
 
 #[derive(Debug, Clone)]
 pub struct DxvkRow {
@@ -48,31 +48,30 @@ impl DxvkRow {
         }
     }
 
-    pub fn download(&self) {
-        let (sender, receiver) = glib::MainContext::channel::<i32>(glib::PRIORITY_DEFAULT);
-        let this = self.clone();
+    pub fn update_state<T: ToString>(&self, dxvks_folder: T) {
+        if self.is_downloaded(dxvks_folder) {
+            self.button.set_icon_name("user-trash-symbolic");
+        }
 
-        this.progress_bar.set_visible(true);
-        this.button.set_visible(false);
-
-        receiver.attach(None, move |fraction| {
-            this.progress_bar.set_fraction(fraction as f64 / 100f64);
-            this.progress_bar.set_text(Some(&format!("Downloading: {}%", fraction)));
-
-            if fraction == 100 {
-                this.progress_bar.set_visible(false);
-                this.button.set_visible(true);
-            }
-
-            glib::Continue(true)
-        });
-
-        std::thread::spawn(move || {
-            for i in 1..101 {
-                std::thread::sleep(std::time::Duration::from_millis(150));
-
-                sender.send(i);
-            }
-        });
+        else {
+            self.button.set_icon_name("document-save-symbolic");
+        }
     }
 }
+
+impl DownloadComponent for DxvkRow {
+    fn get_component_path<T: ToString>(&self, installation_path: T) -> String {
+        format!("{}/{}", installation_path.to_string(), self.version.name)
+    }
+
+    fn get_downloading_widgets(&self) -> (gtk::ProgressBar, gtk::Button) {
+        (self.progress_bar.clone(), self.button.clone())
+    }
+
+    fn get_download_uri(&self) -> String {
+        self.version.uri.clone()
+    }
+}
+
+unsafe impl Send for DxvkRow {}
+unsafe impl Sync for DxvkRow {}

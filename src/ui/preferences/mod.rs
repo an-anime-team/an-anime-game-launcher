@@ -9,11 +9,11 @@ use crate::ui::*;
 use crate::ui::traits::prelude::*;
 
 mod general_page;
-mod enhanced_page;
+mod enhancements_page;
 
 pub mod pages {
     pub use super::general_page::App as GeneralPage;
-    pub use super::enhanced_page::App as EnhancedPage;
+    pub use super::enhancements_page::App as EnhancementsPage;
 }
 
 #[derive(Clone, glib::Downgrade)]
@@ -30,7 +30,7 @@ pub struct PreferencesStack {
     pub stack: gtk::Stack,
 
     pub general_page: pages::GeneralPage,
-    pub enhanced_page: pages::EnhancedPage
+    pub enhancements_page: pages::EnhancementsPage
 }
 
 impl PreferencesStack {
@@ -50,11 +50,11 @@ impl PreferencesStack {
             stack: get_object(&builder, "stack")?,
             
             general_page: pages::GeneralPage::new(window, toast_overlay)?,
-            enhanced_page: pages::EnhancedPage::new()?
+            enhancements_page: pages::EnhancementsPage::new()?
         };
 
         result.stack.add_titled(&result.general_page.get_page(), None, &pages::GeneralPage::title());
-        result.stack.add_titled(&result.enhanced_page.get_page(), None, &pages::EnhancedPage::title());
+        result.stack.add_titled(&result.enhancements_page.get_page(), None, &pages::EnhancementsPage::title());
 
         Ok(result)
     }
@@ -70,7 +70,7 @@ impl PreferencesStack {
         self.flap.set_visible(false);
 
         self.general_page.prepare(&self.status_page)?;
-        self.enhanced_page.prepare(&self.status_page)?;
+        self.enhancements_page.prepare(&self.status_page)?;
 
         self.status_page.set_visible(false);
         self.flap.set_visible(true);

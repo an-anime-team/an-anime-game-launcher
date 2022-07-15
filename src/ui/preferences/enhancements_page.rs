@@ -31,7 +31,7 @@ pub struct AppWidgets {
 
 impl AppWidgets {
     fn try_get() -> Result<Self, String> {
-        let builder = gtk::Builder::from_string(include_str!("../../../assets/ui/.dist/preferences_enhanced.ui"));
+        let builder = gtk::Builder::from_string(include_str!("../../../assets/ui/.dist/preferences_enhancements.ui"));
 
         let result = Self {
             page: get_object(&builder, "enhanced_page")?,
@@ -164,7 +164,7 @@ impl App {
     }
 
     pub fn title() -> String {
-        String::from("Enhanced")
+        String::from("Enhancements")
     }
 
     pub fn get_page(&self) -> adw::PreferencesPage {

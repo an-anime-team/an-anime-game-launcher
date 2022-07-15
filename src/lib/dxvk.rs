@@ -16,6 +16,7 @@ impl List {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Version {
+    pub name: String,
     pub version: String,
     pub uri: String,
     pub recommended: bool

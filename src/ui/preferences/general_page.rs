@@ -34,6 +34,8 @@ pub struct AppWidgets {
     pub game_version: gtk::Label,
     pub patch_version: gtk::Label,
 
+    pub wine_selected: adw::ComboRow,
+
     pub wine_groups: adw::PreferencesGroup,
     pub wine_recommended_only: gtk::Switch,
 
@@ -58,6 +60,8 @@ impl AppWidgets {
 
             game_version: get_object(&builder, "game_version")?,
             patch_version: get_object(&builder, "patch_version")?,
+
+            wine_selected: get_object(&builder, "wine_selected")?,
 
             wine_groups: get_object(&builder, "wine_groups")?,
             wine_recommended_only: get_object(&builder, "wine_recommended_only")?,
@@ -108,6 +112,8 @@ impl AppWidgets {
             for version in versions {
                 let row = DxvkRow::new(version);
 
+                row.update_state(&config.game.dxvk.builds);
+
                 match i {
                     0 => result.dxvk_vanilla.add_row(&row.row),
                     1 => result.dxvk_async.add_row(&row.row),
@@ -129,7 +135,7 @@ impl AppWidgets {
 /// It may be helpful if you want to add the same event for several widgets, or call an action inside of another action
 #[derive(Debug, Clone, glib::Downgrade)]
 pub enum Actions {
-    DownloadDXVK(Rc<usize>),
+    DxvkPerformAction(Rc<usize>),
     WinePerformAction(Rc<(usize, usize)>)
 }
 
@@ -181,6 +187,10 @@ impl App {
 
     /// Add default events and values to the widgets
     fn init_events(self) -> Self {
+        /*self.widgets.wine_selected.connect_selected_notify(|_| {
+
+        });*/
+
         // Set wine recommended only switcher event
         self.widgets.wine_recommended_only.connect_state_notify(clone!(@strong self as this => move |switcher| {
             for group in &*this.widgets.wine_components {
@@ -218,7 +228,7 @@ impl App {
         let components = &*self.widgets.dxvk_components;
 
         for (i, component) in components.into_iter().enumerate() {
-            component.button.connect_clicked(Actions::DownloadDXVK(Rc::new(i)).into_fn(&self));
+            component.button.connect_clicked(Actions::DxvkPerformAction(Rc::new(i)).into_fn(&self));
         }
 
         self
@@ -240,8 +250,26 @@ impl App {
             println!("[general page] [update] action: {:?}, values: {:?}", &action, &values);
 
             match action {
-                Actions::DownloadDXVK(i) => {
-                    this.widgets.dxvk_components[*i].download();
+                Actions::DxvkPerformAction(i) => {
+                    let config = config::get().expect("Failed to load config");
+
+                    let component = this.widgets.dxvk_components[*i].clone();
+
+                    if component.is_downloaded(&config.game.dxvk.builds) {
+                        if let Err(err) = component.delete(&config.game.dxvk.builds) {
+                            this.toast_error("Failed to delete dxvk", err);
+                        }
+
+                        component.update_state(&config.game.dxvk.builds);
+                    }
+
+                    else {
+                        if let Ok(awaiter) = component.download(&config.game.dxvk.builds) {
+                            awaiter.then(move |_| {
+                                component.update_state(&config.game.dxvk.builds);
+                            });
+                        }
+                    }
                 }
 
                 Actions::WinePerformAction(version) => {

@@ -130,6 +130,7 @@ pub struct Game {
     pub path: String,
     pub voices: Vec<String>,
     pub wine: Wine,
+    pub dxvk: Dxvk,
     pub enhancements: Enhancements,
     pub environment: HashMap<String, String>
 }
@@ -145,6 +146,7 @@ impl Default for Game {
                 String::from("en-us")
             ],
             wine: Wine::default(),
+            dxvk: Dxvk::default(),
             enhancements: Enhancements::default(),
             environment: HashMap::new()
         }
@@ -174,6 +176,24 @@ impl Default for Wine {
             selected: None,
             sync: WineSync::default(),
             language: WineLang::default()
+        }
+    }
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Dxvk {
+    pub builds: String,
+    pub selected: Option<String>
+}
+
+impl Default for Dxvk {
+    fn default() -> Self {
+        Self {
+            builds: match launcher_dir() {
+                Some(dir) => format!("{}/dxvks", dir),
+                None => String::new()
+            },
+            selected: None
         }
     }
 }
