@@ -2,7 +2,7 @@
     {
         "title": "Wine-GE-Proton",
         "subtitle": null,
-        "runners": [
+        "versions": [
             {
                 "family": "Wine-GE-Proton",
                 "name": "lutris-GE-Proton7-16-x86_64",
@@ -188,7 +188,7 @@
     {
         "title": "GE-Proton",
         "subtitle": "This version includes its own DXVK builds and you can use DXVK_ASYNC variable",
-        "runners": [
+        "versions": [
             {
                 "family": "GE-Proton",
                 "name": "GE-Proton7-20",
@@ -398,7 +398,7 @@
     {
         "title": "Lutris",
         "subtitle": null,
-        "runners": [
+        "versions": [
             {
                 "family": "Lutris",
                 "name": "lutris-7.2-x86_64",

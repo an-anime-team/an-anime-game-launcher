@@ -136,7 +136,9 @@ impl AppWidgets {
 #[derive(Debug, Clone, glib::Downgrade)]
 pub enum Actions {
     DxvkPerformAction(Rc<usize>),
-    WinePerformAction(Rc<(usize, usize)>)
+    WinePerformAction(Rc<(usize, usize)>),
+    UpdateWineComboRow,
+    SelectWineVersion(Rc<usize>)
 }
 
 impl Actions {
@@ -153,7 +155,9 @@ impl Actions {
 /// 
 /// This must implement `Default` trait
 #[derive(Debug, Default, glib::Downgrade)]
-pub struct Values;
+pub struct Values {
+    downloaded_wine_versions: Rc<Option<Vec<wine::Version>>>
+}
 
 /// The main application structure
 /// 
@@ -187,9 +191,13 @@ impl App {
 
     /// Add default events and values to the widgets
     fn init_events(self) -> Self {
-        /*self.widgets.wine_selected.connect_selected_notify(|_| {
-
-        });*/
+        self.widgets.wine_selected.connect_selected_notify(clone!(@strong self as this => move |combo_row| {
+            if let Some(model) = combo_row.model() {
+                if model.n_items() > 0 {
+                    this.update(Actions::SelectWineVersion(Rc::new(combo_row.selected() as usize)));
+                }
+            }
+        }));
 
         // Set wine recommended only switcher event
         self.widgets.wine_recommended_only.connect_state_notify(clone!(@strong self as this => move |switcher| {
@@ -244,15 +252,13 @@ impl App {
         let this = self.clone();
 
         receiver.attach(None, move |action| {
-            let values = this.values.take();
+            let mut config = config::get().expect("Failed to load config");
 
             // Some debug output
-            println!("[general page] [update] action: {:?}, values: {:?}", &action, &values);
+            println!("[general page] [update] action: {:?}", &action);
 
             match action {
                 Actions::DxvkPerformAction(i) => {
-                    let config = config::get().expect("Failed to load config");
-
                     let component = this.widgets.dxvk_components[*i].clone();
 
                     if component.is_downloaded(&config.game.dxvk.builds) {
@@ -273,8 +279,6 @@ impl App {
                 }
 
                 Actions::WinePerformAction(version) => {
-                    let config = config::get().expect("Failed to load config");
-
                     let component = this.widgets
                         .wine_components[version.0]
                         .version_components[version.1].clone();
@@ -285,19 +289,67 @@ impl App {
                         }
 
                         component.update_state(&config.game.wine.builds);
+
+                        this.update(Actions::UpdateWineComboRow);
                     }
 
                     else {
                         if let Ok(awaiter) = component.download(&config.game.wine.builds) {
-                            awaiter.then(move |_| {
+                            awaiter.then(clone!(@strong this => move |_| {
                                 component.update_state(&config.game.wine.builds);
-                            });
+
+                                this.update(Actions::UpdateWineComboRow);
+                            }));
                         }
                     }
                 }
-            }
 
-            this.values.set(values);
+                Actions::UpdateWineComboRow => {
+                    let model = gtk::StringList::new(&["System"]);
+
+                    let list = wine::List::list_downloaded(config.game.wine.builds)
+                        .expect("Failed to list downloaded wine versions");
+
+                    let mut selected = 0;
+
+                    for (i, version) in (&list).into_iter().enumerate() {
+                        model.append(version.title.as_str());
+
+                        if let Some(curr) = &config.game.wine.selected {
+                            if &version.name == curr {
+                                selected = i as u32 + 1;
+                            }
+                        }
+                    }
+
+                    let mut values = this.values.take();
+
+                    values.downloaded_wine_versions = Rc::new(Some(list));
+
+                    this.values.set(values);
+
+                    // We need to return app values before we call these methods
+                    // because they'll invoke SelectWineVersion action so access
+                    // downloaded_wine_versions value
+                    this.widgets.wine_selected.set_model(Some(&model));
+                    this.widgets.wine_selected.set_selected(selected);
+                }
+
+                Actions::SelectWineVersion(i) => {
+                    let values = this.values.take();
+
+                    if let Some(wine_versions) = &*values.downloaded_wine_versions {
+                        match *i {
+                            0 => config.game.wine.selected = None,
+                            i => config.game.wine.selected = Some(wine_versions[i - 1].name.clone())
+                        }
+                    }
+
+                    this.values.set(values);
+
+                    config::update(config).expect("Failed to update config");
+                }
+            }
 
             glib::Continue(true)
         });
@@ -395,6 +447,9 @@ impl App {
                 self.widgets.patch_version.set_css_classes(&["success"]);
             }
         }
+
+        // Update downloaded wine versions
+        self.update(Actions::UpdateWineComboRow);
 
         Ok(())
     }

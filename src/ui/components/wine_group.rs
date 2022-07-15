@@ -24,7 +24,7 @@ impl WineGroup {
 
         let mut version_components = Vec::new();
 
-        for version in &group.runners {
+        for version in &group.versions {
             let component = WineRow::new(version.clone());
 
             expander_row.add_row(&component.row);
