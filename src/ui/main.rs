@@ -143,7 +143,11 @@ impl App {
                     result.widgets.status_page.set_visible(false);
                     result.widgets.launcher_content.set_visible(true);
                 },
-                Err(err) => result.toast_error("Failed to get initial launcher state", err)
+                Err(err) => {
+                    glib::MainContext::default().invoke(move || {
+                        result.toast_error("Failed to get initial launcher state", err);
+                    });
+                }
             }
         }));
 
