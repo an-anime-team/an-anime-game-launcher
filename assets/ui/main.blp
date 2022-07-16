@@ -22,7 +22,16 @@ Adw.ApplicationWindow window {
                     };
                 }
 
-                Adw.PreferencesPage {
+                Adw.StatusPage status_page {
+                    icon-name: "image-loading-symbolic";
+                    title: "Loading data";
+                    
+                    vexpand: true;
+                }
+
+                Adw.PreferencesPage launcher_content {
+                    visible: false;
+
                     Adw.PreferencesGroup {
                         Gtk.Image {
                             file: "assets/images/icon.png";
@@ -47,19 +56,13 @@ Adw.ApplicationWindow window {
                             margin-top: 64;
                             spacing: 8;
 
-                            Adw.SplitButton launch_game {
+                            Gtk.Button launch_game {
                                 label: "Launch";
 
                                 hexpand: false;
                                 width-request: 200;
 
                                 styles ["suggested-action"]
-
-                                popover: Gtk.Popover {
-                                    Gtk.Button launch_game_debug {
-                                        label: "Launch in debug mode";
-                                    }
-                                };
                             }
 
                             Gtk.Button open_preferences {

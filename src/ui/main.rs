@@ -14,6 +14,7 @@ use super::traits::toast_error::ToastError;
 
 use crate::lib::game;
 use crate::lib::tasks;
+use crate::lib::launcher::states::LauncherState;
 
 /// This structure is used to describe widgets used in application
 /// 
@@ -26,9 +27,10 @@ pub struct AppWidgets {
     pub toast_overlay: adw::ToastOverlay,
 
     pub leaflet: adw::Leaflet,
+    pub status_page: adw::StatusPage,
+    pub launcher_content: adw::PreferencesPage,
 
-    pub launch_game: adw::SplitButton,
-    pub launch_game_debug: gtk::Button,
+    pub launch_game: gtk::Button,
     pub open_preferences: gtk::Button,
 
     pub launch_game_group: adw::PreferencesGroup,
@@ -50,9 +52,10 @@ impl AppWidgets {
             toast_overlay: toast_overlay.clone(),
 
             leaflet: get_object(&builder, "leaflet")?,
+            status_page: get_object(&builder, "status_page")?,
+            launcher_content: get_object(&builder, "launcher_content")?,
 
             launch_game: get_object(&builder, "launch_game")?,
-            launch_game_debug: get_object(&builder, "launch_game_debug")?,
             open_preferences: get_object(&builder, "open_preferences")?,
 
             launch_game_group: get_object(&builder, "launch_game_group")?,
@@ -76,7 +79,11 @@ impl AppWidgets {
 pub enum Actions {
     OpenPreferencesPage,
     PreferencesGoBack,
-    LaunchGame
+    PerformButtonEvent,
+    LaunchGame,
+    ShowProgressBar,
+    UpdateProgress { fraction: Rc<f64>, title: Rc<String> },
+    HideProgressBar
 }
 
 impl Actions {
@@ -93,7 +100,9 @@ impl Actions {
 /// 
 /// This must implement `Default` trait
 #[derive(Debug, Default, glib::Downgrade)]
-pub struct Values;
+pub struct Values {
+    state: Rc<LauncherState>
+}
 
 /// The main application structure
 /// 
@@ -125,6 +134,19 @@ impl App {
         // Bind app to the window
         result.widgets.window.set_application(Some(app));
 
+        // Load initial launcher state
+        std::thread::spawn(clone!(@strong result => move || {
+            match LauncherState::get(Some(result.widgets.status_page.clone())) {
+                Ok(state) => {
+                    result.set_state(state);
+
+                    result.widgets.status_page.set_visible(false);
+                    result.widgets.launcher_content.set_visible(true);
+                },
+                Err(err) => result.toast_error("Failed to get initial launcher state", err)
+            }
+        }));
+
         Ok(result)
     }
 
@@ -137,7 +159,7 @@ impl App {
         self.widgets.preferences_stack.preferences_go_back.connect_clicked(Actions::PreferencesGoBack.into_fn(&self));
 
         // Launch game
-        self.widgets.launch_game.connect_clicked(Actions::LaunchGame.into_fn(&self));
+        self.widgets.launch_game.connect_clicked(Actions::PerformButtonEvent.into_fn(&self));
 
         self
     }
@@ -152,10 +174,8 @@ impl App {
         let this = self.clone();
 
         receiver.attach(None, move |action| {
-            let values = this.values.take();
-
             // Some debug output
-            println!("[main] [update] action: {:?}, values: {:?}", &action, &values);
+            println!("[main] [update] action: {:?}", &action);
 
             match action {
                 Actions::OpenPreferencesPage => {
@@ -175,15 +195,48 @@ impl App {
                     this.widgets.leaflet.navigate(adw::NavigationDirection::Back);
                 }
 
+                Actions::PerformButtonEvent => {
+                    let values = this.values.take();
+                    let state = (*values.state).clone();
+
+                    this.values.set(values);
+
+                    match state {
+                        LauncherState::Launch => {
+                            this.update(Actions::LaunchGame);
+                        },
+                        LauncherState::PatchAvailable(_) => todo!(),
+                        LauncherState::VoiceUpdateAvailable(_) => todo!(),
+                        LauncherState::VoiceOutdated(_) => todo!(),
+                        LauncherState::VoiceNotInstalled(_) => todo!(),
+                        LauncherState::GameUpdateAvailable(_) => todo!(),
+                        LauncherState::GameOutdated(_) => todo!(),
+                        LauncherState::GameNotInstalled(_) => todo!()
+                    }
+                }
+
                 Actions::LaunchGame => {
                     // Display toast message if the game is failed to run
                     if let Err(err) = game::run(false) {
                         this.toast_error("Failed to run game", err);
                     }
                 }
-            }
 
-            this.values.set(values);
+                Actions::ShowProgressBar => {
+                    this.widgets.launch_game_group.set_visible(false);
+                    this.widgets.progress_bar_group.set_visible(true);
+                }
+
+                Actions::UpdateProgress { fraction, title } => {
+                    this.widgets.progress_bar.set_text(Some(title.as_str()));
+                    this.widgets.progress_bar.set_fraction(*fraction);
+                }
+
+                Actions::HideProgressBar => {
+                    this.widgets.launch_game_group.set_visible(true);
+                    this.widgets.progress_bar_group.set_visible(false);
+                }
+            }
 
             glib::Continue(true)
         });
@@ -211,6 +264,45 @@ impl App {
     pub fn show(&self) {
         self.widgets.window.show();
     }
+
+    pub fn set_state(&self, state: LauncherState) {
+        println!("[main] [set_state] state: {:?}", &state);
+
+        match state {
+            LauncherState::Launch => {
+                self.widgets.launch_game.set_label("Launch");
+            }
+
+            LauncherState::PatchAvailable(_) => {
+                self.widgets.launch_game.set_label("Apply patch");
+            }
+
+            LauncherState::GameUpdateAvailable(_) => {
+                self.widgets.launch_game.set_label("Update");
+            }
+
+            LauncherState::VoiceUpdateAvailable(_) => {
+                self.widgets.launch_game.set_label("Update");
+            }
+
+            LauncherState::GameNotInstalled(_) => {
+                self.widgets.launch_game.set_label("Download");
+            }
+
+            LauncherState::VoiceNotInstalled(_) => {
+                self.widgets.launch_game.set_label("Download");
+            }
+
+            LauncherState::VoiceOutdated(_) => todo!(),
+            LauncherState::GameOutdated(_) => todo!()
+        }
+
+        let mut values = self.values.take();
+
+        values.state = Rc::new(state);
+
+        self.values.set(values);
+    }
 }
 
 impl ToastError for App {
@@ -221,29 +313,3 @@ impl ToastError for App {
 
 unsafe impl Send for App {}
 unsafe impl Sync for App {}
-
-/*
-pub enum AppState {
-    Launch,
-    Progress {
-        title: String,
-        progress: f64
-    }
-}
-
-pub fn update_state(&self, state: AppState) {
-    match state {
-        AppState::Launch => {
-            self.launch_game_group.set_visible(true);
-            self.progress_bar_group.set_visible(false);
-        },
-        AppState::Progress { title, progress } => {
-            self.launch_game_group.set_visible(false);
-            self.progress_bar_group.set_visible(true);
-
-            self.progress_bar.set_text(Some(&title));
-            self.progress_bar.set_fraction(progress);
-        }
-    }
-}
-*/

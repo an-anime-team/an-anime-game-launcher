@@ -4,3 +4,4 @@ pub mod tasks;
 pub mod game;
 pub mod dxvk;
 pub mod wine;
+pub mod launcher;
