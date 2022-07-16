@@ -10,6 +10,10 @@ Our current statistics you can find in [readme](../../README.md)
 
 Start date: July 13, 2022
 
+### Launcher analytics (by users choice)
+
+<img src="../pics/stats/2.8.0.png">
+
 <br>
 
 ## 2.7.0

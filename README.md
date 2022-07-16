@@ -69,7 +69,7 @@ field in your `config.yaml` file (settings -> launcher folder). If your system u
 
 | Game version | Launcher version | Patch version |
 | :---: | :---: | :---: |
-| 2.8.0 | 2.3.6 | 2.8.0 testing ⚠️ |
+| 2.8.0 | 2.3.6 | 2.8.0 stable ✅ |
 
 We have our own [An Anime Game](https://discord.gg/ck37X6UWBp) discord server where you can ask any questions
 
@@ -81,9 +81,9 @@ This is our current usage statistics. You can find older ones [here](repository/
 
 <img src="repository/pics/stats/2022/jun29-jul13.png">
 
-### 2.7.0 launcher users — 671 total
+### 2.8.0 launcher users — 159 total
 
-<img src="repository/pics/stats/2.7.0.png">
+<img src="repository/pics/stats/2.8.0.png">
 
 <br>
 
