@@ -7,11 +7,14 @@ use gtk4::glib::clone;
 use std::rc::Rc;
 use std::cell::Cell;
 
+use anime_game_core::prelude::*;
+
 use crate::ui::*;
 
 use super::preferences::PreferencesStack;
 use super::traits::toast_error::ToastError;
 
+use crate::lib::config;
 use crate::lib::game;
 use crate::lib::tasks;
 use crate::lib::launcher::states::LauncherState;
@@ -80,7 +83,7 @@ pub enum Actions {
     OpenPreferencesPage,
     PreferencesGoBack,
     PerformButtonEvent,
-    LaunchGame,
+    DownloadDiff(Rc<VersionDiff>),
     ShowProgressBar,
     UpdateProgress { fraction: Rc<f64>, title: Rc<String> },
     HideProgressBar
@@ -136,12 +139,12 @@ impl App {
 
         // Load initial launcher state
         std::thread::spawn(clone!(@strong result => move || {
-            match LauncherState::get(Some(result.widgets.status_page.clone())) {
+            match LauncherState::get(Some(&result.widgets.status_page)) {
                 Ok(state) => {
                     result.set_state(state);
 
-                    result.widgets.status_page.set_visible(false);
-                    result.widgets.launcher_content.set_visible(true);
+                    result.widgets.status_page.hide();
+                    result.widgets.launcher_content.show();
                 },
                 Err(err) => {
                     glib::MainContext::default().invoke(move || {
@@ -207,28 +210,111 @@ impl App {
 
                     match state {
                         LauncherState::Launch => {
-                            this.update(Actions::LaunchGame);
+                            // Display toast message if the game is failed to run
+                            if let Err(err) = game::run(false) {
+                                this.toast_error("Failed to run game", err);
+                            }
                         },
+
                         LauncherState::PatchAvailable(_) => todo!(),
-                        LauncherState::VoiceUpdateAvailable(_) => todo!(),
-                        LauncherState::VoiceOutdated(_) => todo!(),
-                        LauncherState::VoiceNotInstalled(_) => todo!(),
-                        LauncherState::GameUpdateAvailable(_) => todo!(),
-                        LauncherState::GameOutdated(_) => todo!(),
-                        LauncherState::GameNotInstalled(_) => todo!()
+
+                        LauncherState::VoiceUpdateAvailable(diff) |
+                        LauncherState::VoiceNotInstalled(diff) |
+                        LauncherState::GameUpdateAvailable(diff) |
+                        LauncherState::GameNotInstalled(diff) => {
+                            this.update(Actions::DownloadDiff(Rc::new(diff)));
+                        },
+
+                        LauncherState::GameOutdated(_) => (),
+                        LauncherState::VoiceOutdated(_) => ()
                     }
                 }
+                
+                Actions::DownloadDiff(diff) => {
+                    match config::get() {
+                        Ok(config) => {
+                            fn to_gb(bytes: u64) -> f64 {
+                                (bytes as f64 / 1024.0 / 1024.0 / 1024.0 * 100.0).ceil() / 100.0
+                            }
 
-                Actions::LaunchGame => {
-                    // Display toast message if the game is failed to run
-                    if let Err(err) = game::run(false) {
-                        this.toast_error("Failed to run game", err);
+                            let diff = (*diff).clone();
+
+                            std::thread::spawn(clone!(@strong this => move || {
+                                diff.install_to(config.game.path, clone!(@strong this => move |state| {
+                                    match state {
+                                        InstallerUpdate::DownloadingStarted(_) => {
+                                            this.update(Actions::ShowProgressBar);
+
+                                            this.update(Actions::UpdateProgress {
+                                                fraction: Rc::new(0.0),
+                                                title: Rc::new(String::from("Downloading..."))
+                                            });
+                                        }
+
+                                        InstallerUpdate::DownloadingProgress(curr, total) => {
+                                            // To reduce amount of action requests
+                                            if curr % 10000 < 200 {
+                                                let progress = curr as f64 / total as f64;
+
+                                                this.update(Actions::UpdateProgress {
+                                                    fraction: Rc::new(progress),
+                                                    title: Rc::new(format!(
+                                                        "Downloading: {:.2}% ({} of {} GB)",
+                                                        progress * 100.0,
+                                                        to_gb(curr),
+                                                        to_gb(total)
+                                                    ))
+                                                });
+                                            }
+                                        }
+
+                                        InstallerUpdate::UnpackingStarted(_) => {
+                                            this.update(Actions::UpdateProgress {
+                                                fraction: Rc::new(0.0),
+                                                title: Rc::new(String::from("Unpacking..."))
+                                            });
+                                        }
+
+                                        InstallerUpdate::UnpackingProgress(curr, total) => {
+                                            let progress = curr as f64 / total as f64;
+
+                                            this.update(Actions::UpdateProgress {
+                                                fraction: Rc::new(progress),
+                                                title: Rc::new(format!(
+                                                    "Unpacking: {:.2}% ({} of {} GB)",
+                                                    progress * 100.0,
+                                                    to_gb(curr),
+                                                    to_gb(total)
+                                                ))
+                                            });
+                                        }
+
+                                        InstallerUpdate::DownloadingFinished => (),
+
+                                        InstallerUpdate::UnpackingFinished => {
+                                            this.update(Actions::HideProgressBar);
+                                        }
+
+                                        InstallerUpdate::DownloadingError(err) => this.toast_error("Failed to download game", err),
+                                        InstallerUpdate::UnpackingError => this.toast_error("Failed to unpack game", "?")
+                                    }
+                                })).unwrap();
+                            }));
+                        },
+                        Err(err) => {
+                            glib::MainContext::default().invoke(clone!(@strong this => move || {
+                                this.toast_error("Failed to load config", err);
+                            }));
+                        }
                     }
                 }
 
                 Actions::ShowProgressBar => {
-                    this.widgets.launch_game_group.set_visible(false);
-                    this.widgets.progress_bar_group.set_visible(true);
+                    this.widgets.progress_bar.set_text(None);
+                    this.widgets.progress_bar.set_fraction(0.0);
+
+                    this.widgets.launch_game_group.hide();
+                    this.widgets.progress_bar_group.show();
                 }
 
                 Actions::UpdateProgress { fraction, title } => {
@@ -237,8 +323,8 @@ impl App {
                 }
 
                 Actions::HideProgressBar => {
-                    this.widgets.launch_game_group.set_visible(true);
-                    this.widgets.progress_bar_group.set_visible(false);
+                    this.widgets.launch_game_group.show();
+                    this.widgets.progress_bar_group.hide();
                 }
             }
 
@@ -281,24 +367,22 @@ impl App {
                 self.widgets.launch_game.set_label("Apply patch");
             }
 
-            LauncherState::GameUpdateAvailable(_) => {
-                self.widgets.launch_game.set_label("Update");
-            }
-
+            LauncherState::GameUpdateAvailable(_) |
             LauncherState::VoiceUpdateAvailable(_) => {
                 self.widgets.launch_game.set_label("Update");
             }
 
-            LauncherState::GameNotInstalled(_) => {
-                self.widgets.launch_game.set_label("Download");
-            }
-
+            LauncherState::GameNotInstalled(_) |
             LauncherState::VoiceNotInstalled(_) => {
                 self.widgets.launch_game.set_label("Download");
             }
 
-            LauncherState::VoiceOutdated(_) => todo!(),
-            LauncherState::GameOutdated(_) => todo!()
+            LauncherState::VoiceOutdated(_) |
+            LauncherState::GameOutdated(_) => {
+                self.widgets.launch_game.set_label("Update");
+                self.widgets.launch_game.set_tooltip_text(Some("Version is too outdated and can't be updated"));
+                self.widgets.launch_game.set_sensitive(false);
+            }
         }
 
         let mut values = self.values.take();

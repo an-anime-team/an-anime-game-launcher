@@ -38,7 +38,7 @@ impl Default for LauncherState {
 }
 
 impl LauncherState {
-    pub fn get(status_page: Option<adw::StatusPage>) -> std::io::Result<Self> {
+    pub fn get(status_page: Option<&adw::StatusPage>) -> std::io::Result<Self> {
         let config = config::get()?;
         let game = Game::new(&config.game.path);
 

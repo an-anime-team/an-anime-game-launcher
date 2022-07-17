@@ -62,8 +62,6 @@ impl PreferencesStack {
     /// Update page info before opening it
     /// 
     /// Being called from the `MainApp` struct
-    /// 
-    /// TODO: do it asynchronously. The problem is that I somehow need to handle this function's error to display it as a toast
     pub fn update(&self) -> Result<(), Error> {
         self.status_page.set_visible(true);
         self.status_page.set_description(None);
