@@ -30,7 +30,7 @@
     });
 
     // Steam Deck users asked me to add something like that
-    if (NL_ARGS.includes('--run-game'))
+    if (NL_ARGS.includes('--run-game') || NL_ARGS.includes('--rungame'))
     {
         import('./ts/launcher/states/Launch').then((module) => {
             module.default(null).then(() => {

@@ -247,7 +247,7 @@ export default class constants
     public static readonly uri = {
         api: {
             global: `https://sdk-os-static.${this.placeholders.lowercase.company_new}.com/hk4e_global/mdk/launcher/api`,
-            cn: `https://sdk-static.${this.placeholders.lowercase.company_new}.com/hk4e_cn/mdk/launcher/api`
+            cn: `https://sdk-static.${this.placeholders.lowercase.company}.com/hk4e_cn/mdk/launcher/api`
         },
         patch: {
             origin: atob('aHR0cHM6Ly9ub3RhYnVnLm9yZy9Lcm9jay9kYXdu'),
