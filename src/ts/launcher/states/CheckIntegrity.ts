@@ -392,7 +392,7 @@ export default (launcher: Launcher): Promise<void> => {
                             launcher.progressBar?.init({
                                 label: Locales.translate<string>('launcher.progress.game.download_mismatch_files'),
                                 showSpeed: false,
-                                showEta: false,
+                                showEta: true,
                                 showPercents: true,
                                 showTotals: false
                             });
