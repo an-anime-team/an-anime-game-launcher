@@ -6,6 +6,10 @@ use std::io::{Error, ErrorKind, Write};
 use serde::{Serialize, Deserialize};
 
 use super::consts::*;
+use super::wine::{
+    Version as WineVersion,
+    List as WineList
+};
 
 mod hud;
 mod wine_sync;
@@ -88,6 +92,28 @@ impl Config {
 
                 // ????
                 None
+            },
+            None => None
+        }
+    }
+
+    pub fn try_get_selected_wine_info(&self) -> Option<WineVersion> {
+        match &self.game.wine.selected {
+            Some(selected) => {
+                match WineList::get() {
+                    Ok(list) => {
+                        for group in list {
+                            for version in group.versions {
+                                if &version.name == selected {
+                                    return Some(version.clone());
+                                }
+                            }
+                        }
+
+                        None
+                    },
+                    Err(err) => None
+                }
             },
             None => None
         }

@@ -11,6 +11,7 @@
                 "files": {
                     "wine": "bin/wine64",
                     "wineserver": "bin/wineserver",
+                    "wineboot": "bin/wineboot",
                     "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
                 },
                 "recommended": true
@@ -23,6 +24,7 @@
                 "files": {
                     "wine": "bin/wine64",
                     "wineserver": "bin/wineserver",
+                    "wineboot": "bin/wineboot",
                     "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
                 },
                 "recommended": true
@@ -35,6 +37,7 @@
                 "files": {
                     "wine": "bin/wine64",
                     "wineserver": "bin/wineserver",
+                    "wineboot": "bin/wineboot",
                     "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
                 },
                 "recommended": true
@@ -47,6 +50,7 @@
                 "files": {
                     "wine": "bin/wine64",
                     "wineserver": "bin/wineserver",
+                    "wineboot": "bin/wineboot",
                     "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
                 },
                 "recommended": true
@@ -59,6 +63,7 @@
                 "files": {
                     "wine": "bin/wine64",
                     "wineserver": "bin/wineserver",
+                    "wineboot": "bin/wineboot",
                     "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
                 },
                 "recommended": false
@@ -71,6 +76,7 @@
                 "files": {
                     "wine": "bin/wine64",
                     "wineserver": "bin/wineserver",
+                    "wineboot": "bin/wineboot",
                     "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
                 },
                 "recommended": true
@@ -83,6 +89,7 @@
                 "files": {
                     "wine": "bin/wine64",
                     "wineserver": "bin/wineserver",
+                    "wineboot": "bin/wineboot",
                     "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
                 },
                 "recommended": true
@@ -95,6 +102,7 @@
                 "files": {
                     "wine": "bin/wine64",
                     "wineserver": "bin/wineserver",
+                    "wineboot": "bin/wineboot",
                     "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
                 },
                 "recommended": false
@@ -107,6 +115,7 @@
                 "files": {
                     "wine": "bin/wine64",
                     "wineserver": "bin/wineserver",
+                    "wineboot": "bin/wineboot",
                     "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
                 },
                 "recommended": false
@@ -119,6 +128,7 @@
                 "files": {
                     "wine": "bin/wine64",
                     "wineserver": "bin/wineserver",
+                    "wineboot": "bin/wineboot",
                     "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
                 },
                 "recommended": false
@@ -131,6 +141,7 @@
                 "files": {
                     "wine": "bin/wine64",
                     "wineserver": "bin/wineserver",
+                    "wineboot": "bin/wineboot",
                     "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
                 },
                 "recommended": false
@@ -143,6 +154,7 @@
                 "files": {
                     "wine": "bin/wine64",
                     "wineserver": "bin/wineserver",
+                    "wineboot": "bin/wineboot",
                     "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
                 },
                 "recommended": false
@@ -155,6 +167,7 @@
                 "files": {
                     "wine": "bin/wine64",
                     "wineserver": "bin/wineserver",
+                    "wineboot": "bin/wineboot",
                     "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
                 },
                 "recommended": false
@@ -167,6 +180,7 @@
                 "files": {
                     "wine": "bin/wine64",
                     "wineserver": "bin/wineserver",
+                    "wineboot": "bin/wineboot",
                     "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
                 },
                 "recommended": false
@@ -179,6 +193,7 @@
                 "files": {
                     "wine": "bin/wine64",
                     "wineserver": "bin/wineserver",
+                    "wineboot": "bin/wineboot",
                     "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
                 },
                 "recommended": false
@@ -197,6 +212,7 @@
                 "files": {
                     "wine": "files/bin/wine64",
                     "wineserver": "files/bin/wineserver",
+                    "wineboot": "files/bin/wineboot",
                     "winecfg": "files/lib64/wine/x86_64-windows/winecfg.exe"
                 },
                 "recommended": true
@@ -209,6 +225,7 @@
                 "files": {
                     "wine": "files/bin/wine64",
                     "wineserver": "files/bin/wineserver",
+                    "wineboot": "files/bin/wineboot",
                     "winecfg": "files/lib64/wine/x86_64-windows/winecfg.exe"
                 },
                 "recommended": false
@@ -221,6 +238,7 @@
                 "files": {
                     "wine": "files/bin/wine64",
                     "wineserver": "files/bin/wineserver",
+                    "wineboot": "files/bin/wineboot",
                     "winecfg": "files/lib64/wine/x86_64-windows/winecfg.exe"
                 },
                 "recommended": true
@@ -233,6 +251,7 @@
                 "files": {
                     "wine": "files/bin/wine64",
                     "wineserver": "files/bin/wineserver",
+                    "wineboot": "files/bin/wineboot",
                     "winecfg": "files/lib64/wine/x86_64-windows/winecfg.exe"
                 },
                 "recommended": false
@@ -245,6 +264,7 @@
                 "files": {
                     "wine": "files/bin/wine64",
                     "wineserver": "files/bin/wineserver",
+                    "wineboot": "files/bin/wineboot",
                     "winecfg": "files/lib64/wine/x86_64-windows/winecfg.exe"
                 },
                 "recommended": true
@@ -257,6 +277,7 @@
                 "files": {
                     "wine": "files/bin/wine64",
                     "wineserver": "files/bin/wineserver",
+                    "wineboot": "files/bin/wineboot",
                     "winecfg": "files/lib64/wine/x86_64-windows/winecfg.exe"
                 },
                 "recommended": true
@@ -269,6 +290,7 @@
                 "files": {
                     "wine": "files/bin/wine64",
                     "wineserver": "files/bin/wineserver",
+                    "wineboot": "files/bin/wineboot",
                     "winecfg": "files/lib64/wine/x86_64-windows/winecfg.exe"
                 },
                 "recommended": true
@@ -281,6 +303,7 @@
                 "files": {
                     "wine": "files/bin/wine64",
                     "wineserver": "files/bin/wineserver",
+                    "wineboot": "files/bin/wineboot",
                     "winecfg": "files/lib64/wine/x86_64-windows/winecfg.exe"
                 },
                 "recommended": true
@@ -293,6 +316,7 @@
                 "files": {
                     "wine": "files/bin/wine64",
                     "wineserver": "files/bin/wineserver",
+                    "wineboot": "files/bin/wineboot",
                     "winecfg": "files/lib64/wine/x86_64-windows/winecfg.exe"
                 },
                 "recommended": false
@@ -305,6 +329,7 @@
                 "files": {
                     "wine": "files/bin/wine64",
                     "wineserver": "files/bin/wineserver",
+                    "wineboot": "files/bin/wineboot",
                     "winecfg": "files/lib64/wine/x86_64-windows/winecfg.exe"
                 },
                 "recommended": false
@@ -317,6 +342,7 @@
                 "files": {
                     "wine": "files/bin/wine64",
                     "wineserver": "files/bin/wineserver",
+                    "wineboot": "files/bin/wineboot",
                     "winecfg": "files/lib64/wine/x86_64-windows/winecfg.exe"
                 },
                 "recommended": false
@@ -329,6 +355,7 @@
                 "files": {
                     "wine": "files/bin/wine64",
                     "wineserver": "files/bin/wineserver",
+                    "wineboot": "files/bin/wineboot",
                     "winecfg": "files/lib64/wine/x86_64-windows/winecfg.exe"
                 },
                 "recommended": false
@@ -341,6 +368,7 @@
                 "files": {
                     "wine": "files/bin/wine64",
                     "wineserver": "files/bin/wineserver",
+                    "wineboot": "files/bin/wineboot",
                     "winecfg": "files/lib64/wine/x86_64-windows/winecfg.exe"
                 },
                 "recommended": false
@@ -353,6 +381,7 @@
                 "files": {
                     "wine": "files/bin/wine64",
                     "wineserver": "files/bin/wineserver",
+                    "wineboot": "files/bin/wineboot",
                     "winecfg": "files/lib64/wine/x86_64-windows/winecfg.exe"
                 },
                 "recommended": false
@@ -365,6 +394,7 @@
                 "files": {
                     "wine": "files/bin/wine64",
                     "wineserver": "files/bin/wineserver",
+                    "wineboot": "files/bin/wineboot",
                     "winecfg": "files/lib64/wine/x86_64-windows/winecfg.exe"
                 },
                 "recommended": false
@@ -377,6 +407,7 @@
                 "files": {
                     "wine": "dist/bin/wine64",
                     "wineserver": "dist/bin/wineserver",
+                    "wineboot": "files/bin/wineboot",
                     "winecfg": "dist/lib64/wine/x86_64-windows/winecfg.exe"
                 },
                 "recommended": false
@@ -389,6 +420,7 @@
                 "files": {
                     "wine": "dist/bin/wine64",
                     "wineserver": "dist/bin/wineserver",
+                    "wineboot": "files/bin/wineboot",
                     "winecfg": "dist/lib64/wine/x86_64-windows/winecfg.exe"
                 },
                 "recommended": false
@@ -407,6 +439,7 @@
                 "files": {
                     "wine": "bin/wine64",
                     "wineserver": "bin/wineserver",
+                    "wineboot": "bin/wineboot",
                     "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
                 },
                 "recommended": true
@@ -419,6 +452,7 @@
                 "files": {
                     "wine": "bin/wine64",
                     "wineserver": "bin/wineserver",
+                    "wineboot": "bin/wineboot",
                     "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
                 },
                 "recommended": true
@@ -431,6 +465,7 @@
                 "files": {
                     "wine": "bin/wine64",
                     "wineserver": "bin/wineserver",
+                    "wineboot": "bin/wineboot",
                     "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
                 },
                 "recommended": true
@@ -443,6 +478,7 @@
                 "files": {
                     "wine": "bin/wine64",
                     "wineserver": "bin/wineserver",
+                    "wineboot": "bin/wineboot",
                     "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
                 },
                 "recommended": true
@@ -455,6 +491,7 @@
                 "files": {
                     "wine": "bin/wine64",
                     "wineserver": "bin/wineserver",
+                    "wineboot": "bin/wineboot",
                     "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
                 },
                 "recommended": false
@@ -467,6 +504,7 @@
                 "files": {
                     "wine": "bin/wine64",
                     "wineserver": "bin/wineserver",
+                    "wineboot": "bin/wineboot",
                     "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
                 },
                 "recommended": false
@@ -479,6 +517,7 @@
                 "files": {
                     "wine": "bin/wine64",
                     "wineserver": "bin/wineserver",
+                    "wineboot": "bin/wineboot",
                     "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
                 },
                 "recommended": false
@@ -491,6 +530,7 @@
                 "files": {
                     "wine": "bin/wine64",
                     "wineserver": "bin/wineserver",
+                    "wineboot": "bin/wineboot",
                     "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
                 },
                 "recommended": false
@@ -503,6 +543,7 @@
                 "files": {
                     "wine": "bin/wine64",
                     "wineserver": "bin/wineserver",
+                    "wineboot": "bin/wineboot",
                     "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
                 },
                 "recommended": true
@@ -515,6 +556,7 @@
                 "files": {
                     "wine": "bin/wine64",
                     "wineserver": "bin/wineserver",
+                    "wineboot": "bin/wineboot",
                     "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
                 },
                 "recommended": true
@@ -527,6 +569,7 @@
                 "files": {
                     "wine": "bin/wine64",
                     "wineserver": "bin/wineserver",
+                    "wineboot": "bin/wineboot",
                     "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
                 },
                 "recommended": false
@@ -539,6 +582,7 @@
                 "files": {
                     "wine": "bin/wine64",
                     "wineserver": "bin/wineserver",
+                    "wineboot": "bin/wineboot",
                     "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
                 },
                 "recommended": false
@@ -551,6 +595,7 @@
                 "files": {
                     "wine": "bin/wine64",
                     "wineserver": "bin/wineserver",
+                    "wineboot": "bin/wineboot",
                     "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
                 },
                 "recommended": false
@@ -563,6 +608,7 @@
                 "files": {
                     "wine": "bin/wine64",
                     "wineserver": "bin/wineserver",
+                    "wineboot": "bin/wineboot",
                     "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
                 },
                 "recommended": false
@@ -575,6 +621,7 @@
                 "files": {
                     "wine": "bin/wine64",
                     "wineserver": "bin/wineserver",
+                    "wineboot": "bin/wineboot",
                     "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
                 },
                 "recommended": false

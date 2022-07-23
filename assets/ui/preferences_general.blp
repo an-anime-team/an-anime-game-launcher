@@ -126,17 +126,9 @@ Adw.PreferencesPage general_page {
     Adw.PreferencesGroup {
         title: "DXVK version";
 
-        Adw.ComboRow {
+        Adw.ComboRow dxvk_selected {
             title: "Selected version";
-
-            model: Gtk.StringList {
-                strings [
-                    "Vanilla 1.10.1",
-                    "Vanilla 1.10",
-                    "Vanilla 1.9.4",
-                    "Async 1.10.1"
-                ]
-            };
+            subtitle: "WIP: does nothing as for now";
         }
 
         Adw.ActionRow {

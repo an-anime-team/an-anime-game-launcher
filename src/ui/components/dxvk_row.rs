@@ -12,6 +12,7 @@ pub struct DxvkRow {
 
     pub row: adw::ActionRow,
     pub button: gtk::Button,
+    pub apply_button: gtk::Button,
     pub progress_bar: gtk::ProgressBar
 }
 
@@ -19,9 +20,18 @@ impl DxvkRow {
     pub fn new(version: Version) -> Self {
         let row = adw::ActionRow::new();
         let button = gtk::Button::new();
+        let apply_button = gtk::Button::new();
 
         row.set_title(&version.version);
         row.set_visible(version.recommended);
+
+        apply_button.set_icon_name("view-refresh-symbolic");
+        apply_button.set_valign(gtk::Align::Center);
+        apply_button.add_css_class("flat");
+        apply_button.set_tooltip_text(Some("Apply"));
+        apply_button.hide();
+
+        row.add_suffix(&apply_button);
 
         button.set_icon_name("document-save-symbolic");
         button.set_valign(gtk::Align::Center);
@@ -36,7 +46,7 @@ impl DxvkRow {
 
         progress_bar.set_width_request(200);
         progress_bar.set_valign(Align::Center);
-        progress_bar.set_visible(false);
+        progress_bar.hide();
 
         row.add_suffix(&progress_bar);
 
@@ -44,6 +54,7 @@ impl DxvkRow {
             version,
             row,
             button,
+            apply_button,
             progress_bar
         }
     }
@@ -51,11 +62,27 @@ impl DxvkRow {
     pub fn update_state<T: ToString>(&self, dxvks_folder: T) {
         if self.is_downloaded(dxvks_folder) {
             self.button.set_icon_name("user-trash-symbolic");
+
+            self.apply_button.show();
         }
 
         else {
             self.button.set_icon_name("document-save-symbolic");
+
+            self.apply_button.hide();
         }
+    }
+
+    pub fn apply<T: ToString>(&self, dxvks_folder: T, prefix_path: T) -> std::io::Result<()> {
+        self.button.set_sensitive(false);
+        self.apply_button.set_sensitive(false);
+
+        let result = self.version.apply(dxvks_folder, prefix_path);
+
+        self.button.set_sensitive(true);
+        self.apply_button.set_sensitive(true);
+
+        result
     }
 }
 

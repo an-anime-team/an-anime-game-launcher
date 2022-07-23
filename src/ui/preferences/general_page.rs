@@ -41,6 +41,8 @@ pub struct AppWidgets {
 
     pub wine_components: Rc<Vec<WineGroup>>,
 
+    pub dxvk_selected: adw::ComboRow,
+
     pub dxvk_recommended_only: gtk::Switch,
     pub dxvk_vanilla: adw::ExpanderRow,
     pub dxvk_async: adw::ExpanderRow,
@@ -49,7 +51,7 @@ pub struct AppWidgets {
 }
 
 impl AppWidgets {
-    fn try_get(window: adw::ApplicationWindow, toast_overlay: adw::ToastOverlay) -> Result<Self, String> {
+    pub fn try_get(window: adw::ApplicationWindow, toast_overlay: adw::ToastOverlay) -> Result<Self, String> {
         let builder = gtk::Builder::from_string(include_str!("../../../assets/ui/.dist/preferences_general.ui"));
 
         let mut result = Self {
@@ -67,6 +69,8 @@ impl AppWidgets {
             wine_recommended_only: get_object(&builder, "wine_recommended_only")?,
 
             wine_components: Default::default(),
+
+            dxvk_selected: get_object(&builder, "dxvk_selected")?,
 
             dxvk_recommended_only: get_object(&builder, "dxvk_recommended_only")?,
             dxvk_vanilla: get_object(&builder, "dxvk_vanilla")?,
@@ -137,8 +141,11 @@ impl AppWidgets {
 pub enum Actions {
     DxvkPerformAction(Rc<usize>),
     WinePerformAction(Rc<(usize, usize)>),
+    UpdateDxvkComboRow,
+    SelectDxvkVersion(Rc<usize>),
     UpdateWineComboRow,
-    SelectWineVersion(Rc<usize>)
+    SelectWineVersion(Rc<usize>),
+    ToastError(Rc<(String, Error)>)
 }
 
 impl Actions {
@@ -156,7 +163,8 @@ impl Actions {
 /// This must implement `Default` trait
 #[derive(Debug, Default, glib::Downgrade)]
 pub struct Values {
-    downloaded_wine_versions: Rc<Option<Vec<wine::Version>>>
+    downloaded_wine_versions: Rc<Option<Vec<wine::Version>>>,
+    downloaded_dxvk_versions: Rc<Option<Vec<dxvk::Version>>>
 }
 
 /// The main application structure
@@ -199,6 +207,14 @@ impl App {
             }
         }));
 
+        self.widgets.dxvk_selected.connect_selected_notify(clone!(@strong self as this => move |combo_row| {
+            if let Some(model) = combo_row.model() {
+                if model.n_items() > 0 {
+                    this.update(Actions::SelectDxvkVersion(Rc::new(combo_row.selected() as usize)));
+                }
+            }
+        }));
+
         // Set wine recommended only switcher event
         self.widgets.wine_recommended_only.connect_state_notify(clone!(@strong self as this => move |switcher| {
             for group in &*this.widgets.wine_components {
@@ -232,11 +248,19 @@ impl App {
             }
         }));
 
-        // DXVK install/remove buttons
+        // DXVK install/remove/apply buttons
         let components = &*self.widgets.dxvk_components;
 
         for (i, component) in components.into_iter().enumerate() {
             component.button.connect_clicked(Actions::DxvkPerformAction(Rc::new(i)).into_fn(&self));
+
+            component.apply_button.connect_clicked(clone!(@strong component.version as version, @strong self as this => move |_| {
+                let config = config::get().expect("Failed to load config");
+
+                if let Err(err) = version.apply(config.game.dxvk.builds, config.game.wine.prefix) {
+                    this.toast_error("Failed to apply DXVK", err);
+                }
+            }));
         }
 
         self
@@ -263,17 +287,29 @@ impl App {
 
                     if component.is_downloaded(&config.game.dxvk.builds) {
                         if let Err(err) = component.delete(&config.game.dxvk.builds) {
-                            this.toast_error("Failed to delete dxvk", err);
+                            this.update(Actions::ToastError(Rc::new((
+                                String::from("Failed to delete DXVK"), err
+                            ))));
                         }
 
                         component.update_state(&config.game.dxvk.builds);
+
+                        this.update(Actions::UpdateDxvkComboRow);
                     }
 
                     else {
                         if let Ok(awaiter) = component.download(&config.game.dxvk.builds) {
-                            awaiter.then(move |_| {
+                            awaiter.then(clone!(@strong this => move |_| {
+                                if let Err(err) = component.apply(&config.game.dxvk.builds, &config.game.wine.prefix) {
+                                    this.update(Actions::ToastError(Rc::new((
+                                        String::from("Failed to apply DXVK"), err
+                                    ))));
+                                }
+
                                 component.update_state(&config.game.dxvk.builds);
-                            });
+
+                                this.update(Actions::UpdateDxvkComboRow);
+                            }));
                         }
                     }
                 }
@@ -285,7 +321,9 @@ impl App {
 
                     if component.is_downloaded(&config.game.wine.builds) {
                         if let Err(err) = component.delete(&config.game.wine.builds) {
-                            this.toast_error("Failed to delete wine", err);
+                            this.update(Actions::ToastError(Rc::new((
+                                String::from("Failed to delete wine"), err
+                            ))));
                         }
 
                         component.update_state(&config.game.wine.builds);
@@ -302,6 +340,63 @@ impl App {
                             }));
                         }
                     }
+                }
+
+                Actions::UpdateDxvkComboRow => {
+                    let model = gtk::StringList::new(&[]);
+
+                    let list = dxvk::List::list_downloaded(config.game.dxvk.builds)
+                        .expect("Failed to list downloaded DXVK versions");
+
+                    let mut raw_list = Vec::new();
+                    let mut selected = 0;
+
+                    for (i, group) in [list.vanilla, list.r#async].into_iter().enumerate() {
+                        for version in group {
+                            model.append(format!("{} {}", if i == 0 { "Vanilla" } else { "Async" }, version.version).as_str());
+    
+                            if let Some(curr) = &config.game.dxvk.selected {
+                                if &version.name == curr {
+                                    selected = raw_list.len() as u32;
+                                }
+                            }
+
+                            raw_list.push(version);
+                        }
+                    }
+
+                    let mut values = this.values.take();
+
+                    values.downloaded_dxvk_versions = Rc::new(Some(raw_list));
+
+                    this.values.set(values);
+
+                    // We need to return app values before we call these methods
+                    // because they'll invoke SelectWineVersion action so access
+                    // downloaded_wine_versions value
+                    this.widgets.dxvk_selected.set_model(Some(&model));
+                    this.widgets.dxvk_selected.set_selected(selected);
+                }
+
+                Actions::SelectDxvkVersion(i) => {
+                    let values = this.values.take();
+
+                    if let Some(dxvk_versions) = &*values.downloaded_dxvk_versions {
+                        let version = dxvk_versions[*i].clone();
+                        
+                        config.game.dxvk.selected = Some(version.name.clone());
+
+                        // FIXME: this calls every time we update dxvks comborow
+                        /*if let Err(err) = version.apply(&config.game.dxvk.builds, &config.game.wine.prefix) {
+                            this.update(Actions::ToastError(Rc::new((
+                                String::from("Failed to apply DXVK"), err
+                            ))));
+                        }*/
+                    }
+
+                    this.values.set(values);
+
+                    config::update(config).expect("Failed to update config");
                 }
 
                 Actions::UpdateWineComboRow => {
@@ -348,6 +443,12 @@ impl App {
                     this.values.set(values);
 
                     config::update(config).expect("Failed to update config");
+                }
+
+                Actions::ToastError(toast) => {
+                    let (msg, err) = (toast.0.clone(), toast.1.to_string());
+
+                    this.toast_error(msg, err);
                 }
             }
 
@@ -450,6 +551,9 @@ impl App {
 
         // Update downloaded wine versions
         self.update(Actions::UpdateWineComboRow);
+
+        // Update downloaded DXVK versions
+        self.update(Actions::UpdateDxvkComboRow);
 
         Ok(())
     }

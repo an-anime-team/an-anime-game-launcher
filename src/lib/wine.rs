@@ -29,6 +29,8 @@ impl List {
             }
         }
 
+        downloaded.sort_by(|a, b| b.name.partial_cmp(&a.name).unwrap());
+
         Ok(downloaded)
     }
 }
@@ -60,5 +62,6 @@ impl Version {
 pub struct Files {
     pub wine: String,
     pub wineserver: String,
+    pub wineboot: String,
     pub winecfg: String
 }
