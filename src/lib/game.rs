@@ -81,14 +81,14 @@ pub fn run(debug: bool) -> Result<(), Error> {
         // which is kinda difficult
         todo!();
 
-        match try_get_terminal() {
+        /*match try_get_terminal() {
             Some(terminal) => {
                 command = Command::new(terminal.get_command());
 
                 command.args(terminal.get_args("launcher.bat"));
             },
             None => return Err(Error::new(ErrorKind::Other, "Couldn't find terminal application"))
-        }
+        }*/
     }
 
     else {

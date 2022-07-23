@@ -62,17 +62,18 @@ impl Into<u32> for WineLang {
 impl WineLang {
     /// Get environment variables corresponding to used wine language
     pub fn get_env_vars(&self) -> HashMap<&str, &str> {
-        match self {
-            WineLang::System     => HashMap::new(),
-            WineLang::English    => HashMap::from([("LANG", "en_us.utf8")]),
-            WineLang::German     => HashMap::from([("LANG", "de_de.utf8")]),
-            WineLang::Russian    => HashMap::from([("LANG", "ru_ru.utf8")]),
-            WineLang::Portuguese => HashMap::from([("LANG", "pt_pt.utf8")]),
-            WineLang::French     => HashMap::from([("LANG", "fr_fr.utf8")]),
-            WineLang::Chinese    => HashMap::from([("LANG", "zh_cn.utf8")]),
-            WineLang::Spanish    => HashMap::from([("LANG", "es_es.utf8")]),
-            WineLang::Japanese   => HashMap::from([("LANG", "ja_jp.utf8")]),
-            WineLang::Korean     => HashMap::from([("LANG", "ko_kr.utf8")])
-        }
+        HashMap::from([("LANG", match self {
+            WineLang::System => return HashMap::new(),
+
+            WineLang::English    => "en_US.UTF8",
+            WineLang::German     => "de_DE.UTF8",
+            WineLang::Russian    => "ru_RU.UTF8",
+            WineLang::Portuguese => "pt_PT.UTF8",
+            WineLang::French     => "fr_FR.UTF8",
+            WineLang::Chinese    => "zh_CN.UTF8",
+            WineLang::Spanish    => "es_ES.UTF8",
+            WineLang::Japanese   => "ja_JP.UTF8",
+            WineLang::Korean     => "ko_KR.UTF8"
+        })])
     }
 }
