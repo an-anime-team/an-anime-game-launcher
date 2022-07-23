@@ -57,15 +57,15 @@ pub trait DownloadComponent {
                     progress_bar.set_visible(false);
                     button.set_visible(true);
 
-                    downl_send.send(DownloadingResult::Done);
+                    downl_send.send(DownloadingResult::Done).unwrap();
                 },
 
                 InstallerUpdate::DownloadingError(err) => {
-                    downl_send.send(DownloadingResult::DownloadingError(err.into()));
+                    downl_send.send(DownloadingResult::DownloadingError(err.into())).unwrap();
                 },
 
                 InstallerUpdate::UnpackingError => {
-                    downl_send.send(DownloadingResult::UnpackingError);
+                    downl_send.send(DownloadingResult::UnpackingError).unwrap();
                 }
             }
 
@@ -77,13 +77,13 @@ pub trait DownloadComponent {
         let installer = Installer::new(self.get_download_uri())?;
         let installation_path = installation_path.to_string();
 
-        send.send(installer);
+        send.send(installer).unwrap();
 
         std::thread::spawn(move || {
             let mut installer = recv.recv().unwrap();
 
             installer.install(installation_path, move |state| {
-                sender.send(state);
+                sender.send(state).unwrap();
             });
         });
 

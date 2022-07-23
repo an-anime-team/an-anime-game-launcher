@@ -151,7 +151,7 @@ pub enum Actions {
 impl Actions {
     pub fn into_fn<T: gtk::glib::IsA<gtk::Widget>>(&self, app: &App) -> Box<dyn Fn(&T)> {
         Box::new(clone!(@strong self as action, @strong app => move |_| {
-            app.update(action.clone());
+            app.update(action.clone()).expect(&format!("Failed to execute action {:?}", &action));
         }))
     }
 }
@@ -202,7 +202,7 @@ impl App {
         self.widgets.wine_selected.connect_selected_notify(clone!(@strong self as this => move |combo_row| {
             if let Some(model) = combo_row.model() {
                 if model.n_items() > 0 {
-                    this.update(Actions::SelectWineVersion(Rc::new(combo_row.selected() as usize)));
+                    this.update(Actions::SelectWineVersion(Rc::new(combo_row.selected() as usize))).unwrap();
                 }
             }
         }));
@@ -210,7 +210,7 @@ impl App {
         self.widgets.dxvk_selected.connect_selected_notify(clone!(@strong self as this => move |combo_row| {
             if let Some(model) = combo_row.model() {
                 if model.n_items() > 0 {
-                    this.update(Actions::SelectDxvkVersion(Rc::new(combo_row.selected() as usize)));
+                    this.update(Actions::SelectDxvkVersion(Rc::new(combo_row.selected() as usize))).unwrap();
                 }
             }
         }));
@@ -254,12 +254,16 @@ impl App {
         for (i, component) in components.into_iter().enumerate() {
             component.button.connect_clicked(Actions::DxvkPerformAction(Rc::new(i)).into_fn(&self));
 
-            component.apply_button.connect_clicked(clone!(@strong component.version as version, @strong self as this => move |_| {
-                let config = config::get().expect("Failed to load config");
+            component.apply_button.connect_clicked(clone!(@strong component, @strong self as this => move |_| {
+                std::thread::spawn(clone!(@strong component, @strong this => move || {
+                    let config = config::get().expect("Failed to load config");
 
-                if let Err(err) = version.apply(config.game.dxvk.builds, config.game.wine.prefix) {
-                    this.toast_error("Failed to apply DXVK", err);
-                }
+                    if let Err(err) = component.apply(config.game.dxvk.builds, config.game.wine.prefix) {
+                        this.update(Actions::ToastError(Rc::new((
+                            String::from("Failed to apply DXVK"), err
+                        )))).unwrap();
+                    }
+                }));
             }));
         }
 
@@ -289,12 +293,12 @@ impl App {
                         if let Err(err) = component.delete(&config.game.dxvk.builds) {
                             this.update(Actions::ToastError(Rc::new((
                                 String::from("Failed to delete DXVK"), err
-                            ))));
+                            )))).unwrap();
                         }
 
                         component.update_state(&config.game.dxvk.builds);
 
-                        this.update(Actions::UpdateDxvkComboRow);
+                        this.update(Actions::UpdateDxvkComboRow).unwrap();
                     }
 
                     else {
@@ -303,12 +307,12 @@ impl App {
                                 if let Err(err) = component.apply(&config.game.dxvk.builds, &config.game.wine.prefix) {
                                     this.update(Actions::ToastError(Rc::new((
                                         String::from("Failed to apply DXVK"), err
-                                    ))));
+                                    )))).unwrap();
                                 }
 
                                 component.update_state(&config.game.dxvk.builds);
 
-                                this.update(Actions::UpdateDxvkComboRow);
+                                this.update(Actions::UpdateDxvkComboRow).unwrap();
                             }));
                         }
                     }
@@ -323,12 +327,12 @@ impl App {
                         if let Err(err) = component.delete(&config.game.wine.builds) {
                             this.update(Actions::ToastError(Rc::new((
                                 String::from("Failed to delete wine"), err
-                            ))));
+                            )))).unwrap();
                         }
 
                         component.update_state(&config.game.wine.builds);
 
-                        this.update(Actions::UpdateWineComboRow);
+                        this.update(Actions::UpdateWineComboRow).unwrap();
                     }
 
                     else {
@@ -336,7 +340,7 @@ impl App {
                             awaiter.then(clone!(@strong this => move |_| {
                                 component.update_state(&config.game.wine.builds);
 
-                                this.update(Actions::UpdateWineComboRow);
+                                this.update(Actions::UpdateWineComboRow).unwrap();
                             }));
                         }
                     }
@@ -550,10 +554,10 @@ impl App {
         }
 
         // Update downloaded wine versions
-        self.update(Actions::UpdateWineComboRow);
+        self.update(Actions::UpdateWineComboRow).unwrap();
 
         // Update downloaded DXVK versions
-        self.update(Actions::UpdateDxvkComboRow);
+        self.update(Actions::UpdateDxvkComboRow).unwrap();
 
         Ok(())
     }

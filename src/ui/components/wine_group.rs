@@ -1,9 +1,6 @@
 use gtk4::{self as gtk, prelude::*};
 use libadwaita::{self as adw, prelude::*};
 
-use gtk::glib;
-use gtk::Align;
-
 use crate::lib::wine::Group;
 use super::wine_row::WineRow;
 

@@ -112,7 +112,7 @@ impl Config {
 
                         None
                     },
-                    Err(err) => None
+                    Err(_) => None
                 }
             },
             None => None
@@ -122,13 +122,15 @@ impl Config {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Launcher {
-    pub language: String
+    pub language: String,
+    pub temp: Option<String>
 }
 
 impl Default for Launcher {
     fn default() -> Self {
         Self {
-            language: String::from("en-us")
+            language: String::from("en-us"),
+            temp: launcher_dir()
         }
     }
 }

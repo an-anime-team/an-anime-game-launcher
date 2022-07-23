@@ -78,7 +78,7 @@ impl AppWidgets {
 /// This enum is used to describe an action inside of this application
 /// 
 /// It may be helpful if you want to add the same event for several widgets, or call an action inside of another action
-#[derive(Debug, glib::Downgrade)]
+#[derive(Debug, Clone, glib::Downgrade)]
 pub enum Actions {
     OpenPreferencesPage,
     PreferencesGoBack,
@@ -91,8 +91,8 @@ pub enum Actions {
 
 impl Actions {
     pub fn into_fn<T: gtk::glib::IsA<gtk::Widget>>(&self, app: &App) -> Box<dyn Fn(&T)> {
-        Box::new(clone!(@weak self as action, @strong app => move |_| {
-            app.update(action);
+        Box::new(clone!(@strong self as action, @strong app => move |_| {
+            app.update(action.clone()).expect(&format!("Failed to execute action {:?}", &action));
         }))
     }
 }
@@ -138,21 +138,7 @@ impl App {
         result.widgets.window.set_application(Some(app));
 
         // Load initial launcher state
-        std::thread::spawn(clone!(@strong result => move || {
-            match LauncherState::get(Some(&result.widgets.status_page)) {
-                Ok(state) => {
-                    result.set_state(state);
-
-                    result.widgets.status_page.hide();
-                    result.widgets.launcher_content.show();
-                },
-                Err(err) => {
-                    glib::MainContext::default().invoke(move || {
-                        result.toast_error("Failed to get initial launcher state", err);
-                    });
-                }
-            }
-        }));
+        result.update_state();
 
         Ok(result)
     }
@@ -182,7 +168,10 @@ impl App {
 
         receiver.attach(None, move |action| {
             // Some debug output
-            println!("[main] [update] action: {:?}", &action);
+            match &action {
+                Actions::UpdateProgress { .. } => (),
+                action => println!("[main] [update] action: {:?}", action)
+            }
 
             match action {
                 Actions::OpenPreferencesPage => {
@@ -191,7 +180,8 @@ impl App {
                     tasks::run(clone!(@strong this => async move {
                         if let Err(err) = this.widgets.preferences_stack.update() {
                             glib::MainContext::default().invoke(move || {
-                                this.update(Actions::PreferencesGoBack);
+                                this.update(Actions::PreferencesGoBack).unwrap();
+
                                 this.toast_error("Failed to update preferences", err);
                             });
                         }
@@ -222,7 +212,7 @@ impl App {
                         LauncherState::VoiceNotInstalled(diff) |
                         LauncherState::GameUpdateAvailable(diff) |
                         LauncherState::GameNotInstalled(diff) => {
-                            this.update(Actions::DownloadDiff(Rc::new(diff)));
+                            this.update(Actions::DownloadDiff(Rc::new(diff))).unwrap();
                         },
 
                         LauncherState::GameOutdated(_) => (),
@@ -238,17 +228,20 @@ impl App {
                             }
 
                             let diff = (*diff).clone();
+                            let this = this.clone();
 
-                            std::thread::spawn(clone!(@strong this => move || {
-                                diff.install_to(config.game.path, clone!(@strong this => move |state| {
+                            std::thread::spawn(move || {
+                                let this = this.clone();
+
+                                diff.install_to_by(config.game.path, config.launcher.temp, move |state| {
                                     match state {
                                         InstallerUpdate::DownloadingStarted(_) => {
-                                            this.update(Actions::ShowProgressBar);
+                                            this.update(Actions::ShowProgressBar).unwrap();
 
                                             this.update(Actions::UpdateProgress {
                                                 fraction: Rc::new(0.0),
                                                 title: Rc::new(String::from("Downloading..."))
-                                            });
+                                            }).unwrap();
                                         }
 
                                         InstallerUpdate::DownloadingProgress(curr, total) => {
@@ -264,7 +257,7 @@ impl App {
                                                         to_gb(curr),
                                                         to_gb(total)
                                                     ))
-                                                });
+                                                }).unwrap();
                                             }
                                         }
 
@@ -272,7 +265,7 @@ impl App {
                                             this.update(Actions::UpdateProgress {
                                                 fraction: Rc::new(0.0),
                                                 title: Rc::new(String::from("Unpacking..."))
-                                            });
+                                            }).unwrap();
                                         }
 
                                         InstallerUpdate::UnpackingProgress(curr, total) => {
@@ -286,20 +279,21 @@ impl App {
                                                     to_gb(curr),
                                                     to_gb(total)
                                                 ))
-                                            });
+                                            }).unwrap();
                                         }
 
                                         InstallerUpdate::DownloadingFinished => (),
 
                                         InstallerUpdate::UnpackingFinished => {
-                                            this.update(Actions::HideProgressBar);
+                                            this.update(Actions::HideProgressBar).unwrap();
+                                            this.update_state();
                                         }
 
                                         InstallerUpdate::DownloadingError(err) => this.toast_error("Failed to download game", err),
                                         InstallerUpdate::UnpackingError => this.toast_error("Failed to unpack game", "?")
                                     }
-                                })).unwrap();
-                            }));
+                                }).unwrap();
+                            });
                         },
                         Err(err) => {
                             glib::MainContext::default().invoke(clone!(@strong this => move || {
@@ -390,6 +384,26 @@ impl App {
         values.state = Rc::new(state);
 
         self.values.set(values);
+    }
+
+    pub fn update_state(&self) {
+        let this = self.clone();
+
+        std::thread::spawn(move || {
+            match LauncherState::get(Some(&this.widgets.status_page)) {
+                Ok(state) => {
+                    this.set_state(state);
+
+                    this.widgets.status_page.hide();
+                    this.widgets.launcher_content.show();
+                },
+                Err(err) => {
+                    glib::MainContext::default().invoke(move || {
+                        this.toast_error("Failed to get initial launcher state", err);
+                    });
+                }
+            }
+        });
     }
 }
 

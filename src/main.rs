@@ -15,7 +15,7 @@ async fn main() {
 
     // Create app
     let application = gtk::Application::new(
-        Some("com.gitlab.an-anime-team.an-anime-game-launcher"),
+        Some("com.gitlab.an-anime-team.an-anime-game-launcher-gtk"),
         Default::default()
     );
 
