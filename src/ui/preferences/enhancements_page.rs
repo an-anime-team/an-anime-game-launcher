@@ -154,8 +154,7 @@ impl App {
         match action {
             Actions::OptionSelection(update, value) => {
                 if let Ok(config) = config::get() {
-                    // TODO: show toast
-                    config::update((update)(config, value)).unwrap();
+                    config::update((update)(config, value));
                 }
             }
         }
@@ -193,7 +192,7 @@ impl App {
         self.widgets.fsr_switcher.set_state(config.game.enhancements.fsr.enabled);
 
         // Gamemode switching
-        self.widgets.fsr_switcher.set_state(config.game.enhancements.gamemode);
+        self.widgets.gamemode_switcher.set_state(config.game.enhancements.gamemode);
 
         Ok(())
     }

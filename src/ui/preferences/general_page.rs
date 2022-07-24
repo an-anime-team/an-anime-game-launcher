@@ -150,7 +150,7 @@ pub enum Actions {
 
 impl Actions {
     pub fn into_fn<T: gtk::glib::IsA<gtk::Widget>>(&self, app: &App) -> Box<dyn Fn(&T)> {
-        Box::new(clone!(@strong self as action, @strong app => move |_| {
+        Box::new(clone!(@strong self as action, @weak app => move |_| {
             app.update(action.clone()).expect(&format!("Failed to execute action {:?}", &action));
         }))
     }
@@ -199,7 +199,7 @@ impl App {
 
     /// Add default events and values to the widgets
     fn init_events(self) -> Self {
-        self.widgets.wine_selected.connect_selected_notify(clone!(@strong self as this => move |combo_row| {
+        self.widgets.wine_selected.connect_selected_notify(clone!(@weak self as this => move |combo_row| {
             if let Some(model) = combo_row.model() {
                 if model.n_items() > 0 {
                     this.update(Actions::SelectWineVersion(Rc::new(combo_row.selected() as usize))).unwrap();
@@ -207,7 +207,7 @@ impl App {
             }
         }));
 
-        self.widgets.dxvk_selected.connect_selected_notify(clone!(@strong self as this => move |combo_row| {
+        self.widgets.dxvk_selected.connect_selected_notify(clone!(@weak self as this => move |combo_row| {
             if let Some(model) = combo_row.model() {
                 if model.n_items() > 0 {
                     this.update(Actions::SelectDxvkVersion(Rc::new(combo_row.selected() as usize))).unwrap();
@@ -216,7 +216,7 @@ impl App {
         }));
 
         // Set wine recommended only switcher event
-        self.widgets.wine_recommended_only.connect_state_notify(clone!(@strong self as this => move |switcher| {
+        self.widgets.wine_recommended_only.connect_state_notify(clone!(@weak self as this => move |switcher| {
             for group in &*this.widgets.wine_components {
                 for component in &group.version_components {
                     component.row.set_visible(if switcher.state() {
@@ -238,7 +238,7 @@ impl App {
         }
 
         // Set DXVK recommended only switcher event
-        self.widgets.dxvk_recommended_only.connect_state_notify(clone!(@strong self as this => move |switcher| {
+        self.widgets.dxvk_recommended_only.connect_state_notify(clone!(@weak self as this => move |switcher| {
             for component in &*this.widgets.dxvk_components {
                 component.row.set_visible(if switcher.state() {
                     component.version.recommended
@@ -254,7 +254,7 @@ impl App {
         for (i, component) in components.into_iter().enumerate() {
             component.button.connect_clicked(Actions::DxvkPerformAction(Rc::new(i)).into_fn(&self));
 
-            component.apply_button.connect_clicked(clone!(@strong component, @strong self as this => move |_| {
+            component.apply_button.connect_clicked(clone!(@strong component, @weak self as this => move |_| {
                 std::thread::spawn(clone!(@strong component, @strong this => move || {
                     let config = config::get().expect("Failed to load config");
 
@@ -400,7 +400,7 @@ impl App {
 
                     this.values.set(values);
 
-                    config::update(config).expect("Failed to update config");
+                    config::update(config);
                 }
 
                 Actions::UpdateWineComboRow => {
@@ -446,7 +446,7 @@ impl App {
 
                     this.values.set(values);
 
-                    config::update(config).expect("Failed to update config");
+                    config::update(config);
                 }
 
                 Actions::ToastError(toast) => {

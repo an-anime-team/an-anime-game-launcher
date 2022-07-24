@@ -14,7 +14,7 @@ gtk4 = "0.4"
 gtk4 = "0.4"
 libadwaita = "0.1"
 
-anime-game-core = { path = "anime-game-core", features = ["all"] }
+anime-game-core = { path = "anime-game-core", features = ["all", "static"] }
 
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"

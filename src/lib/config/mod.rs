@@ -19,7 +19,26 @@ pub use hud::HUD;
 pub use wine_sync::WineSync;
 pub use wine_lang::WineLang;
 
+static mut CONFIG: Option<Config> = None;
+
+/// Get config data
+/// 
+/// This method will load config from file once and store it into the memory.
+/// If you know that the config file was updated - you should run `get_raw` method
+/// that always loads config directly from the file. This will also update in-memory config
 pub fn get() -> Result<Config, Error> {
+    unsafe {
+        match &CONFIG {
+            Some(config) => Ok(config.clone()),
+            None => get_raw()
+        }
+    }
+}
+
+/// Get config data
+/// 
+/// This method will always load data directly from the file and update in-memory config
+pub fn get_raw() -> Result<Config, Error> {
     match config_file() {
         Some(path) => {
             // Try to read config if the file exists
@@ -30,14 +49,20 @@ pub fn get() -> Result<Config, Error> {
                 file.read_to_string(&mut json)?;
 
                 match serde_json::from_str::<Config>(&json) {
-                    Ok(json) => Ok(json),
+                    Ok(config) => {
+                        unsafe {
+                            CONFIG = Some(config.clone());
+                        }
+
+                        Ok(config)
+                    },
                     Err(err) => Err(Error::new(ErrorKind::InvalidData, format!("Failed to decode data from json format: {}", err.to_string())))
                 }
             }
 
             // Otherwise create default config file
             else {
-                update(Config::default())?;
+                update_raw(Config::default())?;
 
                 Ok(Config::default())
             }
@@ -46,7 +71,21 @@ pub fn get() -> Result<Config, Error> {
     }
 }
 
-pub fn update(config: Config) -> Result<(), Error> {
+/// Update in-memory config data
+/// 
+/// Use `update_raw` if you want to update config file itself
+pub fn update(config: Config) {
+    unsafe {
+        CONFIG = Some(config);
+    }
+}
+
+/// Update config file
+/// 
+/// This method will also update in-memory config data
+pub fn update_raw(config: Config) -> Result<(), Error> {
+    update(config.clone());
+
     match config_file() {
         Some(path) => {
             let mut file = File::create(&path)?;
@@ -61,6 +100,16 @@ pub fn update(config: Config) -> Result<(), Error> {
             }
         },
         None => Err(Error::new(ErrorKind::NotFound, format!("Failed to get config file path")))
+    }
+}
+
+/// Update config file from the in-memory saved config
+pub fn flush() -> Result<(), Error> {
+    unsafe {
+        match &CONFIG {
+            Some(config) => update_raw(config.clone()),
+            None => Err(Error::new(ErrorKind::Other, "Config wasn't loaded into the memory"))
+        }
     }
 }
 

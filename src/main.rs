@@ -42,6 +42,11 @@ async fn main() {
         main.show();
     });
 
+    // Flush config from the memory to the file before closing the app
+    application.connect_shutdown(|_| {
+        lib::config::flush().expect("Failed to save config data");
+    });
+
     // Run app
     application.run();
 }

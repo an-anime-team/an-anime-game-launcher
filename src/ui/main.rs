@@ -91,7 +91,7 @@ pub enum Actions {
 
 impl Actions {
     pub fn into_fn<T: gtk::glib::IsA<gtk::Widget>>(&self, app: &App) -> Box<dyn Fn(&T)> {
-        Box::new(clone!(@strong self as action, @strong app => move |_| {
+        Box::new(clone!(@strong self as action, @weak app => move |_| {
             app.update(action.clone()).expect(&format!("Failed to execute action {:?}", &action));
         }))
     }
