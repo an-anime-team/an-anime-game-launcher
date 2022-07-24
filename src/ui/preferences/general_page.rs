@@ -258,10 +258,13 @@ impl App {
                 std::thread::spawn(clone!(@strong component, @strong this => move || {
                     let config = config::get().expect("Failed to load config");
 
-                    if let Err(err) = component.apply(config.game.dxvk.builds, config.game.wine.prefix) {
-                        this.update(Actions::ToastError(Rc::new((
-                            String::from("Failed to apply DXVK"), err
-                        )))).unwrap();
+                    match component.apply(&config.game.dxvk.builds, &config.game.wine.prefix) {
+                        Ok(output) => println!("{}", output),
+                        Err(err) => {
+                            this.update(Actions::ToastError(Rc::new((
+                                String::from("Failed to apply DXVK"), err
+                            )))).unwrap();
+                        }
                     }
                 }));
             }));
@@ -304,10 +307,13 @@ impl App {
                     else {
                         if let Ok(awaiter) = component.download(&config.game.dxvk.builds) {
                             awaiter.then(clone!(@strong this => move |_| {
-                                if let Err(err) = component.apply(&config.game.dxvk.builds, &config.game.wine.prefix) {
-                                    this.update(Actions::ToastError(Rc::new((
-                                        String::from("Failed to apply DXVK"), err
-                                    )))).unwrap();
+                                match component.apply(&config.game.dxvk.builds, &config.game.wine.prefix) {
+                                    Ok(output) => println!("{}", output),
+                                    Err(err) => {
+                                        this.update(Actions::ToastError(Rc::new((
+                                            String::from("Failed to apply DXVK"), err
+                                        )))).unwrap();
+                                    }
                                 }
 
                                 component.update_state(&config.game.dxvk.builds);
@@ -375,11 +381,16 @@ impl App {
 
                     this.values.set(values);
 
+                    // This will prevent SelectDxvkVersion action to be invoked
+                    let guard = this.widgets.dxvk_selected.freeze_notify();
+
                     // We need to return app values before we call these methods
                     // because they'll invoke SelectWineVersion action so access
                     // downloaded_wine_versions value
                     this.widgets.dxvk_selected.set_model(Some(&model));
                     this.widgets.dxvk_selected.set_selected(selected);
+
+                    drop(guard);
                 }
 
                 Actions::SelectDxvkVersion(i) => {
@@ -387,15 +398,21 @@ impl App {
 
                     if let Some(dxvk_versions) = &*values.downloaded_dxvk_versions {
                         let version = dxvk_versions[*i].clone();
-                        
-                        config.game.dxvk.selected = Some(version.name.clone());
 
-                        // FIXME: this calls every time we update dxvks comborow
-                        /*if let Err(err) = version.apply(&config.game.dxvk.builds, &config.game.wine.prefix) {
-                            this.update(Actions::ToastError(Rc::new((
-                                String::from("Failed to apply DXVK"), err
-                            ))));
-                        }*/
+                        if config.game.dxvk.selected != Some(version.name.clone()) {
+                            config.game.dxvk.selected = Some(version.name.clone());
+
+                            std::thread::spawn(clone!(@strong config, @strong this => move || {
+                                match version.apply(&config.game.dxvk.builds, &config.game.wine.prefix) {
+                                    Ok(output) => println!("{}", output),
+                                    Err(err) => {
+                                        this.update(Actions::ToastError(Rc::new((
+                                            String::from("Failed to apply DXVK"), err
+                                        )))).unwrap();
+                                    }
+                                }
+                            }));
+                        }
                     }
 
                     this.values.set(values);
@@ -427,11 +444,16 @@ impl App {
 
                     this.values.set(values);
 
+                    // This will prevent SelectWineVersion action to be invoked
+                    let guard = this.widgets.wine_selected.freeze_notify();
+
                     // We need to return app values before we call these methods
                     // because they'll invoke SelectWineVersion action so access
                     // downloaded_wine_versions value
                     this.widgets.wine_selected.set_model(Some(&model));
                     this.widgets.wine_selected.set_selected(selected);
+
+                    drop(guard);
                 }
 
                 Actions::SelectWineVersion(i) => {

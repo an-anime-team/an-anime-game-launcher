@@ -190,6 +190,8 @@ impl App {
 
                 Actions::PreferencesGoBack => {
                     this.widgets.leaflet.navigate(adw::NavigationDirection::Back);
+
+                    config::flush().expect("Failed to save config file");
                 }
 
                 Actions::PerformButtonEvent => {

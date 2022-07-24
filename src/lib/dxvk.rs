@@ -65,7 +65,7 @@ impl Version {
         std::path::Path::new(&format!("{}/{}", folder.to_string(), self.name)).exists()
     }
 
-    pub fn apply<T: ToString>(&self, dxvks_folder: T, prefix_path: T) -> std::io::Result<()> {
+    pub fn apply<T: ToString>(&self, dxvks_folder: T, prefix_path: T) -> std::io::Result<String> {
         let apply_path = format!("{}/{}/setup_dxvk.sh", dxvks_folder.to_string(), self.name);
         let config = config::get()?;
 
@@ -102,9 +102,12 @@ impl Version {
                     .env("WINEPREFIX", prefix_path.to_string())
                     .output()?;
 
-                match output.status.success() {
-                    true => Ok(()),
-                    false => Err(Error::new(ErrorKind::Other, String::from_utf8_lossy(&output.stderr)))
+                if output.status.success() {
+                    Ok(String::from_utf8(output.stdout).unwrap())
+                }
+
+                else {
+                    Err(Error::new(ErrorKind::Other, String::from_utf8_lossy(&output.stderr)))
                 }
             },
             None => Err(Error::new(ErrorKind::Other, "Wine is not selected"))
