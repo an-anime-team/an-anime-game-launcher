@@ -81,7 +81,7 @@ This is our current usage statistics. You can find older ones [here](repository/
 
 <img src="repository/pics/stats/2022/jun29-jul13.png">
 
-### 2.8.0 launcher users — 159 total
+### 2.8.0 launcher users — 393 total
 
 <img src="repository/pics/stats/2.8.0.png">
 
