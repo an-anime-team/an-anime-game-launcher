@@ -13,6 +13,10 @@ async fn main() {
     gtk::init().expect("GTK initialization failed");
     adw::init();
 
+    // Register and include resources
+    gtk::gio::resources_register_include!(".assets.gresource")
+        .expect("Failed to register resources");
+
     // Create app
     let application = gtk::Application::new(
         Some("com.gitlab.an-anime-team.an-anime-game-launcher-gtk"),

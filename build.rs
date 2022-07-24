@@ -1,5 +1,5 @@
 use std::process::{Command, Stdio};
-use std::fs::{self, read_dir, create_dir_all};
+use std::fs::{self, read_dir, create_dir_all, read_to_string};
 use std::path::Path;
 
 fn compile_blueprint<T: ToString>(path: T) -> Result<String, String> {
@@ -27,10 +27,20 @@ fn compile_blueprint<T: ToString>(path: T) -> Result<String, String> {
 }
 
 fn main() {
+    if let Ok(_) = read_to_string("assets/resources.xml") {
+        gtk4::gio::compile_resources(
+            "assets",
+            "assets/resources.xml",
+            ".assets.gresource",
+        );
+    }
+
     if let Ok(entries) = read_dir("assets/ui") {
         if let Err(_) = read_dir("assets/ui/.dist") {
             create_dir_all("assets/ui/.dist").expect("UI dist dir couldn't be created");
         }
+
+        println!("cargo:rerun-if-changed=assets/ui/*.blp");
 
         for entry in entries {
             if let Ok(entry) = entry {
