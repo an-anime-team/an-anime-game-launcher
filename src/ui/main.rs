@@ -74,16 +74,36 @@ impl AppWidgets {
             preferences_stack: PreferencesStack::new(window, toast_overlay)?
         };
 
+        // Set devel style to ApplicationWindow if it's debug mode
+        if crate::APP_DEBUG {
+            result.window.add_css_class("devel");
+        }
+
         // Set default About Dialog values
-        result.about.set_version(Some(crate::APP_VERSION));
+        if crate::APP_DEBUG {
+            result.about.set_version(Some(format!("{} (development)", crate::APP_VERSION).as_str()));
+        }
+
+        else {
+            result.about.set_version(Some(crate::APP_VERSION));
+        }
+
         result.about.set_license_type(gtk::License::Gpl30);
 
         result.about.set_authors(&[
             "Nikita Podvirnyy <suimin.tu.mu.ga.mi@gmail.com>"
         ]);
 
+        let curl_info = anime_game_core::curl_sys::Version::get();
+
         result.about.set_system_information(Some(&[
-            format!("Anime Game core library version:   {}", anime_game_core::VERSION)
+            format!("Anime Game core library version:    {}", anime_game_core::VERSION),
+            format!("    Curl version:    {}", curl_info.version()),
+            format!("     SSL version:    {}", curl_info.ssl_version().unwrap_or("?")),
+            String::new(),
+            format!("GTK version:    {}.{}.{}", gtk::major_version(), gtk::minor_version(), gtk::micro_version()),
+            format!("Libadwaita version:    {}.{}.{}", adw::major_version(), adw::minor_version(), adw::micro_version()),
+            format!("Pango version:    {}", gtk::pango::version_string().unwrap_or("?".into())),
         ].join("\n")));
 
         // Add preferences page to the leaflet

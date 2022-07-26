@@ -1,11 +1,15 @@
 [package]
 name = "anime-game-launcher"
-version = "0.1.0"
+version = "0.1.1"
 description = "Anime Game launcher"
 authors = ["Nikita Podvirnyy <suimin.tu.mu.ga.mi@gmail.com>"]
 license = "GPL-3.0"
 edition = "2021"
 build = "build.rs"
+
+[profile.release]
+strip = true
+lto = true
 
 [build-dependencies]
 gtk4 = "0.4"

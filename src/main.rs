@@ -1,7 +1,9 @@
 use gtk4::{self as gtk, prelude::*};
 use libadwaita::{self as adw, prelude::*};
 
-use gtk::{CssProvider, StyleContext, gdk::Display, STYLE_PROVIDER_PRIORITY_APPLICATION};
+use gtk::{CssProvider, StyleContext, STYLE_PROVIDER_PRIORITY_APPLICATION};
+use gtk::gdk::Display;
+use gtk::glib::set_application_name;
 
 pub mod ui;
 pub mod lib;
@@ -10,6 +12,7 @@ use ui::*;
 
 pub const APP_ID: &str = "com.gitlab.an-anime-team.an-anime-game-launcher-gtk";
 pub const APP_VERSION: &str = env!("CARGO_PKG_VERSION");
+pub const APP_DEBUG: bool = cfg!(debug_assertions);
 
 #[tokio::main]
 async fn main() {
@@ -19,6 +22,10 @@ async fn main() {
     // Register and include resources
     gtk::gio::resources_register_include!(".assets.gresource")
         .expect("Failed to register resources");
+
+    // Set application's title
+    // FIXME: doesn't work?
+    set_application_name("An Anime Game Launcher");
 
     // Create app
     let application = gtk::Application::new(
