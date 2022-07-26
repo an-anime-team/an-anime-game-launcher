@@ -20,6 +20,15 @@ Adw.ApplicationWindow window {
                     title-widget: Adw.WindowTitle {
                         title: "An Anime Game Launcher";
                     };
+
+                    [end]
+                    Gtk.MenuButton menu {
+                        menu-model: app_menu;
+                        icon-name: "open-menu-symbolic";
+                        halign: end;
+                        valign: center;
+                        margin-start: 12;
+                    }
                 }
 
                 Adw.StatusPage status_page {
@@ -100,4 +109,19 @@ Adw.ApplicationWindow window {
             }
         }
     };
+}
+
+Gtk.AboutDialog about {
+    program-name: "An Anime Game Launcher";
+
+    logo: "resource:///org/app/assets/images/icon.png";
+    website: "https://gitlab.com/an-anime-team/alternatives/an-anime-game-launcher-gtk";
+
+    modal: true;
+    transient-for: window;
+}
+
+menu app_menu {
+    item ("Check for updates")
+    item ("About", "show-about-dialog.show-about-dialog")
 }

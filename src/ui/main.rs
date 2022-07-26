@@ -29,6 +29,9 @@ pub struct AppWidgets {
     pub window: adw::ApplicationWindow,
     pub toast_overlay: adw::ToastOverlay,
 
+    pub menu: gtk::MenuButton,
+    pub about: gtk::AboutDialog,
+
     pub leaflet: adw::Leaflet,
     pub status_page: adw::StatusPage,
     pub launcher_content: adw::PreferencesPage,
@@ -54,6 +57,9 @@ impl AppWidgets {
             window: window.clone(),
             toast_overlay: toast_overlay.clone(),
 
+            menu: get_object(&builder, "menu")?,
+            about: get_object(&builder, "about")?,
+
             leaflet: get_object(&builder, "leaflet")?,
             status_page: get_object(&builder, "status_page")?,
             launcher_content: get_object(&builder, "launcher_content")?,
@@ -67,6 +73,18 @@ impl AppWidgets {
 
             preferences_stack: PreferencesStack::new(window, toast_overlay)?
         };
+
+        // Set default About Dialog values
+        result.about.set_version(Some(crate::APP_VERSION));
+        result.about.set_license_type(gtk::License::Gpl30);
+
+        result.about.set_authors(&[
+            "Nikita Podvirnyy <suimin.tu.mu.ga.mi@gmail.com>"
+        ]);
+
+        result.about.set_system_information(Some(&[
+            format!("Anime Game core library version:   {}", anime_game_core::VERSION)
+        ].join("\n")));
 
         // Add preferences page to the leaflet
         result.leaflet.append(&result.preferences_stack.preferences).set_name(Some("preferences_page"));
@@ -145,6 +163,10 @@ impl App {
 
     /// Add default events and values to the widgets
     fn init_events(self) -> Self {
+        add_action(&self.widgets.menu, "show-about-dialog", clone!(@strong self.widgets.about as about => move || {
+            about.show();
+        }));
+
         // Open preferences page
         self.widgets.open_preferences.connect_clicked(Actions::OpenPreferencesPage.into_fn(&self));
 
