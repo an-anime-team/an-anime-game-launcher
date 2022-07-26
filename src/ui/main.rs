@@ -6,6 +6,7 @@ use gtk4::glib::clone;
 
 use std::rc::Rc;
 use std::cell::Cell;
+use std::io::Error;
 
 use anime_game_core::prelude::*;
 
@@ -18,6 +19,36 @@ use crate::lib::config;
 use crate::lib::game;
 use crate::lib::tasks;
 use crate::lib::launcher::states::LauncherState;
+use crate::lib::wine_prefix::WinePrefix;
+use crate::lib::wine::Version as WineVersion;
+use crate::lib::dxvk::Version as DxvkVersion;
+
+fn prettify_bytes(bytes: u64) -> String {
+    if bytes > 1024 * 1024 * 1024 {
+        format!("{:.2} GB", bytes as f64 / 1024.0 / 1024.0 / 1024.0)
+    }
+
+    else if bytes > 1024 * 1024 {
+        format!("{:.2} MB", bytes as f64 / 1024.0 / 1024.0)
+    }
+
+    else if bytes > 1024 {
+        format!("{:.2} KB", bytes as f64 / 1024.0)
+    }
+
+    else {
+        format!("{:.2} B", bytes)
+    }
+}
+
+fn toast_error(app: &App, msg: &str, err: Error) {
+    app.update(Actions::ToastError(Rc::new((
+        String::from(msg), err
+    )))).unwrap();
+
+    app.update(Actions::HideProgressBar).unwrap();
+    app.update_state();
+}
 
 /// This structure is used to describe widgets used in application
 /// 
@@ -104,6 +135,7 @@ impl AppWidgets {
             format!("GTK version:    {}.{}.{}", gtk::major_version(), gtk::minor_version(), gtk::micro_version()),
             format!("Libadwaita version:    {}.{}.{}", adw::major_version(), adw::minor_version(), adw::micro_version()),
             format!("Pango version:    {}", gtk::pango::version_string().unwrap_or("?".into())),
+            format!("Cairo version:    {}", gtk::cairo::version_string()),
         ].join("\n")));
 
         // Add preferences page to the leaflet
@@ -122,9 +154,11 @@ pub enum Actions {
     PreferencesGoBack,
     PerformButtonEvent,
     DownloadDiff(Rc<VersionDiff>),
+    UpdateProgressByState(Rc<(InstallerUpdate, Option<String>)>),
     ShowProgressBar,
     UpdateProgress { fraction: Rc<f64>, title: Rc<String> },
-    HideProgressBar
+    HideProgressBar,
+    ToastError(Rc<(String, Error)>)
 }
 
 impl Actions {
@@ -211,7 +245,9 @@ impl App {
         receiver.attach(None, move |action| {
             // Some debug output
             match &action {
-                Actions::UpdateProgress { .. } => (),
+                // Actions::UpdateProgress { .. } |
+                // Actions::UpdateProgressByState(_) => (),
+
                 action => println!("[main] [update] action: {:?}", action)
             }
 
@@ -266,76 +302,156 @@ impl App {
                 
                 Actions::DownloadDiff(diff) => {
                     match config::get() {
-                        Ok(config) => {
-                            fn to_gb(bytes: u64) -> f64 {
-                                (bytes as f64 / 1024.0 / 1024.0 / 1024.0 * 100.0).ceil() / 100.0
-                            }
-
+                        Ok(mut config) => {
                             let diff = (*diff).clone();
                             let this = this.clone();
 
                             std::thread::spawn(move || {
                                 let this = this.clone();
 
-                                diff.install_to_by(config.game.path, config.launcher.temp, move |state| {
-                                    match state {
-                                        InstallerUpdate::DownloadingStarted(_) => {
-                                            this.update(Actions::ShowProgressBar).unwrap();
+                                this.update(Actions::ShowProgressBar).unwrap();
 
-                                            this.update(Actions::UpdateProgress {
-                                                fraction: Rc::new(0.0),
-                                                title: Rc::new(String::from("Downloading..."))
-                                            }).unwrap();
-                                        }
+                                // Download wine version if not installed
+                                match WineVersion::latest() {
+                                    Ok(wine) => match Installer::new(wine.uri) {
+                                        Ok(mut installer) => {
+                                            let (send, recv) = std::sync::mpsc::channel();
+                                            let wine_title = wine.title.clone();
 
-                                        InstallerUpdate::DownloadingProgress(curr, total) => {
-                                            // To reduce amount of action requests
-                                            if curr % 10000 < 200 {
-                                                let progress = curr as f64 / total as f64;
+                                            installer.install(&config.game.wine.builds, clone!(@strong this => move |state| {
+                                                match state {
+                                                    InstallerUpdate::UnpackingFinished => {
+                                                        send.send(true).unwrap();
+                                                    }
 
-                                                this.update(Actions::UpdateProgress {
-                                                    fraction: Rc::new(progress),
-                                                    title: Rc::new(format!(
-                                                        "Downloading: {:.2}% ({} of {} GB)",
-                                                        progress * 100.0,
-                                                        to_gb(curr),
-                                                        to_gb(total)
-                                                    ))
-                                                }).unwrap();
+                                                    InstallerUpdate::DownloadingError(_) |
+                                                    InstallerUpdate::UnpackingError => {
+                                                        send.send(false).unwrap();
+                                                    }
+
+                                                    _ => ()
+                                                }
+
+                                                this.update(Actions::UpdateProgressByState(Rc::new((state, Some(wine_title.clone()))))).unwrap();
+                                            }));
+
+                                            // Block thread until downloading finished
+                                            if recv.recv().unwrap() {
+                                                config.game.wine.selected = Some(wine.name);
+
+                                                config::update(config.clone());
                                             }
+
+                                            else {
+                                                println!("I'm tired, Boss!");
+
+                                                return;
+                                            }
+                                        },
+                                        Err(err) => {
+                                            toast_error(&this, "Failed to init wine version installer", err.into());
+
+                                            return;
                                         }
+                                    },
+                                    Err(err) => {
+                                        toast_error(&this, "Failed to load wine versions list", err.into());
 
-                                        InstallerUpdate::UnpackingStarted(_) => {
-                                            this.update(Actions::UpdateProgress {
-                                                fraction: Rc::new(0.0),
-                                                title: Rc::new(String::from("Unpacking..."))
-                                            }).unwrap();
-                                        }
-
-                                        InstallerUpdate::UnpackingProgress(curr, total) => {
-                                            let progress = curr as f64 / total as f64;
-
-                                            this.update(Actions::UpdateProgress {
-                                                fraction: Rc::new(progress),
-                                                title: Rc::new(format!(
-                                                    "Unpacking: {:.2}% ({} of {} GB)",
-                                                    progress * 100.0,
-                                                    to_gb(curr),
-                                                    to_gb(total)
-                                                ))
-                                            }).unwrap();
-                                        }
-
-                                        InstallerUpdate::DownloadingFinished => (),
-
-                                        InstallerUpdate::UnpackingFinished => {
-                                            this.update(Actions::HideProgressBar).unwrap();
-                                            this.update_state();
-                                        }
-
-                                        InstallerUpdate::DownloadingError(err) => this.toast_error("Failed to download game", err),
-                                        InstallerUpdate::UnpackingError => this.toast_error("Failed to unpack game", "?")
+                                        return;
                                     }
+                                }
+
+                                // Create prefix if needed
+                                let prefix = WinePrefix::new(&config.game.wine.prefix);
+
+                                if !prefix.exists() {
+                                    this.update(Actions::UpdateProgress {
+                                        fraction: Rc::new(0.0),
+                                        title: Rc::new(String::from("Creating prefix..."))
+                                    }).unwrap();
+
+                                    match config.try_get_selected_wine_info() {
+                                        Some(wine_version) => {
+                                            if let Err(err) = prefix.update(&config.game.wine.builds, wine_version) {
+                                                toast_error(&this, "Failed to create wineprefix", err);
+
+                                                return;
+                                            }
+                                        },
+                                        None => return
+                                    }
+                                }
+
+                                // Download and apply DXVK if not installed
+                                match DxvkVersion::latest() {
+                                    Ok(dxvk) => match Installer::new(&dxvk.uri) {
+                                        Ok(mut installer) => {
+                                            let (send, recv) = std::sync::mpsc::channel();
+                                            let dxvk_title = dxvk.name.clone();
+
+                                            installer.install(&config.game.dxvk.builds, clone!(@strong this => move |state| {
+                                                match state {
+                                                    InstallerUpdate::UnpackingFinished => {
+                                                        send.send(true).unwrap();
+                                                    }
+
+                                                    InstallerUpdate::DownloadingError(_) |
+                                                    InstallerUpdate::UnpackingError => {
+                                                        send.send(false).unwrap();
+                                                    }
+
+                                                    _ => ()
+                                                }
+
+                                                this.update(Actions::UpdateProgressByState(Rc::new((state, Some(dxvk_title.clone()))))).unwrap();
+                                            }));
+
+                                            // Block thread until downloading finished
+                                            if recv.recv().unwrap() {
+                                                config.game.dxvk.selected = Some(dxvk.name.clone());
+
+                                                config::update(config.clone());
+                                            }
+
+                                            else {
+                                                return;
+                                            }
+
+                                            // Apply DXVK
+                                            this.update(Actions::UpdateProgress {
+                                                fraction: Rc::new(100.0),
+                                                title: Rc::new(String::from("Applying DXVK..."))
+                                            }).unwrap();
+
+                                            match dxvk.apply(&config.game.dxvk.builds, &config.game.wine.prefix) {
+                                                Ok(_) => {
+                                                    config.game.dxvk.selected = Some(dxvk.name);
+                                                    
+                                                    config::update(config.clone());
+                                                },
+                                                Err(err) => {
+                                                    toast_error(&this, "Failed to apply DXVK", err);
+
+                                                    return;
+                                                }
+                                            }
+                                        },
+                                        Err(err) => {
+                                            toast_error(&this, "Failed to init wine version installer", err.into());
+
+                                            return;
+                                        }
+                                    },
+                                    Err(err) => {
+                                        toast_error(&this, "Failed to load wine versions list", err.into());
+
+                                        return;
+                                    }
+                                }
+
+                                // Download diff
+                                diff.install_to_by(config.game.path, config.launcher.temp, move |state| {
+                                    this.update(Actions::UpdateProgressByState(Rc::new((state, None)))).unwrap();
                                 }).unwrap();
                             });
                         },
@@ -343,6 +459,74 @@ impl App {
                             glib::MainContext::default().invoke(clone!(@strong this => move || {
                                 this.toast_error("Failed to load config", err);
                             }));
+                        }
+                    }
+                }
+
+                Actions::UpdateProgressByState(state) => {
+                    // let (state, suffix) = (&*state).clone();
+
+                    match &state.0 {
+                        InstallerUpdate::DownloadingStarted(_) => {
+                            this.update(Actions::UpdateProgress {
+                                fraction: Rc::new(0.0),
+                                title: Rc::new(String::from("Downloading..."))
+                            }).unwrap();
+                        }
+
+                        InstallerUpdate::DownloadingProgress(curr, total) => {
+                            // To reduce amount of action requests
+                            // if curr % 10000 < 200 {
+                                let progress = *curr as f64 / *total as f64;
+
+                                this.update(Actions::UpdateProgress {
+                                    fraction: Rc::new(progress),
+                                    title: Rc::new(format!(
+                                        "Downloading{}: {:.2}% ({} of {})",
+                                        if let Some(suffix) = &state.1 { format!(" {}", suffix) } else { String::new() },
+                                        progress * 100.0,
+                                        prettify_bytes(*curr),
+                                        prettify_bytes(*total)
+                                    ))
+                                }).unwrap();
+                            // }
+                        }
+
+                        InstallerUpdate::UnpackingStarted(_) => {
+                            this.update(Actions::UpdateProgress {
+                                fraction: Rc::new(0.0),
+                                title: Rc::new(String::from("Unpacking..."))
+                            }).unwrap();
+                        }
+
+                        InstallerUpdate::UnpackingProgress(curr, total) => {
+                            let progress = *curr as f64 / *total as f64;
+
+                            this.update(Actions::UpdateProgress {
+                                fraction: Rc::new(progress),
+                                title: Rc::new(format!(
+                                    "Unpacking{}: {:.2}% ({} of {})",
+                                    if let Some(suffix) = &state.1 { format!(" {}", suffix) } else { String::new() },
+                                    progress * 100.0,
+                                    prettify_bytes(*curr),
+                                    prettify_bytes(*total)
+                                ))
+                            }).unwrap();
+                        }
+
+                        InstallerUpdate::DownloadingFinished => (),
+
+                        InstallerUpdate::UnpackingFinished => {
+                            this.update(Actions::HideProgressBar).unwrap();
+                            this.update_state();
+                        }
+
+                        InstallerUpdate::DownloadingError(err) => {
+                            toast_error(&this, "Failed to download", err.clone().into());
+                        }
+
+                        InstallerUpdate::UnpackingError => {
+                            toast_error(&this, "Failed to unpack", Error::last_os_error());
                         }
                     }
                 }
@@ -363,6 +547,12 @@ impl App {
                 Actions::HideProgressBar => {
                     this.widgets.launch_game_group.show();
                     this.widgets.progress_bar_group.hide();
+                }
+
+                Actions::ToastError(toast) => {
+                    let (msg, err) = (toast.0.clone(), toast.1.to_string());
+
+                    this.toast_error(msg, err);
                 }
             }
 

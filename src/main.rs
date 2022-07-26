@@ -27,6 +27,13 @@ async fn main() {
     // FIXME: doesn't work?
     set_application_name("An Anime Game Launcher");
 
+    // Create default launcher folder if needed
+    let launcher_dir = lib::consts::launcher_dir().unwrap();
+
+    if !std::path::Path::new(&launcher_dir).exists() {
+        std::fs::create_dir_all(launcher_dir).expect("Failed to create default launcher dir");
+    }
+
     // Create app
     let application = gtk::Application::new(
         Some(APP_ID),

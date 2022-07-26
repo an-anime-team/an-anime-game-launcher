@@ -61,6 +61,10 @@ pub struct Version {
 }
 
 impl Version {
+    pub fn latest() -> Result<Self, serde_json::Error> {
+        Ok(List::get()?.vanilla[0].clone())
+    }
+
     pub fn is_downloaded_in<T: ToString>(&self, folder: T) -> bool {
         std::path::Path::new(&format!("{}/{}", folder.to_string(), self.name)).exists()
     }
