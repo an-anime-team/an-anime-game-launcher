@@ -5,6 +5,9 @@ use gtk::{CssProvider, StyleContext, STYLE_PROVIDER_PRIORITY_APPLICATION};
 use gtk::gdk::Display;
 use gtk::glib::set_application_name;
 
+use std::path::Path;
+use std::fs;
+
 pub mod ui;
 pub mod lib;
 
@@ -27,13 +30,6 @@ async fn main() {
     // FIXME: doesn't work?
     set_application_name("An Anime Game Launcher");
 
-    // Create default launcher folder if needed
-    let launcher_dir = lib::consts::launcher_dir().unwrap();
-
-    if !std::path::Path::new(&launcher_dir).exists() {
-        std::fs::create_dir_all(launcher_dir).expect("Failed to create default launcher dir");
-    }
-
     // Create app
     let application = gtk::Application::new(
         Some(APP_ID),
@@ -53,10 +49,24 @@ async fn main() {
             STYLE_PROVIDER_PRIORITY_APPLICATION
         );
 
-        // Load main window and show it
-        let main = MainApp::new(app).expect("Failed to init MainApp");
+        // Create default launcher folder if needed
+        let launcher_dir = lib::consts::launcher_dir().unwrap();
 
-        main.show();
+        if !Path::new(&launcher_dir).exists() || Path::new(&format!("{}/.first-run", launcher_dir)).exists() {
+            fs::create_dir_all(&launcher_dir).expect("Failed to create default launcher dir");
+            fs::write(format!("{}/.first-run", launcher_dir), "").expect("Failed to create .first-run file");
+
+            let first_run = FirstRunApp::new(app).expect("Failed to init FirstRunApp");
+
+            first_run.show();
+        }
+
+        // Load main window and show it
+        else {
+            let main = MainApp::new(app).expect("Failed to init MainApp");
+
+            main.show();
+        }
     });
 
     // Flush config from the memory to the file before closing the app

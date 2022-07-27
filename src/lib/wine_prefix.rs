@@ -1,6 +1,7 @@
 use std::path::Path;
 use std::process::Command;
 
+#[derive(Debug, Clone)]
 pub struct WinePrefix {
     pub path: String
 }
@@ -17,8 +18,8 @@ impl WinePrefix {
     fn wineboot<T: ToString>(&self, runners_folder: T, runner: super::wine::Version, command: &str) -> std::io::Result<()> {
         let runners_folder = runners_folder.to_string();
 
-        let wineboot = format!("{}/{}", &runners_folder, runner.files.wineboot);
-        let wineserver = format!("{}/{}", &runners_folder, runner.files.wineserver);
+        let wineboot = format!("{}/{}/{}", &runners_folder, runner.name, runner.files.wineboot);
+        let wineserver = format!("{}/{}/{}", &runners_folder, runner.name, runner.files.wineserver);
 
         Command::new(wineboot)
             .env("WINESERVER", wineserver)

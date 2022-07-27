@@ -1,16 +1,15 @@
 use gtk4::{self as gtk, prelude::*};
 use libadwaita::{self as adw, prelude::*};
 
+mod first_run;
 mod main;
 mod preferences;
 mod traits;
 
 pub mod components;
 
-pub use main::{
-    App as MainApp,
-    // AppState as MainAppState,
-};
+pub use first_run::App as FirstRunApp;
+pub use main::App as MainApp;
 
 /// This function loads object from builder or panics if it doesn't exist
 pub fn get_object<T: IsA<gtk::glib::Object>>(builder: &gtk::Builder, name: &str) -> Result<T, String> {

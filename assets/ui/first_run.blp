@@ -1,0 +1,265 @@
+using Gtk 4.0;
+using Adw 1;
+
+Adw.ApplicationWindow window {
+    default-width: 780;
+    default-height: 560;
+
+    content: Gtk.Box {
+        orientation: vertical;
+
+        Adw.HeaderBar {
+            title-widget: Adw.WindowTitle {
+                title: "An Anime Game Launcher";
+            };
+        }
+
+        Adw.Carousel carousel {
+            allow-mouse-drag: false;
+
+            // First page (welcome message)
+
+            Gtk.Box first_page {
+                orientation: vertical;
+                hexpand: true;
+
+                Adw.PreferencesPage {
+                    Adw.PreferencesGroup {
+                        Gtk.Image {
+                            resource: "/org/app/assets/images/icon.png";
+
+                            vexpand: true;
+                            margin-top: 16;
+                        }
+
+                        Gtk.Label {
+                            label: "An Anime Game Launcher";
+                            margin-top: 32;
+
+                            styles ["title-1"]
+                        }
+
+                        Gtk.Label {
+                            label: "Hi there! Welcome to the An Anime Game Launcher. We need to prepare some stuff and download default components before you could run the game";
+
+                            wrap: true;
+                            justify: center;
+                            margin-top: 32;
+                        }
+                    }
+
+                    Adw.PreferencesGroup {
+                        vexpand: true;
+                        valign: center;
+
+                        Gtk.Box {
+                            orientation: horizontal;
+                            spacing: 8;
+                            halign: center;
+
+                            Gtk.Button first_page_continue {
+                                label: "Continue";
+
+                                styles ["suggested-action"]
+                            }
+
+                            Gtk.Button {
+                                label: "Advanced";
+                                sensitive: false;
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Second page (warning message)
+
+            Gtk.Box second_page {
+                orientation: vertical;
+                hexpand: true;
+
+                Adw.PreferencesPage {
+                    Adw.PreferencesGroup {
+                        Gtk.Label {
+                            label: "ToS violation warning";
+                            margin-top: 8;
+
+                            styles ["title-1"]
+                        }
+
+                        Gtk.Box {
+                            orientation: vertical;
+                            margin-top: 32;
+                            spacing: 12;
+
+                            Gtk.Label {
+                                label: "This launcher is an unofficial tool, in no way related to miHoYo nor COGNOSPHERE.";
+
+                                wrap: true;
+                                halign: start;
+                            }
+
+                            Gtk.Label {
+                                label: "This tool is designed to facilitate playing Genshin Impact on Linux, and was built with the sole purpose of installing and running the game with less hassle.";
+
+                                wrap: true;
+                                halign: start;
+                            }
+
+                            Gtk.Label {
+                                label: "It does so by using existing components and making the experience simple for the user.";
+
+                                wrap: true;
+                                halign: start;
+                            }
+
+                            Gtk.Label {
+                                label: "However, some components used here likely break the miHoYo Terms of Service for Genshin Impact.";
+
+                                wrap: true;
+                                halign: start;
+                            }
+
+                            Gtk.Label {
+                                label: "If you are using this launcher, your player account could become identified as TOS-non-compliant by miHoYo/COGNOSPHERE.";
+
+                                wrap: true;
+                                halign: start;
+                            }
+
+                            Gtk.Label {
+                                label: "If this happens, as your account would be disobeying TOS, miHoYo/COGNOSPHERE are free to do what they want. Including banning.";
+
+                                wrap: true;
+                                halign: start;
+                            }
+
+                            Gtk.Label {
+                                label: "If you understand the risk of trying to play the game in an unofficial capacity, press OK and let's go researching the world of Teyvat!";
+
+                                wrap: true;
+                                halign: start;
+                            }
+                        }
+                    }
+
+                    Adw.PreferencesGroup {
+                        vexpand: true;
+                        valign: center;
+
+                        Gtk.Box {
+                            orientation: horizontal;
+                            spacing: 8;
+                            halign: center;
+
+                            Gtk.Button second_page_continue {
+                                label: "Continue";
+
+                                styles ["suggested-action"]
+                            }
+
+                            Gtk.Button second_page_exit {
+                                label: "Exit";
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Third page (downloading components)
+
+            Gtk.Box third_page {
+                orientation: vertical;
+                hexpand: true;
+
+                Adw.PreferencesPage {
+                    Adw.PreferencesGroup {
+                        Gtk.Label {
+                            label: "Download default components";
+                            margin-top: 16;
+
+                            styles ["title-1"]
+                        }
+                    }
+
+                    Adw.PreferencesGroup {
+                        vexpand: true;
+                        valign: center;
+
+                        Adw.ComboRow third_page_wine_version {
+                            title: "Wine version";
+
+                            model: Gtk.StringList {
+                                strings [
+                                    "Wine-GE-Proton 7-22"
+                                ]
+                            };
+                        }
+
+                        Adw.ComboRow third_page_dxvk_version {
+                            title: "DXVK version";
+
+                            model: Gtk.StringList {
+                                strings [
+                                    "dxvk-1.10.2"
+                                ]
+                            };
+                        }
+                    }
+
+                    Adw.PreferencesGroup third_page_buttons_group {
+                        vexpand: true;
+                        valign: center;
+
+                        Gtk.Box {
+                            orientation: horizontal;
+                            spacing: 8;
+                            halign: center;
+
+                            Gtk.Button third_page_download {
+                                label: "Download";
+
+                                styles ["suggested-action"]
+                            }
+
+                            Gtk.Button third_page_exit {
+                                label: "Exit";
+                            }
+                        }
+                    }
+
+                    Adw.PreferencesGroup third_page_progress_bar_group {
+                        vexpand: true;
+                        valign: center;
+                        visible: false;
+
+                        Gtk.Box {
+                            halign: center;
+                            margin-top: 64;
+                            spacing: 20;
+
+                            Gtk.ProgressBar third_page_progress_bar {
+                                text: "Downloading: 37% (3.7 of 10 GB)";
+                                show-text: true;
+
+                                width-request: 260;
+                                fraction: 0.37;
+                                valign: center;
+                            }
+
+                            Gtk.Button {
+                                label: "Pause";
+                                sensitive: false;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        Adw.CarouselIndicatorDots {
+            carousel: carousel;
+            height-request: 32;
+        }
+    };
+}
