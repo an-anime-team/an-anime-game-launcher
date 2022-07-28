@@ -14,25 +14,12 @@ use crate::ui::*;
 
 use super::preferences::PreferencesStack;
 use super::traits::toast_error::ToastError;
-use super::components::progress_bar::ProgressBar;
+use super::components::progress_bar::*;
 
 use crate::lib::config;
 use crate::lib::game;
 use crate::lib::tasks;
 use crate::lib::launcher::states::LauncherState;
-use crate::lib::wine_prefix::WinePrefix;
-use crate::lib::wine::Version as WineVersion;
-use crate::lib::dxvk::Version as DxvkVersion;
-use crate::lib::prettify_bytes::prettify_bytes;
-
-fn toast_error(app: &App, msg: &str, err: Error) {
-    app.update(Actions::ToastError(Rc::new((
-        String::from(msg), err
-    )))).unwrap();
-
-    app.update(Actions::HideProgressBar).unwrap();
-    app.update_state();
-}
 
 /// This structure is used to describe widgets used in application
 /// 
@@ -138,7 +125,6 @@ pub enum Actions {
     PreferencesGoBack,
     PerformButtonEvent,
     DownloadDiff(Rc<VersionDiff>),
-    UpdateProgressByState(Rc<(InstallerUpdate, Option<String>)>),
     ShowProgressBar,
     UpdateProgress { fraction: Rc<f64>, title: Rc<String> },
     HideProgressBar,
@@ -272,6 +258,9 @@ impl App {
 
                         LauncherState::PatchAvailable(_) => todo!(),
 
+                        LauncherState::WineNotInstalled => todo!(),
+                        LauncherState::PrefixNotExists => todo!(),
+
                         LauncherState::VoiceUpdateAvailable(diff) |
                         LauncherState::VoiceNotInstalled(diff) |
                         LauncherState::GameUpdateAvailable(diff) |
@@ -286,7 +275,7 @@ impl App {
                 
                 Actions::DownloadDiff(diff) => {
                     match config::get() {
-                        Ok(mut config) => {
+                        Ok(config) => {
                             let diff = (*diff).clone();
                             let this = this.clone();
 
@@ -297,7 +286,11 @@ impl App {
 
                                 // Download diff
                                 diff.install_to_by(config.game.path, config.launcher.temp, move |state| {
-                                    this.update(Actions::UpdateProgressByState(Rc::new((state, None)))).unwrap();
+                                    match this.widgets.progress_bar.update_from_state(state) {
+                                        ProgressUpdateResult::Updated => (),
+                                        ProgressUpdateResult::Error(msg, err) => this.update(Actions::ToastError(Rc::new((msg, err)))).unwrap(),
+                                        ProgressUpdateResult::Finished => this.update(Actions::HideProgressBar).unwrap()
+                                    }
                                 }).unwrap();
                             });
                         },
@@ -305,75 +298,6 @@ impl App {
                             glib::MainContext::default().invoke(clone!(@strong this => move || {
                                 this.toast_error("Failed to load config", err);
                             }));
-                        }
-                    }
-                }
-
-                Actions::UpdateProgressByState(state) => {
-                    todo!();
-                    // let (state, suffix) = (&*state).clone();
-
-                    match &state.0 {
-                        InstallerUpdate::DownloadingStarted(_) => {
-                            this.update(Actions::UpdateProgress {
-                                fraction: Rc::new(0.0),
-                                title: Rc::new(String::from("Downloading..."))
-                            }).unwrap();
-                        }
-
-                        InstallerUpdate::DownloadingProgress(curr, total) => {
-                            // To reduce amount of action requests
-                            // if curr % 10000 < 200 {
-                                let progress = *curr as f64 / *total as f64;
-
-                                this.update(Actions::UpdateProgress {
-                                    fraction: Rc::new(progress),
-                                    title: Rc::new(format!(
-                                        "Downloading{}: {:.2}% ({} of {})",
-                                        if let Some(suffix) = &state.1 { format!(" {}", suffix) } else { String::new() },
-                                        progress * 100.0,
-                                        prettify_bytes(*curr),
-                                        prettify_bytes(*total)
-                                    ))
-                                }).unwrap();
-                            // }
-                        }
-
-                        InstallerUpdate::UnpackingStarted(_) => {
-                            this.update(Actions::UpdateProgress {
-                                fraction: Rc::new(0.0),
-                                title: Rc::new(String::from("Unpacking..."))
-                            }).unwrap();
-                        }
-
-                        InstallerUpdate::UnpackingProgress(curr, total) => {
-                            let progress = *curr as f64 / *total as f64;
-
-                            this.update(Actions::UpdateProgress {
-                                fraction: Rc::new(progress),
-                                title: Rc::new(format!(
-                                    "Unpacking{}: {:.2}% ({} of {})",
-                                    if let Some(suffix) = &state.1 { format!(" {}", suffix) } else { String::new() },
-                                    progress * 100.0,
-                                    prettify_bytes(*curr),
-                                    prettify_bytes(*total)
-                                ))
-                            }).unwrap();
-                        }
-
-                        InstallerUpdate::DownloadingFinished => (),
-
-                        InstallerUpdate::UnpackingFinished => {
-                            this.update(Actions::HideProgressBar).unwrap();
-                            this.update_state();
-                        }
-
-                        InstallerUpdate::DownloadingError(err) => {
-                            toast_error(&this, "Failed to download", err.clone().into());
-                        }
-
-                        InstallerUpdate::UnpackingError => {
-                            toast_error(&this, "Failed to unpack", Error::last_os_error());
                         }
                     }
                 }
@@ -434,6 +358,14 @@ impl App {
 
             LauncherState::PatchAvailable(_) => {
                 self.widgets.launch_game.set_label("Apply patch");
+            }
+
+            LauncherState::WineNotInstalled => {
+                self.widgets.launch_game.set_label("Download wine");
+            }
+
+            LauncherState::PrefixNotExists => {
+                self.widgets.launch_game.set_label("Create prefix");
             }
 
             LauncherState::GameUpdateAvailable(_) |
