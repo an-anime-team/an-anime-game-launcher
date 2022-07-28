@@ -32,3 +32,10 @@ cargo run
 ```sh
 cargo build --release
 ```
+
+### Building AppImage
+
+```
+cd scripts/appimage
+./build_appimage.sh
+```
