@@ -92,7 +92,7 @@
                     "wineboot": "bin/wineboot",
                     "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
                 },
-                "recommended": true
+                "recommended": false
             },
             {
                 "family": "Wine-GE-Proton",
@@ -118,7 +118,7 @@
                     "wineboot": "bin/wineboot",
                     "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
                 },
-                "recommended": true
+                "recommended": false
             },
             {
                 "family": "Wine-GE-Proton",
@@ -131,7 +131,7 @@
                     "wineboot": "bin/wineboot",
                     "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
                 },
-                "recommended": true
+                "recommended": false
             },
             {
                 "family": "Wine-GE-Proton",
@@ -358,7 +358,7 @@
                     "wineboot": "files/bin/wineboot",
                     "winecfg": "files/lib64/wine/x86_64-windows/winecfg.exe"
                 },
-                "recommended": true
+                "recommended": false
             },
             {
                 "family": "GE-Proton",
@@ -371,7 +371,7 @@
                     "wineboot": "files/bin/wineboot",
                     "winecfg": "files/lib64/wine/x86_64-windows/winecfg.exe"
                 },
-                "recommended": true
+                "recommended": false
             },
             {
                 "family": "GE-Proton",
