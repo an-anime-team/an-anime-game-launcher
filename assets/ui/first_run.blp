@@ -255,6 +255,53 @@ Adw.ApplicationWindow window {
                     }
                 }
             }
+
+            // Fourth page (downloading finished)
+
+            Gtk.Box fourth_page {
+                orientation: vertical;
+                hexpand: true;
+
+                Adw.PreferencesPage {
+                    Adw.PreferencesGroup {
+                        Gtk.Label {
+                            label: "Downloading finished!";
+                            margin-top: 16;
+
+                            styles ["title-1"]
+                        }
+
+                        Gtk.Label {
+                            label: "All the basic components were downloaded. Now you can restart the launcher and download the game. Welcome to our club!";
+
+                            wrap: true;
+                            justify: center;
+                            margin-top: 32;
+                        }
+                    }
+
+                    Adw.PreferencesGroup {
+                        vexpand: true;
+                        valign: center;
+
+                        Gtk.Box {
+                            orientation: horizontal;
+                            spacing: 8;
+                            halign: center;
+
+                            Gtk.Button fourth_page_restart {
+                                label: "Restart";
+
+                                styles ["suggested-action"]
+                            }
+
+                            Gtk.Button fourth_page_exit {
+                                label: "Exit";
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         Adw.CarouselIndicatorDots {

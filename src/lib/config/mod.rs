@@ -197,7 +197,10 @@ impl Default for Patch {
                 Some(dir) => format!("{}/patch", dir),
                 None => String::new()
             },
-            servers: Vec::new()
+            servers: vec![
+                "https://notabug.org/Krock/dawn".to_string(),
+                "https://dev.kaifa.ch/Maroxy/dawn".to_string()
+            ]
         }
     }
 }

@@ -6,7 +6,8 @@ use gtk::glib;
 use std::io::Error;
 
 use anime_game_core::prelude::*;
-use wait_not_await::Await;
+
+use crate::lib::prettify_bytes::prettify_bytes;
 
 #[derive(Debug)]
 pub enum ProgressUpdateResult {
@@ -56,13 +57,23 @@ impl ProgressBar {
             InstallerUpdate::DownloadingProgress(curr, total) => {
                 let progress = curr as f64 / total as f64;
 
-                self.update(progress, None);
+                self.update(progress, Some(&format!(
+                    "Downloading: {:.2}% ({} of {})",
+                    progress * 100.0,
+                    prettify_bytes(curr),
+                    prettify_bytes(total)
+                )));
             }
 
             InstallerUpdate::UnpackingProgress(curr, total) => {
                 let progress = curr as f64 / total as f64;
 
-                self.update(progress, None);
+                self.update(progress, Some(&format!(
+                    "Unpacking: {:.2}% ({} of {})",
+                    progress * 100.0,
+                    prettify_bytes(curr),
+                    prettify_bytes(total)
+                )));
             }
 
             InstallerUpdate::DownloadingFinished => (),

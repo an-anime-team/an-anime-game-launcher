@@ -45,7 +45,12 @@ pub struct AppWidgets {
     pub third_page_download: gtk::Button,
     pub third_page_exit: gtk::Button,
 
-    pub third_page_progress_bar: ProgressBar
+    pub third_page_progress_bar: ProgressBar,
+
+    // Fourth page
+    pub fourth_page: gtk::Box,
+    pub fourth_page_restart: gtk::Button,
+    pub fourth_page_exit: gtk::Button
 }
 
 impl AppWidgets {
@@ -79,6 +84,11 @@ impl AppWidgets {
                 get_object(&builder, "third_page_buttons_group")?,
                 get_object(&builder, "third_page_progress_bar_group")?
             ),
+
+            // Fourth page
+            fourth_page: get_object(&builder, "fourth_page")?,
+            fourth_page_restart: get_object(&builder, "fourth_page_restart")?,
+            fourth_page_exit: get_object(&builder, "fourth_page_exit")?
         })
     }
 }
@@ -93,6 +103,8 @@ pub enum Actions {
     FirstPageContinue,
     SecondPageContinue,
     ThirdPageDownload,
+    ThirdPageContinue,
+    FourthPageRestart,
     Exit
 }
 
@@ -151,9 +163,11 @@ impl App {
         self.widgets.first_page_continue.connect_clicked(Actions::FirstPageContinue.into_fn(&self));
         self.widgets.second_page_continue.connect_clicked(Actions::SecondPageContinue.into_fn(&self));
         self.widgets.third_page_download.connect_clicked(Actions::ThirdPageDownload.into_fn(&self));
+        self.widgets.fourth_page_restart.connect_clicked(Actions::FourthPageRestart.into_fn(&self));
 
         self.widgets.second_page_exit.connect_clicked(Actions::Exit.into_fn(&self));
         self.widgets.third_page_exit.connect_clicked(Actions::Exit.into_fn(&self));
+        self.widgets.fourth_page_exit.connect_clicked(Actions::Exit.into_fn(&self));
 
         self
     }
@@ -185,58 +199,94 @@ impl App {
 
                     this.widgets.third_page_progress_bar.show();
 
-                    let this = this.clone();
+                    let (sender, receiver) = glib::MainContext::channel::<InstallerUpdate>(glib::PRIORITY_DEFAULT);
 
+                    let progress_bar = this.widgets.third_page_progress_bar.clone();
+
+                    let wine_version = WineVersion::latest().unwrap();
+                    let dxvk_version = DxvkVersion::latest().unwrap();
+
+                    let wine_version_copy = wine_version.clone();
+
+                    // Download wine
                     std::thread::spawn(move || {
                         let config = config::get().unwrap();
 
-                        let wine_version = WineVersion::latest().unwrap();
-                        let dxvk_version = DxvkVersion::latest().unwrap();
-
-                        let mut wine_version_installer = Installer::new(&wine_version.uri).unwrap();
-
-                        let progress_bar = this.widgets.third_page_progress_bar.clone();
+                        let mut wine_version_installer = Installer::new(&wine_version_copy.uri).unwrap();
 
                         wine_version_installer.install(&config.game.wine.builds, move |state| {
-                            match progress_bar.update_from_state(state) {
-                                ProgressUpdateResult::Updated => (),
-                                ProgressUpdateResult::Error(_, _) => todo!(),
-
-                                ProgressUpdateResult::Finished => {
-                                    let mut config = config::get().unwrap();
-                                    let prefix = WinePrefix::new(&config.game.wine.prefix);
-
-                                    config.game.wine.selected = Some(wine_version.name.clone());
-
-                                    config::update_raw(config.clone()).unwrap();
-
-                                    prefix.update(&config.game.wine.builds, wine_version.clone()).unwrap();
-
-                                    let mut dxvk_version_installer = Installer::new(&dxvk_version.uri).unwrap();
-
-                                    let dxvk_version = dxvk_version.clone();
-                                    let progress_bar = progress_bar.clone();
-
-                                    dxvk_version_installer.install(&config.game.dxvk.builds, move |state| {
-                                        match progress_bar.update_from_state(state) {
-                                            ProgressUpdateResult::Updated => (),
-                                            ProgressUpdateResult::Error(_, _) => todo!(),
-                
-                                            ProgressUpdateResult::Finished => {
-                                                let mut config = config::get().unwrap();
-
-                                                config.game.dxvk.selected = Some(dxvk_version.name.clone());
-
-                                                config::update_raw(config.clone()).unwrap();
-
-                                                println!("Done!!");
-                                            }
-                                        }
-                                    });
-                                }
-                            }
+                            sender.send(state).unwrap();
                         });
                     });
+
+                    let this = this.clone();
+
+                    // Download wine (had to do so this way)
+                    receiver.attach(None, move |state| {
+                        match progress_bar.update_from_state(state) {
+                            ProgressUpdateResult::Updated => (),
+                            ProgressUpdateResult::Error(_, _) => todo!(),
+
+                            ProgressUpdateResult::Finished => {
+                                let mut config = config::get().unwrap();
+                                let prefix = WinePrefix::new(&config.game.wine.prefix);
+
+                                // Update wine config
+                                config.game.wine.selected = Some(wine_version.name.clone());
+
+                                config::update_raw(config.clone()).unwrap();
+
+                                // Create wine prefix
+                                prefix.update(&config.game.wine.builds, wine_version.clone()).unwrap();
+
+                                // Prepare DXVK downloader
+                                let mut dxvk_version_installer = Installer::new(&dxvk_version.uri).unwrap();
+
+                                let dxvk_version = dxvk_version.clone();
+                                let progress_bar = progress_bar.clone();
+
+                                let this = this.clone();
+
+                                // Download DXVK
+                                dxvk_version_installer.install(&config.game.dxvk.builds, move |state| {
+                                    match progress_bar.update_from_state(state) {
+                                        ProgressUpdateResult::Updated => (),
+                                        ProgressUpdateResult::Error(_, _) => todo!(),
+            
+                                        ProgressUpdateResult::Finished => {
+                                            let mut config = config::get().unwrap();
+
+                                            // Apply DXVK
+                                            println!("{}", dxvk_version.apply(&config.game.dxvk.builds, &config.game.wine.prefix).unwrap());
+
+                                            // Update dxvk config
+                                            config.game.dxvk.selected = Some(dxvk_version.name.clone());
+
+                                            config::update_raw(config.clone()).unwrap();
+
+                                            // Remove .first-run file
+                                            let launcher_dir = crate::lib::consts::launcher_dir().unwrap();
+                                            std::fs::remove_file(format!("{}/.first-run", launcher_dir)).unwrap();
+
+                                            // Show next page
+                                            this.update(Actions::ThirdPageContinue).unwrap();
+                                        }
+                                    }
+                                });
+                            }
+                        }
+
+                        glib::Continue(true)
+                    });
+                }
+
+                Actions::ThirdPageContinue => {
+                    this.widgets.carousel.scroll_to(&this.widgets.fourth_page, true);
+                }
+
+                // FIXME
+                Actions::FourthPageRestart => {
+                    this.widgets.window.close();
                 }
 
                 Actions::Exit => {

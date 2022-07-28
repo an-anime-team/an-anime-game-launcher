@@ -493,6 +493,51 @@
         ]
     },
     {
+        "title": "Soda",
+        "subtitle": "New runner based on Valve’s Wine, with patches from Proton, TKG and GE. Developed by Bottles",
+        "versions": [
+            {
+                "family": "Soda",
+                "name": "soda-7.0-2-x86_64",
+                "title": "Soda 7.0-2",
+                "uri": "https://github.com/bottlesdevs/wine/releases/download/soda-7.0-2/soda-7.0-2-x86_64.tar.xz",
+                "files": {
+                    "wine": "bin/wine64",
+                    "wineserver": "bin/wineserver",
+                    "wineboot": "bin/wineboot",
+                    "winecfg": "lib/wine/x86_64-windows/winecfg.exe"
+                },
+                "recommended": true
+            },
+            {
+                "family": "Soda",
+                "name": "soda-7.0-1-x86_64",
+                "title": "Soda 7.0-1",
+                "uri": "https://github.com/bottlesdevs/wine/releases/download/soda-7.0-1/soda-7.0-1-x86_64.tar.xz",
+                "files": {
+                    "wine": "bin/wine64",
+                    "wineserver": "bin/wineserver",
+                    "wineboot": "bin/wineboot",
+                    "winecfg": "lib/wine/x86_64-windows/winecfg.exe"
+                },
+                "recommended": true
+            },
+            {
+                "family": "Soda",
+                "name": "soda-7.0-x86_64",
+                "title": "Soda 7.0",
+                "uri": "https://github.com/bottlesdevs/wine/releases/download/soda-7.0/soda-7.0-x86_64.tar.xz",
+                "files": {
+                    "wine": "bin/wine64",
+                    "wineserver": "bin/wineserver",
+                    "wineboot": "bin/wineboot",
+                    "winecfg": "lib/wine/x86_64-windows/winecfg.exe"
+                },
+                "recommended": true
+            }
+        ]
+    },
+    {
         "title": "Lutris",
         "subtitle": null,
         "versions": [
