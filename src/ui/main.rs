@@ -9,6 +9,7 @@ use std::cell::Cell;
 use std::io::Error;
 
 use anime_game_core::prelude::*;
+use wait_not_await::Await;
 
 use crate::ui::*;
 
@@ -293,8 +294,9 @@ impl App {
                                                                         ProgressUpdateResult::Updated => (),
 
                                                                         ProgressUpdateResult::Error(msg, err) => {
-                                                                            this.update(Actions::ToastError(Rc::new((msg, err)))).unwrap();
-                                                                            this.update(Actions::HideProgressBar).unwrap();
+                                                                            this.widgets.progress_bar.hide();
+
+                                                                            this.toast_error(msg, err);
                                                                         }
 
                                                                         ProgressUpdateResult::Finished => {
@@ -304,7 +306,8 @@ impl App {
 
                                                                             config::update(config);
 
-                                                                            this.update(Actions::HideProgressBar).unwrap();
+                                                                            this.widgets.progress_bar.hide();
+
                                                                             this.update_state();
                                                                         }
                                                                     }
@@ -345,7 +348,9 @@ impl App {
                                                 this.widgets.launch_game.set_sensitive(false);
 
                                                 if let Err(err) = prefix.update(&config.game.wine.builds, wine) {
-                                                    this.toast_error("Failed to create wine prefix", err);
+                                                    this.update(Actions::ToastError(Rc::new((
+                                                        String::from("Failed to create wine prefix"), err
+                                                    )))).unwrap();
                                                 }
 
                                                 this.widgets.launch_game.set_sensitive(true);
@@ -373,14 +378,29 @@ impl App {
                                             ProgressUpdateResult::Updated => (),
 
                                             ProgressUpdateResult::Error(msg, err) => {
-                                                this.update(Actions::ToastError(Rc::new((msg, err)))).unwrap();
-                                                this.update(Actions::HideProgressBar).unwrap();
+                                                this.widgets.progress_bar.hide();
+
+                                                this.toast_error(msg, err);
                                             }
 
                                             ProgressUpdateResult::Finished => {
-                                                this.update(Actions::HideProgressBar).unwrap();
+                                                this.widgets.progress_bar.hide();
 
-                                                this.update_state();
+                                                let this = this.clone();
+
+                                                this.update_state().then(move |result| {
+                                                    if let Ok(state) = result {
+                                                        match state {
+                                                            LauncherState::VoiceUpdateAvailable(_) |
+                                                            LauncherState::VoiceNotInstalled(_) |
+                                                            LauncherState::GameUpdateAvailable(_) |
+                                                            LauncherState::GameNotInstalled(_) => {
+                                                                this.update(Actions::PerformButtonEvent).unwrap();
+                                                            },
+                                                            _ => ()
+                                                        }
+                                                    }
+                                                });
                                             }
                                         }
 
@@ -497,8 +517,10 @@ impl App {
         self.values.set(values);
     }
 
-    pub fn update_state(&self) {
+    pub fn update_state(&self) -> Await<Result<LauncherState, String>> {
         let this = self.clone();
+
+        let (send, recv) = std::sync::mpsc::channel();
 
         this.widgets.status_page.show();
         this.widgets.launcher_content.hide();
@@ -506,18 +528,26 @@ impl App {
         std::thread::spawn(move || {
             match LauncherState::get(Some(&this.widgets.status_page)) {
                 Ok(state) => {
-                    this.set_state(state);
+                    this.set_state(state.clone());
 
                     this.widgets.status_page.hide();
                     this.widgets.launcher_content.show();
+
+                    send.send(Ok(state)).unwrap();
                 },
                 Err(err) => {
+                    send.send(Err(err.to_string())).unwrap();
+
                     glib::MainContext::default().invoke(move || {
                         this.toast_error("Failed to get initial launcher state", err);
                     });
                 }
             }
         });
+
+        Await::new(move || {
+            recv.recv().unwrap()
+        })
     }
 }
 

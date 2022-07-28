@@ -26,7 +26,8 @@ async fn main() {
         .expect("Failed to register resources");
 
     // Set application's title
-    gtk::glib::set_prgname(Some("An Anime Game Launcher"));
+    gtk::glib::set_application_name("An Anime Game Launcher");
+    gtk::glib::set_program_name(Some("An Anime Game Launcher"));
 
     // Create app
     let application = gtk::Application::new(
