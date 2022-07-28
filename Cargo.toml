@@ -1,6 +1,6 @@
 [package]
 name = "anime-game-launcher"
-version = "0.2.1"
+version = "0.3.0"
 description = "Anime Game launcher"
 authors = ["Nikita Podvirnyy <suimin.tu.mu.ga.mi@gmail.com>"]
 license = "GPL-3.0"

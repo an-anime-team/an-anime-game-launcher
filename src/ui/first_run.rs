@@ -214,6 +214,10 @@ impl App {
 
                         let mut wine_version_installer = Installer::new(&wine_version_copy.uri).unwrap();
 
+                        if let Some(temp_folder) = config.launcher.temp {
+                            wine_version_installer.temp_folder = temp_folder;
+                        }
+
                         wine_version_installer.install(&config.game.wine.builds, move |state| {
                             sender.send(state).unwrap();
                         });
@@ -241,6 +245,10 @@ impl App {
 
                                 // Prepare DXVK downloader
                                 let mut dxvk_version_installer = Installer::new(&dxvk_version.uri).unwrap();
+
+                                if let Some(temp_folder) = config.launcher.temp {
+                                    dxvk_version_installer.temp_folder = temp_folder;
+                                }
 
                                 let dxvk_version = dxvk_version.clone();
                                 let progress_bar = progress_bar.clone();

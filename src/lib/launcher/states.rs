@@ -42,16 +42,19 @@ impl LauncherState {
     pub fn get(status_page: Option<&libadwaita::StatusPage>) -> std::io::Result<Self> {
         let config = config::get()?;
 
+        // Check wine existance
         if config.game.wine.selected == None {
             return Ok(Self::WineNotInstalled);
         }
 
+        // Check prefix existance
         let prefix = WinePrefix::new(&config.game.wine.prefix);
 
         if !prefix.exists() {
             return Ok(Self::PrefixNotExists);
         }
 
+        // Check game installation status
         if let Some(status_page) = &status_page {
             status_page.set_description(Some("Updating game info..."));
         }

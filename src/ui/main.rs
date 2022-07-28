@@ -20,6 +20,11 @@ use crate::lib::config;
 use crate::lib::game;
 use crate::lib::tasks;
 use crate::lib::launcher::states::LauncherState;
+use crate::lib::wine::{
+    Version as WineVersion,
+    List as WineList
+};
+use crate::lib::wine_prefix::WinePrefix;
 
 /// This structure is used to describe widgets used in application
 /// 
@@ -124,7 +129,6 @@ pub enum Actions {
     OpenPreferencesPage,
     PreferencesGoBack,
     PerformButtonEvent,
-    DownloadDiff(Rc<VersionDiff>),
     ShowProgressBar,
     UpdateProgress { fraction: Rc<f64>, title: Rc<String> },
     HideProgressBar,
@@ -214,12 +218,7 @@ impl App {
 
         receiver.attach(None, move |action| {
             // Some debug output
-            match &action {
-                // Actions::UpdateProgress { .. } |
-                // Actions::UpdateProgressByState(_) => (),
-
-                action => println!("[main] [update] action: {:?}", action)
-            }
+            println!("[main] [update] action: {:?}", action);
 
             match action {
                 Actions::OpenPreferencesPage => {
@@ -248,57 +247,159 @@ impl App {
 
                     this.values.set(values);
 
-                    match state {
-                        LauncherState::Launch => {
-                            // Display toast message if the game is failed to run
-                            if let Err(err) = game::run(false) {
-                                this.toast_error("Failed to run game", err);
+                    match config::get() {
+                        Ok(mut config) => {
+                            match state {
+                                LauncherState::Launch => {
+                                    // Display toast message if the game is failed to run
+                                    if let Err(err) = game::run(false) {
+                                        this.toast_error("Failed to run game", err);
+                                    }
+                                },
+
+                                LauncherState::PatchAvailable(_) => todo!(),
+
+                                LauncherState::WineNotInstalled => {
+                                    match WineList::list_downloaded(&config.game.wine.builds) {
+                                        Ok(list) => {
+                                            for version in list {
+                                                if version.recommended {
+                                                    config.game.wine.selected = Some(version.name);
+
+                                                    config::update(config.clone());
+
+                                                    break;
+                                                }
+                                            }
+
+                                            if config.game.wine.selected == None {
+                                                match WineVersion::latest() {
+                                                    Ok(wine) => {
+                                                        match Installer::new(wine.uri) {
+                                                            Ok(mut installer) => {
+                                                                if let Some(temp_folder) = config.launcher.temp {
+                                                                    installer.temp_folder = temp_folder;
+                                                                }
+
+                                                                let (sender, receiver) = glib::MainContext::channel::<InstallerUpdate>(glib::PRIORITY_DEFAULT);
+                                                                let this = this.clone();
+
+                                                                this.update(Actions::ShowProgressBar).unwrap();
+
+                                                                // Download wine version
+                                                                // We need to update components from the main thread
+                                                                receiver.attach(None, move |state| {
+                                                                    match this.widgets.progress_bar.update_from_state(state) {
+                                                                        ProgressUpdateResult::Updated => (),
+
+                                                                        ProgressUpdateResult::Error(msg, err) => {
+                                                                            this.update(Actions::ToastError(Rc::new((msg, err)))).unwrap();
+                                                                            this.update(Actions::HideProgressBar).unwrap();
+                                                                        }
+
+                                                                        ProgressUpdateResult::Finished => {
+                                                                            let mut config = config::get().unwrap();
+
+                                                                            config.game.wine.selected = Some(wine.name.clone());
+
+                                                                            config::update(config);
+
+                                                                            this.update(Actions::HideProgressBar).unwrap();
+                                                                            this.update_state();
+                                                                        }
+                                                                    }
+
+                                                                    glib::Continue(true)
+                                                                });
+
+                                                                // Download wine version in separate thread to not to freeze the main one
+                                                                std::thread::spawn(move || {
+                                                                    installer.install(config.game.wine.builds, move |state| {
+                                                                        sender.send(state).unwrap();
+                                                                    });
+                                                                });
+                                                            },
+                                                            Err(err) => this.toast_error("Failed to init wine version installer", err)
+                                                        }
+                                                    },
+                                                    Err(err) => this.toast_error("Failed to get latest wine version", err)
+                                                }
+                                            }
+
+                                            else {
+                                                this.update_state();
+                                            }
+                                        },
+                                        Err(err) => this.toast_error("Failed to list downloaded wine versions", err)
+                                    }
+                                }
+
+                                LauncherState::PrefixNotExists => {
+                                    let prefix = WinePrefix::new(&config.game.wine.prefix);
+
+                                    match config.try_get_selected_wine_info() {
+                                        Some(wine) => {
+                                            let this = this.clone();
+
+                                            std::thread::spawn(move || {
+                                                this.widgets.launch_game.set_sensitive(false);
+
+                                                if let Err(err) = prefix.update(&config.game.wine.builds, wine) {
+                                                    this.toast_error("Failed to create wine prefix", err);
+                                                }
+
+                                                this.widgets.launch_game.set_sensitive(true);
+
+                                                this.update_state();
+                                            });
+                                        },
+                                        None => this.toast_error("Failed to get selected wine version", Error::last_os_error())
+                                    }
+                                }
+        
+                                LauncherState::VoiceUpdateAvailable(diff) |
+                                LauncherState::VoiceNotInstalled(diff) |
+                                LauncherState::GameUpdateAvailable(diff) |
+                                LauncherState::GameNotInstalled(diff) => {
+                                    let (sender, receiver) = glib::MainContext::channel::<InstallerUpdate>(glib::PRIORITY_DEFAULT);
+                                    let this = this.clone();
+                                    
+                                    this.update(Actions::ShowProgressBar).unwrap();
+
+                                    // Download diff
+                                    // We need to update components from the main thread
+                                    receiver.attach(None, move |state| {
+                                        match this.widgets.progress_bar.update_from_state(state) {
+                                            ProgressUpdateResult::Updated => (),
+
+                                            ProgressUpdateResult::Error(msg, err) => {
+                                                this.update(Actions::ToastError(Rc::new((msg, err)))).unwrap();
+                                                this.update(Actions::HideProgressBar).unwrap();
+                                            }
+
+                                            ProgressUpdateResult::Finished => {
+                                                this.update(Actions::HideProgressBar).unwrap();
+
+                                                this.update_state();
+                                            }
+                                        }
+
+                                        glib::Continue(true)
+                                    });
+
+                                    // Download diff in separate thread to not to freeze the main one
+                                    std::thread::spawn(move || {
+                                        diff.install_to_by(config.game.path, config.launcher.temp, move |state| {
+                                            sender.send(state).unwrap();
+                                        }).unwrap();
+                                    });
+                                },
+        
+                                LauncherState::GameOutdated(_) => (),
+                                LauncherState::VoiceOutdated(_) => ()
                             }
                         },
-
-                        LauncherState::PatchAvailable(_) => todo!(),
-
-                        LauncherState::WineNotInstalled => todo!(),
-                        LauncherState::PrefixNotExists => todo!(),
-
-                        LauncherState::VoiceUpdateAvailable(diff) |
-                        LauncherState::VoiceNotInstalled(diff) |
-                        LauncherState::GameUpdateAvailable(diff) |
-                        LauncherState::GameNotInstalled(diff) => {
-                            this.update(Actions::DownloadDiff(Rc::new(diff))).unwrap();
-                        },
-
-                        LauncherState::GameOutdated(_) => (),
-                        LauncherState::VoiceOutdated(_) => ()
-                    }
-                }
-                
-                Actions::DownloadDiff(diff) => {
-                    match config::get() {
-                        Ok(config) => {
-                            let diff = (*diff).clone();
-                            let this = this.clone();
-
-                            std::thread::spawn(move || {
-                                let this = this.clone();
-
-                                this.update(Actions::ShowProgressBar).unwrap();
-
-                                // Download diff
-                                diff.install_to_by(config.game.path, config.launcher.temp, move |state| {
-                                    match this.widgets.progress_bar.update_from_state(state) {
-                                        ProgressUpdateResult::Updated => (),
-                                        ProgressUpdateResult::Error(msg, err) => this.update(Actions::ToastError(Rc::new((msg, err)))).unwrap(),
-                                        ProgressUpdateResult::Finished => this.update(Actions::HideProgressBar).unwrap()
-                                    }
-                                }).unwrap();
-                            });
-                        },
-                        Err(err) => {
-                            this.update(Actions::ToastError(Rc::new((
-                                String::from("Failed to load config"), err
-                            )))).unwrap();
-                        }
+                        Err(err) => this.toast_error("Failed to load config", err)
                     }
                 }
 
@@ -351,6 +452,9 @@ impl App {
     pub fn set_state(&self, state: LauncherState) {
         println!("[main] [set_state] state: {:?}", &state);
 
+        self.widgets.launch_game.set_tooltip_text(None);
+        self.widgets.launch_game.set_sensitive(true);
+
         match state {
             LauncherState::Launch => {
                 self.widgets.launch_game.set_label("Launch");
@@ -395,6 +499,9 @@ impl App {
 
     pub fn update_state(&self) {
         let this = self.clone();
+
+        this.widgets.status_page.show();
+        this.widgets.launcher_content.hide();
 
         std::thread::spawn(move || {
             match LauncherState::get(Some(&this.widgets.status_page)) {

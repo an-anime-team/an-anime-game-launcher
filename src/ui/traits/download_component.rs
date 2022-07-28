@@ -7,6 +7,8 @@ use std::path::Path;
 use anime_game_core::prelude::*;
 use wait_not_await::Await;
 
+use crate::lib::config;
+
 #[derive(Debug)]
 pub enum DownloadingResult {
     DownloadingError(std::io::Error),
@@ -73,7 +75,12 @@ pub trait DownloadComponent {
 
         let (send, recv) = std::sync::mpsc::channel();
 
-        let installer = Installer::new(self.get_download_uri())?;
+        let mut installer = Installer::new(self.get_download_uri())?;
+
+        if let Some(temp_folder) = config::get()?.launcher.temp {
+            installer.temp_folder = temp_folder;
+        }
+
         let installation_path = installation_path.to_string();
 
         send.send(installer).unwrap();
