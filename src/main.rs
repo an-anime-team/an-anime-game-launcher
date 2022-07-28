@@ -3,7 +3,6 @@ use libadwaita as adw;
 
 use gtk::{CssProvider, StyleContext, STYLE_PROVIDER_PRIORITY_APPLICATION};
 use gtk::gdk::Display;
-use gtk::glib::set_application_name;
 
 use std::path::Path;
 use std::fs;
@@ -27,8 +26,7 @@ async fn main() {
         .expect("Failed to register resources");
 
     // Set application's title
-    // FIXME: doesn't work?
-    set_application_name("An Anime Game Launcher");
+    gtk::glib::set_prgname(Some("An Anime Game Launcher"));
 
     // Create app
     let application = gtk::Application::new(
