@@ -1,5 +1,5 @@
 use gtk4::{self as gtk, prelude::*};
-use libadwaita::{self as adw, prelude::*};
+use libadwaita as adw;
 
 use gtk4::glib;
 use gtk4::glib::clone;
@@ -295,9 +295,9 @@ impl App {
                             });
                         },
                         Err(err) => {
-                            glib::MainContext::default().invoke(clone!(@strong this => move || {
-                                this.toast_error("Failed to load config", err);
-                            }));
+                            this.update(Actions::ToastError(Rc::new((
+                                String::from("Failed to load config"), err
+                            )))).unwrap();
                         }
                     }
                 }

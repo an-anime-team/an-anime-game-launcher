@@ -1,6 +1,3 @@
-use gtk4::{self as gtk, prelude::*};
-use libadwaita::{self as adw, prelude::*};
-
 use std::io::{Error, ErrorKind};
 
 use anime_game_core::prelude::*;
@@ -42,7 +39,7 @@ impl Default for LauncherState {
 }
 
 impl LauncherState {
-    pub fn get(status_page: Option<&adw::StatusPage>) -> std::io::Result<Self> {
+    pub fn get(status_page: Option<&libadwaita::StatusPage>) -> std::io::Result<Self> {
         let config = config::get()?;
 
         if config.game.wine.selected == None {

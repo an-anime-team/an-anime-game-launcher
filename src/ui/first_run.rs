@@ -1,5 +1,5 @@
 use gtk4::{self as gtk, prelude::*};
-use libadwaita::{self as adw, prelude::*};
+use libadwaita as adw;
 
 use gtk::glib;
 use gtk::glib::clone;
@@ -138,7 +138,7 @@ pub struct Values;
 #[derive(Clone)]
 pub struct App {
     widgets: AppWidgets,
-    values: Rc<Cell<Values>>,
+    // values: Rc<Cell<Values>>,
     actions: Rc<Cell<Option<glib::Sender<Actions>>>>
 }
 
@@ -148,7 +148,7 @@ impl App {
         // Get default widgets from ui file and add events to them
         let result = Self {
             widgets: AppWidgets::try_get()?,
-            values: Default::default(),
+            // values: Default::default(),
             actions: Default::default()
         }.init_events().init_actions();
 

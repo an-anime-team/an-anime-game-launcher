@@ -1,5 +1,5 @@
 use gtk4::{self as gtk, prelude::*};
-use libadwaita::{self as adw, prelude::*};
+use libadwaita as adw;
 
 use gtk::{CssProvider, StyleContext, STYLE_PROVIDER_PRIORITY_APPLICATION};
 use gtk::gdk::Display;

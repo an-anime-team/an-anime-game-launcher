@@ -1,4 +1,3 @@
-use gtk4::{self as gtk, prelude::*};
 use libadwaita::{self as adw, prelude::*};
 
 use crate::lib::wine::Group;
