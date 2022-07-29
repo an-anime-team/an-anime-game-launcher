@@ -192,8 +192,13 @@ impl App {
 
     /// Add default events and values to the widgets
     fn init_events(self) -> Self {
+        // Add menu actions
         add_action(&self.widgets.menu, "show-about-dialog", clone!(@strong self.widgets.about as about => move || {
             about.show();
+        }));
+
+        add_action(&self.widgets.menu, "open-settings", clone!(@strong self as this => move || {
+            this.update(Actions::OpenPreferencesPage).unwrap();
         }));
 
         // Open preferences page

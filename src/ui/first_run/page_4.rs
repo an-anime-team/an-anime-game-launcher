@@ -23,8 +23,10 @@ pub fn choose_dir<T: IsA<gtk::Window>>(current_folder: String, parent: &T) -> Aw
 
     dialogue.connect_response(move |dialogue, response| {
         if response == gtk::ResponseType::Accept {
-            sender.send(dialogue.current_folder().unwrap().to_string()).unwrap();
+            sender.send(dialogue.current_folder().unwrap().path().unwrap().to_str().unwrap().to_string()).unwrap();
         }
+
+        dialogue.close();
     });
 
     dialogue.show();
@@ -72,6 +74,7 @@ impl Page {
             Err(err) => return Err(err.to_string())
         };
 
+        // Add paths to subtitles
         result.runners_folder.set_subtitle(&config.game.wine.builds);
         result.dxvk_folder.set_subtitle(&config.game.dxvk.builds);
         result.prefix_folder.set_subtitle(&config.game.wine.prefix);
@@ -81,10 +84,41 @@ impl Page {
             None => String::from("/tmp")
         });
 
-        result.runners_folder.connect_activated(clone!(@strong result.window as window => move |row| {
-            choose_dir(row.subtitle().unwrap().to_string(), &window);
-        }));
+        // Connect path selection events
+        result.connect_activated(&result.runners_folder);
+        result.connect_activated(&result.dxvk_folder);
+        result.connect_activated(&result.prefix_folder);
+        result.connect_activated(&result.game_folder);
+        result.connect_activated(&result.temp_folder);
 
         Ok(result)
+    }
+
+    fn connect_activated(&self, row: &adw::ActionRow) {
+        row.connect_activated(clone!(@strong self.window as window => move |row| {
+            let (sender, receiver) = glib::MainContext::channel::<String>(glib::PRIORITY_DEFAULT);
+
+            choose_dir(row.subtitle().unwrap().to_string(), &window).then(move |path| {
+                sender.send(path.clone()).unwrap();
+            });
+
+            let row = row.clone();
+
+            receiver.attach(None, move |path| {
+                row.set_subtitle(&path);
+
+                glib::Continue(false)
+            });
+        }));
+    }
+
+    pub fn update_config(&self, mut config: config::Config) -> config::Config {
+        config.game.wine.builds = self.runners_folder.subtitle().unwrap().to_string();
+        config.game.dxvk.builds = self.dxvk_folder.subtitle().unwrap().to_string();
+        config.game.wine.prefix = self.prefix_folder.subtitle().unwrap().to_string();
+        config.game.path        = self.game_folder.subtitle().unwrap().to_string();
+        config.launcher.temp    = Some(self.temp_folder.subtitle().unwrap().to_string());
+
+        config
     }
 }

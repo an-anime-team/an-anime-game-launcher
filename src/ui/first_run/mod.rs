@@ -35,6 +35,7 @@ pub struct AppWidgets {
     pub window: adw::ApplicationWindow,
     pub carousel: adw::Carousel,
 
+    // TODO: use names instead of numbers
     pub page_1: page_1::Page,
     pub page_2: page_2::Page,
     pub page_3: page_3::Page,
@@ -192,6 +193,8 @@ impl App {
                 }
 
                 Actions::FourthPageContinue => {
+                    config::update_raw(this.widgets.page_4.update_config(config::get().unwrap())).unwrap();
+
                     this.widgets.carousel.scroll_to(&this.widgets.page_5.page, true);
                 }
 
