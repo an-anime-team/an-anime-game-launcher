@@ -26,30 +26,25 @@ fn compile_blueprint<T: ToString>(path: T) -> Result<String, String> {
     }
 }
 
-fn main() {
-    if let Ok(_) = read_to_string("assets/resources.xml") {
-        gtk4::gio::compile_resources(
-            "assets",
-            "assets/resources.xml",
-            ".assets.gresource",
-        );
-    }
+fn blp_process_dir(dir: String) {
+    let source_dir = format!("assets/ui/{}", &dir).replace("//", "/");
+    let dist_dir = format!("assets/ui/.dist/{}", &dir).replace("//", "/");
 
-    if let Ok(entries) = read_dir("assets/ui") {
-        if let Err(_) = read_dir("assets/ui/.dist") {
-            create_dir_all("assets/ui/.dist").expect("UI dist dir couldn't be created");
+    if let Ok(entries) = read_dir(&source_dir) {
+        if let Err(_) = read_dir(&dist_dir) {
+            create_dir_all(&dist_dir).expect("UI dist dir couldn't be created");
         }
 
-        println!("cargo:rerun-if-changed=assets/ui/*.blp");
+        println!("cargo:rerun-if-changed={}/*.blp", &source_dir);
 
         for entry in entries {
             if let Ok(entry) = entry {
                 if let Ok(metadata) = entry.metadata() {
-                    if metadata.is_file() {
-                        let entry_path = entry.path().to_str().unwrap().to_string();
-                        let entry_filename = entry.file_name().to_str().unwrap().to_string();
+                    let entry_path = entry.path().to_str().unwrap().to_string();
+                    let entry_filename = entry.file_name().to_str().unwrap().to_string();
 
-                        let entry_dist_path = format!("assets/ui/.dist/{}.ui", &entry_filename[..entry_filename.len() - 4]);
+                    if metadata.is_file() {
+                        let entry_dist_path = format!("{}/{}.ui", &dist_dir, &entry_filename[..entry_filename.len() - 4]);
 
                         match compile_blueprint(&entry_path) {
                             Ok(xml) => {
@@ -68,8 +63,24 @@ fn main() {
                             }
                         }
                     }
+
+                    else if metadata.is_dir() && &entry_filename[0..1] != "." {
+                        blp_process_dir(format!("{}/{}", &dir, &entry_filename));
+                    }
                 }
             }
         }
     }
+}
+
+fn main() {
+    if let Ok(_) = read_to_string("assets/resources.xml") {
+        gtk4::gio::compile_resources(
+            "assets",
+            "assets/resources.xml",
+            ".assets.gresource",
+        );
+    }
+
+    blp_process_dir(String::new());
 }

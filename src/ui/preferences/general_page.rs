@@ -52,7 +52,7 @@ pub struct AppWidgets {
 
 impl AppWidgets {
     pub fn try_get(window: adw::ApplicationWindow, toast_overlay: adw::ToastOverlay) -> Result<Self, String> {
-        let builder = gtk::Builder::from_string(include_str!("../../../assets/ui/.dist/preferences_general.ui"));
+        let builder = gtk::Builder::from_string(include_str!("../../../assets/ui/.dist/preferences/general.ui"));
 
         let mut result = Self {
             window,

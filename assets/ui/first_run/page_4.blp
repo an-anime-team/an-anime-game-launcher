@@ -1,0 +1,69 @@
+using Gtk 4.0;
+using Adw 1;
+
+Gtk.Box page {
+    orientation: vertical;
+    hexpand: true;
+
+    Adw.PreferencesPage {
+        Adw.PreferencesGroup {
+            Gtk.Label {
+                label: "Set default paths";
+                margin-top: 16;
+
+                styles ["title-1"]
+            }
+        }
+
+        Adw.PreferencesGroup {
+            vexpand: true;
+            valign: center;
+
+            Adw.ActionRow runners_folder {
+                title: "Runners saving folder";
+                activatable: true;
+            }
+
+            Adw.ActionRow dxvk_folder {
+                title: "DXVK saving folder";
+                activatable: true;
+            }
+
+            Adw.ActionRow prefix_folder {
+                title: "Wine prefix folder";
+                activatable: true;
+            }
+
+            Adw.ActionRow game_folder {
+                title: "Game installation folder";
+                activatable: true;
+            }
+
+            Adw.ActionRow temp_folder {
+                title: "Temp data saving folder";
+                activatable: true;
+            }
+        }
+
+        Adw.PreferencesGroup {
+            vexpand: true;
+            valign: center;
+
+            Gtk.Box {
+                orientation: horizontal;
+                spacing: 8;
+                halign: center;
+
+                Gtk.Button continue_button {
+                    label: "Continue";
+
+                    styles ["suggested-action"]
+                }
+
+                Gtk.Button exit_button {
+                    label: "Exit";
+                }
+            }
+        }
+    }
+}

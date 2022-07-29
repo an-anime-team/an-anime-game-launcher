@@ -1,0 +1,56 @@
+using Gtk 4.0;
+using Adw 1;
+
+Gtk.Box page {
+    orientation: vertical;
+    hexpand: true;
+
+    Adw.PreferencesPage {
+        Adw.PreferencesGroup {
+            Gtk.Image {
+                resource: "/org/app/assets/images/icon.png";
+
+                vexpand: true;
+                margin-top: 16;
+            }
+
+            Gtk.Label {
+                label: "An Anime Game Launcher";
+                margin-top: 32;
+
+                styles ["title-1"]
+            }
+
+            Gtk.Label {
+                label: "Hi there! Welcome to the An Anime Game Launcher. We need to prepare some stuff and download default components before you could run the game";
+
+                wrap: true;
+                justify: center;
+                margin-top: 32;
+            }
+        }
+
+        Adw.PreferencesGroup {
+            vexpand: true;
+            valign: center;
+
+            Gtk.Box {
+                orientation: horizontal;
+                spacing: 8;
+                halign: center;
+
+                Gtk.Button continue_button {
+                    label: "Continue";
+
+                    styles ["suggested-action"]
+                }
+
+                Gtk.Button {
+                    label: "Advanced";
+                    sensitive: false;
+                    tooltip-text: "Work in progress";
+                }
+            }
+        }
+    }
+}

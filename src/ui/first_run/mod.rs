@@ -6,8 +6,16 @@ use gtk::glib::clone;
 
 use std::rc::Rc;
 use std::cell::Cell;
+use std::process::{Command, Stdio};
 
 use anime_game_core::prelude::*;
+
+mod page_1;
+mod page_2;
+mod page_3;
+mod page_4;
+mod page_5;
+mod page_6;
 
 use crate::ui::*;
 use crate::ui::components::progress_bar::*;
@@ -27,69 +35,39 @@ pub struct AppWidgets {
     pub window: adw::ApplicationWindow,
     pub carousel: adw::Carousel,
 
-    // First page
-    pub first_page: gtk::Box,
-    pub first_page_continue: gtk::Button,
-
-    // Second page
-    pub second_page: gtk::Box,
-    pub second_page_continue: gtk::Button,
-    pub second_page_exit: gtk::Button,
-
-    // Third page
-    pub third_page: gtk::Box,
-
-    pub third_page_wine_version: adw::ComboRow,
-    pub third_page_dxvk_version: adw::ComboRow,
-
-    pub third_page_download: gtk::Button,
-    pub third_page_exit: gtk::Button,
-
-    pub third_page_progress_bar: ProgressBar,
-
-    // Fourth page
-    pub fourth_page: gtk::Box,
-    pub fourth_page_restart: gtk::Button,
-    pub fourth_page_exit: gtk::Button
+    pub page_1: page_1::Page,
+    pub page_2: page_2::Page,
+    pub page_3: page_3::Page,
+    pub page_4: page_4::Page,
+    pub page_5: page_5::Page,
+    pub page_6: page_6::Page
 }
 
 impl AppWidgets {
     pub fn try_get() -> Result<Self, String> {
-        let builder = gtk::Builder::from_string(include_str!("../../assets/ui/.dist/first_run.ui"));
+        let builder = gtk::Builder::from_string(include_str!("../../../assets/ui/.dist/first_run.ui"));
 
-        Ok(Self {
+        let result = Self {
             window: get_object(&builder, "window")?,
             carousel: get_object(&builder, "carousel")?,
 
-            // First page
-            first_page: get_object(&builder, "first_page")?,
-            first_page_continue: get_object(&builder, "first_page_continue")?,
+            page_1: page_1::Page::new()?,
+            page_2: page_2::Page::new()?,
+            page_3: page_3::Page::new()?,
+            page_4: page_4::Page::new(get_object(&builder, "window")?)?,
+            page_5: page_5::Page::new()?,
+            page_6: page_6::Page::new()?
+        };
 
-            // Second page
-            second_page: get_object(&builder, "second_page")?,
-            second_page_continue: get_object(&builder, "second_page_continue")?,
-            second_page_exit: get_object(&builder, "second_page_exit")?,
+        // Add pages to carousel
+        result.carousel.append(&result.page_1.page);
+        result.carousel.append(&result.page_2.page);
+        result.carousel.append(&result.page_3.page);
+        result.carousel.append(&result.page_4.page);
+        result.carousel.append(&result.page_5.page);
+        result.carousel.append(&result.page_6.page);
 
-            // Third page
-            third_page: get_object(&builder, "third_page")?,
-
-            third_page_wine_version: get_object(&builder, "third_page_wine_version")?,
-            third_page_dxvk_version: get_object(&builder, "third_page_dxvk_version")?,
-
-            third_page_download: get_object(&builder, "third_page_download")?,
-            third_page_exit: get_object(&builder, "third_page_exit")?,
-
-            third_page_progress_bar: ProgressBar::new(
-                get_object(&builder, "third_page_progress_bar")?,
-                get_object(&builder, "third_page_buttons_group")?,
-                get_object(&builder, "third_page_progress_bar_group")?
-            ),
-
-            // Fourth page
-            fourth_page: get_object(&builder, "fourth_page")?,
-            fourth_page_restart: get_object(&builder, "fourth_page_restart")?,
-            fourth_page_exit: get_object(&builder, "fourth_page_exit")?
-        })
+        Ok(result)
     }
 }
 
@@ -101,10 +79,12 @@ impl AppWidgets {
 #[derive(Debug, glib::Downgrade)]
 pub enum Actions {
     FirstPageContinue,
-    SecondPageContinue,
-    ThirdPageDownload,
+    SecondPageCheck,
     ThirdPageContinue,
-    FourthPageRestart,
+    FourthPageContinue,
+    FifthPageDownload,
+    FifthPageContinue,
+    Restart,
     Exit
 }
 
@@ -160,14 +140,20 @@ impl App {
 
     /// Add default events and values to the widgets
     fn init_events(self) -> Self {
-        self.widgets.first_page_continue.connect_clicked(Actions::FirstPageContinue.into_fn(&self));
-        self.widgets.second_page_continue.connect_clicked(Actions::SecondPageContinue.into_fn(&self));
-        self.widgets.third_page_download.connect_clicked(Actions::ThirdPageDownload.into_fn(&self));
-        self.widgets.fourth_page_restart.connect_clicked(Actions::FourthPageRestart.into_fn(&self));
+        self.widgets.page_1.continue_button.connect_clicked(Actions::FirstPageContinue.into_fn(&self));
+        self.widgets.page_3.continue_button.connect_clicked(Actions::ThirdPageContinue.into_fn(&self));
+        self.widgets.page_4.continue_button.connect_clicked(Actions::FourthPageContinue.into_fn(&self));
 
-        self.widgets.second_page_exit.connect_clicked(Actions::Exit.into_fn(&self));
-        self.widgets.third_page_exit.connect_clicked(Actions::Exit.into_fn(&self));
-        self.widgets.fourth_page_exit.connect_clicked(Actions::Exit.into_fn(&self));
+        self.widgets.page_2.check_button.connect_clicked(Actions::SecondPageCheck.into_fn(&self));
+        self.widgets.page_5.download_button.connect_clicked(Actions::FifthPageDownload.into_fn(&self));
+
+        self.widgets.page_6.restart_button.connect_clicked(Actions::Restart.into_fn(&self));
+
+        self.widgets.page_2.exit_button.connect_clicked(Actions::Exit.into_fn(&self));
+        self.widgets.page_3.exit_button.connect_clicked(Actions::Exit.into_fn(&self));
+        self.widgets.page_4.exit_button.connect_clicked(Actions::Exit.into_fn(&self));
+        self.widgets.page_5.exit_button.connect_clicked(Actions::Exit.into_fn(&self));
+        self.widgets.page_6.exit_button.connect_clicked(Actions::Exit.into_fn(&self));
 
         self
     }
@@ -186,22 +172,38 @@ impl App {
 
             match action {
                 Actions::FirstPageContinue => {
-                    this.widgets.carousel.scroll_to(&this.widgets.second_page, true);
+                    match Command::new("git").stdout(Stdio::null()).spawn() {
+                        Ok(_) => this.widgets.carousel.scroll_to(&this.widgets.page_3.page, true),
+                        Err(_) => this.widgets.carousel.scroll_to(&this.widgets.page_2.page, true)
+                    }
                 }
 
-                Actions::SecondPageContinue => {
-                    this.widgets.carousel.scroll_to(&this.widgets.third_page, true);
+                Actions::SecondPageCheck => {
+                    match Command::new("git").stdout(Stdio::null()).spawn() {
+                        Ok(_) => this.widgets.carousel.scroll_to(&this.widgets.page_3.page, true),
+                        Err(_) => {
+                            // todo
+                        }
+                    }
                 }
 
-                Actions::ThirdPageDownload => {
-                    this.widgets.third_page_wine_version.set_sensitive(false);
-                    this.widgets.third_page_dxvk_version.set_sensitive(false);
+                Actions::ThirdPageContinue => {
+                    this.widgets.carousel.scroll_to(&this.widgets.page_4.page, true);
+                }
 
-                    this.widgets.third_page_progress_bar.show();
+                Actions::FourthPageContinue => {
+                    this.widgets.carousel.scroll_to(&this.widgets.page_5.page, true);
+                }
+
+                Actions::FifthPageDownload => {
+                    this.widgets.page_5.wine_version.set_sensitive(false);
+                    this.widgets.page_5.dxvk_version.set_sensitive(false);
+
+                    this.widgets.page_5.progress_bar.show();
 
                     let (sender, receiver) = glib::MainContext::channel::<InstallerUpdate>(glib::PRIORITY_DEFAULT);
 
-                    let progress_bar = this.widgets.third_page_progress_bar.clone();
+                    let progress_bar = this.widgets.page_5.progress_bar.clone();
 
                     let wine_version = WineVersion::latest().unwrap();
                     let dxvk_version = DxvkVersion::latest().unwrap();
@@ -277,7 +279,7 @@ impl App {
                                             std::fs::remove_file(format!("{}/.first-run", launcher_dir)).unwrap();
 
                                             // Show next page
-                                            this.update(Actions::ThirdPageContinue).unwrap();
+                                            this.update(Actions::FifthPageContinue).unwrap();
                                         }
                                     }
                                 });
@@ -288,12 +290,12 @@ impl App {
                     });
                 }
 
-                Actions::ThirdPageContinue => {
-                    this.widgets.carousel.scroll_to(&this.widgets.fourth_page, true);
+                Actions::FifthPageContinue => {
+                    this.widgets.carousel.scroll_to(&this.widgets.page_6.page, true);
                 }
 
                 // FIXME
-                Actions::FourthPageRestart => {
+                Actions::Restart => {
                     this.widgets.window.close();
                 }
 
