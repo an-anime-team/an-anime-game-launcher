@@ -36,10 +36,10 @@ const bundler = new Bundler({
     },
 
     // Path to the appimage to save
-    output: path.join(__dirname, '../dist/an-anime-game-launcher-2.3.6.AppImage'),
+    output: path.join(__dirname, '../dist/an-anime-game-launcher-2.3.7.AppImage'),
 
     // Application version
-    version: '2.3.6'
+    version: '2.3.7'
 });
 
 // Bundle project
