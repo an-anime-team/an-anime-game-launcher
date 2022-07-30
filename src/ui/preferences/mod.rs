@@ -3,6 +3,8 @@ use libadwaita as adw;
 
 use gtk::glib;
 
+use std::rc::Rc;
+use std::cell::Cell;
 use std::io::Error;
 
 use crate::ui::*;
@@ -18,8 +20,7 @@ pub mod pages {
 
 #[derive(Clone, glib::Downgrade)]
 pub struct PreferencesStack {
-    pub window: adw::ApplicationWindow,
-    pub toast_overlay: adw::ToastOverlay,
+    pub app: Rc<Cell<Option<super::MainApp>>>,
 
     pub preferences: gtk::Box,
     pub preferences_go_back: gtk::Button,
@@ -34,12 +35,11 @@ pub struct PreferencesStack {
 }
 
 impl PreferencesStack {
-    pub fn new(window: adw::ApplicationWindow, toast_overlay: adw::ToastOverlay) -> Result<Self, String> {
+    pub fn new() -> Result<Self, String> {
         let builder = gtk::Builder::from_string(include_str!("../../../assets/ui/.dist/preferences.ui"));
 
         let result = Self {
-            window: window.clone(),
-            toast_overlay: toast_overlay.clone(),
+            app: Default::default(),
 
             preferences: get_object(&builder, "preferences")?,
             preferences_go_back: get_object(&builder, "preferences_go_back")?,
@@ -48,8 +48,8 @@ impl PreferencesStack {
             flap: get_object(&builder, "flap")?,
 
             stack: get_object(&builder, "stack")?,
-            
-            general_page: pages::GeneralPage::new(window, toast_overlay)?,
+
+            general_page: pages::GeneralPage::new()?,
             enhancements_page: pages::EnhancementsPage::new()?
         };
 
@@ -59,19 +59,25 @@ impl PreferencesStack {
         Ok(result)
     }
 
+    pub fn set_app(&mut self, app: super::MainApp) {
+        self.app.set(Some(app.clone()));
+
+        self.general_page.set_app(app);
+    }
+
     /// Update page info before opening it
     /// 
     /// Being called from the `MainApp` struct
     pub fn update(&self) -> Result<(), Error> {
-        self.status_page.set_visible(true);
+        self.status_page.show();
         self.status_page.set_description(None);
-        self.flap.set_visible(false);
+        self.flap.hide();
 
         self.general_page.prepare(&self.status_page)?;
         self.enhancements_page.prepare(&self.status_page)?;
 
-        self.status_page.set_visible(false);
-        self.flap.set_visible(true);
+        self.status_page.hide();
+        self.flap.show();
 
         Ok(())
     }
@@ -79,7 +85,10 @@ impl PreferencesStack {
 
 impl ToastError for PreferencesStack {
     fn get_toast_widgets(&self) -> (adw::ApplicationWindow, adw::ToastOverlay) {
-        (self.window.clone(), self.toast_overlay.clone())
+        let app = (&*self.app).take();
+        self.app.set(app.clone());
+
+        app.unwrap().get_toast_widgets()
     }
 }
 

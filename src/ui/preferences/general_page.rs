@@ -13,9 +13,11 @@ use anime_game_core::prelude::*;
 use crate::lib::config;
 use crate::lib::dxvk;
 use crate::lib::wine;
+use crate::lib::launcher::states::LauncherState;
 
 use crate::ui::*;
 use crate::ui::traits::prelude::*;
+use crate::ui::components::voiceover_row::VoiceoverRow;
 use crate::ui::components::dxvk_row::DxvkRow;
 use crate::ui::components::wine_group::WineGroup;
 
@@ -26,10 +28,10 @@ use crate::ui::components::wine_group::WineGroup;
 /// This function does not implement events
 #[derive(Clone, glib::Downgrade)]
 pub struct AppWidgets {
-    pub window: adw::ApplicationWindow,
-    pub toast_overlay: adw::ToastOverlay,
-
     pub page: adw::PreferencesPage,
+
+    pub voiceovers_row: adw::ExpanderRow,
+    pub voieover_components: Rc<Vec<VoiceoverRow>>,
 
     pub game_version: gtk::Label,
     pub patch_version: gtk::Label,
@@ -51,14 +53,14 @@ pub struct AppWidgets {
 }
 
 impl AppWidgets {
-    pub fn try_get(window: adw::ApplicationWindow, toast_overlay: adw::ToastOverlay) -> Result<Self, String> {
+    pub fn try_get() -> Result<Self, String> {
         let builder = gtk::Builder::from_string(include_str!("../../../assets/ui/.dist/preferences/general.ui"));
 
         let mut result = Self {
-            window,
-            toast_overlay,
-
             page: get_object(&builder, "general_page")?,
+
+            voiceovers_row: get_object(&builder, "voiceovers_row")?,
+            voieover_components: Default::default(),
 
             game_version: get_object(&builder, "game_version")?,
             patch_version: get_object(&builder, "patch_version")?,
@@ -83,6 +85,24 @@ impl AppWidgets {
             Ok(config) => config,
             Err(err) => return Err(err.to_string())
         };
+
+        // Update voiceovers list
+        let voice_packages = match VoicePackage::list_latest() {
+            Ok(voice_packages) => voice_packages,
+            Err(err) => return Err(err.to_string())
+        };
+
+        let mut components = Vec::new();
+
+        for package in voice_packages {
+            let row = VoiceoverRow::new(package);
+
+            result.voiceovers_row.add_row(&row.row);
+
+            components.push(row);
+        }
+
+        result.voieover_components = Rc::new(components);
 
         // Update wine versions lists
         let groups = match wine::List::get() {
@@ -139,6 +159,7 @@ impl AppWidgets {
 /// It may be helpful if you want to add the same event for several widgets, or call an action inside of another action
 #[derive(Debug, Clone, glib::Downgrade)]
 pub enum Actions {
+    VoiceoverPerformAction(Rc<usize>),
     DxvkPerformAction(Rc<usize>),
     WinePerformAction(Rc<(usize, usize)>),
     UpdateDxvkComboRow,
@@ -180,6 +201,7 @@ pub struct Values {
 /// That's what we need and what we use in `App::update` method
 #[derive(Clone, glib::Downgrade)]
 pub struct App {
+    app: Rc<Cell<Option<super::MainApp>>>,
     widgets: AppWidgets,
     values: Rc<Cell<Values>>,
     actions: Rc<Cell<Option<glib::Sender<Actions>>>>
@@ -187,9 +209,10 @@ pub struct App {
 
 impl App {
     /// Create new application
-    pub fn new(window: adw::ApplicationWindow, toast_overlay: adw::ToastOverlay) -> Result<Self, String> {
+    pub fn new() -> Result<Self, String> {
         let result = Self {
-            widgets: AppWidgets::try_get(window, toast_overlay)?,
+            app: Default::default(),
+            widgets: AppWidgets::try_get()?,
             values: Default::default(),
             actions: Default::default()
         }.init_events().init_actions();
@@ -197,8 +220,20 @@ impl App {
         Ok(result)
     }
 
+    pub fn set_app(&mut self, app: super::MainApp) {
+        self.app.set(Some(app));
+    }
+
     /// Add default events and values to the widgets
     fn init_events(self) -> Self {
+        // Voiceover download/delete button event
+        for (i, row) in (&*self.widgets.voieover_components).into_iter().enumerate() {
+            row.button.connect_clicked(clone!(@weak self as this => move |_| {
+                this.update(Actions::VoiceoverPerformAction(Rc::new(i))).unwrap();
+            }));
+        }
+
+        // Selecting wine version event
         self.widgets.wine_selected.connect_selected_notify(clone!(@weak self as this => move |combo_row| {
             if let Some(model) = combo_row.model() {
                 if model.n_items() > 0 {
@@ -207,6 +242,7 @@ impl App {
             }
         }));
 
+        // Selecting dxvk version event
         self.widgets.dxvk_selected.connect_selected_notify(clone!(@weak self as this => move |combo_row| {
             if let Some(model) = combo_row.model() {
                 if model.n_items() > 0 {
@@ -289,6 +325,35 @@ impl App {
             println!("[general page] [update] action: {:?}", &action);
 
             match action {
+                Actions::VoiceoverPerformAction(i) => {
+                    let component = this.widgets.voieover_components[*i].clone();
+
+                    if component.is_downloaded(&config.game.path) {
+                        // TODO: VoicePackage::delete()
+                        todo!();
+                    }
+
+                    else {
+                        let option = (&*this.app).take();
+                        this.app.set(option.clone());
+
+                        let app = option.unwrap();
+
+                        // Add voiceover to config
+                        config.game.voices.push(component.package.locale().to_code().to_string());
+
+                        config::update(config);
+
+                        // Return back, update state and press "download" button if needed
+                        app.update(super::main::Actions::PreferencesGoBack).unwrap();
+                        app.update_state().then(move |state| {
+                            if let Ok(LauncherState::VoiceNotInstalled(_)) = state {
+                                app.update(super::main::Actions::PerformButtonEvent).unwrap();
+                            }
+                        });
+                    }
+                }
+
                 Actions::DxvkPerformAction(i) => {
                     let component = this.widgets.dxvk_components[*i].clone();
 
@@ -511,13 +576,20 @@ impl App {
     /// This method is being called by the `PreferencesStack::update`
     pub fn prepare(&self, status_page: &adw::StatusPage) -> Result<(), Error> {
         let config = config::get()?;
-        let game = Game::new(config.game.path);
+        let game = Game::new(&config.game.path);
 
-        self.widgets.game_version.set_tooltip_text(None);
-        self.widgets.patch_version.set_tooltip_text(None);
+        // Update voiceovers states
+        status_page.set_description(Some("Updating voiceovers info..."));
+
+        for package in &*self.widgets.voieover_components {
+            package.update_state(&config.game.path);
+        }
 
         // Update game version
         status_page.set_description(Some("Updating game info..."));
+
+        self.widgets.game_version.set_tooltip_text(None);
+        self.widgets.patch_version.set_tooltip_text(None);
 
         match game.try_get_diff()? {
             VersionDiff::Latest(version) => {
@@ -587,7 +659,10 @@ impl App {
 
 impl ToastError for App {
     fn get_toast_widgets(&self) -> (adw::ApplicationWindow, adw::ToastOverlay) {
-        (self.widgets.window.clone(), self.widgets.toast_overlay.clone())
+        let app = (&*self.app).take();
+        self.app.set(app.clone());
+
+        app.unwrap().get_toast_widgets()
     }
 }
 

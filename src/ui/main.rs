@@ -79,7 +79,7 @@ impl AppWidgets {
                 get_object(&builder, "progress_bar_group")?
             ),
 
-            preferences_stack: PreferencesStack::new(window, toast_overlay)?
+            preferences_stack: PreferencesStack::new()?
         };
 
         // Set devel style to ApplicationWindow if it's debug mode
@@ -175,11 +175,14 @@ pub struct App {
 impl App {
     /// Create new application
     pub fn new(app: &gtk::Application) -> Result<Self, String> {
-        let result = Self {
+        let mut result = Self {
             widgets: AppWidgets::try_get()?,
             values: Default::default(),
             actions: Default::default()
         }.init_events().init_actions();
+
+        // Set app reference
+        result.widgets.preferences_stack.set_app(result.clone());
 
         // Bind app to the window
         result.widgets.window.set_application(Some(app));
@@ -195,10 +198,6 @@ impl App {
         // Add menu actions
         add_action(&self.widgets.menu, "show-about-dialog", clone!(@strong self.widgets.about as about => move || {
             about.show();
-        }));
-
-        add_action(&self.widgets.menu, "open-settings", clone!(@strong self as this => move || {
-            this.update(Actions::OpenPreferencesPage).unwrap();
         }));
 
         // Open preferences page

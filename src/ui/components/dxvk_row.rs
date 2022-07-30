@@ -1,8 +1,6 @@
 use gtk4::{self as gtk, prelude::*};
 use libadwaita::{self as adw, prelude::*};
 
-use gtk::Align;
-
 use crate::lib::dxvk::Version;
 use crate::ui::traits::download_component::*;
 
@@ -45,7 +43,7 @@ impl DxvkRow {
         progress_bar.set_show_text(true);
 
         progress_bar.set_width_request(200);
-        progress_bar.set_valign(Align::Center);
+        progress_bar.set_valign(gtk::Align::Center);
         progress_bar.hide();
 
         row.add_suffix(&progress_bar);
