@@ -329,8 +329,21 @@ impl App {
                     let component = this.widgets.voieover_components[*i].clone();
 
                     if component.is_downloaded(&config.game.path) {
-                        // TODO: VoicePackage::delete()
-                        todo!();
+                        component.button.set_sensitive(false);
+
+                        let this = this.clone();
+
+                        std::thread::spawn(move || {
+                            if let Err(err) = component.package.delete_in(&config.game.path) {
+                                this.update(Actions::ToastError(Rc::new((
+                                    String::from("Failed to delete voiceover"), err
+                                )))).unwrap();
+                            }
+
+                            component.button.set_sensitive(true);
+
+                            component.update_state(&config.game.path);
+                        });
                     }
 
                     else {
