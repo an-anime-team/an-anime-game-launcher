@@ -530,8 +530,16 @@ impl App {
         this.widgets.status_page.show();
         this.widgets.launcher_content.hide();
 
+        let (sender, receiver) = glib::MainContext::channel::<String>(glib::PRIORITY_DEFAULT);
+
+        receiver.attach(None, clone!(@strong this.widgets.status_page as status_page => move |description| {
+            status_page.set_description(Some(&description));
+
+            glib::Continue(true)
+        }));
+
         std::thread::spawn(move || {
-            match LauncherState::get(Some(&this.widgets.status_page)) {
+            match LauncherState::get(move |status| sender.send(status.to_string()).unwrap()) {
                 Ok(state) => {
                     this.set_state(state.clone());
 

@@ -39,7 +39,7 @@ impl Default for LauncherState {
 }
 
 impl LauncherState {
-    pub fn get(status_page: Option<&libadwaita::StatusPage>) -> std::io::Result<Self> {
+    pub fn get<T: Fn(&str)>(status: T) -> std::io::Result<Self> {
         let config = config::get()?;
 
         // Check wine existance
@@ -55,18 +55,14 @@ impl LauncherState {
         }
 
         // Check game installation status
-        if let Some(status_page) = &status_page {
-            status_page.set_description(Some("Updating game info..."));
-        }
+        status("Updating game info...");
 
         let game = Game::new(&config.game.path);
         let diff = game.try_get_diff()?;
 
         Ok(match diff {
             VersionDiff::Latest(_) => {
-                if let Some(status_page) = &status_page {
-                    status_page.set_description(Some("Updating voice info..."));
-                }
+                status("Updating voice info...");
 
                 for voice_package in &config.game.voices {
                     let mut voice_package = VoicePackage::with_locale(match VoiceLocale::from_str(voice_package) {
@@ -74,9 +70,7 @@ impl LauncherState {
                         None => return Err(Error::new(ErrorKind::Other, format!("Incorrect voice locale \"{}\" specified in the config", voice_package)))
                     })?;
 
-                    if let Some(status_page) = &status_page {
-                        status_page.set_description(Some(format!("Updating voice info ({})...", voice_package.locale().to_name()).as_str()));
-                    }
+                    status(format!("Updating voice info ({})...", voice_package.locale().to_name()).as_str());
 
                     // Replace voice package struct with the one constructed in the game's folder
                     // so it'll properly calculate its difference instead of saying "not installed"
@@ -97,9 +91,7 @@ impl LauncherState {
                     }
                 }
 
-                if let Some(status_page) = &status_page {
-                    status_page.set_description(Some("Updating patch info..."));
-                }
+                status("Updating patch info...");
 
                 let patch = Patch::try_fetch(config.patch.servers.clone())?;
 
