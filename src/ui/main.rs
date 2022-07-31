@@ -262,7 +262,72 @@ impl App {
                                     }
                                 },
 
-                                LauncherState::PatchAvailable(_) => todo!(),
+                                LauncherState::PatchAvailable(patch) => {
+                                    match patch {
+                                        Patch::NotAvailable |
+                                        Patch::Outdated { .. } |
+                                        Patch::Preparation { .. } => unreachable!(),
+
+                                        Patch::Testing { version, host, .. } |
+                                        Patch::Available { version, host, .. } => {
+                                            this.widgets.launch_game.set_sensitive(false);
+                                            this.widgets.open_preferences.set_sensitive(false);
+
+                                            let this = this.clone();
+
+                                            std::thread::spawn(move || {
+                                                let applier = PatchApplier::new(&config.patch.path);
+
+                                                let mut synced = false;
+
+                                                match applier.is_sync(&config.patch.servers) {
+                                                    Ok(true) => synced = true,
+
+                                                    Ok(false) => {
+                                                        match applier.sync(host) {
+                                                            Ok(true) => synced = true,
+
+                                                            Ok(false) => {
+                                                                this.update(Actions::ToastError(Rc::new((
+                                                                    String::from("Failed to sync patch folder"), Error::last_os_error()
+                                                                )))).unwrap();
+                                                            }
+
+                                                            Err(err) => {
+                                                                this.update(Actions::ToastError(Rc::new((
+                                                                    String::from("Failed to sync patch folder"), err
+                                                                )))).unwrap();
+                                                            }
+                                                        }
+                                                    }
+
+                                                    Err(err) => this.update(Actions::ToastError(Rc::new((
+                                                        String::from("Failed to check patch folder state"), err
+                                                    )))).unwrap()
+                                                }
+
+                                                if synced {
+                                                    match applier.apply(&config.game.path, version, config.patch.root) {
+                                                        Ok(_) => (),
+
+                                                        Err(err) => {
+                                                            this.update(Actions::ToastError(Rc::new((
+                                                                String::from("Failed to patch game"), err
+                                                            )))).unwrap();
+                                                        }
+                                                    }
+                                                }
+
+                                                glib::MainContext::default().invoke(move || {
+                                                    this.widgets.launch_game.set_sensitive(true);
+                                                    this.widgets.open_preferences.set_sensitive(true);
+
+                                                    this.update_state();
+                                                });
+                                            });
+                                        }
+                                    }
+                                }
 
                                 LauncherState::WineNotInstalled => {
                                     match WineList::list_downloaded(&config.game.wine.builds) {
@@ -479,13 +544,34 @@ impl App {
         self.widgets.launch_game.set_tooltip_text(None);
         self.widgets.launch_game.set_sensitive(true);
 
-        match state {
+        self.widgets.launch_game.add_css_class("suggested-action");
+        self.widgets.launch_game.remove_css_class("warning");
+
+        match &state {
             LauncherState::Launch => {
                 self.widgets.launch_game.set_label("Launch");
             }
 
-            LauncherState::PatchAvailable(_) => {
-                self.widgets.launch_game.set_label("Apply patch");
+            LauncherState::PatchAvailable(patch) => {
+                match patch {
+                    Patch::NotAvailable |
+                    Patch::Outdated { .. } |
+                    Patch::Preparation { .. } => {
+                        self.widgets.launch_game.set_label("Patch not available");
+                        self.widgets.launch_game.set_sensitive(false);
+                    }
+
+                    Patch::Testing { .. } => {
+                        self.widgets.launch_game.set_label("Apply test patch");
+
+                        self.widgets.launch_game.remove_css_class("suggested-action");
+                        self.widgets.launch_game.add_css_class("warning");
+                    }
+
+                    Patch::Available { .. } => {
+                        self.widgets.launch_game.set_label("Apply patch");
+                    }
+                }
             }
 
             LauncherState::WineNotInstalled => {
@@ -522,20 +608,19 @@ impl App {
     }
 
     pub fn update_state(&self) -> Await<Result<LauncherState, String>> {
-        let this = self.clone();
-
-        let (send, recv) = std::sync::mpsc::channel();
-
-        this.widgets.status_page.show();
-        this.widgets.launcher_content.hide();
+        self.widgets.status_page.show();
+        self.widgets.launcher_content.hide();
 
         let (sender, receiver) = glib::MainContext::channel::<String>(glib::PRIORITY_DEFAULT);
+        let (send, recv) = std::sync::mpsc::channel();
 
-        receiver.attach(None, clone!(@strong this.widgets.status_page as status_page => move |description| {
+        receiver.attach(None, clone!(@strong self.widgets.status_page as status_page => move |description| {
             status_page.set_description(Some(&description));
 
             glib::Continue(true)
         }));
+
+        let this = self.clone();
 
         std::thread::spawn(move || {
             match LauncherState::get(move |status| sender.send(status.to_string()).unwrap()) {

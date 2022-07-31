@@ -17,6 +17,9 @@ Adw.PreferencesPage general_page {
                     "Chinese"
                 ]
             };
+
+            sensitive: false;
+            tooltip-text: "Work in progress";
         }
 
         Adw.ExpanderRow voiceovers_row {
@@ -55,10 +58,16 @@ Adw.PreferencesPage general_page {
 
             Gtk.Button {
                 label: "Revert patch";
+
+                sensitive: false;
+                tooltip-text: "Work in progress";
             }
 
             Gtk.Button {
                 label: "Re-apply patch";
+
+                sensitive: false;
+                tooltip-text: "Work in progress";
             }
         }
     }

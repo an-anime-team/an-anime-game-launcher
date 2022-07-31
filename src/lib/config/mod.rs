@@ -187,7 +187,8 @@ impl Default for Launcher {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Patch {
     pub path: String,
-    pub servers: Vec<String>
+    pub servers: Vec<String>,
+    pub root: bool
 }
 
 impl Default for Patch {
@@ -200,7 +201,8 @@ impl Default for Patch {
             servers: vec![
                 "https://notabug.org/Krock/dawn".to_string(),
                 "https://dev.kaifa.ch/Maroxy/dawn".to_string()
-            ]
+            ],
+            root: true
         }
     }
 }

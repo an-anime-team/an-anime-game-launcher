@@ -629,7 +629,9 @@ impl App {
         // Update patch version
         status_page.set_description(Some("Updating patch info..."));
 
-        match Patch::try_fetch(config.patch.servers)? {
+        let patch = Patch::try_fetch(config.patch.servers)?;
+
+        match patch {
             Patch::NotAvailable => {
                 self.widgets.patch_version.set_label("not available");
                 self.widgets.patch_version.set_css_classes(&["error"]);
@@ -656,7 +658,15 @@ impl App {
             },
             Patch::Available { version, .. } => {
                 self.widgets.patch_version.set_label(&version.to_string());
-                self.widgets.patch_version.set_css_classes(&["success"]);
+                
+                if let Ok(true) = patch.is_applied(&config.game.path) {
+                    self.widgets.patch_version.set_css_classes(&["success"]);
+                }
+
+                else {
+                    self.widgets.patch_version.set_css_classes(&["warning"]);
+                    self.widgets.patch_version.set_tooltip_text(Some("Patch is not applied"));
+                }
             }
         }
 
