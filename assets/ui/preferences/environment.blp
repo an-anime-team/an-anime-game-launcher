@@ -1,0 +1,81 @@
+using Gtk 4.0;
+using Adw 1;
+
+Adw.PreferencesPage page {
+    Adw.PreferencesGroup {
+        title: "New variable";
+
+        Gtk.Box {
+            orientation: horizontal;
+            spacing: 8;
+
+            Gtk.Entry {
+                placeholder-text: "Name";
+            }
+
+            Gtk.Entry {
+                placeholder-text: "Value";
+                hexpand: true;
+            }
+        }
+
+        Gtk.Button {
+            label: "Add";
+
+            margin-top: 8;
+            halign: start;
+        }
+    }
+
+    Adw.PreferencesGroup {
+        title: "Variables";
+
+        Adw.ActionRow {
+            title: "DXVK_HUD";
+            subtitle: "1";
+
+            Gtk.Button {
+                icon-name: "user-trash-symbolic";
+                valign: center;
+
+                styles ["flat"]
+            }
+        }
+
+        Adw.ActionRow {
+            title: "DXVK_HUD";
+            subtitle: "1";
+
+            Gtk.Button {
+                icon-name: "user-trash-symbolic";
+                valign: center;
+
+                styles ["flat"]
+            }
+        }
+
+        Adw.ActionRow {
+            title: "DXVK_HUD";
+            subtitle: "1";
+
+            Gtk.Button {
+                icon-name: "user-trash-symbolic";
+                valign: center;
+
+                styles ["flat"]
+            }
+        }
+
+        Adw.ActionRow {
+            title: "DXVK_HUD";
+            subtitle: "1";
+
+            Gtk.Button {
+                icon-name: "user-trash-symbolic";
+                valign: center;
+
+                styles ["flat"]
+            }
+        }
+    }
+}

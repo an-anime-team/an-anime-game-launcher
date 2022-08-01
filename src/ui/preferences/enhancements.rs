@@ -34,7 +34,7 @@ impl AppWidgets {
         let builder = gtk::Builder::from_string(include_str!("../../../assets/ui/.dist/preferences/enhancements.ui"));
 
         let result = Self {
-            page: get_object(&builder, "enhanced_page")?,
+            page: get_object(&builder, "page")?,
 
             sync_combo: get_object(&builder, "sync_combo")?,
             wine_lang: get_object(&builder, "wine_lang")?,

@@ -1,7 +1,9 @@
 use std::collections::HashMap;
-use std::{fs::File, io::Read};
+use std::fs::File;
+use std::io::Read;
 use std::path::Path;
 use std::io::{Error, ErrorKind, Write};
+use std::process::{Command, Stdio};
 
 use serde::{Serialize, Deserialize};
 
@@ -122,6 +124,10 @@ pub struct Config {
 
 impl Config {
     /// Try to get a path to the wine executable based on `game.wine.builds` and `game.wine.selected`
+    /// 
+    /// Returns `Some("wine")` if:
+    /// 1) `game.wine.selected = None`
+    /// 2) wine installed and available in system
     pub fn try_get_wine_executable(&self) -> Option<String> {
         match &self.game.wine.selected {
             Some(selected) => {
@@ -142,7 +148,10 @@ impl Config {
                 // ????
                 None
             },
-            None => None
+            None => match Command::new("wine").stdout(Stdio::null()).stderr(Stdio::null()).output() {
+                Ok(output) => if output.status.success() { Some(String::from("wine")) } else { None },
+                Err(_) => None
+            }
         }
     }
 

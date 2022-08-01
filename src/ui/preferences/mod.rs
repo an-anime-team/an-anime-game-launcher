@@ -10,12 +10,14 @@ use std::io::Error;
 use crate::ui::*;
 use crate::ui::traits::prelude::*;
 
-mod general_page;
-mod enhancements_page;
+mod general;
+mod enhancements;
+mod environment;
 
 pub mod pages {
-    pub use super::general_page::App as GeneralPage;
-    pub use super::enhancements_page::App as EnhancementsPage;
+    pub use super::general::App as GeneralPage;
+    pub use super::enhancements::App as EnhancementsPage;
+    pub use super::environment::App as EnvironmentPage;
 }
 
 #[derive(Clone, glib::Downgrade)]
@@ -31,7 +33,8 @@ pub struct PreferencesStack {
     pub stack: gtk::Stack,
 
     pub general_page: pages::GeneralPage,
-    pub enhancements_page: pages::EnhancementsPage
+    pub enhancements_page: pages::EnhancementsPage,
+    pub environment_page: pages::EnvironmentPage
 }
 
 impl PreferencesStack {
@@ -50,11 +53,13 @@ impl PreferencesStack {
             stack: get_object(&builder, "stack")?,
 
             general_page: pages::GeneralPage::new()?,
-            enhancements_page: pages::EnhancementsPage::new()?
+            enhancements_page: pages::EnhancementsPage::new()?,
+            environment_page: pages::EnvironmentPage::new()?
         };
 
         result.stack.add_titled(&result.general_page.get_page(), None, &pages::GeneralPage::title());
         result.stack.add_titled(&result.enhancements_page.get_page(), None, &pages::EnhancementsPage::title());
+        result.stack.add_titled(&result.environment_page.get_page(), None, &pages::EnvironmentPage::title());
 
         Ok(result)
     }
@@ -75,6 +80,7 @@ impl PreferencesStack {
 
         self.general_page.prepare(&self.status_page)?;
         self.enhancements_page.prepare(&self.status_page)?;
+        self.environment_page.prepare(&self.status_page)?;
 
         self.status_page.hide();
         self.flap.show();

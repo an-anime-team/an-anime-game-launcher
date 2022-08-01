@@ -5,8 +5,6 @@ Adw.ApplicationWindow window {
     default-width: 900;
     default-height: 600;
 
-    icon-name: "resource:///org/app/assets/icons/64x64";
-
     content: Adw.ToastOverlay toast_overlay {
         Adw.Leaflet leaflet {
             can-navigate-back: true;
@@ -34,7 +32,7 @@ Adw.ApplicationWindow window {
                 Adw.StatusPage status_page {
                     icon-name: "image-loading-symbolic";
                     title: "Loading data";
-                    
+
                     vexpand: true;
                 }
 
@@ -92,7 +90,6 @@ Adw.ApplicationWindow window {
                             spacing: 20;
 
                             Gtk.ProgressBar progress_bar {
-                                text: "Downloading: 37% (3.7 of 10 GB)";
                                 show-text: true;
 
                                 width-request: 360;

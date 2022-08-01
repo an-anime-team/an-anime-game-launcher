@@ -34,19 +34,19 @@
             "name": "dxvk-1.9.2",
             "version": "1.9.2",
             "uri": "https://github.com/doitsujin/dxvk/releases/download/v1.9.2/dxvk-1.9.2.tar.gz",
-            "recommended": true
+            "recommended": false
         },
         {
             "name": "dxvk-1.9.1",
             "version": "1.9.1",
             "uri": "https://github.com/doitsujin/dxvk/releases/download/v1.9.1/dxvk-1.9.1.tar.gz",
-            "recommended": true
+            "recommended": false
         },
         {
             "name": "dxvk-1.9",
             "version": "1.9",
             "uri": "https://github.com/doitsujin/dxvk/releases/download/v1.9/dxvk-1.9.tar.gz",
-            "recommended": true
+            "recommended": false
         },
         {
             "name": "dxvk-1.8.1",
@@ -70,30 +70,6 @@
             "name": "dxvk-1.7.2",
             "version": "1.7.2",
             "uri": "https://github.com/doitsujin/dxvk/releases/download/v1.7.2/dxvk-1.7.2.tar.gz",
-            "recommended": false
-        },
-        {
-            "name": "dxvk-1.7.1",
-            "version": "1.7.1",
-            "uri": "https://github.com/doitsujin/dxvk/releases/download/v1.7.1/dxvk-1.7.1.tar.gz",
-            "recommended": false
-        },
-        {
-            "name": "dxvk-1.7",
-            "version": "1.7",
-            "uri": "https://github.com/doitsujin/dxvk/releases/download/v1.7/dxvk-1.7.tar.gz",
-            "recommended": false
-        },
-        {
-            "name": "dxvk-1.6.1",
-            "version": "1.6.1",
-            "uri": "https://github.com/doitsujin/dxvk/releases/download/v1.6.1/dxvk-1.6.1.tar.gz",
-            "recommended": false
-        },
-        {
-            "name": "dxvk-1.6",
-            "version": "1.6",
-            "uri": "https://github.com/doitsujin/dxvk/releases/download/v1.6/dxvk-1.6.tar.gz",
             "recommended": false
         }
     ],
@@ -132,19 +108,19 @@
             "name": "dxvk-async-1.9.2",
             "version": "1.9.2",
             "uri": "https://github.com/Sporif/dxvk-async/releases/download/1.9.4/dxvk-async-1.9.4.tar.gz",
-            "recommended": true
+            "recommended": false
         },
         {
             "name": "dxvk-async-1.9.1",
             "version": "1.9.1",
             "uri": "https://github.com/Sporif/dxvk-async/releases/download/1.9.1/dxvk-async-1.9.1.tar.gz",
-            "recommended": true
+            "recommended": false
         },
         {
             "name": "dxvk-async-1.9",
             "version": "1.9",
             "uri": "https://github.com/Sporif/dxvk-async/releases/download/1.9/dxvk-async-1.9.tar.gz",
-            "recommended": true
+            "recommended": false
         },
         {
             "name": "dxvk-async-1.8.1",

@@ -57,7 +57,7 @@ impl AppWidgets {
         let builder = gtk::Builder::from_string(include_str!("../../../assets/ui/.dist/preferences/general.ui"));
 
         let mut result = Self {
-            page: get_object(&builder, "general_page")?,
+            page: get_object(&builder, "page")?,
 
             voiceovers_row: get_object(&builder, "voiceovers_row")?,
             voieover_components: Default::default(),

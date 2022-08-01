@@ -3,7 +3,4 @@
   <gresource prefix="/org/app/assets/images">
     <file alias="icon.png">images/icon.png</file>
   </gresource>
-  <gresource prefix="/org/app/assets/icons">
-    <file alias="64x64">icons/64x64.ico</file>
-  </gresource>
 </gresources>

@@ -7,6 +7,7 @@ use gtk4::glib::clone;
 use std::rc::Rc;
 use std::cell::Cell;
 use std::io::Error;
+use std::process::{Command, Stdio};
 
 use anime_game_core::prelude::*;
 use wait_not_await::Await;
@@ -256,10 +257,35 @@ impl App {
                         Ok(mut config) => {
                             match state {
                                 LauncherState::Launch => {
-                                    // Display toast message if the game is failed to run
-                                    if let Err(err) = game::run(false) {
-                                        this.toast_error("Failed to run game", err);
-                                    }
+                                    let this = this.clone();
+
+                                    this.widgets.window.hide();
+
+                                    std::thread::spawn(move || {
+                                        // Display toast message if the game is failed to run
+                                        if let Err(err) = game::run(false) {
+                                            this.widgets.window.show();
+
+                                            this.toast_error("Failed to run game", err);
+                                        }
+
+                                        else {
+                                            loop {
+                                                std::thread::sleep(std::time::Duration::from_secs(3));
+
+                                                match Command::new("ps").arg("-A").stdout(Stdio::piped()).output() {
+                                                    Ok(output) => {
+                                                        if !String::from_utf8_lossy(&output.stdout).contains("GenshinImpact.e") {
+                                                            break;
+                                                        }
+                                                    },
+                                                    Err(_) => break
+                                                }
+                                            }
+
+                                            this.widgets.window.show();
+                                        }
+                                    });
                                 },
 
                                 LauncherState::PatchAvailable(patch) => {
@@ -546,6 +572,7 @@ impl App {
 
         self.widgets.launch_game.add_css_class("suggested-action");
         self.widgets.launch_game.remove_css_class("warning");
+        self.widgets.launch_game.remove_css_class("destructive-action");
 
         match &state {
             LauncherState::Launch => {
@@ -559,6 +586,9 @@ impl App {
                     Patch::Preparation { .. } => {
                         self.widgets.launch_game.set_label("Patch not available");
                         self.widgets.launch_game.set_sensitive(false);
+
+                        self.widgets.launch_game.remove_css_class("suggested-action");
+                        self.widgets.launch_game.add_css_class("destructive-action");
                     }
 
                     Patch::Testing { .. } => {
