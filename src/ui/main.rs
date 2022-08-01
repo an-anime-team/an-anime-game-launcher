@@ -131,6 +131,7 @@ pub enum Actions {
     OpenPreferencesPage,
     PreferencesGoBack,
     PerformButtonEvent,
+    RepairGame,
     ShowProgressBar,
     UpdateProgress { fraction: Rc<f64>, title: Rc<String> },
     HideProgressBar,
@@ -224,7 +225,10 @@ impl App {
 
         receiver.attach(None, move |action| {
             // Some debug output
-            println!("[main] [update] action: {:?}", action);
+            match &action {
+                Actions::UpdateProgress { .. } => (),
+                action => println!("[main] [update] action: {:?}", action)
+            }
 
             match action {
                 Actions::OpenPreferencesPage => {
@@ -401,8 +405,6 @@ impl App {
 
                                                                             config::update(config);
 
-                                                                            this.widgets.progress_bar.hide();
-
                                                                             this.update_state();
                                                                         }
                                                                     }
@@ -518,6 +520,165 @@ impl App {
                     }
                 }
 
+                Actions::RepairGame => {
+                    match config::get() {
+                        Ok(config) => {
+                            let this = this.clone();
+
+                            std::thread::spawn(move || {
+                                match repairer::try_get_integrity_files() {
+                                    Ok(mut files) => {
+                                        // Add voiceovers files
+                                        let game = Game::new(&config.game.path);
+
+                                        if let Ok(voiceovers) = game.get_voice_packages() {
+                                            for package in voiceovers {
+                                                if let Ok(mut voiceover_files) = repairer::try_get_voice_integrity_files(package.locale()) {
+                                                    files.append(&mut voiceover_files);
+                                                }
+                                            }
+                                        }
+
+                                        this.update(Actions::ShowProgressBar).unwrap();
+
+                                        this.update(Actions::UpdateProgress {
+                                            fraction: Rc::new(0.0),
+                                            title: Rc::new(String::from("Verifying files: 0%"))
+                                        }).unwrap();
+
+                                        const VERIFIER_THREADS_NUM: u64 = 4;
+
+                                        let mut total = 0;
+
+                                        for file in &files {
+                                            total += file.size;
+                                        }
+
+                                        let median_size = total / VERIFIER_THREADS_NUM;
+                                        let mut i = 0;
+
+                                        let (sender, receiver) = std::sync::mpsc::channel();
+
+                                        for _ in 0..VERIFIER_THREADS_NUM {
+                                            let mut thread_files = Vec::new();
+                                            let mut thread_files_size = 0;
+
+                                            while i < files.len() {
+                                                thread_files.push(files[i].clone());
+
+                                                thread_files_size += files[i].size;
+                                                i += 1;
+
+                                                if thread_files_size >= median_size {
+                                                    break;
+                                                }
+                                            }
+
+                                            let game_path = config.game.path.clone();
+                                            let thread_sender = sender.clone();
+
+                                            std::thread::spawn(move || {
+                                                for file in thread_files {
+                                                    let status = if config.launcher.repairer.fast {
+                                                        file.fast_verify(&game_path)
+                                                    } else {
+                                                        file.verify(&game_path)
+                                                    };
+
+                                                    thread_sender.send((file, status)).unwrap();
+                                                }
+                                            });
+                                        }
+
+                                        // We have VERIFIER_THREADS_NUM copies of this sender + the original one
+                                        // receiver will return Err when all the senders will be dropped.
+                                        // VERIFIER_THREADS_NUM senders will be dropped when threads will finish verifying files
+                                        // but this one will live as long as current thread exists so we should drop it manually
+                                        drop(sender);
+
+                                        let mut broken = Vec::new();
+                                        let mut processed = 0;
+
+                                        while let Ok((file, status)) = receiver.recv() {
+                                            processed += file.size;
+
+                                            if !status {
+                                                broken.push(file);
+                                            }
+
+                                            let progress = processed as f64 / total as f64;
+
+                                            this.update(Actions::UpdateProgress {
+                                                fraction: Rc::new(progress),
+                                                title: Rc::new(format!("Verifying files: {:.2}%", progress * 100.0))
+                                            }).unwrap();
+                                        }
+
+                                        if broken.len() > 0 {
+                                            this.update(Actions::UpdateProgress {
+                                                fraction: Rc::new(0.0),
+                                                title: Rc::new(String::from("Repairing files: 0%"))
+                                            }).unwrap();
+
+                                            println!("Found broken files:");
+
+                                            for file in &broken {
+                                                println!(" - {}", file.path);
+                                            }
+
+                                            let total = broken.len() as f64;
+
+                                            let is_patch_applied = match Patch::try_fetch(config.patch.servers) {
+                                                Ok(patch) => patch.is_applied(&config.game.path).unwrap_or(true),
+                                                Err(_) => true
+                                            };
+
+                                            println!("Patch status: {}", is_patch_applied);
+
+                                            fn should_ignore(path: &str) -> bool {
+                                                for part in ["UnityPlayer.dll", "xlua.dll", "crashreport.exe", "upload_crash.exe", "vulkan-1.dll"] {
+                                                    if path.contains(part) {
+                                                        return true;
+                                                    }
+                                                }
+
+                                                false
+                                            }
+
+                                            for (i, file) in broken.into_iter().enumerate() {
+                                                if !is_patch_applied || !should_ignore(&file.path) {
+                                                    if let Err(err) = file.repair(&config.game.path) {
+                                                        this.update(Actions::ToastError(Rc::new((
+                                                            String::from("Failed to repair game file"), err
+                                                        )))).unwrap();
+                                                    }
+                                                }
+
+                                                let progress = i as f64 / total;
+
+                                                this.update(Actions::UpdateProgress {
+                                                    fraction: Rc::new(progress),
+                                                    title: Rc::new(format!("Repairing files: {:.2}%", progress * 100.0))
+                                                }).unwrap();
+                                            }
+                                        }
+
+                                        this.update(Actions::HideProgressBar).unwrap();
+                                    },
+                                    Err(err) => {
+                                        this.update(Actions::ToastError(Rc::new((
+                                            String::from("Failed to get integrity files"), err
+                                        )))).unwrap();
+
+                                        this.update(Actions::HideProgressBar).unwrap();
+                                    }
+                                }
+                            });
+                        },
+                        Err(err) => this.toast_error("Failed to load config", err)
+                    }
+                }
+
                 Actions::ShowProgressBar => {
                     this.widgets.progress_bar.show();
                 }
@@ -566,6 +727,8 @@ impl App {
 
     pub fn set_state(&self, state: LauncherState) {
         println!("[main] [set_state] state: {:?}", &state);
+
+        self.widgets.progress_bar.hide();
 
         self.widgets.launch_game.set_tooltip_text(None);
         self.widgets.launch_game.set_sensitive(true);

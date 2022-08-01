@@ -33,6 +33,8 @@ pub struct AppWidgets {
     pub voiceovers_row: adw::ExpanderRow,
     pub voieover_components: Rc<Vec<VoiceoverRow>>,
 
+    pub repair_game: gtk::Button,
+
     pub game_version: gtk::Label,
     pub patch_version: gtk::Label,
 
@@ -61,6 +63,8 @@ impl AppWidgets {
 
             voiceovers_row: get_object(&builder, "voiceovers_row")?,
             voieover_components: Default::default(),
+
+            repair_game: get_object(&builder, "repair_game")?,
 
             game_version: get_object(&builder, "game_version")?,
             patch_version: get_object(&builder, "patch_version")?,
@@ -160,6 +164,7 @@ impl AppWidgets {
 #[derive(Debug, Clone, glib::Downgrade)]
 pub enum Actions {
     VoiceoverPerformAction(Rc<usize>),
+    RepairGame,
     DxvkPerformAction(Rc<usize>),
     WinePerformAction(Rc<(usize, usize)>),
     UpdateDxvkComboRow,
@@ -226,6 +231,8 @@ impl App {
 
     /// Add default events and values to the widgets
     fn init_events(self) -> Self {
+        self.widgets.repair_game.connect_clicked(Actions::RepairGame.into_fn(&self));
+
         // Voiceover download/delete button event
         for (i, row) in (&*self.widgets.voieover_components).into_iter().enumerate() {
             row.button.connect_clicked(clone!(@weak self as this => move |_| {
@@ -325,6 +332,16 @@ impl App {
             println!("[general page] [update] action: {:?}", &action);
 
             match action {
+                Actions::RepairGame => {
+                    let option = (&*this.app).take();
+                    this.app.set(option.clone());
+
+                    let app = option.unwrap();
+
+                    app.update(super::main::Actions::PreferencesGoBack).unwrap();
+                    app.update(super::main::Actions::RepairGame).unwrap();
+                }
+
                 Actions::VoiceoverPerformAction(i) => {
                     let component = this.widgets.voieover_components[*i].clone();
 

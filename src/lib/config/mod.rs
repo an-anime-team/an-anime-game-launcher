@@ -181,14 +181,31 @@ impl Config {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Launcher {
     pub language: String,
-    pub temp: Option<String>
+    pub temp: Option<String>,
+    pub repairer: Repairer
 }
 
 impl Default for Launcher {
     fn default() -> Self {
         Self {
             language: String::from("en-us"),
-            temp: launcher_dir()
+            temp: launcher_dir(),
+            repairer: Repairer::default()
+        }
+    }
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Repairer {
+    pub threads: u8,
+    pub fast: bool
+}
+
+impl Default for Repairer {
+    fn default() -> Self {
+        Self {
+            threads: 4,
+            fast: false
         }
     }
 }
