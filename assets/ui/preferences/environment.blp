@@ -3,6 +3,14 @@ using Adw 1;
 
 Adw.PreferencesPage page {
     Adw.PreferencesGroup {
+        title: "Game command";
+
+        Gtk.Entry command {
+            placeholder-text: "%command%";
+        }
+    }
+
+    Adw.PreferencesGroup {
         title: "New variable";
 
         Gtk.Box {

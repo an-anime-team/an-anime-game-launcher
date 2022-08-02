@@ -21,6 +21,8 @@ use crate::lib::config;
 pub struct AppWidgets {
     pub page: adw::PreferencesPage,
 
+    pub command: gtk::Entry,
+
     pub variables: adw::PreferencesGroup,
 
     pub name: gtk::Entry,
@@ -34,6 +36,8 @@ impl AppWidgets {
 
         let result = Self {
             page: get_object(&builder, "page")?,
+
+            command: get_object(&builder, "command")?,
 
             variables: get_object(&builder, "variables")?,
 
@@ -100,10 +104,24 @@ impl App {
         let this = self.clone();
 
         self.widgets.add.connect_clicked(move |_| {
-            let name = this.widgets.name.text().as_str().to_string();
-            let value = this.widgets.value.text().as_str().to_string();
+            let name = this.widgets.name.text().to_string();
+            let value = this.widgets.value.text().to_string();
 
             this.update(Actions::Add(Rc::new((name, value)))).unwrap();
+        });
+
+        self.widgets.command.connect_changed(move |entry| {
+            if let Ok(mut config) = config::get() {
+                let command = entry.text().to_string();
+
+                config.game.command = if command.is_empty() {
+                    None
+                } else {
+                    Some(command)
+                };
+
+                config::update(config);
+            }
         });
 
         self
@@ -129,7 +147,7 @@ impl App {
                 Actions::Add(strs) => {
                     let (name, value) = &*strs;
 
-                    if name.len() > 0 && value.len() > 0 {
+                    if !name.is_empty() && !value.is_empty() {
                         if !values.rows.contains_key(name) {
                             config.game.environment.insert(name.clone(), value.clone());
 

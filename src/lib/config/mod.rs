@@ -240,7 +240,8 @@ pub struct Game {
     pub wine: Wine,
     pub dxvk: Dxvk,
     pub enhancements: Enhancements,
-    pub environment: HashMap<String, String>
+    pub environment: HashMap<String, String>,
+    pub command: Option<String>
 }
 
 impl Default for Game {
@@ -256,7 +257,8 @@ impl Default for Game {
             wine: Wine::default(),
             dxvk: Dxvk::default(),
             enhancements: Enhancements::default(),
-            environment: HashMap::new()
+            environment: HashMap::new(),
+            command: None
         }
     }
 }

@@ -103,6 +103,11 @@ pub fn run(debug: bool) -> std::io::Result<()> {
         bash_chain += "launcher.bat";
     }
 
+    let bash_chain = match config.game.command {
+        Some(command) => command.replace("%command%", &bash_chain),
+        None => bash_chain
+    };
+
     let mut command = Command::new("bash");
 
     command.arg("-c");
