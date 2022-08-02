@@ -7,9 +7,11 @@ use gtk::glib::clone;
 use std::rc::Rc;
 use std::cell::Cell;
 use std::io::Error;
+use std::process::Command;
 
 use anime_game_core::prelude::*;
 
+use crate::lib::consts;
 use crate::lib::config;
 use crate::lib::dxvk;
 use crate::lib::wine;
@@ -33,6 +35,7 @@ pub struct AppWidgets {
     pub voiceovers_row: adw::ExpanderRow,
     pub voieover_components: Rc<Vec<VoiceoverRow>>,
 
+    pub launcher_folder: gtk::Button,
     pub repair_game: gtk::Button,
 
     pub game_version: gtk::Label,
@@ -64,6 +67,7 @@ impl AppWidgets {
             voiceovers_row: get_object(&builder, "voiceovers_row")?,
             voieover_components: Default::default(),
 
+            launcher_folder: get_object(&builder, "launcher_folder")?,
             repair_game: get_object(&builder, "repair_game")?,
 
             game_version: get_object(&builder, "game_version")?,
@@ -163,8 +167,9 @@ impl AppWidgets {
 /// It may be helpful if you want to add the same event for several widgets, or call an action inside of another action
 #[derive(Debug, Clone, glib::Downgrade)]
 pub enum Actions {
-    VoiceoverPerformAction(Rc<usize>),
+    OpenLauncherFolder,
     RepairGame,
+    VoiceoverPerformAction(Rc<usize>),
     DxvkPerformAction(Rc<usize>),
     WinePerformAction(Rc<(usize, usize)>),
     UpdateDxvkComboRow,
@@ -187,10 +192,10 @@ impl Actions {
 /// In this example we store a counter here to know what should we increment or decrement
 /// 
 /// This must implement `Default` trait
-#[derive(Debug, Default, glib::Downgrade)]
+#[derive(Debug, Default)]
 pub struct Values {
-    downloaded_wine_versions: Rc<Option<Vec<wine::Version>>>,
-    downloaded_dxvk_versions: Rc<Option<Vec<dxvk::Version>>>
+    downloaded_wine_versions: Option<Vec<wine::Version>>,
+    downloaded_dxvk_versions: Option<Vec<dxvk::Version>>
 }
 
 /// The main application structure
@@ -231,6 +236,7 @@ impl App {
 
     /// Add default events and values to the widgets
     fn init_events(self) -> Self {
+        self.widgets.launcher_folder.connect_clicked(Actions::OpenLauncherFolder.into_fn(&self));
         self.widgets.repair_game.connect_clicked(Actions::RepairGame.into_fn(&self));
 
         // Voiceover download/delete button event
@@ -332,6 +338,14 @@ impl App {
             println!("[general page] [update] action: {:?}", &action);
 
             match action {
+                Actions::OpenLauncherFolder => {
+                    if let Some(launcher_folder) = consts::launcher_dir(){
+                        if let Err(err) = Command::new("xdg-open").arg(launcher_folder).spawn() {
+                            this.toast("Failed to open launcher folder", err);
+                        }
+                    }
+                }
+
                 Actions::RepairGame => {
                     let option = (&*this.app).take();
                     this.app.set(option.clone());
@@ -472,7 +486,7 @@ impl App {
 
                     let mut values = this.values.take();
 
-                    values.downloaded_dxvk_versions = Rc::new(Some(raw_list));
+                    values.downloaded_dxvk_versions = Some(raw_list);
 
                     this.values.set(values);
 
@@ -491,7 +505,7 @@ impl App {
                 Actions::SelectDxvkVersion(i) => {
                     let values = this.values.take();
 
-                    if let Some(dxvk_versions) = &*values.downloaded_dxvk_versions {
+                    if let Some(dxvk_versions) = &values.downloaded_dxvk_versions {
                         let version = dxvk_versions[*i].clone();
 
                         if config.game.dxvk.selected != Some(version.name.clone()) {
@@ -535,7 +549,7 @@ impl App {
 
                     let mut values = this.values.take();
 
-                    values.downloaded_wine_versions = Rc::new(Some(list));
+                    values.downloaded_wine_versions = Some(list);
 
                     this.values.set(values);
 
@@ -554,7 +568,7 @@ impl App {
                 Actions::SelectWineVersion(i) => {
                     let values = this.values.take();
 
-                    if let Some(wine_versions) = &*values.downloaded_wine_versions {
+                    if let Some(wine_versions) = &values.downloaded_wine_versions {
                         match *i {
                             0 => config.game.wine.selected = None,
                             i => config.game.wine.selected = Some(wine_versions[i - 1].name.clone())

@@ -20,7 +20,6 @@ use super::components::progress_bar::*;
 
 use crate::lib::config;
 use crate::lib::game;
-use crate::lib::tasks;
 use crate::lib::launcher::states::LauncherState;
 use crate::lib::wine::{
     Version as WineVersion,
@@ -155,9 +154,9 @@ impl Actions {
 /// In this example we store a counter here to know what should we increment or decrement
 /// 
 /// This must implement `Default` trait
-#[derive(Debug, Default, glib::Downgrade)]
+#[derive(Debug, Default)]
 pub struct Values {
-    state: Rc<LauncherState>
+    state: LauncherState
 }
 
 /// The main application structure
@@ -238,7 +237,9 @@ impl App {
                 Actions::OpenPreferencesPage => {
                     this.widgets.leaflet.set_visible_child_name("preferences_page");
 
-                    tasks::run(clone!(@strong this => async move {
+                    let this = this.clone();
+
+                    std::thread::spawn(move || {
                         if let Err(err) = this.widgets.preferences_stack.update() {
                             glib::MainContext::default().invoke(move || {
                                 this.update(Actions::PreferencesGoBack).unwrap();
@@ -246,7 +247,7 @@ impl App {
                                 this.toast("Failed to update preferences", err);
                             });
                         }
-                    }));
+                    });
                 }
 
                 Actions::PreferencesGoBack => {
@@ -257,7 +258,7 @@ impl App {
 
                 Actions::PerformButtonEvent => {
                     let values = this.values.take();
-                    let state = (*values.state).clone();
+                    let state = values.state.clone();
 
                     this.values.set(values);
 
@@ -801,7 +802,7 @@ impl App {
 
         let mut values = self.values.take();
 
-        values.state = Rc::new(state);
+        values.state = state;
 
         self.values.set(values);
     }

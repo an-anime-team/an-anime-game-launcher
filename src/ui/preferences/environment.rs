@@ -66,7 +66,7 @@ pub enum Actions {
 /// This must implement `Default` trait
 #[derive(Debug, Default)]
 pub struct Values {
-    pub rows: HashMap<String, adw::ActionRow>
+    rows: HashMap<String, adw::ActionRow>
 }
 
 /// The main application structure

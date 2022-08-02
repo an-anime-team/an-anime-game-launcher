@@ -16,8 +16,7 @@ pub const APP_ID: &str = "com.gitlab.an-anime-team.an-anime-game-launcher-gtk";
 pub const APP_VERSION: &str = env!("CARGO_PKG_VERSION");
 pub const APP_DEBUG: bool = cfg!(debug_assertions);
 
-#[tokio::main]
-async fn main() {
+fn main() {
     gtk::init().expect("GTK initialization failed");
     adw::init();
 
