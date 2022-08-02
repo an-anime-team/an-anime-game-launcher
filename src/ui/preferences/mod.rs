@@ -89,7 +89,7 @@ impl PreferencesStack {
     }
 }
 
-impl ToastError for PreferencesStack {
+impl Toast for PreferencesStack {
     fn get_toast_widgets(&self) -> (adw::ApplicationWindow, adw::ToastOverlay) {
         let app = (&*self.app).take();
         self.app.set(app.clone());

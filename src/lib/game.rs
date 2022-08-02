@@ -61,7 +61,7 @@ pub fn try_get_terminal() -> Option<Terminal> {
 /// Try to run the game
 /// 
 /// If `debug = true`, then the game will be run in the new terminal window
-pub fn run(debug: bool) -> Result<(), Error> {
+pub fn run(debug: bool) -> std::io::Result<()> {
     let config = config::get()?;
 
     if !Path::new(&config.game.path).exists() {
@@ -73,7 +73,15 @@ pub fn run(debug: bool) -> Result<(), Error> {
         None => return Err(Error::new(ErrorKind::Other, "Couldn't find wine executable"))
     };
 
-    let mut command = Command::new(wine_executable);
+    // Prepare bash -c '<command>'
+
+    let mut bash_chain = String::new();
+
+    if config.game.enhancements.gamemode {
+        bash_chain += "gamemoderun ";
+    }
+
+    bash_chain += &format!("'{}' ", wine_executable);
 
     if debug {
         // Is not supported now because new spawned terminal needs
@@ -92,8 +100,15 @@ pub fn run(debug: bool) -> Result<(), Error> {
     }
 
     else {
-        command.arg("launcher.bat");
+        bash_chain += "launcher.bat";
     }
+
+    let mut command = Command::new("bash");
+
+    command.arg("-c");
+    command.arg(&bash_chain);
+
+    // Setup environment
 
     command.env("WINEPREFIX", &config.game.wine.prefix);
 
@@ -109,9 +124,13 @@ pub fn run(debug: bool) -> Result<(), Error> {
     command.envs(config.game.enhancements.fsr.get_env_vars());
     command.envs(config.game.wine.language.get_env_vars());
 
-    command.envs(config.game.environment)
-        .current_dir(config.game.path)
-        .spawn()?;
+    command.envs(config.game.environment);
+
+    // Run command
+
+    println!("Running command: bash -c \"{}\"", bash_chain);
+
+    command.current_dir(config.game.path).spawn()?;
     
     Ok(())
 }

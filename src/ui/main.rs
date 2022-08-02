@@ -15,7 +15,7 @@ use wait_not_await::Await;
 use crate::ui::*;
 
 use super::preferences::PreferencesStack;
-use super::traits::toast_error::ToastError;
+use super::traits::toast::Toast;
 use super::components::progress_bar::*;
 
 use crate::lib::config;
@@ -135,7 +135,7 @@ pub enum Actions {
     ShowProgressBar,
     UpdateProgress { fraction: Rc<f64>, title: Rc<String> },
     HideProgressBar,
-    ToastError(Rc<(String, Error)>)
+    Toast(Rc<(String, Error)>)
 }
 
 impl Actions {
@@ -239,7 +239,7 @@ impl App {
                             glib::MainContext::default().invoke(move || {
                                 this.update(Actions::PreferencesGoBack).unwrap();
 
-                                this.toast_error("Failed to update preferences", err);
+                                this.toast("Failed to update preferences", err);
                             });
                         }
                     }));
@@ -270,7 +270,7 @@ impl App {
                                         if let Err(err) = game::run(false) {
                                             this.widgets.window.show();
 
-                                            this.toast_error("Failed to run game", err);
+                                            this.toast("Failed to run game", err);
                                         }
 
                                         else {
@@ -318,20 +318,20 @@ impl App {
                                                             Ok(true) => synced = true,
 
                                                             Ok(false) => {
-                                                                this.update(Actions::ToastError(Rc::new((
+                                                                this.update(Actions::Toast(Rc::new((
                                                                     String::from("Failed to sync patch folder"), Error::last_os_error()
                                                                 )))).unwrap();
                                                             }
 
                                                             Err(err) => {
-                                                                this.update(Actions::ToastError(Rc::new((
+                                                                this.update(Actions::Toast(Rc::new((
                                                                     String::from("Failed to sync patch folder"), err
                                                                 )))).unwrap();
                                                             }
                                                         }
                                                     }
 
-                                                    Err(err) => this.update(Actions::ToastError(Rc::new((
+                                                    Err(err) => this.update(Actions::Toast(Rc::new((
                                                         String::from("Failed to check patch folder state"), err
                                                     )))).unwrap()
                                                 }
@@ -341,7 +341,7 @@ impl App {
                                                         Ok(_) => (),
 
                                                         Err(err) => {
-                                                            this.update(Actions::ToastError(Rc::new((
+                                                            this.update(Actions::Toast(Rc::new((
                                                                 String::from("Failed to patch game"), err
                                                             )))).unwrap();
                                                         }
@@ -395,7 +395,7 @@ impl App {
                                                                         ProgressUpdateResult::Error(msg, err) => {
                                                                             this.widgets.progress_bar.hide();
 
-                                                                            this.toast_error(msg, err);
+                                                                            this.toast(msg, err);
                                                                         }
 
                                                                         ProgressUpdateResult::Finished => {
@@ -419,10 +419,10 @@ impl App {
                                                                     });
                                                                 });
                                                             },
-                                                            Err(err) => this.toast_error("Failed to init wine version installer", err)
+                                                            Err(err) => this.toast("Failed to init wine version installer", err)
                                                         }
                                                     },
-                                                    Err(err) => this.toast_error("Failed to get latest wine version", err)
+                                                    Err(err) => this.toast("Failed to get latest wine version", err)
                                                 }
                                             }
 
@@ -430,7 +430,7 @@ impl App {
                                                 this.update_state();
                                             }
                                         },
-                                        Err(err) => this.toast_error("Failed to list downloaded wine versions", err)
+                                        Err(err) => this.toast("Failed to list downloaded wine versions", err)
                                     }
                                 }
 
@@ -445,7 +445,7 @@ impl App {
                                                 this.widgets.launch_game.set_sensitive(false);
 
                                                 if let Err(err) = prefix.update(&config.game.wine.builds, wine) {
-                                                    this.update(Actions::ToastError(Rc::new((
+                                                    this.update(Actions::Toast(Rc::new((
                                                         String::from("Failed to create wine prefix"), err
                                                     )))).unwrap();
                                                 }
@@ -455,7 +455,7 @@ impl App {
                                                 this.update_state();
                                             });
                                         },
-                                        None => this.toast_error("Failed to get selected wine version", Error::last_os_error())
+                                        None => this.toast("Failed to get selected wine version", Error::last_os_error())
                                     }
                                 }
         
@@ -477,7 +477,7 @@ impl App {
                                             ProgressUpdateResult::Error(msg, err) => {
                                                 this.widgets.progress_bar.hide();
 
-                                                this.toast_error(msg, err);
+                                                this.toast(msg, err);
                                             }
 
                                             ProgressUpdateResult::Finished => {
@@ -516,7 +516,7 @@ impl App {
                                 LauncherState::VoiceOutdated(_) => ()
                             }
                         },
-                        Err(err) => this.toast_error("Failed to load config", err)
+                        Err(err) => this.toast("Failed to load config", err)
                     }
                 }
 
@@ -648,7 +648,7 @@ impl App {
                                             for (i, file) in broken.into_iter().enumerate() {
                                                 if !is_patch_applied || !should_ignore(&file.path) {
                                                     if let Err(err) = file.repair(&config.game.path) {
-                                                        this.update(Actions::ToastError(Rc::new((
+                                                        this.update(Actions::Toast(Rc::new((
                                                             String::from("Failed to repair game file"), err
                                                         )))).unwrap();
                                                     }
@@ -666,7 +666,7 @@ impl App {
                                         this.update(Actions::HideProgressBar).unwrap();
                                     },
                                     Err(err) => {
-                                        this.update(Actions::ToastError(Rc::new((
+                                        this.update(Actions::Toast(Rc::new((
                                             String::from("Failed to get integrity files"), err
                                         )))).unwrap();
 
@@ -675,7 +675,7 @@ impl App {
                                 }
                             });
                         },
-                        Err(err) => this.toast_error("Failed to load config", err)
+                        Err(err) => this.toast("Failed to load config", err)
                     }
                 }
 
@@ -691,10 +691,10 @@ impl App {
                     this.widgets.progress_bar.hide();
                 }
 
-                Actions::ToastError(toast) => {
+                Actions::Toast(toast) => {
                     let (msg, err) = (toast.0.clone(), toast.1.to_string());
 
-                    this.toast_error(msg, err);
+                    this.toast(msg, err);
                 }
             }
 
@@ -829,7 +829,7 @@ impl App {
                     send.send(Err(err.to_string())).unwrap();
 
                     glib::MainContext::default().invoke(move || {
-                        this.toast_error("Failed to get initial launcher state", err);
+                        this.toast("Failed to get initial launcher state", err);
                     });
                 }
             }
@@ -841,7 +841,7 @@ impl App {
     }
 }
 
-impl ToastError for App {
+impl Toast for App {
     fn get_toast_widgets(&self) -> (adw::ApplicationWindow, adw::ToastOverlay) {
         (self.widgets.window.clone(), self.widgets.toast_overlay.clone())
     }

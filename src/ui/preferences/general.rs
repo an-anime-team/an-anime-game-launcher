@@ -171,7 +171,7 @@ pub enum Actions {
     SelectDxvkVersion(Rc<usize>),
     UpdateWineComboRow,
     SelectWineVersion(Rc<usize>),
-    ToastError(Rc<(String, Error)>)
+    Toast(Rc<(String, Error)>)
 }
 
 impl Actions {
@@ -304,7 +304,7 @@ impl App {
                     match component.apply(&config.game.dxvk.builds, &config.game.wine.prefix) {
                         Ok(output) => println!("{}", output),
                         Err(err) => {
-                            this.update(Actions::ToastError(Rc::new((
+                            this.update(Actions::Toast(Rc::new((
                                 String::from("Failed to apply DXVK"), err
                             )))).unwrap();
                         }
@@ -352,7 +352,7 @@ impl App {
 
                         std::thread::spawn(move || {
                             if let Err(err) = component.package.delete_in(&config.game.path) {
-                                this.update(Actions::ToastError(Rc::new((
+                                this.update(Actions::Toast(Rc::new((
                                     String::from("Failed to delete voiceover"), err
                                 )))).unwrap();
                             }
@@ -389,7 +389,7 @@ impl App {
 
                     if component.is_downloaded(&config.game.dxvk.builds) {
                         if let Err(err) = component.delete(&config.game.dxvk.builds) {
-                            this.update(Actions::ToastError(Rc::new((
+                            this.update(Actions::Toast(Rc::new((
                                 String::from("Failed to delete DXVK"), err
                             )))).unwrap();
                         }
@@ -405,7 +405,7 @@ impl App {
                                 match component.apply(&config.game.dxvk.builds, &config.game.wine.prefix) {
                                     Ok(output) => println!("{}", output),
                                     Err(err) => {
-                                        this.update(Actions::ToastError(Rc::new((
+                                        this.update(Actions::Toast(Rc::new((
                                             String::from("Failed to apply DXVK"), err
                                         )))).unwrap();
                                     }
@@ -426,7 +426,7 @@ impl App {
 
                     if component.is_downloaded(&config.game.wine.builds) {
                         if let Err(err) = component.delete(&config.game.wine.builds) {
-                            this.update(Actions::ToastError(Rc::new((
+                            this.update(Actions::Toast(Rc::new((
                                 String::from("Failed to delete wine"), err
                             )))).unwrap();
                         }
@@ -501,7 +501,7 @@ impl App {
                                 match version.apply(&config.game.dxvk.builds, &config.game.wine.prefix) {
                                     Ok(output) => println!("{}", output),
                                     Err(err) => {
-                                        this.update(Actions::ToastError(Rc::new((
+                                        this.update(Actions::Toast(Rc::new((
                                             String::from("Failed to apply DXVK"), err
                                         )))).unwrap();
                                     }
@@ -566,10 +566,10 @@ impl App {
                     config::update(config);
                 }
 
-                Actions::ToastError(toast) => {
+                Actions::Toast(toast) => {
                     let (msg, err) = (toast.0.clone(), toast.1.to_string());
 
-                    this.toast_error(msg, err);
+                    this.toast(msg, err);
                 }
             }
 
@@ -697,7 +697,7 @@ impl App {
     }
 }
 
-impl ToastError for App {
+impl Toast for App {
     fn get_toast_widgets(&self) -> (adw::ApplicationWindow, adw::ToastOverlay) {
         let app = (&*self.app).take();
         self.app.set(app.clone());
