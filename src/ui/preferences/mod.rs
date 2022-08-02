@@ -39,7 +39,7 @@ pub struct PreferencesStack {
 
 impl PreferencesStack {
     pub fn new() -> Result<Self, String> {
-        let builder = gtk::Builder::from_string(include_str!("../../../assets/ui/.dist/preferences.ui"));
+        let builder = gtk::Builder::from_resource("/org/app/ui/preferences.ui");
 
         let result = Self {
             app: Default::default(),

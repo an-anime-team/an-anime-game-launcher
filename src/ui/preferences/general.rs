@@ -56,7 +56,7 @@ pub struct AppWidgets {
 
 impl AppWidgets {
     pub fn try_get() -> Result<Self, String> {
-        let builder = gtk::Builder::from_string(include_str!("../../../assets/ui/.dist/preferences/general.ui"));
+        let builder = gtk::Builder::from_resource("/org/app/ui/preferences/general.ui");
 
         let mut result = Self {
             page: get_object(&builder, "page")?,

@@ -55,7 +55,7 @@ pub struct AppWidgets {
 
 impl AppWidgets {
     pub fn try_get() -> Result<Self, String> {
-        let builder = gtk::Builder::from_string(include_str!("../../assets/ui/.dist/main.ui"));
+        let builder = gtk::Builder::from_resource("/org/app/ui/main.ui");
 
         let window = get_object::<adw::ApplicationWindow>(&builder, "window")?;
         let toast_overlay = get_object::<adw::ToastOverlay>(&builder, "toast_overlay")?;
@@ -101,6 +101,10 @@ impl AppWidgets {
 
         result.about.set_authors(&[
             "Nikita Podvirnyy <suimin.tu.mu.ga.mi@gmail.com>"
+        ]);
+
+        result.about.add_credit_section("Logo", &[
+            "@nightany https://pinterest.com/pin/356206651788051017"
         ]);
 
         let curl_info = anime_game_core::curl_sys::Version::get();

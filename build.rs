@@ -74,6 +74,8 @@ fn blp_process_dir(dir: String) {
 }
 
 fn main() {
+    blp_process_dir(String::new());
+
     if let Ok(_) = read_to_string("assets/resources.xml") {
         gtk4::gio::compile_resources(
             "assets",
@@ -81,6 +83,4 @@ fn main() {
             ".assets.gresource",
         );
     }
-
-    blp_process_dir(String::new());
 }

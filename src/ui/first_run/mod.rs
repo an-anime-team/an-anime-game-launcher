@@ -46,7 +46,7 @@ pub struct AppWidgets {
 
 impl AppWidgets {
     pub fn try_get() -> Result<Self, String> {
-        let builder = gtk::Builder::from_string(include_str!("../../../assets/ui/.dist/first_run.ui"));
+        let builder = gtk::Builder::from_resource("/org/app/ui/first_run.ui");
 
         let result = Self {
             window: get_object(&builder, "window")?,

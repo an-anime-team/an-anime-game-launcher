@@ -10,7 +10,7 @@ pub struct Page {
 
 impl Page {
     pub fn new() -> Result<Self, String> {
-        let builder = gtk::Builder::from_string(include_str!("../../../assets/ui/.dist/first_run/page_1.ui"));
+        let builder = gtk::Builder::from_resource("/org/app/ui/first_run/page_1.ui");
 
         Ok(Self {
             page: get_object(&builder, "page")?,
