@@ -1,6 +1,5 @@
 /target
 /assets/ui/.dist
-Cargo.lock
 
 /scripts/appimage/dist
 /scripts/appimage/*.AppImage
