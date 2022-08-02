@@ -172,16 +172,18 @@ impl App {
             match action {
                 Actions::FirstPageContinue => {
                     match Command::new("git").stdout(Stdio::null()).spawn() {
-                        Ok(_) => this.widgets.carousel.scroll_to(&this.widgets.page_3.page, true),
+                        Ok(_) => match Command::new("xdelta3").stdout(Stdio::null()).spawn() {
+                            Ok(_) => this.widgets.carousel.scroll_to(&this.widgets.page_3.page, true),
+                            Err(_) => this.widgets.carousel.scroll_to(&this.widgets.page_2.page, true)
+                        },
                         Err(_) => this.widgets.carousel.scroll_to(&this.widgets.page_2.page, true)
                     }
                 }
 
                 Actions::SecondPageCheck => {
-                    match Command::new("git").stdout(Stdio::null()).spawn() {
-                        Ok(_) => this.widgets.carousel.scroll_to(&this.widgets.page_3.page, true),
-                        Err(_) => {
-                            // todo
+                    if let Ok(_) = Command::new("git").stdout(Stdio::null()).spawn() {
+                        if let Ok(_) = Command::new("xdelta3").stdout(Stdio::null()).spawn() {
+                            this.widgets.carousel.scroll_to(&this.widgets.page_3.page, true);
                         }
                     }
                 }

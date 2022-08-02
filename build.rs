@@ -35,7 +35,7 @@ fn blp_process_dir(dir: String) {
             create_dir_all(&dist_dir).expect("UI dist dir couldn't be created");
         }
 
-        println!("cargo:rerun-if-changed={}/*.blp", &source_dir);
+        // println!("cargo:rerun-if-changed={}/*.blp", &source_dir);
 
         for entry in entries {
             if let Ok(entry) = entry {
