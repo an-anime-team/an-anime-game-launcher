@@ -20,8 +20,6 @@ mod page_6;
 use crate::ui::*;
 use crate::ui::components::progress_bar::*;
 
-use crate::lib::wine::Version as WineVersion;
-use crate::lib::dxvk::Version as DxvkVersion;
 use crate::lib::wine_prefix::WinePrefix;
 use crate::lib::config;
 
@@ -208,8 +206,8 @@ impl App {
 
                     let progress_bar = this.widgets.page_5.progress_bar.clone();
 
-                    let wine_version = WineVersion::latest().unwrap();
-                    let dxvk_version = DxvkVersion::latest().unwrap();
+                    let wine_version = this.widgets.page_5.get_wine_version().clone();
+                    let dxvk_version = this.widgets.page_5.get_dxvk_version().clone();
 
                     let wine_version_copy = wine_version.clone();
 
@@ -297,8 +295,9 @@ impl App {
                     this.widgets.carousel.scroll_to(&this.widgets.page_6.page, true);
                 }
 
-                // FIXME
                 Actions::Restart => {
+                    Command::new(std::env::current_exe().unwrap()).spawn().unwrap();
+
                     this.widgets.window.close();
                 }
 
