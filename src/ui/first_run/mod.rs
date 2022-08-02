@@ -66,6 +66,11 @@ impl AppWidgets {
         result.carousel.append(&result.page_5.page);
         result.carousel.append(&result.page_6.page);
 
+        // Set devel style to ApplicationWindow if it's debug mode
+        if crate::APP_DEBUG {
+            result.window.add_css_class("devel");
+        }
+
         Ok(result)
     }
 }
