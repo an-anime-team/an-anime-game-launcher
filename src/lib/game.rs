@@ -115,6 +115,7 @@ pub fn run(debug: bool) -> std::io::Result<()> {
 
     // Setup environment
 
+    command.env("WINEARCH", "win64");
     command.env("WINEPREFIX", &config.game.wine.prefix);
 
     // Add DXVK_ASYNC=1 for dxvk-async builds automatically

@@ -101,7 +101,7 @@ impl Version {
                 let output = std::process::Command::new("bash")
                     .arg(&apply_path)
                     .arg("install")
-                    .env("WINE", wine_path)
+                    .env("WINEARCH", "win64")
                     .env("WINESERVER", wineserver_path)
                     .env("WINEPREFIX", prefix_path.to_string())
                     .output()?;
