@@ -97,6 +97,13 @@ pub fn run(debug: bool) -> Result<(), Error> {
 
     command.env("WINEPREFIX", &config.game.wine.prefix);
 
+    // Add DXVK_ASYNC=1 for dxvk-async builds automatically
+    if let Some(dxvk) = config.game.dxvk.selected {
+        if dxvk.contains("async") {
+            command.env("DXVK_ASYNC", "1");
+        }
+    }
+
     command.envs(config.game.wine.sync.get_env_vars());
     command.envs(config.game.enhancements.hud.get_env_vars());
     command.envs(config.game.enhancements.fsr.get_env_vars());
