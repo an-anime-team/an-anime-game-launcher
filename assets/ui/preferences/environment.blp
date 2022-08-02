@@ -9,17 +9,17 @@ Adw.PreferencesPage page {
             orientation: horizontal;
             spacing: 8;
 
-            Gtk.Entry {
+            Gtk.Entry name {
                 placeholder-text: "Name";
             }
 
-            Gtk.Entry {
+            Gtk.Entry value {
                 placeholder-text: "Value";
                 hexpand: true;
             }
         }
 
-        Gtk.Button {
+        Gtk.Button add {
             label: "Add";
 
             margin-top: 8;
@@ -27,55 +27,7 @@ Adw.PreferencesPage page {
         }
     }
 
-    Adw.PreferencesGroup {
+    Adw.PreferencesGroup variables {
         title: "Variables";
-
-        Adw.ActionRow {
-            title: "DXVK_HUD";
-            subtitle: "1";
-
-            Gtk.Button {
-                icon-name: "user-trash-symbolic";
-                valign: center;
-
-                styles ["flat"]
-            }
-        }
-
-        Adw.ActionRow {
-            title: "DXVK_HUD";
-            subtitle: "1";
-
-            Gtk.Button {
-                icon-name: "user-trash-symbolic";
-                valign: center;
-
-                styles ["flat"]
-            }
-        }
-
-        Adw.ActionRow {
-            title: "DXVK_HUD";
-            subtitle: "1";
-
-            Gtk.Button {
-                icon-name: "user-trash-symbolic";
-                valign: center;
-
-                styles ["flat"]
-            }
-        }
-
-        Adw.ActionRow {
-            title: "DXVK_HUD";
-            subtitle: "1";
-
-            Gtk.Button {
-                icon-name: "user-trash-symbolic";
-                valign: center;
-
-                styles ["flat"]
-            }
-        }
     }
 }

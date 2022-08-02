@@ -4,6 +4,7 @@ use libadwaita::{self as adw, prelude::*};
 use gtk4::glib;
 use gtk4::glib::clone;
 
+use std::collections::HashMap;
 use std::rc::Rc;
 use std::cell::Cell;
 use std::io::Error;
@@ -18,7 +19,13 @@ use crate::lib::config;
 /// This function does not implement events
 #[derive(Clone, glib::Downgrade)]
 pub struct AppWidgets {
-    pub page: adw::PreferencesPage
+    pub page: adw::PreferencesPage,
+
+    pub variables: adw::PreferencesGroup,
+
+    pub name: gtk::Entry,
+    pub value: gtk::Entry,
+    pub add: gtk::Button
 }
 
 impl AppWidgets {
@@ -26,7 +33,13 @@ impl AppWidgets {
         let builder = gtk::Builder::from_string(include_str!("../../../assets/ui/.dist/preferences/environment.ui"));
 
         let result = Self {
-            page: get_object(&builder, "page")?
+            page: get_object(&builder, "page")?,
+
+            variables: get_object(&builder, "variables")?,
+
+            name: get_object(&builder, "name")?,
+            value: get_object(&builder, "value")?,
+            add: get_object(&builder, "add")?
         };
 
         Ok(result)
@@ -36,9 +49,10 @@ impl AppWidgets {
 /// This enum is used to describe an action inside of this application
 /// 
 /// It may be helpful if you want to add the same event for several widgets, or call an action inside of another action
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum Actions {
-    None
+    Add(Rc<(String, String)>),
+    Delete(Rc<String>)
 }
 
 /// This enum is used to store some of this application data
@@ -46,8 +60,10 @@ pub enum Actions {
 /// In this example we store a counter here to know what should we increment or decrement
 /// 
 /// This must implement `Default` trait
-#[derive(Debug, Default, glib::Downgrade)]
-pub struct Values;
+#[derive(Debug, Default)]
+pub struct Values {
+    pub rows: HashMap<String, adw::ActionRow>
+}
 
 /// The main application structure
 /// 
@@ -63,7 +79,8 @@ pub struct Values;
 #[derive(Clone, glib::Downgrade)]
 pub struct App {
     widgets: AppWidgets,
-    values: Rc<Cell<Values>>
+    values: Rc<Cell<Values>>,
+    actions: Rc<Cell<Option<glib::Sender<Actions>>>>
 }
 
 impl App {
@@ -71,32 +88,118 @@ impl App {
     pub fn new() -> Result<Self, String> {
         let result = Self {
             widgets: AppWidgets::try_get()?,
-            values: Default::default()
-        }.init_events();
+            values: Default::default(),
+            actions: Default::default()
+        }.init_events().init_actions();
 
         Ok(result)
     }
 
     /// Add default events and values to the widgets
     fn init_events(self) -> Self {
-        // ..
+        let this = self.clone();
+
+        self.widgets.add.connect_clicked(move |_| {
+            let name = this.widgets.name.text().as_str().to_string();
+            let value = this.widgets.value.text().as_str().to_string();
+
+            this.update(Actions::Add(Rc::new((name, value)))).unwrap();
+        });
+
+        self
+    }
+
+    /// Add actions processors
+    /// 
+    /// Changes will happen in the main thread so you can call `update` method from separate thread
+    fn init_actions(self) -> Self {
+        let (sender, receiver) = glib::MainContext::channel::<Actions>(glib::PRIORITY_DEFAULT);
+
+        // I prefer to avoid using clone! here because it breaks my code autocompletion
+        let this = self.clone();
+
+        receiver.attach(None, move |action| {
+            let mut config = config::get().expect("Failed to load config");
+            let mut values = this.values.take();
+
+            // Some debug output
+            println!("[environment page] [update] action: {:?}", &action);
+
+            match action {
+                Actions::Add(strs) => {
+                    let (name, value) = &*strs;
+
+                    if name.len() > 0 && value.len() > 0 {
+                        if !values.rows.contains_key(name) {
+                            config.game.environment.insert(name.clone(), value.clone());
+
+                            let row = adw::ActionRow::new();
+
+                            row.set_title(name);
+                            row.set_subtitle(value);
+
+                            let button = gtk::Button::new();
+
+                            button.set_icon_name("user-trash-symbolic");
+                            button.set_valign(gtk::Align::Center);
+                            button.add_css_class("flat");
+
+                            button.connect_clicked(clone!(@weak this, @strong name => move |_| {
+                                this.update(Actions::Delete(Rc::new(name.clone()))).unwrap();
+                            }));
+
+                            row.add_suffix(&button);
+
+                            this.widgets.variables.add(&row);
+
+                            values.rows.insert(name.clone(), row);
+
+                            this.widgets.name.set_text("");
+                            this.widgets.value.set_text("");
+                        }
+                    }
+                }
+
+                Actions::Delete(name) => {
+                    let name = &*name;
+
+                    if let Some(widget) = values.rows.get(name) {
+                        this.widgets.variables.remove(widget);
+                    }
+
+                    values.rows.remove(name);
+                    config.game.environment.remove(name);
+                }
+            }
+
+            config::update(config);
+
+            this.values.set(values);
+
+            glib::Continue(true)
+        });
+
+        self.actions.set(Some(sender));
 
         self
     }
 
     /// Update widgets state by calling some action
-    pub fn update(&self, action: Actions) {
-        let values = self.values.take();
+    pub fn update(&self, action: Actions) -> Result<(), std::sync::mpsc::SendError<Actions>> {
+        let actions = self.actions.take();
+        
+        let result = match &actions {
+            Some(sender) => Ok(sender.send(action)?),
+            None => Ok(())
+        };
 
-        match action {
-            Actions::None => ()
-        }
+        self.actions.set(actions);
 
-        self.values.set(values);
+        result
     }
 
     pub fn title() -> String {
-        String::from("Environment (WIP)")
+        String::from("Environment")
     }
 
     pub fn get_page(&self) -> adw::PreferencesPage {
@@ -109,7 +212,9 @@ impl App {
 
         status_page.set_description(Some("Loading environment..."));
 
-        // ..
+        for (name, value) in config.game.environment {
+            self.update(Actions::Add(Rc::new((name, value)))).unwrap();
+        }
 
         Ok(())
     }
