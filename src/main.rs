@@ -12,7 +12,7 @@ pub mod lib;
 
 use ui::*;
 
-pub const APP_ID: &str = "com.gitlab.an-anime-team.an-anime-game-launcher-gtk";
+pub const APP_ID: &str = "moe.launcher.an-anime-game-launcher-gtk";
 pub const APP_VERSION: &str = env!("CARGO_PKG_VERSION");
 pub const APP_DEBUG: bool = cfg!(debug_assertions);
 
