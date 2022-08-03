@@ -80,9 +80,17 @@ Adw.PreferencesWindow window {
             }
 
             Adw.ActionRow {
-                title: "Use integer scaling";
+                title: "Integer scaling";
 
                 Gtk.Switch integer_scaling {
+                    valign: center;
+                }
+            }
+
+            Adw.ActionRow {
+                title: "Nvidia Image Scaling";
+
+                Gtk.Switch nvidia_image_scaling {
                     valign: center;
                 }
             }

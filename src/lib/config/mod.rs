@@ -226,8 +226,13 @@ impl Config {
                 gamescope += " -n";
             }
 
-            // Set FSR support
-            if self.game.enhancements.fsr.enabled {
+            // Set NIS (Nvidia Image Scaling) support
+            if self.game.enhancements.gamescope.nvidia_image_scaling {
+                gamescope += " -Y";
+            }
+
+            // Set FSR support (only if NIS is not enabled)
+            else if self.game.enhancements.fsr.enabled {
                 gamescope += " -U";
             }
 
@@ -418,6 +423,7 @@ pub struct Gamescope {
     pub gamescope: Size,
     pub framerate: Framerate,
     pub integer_scaling: bool,
+    pub nvidia_image_scaling: bool,
     pub window_type: WindowType
 }
 
@@ -429,6 +435,7 @@ impl Default for Gamescope {
             gamescope: Size::default(),
             framerate: Framerate::default(),
             integer_scaling: true,
+            nvidia_image_scaling: false,
             window_type: WindowType::default()
         }
     }

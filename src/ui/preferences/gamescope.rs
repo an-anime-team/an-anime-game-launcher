@@ -24,6 +24,7 @@ pub struct AppWidgets {
     pub framerate_limit: gtk::Entry,
     pub framerate_unfocused_limit: gtk::Entry,
     pub integer_scaling: gtk::Switch,
+    pub nvidia_image_scaling: gtk::Switch,
 
     pub borderless: gtk::ToggleButton,
     pub fullscreen: gtk::ToggleButton
@@ -45,6 +46,7 @@ impl AppWidgets {
             framerate_limit: get_object(&builder, "framerate_limit")?,
             framerate_unfocused_limit: get_object(&builder, "framerate_unfocused_limit")?,
             integer_scaling: get_object(&builder, "integer_scaling")?,
+            nvidia_image_scaling: get_object(&builder, "nvidia_image_scaling")?,
 
             borderless: get_object(&builder, "borderless")?,
             fullscreen: get_object(&builder, "fullscreen")?
@@ -147,6 +149,15 @@ impl App {
             }
         });
 
+        // Use NIS (Nvidia Image Scaling)
+        self.widgets.nvidia_image_scaling.connect_state_notify(move |switch| {
+            if let Ok(mut config) = config::get() {
+                config.game.enhancements.gamescope.nvidia_image_scaling = switch.state();
+
+                config::update(config);
+            }
+        });
+
         // Window type
 
         let borderless = self.widgets.borderless.clone();
@@ -217,6 +228,7 @@ impl App {
         set_text(&self.widgets.framerate_unfocused_limit, config.game.enhancements.gamescope.framerate.unfocused);
 
         self.widgets.integer_scaling.set_state(config.game.enhancements.gamescope.integer_scaling);
+        self.widgets.nvidia_image_scaling.set_state(config.game.enhancements.gamescope.nvidia_image_scaling);
 
         match config.game.enhancements.gamescope.window_type {
             config::WindowType::Borderless => self.widgets.borderless.set_active(true),
