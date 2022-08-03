@@ -1,3 +1,13 @@
+# 1.0.0-rc1
+
+*(nothing changed)*
+
+# Beta 0.7.1
+
+- updated core library; new version caches patch fetching results
+- added Nvidia Image Scaling option to gamescope
+- added `dxvk-async-1.10.3`
+
 # Beta 0.7.0
 
 - added gamescope support
