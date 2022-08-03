@@ -11,7 +11,7 @@ use crate::lib::config;
 
 #[derive(Debug)]
 pub enum DownloadingResult {
-    DownloadingError(std::io::Error),
+    DownloadingError(DownloadingError),
     UnpackingError,
     Done
 }
@@ -40,30 +40,34 @@ pub trait DownloadComponent {
                 InstallerUpdate::DownloadingFinished => (),
                 InstallerUpdate::UnpackingStarted(_) => (),
 
+                InstallerUpdate::CheckingFreeSpace(_) => {
+                    progress_bar.set_text(Some("Checking free space..."));
+                }
+
                 InstallerUpdate::DownloadingProgress(curr, total) => {
                     let progress = curr as f64 / total as f64;
 
                     progress_bar.set_fraction(progress);
                     progress_bar.set_text(Some(&format!("Downloading: {}%", (progress * 100.0) as u64)));
-                },
+                }
 
                 InstallerUpdate::UnpackingProgress(curr, total) => {
                     let progress = curr as f64 / total as f64;
 
                     progress_bar.set_fraction(progress);
                     progress_bar.set_text(Some(&format!("Unpacking: {}%", (progress * 100.0) as u64)));
-                },
+                }
 
                 InstallerUpdate::UnpackingFinished => {
                     progress_bar.set_visible(false);
                     button.set_visible(true);
 
                     downl_send.send(DownloadingResult::Done).unwrap();
-                },
+                }
 
                 InstallerUpdate::DownloadingError(err) => {
                     downl_send.send(DownloadingResult::DownloadingError(err.into())).unwrap();
-                },
+                }
 
                 InstallerUpdate::UnpackingError => {
                     downl_send.send(DownloadingResult::UnpackingError).unwrap();

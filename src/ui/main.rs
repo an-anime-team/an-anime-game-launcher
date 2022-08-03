@@ -656,7 +656,7 @@ impl App {
                                                 if !is_patch_applied || !should_ignore(&file.path) {
                                                     if let Err(err) = file.repair(&config.game.path) {
                                                         this.update(Actions::Toast(Rc::new((
-                                                            String::from("Failed to repair game file"), err
+                                                            String::from("Failed to repair game file"), err.into()
                                                         )))).unwrap();
                                                     }
                                                 }

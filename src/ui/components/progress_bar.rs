@@ -3,8 +3,6 @@ use libadwaita as adw;
 
 use gtk::glib;
 
-use std::io::Error;
-
 use anime_game_core::prelude::*;
 
 use crate::lib::prettify_bytes::prettify_bytes;
@@ -52,7 +50,8 @@ impl ProgressBar {
 
     pub fn update_from_state(&self, state: InstallerUpdate) -> ProgressUpdateResult {
         match state {
-            InstallerUpdate::DownloadingStarted(_) => self.show(),
+            InstallerUpdate::CheckingFreeSpace(_) => self.progress_bar.set_text(Some("Checking free space...")),
+            InstallerUpdate::DownloadingStarted(_) => (),
 
             InstallerUpdate::DownloadingProgress(curr, total) => {
                 let progress = curr as f64 / total as f64;
@@ -80,9 +79,9 @@ impl ProgressBar {
             InstallerUpdate::UnpackingStarted(_) => (),
 
             InstallerUpdate::DownloadingError(err) => return ProgressUpdateResult::Error(String::from("Failed to download"), err.into()),
-            InstallerUpdate::UnpackingError => return ProgressUpdateResult::Error(String::from("Failed to unpack"), Error::last_os_error()),
+            InstallerUpdate::UnpackingError => return ProgressUpdateResult::Error(String::from("Failed to unpack"), std::io::Error::last_os_error()),
 
-            InstallerUpdate::UnpackingFinished => return ProgressUpdateResult::Finished
+            InstallerUpdate::UnpackingFinished => return ProgressUpdateResult::Finished,
         }
 
         ProgressUpdateResult::Updated
