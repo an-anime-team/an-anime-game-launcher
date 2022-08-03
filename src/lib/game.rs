@@ -2,6 +2,9 @@ use std::io::{Error, ErrorKind};
 use std::path::Path;
 use std::process::Command;
 
+use anime_game_core::telemetry;
+
+use super::consts;
 use super::config;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -72,6 +75,12 @@ pub fn run(debug: bool) -> std::io::Result<()> {
         Some(path) => path,
         None => return Err(Error::new(ErrorKind::Other, "Couldn't find wine executable"))
     };
+
+    // Check telemetry servers
+
+    if let Some(server) = telemetry::is_disabled(consts::TELEMETRY_CHECK_TIMEOUT) {
+        return Err(Error::new(ErrorKind::Other, format!("Telemetry server is not disabled: {server}")));
+    }
 
     // Prepare bash -c '<command>'
 

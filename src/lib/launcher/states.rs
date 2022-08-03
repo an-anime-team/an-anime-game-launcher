@@ -2,6 +2,7 @@ use std::io::{Error, ErrorKind};
 
 use anime_game_core::prelude::*;
 
+use crate::lib::consts;
 use crate::lib::config;
 use crate::lib::wine_prefix::WinePrefix;
 
@@ -93,7 +94,7 @@ impl LauncherState {
 
                 status("Updating patch info...");
 
-                let patch = Patch::try_fetch(config.patch.servers.clone())?;
+                let patch = Patch::try_fetch(config.patch.servers.clone(), consts::PATCH_FETCHING_TIMEOUT)?;
 
                 if patch.is_applied(&config.game.path)? {
                     Self::Launch

@@ -18,6 +18,7 @@ use super::preferences::PreferencesStack;
 use super::traits::toast::Toast;
 use super::components::progress_bar::*;
 
+use crate::lib::consts;
 use crate::lib::config;
 use crate::lib::game;
 use crate::lib::launcher::states::LauncherState;
@@ -275,7 +276,9 @@ impl App {
                                         if let Err(err) = game::run(false) {
                                             this.widgets.window.show();
 
-                                            this.toast("Failed to run game", err);
+                                            this.update(Actions::Toast(Rc::new((
+                                                String::from("Failed to run game"), err
+                                            )))).unwrap();
                                         }
 
                                         else {
@@ -635,7 +638,7 @@ impl App {
 
                                             let total = broken.len() as f64;
 
-                                            let is_patch_applied = match Patch::try_fetch(config.patch.servers) {
+                                            let is_patch_applied = match Patch::try_fetch(config.patch.servers, consts::PATCH_FETCHING_TIMEOUT) {
                                                 Ok(patch) => patch.is_applied(&config.game.path).unwrap_or(true),
                                                 Err(_) => true
                                             };

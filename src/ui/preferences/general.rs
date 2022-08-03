@@ -649,7 +649,7 @@ impl App {
                 self.widgets.game_version.set_label(&current.to_string());
                 self.widgets.game_version.set_css_classes(&["error"]);
 
-                self.widgets.game_version.set_tooltip_text(Some(&format!("Game is too outdated and can't be updated. Latest version: {}", latest)));
+                self.widgets.game_version.set_tooltip_text(Some(&format!("Game is too outdated and can't be updated. Latest version: {latest}")));
             },
             VersionDiff::NotInstalled { .. } => {
                 self.widgets.game_version.set_label("not installed");
@@ -660,7 +660,7 @@ impl App {
         // Update patch version
         status_page.set_description(Some("Updating patch info..."));
 
-        let patch = Patch::try_fetch(config.patch.servers)?;
+        let patch = Patch::try_fetch(config.patch.servers, consts::PATCH_FETCHING_TIMEOUT)?;
 
         match patch {
             Patch::NotAvailable => {
@@ -673,7 +673,7 @@ impl App {
                 self.widgets.patch_version.set_label("outdated");
                 self.widgets.patch_version.set_css_classes(&["warning"]);
 
-                self.widgets.patch_version.set_tooltip_text(Some(&format!("Patch is outdated ({} -> {})", current, latest)));
+                self.widgets.patch_version.set_tooltip_text(Some(&format!("Patch is outdated ({current} -> {latest})")));
             },
             Patch::Preparation { .. } => {
                 self.widgets.patch_version.set_label("preparation");
