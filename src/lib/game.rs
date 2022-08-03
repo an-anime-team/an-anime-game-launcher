@@ -7,7 +7,7 @@ use anime_game_core::telemetry;
 use super::consts;
 use super::config;
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+/*#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Terminal {
     GnomeTerminal,
     Konsole,
@@ -59,7 +59,7 @@ pub fn try_get_terminal() -> Option<Terminal> {
     }
 
     None
-}
+}*/
 
 /// Try to run the game
 /// 
@@ -90,26 +90,17 @@ pub fn run(debug: bool) -> std::io::Result<()> {
         bash_chain += "gamemoderun ";
     }
 
-    bash_chain += &format!("'{}' ", wine_executable);
+    bash_chain += &format!("'{wine_executable}' ");
 
     if debug {
-        // Is not supported now because new spawned terminal needs
-        // to have cwd and env variables specified directly
-        // which is kinda difficult
         todo!();
-
-        /*match try_get_terminal() {
-            Some(terminal) => {
-                command = Command::new(terminal.get_command());
-
-                command.args(terminal.get_args("launcher.bat"));
-            },
-            None => return Err(Error::new(ErrorKind::Other, "Couldn't find terminal application"))
-        }*/
+    } else {
+        bash_chain += "launcher.bat";
     }
 
-    else {
-        bash_chain += "launcher.bat";
+    // gamescope <params> -- <command to run>
+    if let Some(gamescope) = config.get_gamescope_command() {
+        bash_chain = format!("{gamescope} -- {bash_chain}");
     }
 
     let bash_chain = match config.game.command {

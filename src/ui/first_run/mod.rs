@@ -6,7 +6,7 @@ use gtk::glib::clone;
 
 use std::rc::Rc;
 use std::cell::Cell;
-use std::process::{Command, Stdio};
+use std::process::Command;
 
 use anime_game_core::prelude::*;
 
@@ -20,6 +20,7 @@ mod page_6;
 use crate::ui::*;
 use crate::ui::components::progress_bar::*;
 
+use crate::lib;
 use crate::lib::wine_prefix::WinePrefix;
 use crate::lib::config;
 
@@ -100,14 +101,6 @@ impl Actions {
     }
 }
 
-/// This enum is used to store some of this application data
-/// 
-/// In this example we store a counter here to know what should we increment or decrement
-/// 
-/// This must implement `Default` trait
-#[derive(Debug, Default)]
-pub struct Values;
-
 /// The main application structure
 /// 
 /// `Default` macro automatically calls `AppWidgets::default`, i.e. loads UI file and reference its widgets
@@ -122,7 +115,6 @@ pub struct Values;
 #[derive(Clone)]
 pub struct App {
     widgets: AppWidgets,
-    // values: Rc<Cell<Values>>,
     actions: Rc<Cell<Option<glib::Sender<Actions>>>>
 }
 
@@ -132,7 +124,6 @@ impl App {
         // Get default widgets from ui file and add events to them
         let result = Self {
             widgets: AppWidgets::try_get()?,
-            // values: Default::default(),
             actions: Default::default()
         }.init_events().init_actions();
 
@@ -176,20 +167,18 @@ impl App {
 
             match action {
                 Actions::FirstPageContinue => {
-                    match Command::new("git").stdout(Stdio::null()).spawn() {
-                        Ok(_) => match Command::new("xdelta3").stdout(Stdio::null()).spawn() {
-                            Ok(_) => this.widgets.carousel.scroll_to(&this.widgets.page_3.page, true),
-                            Err(_) => this.widgets.carousel.scroll_to(&this.widgets.page_2.page, true)
-                        },
-                        Err(_) => this.widgets.carousel.scroll_to(&this.widgets.page_2.page, true)
-                    }
+                    this.widgets.carousel.scroll_to({
+                        if lib::is_available("git") && lib::is_available("xdelta3") {
+                            &this.widgets.page_3.page
+                        } else {
+                            &this.widgets.page_2.page
+                        }
+                    }, true);
                 }
 
                 Actions::SecondPageCheck => {
-                    if let Ok(_) = Command::new("git").stdout(Stdio::null()).spawn() {
-                        if let Ok(_) = Command::new("xdelta3").stdout(Stdio::null()).spawn() {
-                            this.widgets.carousel.scroll_to(&this.widgets.page_3.page, true);
-                        }
+                    if lib::is_available("git") && lib::is_available("xdelta3") {
+                        this.widgets.carousel.scroll_to(&this.widgets.page_3.page, true);
                     }
                 }
 

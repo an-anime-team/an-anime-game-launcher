@@ -44,20 +44,12 @@ impl Into<u32> for WineSync {
 impl WineSync {
     /// Get environment variables corresponding to used wine sync
     pub fn get_env_vars(&self) -> HashMap<&str, &str> {
-        match self {
-            Self::None => HashMap::new(),
-            Self::ESync => HashMap::from([
-                ("WINEESYNC", "1")
-            ]),
-            Self::FSync => HashMap::from([
-                ("WINEESYNC", "1"),
-                ("WINEFSYNC", "1")
-            ]),
-            Self::Futex2 => HashMap::from([
-                ("WINEESYNC", "1"),
-                ("WINEFSYNC", "1"),
-                ("WINEFSYNC_FUTEX2", "1")
-            ])
-        }
+        HashMap::from([(match self {
+            Self::None => return HashMap::new(),
+
+            Self::ESync  => "WINEESYNC",
+            Self::FSync  => "WINEFSYNC",
+            Self::Futex2 => "WINEFSYNC_FUTEX2"
+        }, "1")])
     }
 }

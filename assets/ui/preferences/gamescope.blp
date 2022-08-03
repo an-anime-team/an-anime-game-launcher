@@ -1,0 +1,111 @@
+using Gtk 4.0;
+using Adw 1;
+
+Adw.PreferencesWindow window {
+    title: "Gamescope";
+
+    modal: true;
+    hide-on-close: true;
+
+    Adw.PreferencesPage {
+        Adw.PreferencesGroup {
+            title: "Game resolution";
+
+            Adw.ActionRow {
+                title: "Width";
+
+                Gtk.Entry game_width {
+                    placeholder-text: "0";
+                    valign: center;
+                    input-purpose: digits;
+                }
+            }
+
+            Adw.ActionRow {
+                title: "Height";
+
+                Gtk.Entry game_height {
+                    placeholder-text: "0";
+                    valign: center;
+                    input-purpose: digits;
+                }
+            }
+        }
+
+        Adw.PreferencesGroup {
+            title: "Gamescope resolution";
+
+            Adw.ActionRow {
+                title: "Width";
+
+                Gtk.Entry gamescope_width {
+                    placeholder-text: "0";
+                    valign: center;
+                    input-purpose: digits;
+                }
+            }
+
+            Adw.ActionRow {
+                title: "Height";
+
+                Gtk.Entry gamescope_height {
+                    placeholder-text: "0";
+                    valign: center;
+                    input-purpose: digits;
+                }
+            }
+        }
+
+        Adw.PreferencesGroup {
+            title: "Other settings";
+
+            Adw.ActionRow {
+                title: "Framerate limit";
+
+                Gtk.Entry framerate_limit {
+                    placeholder-text: "0";
+                    valign: center;
+                    input-purpose: digits;
+                }
+            }
+
+            Adw.ActionRow {
+                title: "Unfocused framerate limit";
+
+                Gtk.Entry framerate_unfocused_limit {
+                    placeholder-text: "0";
+                    valign: center;
+                    input-purpose: digits;
+                }
+            }
+
+            Adw.ActionRow {
+                title: "Use integer scaling";
+
+                Gtk.Switch integer_scaling {
+                    valign: center;
+                }
+            }
+
+            Adw.ActionRow {
+                title: "Window type";
+
+                Gtk.Box {
+                    orientation: horizontal;
+
+                    Gtk.ToggleButton borderless {
+                        label: "Borderless";
+                        valign: center;
+                    }
+
+                    Gtk.ToggleButton fullscreen {
+                        label: "Fullscreen";
+                        valign: center;
+                    }
+
+                    styles ["linked"]
+                }
+            }
+        }
+    }
+}

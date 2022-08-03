@@ -3,10 +3,10 @@ use std::fs::File;
 use std::io::Read;
 use std::path::Path;
 use std::io::{Error, ErrorKind, Write};
-use std::process::{Command, Stdio};
 
 use serde::{Serialize, Deserialize};
 
+use crate::lib;
 use super::consts::*;
 use super::wine::{
     Version as WineVersion,
@@ -148,9 +148,12 @@ impl Config {
                 // ????
                 None
             },
-            None => match Command::new("wine").stdout(Stdio::null()).stderr(Stdio::null()).output() {
-                Ok(output) => if output.status.success() { Some(String::from("wine")) } else { None },
-                Err(_) => None
+            None => {
+                if lib::is_available("wine") {
+                    Some(String::from("wine"))
+                } else {
+                    None
+                }
             }
         }
     }
@@ -174,6 +177,65 @@ impl Config {
                 }
             },
             None => None
+        }
+    }
+
+    pub fn get_gamescope_command(&self) -> Option<String> {
+        // https://github.com/bottlesdevs/Bottles/blob/b908311348ed1184ead23dd76f9d8af41ff24082/src/backend/wine/winecommand.py#L478
+        if self.game.enhancements.gamescope.enabled {
+            let mut gamescope = String::from("gamescope");
+
+            // Set window type
+            match self.game.enhancements.gamescope.window_type {
+                WindowType::Borderless => gamescope += " -b",
+                WindowType::Fullscreen => gamescope += " -f"
+            }
+
+            // Set game width
+            if self.game.enhancements.gamescope.game.width > 0 {
+                gamescope += &format!(" -w {}", self.game.enhancements.gamescope.game.width);
+            }
+
+            // Set game height
+            if self.game.enhancements.gamescope.game.height > 0 {
+                gamescope += &format!(" -h {}", self.game.enhancements.gamescope.game.height);
+            }
+
+            // Set gamescope width
+            if self.game.enhancements.gamescope.gamescope.width > 0 {
+                gamescope += &format!(" -W {}", self.game.enhancements.gamescope.gamescope.width);
+            }
+
+            // Set gamescope height
+            if self.game.enhancements.gamescope.gamescope.height > 0 {
+                gamescope += &format!(" -H {}", self.game.enhancements.gamescope.gamescope.height);
+            }
+
+            // Set focused framerate limit
+            if self.game.enhancements.gamescope.framerate.focused > 0 {
+                gamescope += &format!(" -r {}", self.game.enhancements.gamescope.framerate.focused);
+            }
+
+            // Set unfocused framerate limit
+            if self.game.enhancements.gamescope.framerate.unfocused > 0 {
+                gamescope += &format!(" -o {}", self.game.enhancements.gamescope.framerate.unfocused);
+            }
+
+            // Set integer scaling
+            if self.game.enhancements.gamescope.integer_scaling {
+                gamescope += " -n";
+            }
+
+            // Set FSR support
+            if self.game.enhancements.fsr.enabled {
+                gamescope += " -U";
+            }
+
+            Some(gamescope)
+        }
+
+        else {
+            None
         }
     }
 }
@@ -314,7 +376,8 @@ impl Default for Dxvk {
 pub struct Enhancements {
     pub fsr: Fsr,
     pub gamemode: bool,
-    pub hud: HUD
+    pub hud: HUD,
+    pub gamescope: Gamescope
 }
 
 #[derive(Debug, Clone, Copy, Serialize, Deserialize)]
@@ -345,5 +408,52 @@ impl Fsr {
         else {
             HashMap::new()
         }
+    }
+}
+
+#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
+pub struct Gamescope {
+    pub enabled: bool,
+    pub game: Size,
+    pub gamescope: Size,
+    pub framerate: Framerate,
+    pub integer_scaling: bool,
+    pub window_type: WindowType
+}
+
+impl Default for Gamescope {
+    fn default() -> Self {
+        Self {
+            enabled: false,
+            game: Size::default(),
+            gamescope: Size::default(),
+            framerate: Framerate::default(),
+            integer_scaling: true,
+            window_type: WindowType::default()
+        }
+    }
+}
+
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, Default)]
+pub struct Size {
+    pub width: u16,
+    pub height: u16
+}
+
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, Default)]
+pub struct Framerate {
+    pub focused: u16,
+    pub unfocused: u16
+}
+
+#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
+pub enum WindowType {
+    Borderless,
+    Fullscreen
+}
+
+impl Default for WindowType {
+    fn default() -> Self {
+        Self::Borderless
     }
 }

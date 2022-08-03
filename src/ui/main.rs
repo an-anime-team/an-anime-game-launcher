@@ -80,7 +80,7 @@ impl AppWidgets {
                 get_object(&builder, "progress_bar_group")?
             ),
 
-            preferences_stack: PreferencesStack::new()?
+            preferences_stack: PreferencesStack::new(&window)?
         };
 
         // Set devel style to ApplicationWindow if it's debug mode

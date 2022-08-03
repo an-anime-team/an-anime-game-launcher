@@ -14,6 +14,8 @@ mod general;
 mod enhancements;
 mod environment;
 
+pub mod gamescope;
+
 pub mod pages {
     pub use super::general::App as GeneralPage;
     pub use super::enhancements::App as EnhancementsPage;
@@ -38,7 +40,7 @@ pub struct PreferencesStack {
 }
 
 impl PreferencesStack {
-    pub fn new() -> Result<Self, String> {
+    pub fn new(window: &adw::ApplicationWindow) -> Result<Self, String> {
         let builder = gtk::Builder::from_resource("/org/app/ui/preferences.ui");
 
         let result = Self {
@@ -53,7 +55,7 @@ impl PreferencesStack {
             stack: get_object(&builder, "stack")?,
 
             general_page: pages::GeneralPage::new()?,
-            enhancements_page: pages::EnhancementsPage::new()?,
+            enhancements_page: pages::EnhancementsPage::new(window)?,
             environment_page: pages::EnvironmentPage::new()?
         };
 

@@ -73,11 +73,26 @@ Adw.PreferencesPage page {
             }
         }
 
-        Adw.ActionRow {
+        Adw.ActionRow gamemode_row {
             title: "Gamemode";
             subtitle: "This prioritizes the game over the rest of the processes";
 
             Gtk.Switch gamemode_switcher {
+                valign: center;
+            }
+        }
+
+        Adw.ActionRow gamescope_row {
+            title: "Gamescope";
+
+            Gtk.Button gamescope_settings {
+                icon-name: "emblem-system-symbolic";
+                valign: center;
+
+                styles ["flat"]
+            }
+
+            Gtk.Switch gamescope_switcher {
                 valign: center;
             }
         }
