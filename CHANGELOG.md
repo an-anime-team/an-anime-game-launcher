@@ -1,3 +1,11 @@
+# Beta 0.7.0
+
+- added gamescope support
+- now gamemode option will not be clickabke if gamemode is not installed
+- reworked enhancements page's events
+- changed winesync env variables
+- added `lib::is_available` function to check packages availability
+
 # Beta 0.6.3
 
 - updated core library;
