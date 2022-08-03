@@ -228,7 +228,9 @@ impl Default for Patch {
                 "https://notabug.org/Krock/dawn".to_string(),
                 "https://dev.kaifa.ch/Maroxy/dawn".to_string()
             ],
-            root: true
+
+            // Disable root requirement for patching if we're running launcher in flatpak
+            root: !Path::new("/.flatpak-info").exists()
         }
     }
 }
