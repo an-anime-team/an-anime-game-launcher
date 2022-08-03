@@ -1,8 +1,9 @@
 # An Anime Game Launcher GTK
 
-Development version of the launcher variant written on Rust, GTK4 and libadwaita, using [Anime Game Core](https://gitlab.com/an-anime-team/anime-game-core) library
+The launcher variant written on Rust, GTK4 and libadwaita, using [Anime Game Core](https://gitlab.com/an-anime-team/anime-game-core) library
 
-Work in progress
+<img src="repository/pictures/main.png">
+<img src="repository/pictures/settings.png">
 
 ## Development
 
@@ -34,6 +35,8 @@ cargo build --release
 ```
 
 ### Building AppImage
+
+Important to run it from the `scripts/appimage` folder
 
 ```
 cd scripts/appimage
