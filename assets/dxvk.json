@@ -81,6 +81,12 @@
     ],
     "async": [
         {
+            "name": "dxvk-async-1.10.3",
+            "version": "1.10.3",
+            "uri": "https://github.com/Sporif/dxvk-async/releases/download/1.10.3/dxvk-async-1.10.3.tar.gz",
+            "recommended": true
+        },
+        {
             "name": "dxvk-async-1.10.2",
             "version": "1.10.2",
             "uri": "https://github.com/Sporif/dxvk-async/releases/download/1.10.2/dxvk-async-1.10.2.tar.gz",
