@@ -53,7 +53,7 @@ pub struct Page {
 
 impl Page {
     pub fn new(window: gtk::Window) -> Result<Self, String> {
-        let builder = gtk::Builder::from_resource("/org/app/ui/first_run/page_4.ui");
+        let builder = gtk::Builder::from_resource("/org/app/ui/first_run/default_paths.ui");
 
         let result = Self {
             window,

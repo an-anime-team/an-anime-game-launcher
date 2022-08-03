@@ -10,12 +10,13 @@ use std::process::Command;
 
 use anime_game_core::prelude::*;
 
-mod page_1;
-mod page_2;
-mod page_3;
-mod page_4;
-mod page_5;
-mod page_6;
+mod welcome;
+mod dependencies;
+mod tos_warning;
+mod default_paths;
+mod voice_packages;
+mod download_components;
+mod finish;
 
 use crate::ui::*;
 use crate::ui::components::progress_bar::*;
@@ -34,13 +35,13 @@ pub struct AppWidgets {
     pub window: adw::ApplicationWindow,
     pub carousel: adw::Carousel,
 
-    // TODO: use names instead of numbers
-    pub page_1: page_1::Page,
-    pub page_2: page_2::Page,
-    pub page_3: page_3::Page,
-    pub page_4: page_4::Page,
-    pub page_5: page_5::Page,
-    pub page_6: page_6::Page
+    pub welcome: welcome::Page,
+    pub dependencies: dependencies::Page,
+    pub tos_warning: tos_warning::Page,
+    pub default_paths: default_paths::Page,
+    pub voice_packages: voice_packages::Page,
+    pub download_components: download_components::Page,
+    pub finish: finish::Page
 }
 
 impl AppWidgets {
@@ -51,21 +52,23 @@ impl AppWidgets {
             window: get_object(&builder, "window")?,
             carousel: get_object(&builder, "carousel")?,
 
-            page_1: page_1::Page::new()?,
-            page_2: page_2::Page::new()?,
-            page_3: page_3::Page::new()?,
-            page_4: page_4::Page::new(get_object(&builder, "window")?)?,
-            page_5: page_5::Page::new()?,
-            page_6: page_6::Page::new()?
+            welcome: welcome::Page::new()?,
+            dependencies: dependencies::Page::new()?,
+            tos_warning: tos_warning::Page::new()?,
+            default_paths: default_paths::Page::new(get_object(&builder, "window")?)?,
+            voice_packages: voice_packages::Page::new()?,
+            download_components: download_components::Page::new()?,
+            finish: finish::Page::new()?
         };
 
         // Add pages to carousel
-        result.carousel.append(&result.page_1.page);
-        result.carousel.append(&result.page_2.page);
-        result.carousel.append(&result.page_3.page);
-        result.carousel.append(&result.page_4.page);
-        result.carousel.append(&result.page_5.page);
-        result.carousel.append(&result.page_6.page);
+        result.carousel.append(&result.welcome.page);
+        result.carousel.append(&result.dependencies.page);
+        result.carousel.append(&result.tos_warning.page);
+        result.carousel.append(&result.default_paths.page);
+        result.carousel.append(&result.voice_packages.page);
+        result.carousel.append(&result.download_components.page);
+        result.carousel.append(&result.finish.page);
 
         // Set devel style to ApplicationWindow if it's debug mode
         if crate::APP_DEBUG {
@@ -83,12 +86,14 @@ impl AppWidgets {
 /// Has to implement glib::Downgrade` trait
 #[derive(Debug, glib::Downgrade)]
 pub enum Actions {
-    FirstPageContinue,
-    SecondPageCheck,
-    ThirdPageContinue,
-    FourthPageContinue,
-    FifthPageDownload,
-    FifthPageContinue,
+    WelcomeContinue,
+    WelcomeAdvanced,
+    DependenciesContinue,
+    TosWarningContinue,
+    DefaultPathsContinue,
+    VoicePackagesContinue,
+    DownloadComponents,
+    DownloadComponentsContinue,
     Restart,
     Exit
 }
@@ -115,7 +120,8 @@ impl Actions {
 #[derive(Clone)]
 pub struct App {
     widgets: AppWidgets,
-    actions: Rc<Cell<Option<glib::Sender<Actions>>>>
+    actions: Rc<Cell<Option<glib::Sender<Actions>>>>,
+    advanced: Rc<Cell<bool>>
 }
 
 impl App {
@@ -124,7 +130,8 @@ impl App {
         // Get default widgets from ui file and add events to them
         let result = Self {
             widgets: AppWidgets::try_get()?,
-            actions: Default::default()
+            actions: Default::default(),
+            advanced: Default::default()
         }.init_events().init_actions();
 
         // Bind app to the window
@@ -135,20 +142,23 @@ impl App {
 
     /// Add default events and values to the widgets
     fn init_events(self) -> Self {
-        self.widgets.page_1.continue_button.connect_clicked(Actions::FirstPageContinue.into_fn(&self));
-        self.widgets.page_3.continue_button.connect_clicked(Actions::ThirdPageContinue.into_fn(&self));
-        self.widgets.page_4.continue_button.connect_clicked(Actions::FourthPageContinue.into_fn(&self));
+        self.widgets.welcome.continue_button.connect_clicked(Actions::WelcomeContinue.into_fn(&self));
+        self.widgets.tos_warning.continue_button.connect_clicked(Actions::TosWarningContinue.into_fn(&self));
+        self.widgets.default_paths.continue_button.connect_clicked(Actions::DefaultPathsContinue.into_fn(&self));
+        self.widgets.dependencies.check_button.connect_clicked(Actions::DependenciesContinue.into_fn(&self));
+        self.widgets.voice_packages.continue_button.connect_clicked(Actions::VoicePackagesContinue.into_fn(&self));
 
-        self.widgets.page_2.check_button.connect_clicked(Actions::SecondPageCheck.into_fn(&self));
-        self.widgets.page_5.download_button.connect_clicked(Actions::FifthPageDownload.into_fn(&self));
+        self.widgets.welcome.advanced_button.connect_clicked(Actions::WelcomeAdvanced.into_fn(&self));
+        self.widgets.download_components.download_button.connect_clicked(Actions::DownloadComponents.into_fn(&self));
 
-        self.widgets.page_6.restart_button.connect_clicked(Actions::Restart.into_fn(&self));
+        self.widgets.dependencies.exit_button.connect_clicked(Actions::Exit.into_fn(&self));
+        self.widgets.tos_warning.exit_button.connect_clicked(Actions::Exit.into_fn(&self));
+        self.widgets.default_paths.exit_button.connect_clicked(Actions::Exit.into_fn(&self));
+        self.widgets.voice_packages.exit_button.connect_clicked(Actions::Exit.into_fn(&self));
+        self.widgets.download_components.exit_button.connect_clicked(Actions::Exit.into_fn(&self));
+        self.widgets.finish.exit_button.connect_clicked(Actions::Exit.into_fn(&self));
 
-        self.widgets.page_2.exit_button.connect_clicked(Actions::Exit.into_fn(&self));
-        self.widgets.page_3.exit_button.connect_clicked(Actions::Exit.into_fn(&self));
-        self.widgets.page_4.exit_button.connect_clicked(Actions::Exit.into_fn(&self));
-        self.widgets.page_5.exit_button.connect_clicked(Actions::Exit.into_fn(&self));
-        self.widgets.page_6.exit_button.connect_clicked(Actions::Exit.into_fn(&self));
+        self.widgets.finish.restart_button.connect_clicked(Actions::Restart.into_fn(&self));
 
         self
     }
@@ -166,44 +176,62 @@ impl App {
             println!("[update] action: {:?}", &action);
 
             match action {
-                Actions::FirstPageContinue => {
+                Actions::WelcomeContinue => {
                     this.widgets.carousel.scroll_to({
                         if lib::is_available("git") && lib::is_available("xdelta3") {
-                            &this.widgets.page_3.page
+                            &this.widgets.tos_warning.page
                         } else {
-                            &this.widgets.page_2.page
+                            &this.widgets.dependencies.page
                         }
                     }, true);
                 }
 
-                Actions::SecondPageCheck => {
+                Actions::WelcomeAdvanced => {
+                    this.advanced.set(true);
+
+                    this.update(Actions::WelcomeContinue).unwrap();
+                }
+
+                Actions::DependenciesContinue => {
                     if lib::is_available("git") && lib::is_available("xdelta3") {
-                        this.widgets.carousel.scroll_to(&this.widgets.page_3.page, true);
+                        this.widgets.carousel.scroll_to(&this.widgets.tos_warning.page, true);
                     }
                 }
 
-                Actions::ThirdPageContinue => {
-                    this.widgets.carousel.scroll_to(&this.widgets.page_4.page, true);
+                Actions::TosWarningContinue => {
+                    this.widgets.carousel.scroll_to({
+                        if this.advanced.get() {
+                            &this.widgets.default_paths.page
+                        } else {
+                            &this.widgets.voice_packages.page
+                        }
+                    }, true);
                 }
 
-                Actions::FourthPageContinue => {
-                    config::update_raw(this.widgets.page_4.update_config(config::get().unwrap())).unwrap();
+                Actions::DefaultPathsContinue => {
+                    config::update_raw(this.widgets.default_paths.update_config(config::get().unwrap())).unwrap();
 
-                    this.widgets.carousel.scroll_to(&this.widgets.page_5.page, true);
+                    this.widgets.carousel.scroll_to(&this.widgets.voice_packages.page, true);
                 }
 
-                Actions::FifthPageDownload => {
-                    this.widgets.page_5.wine_version.set_sensitive(false);
-                    this.widgets.page_5.dxvk_version.set_sensitive(false);
+                Actions::VoicePackagesContinue => {
+                    config::update_raw(this.widgets.voice_packages.update_config(config::get().unwrap())).unwrap();
 
-                    this.widgets.page_5.progress_bar.show();
+                    this.widgets.carousel.scroll_to(&this.widgets.download_components.page, true);
+                }
+
+                Actions::DownloadComponents => {
+                    this.widgets.download_components.wine_version.set_sensitive(false);
+                    this.widgets.download_components.dxvk_version.set_sensitive(false);
+
+                    this.widgets.download_components.progress_bar.show();
 
                     let (sender, receiver) = glib::MainContext::channel::<InstallerUpdate>(glib::PRIORITY_DEFAULT);
 
-                    let progress_bar = this.widgets.page_5.progress_bar.clone();
+                    let progress_bar = this.widgets.download_components.progress_bar.clone();
 
-                    let wine_version = this.widgets.page_5.get_wine_version().clone();
-                    let dxvk_version = this.widgets.page_5.get_dxvk_version().clone();
+                    let wine_version = this.widgets.download_components.get_wine_version().clone();
+                    let dxvk_version = this.widgets.download_components.get_dxvk_version().clone();
 
                     let wine_version_copy = wine_version.clone();
 
@@ -276,7 +304,7 @@ impl App {
                                             std::fs::remove_file(format!("{}/.first-run", launcher_dir)).unwrap();
 
                                             // Show next page
-                                            this.update(Actions::FifthPageContinue).unwrap();
+                                            this.update(Actions::DownloadComponentsContinue).unwrap();
                                         }
                                     }
                                 });
@@ -287,8 +315,8 @@ impl App {
                     });
                 }
 
-                Actions::FifthPageContinue => {
-                    this.widgets.carousel.scroll_to(&this.widgets.page_6.page, true);
+                Actions::DownloadComponentsContinue => {
+                    this.widgets.carousel.scroll_to(&this.widgets.finish.page, true);
                 }
 
                 Actions::Restart => {

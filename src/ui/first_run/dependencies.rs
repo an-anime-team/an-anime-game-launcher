@@ -18,7 +18,7 @@ pub struct Page {
 
 impl Page {
     pub fn new() -> Result<Self, String> {
-        let builder = gtk::Builder::from_resource("/org/app/ui/first_run/page_2.ui");
+        let builder = gtk::Builder::from_resource("/org/app/ui/first_run/dependencies.ui");
 
         let result = Self {
             page: get_object(&builder, "page")?,

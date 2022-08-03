@@ -1,0 +1,44 @@
+using Gtk 4.0;
+using Adw 1;
+
+Gtk.Box page {
+    orientation: vertical;
+    hexpand: true;
+
+    Adw.PreferencesPage {
+        Adw.PreferencesGroup {
+            Gtk.Label {
+                label: "Select voice packages";
+                margin-top: 16;
+
+                styles ["title-1"]
+            }
+        }
+
+        Adw.PreferencesGroup voice_packages_group {
+            vexpand: true;
+            valign: center;
+        }
+
+        Adw.PreferencesGroup {
+            vexpand: true;
+            valign: center;
+
+            Gtk.Box {
+                orientation: horizontal;
+                spacing: 8;
+                halign: center;
+
+                Gtk.Button continue_button {
+                    label: "Continue";
+
+                    styles ["suggested-action"]
+                }
+
+                Gtk.Button exit_button {
+                    label: "Exit";
+                }
+            }
+        }
+    }
+}
