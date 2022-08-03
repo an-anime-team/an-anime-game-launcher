@@ -10,6 +10,10 @@ Our current statistics you can find in [readme](../../README.md)
 
 Start date: July 13, 2022
 
+| Period | Data |
+| - | - |
+| Jul 20 — Aug 3 | <img src="../pics/stats/2022/jul20-aug3.png" height="400px"> |
+
 ### Launcher analytics (by users choice)
 
 <img src="../pics/stats/2.8.0.png">
