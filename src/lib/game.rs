@@ -103,7 +103,7 @@ pub fn run(debug: bool) -> std::io::Result<()> {
         bash_chain = format!("{gamescope} -- {bash_chain}");
     }
 
-    let bash_chain = match config.game.command {
+    let bash_chain = match &config.game.command {
         Some(command) => command.replace("%command%", &bash_chain),
         None => bash_chain
     };
@@ -119,14 +119,14 @@ pub fn run(debug: bool) -> std::io::Result<()> {
     command.env("WINEPREFIX", &config.game.wine.prefix);
 
     // Add DXVK_ASYNC=1 for dxvk-async builds automatically
-    if let Some(dxvk) = config.game.dxvk.selected {
+    if let Some(dxvk) = &config.game.dxvk.selected {
         if dxvk.contains("async") {
             command.env("DXVK_ASYNC", "1");
         }
     }
 
     command.envs(config.game.wine.sync.get_env_vars());
-    command.envs(config.game.enhancements.hud.get_env_vars());
+    command.envs(config.game.enhancements.hud.get_env_vars(&config));
     command.envs(config.game.enhancements.fsr.get_env_vars());
     command.envs(config.game.wine.language.get_env_vars());
 

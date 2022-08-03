@@ -2,6 +2,8 @@ use std::collections::HashMap;
 
 use serde::{Serialize, Deserialize};
 
+use super::Config;
+
 #[derive(Debug, Clone, Copy, Serialize, Deserialize)]
 pub enum HUD {
     None,
@@ -40,15 +42,23 @@ impl Into<u32> for HUD {
 
 impl HUD {
     /// Get environment variables corresponding to used wine hud
-    pub fn get_env_vars(&self) -> HashMap<&str, &str> {
+    pub fn get_env_vars(&self, config: &Config) -> HashMap<&str, &str> {
         match self {
             Self::None => HashMap::new(),
             Self::DXVK => HashMap::from([
                 ("DXVK_HUD", "fps,frametimes,version,gpuload")
             ]),
-            Self::MangoHUD => HashMap::from([
-                ("MANGOHUD", "1")
-            ])
+            Self::MangoHUD => {
+                // Don't show mangohud if gamescope is enabled
+                // otherwise it'll be doubled
+                if config.game.enhancements.gamescope.enabled {
+                    HashMap::new()
+                } else {
+                    HashMap::from([
+                        ("MANGOHUD", "1")
+                    ])
+                }
+            }
         }
     }
 }
