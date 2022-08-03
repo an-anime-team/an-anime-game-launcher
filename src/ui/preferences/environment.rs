@@ -230,6 +230,10 @@ impl App {
 
         status_page.set_description(Some("Loading environment..."));
 
+        // Set game command
+        self.widgets.command.set_text(&config.game.command.unwrap_or(String::new()));
+
+        // Add environment variables
         for (name, value) in config.game.environment {
             self.update(Actions::Add(Rc::new((name, value)))).unwrap();
         }
