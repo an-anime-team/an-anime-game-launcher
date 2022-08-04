@@ -1,5 +1,6 @@
 /target
 /assets/ui/.dist
 
+/scripts/builds
 /scripts/appimage/dist
 /scripts/appimage/*.AppImage

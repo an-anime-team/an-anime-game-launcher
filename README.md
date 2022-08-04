@@ -36,9 +36,6 @@ cargo build --release
 
 ### Building AppImage
 
-Important to run it from the `scripts/appimage` folder
-
 ```
-cd scripts/appimage
-./build_appimage.sh
+./scripts/build.sh
 ```

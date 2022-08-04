@@ -1,9 +1,14 @@
 #!/bin/bash
 
+cd "$(dirname "$0")"
+
 linuxdeploy="linuxdeploy-x86_64.AppImage"
 appimagetool="appimagetool-x86_64.AppImage"
 
-version="0.3.1"
+icon="../../assets/images/icon.png"
+release_bin="../../target/release/anime-game-launcher"
+
+version=$(awk '/^version = "(.+)"$/{print substr($3, 2, length($3) - 2)}' '../../Cargo.toml')
 
 if [ ! -f $linuxdeploy ];
 then
@@ -30,12 +35,17 @@ fi
 
 mkdir dist
 
-cp "../../target/release/anime-game-launcher" "dist/anime-game-launcher"
+cp $release_bin "dist/anime-game-launcher"
 
 echo "Executing LinuxDeploy..."
 
-./$linuxdeploy --appdir dist -d anime-game-launcher.desktop --custom-apprun run.sh -i icon.png -o appimage
+./$linuxdeploy --appdir dist -d anime-game-launcher.desktop --custom-apprun run.sh -i $icon -o appimage
 
 echo "Executing AppImageTool..."
 
 VERSION=$version ./$appimagetool dist
+
+rm -rf dist
+rm -f An_Anime_Game_Launcher_GTK-x86_64.AppImage
+
+cp An_Anime_Game_Launcher_GTK-$version-x86_64.AppImage ../builds/an-anime-game-launcher-gtk-$version.AppImage
