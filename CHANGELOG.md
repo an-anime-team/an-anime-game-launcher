@@ -1,3 +1,25 @@
+# 1.0.0-rc2
+
+- updated core library;
+  this fixes getting available space on systems with lots of disks
+- added patch folder selection during initial setup
+- fixed error panicking when you're closing folder selection dialogue
+  during initial setup
+- disabled mangohud if gamescope is enabled
+
+Reworked work with config file
+- now missing fields will be automatically filled;
+  excess fields - removed.
+  thanks to new code structure I can easily create
+  new fields or rename old ones
+- improved `WineLang` enum; now launcher loads languages list dynamically
+  from this enum so I can easily add support for new languages
+
+Initial setup changes
+- renamed "page_*" to some actual pages names
+- added voice packages selection page
+- made "Advanced" button working. It shows default paths selection page
+
 # 1.0.0-rc1
 
 *(nothing changed)*

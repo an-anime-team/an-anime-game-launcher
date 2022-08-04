@@ -107,6 +107,11 @@ impl AppWidgets {
             "@nightany https://pinterest.com/pin/356206651788051017"
         ]);
 
+        result.about.add_credit_section("An Anime Team", &[
+            "@Marie https://gitlab.com/Maroxy",
+            "@lane https://gitlab.com/lane__"
+        ]);
+
         let curl_info = anime_game_core::curl_sys::Version::get();
 
         result.about.set_system_information(Some(&[
