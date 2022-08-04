@@ -9,7 +9,6 @@ Gtk.Box page {
         Adw.PreferencesGroup {
             Gtk.Label {
                 label: "Set default paths";
-                margin-top: 16;
 
                 styles ["title-1"]
             }
@@ -36,6 +35,11 @@ Gtk.Box page {
 
             Adw.ActionRow game_folder {
                 title: "Game installation folder";
+                activatable: true;
+            }
+
+            Adw.ActionRow patch_folder {
+                title: "Patch storing folder";
                 activatable: true;
             }
 

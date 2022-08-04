@@ -474,7 +474,9 @@ impl App {
                                 LauncherState::GameUpdateAvailable(diff) |
                                 LauncherState::GameNotInstalled(diff) => {
                                     let (sender, receiver) = glib::MainContext::channel::<InstallerUpdate>(glib::PRIORITY_DEFAULT);
+                                    
                                     let this = this.clone();
+                                    let this_copy = this.clone();
                                     
                                     this.update(Actions::ShowProgressBar).unwrap();
 
@@ -516,9 +518,15 @@ impl App {
 
                                     // Download diff in separate thread to not to freeze the main one
                                     std::thread::spawn(move || {
-                                        diff.install_to_by(config.game.path, config.launcher.temp, move |state| {
+                                        let result = diff.install_to_by(config.game.path, config.launcher.temp, move |state| {
                                             sender.send(state).unwrap();
-                                        }).unwrap();
+                                        });
+
+                                        if let Err(err) = result {
+                                            this_copy.update(Actions::Toast(Rc::new((
+                                                String::from("Downloading failed"), err.into()
+                                            )))).unwrap();
+                                        }
                                     });
                                 },
         
