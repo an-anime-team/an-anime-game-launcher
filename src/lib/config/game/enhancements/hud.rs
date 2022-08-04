@@ -1,8 +1,9 @@
 use std::collections::HashMap;
 
 use serde::{Serialize, Deserialize};
+use serde_json::Value as JsonValue;
 
-use super::Config;
+use crate::lib::config::Config;
 
 #[derive(Debug, Clone, Copy, Serialize, Deserialize)]
 pub enum HUD {
@@ -14,6 +15,12 @@ pub enum HUD {
 impl Default for HUD {
     fn default() -> Self {
         Self::None
+    }
+}
+
+impl From<&JsonValue> for HUD {
+    fn from(value: &JsonValue) -> Self {
+        serde_json::from_value(value.clone()).unwrap_or(Self::default())
     }
 }
 

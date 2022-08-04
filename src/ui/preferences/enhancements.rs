@@ -6,6 +6,7 @@ use gtk::glib::clone;
 
 use crate::lib;
 use crate::lib::config;
+use crate::lib::config::prelude::*;
 
 use crate::ui::*;
 
@@ -61,6 +62,17 @@ impl AppWidgets {
             gamescope_app: GamescopeApp::new(window)?
         };
 
+        // Set availale wine languages
+        let model = gtk::StringList::new(&[]);
+
+        for lang in WineLang::list() {
+            let lang: String = lang.into();
+
+            model.append(&lang);
+        }
+
+        result.wine_lang.set_model(Some(&model));
+
         // Disable gamemode row if it's not available
         if !lib::is_available("gamemoderun") {
             result.gamemode_row.set_sensitive(false);
@@ -108,7 +120,7 @@ impl App {
         // Wine sync selection
         self.widgets.sync_combo.connect_selected_notify(move |row| {
             if let Ok(mut config) = config::get() {
-                config.game.wine.sync = config::WineSync::try_from(row.selected()).unwrap();
+                config.game.wine.sync = WineSync::try_from(row.selected()).unwrap();
 
                 config::update(config);
             }
@@ -117,7 +129,7 @@ impl App {
         // Wine language selection
         self.widgets.wine_lang.connect_selected_notify(move |row| {
             if let Ok(mut config) = config::get() {
-                config.game.wine.language = config::WineLang::try_from(row.selected()).unwrap();
+                config.game.wine.language = WineLang::list()[row.selected() as usize];
 
                 config::update(config);
             }
@@ -126,7 +138,7 @@ impl App {
         // HUD selection
         self.widgets.hud_combo.connect_selected_notify(move |row| {
             if let Ok(mut config) = config::get() {
-                config.game.enhancements.hud = config::HUD::try_from(row.selected()).unwrap();
+                config.game.enhancements.hud = HUD::try_from(row.selected()).unwrap();
 
                 config::update(config);
             }
@@ -142,7 +154,7 @@ impl App {
         // Source: Bottles (https://github.com/bottlesdevs/Bottles/blob/22fa3573a13f4e9b9c429e4cdfe4ca29787a2832/src/ui/details-preferences.ui#L88)
         self.widgets.fsr_combo.connect_selected_notify(move |row| {
             if let Ok(mut config) = config::get() {
-                config.game.enhancements.fsr.strength = 5 - row.selected();
+                config.game.enhancements.fsr.strength = 5 - row.selected() as u64;
 
                 config::update(config);
             }
@@ -207,7 +219,7 @@ impl App {
         self.widgets.hud_combo.set_selected(config.game.enhancements.hud.into());
 
         // FSR strength selection
-        self.widgets.fsr_combo.set_selected(5 - config.game.enhancements.fsr.strength);
+        self.widgets.fsr_combo.set_selected(5 - config.game.enhancements.fsr.strength as u32);
 
         // FSR switching
         self.widgets.fsr_switcher.set_state(config.game.enhancements.fsr.enabled);

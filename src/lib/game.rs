@@ -99,7 +99,7 @@ pub fn run(debug: bool) -> std::io::Result<()> {
     }
 
     // gamescope <params> -- <command to run>
-    if let Some(gamescope) = config.get_gamescope_command() {
+    if let Some(gamescope) = config.game.enhancements.gamescope.get_command(config.game.enhancements.fsr.enabled) {
         bash_chain = format!("{gamescope} -- {bash_chain}");
     }
 

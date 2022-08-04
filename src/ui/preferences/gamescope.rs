@@ -3,8 +3,10 @@ use libadwaita::{self as adw, prelude::*};
 
 use gtk::glib;
 
-use crate::ui::get_object;
 use crate::lib::config;
+use crate::lib::config::prelude::*;
+
+use crate::ui::*;
 
 /// This structure is used to describe widgets used in application
 /// 
@@ -174,9 +176,9 @@ impl App {
 
                 if let Ok(mut config) = config::get() {
                     config.game.enhancements.gamescope.window_type = if button.is_active() {
-                        config::WindowType::Borderless
+                        WindowType::Borderless
                     } else {
-                        config::WindowType::Fullscreen
+                        WindowType::Fullscreen
                     };
     
                     config::update(config);
@@ -195,9 +197,9 @@ impl App {
 
                 if let Ok(mut config) = config::get() {
                     config.game.enhancements.gamescope.window_type = if button.is_active() {
-                        config::WindowType::Fullscreen
+                        WindowType::Fullscreen
                     } else {
-                        config::WindowType::Borderless
+                        WindowType::Borderless
                     };
     
                     config::update(config);
@@ -214,7 +216,7 @@ impl App {
 
         status_page.set_description(Some("Loading gamescope..."));
 
-        fn set_text(widget: &gtk::Entry, value: u16) {
+        fn set_text(widget: &gtk::Entry, value: u64) {
             widget.set_text(&if value == 0 { String::new() } else { value.to_string() });
         }
 
@@ -231,8 +233,8 @@ impl App {
         self.widgets.nvidia_image_scaling.set_state(config.game.enhancements.gamescope.nvidia_image_scaling);
 
         match config.game.enhancements.gamescope.window_type {
-            config::WindowType::Borderless => self.widgets.borderless.set_active(true),
-            config::WindowType::Fullscreen => self.widgets.fullscreen.set_active(true)
+            WindowType::Borderless => self.widgets.borderless.set_active(true),
+            WindowType::Fullscreen => self.widgets.fullscreen.set_active(true)
         };
 
         Ok(())

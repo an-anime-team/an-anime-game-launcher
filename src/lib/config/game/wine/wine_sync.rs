@@ -1,6 +1,7 @@
 use std::collections::HashMap;
 
 use serde::{Serialize, Deserialize};
+use serde_json::Value as JsonValue;
 
 #[derive(Debug, Clone, Copy, Serialize, Deserialize)]
 pub enum WineSync {
@@ -13,6 +14,12 @@ pub enum WineSync {
 impl Default for WineSync {
     fn default() -> Self {
         Self::ESync
+    }
+}
+
+impl From<&JsonValue> for WineSync {
+    fn from(value: &JsonValue) -> Self {
+        serde_json::from_value(value.clone()).unwrap_or(Self::default())
     }
 }
 

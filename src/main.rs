@@ -48,7 +48,7 @@ fn main() {
         );
 
         // Create default launcher folder if needed
-        let launcher_dir = lib::consts::launcher_dir().unwrap();
+        let launcher_dir = lib::consts::launcher_dir().expect("Failed to get launcher dir");
 
         if !Path::new(&launcher_dir).exists() || Path::new(&format!("{}/.first-run", launcher_dir)).exists() {
             fs::create_dir_all(&launcher_dir).expect("Failed to create default launcher dir");

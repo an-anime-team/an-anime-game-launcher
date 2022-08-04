@@ -1,10 +1,10 @@
-use std::collections::HashMap;
 use std::fs::File;
 use std::io::Read;
 use std::path::Path;
 use std::io::{Error, ErrorKind, Write};
 
 use serde::{Serialize, Deserialize};
+use serde_json::Value as JsonValue;
 
 use crate::lib;
 use super::consts::*;
@@ -13,13 +13,18 @@ use super::wine::{
     List as WineList
 };
 
-mod hud;
-mod wine_sync;
-mod wine_lang;
+pub mod launcher;
+pub mod game;
+pub mod patch;
 
-pub use hud::HUD;
-pub use wine_sync::WineSync;
-pub use wine_lang::WineLang;
+pub mod prelude {
+    pub use super::launcher::prelude::*;
+    pub use super::game::prelude::*;
+
+    pub use super::patch::Patch;
+}
+
+use prelude::*;
 
 static mut CONFIG: Option<Config> = None;
 
@@ -50,8 +55,10 @@ pub fn get_raw() -> Result<Config, Error> {
 
                 file.read_to_string(&mut json)?;
 
-                match serde_json::from_str::<Config>(&json) {
+                match serde_json::from_str(&json) {
                     Ok(config) => {
+                        let config = Config::from(&config);
+
                         unsafe {
                             CONFIG = Some(config.clone());
                         }
@@ -179,288 +186,27 @@ impl Config {
             None => None
         }
     }
-
-    pub fn get_gamescope_command(&self) -> Option<String> {
-        // https://github.com/bottlesdevs/Bottles/blob/b908311348ed1184ead23dd76f9d8af41ff24082/src/backend/wine/winecommand.py#L478
-        if self.game.enhancements.gamescope.enabled {
-            let mut gamescope = String::from("gamescope");
-
-            // Set window type
-            match self.game.enhancements.gamescope.window_type {
-                WindowType::Borderless => gamescope += " -b",
-                WindowType::Fullscreen => gamescope += " -f"
-            }
-
-            // Set game width
-            if self.game.enhancements.gamescope.game.width > 0 {
-                gamescope += &format!(" -w {}", self.game.enhancements.gamescope.game.width);
-            }
-
-            // Set game height
-            if self.game.enhancements.gamescope.game.height > 0 {
-                gamescope += &format!(" -h {}", self.game.enhancements.gamescope.game.height);
-            }
-
-            // Set gamescope width
-            if self.game.enhancements.gamescope.gamescope.width > 0 {
-                gamescope += &format!(" -W {}", self.game.enhancements.gamescope.gamescope.width);
-            }
-
-            // Set gamescope height
-            if self.game.enhancements.gamescope.gamescope.height > 0 {
-                gamescope += &format!(" -H {}", self.game.enhancements.gamescope.gamescope.height);
-            }
-
-            // Set focused framerate limit
-            if self.game.enhancements.gamescope.framerate.focused > 0 {
-                gamescope += &format!(" -r {}", self.game.enhancements.gamescope.framerate.focused);
-            }
-
-            // Set unfocused framerate limit
-            if self.game.enhancements.gamescope.framerate.unfocused > 0 {
-                gamescope += &format!(" -o {}", self.game.enhancements.gamescope.framerate.unfocused);
-            }
-
-            // Set integer scaling
-            if self.game.enhancements.gamescope.integer_scaling {
-                gamescope += " -n";
-            }
-
-            // Set NIS (Nvidia Image Scaling) support
-            if self.game.enhancements.gamescope.nvidia_image_scaling {
-                gamescope += " -Y";
-            }
-
-            // Set FSR support (only if NIS is not enabled)
-            else if self.game.enhancements.fsr.enabled {
-                gamescope += " -U";
-            }
-
-            Some(gamescope)
-        }
-
-        else {
-            None
-        }
-    }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct Launcher {
-    pub language: String,
-    pub temp: Option<String>,
-    pub repairer: Repairer
-}
+impl From<&JsonValue> for Config {
+    fn from(value: &JsonValue) -> Self {
+        let default = Self::default();
 
-impl Default for Launcher {
-    fn default() -> Self {
         Self {
-            language: String::from("en-us"),
-            temp: launcher_dir(),
-            repairer: Repairer::default()
-        }
-    }
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct Repairer {
-    pub threads: u8,
-    pub fast: bool
-}
-
-impl Default for Repairer {
-    fn default() -> Self {
-        Self {
-            threads: 4,
-            fast: false
-        }
-    }
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct Patch {
-    pub path: String,
-    pub servers: Vec<String>,
-    pub root: bool
-}
-
-impl Default for Patch {
-    fn default() -> Self {
-        Self {
-            path: match launcher_dir() {
-                Some(dir) => format!("{}/patch", dir),
-                None => String::new()
+            launcher: match value.get("launcher") {
+                Some(value) => Launcher::from(value),
+                None => default.launcher
             },
-            servers: vec![
-                "https://notabug.org/Krock/dawn".to_string(),
-                "https://dev.kaifa.ch/Maroxy/dawn".to_string()
-            ],
 
-            // Disable root requirement for patching if we're running launcher in flatpak
-            root: !Path::new("/.flatpak-info").exists()
-        }
-    }
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct Game {
-    pub path: String,
-    pub voices: Vec<String>,
-    pub wine: Wine,
-    pub dxvk: Dxvk,
-    pub enhancements: Enhancements,
-    pub environment: HashMap<String, String>,
-    pub command: Option<String>
-}
-
-impl Default for Game {
-    fn default() -> Self {
-        Self {
-            path: match launcher_dir() {
-                Some(dir) => format!("{}/game/drive_c/Program Files/Genshin Impact", dir),
-                None => String::new()
+            game: match value.get("game") {
+                Some(value) => Game::from(value),
+                None => default.game
             },
-            voices: vec![
-                String::from("en-us")
-            ],
-            wine: Wine::default(),
-            dxvk: Dxvk::default(),
-            enhancements: Enhancements::default(),
-            environment: HashMap::new(),
-            command: None
+
+            patch: match value.get("patch") {
+                Some(value) => Patch::from(value),
+                None => default.patch
+            }
         }
-    }
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct Wine {
-    pub prefix: String,
-    pub builds: String,
-    pub selected: Option<String>,
-    pub sync: WineSync,
-    pub language: WineLang
-}
-
-impl Default for Wine {
-    fn default() -> Self {
-        Self {
-            prefix: match launcher_dir() {
-                Some(dir) => format!("{}/game", dir),
-                None => String::new()
-            },
-            builds: match launcher_dir() {
-                Some(dir) => format!("{}/runners", dir),
-                None => String::new()
-            },
-            selected: None,
-            sync: WineSync::default(),
-            language: WineLang::default()
-        }
-    }
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct Dxvk {
-    pub builds: String,
-    pub selected: Option<String>
-}
-
-impl Default for Dxvk {
-    fn default() -> Self {
-        Self {
-            builds: match launcher_dir() {
-                Some(dir) => format!("{}/dxvks", dir),
-                None => String::new()
-            },
-            selected: None
-        }
-    }
-}
-
-#[derive(Debug, Clone, Copy, Serialize, Deserialize, Default)]
-pub struct Enhancements {
-    pub fsr: Fsr,
-    pub gamemode: bool,
-    pub hud: HUD,
-    pub gamescope: Gamescope
-}
-
-#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
-pub struct Fsr {
-    pub strength: u32,
-    pub enabled: bool
-}
-
-impl Default for Fsr {
-    fn default() -> Self {
-        Self {
-            strength: 2,
-            enabled: false
-        }
-    }
-}
-
-impl Fsr {
-    /// Get environment variables corresponding to used amd fsr options
-    pub fn get_env_vars(&self) -> HashMap<&str, String> {
-        if self.enabled {
-            HashMap::from([
-                ("WINE_FULLSCREEN_FSR", String::from("1")),
-                ("WINE_FULLSCREEN_FSR_STRENGTH", self.strength.to_string())
-            ])
-        }
-        
-        else {
-            HashMap::new()
-        }
-    }
-}
-
-#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
-pub struct Gamescope {
-    pub enabled: bool,
-    pub game: Size,
-    pub gamescope: Size,
-    pub framerate: Framerate,
-    pub integer_scaling: bool,
-    pub nvidia_image_scaling: bool,
-    pub window_type: WindowType
-}
-
-impl Default for Gamescope {
-    fn default() -> Self {
-        Self {
-            enabled: false,
-            game: Size::default(),
-            gamescope: Size::default(),
-            framerate: Framerate::default(),
-            integer_scaling: true,
-            nvidia_image_scaling: false,
-            window_type: WindowType::default()
-        }
-    }
-}
-
-#[derive(Debug, Clone, Copy, Serialize, Deserialize, Default)]
-pub struct Size {
-    pub width: u16,
-    pub height: u16
-}
-
-#[derive(Debug, Clone, Copy, Serialize, Deserialize, Default)]
-pub struct Framerate {
-    pub focused: u16,
-    pub unfocused: u16
-}
-
-#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
-pub enum WindowType {
-    Borderless,
-    Fullscreen
-}
-
-impl Default for WindowType {
-    fn default() -> Self {
-        Self::Borderless
     }
 }
