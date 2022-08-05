@@ -42,6 +42,7 @@ flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flat
 ```
 
 After installing flathub's remote you install launcher.moe's remote
+You can install the repo on a per user base by appending --user after --if-not-exists (This is especially useful if on Steam Deck)
 
 ```zsh
 flatpak remote-add --if-not-exists launcher.moe https://gol.launcher.moe/gol.launcher.moe.flatpakrepo
