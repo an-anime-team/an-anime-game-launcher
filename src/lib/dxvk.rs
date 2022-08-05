@@ -1,6 +1,7 @@
 use serde::{Serialize, Deserialize};
 
 use std::io::{Error, ErrorKind};
+use std::process::{Command, Output};
 
 use lazy_static::lazy_static;
 use regex::Regex;
@@ -69,7 +70,7 @@ impl Version {
         std::path::Path::new(&format!("{}/{}", folder.to_string(), self.name)).exists()
     }
 
-    pub fn apply<T: ToString>(&self, dxvks_folder: T, prefix_path: T) -> std::io::Result<String> {
+    pub fn apply<T: ToString>(&self, dxvks_folder: T, prefix_path: T) -> std::io::Result<Output> {
         let apply_path = format!("{}/{}/setup_dxvk.sh", dxvks_folder.to_string(), self.name);
         let config = config::get()?;
 
@@ -102,7 +103,7 @@ impl Version {
 
                 std::fs::write(&apply_path, apply_script)?;
 
-                let output = std::process::Command::new("bash")
+                let output = Command::new("bash")
                     .arg(&apply_path)
                     .arg("install")
                     .env("WINEARCH", "win64")
@@ -111,7 +112,7 @@ impl Version {
                     .output()?;
 
                 if output.status.success() {
-                    Ok(String::from_utf8(output.stdout).unwrap())
+                    Ok(output)
                 }
 
                 else {

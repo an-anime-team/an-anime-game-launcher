@@ -308,7 +308,7 @@ impl App {
                     let config = config::get().expect("Failed to load config");
 
                     match component.apply(&config.game.dxvk.builds, &config.game.wine.prefix) {
-                        Ok(output) => println!("{}", output),
+                        Ok(output) => println!("{}", String::from_utf8_lossy(&output.stdout)),
                         Err(err) => {
                             this.update(Actions::Toast(Rc::new((
                                 String::from("Failed to apply DXVK"), err
@@ -417,7 +417,7 @@ impl App {
                         if let Ok(awaiter) = component.download(&config.game.dxvk.builds) {
                             awaiter.then(clone!(@strong this => move |_| {
                                 match component.apply(&config.game.dxvk.builds, &config.game.wine.prefix) {
-                                    Ok(output) => println!("{}", output),
+                                    Ok(output) => println!("{}", String::from_utf8_lossy(&output.stdout)),
                                     Err(err) => {
                                         this.update(Actions::Toast(Rc::new((
                                             String::from("Failed to apply DXVK"), err
@@ -513,7 +513,7 @@ impl App {
 
                             std::thread::spawn(clone!(@strong config, @strong this => move || {
                                 match version.apply(&config.game.dxvk.builds, &config.game.wine.prefix) {
-                                    Ok(output) => println!("{}", output),
+                                    Ok(output) => println!("{}", String::from_utf8_lossy(&output.stdout)),
                                     Err(err) => {
                                         this.update(Actions::Toast(Rc::new((
                                             String::from("Failed to apply DXVK"), err
