@@ -1,3 +1,5 @@
+use gtk4 as gtk;
+
 use std::collections::HashMap;
 
 use serde::{Serialize, Deserialize};
@@ -30,12 +32,6 @@ impl From<&JsonValue> for WineLang {
     }
 }
 
-impl Into<String> for WineLang {
-    fn into(self) -> String {
-        format!("{:?}", self)
-    }
-}
-
 impl Into<u32> for WineLang {
     fn into(self) -> u32 {
         for (i, lang) in Self::list().into_iter().enumerate() {
@@ -63,6 +59,20 @@ impl WineLang {
             Self::Japanese,
             Self::Korean
         ]
+    }
+
+    pub fn get_model() -> gtk::StringList {
+        let model = gtk::StringList::new(&[]);
+
+        for lang in Self::list() {
+            model.append(&lang.to_string());
+        }
+
+        model
+    }
+
+    pub fn to_string(&self) -> String {
+        format!("{:?}", self)
     }
 
     /// Get environment variables corresponding to used wine language

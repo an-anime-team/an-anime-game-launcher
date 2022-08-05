@@ -2,6 +2,7 @@
 
 The launcher variant written on Rust, GTK4 and libadwaita, using [Anime Game Core](https://gitlab.com/an-anime-team/anime-game-core) library
 
+<img src="https://gitlab.com/an-anime-team/an-anime-game-launcher/-/raw/main/repository/pics/logo.jpg">
 <img src="repository/pictures/main.png">
 <img src="repository/pictures/settings.png">
 

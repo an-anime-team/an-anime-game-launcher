@@ -23,6 +23,9 @@ pub struct AppWidgets {
 
     pub sync_combo: adw::ComboRow,
     pub wine_lang: adw::ComboRow,
+    pub borderless: gtk::Switch,
+    pub virtual_desktop_row: adw::ComboRow,
+    pub virtual_desktop: gtk::Switch,
 
     pub hud_combo: adw::ComboRow,
     pub fsr_combo: adw::ComboRow,
@@ -47,6 +50,9 @@ impl AppWidgets {
 
             sync_combo: get_object(&builder, "sync_combo")?,
             wine_lang: get_object(&builder, "wine_lang")?,
+            borderless: get_object(&builder, "borderless")?,
+            virtual_desktop_row: get_object(&builder, "virtual_desktop_row")?,
+            virtual_desktop: get_object(&builder, "virtual_desktop")?,
 
             hud_combo: get_object(&builder, "hud_combo")?,
             fsr_combo: get_object(&builder, "fsr_combo")?,
@@ -63,15 +69,10 @@ impl AppWidgets {
         };
 
         // Set availale wine languages
-        let model = gtk::StringList::new(&[]);
+        result.wine_lang.set_model(Some(&WineLang::get_model()));
 
-        for lang in WineLang::list() {
-            let lang: String = lang.into();
-
-            model.append(&lang);
-        }
-
-        result.wine_lang.set_model(Some(&model));
+        // Set availale virtual desktop resolutions
+        result.virtual_desktop_row.set_model(Some(&Resolution::get_model()));
 
         // Disable gamemode row if it's not available
         if !lib::is_available("gamemoderun") {
@@ -130,6 +131,40 @@ impl App {
         self.widgets.wine_lang.connect_selected_notify(move |row| {
             if let Ok(mut config) = config::get() {
                 config.game.wine.language = WineLang::list()[row.selected() as usize];
+
+                config::update(config);
+            }
+        });
+
+        // Borderless switching
+        self.widgets.borderless.connect_state_notify(move |switch| {
+            if let Ok(mut config) = config::get() {
+                config.game.wine.borderless = switch.state();
+
+                config::update(config);
+            }
+        });
+
+        // Virtual desktop resolution selection
+        self.widgets.virtual_desktop_row.connect_selected_notify(move |row| {
+            if let Ok(mut config) = config::get() {
+                let resolutions = Resolution::list();
+
+                if row.selected() > 0 {
+                    let (w, h) = resolutions[row.selected() as usize - 1].get_pair();
+
+                    config.game.wine.virtual_desktop.width = w;
+                    config.game.wine.virtual_desktop.height = h;
+
+                    config::update(config);
+                }
+            }
+        });
+
+        // Virtual desktop switching
+        self.widgets.virtual_desktop.connect_state_notify(move |switch| {
+            if let Ok(mut config) = config::get() {
+                config.game.wine.virtual_desktop.enabled = switch.state();
 
                 config::update(config);
             }
@@ -214,6 +249,29 @@ impl App {
 
         // Update wine language
         self.widgets.wine_lang.set_selected(config.game.wine.language.into());
+
+        // Update borderless
+        self.widgets.borderless.set_state(config.game.wine.borderless);
+        
+        // Update virtual desktop
+        self.widgets.virtual_desktop.set_state(config.game.wine.virtual_desktop.enabled);
+
+        let resolution = Resolution::from_pair(
+            config.game.wine.virtual_desktop.width,
+            config.game.wine.virtual_desktop.height
+        );
+
+        if let Resolution::Custom(_, _) = resolution {
+            self.widgets.virtual_desktop_row.set_selected(0);
+        }
+
+        else {
+            for (i, res) in Resolution::list().into_iter().enumerate() {
+                if res == resolution {
+                    self.widgets.virtual_desktop_row.set_selected(i as u32 + 1);
+                }
+            }
+        }
 
         // Update HUD
         self.widgets.hud_combo.set_selected(config.game.enhancements.hud.into());

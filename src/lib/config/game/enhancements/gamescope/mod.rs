@@ -21,12 +21,13 @@ pub struct Gamescope {
     pub gamescope: Size,
     pub framerate: Framerate,
     pub integer_scaling: bool,
-    pub nvidia_image_scaling: bool,
+    pub fsr: bool,
+    pub nis: bool,
     pub window_type: WindowType
 }
 
 impl Gamescope {
-    pub fn get_command(&self, fsr_enabled: bool) -> Option<String> {
+    pub fn get_command(&self) -> Option<String> {
         // https://github.com/bottlesdevs/Bottles/blob/b908311348ed1184ead23dd76f9d8af41ff24082/src/backend/wine/winecommand.py#L478
         if self.enabled {
             let mut gamescope = String::from("gamescope");
@@ -72,14 +73,14 @@ impl Gamescope {
                 gamescope += " -n";
             }
 
-            // Set NIS (Nvidia Image Scaling) support
-            if self.nvidia_image_scaling {
-                gamescope += " -Y";
+            // Set FSR support
+            if self.fsr {
+                gamescope += " -U";
             }
 
-            // Set FSR support (only if NIS is not enabled)
-            else if fsr_enabled {
-                gamescope += " -U";
+            // Set NIS (Nvidia Image Scaling) support
+            if self.nis {
+                gamescope += " -Y";
             }
 
             Some(gamescope)
@@ -99,7 +100,8 @@ impl Default for Gamescope {
             gamescope: Size::default(),
             framerate: Framerate::default(),
             integer_scaling: true,
-            nvidia_image_scaling: false,
+            fsr: false,
+            nis: false,
             window_type: WindowType::default()
         }
     }
@@ -135,9 +137,14 @@ impl From<&JsonValue> for Gamescope {
                 None => default.integer_scaling
             },
 
-            nvidia_image_scaling: match value.get("nvidia_image_scaling") {
-                Some(value) => value.as_bool().unwrap_or(default.nvidia_image_scaling),
-                None => default.nvidia_image_scaling
+            fsr: match value.get("fsr") {
+                Some(value) => value.as_bool().unwrap_or(default.fsr),
+                None => default.fsr
+            },
+
+            nis: match value.get("nis") {
+                Some(value) => value.as_bool().unwrap_or(default.nis),
+                None => default.nis
             },
 
             window_type: match value.get("window_type") {

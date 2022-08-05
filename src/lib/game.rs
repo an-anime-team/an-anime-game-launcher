@@ -92,14 +92,27 @@ pub fn run(debug: bool) -> std::io::Result<()> {
 
     bash_chain += &format!("'{wine_executable}' ");
 
+    if let Some(virtual_desktop) = config.game.wine.virtual_desktop.get_command() {
+        bash_chain += &format!("{virtual_desktop} ");
+    }
+
     if debug {
         todo!();
     } else {
-        bash_chain += "launcher.bat";
+        bash_chain += "launcher.bat ";
+    }
+
+    if config.game.wine.borderless {
+        bash_chain += "-screen-fullscreen 0 -popupwindow ";
+    }
+
+    // https://notabug.org/Krock/dawn/src/master/TWEAKS.md
+    if config.game.enhancements.fsr.enabled {
+        bash_chain += "-window-mode exclusive ";
     }
 
     // gamescope <params> -- <command to run>
-    if let Some(gamescope) = config.game.enhancements.gamescope.get_command(config.game.enhancements.fsr.enabled) {
+    if let Some(gamescope) = config.game.enhancements.gamescope.get_command() {
         bash_chain = format!("{gamescope} -- {bash_chain}");
     }
 

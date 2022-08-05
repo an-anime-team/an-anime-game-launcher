@@ -15,13 +15,13 @@ impl WinePrefix {
         Path::new(&format!("{}/drive_c", self.path)).exists()
     }
 
-    fn wineboot<T: ToString>(&self, runners_folder: T, runner: super::wine::Version, command: &str) -> std::io::Result<Output> {
+    fn wine<T: ToString>(&self, runners_folder: T, runner: super::wine::Version, command: &str) -> std::io::Result<Output> {
         let runners_folder = runners_folder.to_string();
 
-        let wineboot = format!("{}/{}/{}", &runners_folder, runner.name, runner.files.wineboot);
+        let wine = format!("{}/{}/{}", &runners_folder, runner.name, runner.files.wine64);
         let wineserver = format!("{}/{}/{}", &runners_folder, runner.name, runner.files.wineserver);
 
-        let mut wineboot = Command::new(wineboot);
+        let mut wineboot = Command::new(wine);
 
         wineboot.env("WINEARCH", "win64")
             .env("WINESERVER", wineserver)
@@ -32,22 +32,22 @@ impl WinePrefix {
     }
 
     pub fn update<T: ToString>(&self, runners_folder: T, runner: super::wine::Version) -> std::io::Result<Output> {
-        self.wineboot(runners_folder, runner, "-u")
+        self.wine(runners_folder, runner, "-u")
     }
 
     pub fn end<T: ToString>(&self, runners_folder: T, runner: super::wine::Version) -> std::io::Result<Output> {
-        self.wineboot(runners_folder, runner, "-e")
+        self.wine(runners_folder, runner, "-e")
     }
 
     pub fn kill<T: ToString>(&self, runners_folder: T, runner: super::wine::Version) -> std::io::Result<Output> {
-        self.wineboot(runners_folder, runner, "-k")
+        self.wine(runners_folder, runner, "-k")
     }
 
     pub fn restart<T: ToString>(&self, runners_folder: T, runner: super::wine::Version) -> std::io::Result<Output> {
-        self.wineboot(runners_folder, runner, "-r")
+        self.wine(runners_folder, runner, "-r")
     }
 
     pub fn shutdown<T: ToString>(&self, runners_folder: T, runner: super::wine::Version) -> std::io::Result<Output> {
-        self.wineboot(runners_folder, runner, "-s")
+        self.wine(runners_folder, runner, "-s")
     }
 }

@@ -75,7 +75,7 @@ impl Version {
 
         match config.try_get_selected_wine_info() {
             Some(wine) => {
-                let wine_path = format!("{}/{}/{}", &config.game.wine.builds, wine.name, wine.files.wine);
+                let wine_path = format!("{}/{}/{}", &config.game.wine.builds, wine.name, wine.files.wine64);
                 let wineserver_path = format!("{}/{}/{}", &config.game.wine.builds, wine.name, wine.files.wineserver);
                 let wineboot_path = format!("{}/{}/{}", &config.game.wine.builds, wine.name, wine.files.wineboot);
 
@@ -91,6 +91,10 @@ impl Version {
                 apply_script = WINE.replace_all(&apply_script, &format!("wine=\"{}\"", &wine_path)).to_string();
                 apply_script = WINE64.replace_all(&apply_script, &format!("wine64=\"{}\"", &wine_path)).to_string();
                 apply_script = WINEBOOT.replace_all(&apply_script, &format!("wineboot=\"{}\"", &wineboot_path)).to_string();
+
+                // Use wine64 to update wine prefix instead of running wineboot
+                // so we can get rid of 32bit support
+                apply_script = apply_script.replace("$wineboot -u", "$wine64 -u");
 
                 // Old GE builds return specific --version output which can break
                 // DXVK installation script

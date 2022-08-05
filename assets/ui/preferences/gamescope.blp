@@ -88,9 +88,17 @@ Adw.PreferencesWindow window {
             }
 
             Adw.ActionRow {
+                title: "FSR";
+
+                Gtk.Switch fsr {
+                    valign: center;
+                }
+            }
+
+            Adw.ActionRow {
                 title: "Nvidia Image Scaling";
 
-                Gtk.Switch nvidia_image_scaling {
+                Gtk.Switch nis {
                     valign: center;
                 }
             }

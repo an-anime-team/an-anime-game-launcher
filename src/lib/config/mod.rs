@@ -16,17 +16,19 @@ use super::wine::{
 pub mod launcher;
 pub mod game;
 pub mod patch;
+pub mod resolution;
 
 pub mod prelude {
     pub use super::launcher::prelude::*;
     pub use super::game::prelude::*;
 
     pub use super::patch::Patch;
+    pub use super::resolution::Resolution;
 }
 
 use prelude::*;
 
-static mut CONFIG: Option<Config> = None;
+static mut CONFIG: Option<Config> = None; 
 
 /// Get config data
 /// 
@@ -130,41 +132,6 @@ pub struct Config {
 }
 
 impl Config {
-    /// Try to get a path to the wine executable based on `game.wine.builds` and `game.wine.selected`
-    /// 
-    /// Returns `Some("wine")` if:
-    /// 1) `game.wine.selected = None`
-    /// 2) wine installed and available in system
-    pub fn try_get_wine_executable(&self) -> Option<String> {
-        match &self.game.wine.selected {
-            Some(selected) => {
-                // Most of wine builds
-                let path = format!("{}/{}/bin/wine", &self.game.wine.builds, &selected);
-
-                if Path::new(&path).exists() {
-                    return Some(path);
-                }
-
-                // Proton-based builds
-                let path = format!("{}/{}/files/bin/wine", &self.game.wine.builds, &selected);
-
-                if Path::new(&path).exists() {
-                    return Some(path);
-                }
-
-                // ????
-                None
-            },
-            None => {
-                if lib::is_available("wine") {
-                    Some(String::from("wine"))
-                } else {
-                    None
-                }
-            }
-        }
-    }
-
     pub fn try_get_selected_wine_info(&self) -> Option<WineVersion> {
         match &self.game.wine.selected {
             Some(selected) => {
@@ -184,6 +151,24 @@ impl Config {
                 }
             },
             None => None
+        }
+    }
+
+    /// Try to get a path to the wine64 executable based on `game.wine.builds` and `game.wine.selected`
+    /// 
+    /// Returns `Some("wine64")` if:
+    /// 1) `game.wine.selected = None`
+    /// 2) wine64 installed and available in system
+    pub fn try_get_wine_executable(&self) -> Option<String> {
+        match self.try_get_selected_wine_info() {
+            Some(selected) => Some(format!("{}/{}/{}", &self.game.wine.builds, selected.name, selected.files.wine64)),
+            None => {
+                if lib::is_available("wine64") {
+                    Some(String::from("wine64"))
+                } else {
+                    None
+                }
+            }
         }
     }
 }

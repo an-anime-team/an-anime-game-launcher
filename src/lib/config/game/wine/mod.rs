@@ -5,11 +5,13 @@ use crate::lib::consts::launcher_dir;
 
 pub mod wine_sync;
 pub mod wine_lang;
+pub mod virtual_desktop;
 
 pub mod prelude {
     pub use super::Wine;
     pub use super::wine_sync::WineSync;
     pub use super::wine_lang::WineLang;
+    pub use super::virtual_desktop::VirtualDesktop;
 }
 
 use prelude::*;
@@ -20,7 +22,9 @@ pub struct Wine {
     pub builds: String,
     pub selected: Option<String>,
     pub sync: WineSync,
-    pub language: WineLang
+    pub language: WineLang,
+    pub borderless: bool,
+    pub virtual_desktop: VirtualDesktop
 }
 
 impl Default for Wine {
@@ -32,7 +36,9 @@ impl Default for Wine {
             builds: format!("{launcher_dir}/runners"),
             selected: None,
             sync: WineSync::default(),
-            language: WineLang::default()
+            language: WineLang::default(),
+            borderless: false,
+            virtual_desktop: VirtualDesktop::default()
         }
     }
 }
@@ -74,6 +80,16 @@ impl From<&JsonValue> for Wine {
             language: match value.get("language") {
                 Some(value) => WineLang::from(value),
                 None => default.language
+            },
+
+            borderless: match value.get("borderless") {
+                Some(value) => value.as_bool().unwrap_or(default.borderless),
+                None => default.borderless
+            },
+
+            virtual_desktop: match value.get("virtual_desktop") {
+                Some(value) => VirtualDesktop::from(value),
+                None => default.virtual_desktop
             }
         }
     }

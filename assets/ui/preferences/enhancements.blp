@@ -23,6 +23,22 @@ Adw.PreferencesPage page {
             title: "Language";
             subtitle: "Choose the language to use in wine environment. Can fix keyboard layout detection in-game";
         }
+
+        Adw.ActionRow {
+            title: "Borderless window";
+
+            Gtk.Switch borderless {
+                valign: center;
+            }
+        }
+
+        Adw.ComboRow virtual_desktop_row {
+            title: "Virtual desktop";
+
+            Gtk.Switch virtual_desktop {
+                valign: center;
+            }
+        }
     }
 
     Adw.PreferencesGroup {

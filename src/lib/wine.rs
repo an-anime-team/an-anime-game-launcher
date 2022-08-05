@@ -64,7 +64,7 @@ impl Version {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Files {
-    pub wine: String,
+    pub wine64: String,
     pub wineserver: String,
     pub wineboot: String,
     pub winecfg: String
