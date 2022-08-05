@@ -5,9 +5,7 @@ Adw.ApplicationWindow window {
     default-width: 780;
     default-height: 560;
 
-    content: Gtk.Box {
-        orientation: vertical;
-
+    content: Adw.ToastOverlay toast_overlay {
         Adw.HeaderBar {
             title-widget: Adw.WindowTitle {
                 title: "An Anime Game Launcher";

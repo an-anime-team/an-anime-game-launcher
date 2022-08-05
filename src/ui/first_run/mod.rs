@@ -19,6 +19,7 @@ mod download_components;
 mod finish;
 
 use crate::ui::*;
+use crate::ui::traits::prelude::*;
 use crate::ui::components::progress_bar::*;
 
 use crate::lib;
@@ -33,6 +34,7 @@ use crate::lib::config;
 #[derive(Clone)]
 pub struct AppWidgets {
     pub window: adw::ApplicationWindow,
+    pub toast_overlay: adw::ToastOverlay,
     pub carousel: adw::Carousel,
 
     pub welcome: welcome::Page,
@@ -50,6 +52,7 @@ impl AppWidgets {
 
         let result = Self {
             window: get_object(&builder, "window")?,
+            toast_overlay: get_object(&builder, "toast_overlay")?,
             carousel: get_object(&builder, "carousel")?,
 
             welcome: welcome::Page::new()?,
@@ -95,7 +98,8 @@ pub enum Actions {
     DownloadComponents,
     DownloadComponentsContinue,
     Restart,
-    Exit
+    Exit,
+    Toast(Rc<(String, String)>)
 }
 
 impl Actions {
@@ -193,7 +197,19 @@ impl App {
                 }
 
                 Actions::DependenciesContinue => {
-                    if lib::is_available("git") && lib::is_available("xdelta3") {
+                    let mut installed = true;
+
+                    for package in ["git", "xdelta3"] {
+                        if !lib::is_available(package) {
+                            installed = false;
+
+                            this.toast(format!("Package {package} is not installed"), "");
+
+                            break;
+                        }
+                    }
+
+                    if installed {
                         this.widgets.carousel.scroll_to(&this.widgets.tos_warning.page, true);
                     }
                 }
@@ -234,20 +250,28 @@ impl App {
                     let dxvk_version = this.widgets.download_components.get_dxvk_version().clone();
 
                     let wine_version_copy = wine_version.clone();
+                    let this_copy = this.clone();
 
                     // Download wine
                     std::thread::spawn(move || {
                         let config = config::get().unwrap();
 
-                        let mut wine_version_installer = Installer::new(&wine_version_copy.uri).unwrap();
+                        match Installer::new(&wine_version_copy.uri) {
+                            Ok(mut installer) => {
+                                if let Some(temp_folder) = config.launcher.temp {
+                                    installer.temp_folder = temp_folder;
+                                }
 
-                        if let Some(temp_folder) = config.launcher.temp {
-                            wine_version_installer.temp_folder = temp_folder;
+                                installer.install(&config.game.wine.builds, move |state| {
+                                    sender.send(state).unwrap();
+                                });
+                            },
+                            Err(err) => {
+                                this_copy.update(Actions::Toast(Rc::new((
+                                    String::from("Failed to init wine downloader"), err.to_string()
+                                )))).unwrap();
+                            }
                         }
-
-                        wine_version_installer.install(&config.game.wine.builds, move |state| {
-                            sender.send(state).unwrap();
-                        });
                     });
 
                     let this = this.clone();
@@ -256,7 +280,10 @@ impl App {
                     receiver.attach(None, move |state| {
                         match progress_bar.update_from_state(state) {
                             ProgressUpdateResult::Updated => (),
-                            ProgressUpdateResult::Error(_, _) => todo!(),
+
+                            ProgressUpdateResult::Error(msg, err) => {
+                                this.update(Actions::Toast(Rc::new((msg, err.to_string())))).unwrap();
+                            },
 
                             ProgressUpdateResult::Finished => {
                                 let mut config = config::get().unwrap();
@@ -268,46 +295,72 @@ impl App {
                                 config::update_raw(config.clone()).unwrap();
 
                                 // Create wine prefix
-                                prefix.update(&config.game.wine.builds, wine_version.clone()).unwrap();
+                                match prefix.update(&config.game.wine.builds, wine_version.clone()) {
+                                    Ok(output) => {
+                                        println!("Wine prefix created:\n\n{}", String::from_utf8_lossy(&output.stdout));
 
-                                // Prepare DXVK downloader
-                                let mut dxvk_version_installer = Installer::new(&dxvk_version.uri).unwrap();
+                                        // Prepare DXVK downloader
+                                        match Installer::new(&dxvk_version.uri) {
+                                            Ok(mut installer) => {
+                                                if let Some(temp_folder) = config.launcher.temp {
+                                                    installer.temp_folder = temp_folder;
+                                                }
 
-                                if let Some(temp_folder) = config.launcher.temp {
-                                    dxvk_version_installer.temp_folder = temp_folder;
-                                }
+                                                let dxvk_version = dxvk_version.clone();
+                                                let progress_bar = progress_bar.clone();
 
-                                let dxvk_version = dxvk_version.clone();
-                                let progress_bar = progress_bar.clone();
+                                                let this = this.clone();
 
-                                let this = this.clone();
+                                                // Download DXVK
+                                                installer.install(&config.game.dxvk.builds, move |state| {
+                                                    match progress_bar.update_from_state(state) {
+                                                        ProgressUpdateResult::Updated => (),
+                                                        ProgressUpdateResult::Error(_, _) => todo!(),
 
-                                // Download DXVK
-                                dxvk_version_installer.install(&config.game.dxvk.builds, move |state| {
-                                    match progress_bar.update_from_state(state) {
-                                        ProgressUpdateResult::Updated => (),
-                                        ProgressUpdateResult::Error(_, _) => todo!(),
-            
-                                        ProgressUpdateResult::Finished => {
-                                            let mut config = config::get().unwrap();
+                                                        ProgressUpdateResult::Finished => {
+                                                            let mut config = config::get().unwrap();
 
-                                            // Apply DXVK
-                                            println!("{}", dxvk_version.apply(&config.game.dxvk.builds, &config.game.wine.prefix).unwrap());
+                                                            // Apply DXVK
+                                                            match dxvk_version.apply(&config.game.dxvk.builds, &config.game.wine.prefix) {
+                                                                Ok(output) => {
+                                                                    println!("Applied DXVK:\n\n{output}");
 
-                                            // Update dxvk config
-                                            config.game.dxvk.selected = Some(dxvk_version.name.clone());
+                                                                    // Update dxvk config
+                                                                    config.game.dxvk.selected = Some(dxvk_version.name.clone());
 
-                                            config::update_raw(config.clone()).unwrap();
+                                                                    config::update_raw(config.clone()).unwrap();
 
-                                            // Remove .first-run file
-                                            let launcher_dir = crate::lib::consts::launcher_dir().unwrap();
-                                            std::fs::remove_file(format!("{}/.first-run", launcher_dir)).unwrap();
+                                                                    // Remove .first-run file
+                                                                    let launcher_dir = crate::lib::consts::launcher_dir().unwrap();
 
-                                            // Show next page
-                                            this.update(Actions::DownloadComponentsContinue).unwrap();
+                                                                    std::fs::remove_file(format!("{}/.first-run", launcher_dir)).unwrap();
+
+                                                                    // Show next page
+                                                                    this.update(Actions::DownloadComponentsContinue).unwrap();
+                                                                },
+                                                                Err(err) => {
+                                                                    this.update(Actions::Toast(Rc::new((
+                                                                        String::from("Failed to apply DXVK"), err.to_string()
+                                                                    )))).unwrap();
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                });
+                                            },
+                                            Err(err) => {
+                                                this.update(Actions::Toast(Rc::new((
+                                                    String::from("Failed to init DXVK downloader"), err.to_string()
+                                                )))).unwrap();
+                                            }
                                         }
+                                    },
+                                    Err(err) => {
+                                        this.update(Actions::Toast(Rc::new((
+                                            String::from("Failed to create wine prefix"), err.to_string()
+                                        )))).unwrap();
                                     }
-                                });
+                                }
                             }
                         }
 
@@ -327,6 +380,12 @@ impl App {
 
                 Actions::Exit => {
                     this.widgets.window.close();
+                }
+
+                Actions::Toast(toast) => {
+                    let (msg, err) = (toast.0.clone(), toast.1.clone());
+
+                    this.toast(msg, err);
                 }
             }
 
@@ -358,4 +417,11 @@ impl App {
     }
 }
 
+impl Toast for App {
+    fn get_toast_widgets(&self) -> (adw::ApplicationWindow, adw::ToastOverlay) {
+        (self.widgets.window.clone(), self.widgets.toast_overlay.clone())
+    }
+}
+
 unsafe impl Send for App {}
+unsafe impl Sync for App {}
