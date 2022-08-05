@@ -6,19 +6,23 @@ Adw.ApplicationWindow window {
     default-height: 560;
 
     content: Adw.ToastOverlay toast_overlay {
-        Adw.HeaderBar {
-            title-widget: Adw.WindowTitle {
-                title: "An Anime Game Launcher";
-            };
-        }
+        Gtk.Box {
+            orientation: vertical;
 
-        Adw.Carousel carousel {
-            allow-mouse-drag: false;
-        }
+            Adw.HeaderBar {
+                title-widget: Adw.WindowTitle {
+                    title: "An Anime Game Launcher";
+                };
+            }
 
-        Adw.CarouselIndicatorDots {
-            carousel: carousel;
-            height-request: 32;
+            Adw.Carousel carousel {
+                allow-mouse-drag: false;
+            }
+
+            Adw.CarouselIndicatorDots {
+                carousel: carousel;
+                height-request: 32;
+            }
         }
     };
 }
