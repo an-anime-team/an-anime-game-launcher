@@ -1,6 +1,8 @@
 use serde::{Serialize, Deserialize};
 use serde_json::Value as JsonValue;
 
+use anime_game_core::consts::GameEdition as CoreGameEdition;
+
 use crate::lib::consts::launcher_dir;
 
 pub mod repairer;
@@ -12,11 +14,42 @@ pub mod prelude {
 
 use prelude::*;
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub enum GameEdition {
+    Global,
+    China
+}
+
+impl Default for GameEdition {
+    fn default() -> Self {
+        Self::Global
+    }
+}
+
+impl Into<CoreGameEdition> for GameEdition {
+    fn into(self) -> CoreGameEdition {
+        match self {
+            Self::Global => CoreGameEdition::Global,
+            Self::China  => CoreGameEdition::China
+        }
+    }
+}
+
+impl From<CoreGameEdition> for GameEdition {
+    fn from(edition: CoreGameEdition) -> Self {
+        match edition {
+            CoreGameEdition::Global => Self::Global,
+            CoreGameEdition::China  => Self::China
+        }
+    }
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Launcher {
     pub language: String,
     pub temp: Option<String>,
-    pub repairer: Repairer
+    pub repairer: Repairer,
+    pub edition: GameEdition
 }
 
 impl Default for Launcher {
@@ -24,7 +57,8 @@ impl Default for Launcher {
         Self {
             language: String::from("en-us"),
             temp: launcher_dir(),
-            repairer: Repairer::default()
+            repairer: Repairer::default(),
+            edition: GameEdition::default()
         }
     }
 }
@@ -56,6 +90,11 @@ impl From<&JsonValue> for Launcher {
             repairer: match value.get("repairer") {
                 Some(value) => Repairer::from(value),
                 None => default.repairer
+            },
+
+            edition: match value.get("edition") {
+                Some(value) => serde_json::from_value(value.clone()).unwrap_or(default.edition),
+                None => default.edition
             }
         }
     }

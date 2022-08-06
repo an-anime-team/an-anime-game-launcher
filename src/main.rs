@@ -59,8 +59,13 @@ fn main() {
             first_run.show();
         }
 
-        // Load main window and show it
         else {
+            // Set game edition
+            let config = lib::config::get().expect("Failed to load config");
+
+            anime_game_core::consts::set_game_edition(config.launcher.edition.into());
+
+            // Load and show main window
             let main = MainApp::new(app).expect("Failed to init MainApp");
 
             main.show();
