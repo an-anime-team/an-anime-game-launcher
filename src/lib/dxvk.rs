@@ -97,6 +97,13 @@ impl Version {
                 // so we can get rid of 32bit support
                 apply_script = apply_script.replace("$wineboot -u", "$wine64 -u");
 
+                // Fix issues related to spaces in paths to the runners folder
+                apply_script = apply_script.replace("which $wineboot", "which \"$wineboot\"");
+                apply_script = apply_script.replace("$wine --version", "\"$wine\" --version");
+                apply_script = apply_script.replace("$wine64 winepath", "\"$wine64\" winepath");
+                apply_script = apply_script.replace("$wine winepath", "\"$wine\" winepath");
+                apply_script = apply_script.replace("$wine reg", "\"$wine\" reg");
+
                 // Old GE builds return specific --version output which can break
                 // DXVK installation script
                 apply_script = apply_script.replace("grep wine", "grep \"wine\\|GE\"");
