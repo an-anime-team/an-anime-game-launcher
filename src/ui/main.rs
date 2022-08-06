@@ -271,6 +271,7 @@ impl App {
                     match config::get() {
                         Ok(mut config) => {
                             match state {
+                                LauncherState::PatchAvailable(Patch::NotAvailable) |
                                 LauncherState::Launch => {
                                     let this = this.clone();
 
@@ -767,11 +768,21 @@ impl App {
 
             LauncherState::PatchAvailable(patch) => {
                 match patch {
-                    Patch::NotAvailable |
+                    Patch::NotAvailable => {
+                        self.widgets.launch_game.set_label("Patch not available");
+
+                        self.widgets.launch_game.set_tooltip_text(Some("Patch servers are unavailable and launcher can't verify the game's patching status. You're allowed to run the game on your own risk"));
+
+                        self.widgets.launch_game.remove_css_class("suggested-action");
+                        self.widgets.launch_game.add_css_class("destructive-action");
+                    }
+
                     Patch::Outdated { .. } |
                     Patch::Preparation { .. } => {
                         self.widgets.launch_game.set_label("Patch not available");
                         self.widgets.launch_game.set_sensitive(false);
+
+                        self.widgets.launch_game.set_tooltip_text(Some("Patch is outdated or in preparation state, so unavailable for usage. Return back later to see its status"));
 
                         self.widgets.launch_game.remove_css_class("suggested-action");
                         self.widgets.launch_game.add_css_class("destructive-action");
