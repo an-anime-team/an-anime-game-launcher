@@ -20,7 +20,7 @@ impl Default for Patch {
             path: format!("{launcher_dir}/patch"),
             servers: vec![
                 "https://notabug.org/Krock/dawn".to_string(),
-                "https://gitlab.com/an-anime-team/linux-patch".to_string()
+                "https://codespace.gay/Maroxy/dawnin".to_string()
             ],
 
             // Disable root requirement for patching if we're running launcher in flatpak
