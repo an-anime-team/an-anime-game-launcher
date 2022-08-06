@@ -95,7 +95,7 @@ impl Version {
 
                 // Use wine64 to update wine prefix instead of running wineboot
                 // so we can get rid of 32bit support
-                apply_script = apply_script.replace("$wineboot -u", "$wine64 -u");
+                apply_script = apply_script.replace("$wineboot -u", "\"$wine64\" -u");
 
                 // Fix issues related to spaces in paths to the runners folder
                 apply_script = apply_script.replace("which $wineboot", "which \"$wineboot\"");
