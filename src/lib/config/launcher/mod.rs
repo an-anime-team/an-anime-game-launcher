@@ -22,7 +22,22 @@ pub enum GameEdition {
 
 impl Default for GameEdition {
     fn default() -> Self {
-        Self::Global
+        let locale = match std::env::var("LC_ALL") {
+            Ok(locale) => locale,
+            Err(_) => match std::env::var("LC_MESSAGES") {
+                Ok(locale) => locale,
+                Err(_) => match std::env::var("LANG") {
+                    Ok(locale) => locale,
+                    Err(_) => return Self::Global
+                }
+            }
+        };
+
+        if locale.len() > 4 && &locale[..5].to_lowercase() == "zh_cn" {
+            Self::China
+        } else {
+            Self::Global
+        }
     }
 }
 
