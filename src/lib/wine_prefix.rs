@@ -21,14 +21,14 @@ impl WinePrefix {
         let wine = format!("{}/{}/{}", &runners_folder, runner.name, runner.files.wine64);
         let wineserver = format!("{}/{}/{}", &runners_folder, runner.name, runner.files.wineserver);
 
-        let mut wineboot = Command::new(wine);
+        let mut wine_command = Command::new(wine);
 
-        wineboot.env("WINEARCH", "win64")
+        wine_command.env("WINEARCH", "win64")
             .env("WINESERVER", wineserver)
             .env("WINEPREFIX", &self.path)
             .arg(command);
 
-        Ok(wineboot.output()?)
+        Ok(wine_command.output()?)
     }
 
     pub fn update<T: ToString>(&self, runners_folder: T, runner: super::wine::Version) -> std::io::Result<Output> {

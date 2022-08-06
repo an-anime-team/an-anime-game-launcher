@@ -74,7 +74,7 @@ Adw.ApplicationWindow window {
                             }
 
                             Gtk.Button open_preferences {
-                                icon-name: "preferences-system-symbolic";
+                                icon-name: "emblem-system-symbolic";
                             }
                         }
                     }
@@ -91,9 +91,7 @@ Adw.ApplicationWindow window {
 
                             Gtk.ProgressBar progress_bar {
                                 show-text: true;
-
                                 width-request: 360;
-                                fraction: 0.37;
                                 valign: center;
                             }
 
@@ -121,6 +119,28 @@ Gtk.AboutDialog about {
 }
 
 menu app_menu {
-    item ("Check for updates")
-    item ("About", "show-about-dialog.show-about-dialog")
+    section {
+        submenu {
+            label: "Open";
+
+            item {
+                label: "Launcher folder";
+                action: "open-launcher-folder.open-launcher-folder";
+            }
+
+            item {
+                label: "Game folder";
+                action: "open-game-folder.open-game-folder";
+            }
+
+            item {
+                label: "Config file";
+                action: "open-config-file.open-config-file";
+            }
+        }
+    }
+
+    section {
+        item ("About", "show-about-dialog.show-about-dialog")
+    }
 }

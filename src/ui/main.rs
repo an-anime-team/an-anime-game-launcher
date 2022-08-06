@@ -207,6 +207,38 @@ impl App {
     /// Add default events and values to the widgets
     fn init_events(self) -> Self {
         // Add menu actions
+        add_action(&self.widgets.menu, "open-launcher-folder", clone!(@weak self as this => move || {
+            if let Some(launcher_dir) = consts::launcher_dir() {
+                if let Err(err) = Command::new("xdg-open").arg(launcher_dir).spawn() {
+                    this.update(Actions::Toast(Rc::new((
+                        String::from("Failed to open launcher folder"), err
+                    )))).unwrap();
+                }
+            }
+        }));
+
+        add_action(&self.widgets.menu, "open-game-folder", clone!(@weak self as this => move || {
+            if let Ok(config) = config::get() {
+                if let Err(err) = Command::new("xdg-open").arg(config.game.path).spawn() {
+                    this.update(Actions::Toast(Rc::new((
+                        String::from("Failed to open game folder"), err
+                    )))).unwrap();
+                }
+            }
+        }));
+
+        add_action(&self.widgets.menu, "open-config-file", clone!(@weak self as this => move || {
+            if let Some(config_file) = consts::config_file() {
+                if let Err(err) = Command::new("xdg-open").arg(config_file).spawn() {
+                    this.update(Actions::Toast(Rc::new((
+                        String::from("Failed to open config file"), err
+                    )))).unwrap();
+                }
+            }
+        }));
+
+        // Other actions
+
         add_action(&self.widgets.menu, "show-about-dialog", clone!(@strong self.widgets.about as about => move || {
             about.show();
         }));
