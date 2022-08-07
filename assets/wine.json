@@ -5,6 +5,19 @@
         "versions": [
             {
                 "family": "Wine-GE-Proton",
+                "name": "lutris-GE-Proton7-25-x86_64",
+                "title": "Wine-GE-Proton 7-25",
+                "uri": "https://github.com/GloriousEggroll/wine-ge-custom/releases/download/GE-Proton7-25/wine-lutris-GE-Proton7-25-x86_64.tar.xz",
+                "files": {
+                    "wine64": "bin/wine64",
+                    "wineserver": "bin/wineserver",
+                    "wineboot": "bin/wineboot",
+                    "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
+                },
+                "recommended": true
+            },
+            {
+                "family": "Wine-GE-Proton",
                 "name": "lutris-GE-Proton7-24-x86_64",
                 "title": "Wine-GE-Proton 7-24",
                 "uri": "https://github.com/GloriousEggroll/wine-ge-custom/releases/download/GE-Proton7-24/wine-lutris-GE-Proton7-24-x86_64.tar.xz",
@@ -79,7 +92,7 @@
                     "wineboot": "bin/wineboot",
                     "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
                 },
-                "recommended": true
+                "recommended": false
             },
             {
                 "family": "Wine-GE-Proton",
@@ -152,6 +165,19 @@
         "title": "GE-Proton",
         "subtitle": "This version includes its own DXVK builds and you can use DXVK_ASYNC variable",
         "versions": [
+            {
+                "family": "GE-Proton",
+                "name": "GE-Proton7-29",
+                "title": "GE-Proton 7-29",
+                "uri": "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/GE-Proton7-29/GE-Proton7-29.tar.gz",
+                "files": {
+                    "wine64": "files/bin/wine64",
+                    "wineserver": "files/bin/wineserver",
+                    "wineboot": "files/bin/wineboot",
+                    "winecfg": "files/lib64/wine/x86_64-windows/winecfg.exe"
+                },
+                "recommended": true
+            },
             {
                 "family": "GE-Proton",
                 "name": "GE-Proton7-28",
@@ -241,7 +267,7 @@
                     "wineboot": "files/bin/wineboot",
                     "winecfg": "files/lib64/wine/x86_64-windows/winecfg.exe"
                 },
-                "recommended": true
+                "recommended": false
             },
             {
                 "family": "GE-Proton",
@@ -500,7 +526,7 @@
                     "wineboot": "bin/wineboot",
                     "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
                 },
-                "recommended": true
+                "recommended": false
             },
             {
                 "family": "Lutris",

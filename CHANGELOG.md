@@ -1,3 +1,25 @@
+# 1.0.0
+
+- added new wine versions
+- changed preferences icon, updated main window's menu
+- removed open launcher folder button from settings
+- added fix for dxvk applying with spaces to the runners folder path
+- updated default patch repo's mirror
+- updated core library; added support for Chinese version
+- added default game edition prediction based on system locale
+- added ability to run the game when all patch servers are down
+- used `std::process::Output` on DXVK applying instead of String
+  this fixes errors related to UTF-8 decoding since different systems may have
+  different default encodings
+- added "borderless" and "virtual desktop" options to settings;
+  added separate FSR option to gamescope settings
+- dxvk now uses wine64 to update prefix before applying patches
+- added setting of `-window-mode exclusive` args to the wine when using wine FSR
+- `WinePrefix::update` and so now use wine64 binary instead of wineboot
+- renamed `files.wine` to `files.wine64` in `wine.json`
+- `Config::try_get_wine_executable` function now return wine64 binary
+- added errors toasting for initial setup window
+
 # 1.0.0-rc2
 
 - updated core library;

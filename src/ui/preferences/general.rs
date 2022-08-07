@@ -7,7 +7,6 @@ use gtk::glib::clone;
 use std::rc::Rc;
 use std::cell::Cell;
 use std::io::Error;
-use std::process::Command;
 
 use anime_game_core::prelude::*;
 
