@@ -35,7 +35,6 @@ pub struct AppWidgets {
     pub voiceovers_row: adw::ExpanderRow,
     pub voieover_components: Rc<Vec<VoiceoverRow>>,
 
-    pub launcher_folder: gtk::Button,
     pub repair_game: gtk::Button,
 
     pub game_version: gtk::Label,
@@ -67,7 +66,6 @@ impl AppWidgets {
             voiceovers_row: get_object(&builder, "voiceovers_row")?,
             voieover_components: Default::default(),
 
-            launcher_folder: get_object(&builder, "launcher_folder")?,
             repair_game: get_object(&builder, "repair_game")?,
 
             game_version: get_object(&builder, "game_version")?,
@@ -167,7 +165,6 @@ impl AppWidgets {
 /// It may be helpful if you want to add the same event for several widgets, or call an action inside of another action
 #[derive(Debug, Clone, glib::Downgrade)]
 pub enum Actions {
-    OpenLauncherFolder,
     RepairGame,
     VoiceoverPerformAction(Rc<usize>),
     DxvkPerformAction(Rc<usize>),
@@ -236,7 +233,6 @@ impl App {
 
     /// Add default events and values to the widgets
     fn init_events(self) -> Self {
-        self.widgets.launcher_folder.connect_clicked(Actions::OpenLauncherFolder.into_fn(&self));
         self.widgets.repair_game.connect_clicked(Actions::RepairGame.into_fn(&self));
 
         // Voiceover download/delete button event
@@ -338,14 +334,6 @@ impl App {
             println!("[general page] [update] action: {:?}", &action);
 
             match action {
-                Actions::OpenLauncherFolder => {
-                    if let Some(launcher_folder) = consts::launcher_dir(){
-                        if let Err(err) = Command::new("xdg-open").arg(launcher_folder).spawn() {
-                            this.toast("Failed to open launcher folder", err);
-                        }
-                    }
-                }
-
                 Actions::RepairGame => {
                     let option = (&*this.app).take();
                     this.app.set(option.clone());
