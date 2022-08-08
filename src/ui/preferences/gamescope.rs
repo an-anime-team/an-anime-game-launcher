@@ -49,7 +49,7 @@ impl AppWidgets {
             framerate_limit: get_object(&builder, "framerate_limit")?,
             framerate_unfocused_limit: get_object(&builder, "framerate_unfocused_limit")?,
             integer_scaling: get_object(&builder, "integer_scaling")?,
-            fsr: get_object(&builder, "nis")?,
+            fsr: get_object(&builder, "fsr")?,
             nis: get_object(&builder, "nis")?,
 
             borderless: get_object(&builder, "borderless")?,
