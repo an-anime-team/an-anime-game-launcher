@@ -285,6 +285,9 @@ impl App {
         // Gamemode switching
         self.widgets.gamemode_switcher.set_state(config.game.enhancements.gamemode);
 
+        // Switch gamescope option
+        self.widgets.gamescope_switcher.set_state(config.game.enhancements.gamescope.enabled);
+
         // Prepare gamescope settings app
         self.widgets.gamescope_app.prepare(status_page)?;
 
