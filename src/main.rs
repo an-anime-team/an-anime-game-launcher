@@ -3,6 +3,8 @@ use libadwaita as adw;
 
 use gtk::{CssProvider, StyleContext, STYLE_PROVIDER_PRIORITY_APPLICATION};
 use gtk::gdk::Display;
+use gtk::glib;
+use gtk::glib::clone;
 
 use std::path::Path;
 use std::fs;
@@ -25,8 +27,8 @@ fn main() {
         .expect("Failed to register resources");
 
     // Set application's title
-    gtk::glib::set_application_name("An Anime Game Launcher");
-    gtk::glib::set_program_name(Some("An Anime Game Launcher"));
+    glib::set_application_name("An Anime Game Launcher");
+    glib::set_program_name(Some("An Anime Game Launcher"));
 
     // Create app
     let application = gtk::Application::new(
@@ -34,8 +36,27 @@ fn main() {
         Default::default()
     );
 
+    application.add_main_option(
+        "run-game", 
+        glib::Char::from(0),
+        glib::OptionFlags::empty(),
+        glib::OptionArg::None,
+        "Run the game",
+        None
+    );
+
+    let run_game = std::rc::Rc::new(std::cell::Cell::new(false));
+
+    application.connect_handle_local_options(clone!(@strong run_game => move |_, arg| {
+        if arg.contains("run-game") {
+            run_game.set(true);
+        }
+
+        -1
+    }));
+
     // Init app window and show it
-    application.connect_activate(|app| {
+    application.connect_activate(move |app| {
         // Apply CSS styles to the application
         let provider = CssProvider::new();
 
@@ -65,10 +86,28 @@ fn main() {
 
             anime_game_core::consts::set_game_edition(config.launcher.edition.into());
 
-            // Load and show main window
+            // Load main window
             let main = MainApp::new(app).expect("Failed to init MainApp");
 
-            main.show();
+            // Load initial launcher state
+            let awaiter = main.update_state();
+
+            if !run_game.get() {
+                main.show();
+            }
+
+            else {
+                awaiter.then(move |state| {
+                    match state.as_ref().expect("Failed to load launcher state") {
+                        lib::launcher::states::LauncherState::Launch => {
+                            main.update(ui::main::Actions::PerformButtonEvent).unwrap();
+
+                            std::process::exit(0);
+                        },
+                        _ => main.show()
+                    }
+                });
+            }
         }
     });
 

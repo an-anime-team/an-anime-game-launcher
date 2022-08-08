@@ -45,6 +45,7 @@ pub struct AppWidgets {
     pub status_page: adw::StatusPage,
     pub launcher_content: adw::PreferencesPage,
 
+    pub icon: gtk::Image,
     pub launch_game: gtk::Button,
     pub open_preferences: gtk::Button,
 
@@ -71,6 +72,7 @@ impl AppWidgets {
             status_page: get_object(&builder, "status_page")?,
             launcher_content: get_object(&builder, "launcher_content")?,
 
+            icon: get_object(&builder, "icon")?,
             launch_game: get_object(&builder, "launch_game")?,
             open_preferences: get_object(&builder, "open_preferences")?,
 
@@ -86,6 +88,11 @@ impl AppWidgets {
         // Set devel style to ApplicationWindow if it's debug mode
         if crate::APP_DEBUG {
             result.window.add_css_class("devel");
+        }
+        
+        // Load icon from "icon" file if it exists
+        if std::path::Path::new("icon").exists() {
+            result.icon.set_from_file(Some("icon"));
         }
 
         // Set default About Dialog values
@@ -197,9 +204,6 @@ impl App {
 
         // Bind app to the window
         result.widgets.window.set_application(Some(app));
-
-        // Load initial launcher state
-        result.update_state();
 
         Ok(result)
     }

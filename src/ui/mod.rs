@@ -1,10 +1,10 @@
 use gtk4::{self as gtk, prelude::*};
 use libadwaita as adw;
 
-mod first_run;
-mod main;
-mod preferences;
-mod traits;
+pub mod first_run;
+pub mod main;
+pub mod preferences;
+pub mod traits;
 
 pub mod components;
 
