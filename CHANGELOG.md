@@ -1,3 +1,10 @@
+# 1.0.1
+
+- updated core library with fixed Chinese game's data folder name
+- added icon loading from "icon" file, added `--run-game` argument
+- fixed gamescope switcher's state loading from config
+- fixed FSR switch in gamescope settings
+
 # 1.0.0
 
 - added new wine versions
