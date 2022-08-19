@@ -84,7 +84,7 @@ impl WineLang {
             Self::Russian    => "ru_RU.UTF8",
             Self::German     => "de_DE.UTF8",
             Self::Portuguese => "pt_PT.UTF8",
-            Self::Polish     => "pl-PL.UTF8",
+            Self::Polish     => "pl_PL.UTF8",
             Self::French     => "fr_FR.UTF8",
             Self::Spanish    => "es_ES.UTF8",
             Self::Chinese    => "zh_CN.UTF8",

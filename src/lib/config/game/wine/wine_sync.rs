@@ -13,7 +13,7 @@ pub enum WineSync {
 
 impl Default for WineSync {
     fn default() -> Self {
-        Self::ESync
+        Self::FSync
     }
 }
 
@@ -32,6 +32,7 @@ impl TryFrom<u32> for WineSync {
             1 => Ok(Self::ESync),
             2 => Ok(Self::FSync),
             3 => Ok(Self::Futex2),
+
             _ => Err(String::from("Failed to convert number to WineSync enum"))
         }
     }
