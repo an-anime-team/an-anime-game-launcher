@@ -362,7 +362,7 @@ impl App {
 
                                                 let mut synced = false;
 
-                                                match applier.is_sync(&config.patch.servers) {
+                                                match applier.is_sync_with(&host) {
                                                     Ok(true) => synced = true,
 
                                                     Ok(false) => {
