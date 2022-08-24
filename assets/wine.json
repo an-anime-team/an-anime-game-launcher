@@ -5,6 +5,19 @@
         "versions": [
             {
                 "family": "Wine-GE-Proton",
+                "name": "lutris-GE-Proton7-26-x86_64",
+                "title": "Wine-GE-Proton 7-26",
+                "uri": "https://github.com/GloriousEggroll/wine-ge-custom/releases/download/GE-Proton7-26/wine-lutris-GE-Proton7-26-x86_64.tar.xz",
+                "files": {
+                    "wine64": "bin/wine64",
+                    "wineserver": "bin/wineserver",
+                    "wineboot": "bin/wineboot",
+                    "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
+                },
+                "recommended": true
+            },
+            {
+                "family": "Wine-GE-Proton",
                 "name": "lutris-GE-Proton7-25-x86_64",
                 "title": "Wine-GE-Proton 7-25",
                 "uri": "https://github.com/GloriousEggroll/wine-ge-custom/releases/download/GE-Proton7-25/wine-lutris-GE-Proton7-25-x86_64.tar.xz",
@@ -79,7 +92,7 @@
                     "wineboot": "bin/wineboot",
                     "winecfg": "lib64/wine/x86_64-windows/winecfg.exe"
                 },
-                "recommended": true
+                "recommended": false
             },
             {
                 "family": "Wine-GE-Proton",
@@ -167,6 +180,19 @@
         "versions": [
             {
                 "family": "GE-Proton",
+                "name": "GE-Proton7-30",
+                "title": "GE-Proton 7-30",
+                "uri": "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/GE-Proton7-30/GE-Proton7-30.tar.gz",
+                "files": {
+                    "wine64": "files/bin/wine64",
+                    "wineserver": "files/bin/wineserver",
+                    "wineboot": "files/bin/wineboot",
+                    "winecfg": "files/lib64/wine/x86_64-windows/winecfg.exe"
+                },
+                "recommended": true
+            },
+            {
+                "family": "GE-Proton",
                 "name": "GE-Proton7-29",
                 "title": "GE-Proton 7-29",
                 "uri": "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/GE-Proton7-29/GE-Proton7-29.tar.gz",
@@ -241,7 +267,7 @@
                     "wineboot": "files/bin/wineboot",
                     "winecfg": "files/lib64/wine/x86_64-windows/winecfg.exe"
                 },
-                "recommended": true
+                "recommended": false
             },
             {
                 "family": "GE-Proton",
@@ -340,6 +366,19 @@
         "title": "Soda",
         "subtitle": "New runner based on Valve’s Wine, with patches from Proton, TKG and GE. Developed by Bottles",
         "versions": [
+            {
+                "family": "Soda",
+                "name": "soda-7.0-3-x86_64",
+                "title": "Soda 7.0-3",
+                "uri": "https://github.com/bottlesdevs/wine/releases/download/soda-7.0-3/soda-7.0-3-x86_64.tar.xz",
+                "files": {
+                    "wine64": "bin/wine64",
+                    "wineserver": "bin/wineserver",
+                    "wineboot": "bin/wineboot",
+                    "winecfg": "lib/wine/x86_64-windows/winecfg.exe"
+                },
+                "recommended": true
+            },
             {
                 "family": "Soda",
                 "name": "soda-7.0-2-x86_64",
