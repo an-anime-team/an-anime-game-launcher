@@ -32,7 +32,7 @@ instead of the actual name of the game, to avoid search engine parsing.
 
 | Source | Link |
 | --- | --- |
-| AppImage | [Releases](https://gitlab.com/KRypt0n_/an-anime-game-launcher/-/releases) page |
+| AppImage | [Releases](https://gitlab.com/an-anime-team/an-anime-game-launcher/-/releases) page |
 | AUR | [an-anime-game-launcher-bin](https://aur.archlinux.org/packages/an-anime-game-launcher-bin) |
 | Pacstall | [an-anime-game-launcher-bin](https://pacstall.dev/packages/an-anime-game-launcher-bin) |
 | Gentoo | [an-anime-game-launcher-bin](https://gitlab.com/an-anime-team/aagl-ebuilds) |
@@ -60,7 +60,7 @@ Now the only thing remaining is to install the launcher
 flatpak install launcher.moe com.gitlab.KRypt0n_.an-anime-game-launcher
 ```
 
-Some additional configuration is possible when using the flatpak. For info about this, see [this page](https://gitlab.com/lane__/an-anime-game-launcher-flatpak/-/blob/master/README.md)
+Some additional configuration is possible when using the flatpak. For info about this, see [this page](https://gitlab.com/an-anime-team/distributions/an-anime-game-launcher-flatpak/-/blob/master/README.md)
 
 ## Chinese version
 
@@ -161,7 +161,7 @@ They're required only for some specific functions
 ## Download source
 
 ```sh
-git clone https://gitlab.com/KRypt0n_/an-anime-game-launcher
+git clone https://gitlab.com/an-anime-team/an-anime-game-launcher
 cd an-anime-game-launcher
 yarn
 yarn neu update
