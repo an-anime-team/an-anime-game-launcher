@@ -1,3 +1,10 @@
+# 1.0.2
+
+- updated core library with lots of fixes
+- added new wine versions
+- fixed Polish `LANG` value
+- made FSync default wine sync option
+
 # 1.0.1
 
 - updated core library with fixed Chinese game's data folder name
