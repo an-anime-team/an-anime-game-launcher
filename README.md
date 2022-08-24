@@ -4,6 +4,10 @@
 
 <img src="repository/pics/launcher-settings.png">
 
+<br>
+
+<p align="center">You could also try <a href="https://gitlab.com/an-anime-team/alternatives/an-anime-game-launcher-gtk">the GTK branch</a></p>
+
 <br><br>
 
 # Please don't link to this repository
@@ -21,6 +25,7 @@ Or share them and ruin it for the dozens of Linux players. It's up to you.
 
 Do what you must, but we would respectfully request that you try to label the game as "An Anime Game"
 instead of the actual name of the game, to avoid search engine parsing.
+
 <br><br>
 
 # Download
