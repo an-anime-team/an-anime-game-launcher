@@ -251,7 +251,7 @@ export default class constants
         },
         patch: {
             origin: atob('aHR0cHM6Ly9ub3RhYnVnLm9yZy9Lcm9jay9kYXdu'),
-            additional: atob('aHR0cHM6Ly9kZXYua2FpZmEuY2gvTWFyb3h5L2Rhd24=')
+            additional: atob('aHR0cHM6Ly9jb2Rlc3BhY2UuZ2F5L01hcm94eS9kYXduaW4=')
         },
         telemetry: {
             global: [

@@ -70,10 +70,10 @@ export default class Voice
                                     // That's why we have to substract this approximate value from all the packages sizes
 
                                     const CONSTANT_OF_STUPIDITY = {
-                                        'en-us': 8593687434, // 8 GB
-                                        'ja-jp': 9373182378, // 8.72 GB
-                                        'ko-kr': 8804682956, // 8.2 GB, not calculated (approximation)
-                                        'zh-cn': 8804682956  // 8.2 GB, not calculated (approximation)
+                                        'en-us': 8593687434 + 750 * 1024 * 1024, // 8 GB    (2.8.0)                                 + 750 MB (3.0.0)
+                                        'ja-jp': 9373182378 + 750 * 1024 * 1024, // 8.72 GB (2.8.0)                                 + 750 MB (3.0.0)
+                                        'ko-kr': 8804682956 + 750 * 1024 * 1024, // 8.2 GB  (2.8.0, not calculated (approximation)) + 750 MB (3.0.0)
+                                        'zh-cn': 8804682956 + 750 * 1024 * 1024, // 8.2 GB  (2.8.0, not calculated (approximation)) + 750 MB (3.0.0)
                                     }[locale] as number;
 
                                     // API works this way:
@@ -121,7 +121,8 @@ export default class Voice
                                                 if (relativeSize < 4 * 1024 * 1024 * 1024)
                                                     packageSize -= relativeSize;
 
-                                                else packageSize = Math.abs(relativeSize - CONSTANT_OF_STUPIDITY);
+                                                else if (packageSize > CONSTANT_OF_STUPIDITY)
+                                                    packageSize -= CONSTANT_OF_STUPIDITY;
 
                                                 packages.push({
                                                     version: diff.version,
@@ -137,8 +138,8 @@ export default class Voice
 
                                     for (const packageData of packages.reverse()) {
                                         // Actual folder size can be +- the same as in API response
-                                        // Let's say +-250 MB is ok
-                                        if (actualSize > packageData.size - 250 * 1024 * 1024)
+                                        // Let's say +-512 MB is ok
+                                        if (actualSize > packageData.size - 512 * 1024 * 1024)
                                             packageVersion = packageData.version;
                                     }
 
