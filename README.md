@@ -6,6 +6,20 @@ The launcher variant written on Rust, GTK4 and libadwaita, using [Anime Game Cor
 <img src="repository/pictures/main.png">
 <img src="repository/pictures/settings.png">
 
+<br>
+
+<p align="center">You could also try <a href="https://gitlab.com/an-anime-team/an-anime-game-launcher">the main branch</a></p>
+
+<br>
+
+## Documentation
+
+I wrote small documentation [here](https://gitlab.com/an-anime-team/alternatives/an-anime-game-launcher-gtk/-/wikis/home). It may contain some useful information
+
+## Chinese version support
+
+This should be automatically enabled if you're using zh_cn (Chinese) as your system language. If you're not using it - you'll need to set `China` as your `launcher.edition` in the `config.json` file
+
 ## Development
 
 | Folder | Description |
