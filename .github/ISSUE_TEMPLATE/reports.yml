@@ -1,0 +1,33 @@
+name: Issue Report
+description: File a report
+title: "[Issue]: "
+body:
+- type: textarea
+  attributes:
+    label: Distro
+    description: Please tell us your Operating System/Distro
+  validations:
+    required: true
+- type: checkboxes
+  attributes:
+    label: Installation Type
+    description: Which way did you install the launcher
+    options:
+    - label: Flatpak
+      required: false
+    - label: AUR
+      required: false
+    - label: AppImage
+      required: false
+- type: textarea
+  attributes:
+    label: Describe the issue
+    description: Please describe the issue
+  validations:
+    required: true
+- type: textarea
+  attributes:
+    label: Reproduction Steps
+    description: Tell us how to reproduce it.
+  validations:
+    required: false
