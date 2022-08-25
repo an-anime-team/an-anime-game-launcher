@@ -1,3 +1,10 @@
+# 1.0.3
+
+- fixed work with `patch` folder
+- reworked components downloading during initial setup
+  now lots of stuff happens in separate threads and launcher shouldn't freeze
+  also fixed sometimes weird progress bar behavior
+
 # 1.0.2
 
 - updated core library with lots of fixes
