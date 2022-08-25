@@ -1,0 +1,17 @@
+name: Feature Request
+description: Request a feature that is missing
+title: "[Feature Request]: "
+labels: [request]
+body:
+- type: textarea
+  attributes:
+    label: What the feature is suppose to do
+    description: Tell us in detail about the feature and what it's suppose to do
+  validations:
+    required: true
+- type: textarea
+  attributes:
+    label: Describe the reason behind the request
+    description: Tell us why it should be added
+  validations:
+    required: true
