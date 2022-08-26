@@ -1,0 +1,75 @@
+name: Build AppImage
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v3.4.1
+        with:
+          node-version: 16.17.0
+
+      - name: Install Node Modules and Setup Neutralino and Build
+        run: |
+          npm install
+          npm run neu update
+          npm run build
+          
+      - name: Cache Folders
+        uses: actions/cache@v3.0.8
+        env:
+          cache-name: cache-dist-npm
+        with:
+          path: |
+            node_modules
+            dist
+          key: ${{ runner.os }}-${{ hashFiles('package.json') }}
+          
+  package:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v3.4.1
+        with:
+          node-version: 16.17.0
+          
+      - name: Cache Folders
+        uses: actions/cache@v3.0.8
+        env:
+          cache-name: cache-dist-npm
+        with:
+          path: |
+            node_modules
+            dist
+          key: ${{ runner.os }}-${{ hashFiles('package.json') }}
+          
+      - name: Package AppImage
+        run: |
+          find . -name "an-anime-game-launcher-linux_x64" | xargs chmod 755
+          apt update
+          apt install -y curl gnupg appstream file
+          npm run bundle
+          scripts/ci-appimage-prep.sh
+          npm run bundle
+          
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v3.1.0
+        with:
+          name: Built AppImage
+          path: An_Anime_Game_Launcher*.AppImage
+          if-no-files-found: error
+          
