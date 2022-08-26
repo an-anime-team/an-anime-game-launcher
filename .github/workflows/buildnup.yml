@@ -20,7 +20,7 @@ jobs:
         submodules: true
         
     - name: Install Deps
-      run: sudo apt install -y libgtk-4-1 libgtk-4-dev libadwaita-1-0
+      run: sudo apt install -y libgtk-4-1 libgtk-4-dev libadwaita-1-0 libadwaita-1-dev
     
     - name: Build
       run: cargo build --release --verbose
