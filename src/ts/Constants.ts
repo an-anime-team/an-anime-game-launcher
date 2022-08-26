@@ -268,11 +268,11 @@ export default class constants
             unlocker: `https://github.com/34736384/${this.placeholders.lowercase.first}-fps-unlock/releases/download/v2.0.0/unlockfps_clr.exe`,
             bat: 'https://aagl.launcher.moe/dl/unlockfps.bat'
         },
-        launcher: 'https://gitlab.com/KRypt0n_/an-anime-game-launcher',
+        launcher: 'https://github.com/an-anime-team/an-anime-game-launcher',
         discord: 'https://discord.gg/ck37X6UWBp',
         analytics: 'https://aagl.launcher.moe/stat/',
-        dxvk_list: 'https://gitlab.com/KRypt0n_/an-anime-game-launcher/-/raw/main/public/dxvks.yaml',
-        runners_list: 'https://gitlab.com/KRypt0n_/an-anime-game-launcher/-/raw/main/public/runners.yaml'
+        dxvk_list: 'https://github.com/an-anime-team/an-anime-game-launcher/raw/main/public/dxvks.yaml',
+        runners_list: 'https://github.com/an-anime-team/an-anime-game-launcher/raw/main/public/runners.yaml'
     };
 
     public static readonly paths = Paths;
