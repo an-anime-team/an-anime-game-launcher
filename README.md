@@ -12,15 +12,47 @@ The launcher variant written on Rust, GTK4 and libadwaita, using [Anime Game Cor
 
 <br>
 
-## Documentation
+# Documentation
 
 I wrote small documentation [here](https://github.com/an-anime-team/an-anime-game-launcher-gtk/wiki). It may contain some useful information
+
+# Download
+
+| Source | Link |
+| --- | --- |
+| Native | [Releases](https://github.com/an-anime-team/an-anime-game-launcher-gtk/releases) page |
+| AUR | [an-anime-game-launcher-gtk-bin](https://aur.archlinux.org/packages/an-anime-game-launcher-gtk-bin) |
+| Pacstall | [an-anime-game-launcher-gtk-bin](https://pacstall.dev/packages/an-anime-game-launcher-gtk-bin) |
+
+## Flatpak support
+
+To install the launcher via flatpak you will first have to make sure that you have flathub's remote installed
+
+```zsh
+flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+```
+
+After installing flathub's remote you install launcher.moe's remote
+
+NOTE: You can install the repo on a per user base by appending --user after --if-not-exists (This is especially useful if on Steam Deck)
+
+```zsh
+flatpak remote-add --if-not-exists launcher.moe https://gol.launcher.moe/gol.launcher.moe.flatpakrepo
+```
+
+Now the only thing remaining is to install the launcher
+
+```zsh
+flatpak install launcher.moe moe.launcher.an-anime-game-launcher-gtk
+```
+
+Some additional configuration is possible when using the flatpak. For info about this, see [this page](https://github.com/an-anime-team/an-anime-game-launcher-flatpak/blob/rust-launcher/README.md)
 
 ## Chinese version support
 
 This should be automatically enabled if you're using zh_cn (Chinese) as your system language. If you're not using it - you'll need to set `China` as your `launcher.edition` in the `config.json` file
 
-## Development
+# Development
 
 | Folder | Description |
 | - | - |
@@ -31,25 +63,25 @@ This should be automatically enabled if you're using zh_cn (Chinese) as your sys
 | blueprint-compiler | Blueprint compiler |
 | anime-game-core | Anime Game Core library |
 
-### Clone repo
+## Clone repo
 
 ```sh
 git clone --recursive https://github.com/an-anime-team/an-anime-game-launcher-gtk
 ```
 
-### Run app
+## Run app
 
 ```sh
 cargo run
 ```
 
-### Build app
+## Build app
 
 ```sh
 cargo build --release
 ```
 
-### Building AppImage
+## Building AppImage
 
 ```
 ./scripts/build.sh
