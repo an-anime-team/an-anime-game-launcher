@@ -3,10 +3,10 @@ name: Build & Upload Launcher
 on:
   push:
     branches: [ "main" ]
-    paths: ['src/**']
+    paths: [ "src/**" ]
   pull_request:
     branches: [ "main" ]
-    paths: ['src/**']
+    paths: [ "src/**" ]
 
 env:
   CARGO_TERM_COLOR: always
