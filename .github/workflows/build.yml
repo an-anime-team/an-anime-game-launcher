@@ -61,8 +61,8 @@ jobs:
       - name: Package AppImage
         run: |
           find . -name "an-anime-game-launcher-linux_x64" | xargs chmod 755
-          apt update
-          apt install -y curl gnupg appstream file
+          sudo apt update
+          sudo apt install -y curl gnupg appstream file
           npm run bundle
           scripts/ci-appimage-prep.sh
           npm run bundle
