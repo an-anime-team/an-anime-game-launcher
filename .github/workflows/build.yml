@@ -64,7 +64,7 @@ jobs:
           sudo apt update
           sudo apt install -y curl gnupg appstream file
           npm run bundle
-          scripts/ci-appimage-prep.sh
+          sudo scripts/ci-appimage-prep.sh
           npm run bundle
           
       - name: Upload a Build Artifact
