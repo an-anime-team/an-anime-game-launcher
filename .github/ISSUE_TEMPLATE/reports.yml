@@ -8,17 +8,14 @@ body:
     description: Please tell us your Operating System/Distro
   validations:
     required: true
-- type: checkboxes
+- type: dropdown
   attributes:
     label: Installation Type
     description: Which way did you install the launcher
     options:
-    - label: Flatpak
-      required: false
-    - label: AUR
-      required: false
-    - label: AppImage
-      required: false
+    - Flatpak
+    - AUR
+    - AppImage
   validations:
     required: true
 - type: textarea
