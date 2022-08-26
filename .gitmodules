@@ -3,4 +3,4 @@
 	url = https://gitlab.gnome.org/jwestman/blueprint-compiler
 [submodule "anime-game-core"]
 	path = anime-game-core
-	url = https://gitlab.com/an-anime-team/anime-game-core
+	url = https://github.com/an-anime-team/anime-game-core

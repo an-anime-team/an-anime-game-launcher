@@ -1,20 +1,20 @@
 # An Anime Game Launcher GTK
 
-The launcher variant written on Rust, GTK4 and libadwaita, using [Anime Game Core](https://gitlab.com/an-anime-team/anime-game-core) library
+The launcher variant written on Rust, GTK4 and libadwaita, using [Anime Game Core](https://github.com/an-anime-team/anime-game-core) library
 
-<img src="https://gitlab.com/an-anime-team/an-anime-game-launcher/-/raw/main/repository/pics/logo.jpg">
+<img src="https://github.com/an-anime-team/an-anime-game-launcher/raw/main/repository/pics/logo.jpg">
 <img src="repository/pictures/main.png">
 <img src="repository/pictures/settings.png">
 
 <br>
 
-<p align="center">You could also try <a href="https://gitlab.com/an-anime-team/an-anime-game-launcher">the main branch</a></p>
+<p align="center">You could also try <a href="https://github.com/an-anime-team/an-anime-game-launcher">the main branch</a></p>
 
 <br>
 
 ## Documentation
 
-I wrote small documentation [here](https://gitlab.com/an-anime-team/alternatives/an-anime-game-launcher-gtk/-/wikis/home). It may contain some useful information
+I wrote small documentation [here](https://github.com/an-anime-team/an-anime-game-launcher-gtk/wiki). It may contain some useful information
 
 ## Chinese version support
 
@@ -34,7 +34,7 @@ This should be automatically enabled if you're using zh_cn (Chinese) as your sys
 ### Clone repo
 
 ```sh
-git clone --recursive https://gitlab.com/an-anime-team/an-anime-game-launcher-gtk
+git clone --recursive https://github.com/an-anime-team/an-anime-game-launcher-gtk
 ```
 
 ### Run app

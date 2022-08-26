@@ -107,7 +107,7 @@ impl AppWidgets {
         result.about.set_license_type(gtk::License::Gpl30);
 
         result.about.set_authors(&[
-            "Nikita Podvirnyy <suimin.tu.mu.ga.mi@gmail.com>"
+            "Nikita Podvirnyy https://github.com/krypt0nn"
         ]);
 
         result.about.add_credit_section("Logo", &[
@@ -115,8 +115,8 @@ impl AppWidgets {
         ]);
 
         result.about.add_credit_section("An Anime Team", &[
-            "@Marie https://gitlab.com/Maroxy",
-            "@lane https://gitlab.com/lane__"
+            "@Marie https://github.com/Mar0xy",
+            "@lane https://github.com/laurinneff"
         ]);
 
         let curl_info = anime_game_core::curl_sys::Version::get();
