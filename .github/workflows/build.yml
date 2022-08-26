@@ -38,6 +38,7 @@ jobs:
           
   package:
     runs-on: ubuntu-latest
+    needs: [build]
     
     steps:
       - uses: actions/checkout@v3
