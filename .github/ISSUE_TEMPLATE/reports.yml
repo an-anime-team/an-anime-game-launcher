@@ -19,6 +19,8 @@ body:
       required: false
     - label: AppImage
       required: false
+  validations:
+    required: true
 - type: textarea
   attributes:
     label: Describe the issue
