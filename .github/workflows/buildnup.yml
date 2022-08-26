@@ -11,13 +11,16 @@ env:
 
 jobs:
   build_and_upload:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     steps:
     - name: Checkout
       uses: actions/checkout@v3
       with:
         submodules: true
+        
+    - name: Install Deps
+      run: sudo apt install -y libgtk-4-1 libgtk-4-dev libadwaita-1-0
     
     - name: Build
       run: cargo build --release --verbose
