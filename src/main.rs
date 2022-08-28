@@ -81,9 +81,21 @@ fn main() {
         }
 
         else {
-            // Set game edition
             let config = lib::config::get().expect("Failed to load config");
 
+            // Create wine builds folder
+            if !Path::new(&config.game.wine.builds).exists() {
+                fs::create_dir_all(config.game.wine.builds)
+                    .expect("Failed to create wine builds directory");
+            }
+
+            // Create DXVK builds folder
+            if !Path::new(&config.game.dxvk.builds).exists() {
+                fs::create_dir_all(config.game.dxvk.builds)
+                    .expect("Failed to create DXVK builds directory");
+            }
+
+            // Set game edition
             anime_game_core::consts::set_game_edition(config.launcher.edition.into());
 
             // Load main window
