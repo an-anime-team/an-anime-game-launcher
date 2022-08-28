@@ -12,7 +12,11 @@ impl WinePrefix {
     }
 
     pub fn exists(&self) -> bool {
-        Path::new(&format!("{}/drive_c", self.path)).exists()
+        Self::exists_in(&self.path)
+    }
+
+    pub fn exists_in<T: ToString>(path: T) -> bool {
+        Path::new(&format!("{}/drive_c", path.to_string())).exists()
     }
 
     fn wine<T: ToString>(&self, runners_folder: T, runner: super::wine::Version, command: &str) -> std::io::Result<Output> {

@@ -43,15 +43,13 @@ impl LauncherState {
     pub fn get<T: Fn(&str)>(status: T) -> std::io::Result<Self> {
         let config = config::get()?;
 
-        // Check wine existance
-        if config.game.wine.selected == None {
+        // Check wine existence
+        if let None = config.try_get_wine_executable() {
             return Ok(Self::WineNotInstalled);
         }
 
-        // Check prefix existance
-        let prefix = WinePrefix::new(&config.game.wine.prefix);
-
-        if !prefix.exists() {
+        // Check prefix existence
+        if !WinePrefix::exists_in(&config.game.wine.prefix) {
             return Ok(Self::PrefixNotExists);
         }
 
