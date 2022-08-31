@@ -8,7 +8,10 @@ use regex::Regex;
 
 use crate::lib::config;
 
-const LIST: &str = include_str!("../../assets/dxvk.json");
+lazy_static! {
+    static ref VANILLA_LIST: Vec<Version> = serde_json::from_str(include_str!("../../components/dxvk/vanilla.json")).unwrap();
+    static ref ASYNC_LIST: Vec<Version> = serde_json::from_str(include_str!("../../components/dxvk/async.json")).unwrap();
+}
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct List {
@@ -17,8 +20,11 @@ pub struct List {
 }
 
 impl List {
-    pub fn get() -> Result<Self, serde_json::Error> {
-        Ok(serde_json::from_str(LIST)?)
+    pub fn get() -> Self {
+        Self {
+            vanilla: VANILLA_LIST.clone(),
+            r#async: ASYNC_LIST.clone()
+        }
     }
 
     /// List only downloaded DXVK versions in some specific folder
@@ -26,7 +32,7 @@ impl List {
         let mut vanilla = Vec::new();
         let mut r#async = Vec::new();
 
-        let list = Self::get()?;
+        let list = Self::get();
 
         for entry in std::fs::read_dir(folder.to_string())? {
             let name = entry?.file_name();
@@ -63,7 +69,7 @@ pub struct Version {
 
 impl Version {
     pub fn latest() -> Result<Self, serde_json::Error> {
-        Ok(List::get()?.vanilla[0].clone())
+        Ok(List::get().vanilla[0].clone())
     }
 
     pub fn is_downloaded_in<T: ToString>(&self, folder: T) -> bool {

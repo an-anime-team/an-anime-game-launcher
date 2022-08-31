@@ -1,7 +1,7 @@
 use gtk4::{self as gtk, prelude::*};
 use libadwaita::{self as adw, prelude::*};
 
-use anime_game_core::prelude::*;
+use anime_game_core::genshin::voice_data::package::VoicePackage;
 
 #[derive(Debug, Clone)]
 pub struct VoiceoverRow {

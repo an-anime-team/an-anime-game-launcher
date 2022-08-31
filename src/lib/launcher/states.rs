@@ -1,6 +1,5 @@
-use std::io::{Error, ErrorKind};
-
 use anime_game_core::prelude::*;
+use anime_game_core::genshin::prelude::*;
 
 use crate::lib::consts;
 use crate::lib::config;
@@ -40,7 +39,7 @@ impl Default for LauncherState {
 }
 
 impl LauncherState {
-    pub fn get<T: Fn(&str)>(status: T) -> std::io::Result<Self> {
+    pub fn get<T: Fn(&str)>(status: T) -> anyhow::Result<Self> {
         let config = config::get()?;
 
         // Check wine existence
@@ -66,7 +65,7 @@ impl LauncherState {
                 for voice_package in &config.game.voices {
                     let mut voice_package = VoicePackage::with_locale(match VoiceLocale::from_str(voice_package) {
                         Some(locale) => locale,
-                        None => return Err(Error::new(ErrorKind::Other, format!("Incorrect voice locale \"{}\" specified in the config", voice_package)))
+                        None => return Err(anyhow::anyhow!("Incorrect voice locale \"{}\" specified in the config", voice_package))
                     })?;
 
                     status(format!("Updating voice info ({})...", voice_package.locale().to_name()).as_str());
@@ -76,7 +75,7 @@ impl LauncherState {
                     if voice_package.is_installed_in(&config.game.path) {
                         voice_package = match VoicePackage::new(get_voice_package_path(&config.game.path, voice_package.locale())) {
                             Some(locale) => locale,
-                            None => return Err(Error::new(ErrorKind::Other, format!("Failed to load {} voice package", voice_package.locale().to_name())))
+                            None => return Err(anyhow::anyhow!("Failed to load {} voice package", voice_package.locale().to_name()))
                         };
                     }
 

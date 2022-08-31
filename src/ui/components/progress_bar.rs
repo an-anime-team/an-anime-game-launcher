@@ -10,7 +10,7 @@ use crate::lib::prettify_bytes::prettify_bytes;
 #[derive(Debug)]
 pub enum ProgressUpdateResult {
     Updated,
-    Error(String, std::io::Error),
+    Error(String, String),
     Finished
 }
 
@@ -78,10 +78,14 @@ impl ProgressBar {
             InstallerUpdate::DownloadingFinished => (),
             InstallerUpdate::UnpackingStarted(_) => (),
 
-            InstallerUpdate::DownloadingError(err) => return ProgressUpdateResult::Error(String::from("Failed to download"), err.into()),
-            InstallerUpdate::UnpackingError => return ProgressUpdateResult::Error(String::from("Failed to unpack"), std::io::Error::last_os_error()),
+            InstallerUpdate::DownloadingError(err) => {
+                let err: std::io::Error = err.into();
 
-            InstallerUpdate::UnpackingFinished => return ProgressUpdateResult::Finished,
+                return ProgressUpdateResult::Error(String::from("Failed to download"), err.to_string());
+            }
+
+            InstallerUpdate::UnpackingError(err) => return ProgressUpdateResult::Error(String::from("Failed to unpack"), err),
+            InstallerUpdate::UnpackingFinished => return ProgressUpdateResult::Finished
         }
 
         ProgressUpdateResult::Updated

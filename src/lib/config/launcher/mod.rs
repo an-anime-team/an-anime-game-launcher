@@ -1,7 +1,7 @@
 use serde::{Serialize, Deserialize};
 use serde_json::Value as JsonValue;
 
-use anime_game_core::consts::GameEdition as CoreGameEdition;
+use anime_game_core::genshin::consts::GameEdition as CoreGameEdition;
 
 use crate::lib::consts::launcher_dir;
 

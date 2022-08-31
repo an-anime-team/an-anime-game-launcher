@@ -96,7 +96,7 @@ fn main() {
             }
 
             // Set game edition
-            anime_game_core::consts::set_game_edition(config.launcher.edition.into());
+            anime_game_core::genshin::consts::set_game_edition(config.launcher.edition.into());
 
             // Load main window
             let main = MainApp::new(app).expect("Failed to init MainApp");

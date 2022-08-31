@@ -6,9 +6,9 @@ use gtk::glib::clone;
 
 use std::rc::Rc;
 use std::cell::Cell;
-use std::io::Error;
 
 use anime_game_core::prelude::*;
+use anime_game_core::genshin::prelude::*;
 
 use crate::lib::consts;
 use crate::lib::config;
@@ -110,14 +110,9 @@ impl AppWidgets {
         result.voieover_components = Rc::new(components);
 
         // Update wine versions lists
-        let groups = match wine::List::get() {
-            Ok(list) => list,
-            Err(err) => return Err(err.to_string())
-        };
-
         let mut components = Vec::new();
 
-        for group in groups {
+        for group in wine::List::get() {
             let group = WineGroup::new(group);
 
             group.update_states(&config.game.wine.builds);
@@ -130,10 +125,7 @@ impl AppWidgets {
         result.wine_components = Rc::new(components);
 
         // Update DXVK list
-        let list = match dxvk::List::get() {
-            Ok(list) => list,
-            Err(err) => return Err(err.to_string())
-        };
+        let list = dxvk::List::get();
 
         let mut components = Vec::new();
 
@@ -172,7 +164,7 @@ pub enum Actions {
     SelectDxvkVersion(Rc<usize>),
     UpdateWineComboRow,
     SelectWineVersion(Rc<usize>),
-    Toast(Rc<(String, Error)>)
+    Toast(Rc<(String, String)>)
 }
 
 impl Actions {
@@ -306,7 +298,7 @@ impl App {
                         Ok(output) => println!("{}", String::from_utf8_lossy(&output.stdout)),
                         Err(err) => {
                             this.update(Actions::Toast(Rc::new((
-                                String::from("Failed to apply DXVK"), err
+                                String::from("Failed to apply DXVK"), err.to_string()
                             )))).unwrap();
                         }
                     }
@@ -354,7 +346,7 @@ impl App {
                         std::thread::spawn(move || {
                             if let Err(err) = component.package.delete_in(&config.game.path) {
                                 this.update(Actions::Toast(Rc::new((
-                                    String::from("Failed to delete voiceover"), err
+                                    String::from("Failed to delete voiceover"), err.to_string()
                                 )))).unwrap();
                             }
 
@@ -391,7 +383,7 @@ impl App {
                     if component.is_downloaded(&config.game.dxvk.builds) {
                         if let Err(err) = component.delete(&config.game.dxvk.builds) {
                             this.update(Actions::Toast(Rc::new((
-                                String::from("Failed to delete DXVK"), err
+                                String::from("Failed to delete DXVK"), err.to_string()
                             )))).unwrap();
                         }
 
@@ -407,7 +399,7 @@ impl App {
                                     Ok(output) => println!("{}", String::from_utf8_lossy(&output.stdout)),
                                     Err(err) => {
                                         this.update(Actions::Toast(Rc::new((
-                                            String::from("Failed to apply DXVK"), err
+                                            String::from("Failed to apply DXVK"), err.to_string()
                                         )))).unwrap();
                                     }
                                 }
@@ -428,7 +420,7 @@ impl App {
                     if component.is_downloaded(&config.game.wine.builds) {
                         if let Err(err) = component.delete(&config.game.wine.builds) {
                             this.update(Actions::Toast(Rc::new((
-                                String::from("Failed to delete wine"), err
+                                String::from("Failed to delete wine"), err.to_string()
                             )))).unwrap();
                         }
 
@@ -503,7 +495,7 @@ impl App {
                                     Ok(output) => println!("{}", String::from_utf8_lossy(&output.stdout)),
                                     Err(err) => {
                                         this.update(Actions::Toast(Rc::new((
-                                            String::from("Failed to apply DXVK"), err
+                                            String::from("Failed to apply DXVK"), err.to_string()
                                         )))).unwrap();
                                     }
                                 }
@@ -605,7 +597,7 @@ impl App {
     }
 
     /// This method is being called by the `PreferencesStack::update`
-    pub fn prepare(&self, status_page: &adw::StatusPage) -> Result<(), Error> {
+    pub fn prepare(&self, status_page: &adw::StatusPage) -> anyhow::Result<()> {
         let config = config::get()?;
         let game = Game::new(&config.game.path);
 

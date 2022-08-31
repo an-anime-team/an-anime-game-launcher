@@ -2,7 +2,7 @@ use std::io::{Error, ErrorKind};
 use std::path::Path;
 use std::process::Command;
 
-use anime_game_core::telemetry;
+use anime_game_core::genshin::telemetry;
 
 use super::consts;
 use super::config;

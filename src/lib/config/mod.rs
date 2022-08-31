@@ -135,20 +135,15 @@ impl Config {
     pub fn try_get_selected_wine_info(&self) -> Option<WineVersion> {
         match &self.game.wine.selected {
             Some(selected) => {
-                match WineList::get() {
-                    Ok(list) => {
-                        for group in list {
-                            for version in group.versions {
-                                if &version.name == selected {
-                                    return Some(version.clone());
-                                }
-                            }
+                for group in WineList::get() {
+                    for version in group.versions {
+                        if &version.name == selected {
+                            return Some(version.clone());
                         }
-
-                        None
-                    },
-                    Err(_) => None
+                    }
                 }
+
+                None
             },
             None => None
         }

@@ -49,12 +49,7 @@ impl Page {
         // Add wine versions
         let model = gtk::StringList::new(&[]);
 
-        let versions = match WineList::get() {
-            Ok(versions) => versions,
-            Err(err) => return Err(err.to_string())
-        };
-
-        for version in &versions[0].versions {
+        for version in &WineList::get()[0].versions {
             if version.recommended {
                 model.append(&version.title);
 
@@ -67,12 +62,7 @@ impl Page {
         // Add DXVK versions
         let model = gtk::StringList::new(&[]);
 
-        let versions = match DxvkList::get() {
-            Ok(versions) => versions,
-            Err(err) => return Err(err.to_string())
-        };
-
-        for version in &versions.vanilla {
+        for version in &DxvkList::get().vanilla {
             if version.recommended {
                 model.append(&version.version);
 

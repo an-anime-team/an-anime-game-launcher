@@ -1,7 +1,7 @@
 use gtk4 as gtk;
 use libadwaita::{self as adw, prelude::*};
 
-use anime_game_core::voice_data::prelude::*;
+use anime_game_core::genshin::voice_data::prelude::*;
 
 use crate::lib::config;
 use crate::ui::*;

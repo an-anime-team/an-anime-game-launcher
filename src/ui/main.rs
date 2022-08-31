@@ -9,8 +9,10 @@ use std::cell::Cell;
 use std::io::Error;
 use std::process::{Command, Stdio};
 
-use anime_game_core::prelude::*;
 use wait_not_await::Await;
+
+use anime_game_core::prelude::*;
+use anime_game_core::genshin::prelude::*;
 
 use crate::ui::*;
 
@@ -151,7 +153,7 @@ pub enum Actions {
     ShowProgressBar,
     UpdateProgress { fraction: Rc<f64>, title: Rc<String> },
     HideProgressBar,
-    Toast(Rc<(String, Error)>)
+    Toast(Rc<(String, String)>)
 }
 
 impl Actions {
@@ -215,7 +217,7 @@ impl App {
             if let Some(launcher_dir) = consts::launcher_dir() {
                 if let Err(err) = Command::new("xdg-open").arg(launcher_dir).spawn() {
                     this.update(Actions::Toast(Rc::new((
-                        String::from("Failed to open launcher folder"), err
+                        String::from("Failed to open launcher folder"), err.to_string()
                     )))).unwrap();
                 }
             }
@@ -225,7 +227,7 @@ impl App {
             if let Ok(config) = config::get() {
                 if let Err(err) = Command::new("xdg-open").arg(config.game.path).spawn() {
                     this.update(Actions::Toast(Rc::new((
-                        String::from("Failed to open game folder"), err
+                        String::from("Failed to open game folder"), err.to_string()
                     )))).unwrap();
                 }
             }
@@ -235,7 +237,7 @@ impl App {
             if let Some(config_file) = consts::config_file() {
                 if let Err(err) = Command::new("xdg-open").arg(config_file).spawn() {
                     this.update(Actions::Toast(Rc::new((
-                        String::from("Failed to open config file"), err
+                        String::from("Failed to open config file"), err.to_string()
                     )))).unwrap();
                 }
             }
@@ -319,7 +321,7 @@ impl App {
                                             this.widgets.window.show();
 
                                             this.update(Actions::Toast(Rc::new((
-                                                String::from("Failed to run game"), err
+                                                String::from("Failed to run game"), err.to_string()
                                             )))).unwrap();
                                         }
 
@@ -371,20 +373,20 @@ impl App {
 
                                                             Ok(false) => {
                                                                 this.update(Actions::Toast(Rc::new((
-                                                                    String::from("Failed to sync patch folder"), Error::last_os_error()
+                                                                    String::from("Failed to sync patch folder"), Error::last_os_error().to_string()
                                                                 )))).unwrap();
                                                             }
 
                                                             Err(err) => {
                                                                 this.update(Actions::Toast(Rc::new((
-                                                                    String::from("Failed to sync patch folder"), err
+                                                                    String::from("Failed to sync patch folder"), err.to_string()
                                                                 )))).unwrap();
                                                             }
                                                         }
                                                     }
 
                                                     Err(err) => this.update(Actions::Toast(Rc::new((
-                                                        String::from("Failed to check patch folder state"), err
+                                                        String::from("Failed to check patch folder state"), err.to_string()
                                                     )))).unwrap()
                                                 }
 
@@ -394,7 +396,7 @@ impl App {
 
                                                         Err(err) => {
                                                             this.update(Actions::Toast(Rc::new((
-                                                                String::from("Failed to patch game"), err
+                                                                String::from("Failed to patch game"), err.to_string()
                                                             )))).unwrap();
                                                         }
                                                     }
@@ -498,7 +500,7 @@ impl App {
 
                                                 if let Err(err) = prefix.update(&config.game.wine.builds, wine) {
                                                     this.update(Actions::Toast(Rc::new((
-                                                        String::from("Failed to create wine prefix"), err
+                                                        String::from("Failed to create wine prefix"), err.to_string()
                                                     )))).unwrap();
                                                 }
 
@@ -565,8 +567,10 @@ impl App {
                                         });
 
                                         if let Err(err) = result {
+                                            let err: Error = err.into();
+
                                             this_copy.update(Actions::Toast(Rc::new((
-                                                String::from("Downloading failed"), err.into()
+                                                String::from("Downloading failed"), err.to_string()
                                             )))).unwrap();
                                         }
                                     });
@@ -586,14 +590,14 @@ impl App {
                             let this = this.clone();
 
                             std::thread::spawn(move || {
-                                match repairer::try_get_integrity_files() {
+                                match repairer::try_get_integrity_files(None) {
                                     Ok(mut files) => {
                                         // Add voiceovers files
                                         let game = Game::new(&config.game.path);
 
                                         if let Ok(voiceovers) = game.get_voice_packages() {
                                             for package in voiceovers {
-                                                if let Ok(mut voiceover_files) = repairer::try_get_voice_integrity_files(package.locale()) {
+                                                if let Ok(mut voiceover_files) = repairer::try_get_voice_integrity_files(package.locale(), None) {
                                                     files.append(&mut voiceover_files);
                                                 }
                                             }
@@ -708,8 +712,10 @@ impl App {
                                             for (i, file) in broken.into_iter().enumerate() {
                                                 if !is_patch_applied || !should_ignore(&file.path) {
                                                     if let Err(err) = file.repair(&config.game.path) {
+                                                        let err: Error = err.into();
+
                                                         this.update(Actions::Toast(Rc::new((
-                                                            String::from("Failed to repair game file"), err.into()
+                                                            String::from("Failed to repair game file"), err.to_string()
                                                         )))).unwrap();
                                                     }
                                                 }
@@ -727,7 +733,7 @@ impl App {
                                     },
                                     Err(err) => {
                                         this.update(Actions::Toast(Rc::new((
-                                            String::from("Failed to get integrity files"), err
+                                            String::from("Failed to get integrity files"), err.to_string()
                                         )))).unwrap();
 
                                         this.update(Actions::HideProgressBar).unwrap();

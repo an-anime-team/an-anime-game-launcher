@@ -5,7 +5,6 @@ use gtk::glib;
 
 use std::rc::Rc;
 use std::cell::Cell;
-use std::io::Error;
 
 use crate::ui::*;
 use crate::ui::traits::prelude::*;
@@ -75,7 +74,7 @@ impl PreferencesStack {
     /// Update page info before opening it
     /// 
     /// Being called from the `MainApp` struct
-    pub fn update(&self) -> Result<(), Error> {
+    pub fn update(&self) -> anyhow::Result<()> {
         self.status_page.show();
         self.status_page.set_description(None);
         self.flap.hide();

@@ -12,7 +12,7 @@ use crate::lib::config;
 #[derive(Debug)]
 pub enum DownloadingResult {
     DownloadingError(DownloadingError),
-    UnpackingError,
+    UnpackingError(String),
     Done
 }
 
@@ -69,8 +69,8 @@ pub trait DownloadComponent {
                     downl_send.send(DownloadingResult::DownloadingError(err.into())).unwrap();
                 }
 
-                InstallerUpdate::UnpackingError => {
-                    downl_send.send(DownloadingResult::UnpackingError).unwrap();
+                InstallerUpdate::UnpackingError(err) => {
+                    downl_send.send(DownloadingResult::UnpackingError(err.to_string())).unwrap();
                 }
             }
 
