@@ -19,8 +19,8 @@ use crate::lib::launcher::states::LauncherState;
 use crate::ui::*;
 use crate::ui::traits::prelude::*;
 use crate::ui::components::voiceover_row::VoiceoverRow;
-use crate::ui::components::dxvk_row::DxvkRow;
 use crate::ui::components::wine_group::WineGroup;
+use crate::ui::components::dxvk_group::DxvkGroup;
 
 /// This structure is used to describe widgets used in application
 /// 
@@ -48,11 +48,10 @@ pub struct AppWidgets {
 
     pub dxvk_selected: adw::ComboRow,
 
+    pub dxvk_groups: adw::PreferencesGroup,
     pub dxvk_recommended_only: gtk::Switch,
-    pub dxvk_vanilla: adw::ExpanderRow,
-    pub dxvk_async: adw::ExpanderRow,
 
-    pub dxvk_components: Rc<Vec<DxvkRow>>
+    pub dxvk_components: Rc<Vec<DxvkGroup>>
 }
 
 impl AppWidgets {
@@ -79,9 +78,8 @@ impl AppWidgets {
 
             dxvk_selected: get_object(&builder, "dxvk_selected")?,
 
+            dxvk_groups: get_object(&builder, "dxvk_groups")?,
             dxvk_recommended_only: get_object(&builder, "dxvk_recommended_only")?,
-            dxvk_vanilla: get_object(&builder, "dxvk_vanilla")?,
-            dxvk_async: get_object(&builder, "dxvk_async")?,
 
             dxvk_components: Default::default()
         };
@@ -125,24 +123,16 @@ impl AppWidgets {
         result.wine_components = Rc::new(components);
 
         // Update DXVK list
-        let list = dxvk::List::get();
-
         let mut components = Vec::new();
 
-        for (i, versions) in [list.vanilla, list.r#async].into_iter().enumerate() {
-            for version in versions {
-                let row = DxvkRow::new(version);
+        for group in dxvk::List::get() {
+            let group = DxvkGroup::new(group);
 
-                row.update_state(&config.game.dxvk.builds);
+            group.update_states(&config.game.dxvk.builds);
 
-                match i {
-                    0 => result.dxvk_vanilla.add_row(&row.row),
-                    1 => result.dxvk_async.add_row(&row.row),
-                    _ => ()
-                }
+            result.dxvk_groups.add(&group.expander_row);
 
-                components.push(row);
-            }
+            components.push(group);
         }
 
         result.dxvk_components = Rc::new(components);
@@ -158,7 +148,7 @@ impl AppWidgets {
 pub enum Actions {
     RepairGame,
     VoiceoverPerformAction(Rc<usize>),
-    DxvkPerformAction(Rc<usize>),
+    DxvkPerformAction(Rc<(usize, usize)>),
     WinePerformAction(Rc<(usize, usize)>),
     UpdateDxvkComboRow,
     SelectDxvkVersion(Rc<usize>),
@@ -275,35 +265,39 @@ impl App {
 
         // Set DXVK recommended only switcher event
         self.widgets.dxvk_recommended_only.connect_state_notify(clone!(@weak self as this => move |switcher| {
-            for component in &*this.widgets.dxvk_components {
-                component.row.set_visible(if switcher.state() {
-                    component.version.recommended
-                } else {
-                    true
-                });
+            for group in &*this.widgets.dxvk_components {
+                for component in &group.version_components {
+                    component.row.set_visible(if switcher.state() {
+                        component.version.recommended
+                    } else {
+                        true
+                    });
+                }
             }
         }));
 
         // DXVK install/remove/apply buttons
         let components = &*self.widgets.dxvk_components;
 
-        for (i, component) in components.into_iter().enumerate() {
-            component.button.connect_clicked(Actions::DxvkPerformAction(Rc::new(i)).into_fn(&self));
+        for (i, group) in components.into_iter().enumerate() {
+            for (j, component) in (&group.version_components).into_iter().enumerate() {
+                component.button.connect_clicked(Actions::DxvkPerformAction(Rc::new((i, j))).into_fn(&self));
 
-            component.apply_button.connect_clicked(clone!(@strong component, @weak self as this => move |_| {
-                std::thread::spawn(clone!(@strong component, @strong this => move || {
-                    let config = config::get().expect("Failed to load config");
-
-                    match component.apply(&config.game.dxvk.builds, &config.game.wine.prefix) {
-                        Ok(output) => println!("{}", String::from_utf8_lossy(&output.stdout)),
-                        Err(err) => {
-                            this.update(Actions::Toast(Rc::new((
-                                String::from("Failed to apply DXVK"), err.to_string()
-                            )))).unwrap();
+                component.apply_button.connect_clicked(clone!(@strong component, @weak self as this => move |_| {
+                    std::thread::spawn(clone!(@strong component, @strong this => move || {
+                        let config = config::get().expect("Failed to load config");
+    
+                        match component.apply(&config.game.dxvk.builds, &config.game.wine.prefix) {
+                            Ok(output) => println!("{}", String::from_utf8_lossy(&output.stdout)),
+                            Err(err) => {
+                                this.update(Actions::Toast(Rc::new((
+                                    String::from("Failed to apply DXVK"), err.to_string()
+                                )))).unwrap();
+                            }
                         }
-                    }
+                    }));
                 }));
-            }));
+            }
         }
 
         self
@@ -377,8 +371,10 @@ impl App {
                     }
                 }
 
-                Actions::DxvkPerformAction(i) => {
-                    let component = this.widgets.dxvk_components[*i].clone();
+                Actions::DxvkPerformAction(version) => {
+                    let component = this.widgets
+                        .dxvk_components[version.0]
+                        .version_components[version.1].clone();
 
                     if component.is_downloaded(&config.game.dxvk.builds) {
                         if let Err(err) = component.delete(&config.game.dxvk.builds) {
@@ -449,18 +445,16 @@ impl App {
                     let mut raw_list = Vec::new();
                     let mut selected = 0;
 
-                    for (i, group) in [list.vanilla, list.r#async].into_iter().enumerate() {
-                        for version in group {
-                            model.append(format!("{} {}", if i == 0 { "Vanilla" } else { "Async" }, version.version).as_str());
-    
-                            if let Some(curr) = &config.game.dxvk.selected {
-                                if &version.name == curr {
-                                    selected = raw_list.len() as u32;
-                                }
-                            }
+                    for version in list {
+                        model.append(&version.name);
 
-                            raw_list.push(version);
+                        if let Some(curr) = &config.game.dxvk.selected {
+                            if &version.name == curr {
+                                selected = raw_list.len() as u32;
+                            }
                         }
+
+                        raw_list.push(version);
                     }
 
                     let mut values = this.values.take();

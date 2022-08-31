@@ -62,7 +62,7 @@ impl Page {
         // Add DXVK versions
         let model = gtk::StringList::new(&[]);
 
-        for version in &DxvkList::get().vanilla {
+        for version in &DxvkList::get()[0].versions {
             if version.recommended {
                 model.append(&version.version);
 

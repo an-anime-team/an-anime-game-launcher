@@ -9,42 +9,41 @@ use regex::Regex;
 use crate::lib::config;
 
 lazy_static! {
-    static ref VANILLA_LIST: Vec<Version> = serde_json::from_str(include_str!("../../components/dxvk/vanilla.json")).unwrap();
-    static ref ASYNC_LIST: Vec<Version> = serde_json::from_str(include_str!("../../components/dxvk/async.json")).unwrap();
+    static ref GROUPS: Vec<Group> = vec![
+        Group {
+            title: String::from("Vanilla"),
+            subtitle: None,
+            versions: serde_json::from_str(include_str!("../../components/dxvk/vanilla.json")).unwrap()
+        },
+        Group {
+            title: String::from("Async"),
+            subtitle: Some(String::from("This version is not recommended for usage as can lead to anti-cheat detection. Automatically uses DXVK_ASYNC=1")),
+            versions: serde_json::from_str(include_str!("../../components/dxvk/async.json")).unwrap()
+        }
+    ];
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct List {
-    pub vanilla: Vec<Version>,
-    pub r#async: Vec<Version>
-}
+pub struct List;
 
 impl List {
-    pub fn get() -> Self {
-        Self {
-            vanilla: VANILLA_LIST.clone(),
-            r#async: ASYNC_LIST.clone()
-        }
+    pub fn get() -> Vec<Group> {
+        GROUPS.clone()
     }
 
     /// List only downloaded DXVK versions in some specific folder
-    pub fn list_downloaded<T: ToString>(folder: T) -> std::io::Result<List> {
-        let mut vanilla = Vec::new();
-        let mut r#async = Vec::new();
+    pub fn list_downloaded<T: ToString>(folder: T) -> std::io::Result<Vec<Version>> {
+        let mut downloaded = Vec::new();
 
         let list = Self::get();
 
         for entry in std::fs::read_dir(folder.to_string())? {
             let name = entry?.file_name();
 
-            for (i, versions) in [&list.vanilla, &list.r#async].into_iter().enumerate() {
-                for version in versions {
+            for group in &list {
+                for version in &group.versions {
                     if name == version.name.as_str() {
-                        match i {
-                            0 => vanilla.push(version.clone()),
-                            1 => r#async.push(version.clone()),
-                            _ => unreachable!()
-                        }
+                        downloaded.push(version.clone());
 
                         break;
                     }
@@ -52,11 +51,15 @@ impl List {
             }
         }
 
-        Ok(List {
-            vanilla,
-            r#async
-        })
+        Ok(downloaded)
     }
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Group {
+    pub title: String,
+    pub subtitle: Option<String>,
+    pub versions: Vec<Version>
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -69,7 +72,7 @@ pub struct Version {
 
 impl Version {
     pub fn latest() -> Result<Self, serde_json::Error> {
-        Ok(List::get().vanilla[0].clone())
+        Ok(List::get()[0].versions[0].clone())
     }
 
     pub fn is_downloaded_in<T: ToString>(&self, folder: T) -> bool {
