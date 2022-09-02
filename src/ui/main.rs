@@ -880,35 +880,38 @@ impl App {
         self.widgets.status_page.show();
         self.widgets.launcher_content.hide();
 
-        let (sender, receiver) = glib::MainContext::channel::<String>(glib::PRIORITY_DEFAULT);
         let (send, recv) = std::sync::mpsc::channel();
-
-        receiver.attach(None, clone!(@strong self.widgets.status_page as status_page => move |description| {
-            status_page.set_description(Some(&description));
-
-            glib::Continue(true)
-        }));
 
         let this = self.clone();
 
-        std::thread::spawn(move || {
-            match LauncherState::get(move |status| sender.send(status.to_string()).unwrap()) {
-                Ok(state) => {
-                    this.set_state(state.clone());
+        glib::MainContext::default().invoke(move || {
+            let (sender, receiver) = glib::MainContext::channel::<String>(glib::PRIORITY_DEFAULT);
 
-                    this.widgets.status_page.hide();
-                    this.widgets.launcher_content.show();
+            receiver.attach(None, clone!(@strong this.widgets.status_page as status_page => move |description| {
+                status_page.set_description(Some(&description));
 
-                    send.send(Ok(state)).unwrap();
-                },
-                Err(err) => {
-                    send.send(Err(err.to_string())).unwrap();
+                glib::Continue(true)
+            }));
 
-                    glib::MainContext::default().invoke(move || {
-                        this.toast("Failed to get initial launcher state", err);
-                    });
+            std::thread::spawn(move || {
+                match LauncherState::get(move |status| sender.send(status.to_string()).unwrap()) {
+                    Ok(state) => {
+                        this.set_state(state.clone());
+
+                        this.widgets.status_page.hide();
+                        this.widgets.launcher_content.show();
+
+                        send.send(Ok(state)).unwrap();
+                    },
+                    Err(err) => {
+                        send.send(Err(err.to_string())).unwrap();
+
+                        glib::MainContext::default().invoke(move || {
+                            this.toast("Failed to get initial launcher state", err);
+                        });
+                    }
                 }
-            }
+            });
         });
 
         Await::new(move || {
