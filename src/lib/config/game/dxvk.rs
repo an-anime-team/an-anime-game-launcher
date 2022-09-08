@@ -5,8 +5,7 @@ use crate::lib::consts::launcher_dir;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Dxvk {
-    pub builds: String,
-    pub selected: Option<String>
+    pub builds: String
 }
 
 impl Default for Dxvk {
@@ -14,8 +13,7 @@ impl Default for Dxvk {
         let launcher_dir = launcher_dir().expect("Failed to get launcher dir");
 
         Self {
-            builds: format!("{launcher_dir}/dxvks"),
-            selected: None
+            builds: format!("{launcher_dir}/dxvks")
         }
     }
 }
@@ -28,20 +26,6 @@ impl From<&JsonValue> for Dxvk {
             builds: match value.get("builds") {
                 Some(value) => value.as_str().unwrap_or(&default.builds).to_string(),
                 None => default.builds
-            },
-
-            selected: match value.get("selected") {
-                Some(value) => {
-                    if value.is_null() {
-                        None
-                    } else {
-                        match value.as_str() {
-                            Some(value) => Some(value.to_string()),
-                            None => default.selected
-                        }
-                    }
-                },
-                None => default.selected
             }
         }
     }

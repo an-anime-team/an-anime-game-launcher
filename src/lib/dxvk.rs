@@ -62,7 +62,7 @@ pub struct Group {
     pub versions: Vec<Version>
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Version {
     pub name: String,
     pub version: String,

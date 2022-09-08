@@ -12,6 +12,10 @@ use super::wine::{
     Version as WineVersion,
     List as WineList
 };
+use super::dxvk::{
+    Version as DxvkVersion,
+    List as DxvkList
+};
 
 pub mod launcher;
 pub mod game;
@@ -135,15 +139,10 @@ impl Config {
     pub fn try_get_selected_wine_info(&self) -> Option<WineVersion> {
         match &self.game.wine.selected {
             Some(selected) => {
-                for group in WineList::get() {
-                    for version in group.versions {
-                        if &version.name == selected {
-                            return Some(version.clone());
-                        }
-                    }
-                }
-
-                None
+                WineList::get().iter()
+                    .flat_map(|group| group.versions.clone())
+                    .filter(|version| version.name.eq(selected))
+                    .next()
             },
             None => None
         }
@@ -165,6 +164,34 @@ impl Config {
                 }
             }
         }
+    }
+
+    /// Try to get DXVK version applied to wine prefix
+    /// 
+    /// Returns:
+    /// 1) `Ok(Some(..))` if version was found
+    /// 2) `Ok(None)` if version wasn't found, so too old or dxvk is not applied
+    /// 3) `Err(..)` if failed to get applied dxvk version, likely because wrong prefix path specified
+    pub fn try_get_selected_dxvk_info(&self) -> std::io::Result<Option<DxvkVersion>> {
+        let bytes = match std::fs::read(format!("{}/drive_c/windows/system32/dxgi.dll", &self.game.wine.prefix)) {
+            Ok(bytes) => bytes[1600000..1700000].to_vec(),
+            Err(_) => std::fs::read(format!("{}/drive_c/windows/system32/d3d11.dll", &self.game.wine.prefix))?[2400000..2500000].to_vec()
+        };
+
+        Ok({
+            DxvkList::get()
+                .iter()
+                .flat_map(|group| group.versions.clone())
+                .filter(|version| {
+                    let version = format!("\0v{}\0", &version.version);
+                    let version = version.as_bytes();
+
+                    bytes.windows(version.len())
+                        .position(|window| window == version)
+                        .is_some()
+                })
+                .next()
+        })
     }
 }
 

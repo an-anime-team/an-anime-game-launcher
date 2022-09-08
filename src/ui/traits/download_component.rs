@@ -78,12 +78,17 @@ pub trait DownloadComponent {
         });
 
         let (send, recv) = std::sync::mpsc::channel();
+        let config = config::get()?;
 
         let mut installer = Installer::new(self.get_download_uri())?;
 
-        if let Some(temp_folder) = config::get()?.launcher.temp {
+        if let Some(temp_folder) = config.launcher.temp {
             installer.temp_folder = temp_folder;
         }
+
+        installer.downloader
+            .set_downloading_speed(config.launcher.speed_limit)
+            .expect("Failed to set downloading speed limit");
 
         let installation_path = installation_path.to_string();
 

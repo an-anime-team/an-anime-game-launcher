@@ -132,8 +132,8 @@ pub fn run(debug: bool) -> std::io::Result<()> {
     command.env("WINEPREFIX", &config.game.wine.prefix);
 
     // Add DXVK_ASYNC=1 for dxvk-async builds automatically
-    if let Some(dxvk) = &config.game.dxvk.selected {
-        if dxvk.contains("async") {
+    if let Ok(Some(dxvk)) = &config.try_get_selected_dxvk_info() {
+        if dxvk.version.contains("async") {
             command.env("DXVK_ASYNC", "1");
         }
     }

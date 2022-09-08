@@ -435,6 +435,10 @@ impl App {
                                                                     installer.temp_folder = temp_folder;
                                                                 }
 
+                                                                installer.downloader
+                                                                    .set_downloading_speed(config.launcher.speed_limit)
+                                                                    .expect("Failed to set downloading speed limit");
+
                                                                 let (sender, receiver) = glib::MainContext::channel::<InstallerUpdate>(glib::PRIORITY_DEFAULT);
                                                                 let this = this.clone();
 

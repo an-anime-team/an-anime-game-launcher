@@ -263,6 +263,10 @@ impl App {
                                     installer.temp_folder = temp_folder;
                                 }
 
+                                installer.downloader
+                                    .set_downloading_speed(config.launcher.speed_limit)
+                                    .expect("Failed to set downloading speed limit");
+
                                 // Download wine
                                 #[allow(unused_must_use)]
                                 installer.install(&config.game.wine.builds, move |state| {
@@ -317,6 +321,10 @@ impl App {
                                                     if let Some(temp_folder) = config.launcher.temp {
                                                         installer.temp_folder = temp_folder;
                                                     }
+
+                                                    installer.downloader
+                                                        .set_downloading_speed(config.launcher.speed_limit)
+                                                        .expect("Failed to set downloading speed limit");
     
                                                     // Download DXVK
                                                     #[allow(unused_must_use)]
@@ -358,7 +366,7 @@ impl App {
                             },
 
                             ProgressUpdateResult::Finished => {
-                                let mut config = config::get().unwrap();
+                                let config = config::get().unwrap();
 
                                 // Apply DXVK
                                 let this = this.clone();
@@ -368,12 +376,7 @@ impl App {
                                     match dxvk_version.apply(&config.game.dxvk.builds, &config.game.wine.prefix) {
                                         Ok(output) => {
                                             println!("Applied DXVK:\n\n{}", String::from_utf8_lossy(&output.stdout));
-    
-                                            // Update dxvk config
-                                            config.game.dxvk.selected = Some(dxvk_version.name.clone());
-    
-                                            config::update_raw(config.clone()).unwrap();
-    
+
                                             // Remove .first-run file
                                             let launcher_dir = crate::lib::consts::launcher_dir().unwrap();
     
