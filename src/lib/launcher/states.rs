@@ -8,6 +8,13 @@ use crate::lib::wine_prefix::WinePrefix;
 #[derive(Debug, Clone)]
 pub enum LauncherState {
     Launch,
+
+    /// Always contains `VersionDiff::Predownload`
+    PredownloadAvailable {
+        game: VersionDiff,
+        voices: Vec<VersionDiff>
+    },
+
     PatchAvailable(Patch),
 
     WineNotInstalled,
@@ -59,8 +66,10 @@ impl LauncherState {
         let diff = game.try_get_diff()?;
 
         Ok(match diff {
-            VersionDiff::Latest(_) => {
+            VersionDiff::Latest(_) | VersionDiff::Predownload { .. } => {
                 status("Updating voice info...");
+
+                let mut predownload_voice = Vec::new();
 
                 for voice_package in &config.game.voices {
                     let mut voice_package = VoicePackage::with_locale(match VoiceLocale::from_str(voice_package) {
@@ -82,7 +91,9 @@ impl LauncherState {
                     let diff = voice_package.try_get_diff()?;
 
                     match diff {
-                        VersionDiff::Latest(_) => continue,
+                        VersionDiff::Latest(_) => (),
+                        VersionDiff::Predownload { .. } => predownload_voice.push(diff),
+
                         VersionDiff::Diff { .. } => return Ok(Self::VoiceUpdateAvailable(diff)),
                         VersionDiff::Outdated { .. } => return Ok(Self::VoiceOutdated(diff)),
                         VersionDiff::NotInstalled { .. } => return Ok(Self::VoiceNotInstalled(diff))
@@ -94,7 +105,16 @@ impl LauncherState {
                 let patch = Patch::try_fetch(config.patch.servers.clone(), consts::PATCH_FETCHING_TIMEOUT)?;
 
                 if patch.is_applied(&config.game.path)? {
-                    Self::Launch
+                    if let VersionDiff::Predownload { .. } = diff {
+                        Self::PredownloadAvailable {
+                            game: diff,
+                            voices: predownload_voice
+                        }
+                    }
+
+                    else {
+                        Self::Launch
+                    }
                 }
 
                 else {

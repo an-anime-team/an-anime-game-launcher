@@ -625,19 +625,29 @@ impl App {
         match game.try_get_diff()? {
             VersionDiff::Latest(version) => {
                 self.widgets.game_version.set_label(&version.to_string());
-            },
+            }
+
+            VersionDiff::Predownload { current, latest, .. } => {
+                self.widgets.game_version.set_label(&current.to_string());
+                self.widgets.game_version.set_css_classes(&["accent"]);
+
+                self.widgets.game_version.set_tooltip_text(Some(&format!("Game update pre-downloading available: {} -> {}", current, latest)));
+            }
+
             VersionDiff::Diff { current, latest, .. } => {
                 self.widgets.game_version.set_label(&current.to_string());
                 self.widgets.game_version.set_css_classes(&["warning"]);
 
                 self.widgets.game_version.set_tooltip_text(Some(&format!("Game update available: {} -> {}", current, latest)));
-            },
+            }
+
             VersionDiff::Outdated { current, latest } => {
                 self.widgets.game_version.set_label(&current.to_string());
                 self.widgets.game_version.set_css_classes(&["error"]);
 
                 self.widgets.game_version.set_tooltip_text(Some(&format!("Game is too outdated and can't be updated. Latest version: {latest}")));
-            },
+            }
+
             VersionDiff::NotInstalled { .. } => {
                 self.widgets.game_version.set_label("not installed");
                 self.widgets.game_version.set_css_classes(&[]);
@@ -655,25 +665,29 @@ impl App {
                 self.widgets.patch_version.set_css_classes(&["error"]);
 
                 self.widgets.patch_version.set_tooltip_text(Some("Patch is not available"));
-            },
+            }
+
             Patch::Outdated { current, latest, .. } => {
                 self.widgets.patch_version.set_label("outdated");
                 self.widgets.patch_version.set_css_classes(&["warning"]);
 
                 self.widgets.patch_version.set_tooltip_text(Some(&format!("Patch is outdated ({current} -> {latest})")));
-            },
+            }
+
             Patch::Preparation { .. } => {
                 self.widgets.patch_version.set_label("preparation");
                 self.widgets.patch_version.set_css_classes(&["warning"]);
 
                 self.widgets.patch_version.set_tooltip_text(Some("Patch is in preparation state and will be available later"));
-            },
+            }
+
             Patch::Testing { version, .. } => {
                 self.widgets.patch_version.set_label(&version.to_string());
                 self.widgets.patch_version.set_css_classes(&["warning"]);
 
                 self.widgets.patch_version.set_tooltip_text(Some("Patch is in testing phase"));
-            },
+            }
+
             Patch::Available { version, .. } => {
                 self.widgets.patch_version.set_label(&version.to_string());
                 

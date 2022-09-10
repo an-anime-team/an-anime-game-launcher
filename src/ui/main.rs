@@ -310,6 +310,7 @@ impl App {
                         Ok(mut config) => {
                             match state {
                                 LauncherState::PatchAvailable(Patch::NotAvailable) |
+                                LauncherState::PredownloadAvailable { .. } |
                                 LauncherState::Launch => {
                                     let this = this.clone();
 
@@ -809,6 +810,11 @@ impl App {
 
         match &state {
             LauncherState::Launch => {
+                self.widgets.launch_game.set_label("Launch");
+            }
+
+            // TODO
+            LauncherState::PredownloadAvailable { .. } => {
                 self.widgets.launch_game.set_label("Launch");
             }
 
