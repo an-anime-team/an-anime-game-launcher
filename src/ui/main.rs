@@ -318,7 +318,7 @@ impl App {
 
                                     std::thread::spawn(move || {
                                         // Display toast message if the game is failed to run
-                                        if let Err(err) = game::run(false) {
+                                        if let Err(err) = game::run() {
                                             this.widgets.window.show();
 
                                             this.update(Actions::Toast(Rc::new((

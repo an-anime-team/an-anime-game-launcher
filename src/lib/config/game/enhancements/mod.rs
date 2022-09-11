@@ -3,23 +3,27 @@ use serde_json::Value as JsonValue;
 
 pub mod fsr;
 pub mod hud;
+pub mod fps_unlocker;
 pub mod gamescope;
 
 pub mod prelude {
     pub use super::gamescope::prelude::*;
+    pub use super::fps_unlocker::prelude::*;
 
     pub use super::Enhancements;
     pub use super::fsr::Fsr;
     pub use super::hud::HUD;
+    pub use super::fps_unlocker::FpsUnlocker;
 }
 
 use prelude::*;
 
-#[derive(Debug, Clone, Copy, Serialize, Deserialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct Enhancements {
     pub fsr: Fsr,
     pub gamemode: bool,
     pub hud: HUD,
+    pub fps_unlocker: FpsUnlocker,
     pub gamescope: Gamescope
 }
 
@@ -41,6 +45,11 @@ impl From<&JsonValue> for Enhancements {
             hud: match value.get("hud") {
                 Some(value) => HUD::from(value),
                 None => default.hud
+            },
+
+            fps_unlocker: match value.get("fps_unlocker") {
+                Some(value) => FpsUnlocker::from(value),
+                None => default.fps_unlocker
             },
 
             gamescope: match value.get("gamescope") {

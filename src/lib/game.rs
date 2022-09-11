@@ -1,4 +1,3 @@
-use std::io::{Error, ErrorKind};
 use std::path::Path;
 use std::process::Command;
 
@@ -6,6 +5,7 @@ use anime_game_core::genshin::telemetry;
 
 use super::consts;
 use super::config;
+use super::fps_unlocker::FpsUnlocker;
 
 /*#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Terminal {
@@ -64,22 +64,51 @@ pub fn try_get_terminal() -> Option<Terminal> {
 /// Try to run the game
 /// 
 /// If `debug = true`, then the game will be run in the new terminal window
-pub fn run(debug: bool) -> std::io::Result<()> {
+pub fn run() -> anyhow::Result<()> {
     let config = config::get()?;
 
     if !Path::new(&config.game.path).exists() {
-        return Err(Error::new(ErrorKind::Other, "Game is not installed"));
+        return Err(anyhow::anyhow!("Game is not installed"));
     }
 
     let wine_executable = match config.try_get_wine_executable() {
         Some(path) => path,
-        None => return Err(Error::new(ErrorKind::Other, "Couldn't find wine executable"))
+        None => return Err(anyhow::anyhow!("Couldn't find wine executable"))
     };
 
     // Check telemetry servers
 
     if let Some(server) = telemetry::is_disabled(consts::TELEMETRY_CHECK_TIMEOUT) {
-        return Err(Error::new(ErrorKind::Other, format!("Telemetry server is not disabled: {server}")));
+        return Err(anyhow::anyhow!("Telemetry server is not disabled: {server}"));
+    }
+
+    // Prepare fps unlocker
+    // 1) Download if needed
+    // 2) Generate config file
+    // 3) Generate fpsunlocker.bat from launcher.bat
+
+    if config.game.enhancements.fps_unlocker.enabled {
+        let unlocker = match FpsUnlocker::from_dir(&config.game.enhancements.fps_unlocker.path) {
+            Ok(Some(unlocker)) => unlocker,
+            Ok(None) => match FpsUnlocker::download(&config.game.enhancements.fps_unlocker.path) {
+                Ok(unlocker) => unlocker,
+                Err(err) => return Err(anyhow::anyhow!("Failed to download FPS unlocker: {err}"))
+            },
+            Err(err) => return Err(anyhow::anyhow!("Failed to load FPS unlocker: {err}"))
+        };
+
+        // Generate FPS unlocker config file
+        if let Err(err) = unlocker.update_config(config.game.enhancements.fps_unlocker.config.clone()) {
+            return Err(anyhow::anyhow!("Failed to update FPS unlocker config: {err}"));
+        }
+
+        let bat_path = format!("{}/fpsunlocker.bat", config.game.path);
+        let original_bat_path = format!("{}/launcher.bat", config.game.path);
+
+        // Generate fpsunlocker.bat from launcher.bat
+        std::fs::write(bat_path, std::fs::read_to_string(original_bat_path)?
+            .replace("start GenshinImpact.exe %*", &format!("start GenshinImpact.exe %*\n\nZ:\ncd \"{}\"\nstart unlocker.exe", unlocker.dir()))
+            .replace("start YuanShen.exe %*", &format!("start YuanShen.exe %*\n\nZ:\ncd \"{}\"\nstart unlocker.exe", unlocker.dir())))?;
     }
 
     // Prepare bash -c '<command>'
@@ -96,11 +125,7 @@ pub fn run(debug: bool) -> std::io::Result<()> {
         bash_chain += &format!("{virtual_desktop} ");
     }
 
-    if debug {
-        todo!();
-    } else {
-        bash_chain += "launcher.bat ";
-    }
+    bash_chain += if config.game.enhancements.fps_unlocker.enabled { "fpsunlocker.bat " } else { "launcher.bat " };
 
     if config.game.wine.borderless {
         bash_chain += "-screen-fullscreen 0 -popupwindow ";
@@ -150,6 +175,6 @@ pub fn run(debug: bool) -> std::io::Result<()> {
     println!("Running command: bash -c \"{}\"", bash_chain);
 
     command.current_dir(config.game.path).spawn()?;
-    
+
     Ok(())
 }

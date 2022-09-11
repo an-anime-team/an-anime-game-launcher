@@ -38,7 +38,11 @@ pub struct AppWidgets {
     pub gamescope_settings: gtk::Button,
     pub gamescope_switcher: gtk::Switch,
 
-    pub gamescope_app: GamescopeApp
+    pub gamescope_app: GamescopeApp,
+
+    pub fps_unlocker_combo: adw::ComboRow,
+    pub fps_unlocker_switcher: gtk::Switch,
+    pub fps_unlocker_power_saving_switcher: gtk::Switch
 }
 
 impl AppWidgets {
@@ -65,7 +69,11 @@ impl AppWidgets {
             gamescope_settings: get_object(&builder, "gamescope_settings")?,
             gamescope_switcher: get_object(&builder, "gamescope_switcher")?,
 
-            gamescope_app: GamescopeApp::new(window)?
+            gamescope_app: GamescopeApp::new(window)?,
+
+            fps_unlocker_combo: get_object(&builder, "fps_unlocker_combo")?,
+            fps_unlocker_switcher: get_object(&builder, "fps_unlocker_switcher")?,
+            fps_unlocker_power_saving_switcher: get_object(&builder, "fps_unlocker_power_saving_switcher")?
         };
 
         // Set availale wine languages
@@ -73,6 +81,9 @@ impl AppWidgets {
 
         // Set availale virtual desktop resolutions
         result.virtual_desktop_row.set_model(Some(&Resolution::get_model()));
+
+        // Set availale fps unlocker limits
+        result.fps_unlocker_combo.set_model(Some(&Fps::get_model()));
 
         // Disable gamemode row if it's not available
         if !lib::is_available("gamemoderun") {
@@ -227,6 +238,35 @@ impl App {
             }
         });
 
+        // FPS unlocker swithing
+        self.widgets.fps_unlocker_switcher.connect_state_notify(move |switch| {
+            if let Ok(mut config) = config::get() {
+                config.game.enhancements.fps_unlocker.enabled = switch.state();
+
+                config::update(config);
+            }
+        });
+
+        // FPS unlocker -> fps limit combo
+        self.widgets.fps_unlocker_combo.connect_selected_notify(move |row| {
+            if let Ok(mut config) = config::get() {
+                if row.selected() > 0 {
+                    config.game.enhancements.fps_unlocker.config.fps = Fps::list()[row.selected() as usize - 1].to_num();
+
+                    config::update(config);
+                }
+            }
+        });
+
+        // FPS unlocker -> power saving swithing
+        self.widgets.fps_unlocker_power_saving_switcher.connect_state_notify(move |switch| {
+            if let Ok(mut config) = config::get() {
+                config.game.enhancements.fps_unlocker.config.power_saving = switch.state();
+
+                config::update(config);
+            }
+        });
+
         self
     }
 
@@ -287,6 +327,27 @@ impl App {
 
         // Switch gamescope option
         self.widgets.gamescope_switcher.set_state(config.game.enhancements.gamescope.enabled);
+
+        // Switch FPS unlocker
+        self.widgets.fps_unlocker_switcher.set_state(config.game.enhancements.fps_unlocker.enabled);
+
+        // Select FPS limit
+        let fps = Fps::from_num(config.game.enhancements.fps_unlocker.config.fps);
+
+        if let Fps::Custom(_) = fps {
+            self.widgets.fps_unlocker_combo.set_selected(0);
+        }
+
+        else {
+            for (i, value) in Fps::list().into_iter().enumerate() {
+                if value == fps {
+                    self.widgets.fps_unlocker_combo.set_selected(i as u32 + 1);
+                }
+            }
+        }
+
+        // Switch FPS unlocker -> power saving
+        self.widgets.fps_unlocker_power_saving_switcher.set_state(config.game.enhancements.fps_unlocker.config.power_saving);
 
         // Prepare gamescope settings app
         self.widgets.gamescope_app.prepare(status_page)?;

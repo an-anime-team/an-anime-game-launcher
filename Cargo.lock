@@ -60,6 +60,7 @@ dependencies = [
  "gtk4",
  "lazy_static",
  "libadwaita",
+ "md5",
  "regex",
  "serde",
  "serde_json",

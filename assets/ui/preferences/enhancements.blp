@@ -99,4 +99,26 @@ Adw.PreferencesPage page {
             }
         }
     }
+
+    Adw.PreferencesGroup {
+        title: "FPS Unlocker";
+
+        Adw.ComboRow fps_unlocker_combo {
+            title: "Enabled";
+            subtitle: "Remove frames rendering limitation modifying the game's memory. Can be detected by the anti-cheat";
+
+            Gtk.Switch fps_unlocker_switcher {
+                valign: center;
+            }
+        }
+
+        Adw.ActionRow {
+            title: "Power saving";
+            subtitle: "Automatically sets the fps limit to 10 and low process priority upon losing focus to the game (e.g. tabbing out of the game)";
+
+            Gtk.Switch fps_unlocker_power_saving_switcher {
+                valign: center;
+            }
+        }
+    }
 }
