@@ -334,7 +334,9 @@ impl App {
 
                                                 match Command::new("ps").arg("-A").stdout(Stdio::piped()).output() {
                                                     Ok(output) => {
-                                                        if !String::from_utf8_lossy(&output.stdout).contains("GenshinImpact.e") {
+                                                        let output = String::from_utf8_lossy(&output.stdout);
+
+                                                        if !output.contains("GenshinImpact.e") && !output.contains("unlocker.exe") {
                                                             break;
                                                         }
                                                     },

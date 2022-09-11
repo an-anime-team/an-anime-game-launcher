@@ -48,7 +48,11 @@ impl FpsUnlocker {
     }
 
     pub fn get_binary(&self) -> String {
-        format!("{}/unlocker.exe", self.dir)
+        Self::get_binary_in(&self.dir)
+    }
+
+    pub fn get_binary_in<T: ToString>(dir: T) -> String {
+        format!("{}/unlocker.exe", dir.to_string())
     }
 
     pub fn dir(&self) -> &str {

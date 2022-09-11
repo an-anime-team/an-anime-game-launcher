@@ -90,11 +90,19 @@ pub fn run() -> anyhow::Result<()> {
     if config.game.enhancements.fps_unlocker.enabled {
         let unlocker = match FpsUnlocker::from_dir(&config.game.enhancements.fps_unlocker.path) {
             Ok(Some(unlocker)) => unlocker,
-            Ok(None) => match FpsUnlocker::download(&config.game.enhancements.fps_unlocker.path) {
-                Ok(unlocker) => unlocker,
-                Err(err) => return Err(anyhow::anyhow!("Failed to download FPS unlocker: {err}"))
-            },
-            Err(err) => return Err(anyhow::anyhow!("Failed to load FPS unlocker: {err}"))
+
+            other => {
+                // Ok(None) means unknown version, so we should delete it before downloading newer one
+                // because otherwise downloader will try to continue downloading "partially downloaded" file
+                if let Ok(None) = other {
+                    std::fs::remove_file(FpsUnlocker::get_binary_in(&config.game.enhancements.fps_unlocker.path))?;
+                }
+
+                match FpsUnlocker::download(&config.game.enhancements.fps_unlocker.path) {
+                    Ok(unlocker) => unlocker,
+                    Err(err) => return Err(anyhow::anyhow!("Failed to download FPS unlocker: {err}"))
+                }
+            }
         };
 
         // Generate FPS unlocker config file
