@@ -80,9 +80,3 @@ cargo run
 ```sh
 cargo build --release
 ```
-
-## Building AppImage
-
-```
-./scripts/build.sh
-```
