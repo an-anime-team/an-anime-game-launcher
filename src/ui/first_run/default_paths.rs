@@ -9,31 +9,20 @@ use wait_not_await::Await;
 use crate::lib::config;
 use crate::ui::*;
 
-pub fn choose_dir<T: IsA<gtk::Window>>(current_folder: String, parent: &T) -> Await<Option<String>> {
-    let dialogue = gtk::FileChooserDialog::new(
-        Some("Select folder"),
-        Some(parent),
-        gtk::FileChooserAction::SelectFolder,
-        &[("Select", gtk::ResponseType::Accept)]
-    );
-
-    dialogue.set_current_folder(Some(&gtk::gio::File::for_path(current_folder))).unwrap();
+pub fn choose_dir(current_folder: String) -> Await<Option<String>> {
+    let dialogue = rfd::FileDialog::new()
+        .set_directory(current_folder);
 
     let (sender, receiver) = std::sync::mpsc::channel();
 
-    dialogue.connect_response(move |dialogue, response| {
-        if response == gtk::ResponseType::Accept {
-            sender.send(dialogue.current_folder().unwrap().path().unwrap().to_str().unwrap().to_string()).unwrap();
-        }
-
-        dialogue.close();
+    std::thread::spawn(move || {
+        sender.send(dialogue.pick_folder()).unwrap();
     });
-
-    dialogue.show();
 
     Await::new(move || {
         match receiver.recv() {
-            Ok(path) => Some(path),
+            Ok(Some(path)) => Some(path.to_string_lossy().to_string()),
+            Ok(None) => None,
             Err(_) => None
         }
     })
@@ -105,7 +94,7 @@ impl Page {
         row.connect_activated(clone!(@strong self.window as window => move |row| {
             let (sender, receiver) = glib::MainContext::channel::<String>(glib::PRIORITY_DEFAULT);
 
-            choose_dir(row.subtitle().unwrap().to_string(), &window).then(move |path| {
+            choose_dir(row.subtitle().unwrap().to_string()).then(move |path| {
                 if let Some(path) = path {
                     sender.send(path.clone()).unwrap();
                 }
