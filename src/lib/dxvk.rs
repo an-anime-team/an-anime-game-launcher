@@ -83,59 +83,61 @@ impl Version {
         let apply_path = format!("{}/{}/setup_dxvk.sh", dxvks_folder.to_string(), self.name);
         let config = config::get()?;
 
-        match config.try_get_selected_wine_info() {
+        let (wine_path, wineserver_path, wineboot_path) = match config.try_get_selected_wine_info() {
             Some(wine) => {
                 let wine_path = format!("{}/{}/{}", &config.game.wine.builds, wine.name, wine.files.wine64);
                 let wineserver_path = format!("{}/{}/{}", &config.game.wine.builds, wine.name, wine.files.wineserver);
                 let wineboot_path = format!("{}/{}/{}", &config.game.wine.builds, wine.name, wine.files.wineboot);
 
-                let mut apply_script = std::fs::read_to_string(&apply_path)?;
-
-                lazy_static! {
-                    static ref WINE: Regex = Regex::new("wine=\".*\"").unwrap();
-                    static ref WINE64: Regex = Regex::new("wine64=\".*\"").unwrap();
-                    static ref WINEBOOT: Regex = Regex::new("wineboot=\".*\"").unwrap();
-                }
-
-                // Update wine paths
-                apply_script = WINE.replace_all(&apply_script, &format!("wine=\"{}\"", &wine_path)).to_string();
-                apply_script = WINE64.replace_all(&apply_script, &format!("wine64=\"{}\"", &wine_path)).to_string();
-                apply_script = WINEBOOT.replace_all(&apply_script, &format!("wineboot=\"{}\"", &wineboot_path)).to_string();
-
-                // Use wine64 to update wine prefix instead of running wineboot
-                // so we can get rid of 32bit support
-                apply_script = apply_script.replace("$wineboot -u", "\"$wine64\" -u");
-
-                // Fix issues related to spaces in paths to the runners folder
-                apply_script = apply_script.replace("which $wineboot", "which \"$wineboot\"");
-                apply_script = apply_script.replace("$wine --version", "\"$wine\" --version");
-                apply_script = apply_script.replace("$wine64 winepath", "\"$wine64\" winepath");
-                apply_script = apply_script.replace("$wine winepath", "\"$wine\" winepath");
-                apply_script = apply_script.replace("$wine reg", "\"$wine\" reg");
-
-                // Old GE builds return specific --version output which can break
-                // DXVK installation script
-                apply_script = apply_script.replace("grep wine", "grep \"wine\\|GE\"");
-
-                std::fs::write(&apply_path, apply_script)?;
-
-                let output = Command::new("bash")
-                    .arg(&apply_path)
-                    .arg("install")
-                    .env("WINEARCH", "win64")
-                    .env("WINESERVER", wineserver_path)
-                    .env("WINEPREFIX", prefix_path.to_string())
-                    .output()?;
-
-                if output.status.success() {
-                    Ok(output)
-                }
-
-                else {
-                    Err(Error::new(ErrorKind::Other, String::from_utf8_lossy(&output.stderr)))
-                }
+                (wine_path, wineserver_path, wineboot_path)
             },
-            None => Err(Error::new(ErrorKind::Other, "Wine is not selected"))
+            None => (String::from("wine64"), String::from("wineserver"), String::from("wineboot"))
+        };
+
+        let mut apply_script = std::fs::read_to_string(&apply_path)?;
+
+        lazy_static! {
+            static ref WINE: Regex = Regex::new("wine=\".*\"").unwrap();
+            static ref WINE64: Regex = Regex::new("wine64=\".*\"").unwrap();
+            static ref WINEBOOT: Regex = Regex::new("wineboot=\".*\"").unwrap();
+        }
+
+        // Update wine paths
+        apply_script = WINE.replace_all(&apply_script, &format!("wine=\"{}\"", &wine_path)).to_string();
+        apply_script = WINE64.replace_all(&apply_script, &format!("wine64=\"{}\"", &wine_path)).to_string();
+        apply_script = WINEBOOT.replace_all(&apply_script, &format!("wineboot=\"{}\"", &wineboot_path)).to_string();
+
+        // Use wine64 to update wine prefix instead of running wineboot
+        // so we can get rid of 32bit support
+        apply_script = apply_script.replace("$wineboot -u", "\"$wine64\" -u");
+
+        // Fix issues related to spaces in paths to the runners folder
+        apply_script = apply_script.replace("which $wineboot", "which \"$wineboot\"");
+        apply_script = apply_script.replace("$wine --version", "\"$wine\" --version");
+        apply_script = apply_script.replace("$wine64 winepath", "\"$wine64\" winepath");
+        apply_script = apply_script.replace("$wine winepath", "\"$wine\" winepath");
+        apply_script = apply_script.replace("$wine reg", "\"$wine\" reg");
+
+        // Old GE builds return specific --version output which can break
+        // DXVK installation script
+        apply_script = apply_script.replace("grep wine", "grep \"wine\\|GE\"");
+
+        std::fs::write(&apply_path, apply_script)?;
+
+        let output = Command::new("bash")
+            .arg(&apply_path)
+            .arg("install")
+            .env("WINEARCH", "win64")
+            .env("WINESERVER", wineserver_path)
+            .env("WINEPREFIX", prefix_path.to_string())
+            .output()?;
+
+        if output.status.success() {
+            Ok(output)
+        }
+
+        else {
+            Err(Error::new(ErrorKind::Other, String::from_utf8_lossy(&output.stderr)))
         }
     }
 }
