@@ -20,7 +20,9 @@ pub struct Page {
     pub progress_bar: ProgressBar,
 
     pub wine_versions: Vec<WineVersion>,
-    pub dxvk_versions: Vec<DxvkVersion>
+    pub dxvk_versions: Vec<DxvkVersion>,
+
+    system_wine_available: bool
 }
 
 impl Page {
@@ -43,11 +45,17 @@ impl Page {
             ),
 
             wine_versions: Vec::new(),
-            dxvk_versions: Vec::new()
+            dxvk_versions: Vec::new(),
+
+            system_wine_available: crate::lib::is_available("wine64")
         };
 
         // Add wine versions
         let model = gtk::StringList::new(&[]);
+
+        if result.system_wine_available {
+            model.append("System");
+        }
 
         for version in &WineList::get()[0].versions {
             if version.recommended {
@@ -58,6 +66,12 @@ impl Page {
         }
 
         result.wine_version.set_model(Some(&model));
+
+        // We're not recommending user to use system wine
+        // and suggest to download some wine build better for gaming
+        if result.system_wine_available {
+            result.wine_version.set_selected(1);
+        }
 
         // Add DXVK versions
         let model = gtk::StringList::new(&[]);
@@ -75,8 +89,20 @@ impl Page {
         Ok(result)
     }
 
-    pub fn get_wine_version(&self) -> &WineVersion {
-        &self.wine_versions[self.wine_version.selected() as usize]
+    /// Get selected wine version
+    /// 
+    /// `None` means `System`
+    pub fn get_wine_version(&self) -> Option<WineVersion> {
+        if self.system_wine_available {
+            match self.wine_version.selected() {
+                0 => None,
+                i => Some(self.wine_versions[i as usize - 1].clone())
+            }
+        }
+        
+        else {
+            Some(self.wine_versions[self.wine_version.selected() as usize].clone())
+        }
     }
 
     pub fn get_dxvk_version(&self) -> &DxvkVersion {

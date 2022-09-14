@@ -250,36 +250,42 @@ impl App {
                     let wine_version = this.widgets.download_components.get_wine_version().clone();
                     let dxvk_version = this.widgets.download_components.get_dxvk_version().clone();
 
-                    let wine_version_copy = wine_version.clone();
-                    let this_copy = this.clone();
-
                     // Prepare wine downloader
-                    std::thread::spawn(move || {
-                        let config = config::get().unwrap();
+                    if let Some(wine_version) = &wine_version {
+                        let wine_version_copy = wine_version.clone();
+                        let this_copy = this.clone();
 
-                        match Installer::new(&wine_version_copy.uri) {
-                            Ok(mut installer) => {
-                                if let Some(temp_folder) = config.launcher.temp {
-                                    installer.temp_folder = temp_folder;
+                        std::thread::spawn(move || {
+                            let config = config::get().unwrap();
+    
+                            match Installer::new(&wine_version_copy.uri) {
+                                Ok(mut installer) => {
+                                    if let Some(temp_folder) = config.launcher.temp {
+                                        installer.temp_folder = temp_folder;
+                                    }
+    
+                                    installer.downloader
+                                        .set_downloading_speed(config.launcher.speed_limit)
+                                        .expect("Failed to set downloading speed limit");
+    
+                                    // Download wine
+                                    #[allow(unused_must_use)]
+                                    installer.install(&config.game.wine.builds, move |state| {
+                                        sender_wine.send(state);
+                                    });
+                                },
+                                Err(err) => {
+                                    this_copy.update(Actions::Toast(Rc::new((
+                                        String::from("Failed to init wine downloader"), err.to_string()
+                                    )))).unwrap();
                                 }
-
-                                installer.downloader
-                                    .set_downloading_speed(config.launcher.speed_limit)
-                                    .expect("Failed to set downloading speed limit");
-
-                                // Download wine
-                                #[allow(unused_must_use)]
-                                installer.install(&config.game.wine.builds, move |state| {
-                                    sender_wine.send(state);
-                                });
-                            },
-                            Err(err) => {
-                                this_copy.update(Actions::Toast(Rc::new((
-                                    String::from("Failed to init wine downloader"), err.to_string()
-                                )))).unwrap();
                             }
-                        }
-                    });
+                        });
+                    }
+
+                    else {
+                        sender_wine.send(InstallerUpdate::UnpackingFinished).unwrap();
+                    }
 
                     // Display wine downloading progress
                     let progress_bar_copy = progress_bar.clone();
@@ -300,18 +306,19 @@ impl App {
                                 let prefix = WinePrefix::new(&config.game.wine.prefix);
 
                                 // Update wine config
-                                config.game.wine.selected = Some(wine_version.name.clone());
+                                if let Some(wine_version) = &wine_version {
+                                    config.game.wine.selected = Some(wine_version.name.clone());
 
-                                config::update_raw(config.clone()).unwrap();
+                                    config::update_raw(config.clone()).unwrap();
+                                }
 
                                 // Create wine prefix
                                 let this = this_copy.clone();
-                                let wine_version = wine_version.clone();
                                 let dxvk_version = dxvk_version_copy.clone();
                                 let sender_dxvk = sender_dxvk.clone();
 
                                 std::thread::spawn(move || {
-                                    match prefix.update(&config.game.wine.builds, wine_version.clone()) {
+                                    match prefix.update_with(config.try_get_wine_executable().expect("None of wine builds are available")) {
                                         Ok(output) => {
                                             println!("Wine prefix created:\n\n{}", String::from_utf8_lossy(&output.stdout));
     
