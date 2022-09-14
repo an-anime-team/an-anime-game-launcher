@@ -35,6 +35,11 @@ impl FpsUnlocker {
     pub fn download<T: ToString>(dir: T) -> anyhow::Result<Self> {
         let mut downloader = Downloader::new(LATEST_INFO.1)?;
 
+        // Create FPS unlocker folder if needed
+        if !std::path::Path::new(&dir.to_string()).exists() {
+            std::fs::create_dir_all(dir.to_string())?;
+        }
+
         match downloader.download_to(format!("{}/unlocker.exe", dir.to_string()), |_, _| {}) {
             Ok(_) => Ok(Self {
                 dir: dir.to_string()

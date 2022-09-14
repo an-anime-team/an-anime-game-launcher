@@ -120,5 +120,30 @@ Adw.PreferencesPage page {
                 valign: center;
             }
         }
+
+        Adw.ActionRow {
+            title: "Fullscreen";
+            subtitle: "Open game window in fullscreen mode";
+
+            Gtk.Switch fps_unlocker_fullscreen_switcher {
+                valign: center;
+            }
+        }
+
+        Adw.ComboRow fps_unlocker_priority_combo {
+            title: "Priority";
+            subtitle: "Game process priority";
+
+            model: Gtk.StringList {
+                strings [
+                    "Realtime",
+                    "High",
+                    "Above normal",
+                    "Normal",
+                    "Below normal",
+                    "Low"
+                ]
+            };
+        }
     }
 }

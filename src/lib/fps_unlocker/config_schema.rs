@@ -53,6 +53,8 @@ impl ConfigSchema {
         Self {
             FPSTarget: config.fps,
             UsePowerSave: config.power_saving,
+            Fullscreen: config.fullscreen,
+            Priority: config.priority,
 
             ..Self::default()
         }
