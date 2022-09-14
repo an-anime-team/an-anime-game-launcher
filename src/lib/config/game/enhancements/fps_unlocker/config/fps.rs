@@ -14,8 +14,17 @@ pub enum Fps {
     /// 144
     HundredFourtyFour,
 
+    /// 165
+    HundredSixtyFive,
+
+    /// 180
+    HundredEighty,
+
     /// 200
     TwoHundred,
+
+    /// 240
+    TwoHundredFourty,
 
     Custom(u64)
 }
@@ -27,7 +36,10 @@ impl Fps {
             Self::Hundred,
             Self::HundredTwenty,
             Self::HundredFourtyFour,
-            Self::TwoHundred
+            Self::HundredSixtyFive,
+            Self::HundredEighty,
+            Self::TwoHundred,
+            Self::TwoHundredFourty
         ]
     }
 
@@ -49,19 +61,25 @@ impl Fps {
             100 => Self::Hundred,
             120 => Self::HundredTwenty,
             144 => Self::HundredFourtyFour,
+            165 => Self::HundredSixtyFive,
+            180 => Self::HundredEighty,
             200 => Self::TwoHundred,
+            240 => Self::TwoHundredFourty,
             num => Self::Custom(num)
         }
     }
 
     pub fn to_num(&self) -> u64 {
         match self {
-            Fps::Ninety => 90,
-            Fps::Hundred => 100,
-            Fps::HundredTwenty => 120,
-            Fps::HundredFourtyFour => 144,
-            Fps::TwoHundred => 200,
-            Fps::Custom(num) => *num
+            Self::Ninety            => 90,
+            Self::Hundred           => 100,
+            Self::HundredTwenty     => 120,
+            Self::HundredFourtyFour => 144,
+            Self::HundredSixtyFive  => 165,
+            Self::HundredEighty     => 180,
+            Self::TwoHundred        => 200,
+            Self::TwoHundredFourty  => 240,
+            Self::Custom(num)  => *num
         }
     }
 }
