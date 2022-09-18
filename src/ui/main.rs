@@ -8,6 +8,7 @@ use std::rc::Rc;
 use std::cell::Cell;
 use std::io::Error;
 use std::process::{Command, Stdio};
+use std::path::PathBuf;
 
 use wait_not_await::Await;
 
@@ -435,7 +436,7 @@ impl App {
                                                         match Installer::new(wine.uri) {
                                                             Ok(mut installer) => {
                                                                 if let Some(temp_folder) = config.launcher.temp {
-                                                                    installer.temp_folder = temp_folder;
+                                                                    installer.temp_folder = PathBuf::from(temp_folder);
                                                                 }
 
                                                                 installer.downloader
@@ -694,7 +695,7 @@ impl App {
                                             println!("Found broken files:");
 
                                             for file in &broken {
-                                                println!(" - {}", file.path);
+                                                println!(" - {:?}", file.path);
                                             }
 
                                             let total = broken.len() as f64;
@@ -706,9 +707,9 @@ impl App {
 
                                             println!("Patch status: {}", is_patch_applied);
 
-                                            fn should_ignore(path: &str) -> bool {
+                                            fn should_ignore(path: &PathBuf) -> bool {
                                                 for part in ["UnityPlayer.dll", "xlua.dll", "crashreport.exe", "upload_crash.exe", "vulkan-1.dll"] {
-                                                    if path.contains(part) {
+                                                    if path.to_string_lossy().contains(part) {
                                                         return true;
                                                     }
                                                 }

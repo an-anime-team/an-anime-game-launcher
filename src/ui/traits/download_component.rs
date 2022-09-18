@@ -2,7 +2,7 @@ use gtk4::{self as gtk, prelude::*};
 
 use gtk::glib;
 
-use std::path::Path;
+use std::path::{Path, PathBuf};
 
 use anime_game_core::prelude::*;
 use wait_not_await::Await;
@@ -83,7 +83,7 @@ pub trait DownloadComponent {
         let mut installer = Installer::new(self.get_download_uri())?;
 
         if let Some(temp_folder) = config.launcher.temp {
-            installer.temp_folder = temp_folder;
+            installer.temp_folder = PathBuf::from(temp_folder);
         }
 
         installer.downloader

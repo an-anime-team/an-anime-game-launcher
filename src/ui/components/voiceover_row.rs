@@ -1,6 +1,8 @@
 use gtk4::{self as gtk, prelude::*};
 use libadwaita::{self as adw, prelude::*};
 
+use std::path::PathBuf;
+
 use anime_game_core::genshin::voice_data::package::VoicePackage;
 
 #[derive(Debug, Clone)]
@@ -31,7 +33,7 @@ impl VoiceoverRow {
         }
     }
 
-    pub fn update_state<T: ToString>(&self, game_path: T) {
+    pub fn update_state<T: Into<PathBuf>>(&self, game_path: T) {
         if self.is_downloaded(game_path) {
             self.button.set_icon_name("user-trash-symbolic");
         }
@@ -41,7 +43,7 @@ impl VoiceoverRow {
         }
     }
 
-    pub fn is_downloaded<T: ToString>(&self, game_path: T) -> bool {
+    pub fn is_downloaded<T: Into<PathBuf>>(&self, game_path: T) -> bool {
         self.package.is_installed_in(game_path)
     }
 }
