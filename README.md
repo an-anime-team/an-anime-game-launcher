@@ -159,15 +159,15 @@ They're required only for some specific functions
 # Development
 ## Dependency required for bundling to AppImage
 
-apt
+### apt
 ```sh
 sudo apt install libfuse2
 ```
-pacman
+### pacman
 ```sh
 sudo pacman -S fuse2
 ```
-dnf
+### dnf
 ```sh
 sudo dnf install libfuse2
 ```
