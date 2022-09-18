@@ -5,9 +5,6 @@ pub enum Fps {
     /// 90
     Ninety,
 
-    /// 100
-    Hundred,
-
     /// 120
     HundredTwenty,
 
@@ -33,7 +30,6 @@ impl Fps {
     pub fn list() -> Vec<Self> {
         vec![
             Self::Ninety,
-            Self::Hundred,
             Self::HundredTwenty,
             Self::HundredFourtyFour,
             Self::HundredSixtyFive,
@@ -58,7 +54,6 @@ impl Fps {
     pub fn from_num(fps: u64) -> Self {
         match fps {
             90 => Self::Ninety,
-            100 => Self::Hundred,
             120 => Self::HundredTwenty,
             144 => Self::HundredFourtyFour,
             165 => Self::HundredSixtyFive,
@@ -72,7 +67,6 @@ impl Fps {
     pub fn to_num(&self) -> u64 {
         match self {
             Self::Ninety            => 90,
-            Self::Hundred           => 100,
             Self::HundredTwenty     => 120,
             Self::HundredFourtyFour => 144,
             Self::HundredSixtyFive  => 165,

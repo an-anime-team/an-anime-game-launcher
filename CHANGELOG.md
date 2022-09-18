@@ -1,3 +1,10 @@
+# 1.1.0
+
+- added support for FPS unlocker
+- added support for system wine during initial setup
+- added usage of xdg-portals for folders chooser during initial setup
+- fixed DXVK applying using system wine
+
 # 1.0.4
 
 - added creation of wine/dxvk folders at start if needed

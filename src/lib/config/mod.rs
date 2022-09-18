@@ -173,9 +173,19 @@ impl Config {
     /// 2) `Ok(None)` if version wasn't found, so too old or dxvk is not applied
     /// 3) `Err(..)` if failed to get applied dxvk version, likely because wrong prefix path specified
     pub fn try_get_selected_dxvk_info(&self) -> std::io::Result<Option<DxvkVersion>> {
-        let bytes = match std::fs::read(format!("{}/drive_c/windows/system32/dxgi.dll", &self.game.wine.prefix)) {
-            Ok(bytes) => bytes[1600000..1700000].to_vec(),
-            Err(_) => std::fs::read(format!("{}/drive_c/windows/system32/d3d11.dll", &self.game.wine.prefix))?[2400000..2500000].to_vec()
+        let (bytes, from, to) = match std::fs::read(format!("{}/drive_c/windows/system32/dxgi.dll", &self.game.wine.prefix)) {
+            Ok(bytes) => (bytes, 1600000, 1700000),
+            Err(_) => {
+                let bytes = std::fs::read(format!("{}/drive_c/windows/system32/d3d11.dll", &self.game.wine.prefix))?;
+
+                (bytes, 2400000, 2500000)
+            }
+        };
+
+        let bytes = if bytes.len() > to {
+            bytes[from..to].to_vec()
+        } else {
+            return Ok(None);
         };
 
         Ok({
