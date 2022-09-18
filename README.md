@@ -157,6 +157,20 @@ These requirements can't be easily installed so you should do it manually
 They're required only for some specific functions
 
 # Development
+## Dependency required for bundling to AppImage
+
+apt
+```sh
+sudo apt install libfuse2
+```
+pacman
+```sh
+sudo pacman -S fuse2
+```
+dnf
+```sh
+sudo dnf install libfuse2
+```
 
 ## Download source
 
