@@ -37,7 +37,8 @@ jobs:
         
   build_and_upload_exp:
     runs-on: ubuntu-latest
-    if: ${{ jobs.build_and_upload.result == "failure" }}
+    needs: build_and_upload
+    if: ${{ always() && needs.build_and_upload.result == "failure" }}
     
     container:
       image: ubuntu:rolling
