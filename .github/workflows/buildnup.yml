@@ -49,7 +49,7 @@ jobs:
     - name: Install Deps
       run: |
         apt update
-        apt install -y libgtk-4-1 libgtk-4-dev libadwaita-1-0 libadwaita-1-dev git rustc rustfmt cargo
+        apt install -y libgtk-4-1 libgtk-4-dev libadwaita-1-0 libadwaita-1-dev git rustc rustfmt cargo curl openssl
         
     - name: Checkout
       uses: actions/checkout@v3
