@@ -46,16 +46,15 @@ jobs:
         DEBIAN_FRONTEND: noninteractive
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3
-      
     - name: Install Deps
       run: |
         apt update
         apt install -y libgtk-4-1 libgtk-4-dev libadwaita-1-0 libadwaita-1-dev git rustc rustfmt cargo
-      
-    - name: Get Submodules
-      run: git submodule update --init
+        
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        submodules: true
     
     - name: Build
       run: cargo build --release --verbose
