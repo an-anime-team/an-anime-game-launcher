@@ -32,3 +32,32 @@ jobs:
       with:
         name: Launcher
         path: target/release/anime-game-launcher
+        
+  build_and_upload_exp:
+    runs-on: ubuntu-latest
+    if: ${{ jobs.build_and_upload.result == "failure" }}
+    
+    container:
+      image: ubuntu:rolling
+      env:
+        DEBIAN_FRONTEND: noninteractive
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        submodules: true
+        
+    - name: Install Deps
+      run: |
+        apt update
+        apt install -y libgtk-4-1 libgtk-4-dev libadwaita-1-0 libadwaita-1-dev
+    
+    - name: Build
+      run: cargo build --release --verbose
+      
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v3.1.0
+      with:
+        name: Launcher
+        path: target/release/anime-game-launcher
