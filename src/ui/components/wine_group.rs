@@ -1,4 +1,4 @@
-use libadwaita::{self as adw, prelude::*};
+use adw::prelude::*;
 
 use crate::lib::wine::Group;
 use super::wine_row::WineRow;

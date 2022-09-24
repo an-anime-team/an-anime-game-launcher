@@ -1,8 +1,7 @@
-use gtk4::{self as gtk, prelude::*};
-use libadwaita as adw;
+use gtk::prelude::*;
 
-use gtk4::glib;
-use gtk4::glib::clone;
+use gtk::glib;
+use gtk::glib::clone;
 
 use std::rc::Rc;
 use std::cell::Cell;
@@ -42,7 +41,7 @@ pub struct AppWidgets {
     pub toast_overlay: adw::ToastOverlay,
 
     pub menu: gtk::MenuButton,
-    pub about: gtk::AboutDialog,
+    pub about: adw::AboutWindow,
 
     pub leaflet: adw::Leaflet,
     pub status_page: adw::StatusPage,
@@ -100,40 +99,40 @@ impl AppWidgets {
 
         // Set default About Dialog values
         if crate::APP_DEBUG {
-            result.about.set_version(Some(format!("{} (development)", crate::APP_VERSION).as_str()));
+            result.about.set_version(&format!("{}-dev", crate::APP_VERSION));
         }
 
         else {
-            result.about.set_version(Some(crate::APP_VERSION));
+            result.about.set_version(crate::APP_VERSION);
         }
 
         result.about.set_license_type(gtk::License::Gpl30);
 
-        result.about.set_authors(&[
+        result.about.set_developers(&[
             "Nikita Podvirnyy https://github.com/krypt0nn"
         ]);
 
-        result.about.add_credit_section("Logo", &[
+        result.about.add_credit_section(Some("Logo"), &[
             "@nightany https://pinterest.com/pin/356206651788051017"
         ]);
 
-        result.about.add_credit_section("An Anime Team", &[
+        result.about.add_credit_section(Some("An Anime Team"), &[
             "@Marie https://github.com/Mar0xy",
             "@lane https://github.com/laurinneff"
         ]);
 
         let curl_info = anime_game_core::curl_sys::Version::get();
 
-        result.about.set_system_information(Some(&[
-            format!("Anime Game core library version:    {}", anime_game_core::VERSION),
-            format!("    Curl version:    {}", curl_info.version()),
-            format!("     SSL version:    {}", curl_info.ssl_version().unwrap_or("?")),
+        result.about.set_debug_info(&[
+            format!("Anime Game core library version: {}", anime_game_core::VERSION),
+            format!("Curl version: {}", curl_info.version()),
+            format!("SSL version: {}", curl_info.ssl_version().unwrap_or("?")),
             String::new(),
-            format!("GTK version:    {}.{}.{}", gtk::major_version(), gtk::minor_version(), gtk::micro_version()),
-            format!("Libadwaita version:    {}.{}.{}", adw::major_version(), adw::minor_version(), adw::micro_version()),
-            format!("Pango version:    {}", gtk::pango::version_string().unwrap_or("?".into())),
-            format!("Cairo version:    {}", gtk::cairo::version_string()),
-        ].join("\n")));
+            format!("GTK version: {}.{}.{}", gtk::major_version(), gtk::minor_version(), gtk::micro_version()),
+            format!("Libadwaita version: {}.{}.{}", adw::major_version(), adw::minor_version(), adw::micro_version()),
+            format!("Pango version: {}", gtk::pango::version_string().unwrap_or("?".into())),
+            format!("Cairo version: {}", gtk::cairo::version_string()),
+        ].join("\n"));
 
         // Add preferences page to the leaflet
         result.leaflet.append(&result.preferences_stack.preferences).set_name(Some("preferences_page"));

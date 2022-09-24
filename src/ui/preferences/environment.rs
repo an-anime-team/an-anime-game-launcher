@@ -1,8 +1,8 @@
-use gtk4 as gtk;
-use libadwaita::{self as adw, prelude::*};
+use gtk::prelude::*;
+use adw::prelude::*;
 
-use gtk4::glib;
-use gtk4::glib::clone;
+use gtk::glib;
+use gtk::glib::clone;
 
 use std::collections::HashMap;
 use std::rc::Rc;

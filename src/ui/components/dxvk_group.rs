@@ -1,4 +1,4 @@
-use libadwaita::{self as adw, prelude::*};
+use adw::prelude::*;
 
 use crate::lib::dxvk::Group;
 use super::dxvk_row::DxvkRow;

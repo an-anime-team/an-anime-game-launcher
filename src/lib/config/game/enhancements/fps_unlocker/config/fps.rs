@@ -1,5 +1,3 @@
-use gtk4 as gtk;
-
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 pub enum Fps {
     /// 90

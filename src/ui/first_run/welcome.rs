@@ -1,5 +1,3 @@
-use gtk4 as gtk;
-
 use crate::ui::*;
 
 #[derive(Clone)]

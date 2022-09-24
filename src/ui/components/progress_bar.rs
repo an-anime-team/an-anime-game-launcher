@@ -1,5 +1,4 @@
-use gtk4::{self as gtk, prelude::*};
-use libadwaita as adw;
+use gtk::prelude::*;
 
 use gtk::glib;
 

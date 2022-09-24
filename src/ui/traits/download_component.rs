@@ -1,4 +1,4 @@
-use gtk4::{self as gtk, prelude::*};
+use gtk::prelude::*;
 
 use gtk::glib;
 

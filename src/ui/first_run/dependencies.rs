@@ -1,5 +1,3 @@
-use gtk4 as gtk;
-
 use std::process::{Command, Stdio};
 
 use crate::ui::*;

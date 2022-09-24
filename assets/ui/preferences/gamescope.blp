@@ -11,72 +11,48 @@ Adw.PreferencesWindow window {
         Adw.PreferencesGroup {
             title: "Game resolution";
 
-            Adw.ActionRow {
+            Adw.EntryRow game_width {
                 title: "Width";
 
-                Gtk.Entry game_width {
-                    placeholder-text: "0";
-                    valign: center;
-                    input-purpose: digits;
-                }
+                input-purpose: digits;
             }
 
-            Adw.ActionRow {
+            Adw.EntryRow game_height {
                 title: "Height";
 
-                Gtk.Entry game_height {
-                    placeholder-text: "0";
-                    valign: center;
-                    input-purpose: digits;
-                }
+                input-purpose: digits;
             }
         }
 
         Adw.PreferencesGroup {
             title: "Gamescope resolution";
 
-            Adw.ActionRow {
+            Adw.EntryRow gamescope_width {
                 title: "Width";
 
-                Gtk.Entry gamescope_width {
-                    placeholder-text: "0";
-                    valign: center;
-                    input-purpose: digits;
-                }
+                input-purpose: digits;
             }
 
-            Adw.ActionRow {
+            Adw.EntryRow gamescope_height {
                 title: "Height";
 
-                Gtk.Entry gamescope_height {
-                    placeholder-text: "0";
-                    valign: center;
-                    input-purpose: digits;
-                }
+                input-purpose: digits;
             }
         }
 
         Adw.PreferencesGroup {
             title: "Other settings";
 
-            Adw.ActionRow {
+            Adw.EntryRow framerate_limit {
                 title: "Framerate limit";
 
-                Gtk.Entry framerate_limit {
-                    placeholder-text: "0";
-                    valign: center;
-                    input-purpose: digits;
-                }
+                input-purpose: digits;
             }
 
-            Adw.ActionRow {
+            Adw.EntryRow framerate_unfocused_limit {
                 title: "Unfocused framerate limit";
 
-                Gtk.Entry framerate_unfocused_limit {
-                    placeholder-text: "0";
-                    valign: center;
-                    input-purpose: digits;
-                }
+                input-purpose: digits;
             }
 
             Adw.ActionRow {

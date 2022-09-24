@@ -1,5 +1,4 @@
-use gtk4::{self as gtk, prelude::*};
-use libadwaita as adw;
+use gtk::prelude::*;
 
 use gtk::{CssProvider, StyleContext, STYLE_PROVIDER_PRIORITY_APPLICATION};
 use gtk::gdk::Display;
@@ -19,8 +18,7 @@ pub const APP_VERSION: &str = env!("CARGO_PKG_VERSION");
 pub const APP_DEBUG: bool = cfg!(debug_assertions);
 
 fn main() {
-    gtk::init().expect("GTK initialization failed");
-    adw::init();
+    adw::init().expect("Libadwaita initialization failed");
 
     // Register and include resources
     gtk::gio::resources_register_include!(".assets.gresource")

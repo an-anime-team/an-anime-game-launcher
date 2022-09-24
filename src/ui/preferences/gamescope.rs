@@ -1,5 +1,4 @@
-use gtk4 as gtk;
-use libadwaita::{self as adw, prelude::*};
+use gtk::prelude::*;
 
 use gtk::glib;
 
@@ -17,14 +16,14 @@ use crate::ui::*;
 pub struct AppWidgets {
     pub window: adw::PreferencesWindow,
 
-    pub game_width: gtk::Entry,
-    pub game_height: gtk::Entry,
+    pub game_width: adw::EntryRow,
+    pub game_height: adw::EntryRow,
 
-    pub gamescope_width: gtk::Entry,
-    pub gamescope_height: gtk::Entry,
+    pub gamescope_width: adw::EntryRow,
+    pub gamescope_height: adw::EntryRow,
 
-    pub framerate_limit: gtk::Entry,
-    pub framerate_unfocused_limit: gtk::Entry,
+    pub framerate_limit: adw::EntryRow,
+    pub framerate_unfocused_limit: adw::EntryRow,
     pub integer_scaling: gtk::Switch,
     pub fsr: gtk::Switch,
     pub nis: gtk::Switch,
@@ -227,7 +226,7 @@ impl App {
 
         status_page.set_description(Some("Loading gamescope..."));
 
-        fn set_text(widget: &gtk::Entry, value: u64) {
+        fn set_text(widget: &adw::EntryRow, value: u64) {
             widget.set_text(&if value == 0 { String::new() } else { value.to_string() });
         }
 

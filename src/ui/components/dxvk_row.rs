@@ -1,5 +1,5 @@
-use gtk4::{self as gtk, prelude::*};
-use libadwaita::{self as adw, prelude::*};
+use gtk::prelude::*;
+use adw::prelude::*;
 
 use crate::lib::dxvk::Version;
 use crate::ui::traits::download_component::*;

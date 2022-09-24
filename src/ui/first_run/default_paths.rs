@@ -1,5 +1,4 @@
-use gtk4 as gtk;
-use libadwaita::{self as adw, prelude::*};
+use adw::prelude::*;
 
 use gtk::glib;
 use gtk::glib::clone;

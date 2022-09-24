@@ -1,5 +1,4 @@
-use gtk4 as gtk;
-use libadwaita::{self as adw, prelude::*};
+use adw::prelude::*;
 
 use crate::lib::wine::{Version as WineVersion, List as WineList};
 use crate::lib::dxvk::{Version as DxvkVersion, List as DxvkList};

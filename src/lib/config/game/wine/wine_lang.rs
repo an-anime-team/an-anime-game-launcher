@@ -1,5 +1,3 @@
-use gtk4 as gtk;
-
 use std::collections::HashMap;
 
 use serde::{Serialize, Deserialize};

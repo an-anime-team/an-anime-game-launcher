@@ -108,11 +108,12 @@ Adw.ApplicationWindow window {
     };
 }
 
-Gtk.AboutDialog about {
-    program-name: "An Anime Game Launcher";
+Adw.AboutWindow about {
+    application-name: "An Anime Game Launcher";
+    application-icon: "moe.launcher.an-anime-game-launcher-gtk";
 
-    logo: "resource:///org/app/assets/images/icon.png";
     website: "https://github.com/an-anime-team/an-anime-game-launcher-gtk";
+    issue-url: "https://github.com/an-anime-team/an-anime-game-launcher-gtk/issues";
 
     modal: true;
     transient-for: window;
