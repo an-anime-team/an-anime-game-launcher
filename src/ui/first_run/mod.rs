@@ -10,6 +10,8 @@ use std::path::PathBuf;
 
 use anime_game_core::prelude::*;
 
+use wincompatlib::prelude::*;
+
 mod welcome;
 mod dependencies;
 mod tos_warning;
@@ -23,7 +25,6 @@ use crate::ui::traits::prelude::*;
 use crate::ui::components::progress_bar::*;
 
 use crate::lib;
-use crate::lib::wine_prefix::WinePrefix;
 use crate::lib::config;
 
 /// This structure is used to describe widgets used in application
@@ -303,7 +304,6 @@ impl App {
 
                             ProgressUpdateResult::Finished => {
                                 let mut config = config::get().unwrap();
-                                let prefix = WinePrefix::new(&config.game.wine.prefix);
 
                                 // Update wine config
                                 if let Some(wine_version) = &wine_version {
@@ -318,7 +318,13 @@ impl App {
                                 let sender_dxvk = sender_dxvk.clone();
 
                                 std::thread::spawn(move || {
-                                    match prefix.update_with(config.try_get_wine_executable().expect("None of wine builds are available")) {
+                                    let wine = config.try_get_wine_executable()
+                                        .expect("None of wine builds are available");
+
+                                    let wine = Wine::from_binary(wine)
+                                        .with_arch(WineArch::Win64);
+
+                                    match wine.update_prefix(&config.game.wine.prefix) {
                                         Ok(output) => {
                                             println!("Wine prefix created:\n\n{}", String::from_utf8_lossy(&output.stdout));
     

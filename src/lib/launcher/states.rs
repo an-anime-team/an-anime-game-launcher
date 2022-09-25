@@ -1,9 +1,10 @@
+use std::path::PathBuf;
+
 use anime_game_core::prelude::*;
 use anime_game_core::genshin::prelude::*;
 
 use crate::lib::consts;
 use crate::lib::config;
-use crate::lib::wine_prefix::WinePrefix;
 
 #[derive(Debug, Clone)]
 pub enum LauncherState {
@@ -55,7 +56,7 @@ impl LauncherState {
         }
 
         // Check prefix existence
-        if !WinePrefix::exists_in(&config.game.wine.prefix) {
+        if !PathBuf::from(&config.game.wine.prefix).join("drive_c").exists() {
             return Ok(Self::PrefixNotExists);
         }
 

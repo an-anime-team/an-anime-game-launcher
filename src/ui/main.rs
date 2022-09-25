@@ -14,6 +14,8 @@ use wait_not_await::Await;
 use anime_game_core::prelude::*;
 use anime_game_core::genshin::prelude::*;
 
+use wincompatlib::prelude::*;
+
 use crate::ui::*;
 
 use super::preferences::PreferencesStack;
@@ -28,7 +30,6 @@ use crate::lib::wine::{
     Version as WineVersion,
     List as WineList
 };
-use crate::lib::wine_prefix::WinePrefix;
 
 /// This structure is used to describe widgets used in application
 /// 
@@ -496,16 +497,17 @@ impl App {
                                 }
 
                                 LauncherState::PrefixNotExists => {
-                                    let prefix = WinePrefix::new(&config.game.wine.prefix);
-
-                                    match config.try_get_selected_wine_info() {
+                                    match config.try_get_wine_executable() {
                                         Some(wine) => {
                                             let this = this.clone();
 
                                             std::thread::spawn(move || {
                                                 this.widgets.launch_game.set_sensitive(false);
 
-                                                if let Err(err) = prefix.update(&config.game.wine.builds, wine) {
+                                                let wine = Wine::from_binary(wine)
+                                                    .with_arch(WineArch::Win64);
+
+                                                if let Err(err) = wine.update_prefix(&config.game.wine.prefix) {
                                                     this.update(Actions::Toast(Rc::new((
                                                         String::from("Failed to create wine prefix"), err.to_string()
                                                     )))).unwrap();
@@ -519,16 +521,16 @@ impl App {
                                         None => this.toast("Failed to get selected wine version", Error::last_os_error())
                                     }
                                 }
-        
+
                                 LauncherState::VoiceUpdateAvailable(diff) |
                                 LauncherState::VoiceNotInstalled(diff) |
                                 LauncherState::GameUpdateAvailable(diff) |
                                 LauncherState::GameNotInstalled(diff) => {
                                     let (sender, receiver) = glib::MainContext::channel::<InstallerUpdate>(glib::PRIORITY_DEFAULT);
-                                    
+
                                     let this = this.clone();
                                     let this_copy = this.clone();
-                                    
+
                                     this.update(Actions::ShowProgressBar).unwrap();
 
                                     // Download diff

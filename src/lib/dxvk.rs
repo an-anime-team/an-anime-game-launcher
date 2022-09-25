@@ -1,10 +1,11 @@
 use serde::{Serialize, Deserialize};
 
-use std::io::{Error, ErrorKind};
-use std::process::{Command, Output};
+use std::process::Output;
+use std::path::PathBuf;
 
 use lazy_static::lazy_static;
-use regex::Regex;
+
+use wincompatlib::prelude::*;
 
 use crate::lib::config;
 
@@ -94,50 +95,13 @@ impl Version {
             None => (String::from("wine64"), String::from("wineserver"), String::from("wineboot"))
         };
 
-        let mut apply_script = std::fs::read_to_string(&apply_path)?;
-
-        lazy_static! {
-            static ref WINE: Regex = Regex::new("wine=\".*\"").unwrap();
-            static ref WINE64: Regex = Regex::new("wine64=\".*\"").unwrap();
-            static ref WINEBOOT: Regex = Regex::new("wineboot=\".*\"").unwrap();
-        }
-
-        // Update wine paths
-        apply_script = WINE.replace_all(&apply_script, &format!("wine=\"{}\"", &wine_path)).to_string();
-        apply_script = WINE64.replace_all(&apply_script, &format!("wine64=\"{}\"", &wine_path)).to_string();
-        apply_script = WINEBOOT.replace_all(&apply_script, &format!("wineboot=\"{}\"", &wineboot_path)).to_string();
-
-        // Use wine64 to update wine prefix instead of running wineboot
-        // so we can get rid of 32bit support
-        apply_script = apply_script.replace("$wineboot -u", "\"$wine64\" -u");
-
-        // Fix issues related to spaces in paths to the runners folder
-        apply_script = apply_script.replace("which $wineboot", "which \"$wineboot\"");
-        apply_script = apply_script.replace("$wine --version", "\"$wine\" --version");
-        apply_script = apply_script.replace("$wine64 winepath", "\"$wine64\" winepath");
-        apply_script = apply_script.replace("$wine winepath", "\"$wine\" winepath");
-        apply_script = apply_script.replace("$wine reg", "\"$wine\" reg");
-
-        // Old GE builds return specific --version output which can break
-        // DXVK installation script
-        apply_script = apply_script.replace("grep wine", "grep \"wine\\|GE\"");
-
-        std::fs::write(&apply_path, apply_script)?;
-
-        let output = Command::new("bash")
-            .arg(&apply_path)
-            .arg("install")
-            .env("WINEARCH", "win64")
-            .env("WINESERVER", wineserver_path)
-            .env("WINEPREFIX", prefix_path.to_string())
-            .output()?;
-
-        if output.status.success() {
-            Ok(output)
-        }
-
-        else {
-            Err(Error::new(ErrorKind::Other, String::from_utf8_lossy(&output.stderr)))
-        }
+        Dxvk::install(
+            PathBuf::from(apply_path),
+            PathBuf::from(prefix_path.to_string()),
+            PathBuf::from(&wine_path),
+            PathBuf::from(wine_path),
+            PathBuf::from(wineboot_path),
+            PathBuf::from(wineserver_path)
+        )
     }
 }

@@ -1,4 +1,8 @@
+use std::path::PathBuf;
+
 use serde::{Serialize, Deserialize};
+
+use wincompatlib::prelude::*;
 
 lazy_static::lazy_static! {
     static ref GROUPS: Vec<Group> = vec![
@@ -79,8 +83,19 @@ impl Version {
         Ok(List::get()[0].versions[0].clone())
     }
 
-    pub fn is_downloaded_in<T: ToString>(&self, folder: T) -> bool {
-        std::path::Path::new(&format!("{}/{}", folder.to_string(), self.name)).exists()
+    pub fn is_downloaded_in<T: Into<PathBuf>>(&self, folder: T) -> bool {
+        folder.into().join(&self.name).exists()
+    }
+
+    pub fn to_wine(&self) -> Wine {
+        Wine::new(
+            &self.files.wine64,
+            None,
+            Some(WineArch::Win64),
+            Some(&self.files.wineboot),
+            Some(&self.files.wineserver),
+            WineLoader::Current
+        )
     }
 }
 
