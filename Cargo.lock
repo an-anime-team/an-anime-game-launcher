@@ -31,7 +31,7 @@ dependencies = [
 
 [[package]]
 name = "anime-game-core"
-version = "1.1.4"
+version = "1.1.5"
 dependencies = [
  "anyhow",
  "bzip2",
@@ -52,7 +52,7 @@ dependencies = [
 
 [[package]]
 name = "anime-game-launcher"
-version = "1.1.1"
+version = "1.1.2"
 dependencies = [
  "anime-game-core",
  "anyhow",
