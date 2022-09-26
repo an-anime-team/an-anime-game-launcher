@@ -38,7 +38,7 @@ pub struct PreferencesStack {
 }
 
 impl PreferencesStack {
-    pub fn new(window: &adw::ApplicationWindow) -> Result<Self, String> {
+    pub fn new(window: &adw::ApplicationWindow) -> anyhow::Result<Self> {
         let builder = gtk::Builder::from_resource("/org/app/ui/preferences.ui");
 
         let result = Self {

@@ -48,7 +48,7 @@ pub struct AppWidgets {
 }
 
 impl AppWidgets {
-    pub fn try_get() -> Result<Self, String> {
+    pub fn try_get() -> anyhow::Result<Self> {
         let builder = gtk::Builder::from_resource("/org/app/ui/first_run.ui");
 
         let result = Self {
@@ -131,7 +131,7 @@ pub struct App {
 
 impl App {
     /// Create new application
-    pub fn new(app: &gtk::Application) -> Result<Self, String> {
+    pub fn new(app: &gtk::Application) -> anyhow::Result<Self> {
         // Get default widgets from ui file and add events to them
         let result = Self {
             widgets: AppWidgets::try_get()?,

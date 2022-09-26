@@ -11,10 +11,10 @@ pub use first_run::App as FirstRunApp;
 pub use main::App as MainApp;
 
 /// This function loads object from builder or panics if it doesn't exist
-pub fn get_object<T: IsA<gtk::glib::Object>>(builder: &gtk::Builder, name: &str) -> Result<T, String> {
+pub fn get_object<T: IsA<gtk::glib::Object>>(builder: &gtk::Builder, name: &str) -> anyhow::Result<T> {
     match builder.object::<T>(name) {
         Some(object) => Ok(object),
-        None => Err(format!("Failed to parse object '{}'", name))
+        None => Err(anyhow::anyhow!("Failed to parse object '{name}'"))
     }
 }
 

@@ -55,7 +55,7 @@ pub struct AppWidgets {
 }
 
 impl AppWidgets {
-    pub fn try_get() -> Result<Self, String> {
+    pub fn try_get() -> anyhow::Result<Self> {
         let builder = gtk::Builder::from_resource("/org/app/ui/preferences/general.ui");
 
         let mut result = Self {
@@ -84,16 +84,10 @@ impl AppWidgets {
             dxvk_components: Default::default()
         };
 
-        let config = match config::get() {
-            Ok(config) => config,
-            Err(err) => return Err(err.to_string())
-        };
+        let config = config::get()?;
 
         // Update voiceovers list
-        let voice_packages = match VoicePackage::list_latest() {
-            Ok(voice_packages) => voice_packages,
-            Err(err) => return Err(err.to_string())
-        };
+        let voice_packages = VoicePackage::list_latest()?;
 
         let mut components = Vec::new();
 
@@ -197,7 +191,7 @@ pub struct App {
 
 impl App {
     /// Create new application
-    pub fn new() -> Result<Self, String> {
+    pub fn new() -> anyhow::Result<Self> {
         let result = Self {
             app: Default::default(),
             widgets: AppWidgets::try_get()?,

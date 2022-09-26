@@ -1,7 +1,7 @@
 use std::fs::File;
 use std::io::Read;
 use std::path::Path;
-use std::io::{Error, ErrorKind, Write};
+use std::io::Write;
 
 use serde::{Serialize, Deserialize};
 use serde_json::Value as JsonValue;
@@ -39,7 +39,7 @@ static mut CONFIG: Option<Config> = None;
 /// This method will load config from file once and store it into the memory.
 /// If you know that the config file was updated - you should run `get_raw` method
 /// that always loads config directly from the file. This will also update in-memory config
-pub fn get() -> Result<Config, Error> {
+pub fn get() -> anyhow::Result<Config> {
     unsafe {
         match &CONFIG {
             Some(config) => Ok(config.clone()),
@@ -51,7 +51,7 @@ pub fn get() -> Result<Config, Error> {
 /// Get config data
 /// 
 /// This method will always load data directly from the file and update in-memory config
-pub fn get_raw() -> Result<Config, Error> {
+pub fn get_raw() -> anyhow::Result<Config> {
     match config_file() {
         Some(path) => {
             // Try to read config if the file exists
@@ -71,7 +71,7 @@ pub fn get_raw() -> Result<Config, Error> {
 
                         Ok(config)
                     },
-                    Err(err) => Err(Error::new(ErrorKind::InvalidData, format!("Failed to decode data from json format: {}", err.to_string())))
+                    Err(err) => Err(anyhow::anyhow!("Failed to decode data from json format: {}", err.to_string()))
                 }
             }
 
@@ -82,7 +82,7 @@ pub fn get_raw() -> Result<Config, Error> {
                 Ok(Config::default())
             }
         },
-        None => Err(Error::new(ErrorKind::NotFound, format!("Failed to get config file path")))
+        None => Err(anyhow::anyhow!("Failed to get config file path"))
     }
 }
 
@@ -98,7 +98,7 @@ pub fn update(config: Config) {
 /// Update config file
 /// 
 /// This method will also update in-memory config data
-pub fn update_raw(config: Config) -> Result<(), Error> {
+pub fn update_raw(config: Config) -> anyhow::Result<()> {
     update(config.clone());
 
     match config_file() {
@@ -111,19 +111,19 @@ pub fn update_raw(config: Config) -> Result<(), Error> {
 
                     Ok(())
                 },
-                Err(err) => Err(Error::new(ErrorKind::InvalidData, format!("Failed to encode data into json format: {}", err.to_string())))
+                Err(err) => Err(anyhow::anyhow!("Failed to encode data into json format: {}", err.to_string()))
             }
         },
-        None => Err(Error::new(ErrorKind::NotFound, format!("Failed to get config file path")))
+        None => Err(anyhow::anyhow!("Failed to get config file path"))
     }
 }
 
 /// Update config file from the in-memory saved config
-pub fn flush() -> Result<(), Error> {
+pub fn flush() -> anyhow::Result<()> {
     unsafe {
         match &CONFIG {
             Some(config) => update_raw(config.clone()),
-            None => Err(Error::new(ErrorKind::Other, "Config wasn't loaded into the memory"))
+            None => Err(anyhow::anyhow!("Config wasn't loaded into the memory"))
         }
     }
 }

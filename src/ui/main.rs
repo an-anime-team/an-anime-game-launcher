@@ -30,6 +30,7 @@ use crate::lib::wine::{
     Version as WineVersion,
     List as WineList
 };
+use crate::lib::prettify_bytes::prettify_bytes;
 
 /// This structure is used to describe widgets used in application
 /// 
@@ -49,6 +50,7 @@ pub struct AppWidgets {
     pub launcher_content: adw::PreferencesPage,
 
     pub icon: gtk::Image,
+    pub predownload_game: gtk::Button,
     pub launch_game: gtk::Button,
     pub open_preferences: gtk::Button,
 
@@ -58,7 +60,7 @@ pub struct AppWidgets {
 }
 
 impl AppWidgets {
-    pub fn try_get() -> Result<Self, String> {
+    pub fn try_get() -> anyhow::Result<Self> {
         let builder = gtk::Builder::from_resource("/org/app/ui/main.ui");
 
         let window = get_object::<adw::ApplicationWindow>(&builder, "window")?;
@@ -76,6 +78,7 @@ impl AppWidgets {
             launcher_content: get_object(&builder, "launcher_content")?,
 
             icon: get_object(&builder, "icon")?,
+            predownload_game: get_object(&builder, "predownload_game")?,
             launch_game: get_object(&builder, "launch_game")?,
             open_preferences: get_object(&builder, "open_preferences")?,
 
@@ -150,6 +153,7 @@ pub enum Actions {
     OpenPreferencesPage,
     PreferencesGoBack,
     PerformButtonEvent,
+    PredownloadUpdate,
     RepairGame,
     ShowProgressBar,
     UpdateProgress { fraction: Rc<f64>, title: Rc<String> },
@@ -195,7 +199,7 @@ pub struct App {
 
 impl App {
     /// Create new application
-    pub fn new(app: &gtk::Application) -> Result<Self, String> {
+    pub fn new(app: &gtk::Application) -> anyhow::Result<Self> {
         let mut result = Self {
             widgets: AppWidgets::try_get()?,
             values: Default::default(),
@@ -255,6 +259,9 @@ impl App {
 
         // Go back button for preferences page
         self.widgets.preferences_stack.preferences_go_back.connect_clicked(Actions::PreferencesGoBack.into_fn(&self));
+
+        // Predownload update
+        self.widgets.predownload_game.connect_clicked(Actions::PredownloadUpdate.into_fn(&self));
 
         // Launch game
         self.widgets.launch_game.connect_clicked(Actions::PerformButtonEvent.into_fn(&self));
@@ -593,6 +600,61 @@ impl App {
                     }
                 }
 
+                Actions::PredownloadUpdate => {
+                    let values = this.values.take();
+                    let state = values.state.clone();
+
+                    this.values.set(values);
+
+                    match config::get() {
+                        Ok(config) => {
+                            match state {
+                                LauncherState::PredownloadAvailable { game, mut voices } => {
+                                    let (sender, receiver) = glib::MainContext::channel::<InstallerUpdate>(glib::PRIORITY_DEFAULT);
+
+                                    let mut diffs: Vec<VersionDiff> = vec![game];
+
+                                    diffs.append(&mut voices);
+
+                                    this.widgets.progress_bar.show();
+
+                                    std::thread::spawn(clone!(@strong this => move || {
+                                        for mut diff in diffs {
+                                            let sender = sender.clone();
+    
+                                            #[allow(unused_must_use)]
+                                            let result = diff.download_in(config.launcher.temp.as_ref().unwrap(), move |curr, total| {
+                                                sender.send(InstallerUpdate::DownloadingProgress(curr, total));
+                                            });
+    
+                                            if let Err(err) = result {
+                                                let err: Error = err.into();
+    
+                                                this.update(Actions::Toast(Rc::new((
+                                                    String::from("Downloading failed"), err.to_string()
+                                                )))).unwrap();
+
+                                                break;
+                                            }
+                                        }
+
+                                        this.update(Actions::HideProgressBar).unwrap();
+                                    }));
+
+                                    receiver.attach(None, clone!(@strong this => move |state| {
+                                        this.widgets.progress_bar.update_from_state(state);
+
+                                        glib::Continue(true)
+                                    }));
+                                }
+
+                                _ => unreachable!()
+                            }
+                        },
+                        Err(err) => this.toast("Failed to load config", err)
+                    }
+                }
+
                 Actions::RepairGame => {
                     match config::get() {
                         Ok(config) => {
@@ -812,14 +874,49 @@ impl App {
         self.widgets.launch_game.remove_css_class("warning");
         self.widgets.launch_game.remove_css_class("destructive-action");
 
+        self.widgets.predownload_game.hide();
+
         match &state {
             LauncherState::Launch => {
                 self.widgets.launch_game.set_label("Launch");
             }
 
-            // TODO
-            LauncherState::PredownloadAvailable { .. } => {
+            LauncherState::PredownloadAvailable { game, voices } => {
                 self.widgets.launch_game.set_label("Launch");
+
+                // Calculate size of the update
+                let size =
+                    game.size().unwrap_or((0, 0)).0 +
+                    voices.into_iter().fold(0, |acc, voice| acc + voice.size().unwrap_or((0, 0)).0);
+
+                // Update tooltip
+                self.widgets.predownload_game.set_tooltip_text(Some(&format!("Pre-download {} update ({})", game.latest(), prettify_bytes(size))));
+
+                // Prepare button's color
+                self.widgets.predownload_game.remove_css_class("success");
+                self.widgets.predownload_game.add_css_class("warning");
+                self.widgets.predownload_game.set_sensitive(true);
+
+                if let Ok(config) = config::get() {
+                    if let Some(temp) = config.launcher.temp {
+                        let tmp = PathBuf::from(temp);
+
+                        // If all the files were downloaded
+                        let downloaded =
+                            tmp.join(game.file_name().unwrap()).exists() &&
+                            voices.into_iter().fold(true, move |acc, voice| acc && tmp.join(voice.file_name().unwrap()).exists());
+
+                        if downloaded {
+                            self.widgets.predownload_game.remove_css_class("warning");
+                            self.widgets.predownload_game.add_css_class("success");
+                            self.widgets.predownload_game.set_sensitive(false);
+
+                            self.widgets.predownload_game.set_tooltip_text(Some(&format!("{} update is predownloaded ({})", game.latest(), prettify_bytes(size))));
+                        }
+                    }
+                }
+
+                self.widgets.predownload_game.show();
             }
 
             LauncherState::PatchAvailable(patch) => {

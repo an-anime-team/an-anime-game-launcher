@@ -44,7 +44,7 @@ pub struct Page {
 }
 
 impl Page {
-    pub fn new(window: gtk::Window) -> Result<Self, String> {
+    pub fn new(window: gtk::Window) -> anyhow::Result<Self> {
         let builder = gtk::Builder::from_resource("/org/app/ui/first_run/default_paths.ui");
 
         let result = Self {
@@ -62,10 +62,7 @@ impl Page {
             exit_button: get_object(&builder, "exit_button")?
         };
 
-        let config = match config::get() {
-            Ok(config) => config,
-            Err(err) => return Err(err.to_string())
-        };
+        let config = config::get()?;
 
         // Add paths to subtitles
         result.runners_folder.set_subtitle(&config.game.wine.builds);

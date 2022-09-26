@@ -48,7 +48,7 @@ pub struct AppWidgets {
 }
 
 impl AppWidgets {
-    fn try_get(window: &adw::ApplicationWindow) -> Result<Self, String> {
+    fn try_get(window: &adw::ApplicationWindow) -> anyhow::Result<Self> {
         let builder = gtk::Builder::from_resource("/org/app/ui/preferences/enhancements.ui");
 
         let result = Self {
@@ -123,7 +123,7 @@ pub struct App {
 
 impl App {
     /// Create new application
-    pub fn new(window: &adw::ApplicationWindow) -> Result<Self, String> {
+    pub fn new(window: &adw::ApplicationWindow) -> anyhow::Result<Self> {
         let result = Self {
             widgets: AppWidgets::try_get(window)?
         }.init_events();
@@ -301,7 +301,7 @@ impl App {
     }
 
     /// This method is being called by the `PreferencesStack::update`
-    pub fn prepare(&self, status_page: &adw::StatusPage) -> std::io::Result<()> {
+    pub fn prepare(&self, status_page: &adw::StatusPage) -> anyhow::Result<()> {
         let config = config::get()?;
 
         status_page.set_description(Some("Loading enhancements..."));

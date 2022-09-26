@@ -18,7 +18,7 @@ pub struct Page {
 }
 
 impl Page {
-    pub fn new() -> Result<Self, String> {
+    pub fn new() -> anyhow::Result<Self> {
         let builder = gtk::Builder::from_resource("/org/app/ui/first_run/voice_packages.ui");
 
         let mut result = Self {

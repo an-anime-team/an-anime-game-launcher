@@ -64,6 +64,16 @@ Adw.ApplicationWindow window {
                             margin-top: 64;
                             spacing: 8;
 
+                            Gtk.Button predownload_game {
+                                icon-name: "document-save-symbolic";
+                                tooltip-text: "Pre-download 3.1.0 update (15 GB)";
+
+                                hexpand: false;
+                                visible: false;
+
+                                styles ["warning"]
+                            }
+
                             Gtk.Button launch_game {
                                 label: "Launch";
 

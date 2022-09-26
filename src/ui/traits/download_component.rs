@@ -25,7 +25,7 @@ pub trait DownloadComponent {
         Path::new(&self.get_component_path(installation_path)).exists()
     }
 
-    fn download<T: ToString>(&self, installation_path: T) -> std::io::Result<Await<DownloadingResult>> {
+    fn download<T: ToString>(&self, installation_path: T) -> anyhow::Result<Await<DownloadingResult>> {
         let (sender, receiver) = glib::MainContext::channel::<InstallerUpdate>(glib::PRIORITY_DEFAULT);
         let (progress_bar, button) = self.get_downloading_widgets();
 

@@ -7,7 +7,6 @@ use gtk::glib::clone;
 use std::collections::HashMap;
 use std::rc::Rc;
 use std::cell::Cell;
-use std::io::Error;
 
 use crate::ui::get_object;
 use crate::lib::config;
@@ -31,7 +30,7 @@ pub struct AppWidgets {
 }
 
 impl AppWidgets {
-    fn try_get() -> Result<Self, String> {
+    fn try_get() -> anyhow::Result<Self> {
         let builder = gtk::Builder::from_resource("/org/app/ui/preferences/environment.ui");
 
         let result = Self {
@@ -89,7 +88,7 @@ pub struct App {
 
 impl App {
     /// Create new application
-    pub fn new() -> Result<Self, String> {
+    pub fn new() -> anyhow::Result<Self> {
         let result = Self {
             widgets: AppWidgets::try_get()?,
             values: Default::default(),
@@ -225,7 +224,7 @@ impl App {
     }
 
     /// This method is being called by the `PreferencesStack::update`
-    pub fn prepare(&self, status_page: &adw::StatusPage) -> Result<(), Error> {
+    pub fn prepare(&self, status_page: &adw::StatusPage) -> anyhow::Result<()> {
         let config = config::get()?;
 
         status_page.set_description(Some("Loading environment..."));

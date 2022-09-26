@@ -80,7 +80,7 @@ impl Version {
         std::path::Path::new(&format!("{}/{}", folder.to_string(), self.name)).exists()
     }
 
-    pub fn apply<T: ToString>(&self, dxvks_folder: T, prefix_path: T) -> std::io::Result<Output> {
+    pub fn apply<T: ToString>(&self, dxvks_folder: T, prefix_path: T) -> anyhow::Result<Output> {
         let apply_path = format!("{}/{}/setup_dxvk.sh", dxvks_folder.to_string(), self.name);
         let config = config::get()?;
 
@@ -95,13 +95,18 @@ impl Version {
             None => (String::from("wine64"), String::from("wineserver"), String::from("wineboot"))
         };
 
-        Dxvk::install(
+        let result = Dxvk::install(
             PathBuf::from(apply_path),
             PathBuf::from(prefix_path.to_string()),
             PathBuf::from(&wine_path),
             PathBuf::from(wine_path),
             PathBuf::from(wineboot_path),
             PathBuf::from(wineserver_path)
-        )
+        );
+
+        match result {
+            Ok(output) => Ok(output),
+            Err(err) => Err(err.into())
+        }
     }
 }
