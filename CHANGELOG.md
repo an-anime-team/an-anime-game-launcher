@@ -1,3 +1,11 @@
+# 1.1.1
+
+- updated core library and components library
+- added (likely working) updates pre-downloading functionality
+- moved to `anyhow::Result` in lots of places
+- added partial support of wincompatlib
+- moved to libadwaita 1.2
+
 # 1.1.0
 
 - added support for FPS unlocker
