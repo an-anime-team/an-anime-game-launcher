@@ -26,7 +26,7 @@
                 cursor: pointer
 
                 &:hover
-                    background-color: map.get($theme-map, "primary")
+                    background-color: map.get($theme-map, "checkbox-hover")
 
                     img
                         filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(219deg) brightness(102%) contrast(104%)
@@ -47,7 +47,13 @@
         .checkbox-active
             .checkbox-mark
                 background-color: map.get($theme-map, "primary")
+                cursor: pointer
 
+                &:hover
+                    background-color: map.get($theme-map, "checkbox-hover-active")
+
+                    img
+                        filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(219deg) brightness(102%) contrast(104%)
                 img
                     filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(219deg) brightness(102%) contrast(104%)
 
