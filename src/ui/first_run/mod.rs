@@ -322,11 +322,12 @@ impl App {
                                         .expect("None of wine builds are available");
 
                                     let wine = Wine::from_binary(wine)
+                                        .with_loader(WineLoader::Current)
                                         .with_arch(WineArch::Win64);
 
                                     match wine.update_prefix(&config.game.wine.prefix) {
                                         Ok(output) => {
-                                            println!("Wine prefix created:\n\n{}", String::from_utf8_lossy(&output.stdout));
+                                            println!("Wine prefix created:\n{}", String::from_utf8_lossy(&output.stdout));
     
                                             // Prepare DXVK downloader
                                             match Installer::new(&dxvk_version.uri) {

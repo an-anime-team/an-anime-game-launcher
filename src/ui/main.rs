@@ -512,6 +512,7 @@ impl App {
                                                 this.widgets.launch_game.set_sensitive(false);
 
                                                 let wine = Wine::from_binary(wine)
+                                                    .with_loader(WineLoader::Current)
                                                     .with_arch(WineArch::Win64);
 
                                                 if let Err(err) = wine.update_prefix(&config.game.wine.prefix) {
