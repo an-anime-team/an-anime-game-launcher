@@ -1,3 +1,11 @@
+# 1.1.3
+
+Updated core library with fixed voiceovers versions prediction algorithm
+
+# 1.1.2
+
+Hotfix of launcher being unable to download any stuff
+
 # 1.1.1
 
 - updated core library and components library
