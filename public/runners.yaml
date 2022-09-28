@@ -11,7 +11,7 @@
       wineserver: bin/wineserver
       winecfg: lib64/wine/x86_64-windows/winecfg.exe
     recommended: true
-    
+
   # Wine-GE-Proton 7-28
   - family: Wine-GE-Proton
     name: lutris-GE-Proton7-28-x86_64
@@ -22,7 +22,7 @@
       wineserver: bin/wineserver
       winecfg: lib64/wine/x86_64-windows/winecfg.exe
     recommended: true
-    
+
   # Wine-GE-Proton 7-27
   - family: Wine-GE-Proton
     name: lutris-GE-Proton7-27-x86_64
@@ -33,7 +33,7 @@
       wineserver: bin/wineserver
       winecfg: lib64/wine/x86_64-windows/winecfg.exe
     recommended: true
-    
+
   # Wine-GE-Proton 7-26
   - family: Wine-GE-Proton
     name: lutris-GE-Proton7-26-x86_64

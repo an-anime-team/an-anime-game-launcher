@@ -92,11 +92,11 @@ export default new Promise<void>(async (resolve) => {
             /**
              * Wine synchronization
              * 
-             * Available options: none, esync, fsync
+             * Available options: null, esync, fsync, futex2
              * 
-             * @default "esync"
+             * @default "fsync"
              */
-            sync: 'esync',
+            sync: 'fsync',
 
             /**
              * If the launcher should enable AMD FSR

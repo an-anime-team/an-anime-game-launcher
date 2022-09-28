@@ -20,6 +20,68 @@ class Stream extends AbstractInstaller
     }
 }
 
+/**
+ * List of voiceover sizes
+ * 
+ * 2.8.0 sizes are predicted and can be incorrect
+ */
+const VOICE_PACKAGES_SIZES = {
+    '3.1.0': {
+        'en-us': 10160526140,
+        'ja-jp': 11223463952,
+        'ko-kr': 8674947588,
+        'zh-cn': 8796386584
+    },
+    '3.0.0': {
+        'en-us': 9359645164,
+        'ja-jp': 10314955860,
+        'ko-kr': 7991164050,
+        'zh-cn': 8103030886
+    },
+    '2.8.0': {
+        'en-us': 8621891855,
+        'ja-jp': 9479988966,
+        'ko-kr': 7361278235,
+        'zh-cn': 7464327416
+    }
+};
+
+function wma_predict(values: number[]): number
+{
+    switch (values.length)
+    {
+        case 0:
+            return 0;
+
+        case 1:
+            return values[0];
+
+        case 2:
+            return values[1] * (values[1] / values[0]);
+
+        default:
+            let weighted_sum = 0, weighted_delim = 0;
+
+            for (let i = 0; i < values.length - 1; ++i)
+            {
+                weighted_sum += values[i + 1] / values[i] * (values.length - i - 1);
+                weighted_delim += values.length - i - 1;
+            }
+
+            return values[values.length - 1] * weighted_sum / weighted_delim;
+    }
+}
+
+function getVoicePackageSizes(locale: VoiceLang): object
+{
+    let sizes = {};
+
+    for (const version in VOICE_PACKAGES_SIZES)
+        sizes[version] = VOICE_PACKAGES_SIZES[version][locale];
+
+    return sizes;
+}
+
 export default class Voice
 {
     public static readonly langs = {
@@ -50,103 +112,36 @@ export default class Voice
                             for (const folder of Object.values(this.langs))
                                 if (files.includes(folder))
                                 {
-                                    // Since anime company changed the way they store voice packages data
-                                    // now to identify its version I want to calculate the actual
-                                    // size of the voice package directory and compare it with all the
-                                    // remotely available voice packages sizes. The closest one is the actual version of the package
-
                                     const actualSize = parseInt((await Neutralino.os.execCommand(`du -b "${path.addSlashes(`${voiceDir}/${folder}`)}"`))
                                         .stdOut.split('\t')[0]);
 
-                                    const locale = Object.keys(this.langs).find((lang) => this.langs[lang] === folder) as string;
+                                    const locale = Object.keys(this.langs).find((lang) => this.langs[lang] === folder) as VoiceLang;
 
-                                    // This constant found its origin in the change of the voice packages format.
-                                    // When the Anime Company decided that they know better how their game should work
-                                    // and changed voice files names to some random numbers it caused issue when
-                                    // old files aren't being replaced by the new ones, obviously because now they have
-                                    // different names. When you download new voice package - its size will be something like 9 GB.
-                                    // But Company's API returns double of this size, so like 18 GB, because their API also
-                                    // messed folder where they store unpacked voice packages.
-                                    // That's why we have to substract this approximate value from all the packages sizes
+                                    let sizes = getVoicePackageSizes(locale);
 
-                                    const CONSTANT_OF_STUPIDITY = {
-                                        'en-us': 8593687434 + 750 * 1024 * 1024, // 8 GB    (2.8.0)                                 + 750 MB (3.0.0)
-                                        'ja-jp': 9373182378 + 750 * 1024 * 1024, // 8.72 GB (2.8.0)                                 + 750 MB (3.0.0)
-                                        'ko-kr': 8804682956 + 750 * 1024 * 1024, // 8.2 GB  (2.8.0, not calculated (approximation)) + 750 MB (3.0.0)
-                                        'zh-cn': 8804682956 + 750 * 1024 * 1024, // 8.2 GB  (2.8.0, not calculated (approximation)) + 750 MB (3.0.0)
-                                    }[locale] as number;
+                                    // If latest voice packages sizes aren't listed in `VOICE_PACKAGES_SIZES`
+                                    // then we should predict their sizes
+                                    if (Object.keys(sizes)[0] != data.game.latest.version)
+                                    {
+                                        let t = {};
 
-                                    // API works this way:
-                                    // We have [latest] field that contains absolute voice package with its real, absolute size
-                                    // and we have [diff] fields that contains relative incremental changes with relative sizes
-                                    // Since we're approximating packages versions by the real, so absolute folder sizes, we need to calculate
-                                    // absolute folder sizes for differences
-                                    // Since this is not an option in the API we have second approximation: lets say
-                                    // that absolute [2.6.0] version size is [latest (2.8.0)] absolute size - [2.7.0] relative size - [2.6.0] relative size
-                                    // That's being said we need to substract each diff.size from the latest.size
+                                        t[data.game.latest.version] = wma_predict(Object.values(sizes));
 
-                                    let packageSize = 0;
-                                    let packages: { version: string, size: number }[] = [];
+                                        sizes = Object.assign(t, sizes);
+                                    }
 
-                                    for (const voicePackage of data.game.latest.voice_packs)
-                                        if (voicePackage.language == locale)
+                                    // To predict voice package version we're going through saved voice packages sizes in the `VOICE_PACKAGES_SIZES` constant
+                                    // plus predicted voice packages sizes if needed. The version with closest folder size is version we have installed
+                                    for (const version in sizes)
+                                        if (actualSize > sizes[version] - 512 * 1024 * 1024)
                                         {
-                                            packageSize = parseInt(voicePackage.size) - CONSTANT_OF_STUPIDITY;
-
-                                            packages.push({
-                                                version: data.game.latest.version,
-                                                size: packageSize
-                                            });
+                                            installedVoices.push({
+                                                lang: locale,
+                                                version
+                                            } as InstalledVoice);
 
                                             break;
                                         }
-
-                                    // List through other versions of the game
-                                    for (const diff of data.game.diffs)
-                                        for (const voicePackage of diff.voice_packs)
-                                            if (voicePackage.language == locale)
-                                            {
-                                                // Approximate this diff absolute folder size
-                                                let relativeSize = parseInt(voicePackage.size);
-
-                                                // For no reason API's size field in the [diff] can contain
-                                                // its absolute size. Let's say if size is more than 4 GB then it's only
-                                                // update size, so difference, so relative size. Otherwise it's absolute size
-                                                // 
-                                                // Example (Japanese):
-                                                // 
-                                                // 2.8.0 size: 18736543170 (latest, so absolute size)
-                                                // 2.7.0 size: 1989050587  (clearly update size, so relative)
-                                                // 2.6.0 size: 15531165534 (clearly absolute size)
-                                                if (relativeSize < 4 * 1024 * 1024 * 1024)
-                                                    packageSize -= relativeSize;
-
-                                                else if (packageSize > CONSTANT_OF_STUPIDITY)
-                                                    packageSize -= CONSTANT_OF_STUPIDITY;
-
-                                                packages.push({
-                                                    version: diff.version,
-                                                    size: packageSize
-                                                });
-                                                
-                                                break;
-                                            }
-
-                                    // To approximate the version let's say if an actual folder weights less
-                                    // than API says some version should weight - then it's definitely not this version
-                                    let packageVersion: string|null = null;
-
-                                    for (const packageData of packages.reverse()) {
-                                        // Actual folder size can be +- the same as in API response
-                                        // Let's say +-512 MB is ok
-                                        if (actualSize > packageData.size - 512 * 1024 * 1024)
-                                            packageVersion = packageData.version;
-                                    }
-
-                                    installedVoices.push({
-                                        lang: locale,
-                                        version: packageVersion
-                                    } as InstalledVoice);
                                 }
 
                                 resolveVoices();
