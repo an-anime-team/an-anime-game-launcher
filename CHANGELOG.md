@@ -1,6 +1,7 @@
 # 1.1.3
 
-Updated core library with fixed voiceovers versions prediction algorithm
+- updated core library with fixed voiceovers versions prediction algorithm
+- fixed wine prefix creation
 
 # 1.1.2
 
