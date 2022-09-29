@@ -16,7 +16,7 @@ pub trait Toast {
 
         let message = format!("{}", message);
 
-        if message.len() > 0 {
+        if !message.is_empty() {
             toast.set_button_label(Some("See message"));
             toast.set_action_name(Some("see-message.see-message"));
 

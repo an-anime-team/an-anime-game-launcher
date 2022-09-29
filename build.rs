@@ -31,42 +31,40 @@ fn blp_process_dir(dir: String) {
     let dist_dir = format!("assets/ui/.dist/{}", &dir).replace("//", "/");
 
     if let Ok(entries) = read_dir(&source_dir) {
-        if let Err(_) = read_dir(&dist_dir) {
+        if read_dir(&dist_dir).is_err() {
             create_dir_all(&dist_dir).expect("UI dist dir couldn't be created");
         }
 
         // println!("cargo:rerun-if-changed={}/*.blp", &source_dir);
 
-        for entry in entries {
-            if let Ok(entry) = entry {
-                if let Ok(metadata) = entry.metadata() {
-                    let entry_path = entry.path().to_str().unwrap().to_string();
-                    let entry_filename = entry.file_name().to_str().unwrap().to_string();
+        for entry in entries.flatten() {
+            if let Ok(metadata) = entry.metadata() {
+                let entry_path = entry.path().to_str().unwrap().to_string();
+                let entry_filename = entry.file_name().to_str().unwrap().to_string();
 
-                    if metadata.is_file() {
-                        let entry_dist_path = format!("{}/{}.ui", &dist_dir, &entry_filename[..entry_filename.len() - 4]);
+                if metadata.is_file() {
+                    let entry_dist_path = format!("{}/{}.ui", &dist_dir, &entry_filename[..entry_filename.len() - 4]);
 
-                        match compile_blueprint(&entry_path) {
-                            Ok(xml) => {
-                                let result = fs::write(entry_dist_path, xml);
+                    match compile_blueprint(&entry_path) {
+                        Ok(xml) => {
+                            let result = fs::write(entry_dist_path, xml);
 
-                                if let Err(err) = result {
-                                    println!("cargo:warning=Couldn't write compiled XML UI: {}", err);
-                                }
-                            },
-                            Err(err) => {
-                                if Path::new(&entry_dist_path).exists() {
-                                    fs::remove_file(entry_dist_path).expect("Couldn't remove broken file");
-                                }
-
-                                println!("cargo:warning=Couldn't compile {}: {}", entry_path, err);
+                            if let Err(err) = result {
+                                println!("cargo:warning=Couldn't write compiled XML UI: {}", err);
                             }
+                        },
+                        Err(err) => {
+                            if Path::new(&entry_dist_path).exists() {
+                                fs::remove_file(entry_dist_path).expect("Couldn't remove broken file");
+                            }
+
+                            println!("cargo:warning=Couldn't compile {}: {}", entry_path, err);
                         }
                     }
+                }
 
-                    else if metadata.is_dir() && &entry_filename[0..1] != "." {
-                        blp_process_dir(format!("{}/{}", &dir, &entry_filename));
-                    }
+                else if metadata.is_dir() && &entry_filename[0..1] != "." {
+                    blp_process_dir(format!("{}/{}", &dir, &entry_filename));
                 }
             }
         }
@@ -76,7 +74,7 @@ fn blp_process_dir(dir: String) {
 fn main() {
     blp_process_dir(String::new());
 
-    if let Ok(_) = read_to_string("assets/resources.xml") {
+    if read_to_string("assets/resources.xml").is_ok() {
         gtk::gio::compile_resources(
             "assets",
             "assets/resources.xml",

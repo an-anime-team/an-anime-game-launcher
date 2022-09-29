@@ -1,5 +1,3 @@
-use std::path::PathBuf;
-
 use anime_game_core::prelude::*;
 use anime_game_core::genshin::prelude::*;
 
@@ -51,12 +49,12 @@ impl LauncherState {
         let config = config::get()?;
 
         // Check wine existence
-        if let None = config.try_get_wine_executable() {
+        if config.try_get_wine_executable().is_none() {
             return Ok(Self::WineNotInstalled);
         }
 
         // Check prefix existence
-        if !PathBuf::from(&config.game.wine.prefix).join("drive_c").exists() {
+        if !config.game.wine.prefix.join("drive_c").exists() {
             return Ok(Self::PrefixNotExists);
         }
 

@@ -1,6 +1,8 @@
 use gtk::prelude::*;
 use adw::prelude::*;
 
+use std::path::PathBuf;
+
 use crate::lib::wine::Version;
 use crate::ui::traits::download_component::*;
 
@@ -46,7 +48,7 @@ impl WineRow {
         }
     }
 
-    pub fn update_state<T: ToString>(&self, runners_folder: T) {
+    pub fn update_state<T: Into<PathBuf>>(&self, runners_folder: T) {
         if self.is_downloaded(runners_folder) {
             self.button.set_icon_name("user-trash-symbolic");
         }
@@ -58,8 +60,8 @@ impl WineRow {
 }
 
 impl DownloadComponent for WineRow {
-    fn get_component_path<T: ToString>(&self, installation_path: T) -> String {
-        format!("{}/{}", installation_path.to_string(), self.version.name)
+    fn get_component_path<T: Into<PathBuf>>(&self, installation_path: T) -> PathBuf {
+        installation_path.into().join(&self.version.name)
     }
 
     fn get_downloading_widgets(&self) -> (gtk::ProgressBar, gtk::Button) {

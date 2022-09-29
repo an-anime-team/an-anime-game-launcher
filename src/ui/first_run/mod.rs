@@ -6,7 +6,6 @@ use gtk::glib::clone;
 use std::rc::Rc;
 use std::cell::Cell;
 use std::process::Command;
-use std::path::PathBuf;
 
 use anime_game_core::prelude::*;
 
@@ -248,7 +247,7 @@ impl App {
 
                     let progress_bar = this.widgets.download_components.progress_bar.clone();
 
-                    let wine_version = this.widgets.download_components.get_wine_version().clone();
+                    let wine_version = this.widgets.download_components.get_wine_version();
                     let dxvk_version = this.widgets.download_components.get_dxvk_version().clone();
 
                     // Prepare wine downloader
@@ -262,7 +261,7 @@ impl App {
                             match Installer::new(&wine_version_copy.uri) {
                                 Ok(mut installer) => {
                                     if let Some(temp_folder) = config.launcher.temp {
-                                        installer.temp_folder = PathBuf::from(temp_folder);
+                                        installer.temp_folder = temp_folder;
                                     }
     
                                     installer.downloader
@@ -333,7 +332,7 @@ impl App {
                                             match Installer::new(&dxvk_version.uri) {
                                                 Ok(mut installer) => {
                                                     if let Some(temp_folder) = config.launcher.temp {
-                                                        installer.temp_folder = PathBuf::from(temp_folder);
+                                                        installer.temp_folder = temp_folder;
                                                     }
 
                                                     installer.downloader
@@ -393,9 +392,9 @@ impl App {
 
                                             // Remove .first-run file
                                             let launcher_dir = crate::lib::consts::launcher_dir().unwrap();
-    
-                                            std::fs::remove_file(format!("{}/.first-run", launcher_dir)).unwrap();
-    
+
+                                            std::fs::remove_file(launcher_dir.join(".first-run")).unwrap();
+
                                             // Show next page
                                             this.update(Actions::DownloadComponentsContinue).unwrap();
                                         },

@@ -37,12 +37,12 @@ impl List {
     }
 
     /// List only downloaded wine versions in some specific folder
-    pub fn list_downloaded<T: ToString>(folder: T) -> std::io::Result<Vec<Version>> {
+    pub fn list_downloaded<T: Into<PathBuf>>(folder: T) -> std::io::Result<Vec<Version>> {
         let mut downloaded = Vec::new();
 
         let list = Self::get();
 
-        for entry in std::fs::read_dir(folder.to_string())? {
+        for entry in std::fs::read_dir(folder.into())? {
             let name = entry?.file_name();
 
             for group in &list {

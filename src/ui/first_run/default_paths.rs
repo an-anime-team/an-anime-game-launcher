@@ -3,6 +3,8 @@ use adw::prelude::*;
 use gtk::glib;
 use gtk::glib::clone;
 
+use std::path::PathBuf;
+
 use wait_not_await::Await;
 
 use crate::lib::config;
@@ -65,13 +67,13 @@ impl Page {
         let config = config::get()?;
 
         // Add paths to subtitles
-        result.runners_folder.set_subtitle(&config.game.wine.builds);
-        result.dxvk_folder.set_subtitle(&config.game.dxvk.builds);
-        result.prefix_folder.set_subtitle(&config.game.wine.prefix);
-        result.game_folder.set_subtitle(&config.game.path);
-        result.patch_folder.set_subtitle(&config.patch.path);
+        result.runners_folder.set_subtitle(config.game.wine.builds.to_str().unwrap());
+        result.dxvk_folder.set_subtitle(config.game.dxvk.builds.to_str().unwrap());
+        result.prefix_folder.set_subtitle(config.game.wine.prefix.to_str().unwrap());
+        result.game_folder.set_subtitle(config.game.path.to_str().unwrap());
+        result.patch_folder.set_subtitle(config.patch.path.to_str().unwrap());
         result.temp_folder.set_subtitle(&match config.launcher.temp {
-            Some(temp) => temp,
+            Some(temp) => temp.to_string_lossy().to_string(),
             None => String::from("/tmp")
         });
 
@@ -107,12 +109,12 @@ impl Page {
     }
 
     pub fn update_config(&self, mut config: config::Config) -> config::Config {
-        config.game.wine.builds = self.runners_folder.subtitle().unwrap().to_string();
-        config.game.dxvk.builds = self.dxvk_folder.subtitle().unwrap().to_string();
-        config.game.wine.prefix = self.prefix_folder.subtitle().unwrap().to_string();
-        config.game.path        = self.game_folder.subtitle().unwrap().to_string();
-        config.patch.path       = self.patch_folder.subtitle().unwrap().to_string();
-        config.launcher.temp    = Some(self.temp_folder.subtitle().unwrap().to_string());
+        config.game.wine.builds = PathBuf::from(self.runners_folder.subtitle().unwrap().to_string());
+        config.game.dxvk.builds = PathBuf::from(self.dxvk_folder.subtitle().unwrap().to_string());
+        config.game.wine.prefix = PathBuf::from(self.prefix_folder.subtitle().unwrap().to_string());
+        config.game.path        = PathBuf::from(self.game_folder.subtitle().unwrap().to_string());
+        config.patch.path       = PathBuf::from(self.patch_folder.subtitle().unwrap().to_string());
+        config.launcher.temp    = Some(PathBuf::from(self.temp_folder.subtitle().unwrap().to_string()));
 
         config
     }

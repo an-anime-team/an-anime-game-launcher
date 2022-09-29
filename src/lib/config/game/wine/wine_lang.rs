@@ -26,10 +26,11 @@ impl Default for WineLang {
 
 impl From<&JsonValue> for WineLang {
     fn from(value: &JsonValue) -> Self {
-        serde_json::from_value(value.clone()).unwrap_or(Self::default())
+        serde_json::from_value(value.clone()).unwrap_or_default()
     }
 }
 
+#[allow(clippy::from_over_into)]
 impl Into<u32> for WineLang {
     fn into(self) -> u32 {
         for (i, lang) in Self::list().into_iter().enumerate() {
@@ -69,10 +70,6 @@ impl WineLang {
         model
     }
 
-    pub fn to_string(&self) -> String {
-        format!("{:?}", self)
-    }
-
     /// Get environment variables corresponding to used wine language
     pub fn get_env_vars(&self) -> HashMap<&str, &str> {
         HashMap::from([("LANG", match self {
@@ -89,5 +86,11 @@ impl WineLang {
             Self::Japanese   => "ja_JP.UTF8",
             Self::Korean     => "ko_KR.UTF8"
         })])
+    }
+}
+
+impl std::fmt::Display for WineLang {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str(&format!("{:?}", self))
     }
 }

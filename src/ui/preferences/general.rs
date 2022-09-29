@@ -152,6 +152,7 @@ pub enum Actions {
 }
 
 impl Actions {
+    #[allow(clippy::expect_fun_call, clippy::wrong_self_convention)]
     pub fn into_fn<T: gtk::glib::IsA<gtk::Widget>>(&self, app: &App) -> Box<dyn Fn(&T)> {
         Box::new(clone!(@strong self as action, @weak app => move |_| {
             app.update(action.clone()).expect(&format!("Failed to execute action {:?}", &action));
@@ -211,7 +212,7 @@ impl App {
         self.widgets.repair_game.connect_clicked(Actions::RepairGame.into_fn(&self));
 
         // Voiceover download/delete button event
-        for (i, row) in (&*self.widgets.voieover_components).into_iter().enumerate() {
+        for (i, row) in (*self.widgets.voieover_components).iter().enumerate() {
             row.button.connect_clicked(clone!(@weak self as this => move |_| {
                 this.update(Actions::VoiceoverPerformAction(Rc::new(i))).unwrap();
             }));
@@ -251,8 +252,8 @@ impl App {
         // Wine install/remove buttons
         let components = &*self.widgets.wine_components;
 
-        for (i, group) in components.into_iter().enumerate() {
-            for (j, component) in (&group.version_components).into_iter().enumerate() {
+        for (i, group) in components.iter().enumerate() {
+            for (j, component) in group.version_components.iter().enumerate() {
                 component.button.connect_clicked(Actions::WinePerformAction(Rc::new((i, j))).into_fn(&self));
             }
         }
@@ -273,8 +274,8 @@ impl App {
         // DXVK install/remove/apply buttons
         let components = &*self.widgets.dxvk_components;
 
-        for (i, group) in components.into_iter().enumerate() {
-            for (j, component) in (&group.version_components).into_iter().enumerate() {
+        for (i, group) in components.iter().enumerate() {
+            for (j, component) in group.version_components.iter().enumerate() {
                 component.button.connect_clicked(Actions::DxvkPerformAction(Rc::new((i, j))).into_fn(&self));
 
                 component.apply_button.connect_clicked(clone!(@strong component, @weak self as this => move |_| {
@@ -314,7 +315,7 @@ impl App {
 
             match action {
                 Actions::RepairGame => {
-                    let option = (&*this.app).take();
+                    let option = (*this.app).take();
                     this.app.set(option.clone());
 
                     let app = option.unwrap();
@@ -345,7 +346,7 @@ impl App {
                     }
 
                     else {
-                        let option = (&*this.app).take();
+                        let option = (*this.app).take();
                         this.app.set(option.clone());
 
                         let app = option.unwrap();
@@ -382,23 +383,21 @@ impl App {
                         this.update(Actions::UpdateDxvkComboRow).unwrap();
                     }
 
-                    else {
-                        if let Ok(awaiter) = component.download(&config.game.dxvk.builds) {
-                            awaiter.then(clone!(@strong this => move |_| {
-                                match component.apply(&config.game.dxvk.builds, &config.game.wine.prefix) {
-                                    Ok(output) => println!("{}", String::from_utf8_lossy(&output.stdout)),
-                                    Err(err) => {
-                                        this.update(Actions::Toast(Rc::new((
-                                            String::from("Failed to apply DXVK"), err.to_string()
-                                        )))).unwrap();
-                                    }
+                    else if let Ok(awaiter) = component.download(&config.game.dxvk.builds) {
+                        awaiter.then(clone!(@strong this => move |_| {
+                            match component.apply(&config.game.dxvk.builds, &config.game.wine.prefix) {
+                                Ok(output) => println!("{}", String::from_utf8_lossy(&output.stdout)),
+                                Err(err) => {
+                                    this.update(Actions::Toast(Rc::new((
+                                        String::from("Failed to apply DXVK"), err.to_string()
+                                    )))).unwrap();
                                 }
+                            }
 
-                                component.update_state(&config.game.dxvk.builds);
+                            component.update_state(&config.game.dxvk.builds);
 
-                                this.update(Actions::UpdateDxvkComboRow).unwrap();
-                            }));
-                        }
+                            this.update(Actions::UpdateDxvkComboRow).unwrap();
+                        }));
                     }
                 }
 
@@ -419,14 +418,12 @@ impl App {
                         this.update(Actions::UpdateWineComboRow).unwrap();
                     }
 
-                    else {
-                        if let Ok(awaiter) = component.download(&config.game.wine.builds) {
-                            awaiter.then(clone!(@strong this => move |_| {
-                                component.update_state(&config.game.wine.builds);
+                    else if let Ok(awaiter) = component.download(&config.game.wine.builds) {
+                        awaiter.then(clone!(@strong this => move |_| {
+                            component.update_state(&config.game.wine.builds);
 
-                                this.update(Actions::UpdateWineComboRow).unwrap();
-                            }));
-                        }
+                            this.update(Actions::UpdateWineComboRow).unwrap();
+                        }));
                     }
                 }
 
@@ -518,7 +515,7 @@ impl App {
 
                     let mut selected = 0;
 
-                    for (i, version) in (&list).into_iter().enumerate() {
+                    for (i, version) in list.iter().enumerate() {
                         model.append(version.title.as_str());
 
                         if let Some(curr) = &config.game.wine.selected {
@@ -708,7 +705,7 @@ impl App {
 
 impl Toast for App {
     fn get_toast_widgets(&self) -> (adw::ApplicationWindow, adw::ToastOverlay) {
-        let app = (&*self.app).take();
+        let app = (*self.app).take();
         self.app.set(app.clone());
 
         app.unwrap().get_toast_widgets()

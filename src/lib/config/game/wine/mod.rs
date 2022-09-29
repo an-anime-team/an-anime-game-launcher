@@ -1,3 +1,5 @@
+use std::path::PathBuf;
+
 use serde::{Serialize, Deserialize};
 use serde_json::Value as JsonValue;
 
@@ -18,8 +20,8 @@ use prelude::*;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Wine {
-    pub prefix: String,
-    pub builds: String,
+    pub prefix: PathBuf,
+    pub builds: PathBuf,
     pub selected: Option<String>,
     pub sync: WineSync,
     pub language: WineLang,
@@ -32,8 +34,8 @@ impl Default for Wine {
         let launcher_dir = launcher_dir().expect("Failed to get launcher dir");
 
         Self {
-            prefix: format!("{launcher_dir}/game"),
-            builds: format!("{launcher_dir}/runners"),
+            prefix: launcher_dir.join("game"),
+            builds: launcher_dir.join("runners"),
             selected: None,
             sync: WineSync::default(),
             language: WineLang::default(),
@@ -49,12 +51,18 @@ impl From<&JsonValue> for Wine {
 
         Self {
             prefix: match value.get("prefix") {
-                Some(value) => value.as_str().unwrap_or(&default.prefix).to_string(),
+                Some(value) => match value.as_str() {
+                    Some(value) => PathBuf::from(value),
+                    None => default.prefix
+                },
                 None => default.prefix
             },
 
             builds: match value.get("builds") {
-                Some(value) => value.as_str().unwrap_or(&default.builds).to_string(),
+                Some(value) => match value.as_str() {
+                    Some(value) => PathBuf::from(value),
+                    None => default.builds
+                },
                 None => default.builds
             },
 

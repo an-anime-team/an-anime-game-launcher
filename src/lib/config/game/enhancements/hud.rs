@@ -20,7 +20,7 @@ impl Default for HUD {
 
 impl From<&JsonValue> for HUD {
     fn from(value: &JsonValue) -> Self {
-        serde_json::from_value(value.clone()).unwrap_or(Self::default())
+        serde_json::from_value(value.clone()).unwrap_or_default()
     }
 }
 
@@ -37,6 +37,7 @@ impl TryFrom<u32> for HUD {
     }
 }
 
+#[allow(clippy::from_over_into)]
 impl Into<u32> for HUD {
     fn into(self) -> u32 {
         match self {

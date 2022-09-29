@@ -91,7 +91,7 @@ impl PreferencesStack {
 
 impl Toast for PreferencesStack {
     fn get_toast_widgets(&self) -> (adw::ApplicationWindow, adw::ToastOverlay) {
-        let app = (&*self.app).take();
+        let app = (*self.app).take();
         self.app.set(app.clone());
 
         app.unwrap().get_toast_widgets()

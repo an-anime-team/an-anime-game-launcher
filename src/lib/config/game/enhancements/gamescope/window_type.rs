@@ -15,6 +15,6 @@ impl Default for WindowType {
 
 impl From<&JsonValue> for WindowType {
     fn from(value: &JsonValue) -> Self {
-        serde_json::from_value(value.clone()).unwrap_or(Self::default())
+        serde_json::from_value(value.clone()).unwrap_or_default()
     }
 }

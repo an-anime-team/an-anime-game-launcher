@@ -64,10 +64,12 @@ impl Resolution {
             Self::Custom(w, h) => (*w, *h)
         }
     }
+}
 
-    pub fn to_string(&self) -> String {
+impl std::fmt::Display for Resolution {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let (w, h) = self.get_pair();
 
-        format!("{w}x{h}")
+        f.write_str(&format!("{w}x{h}"))
     }
 }

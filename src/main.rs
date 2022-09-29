@@ -69,9 +69,9 @@ fn main() {
         // Create default launcher folder if needed
         let launcher_dir = lib::consts::launcher_dir().expect("Failed to get launcher dir");
 
-        if !Path::new(&launcher_dir).exists() || Path::new(&format!("{}/.first-run", launcher_dir)).exists() {
+        if !launcher_dir.exists() || launcher_dir.join(".first-run").exists() {
             fs::create_dir_all(&launcher_dir).expect("Failed to create default launcher dir");
-            fs::write(format!("{}/.first-run", launcher_dir), "").expect("Failed to create .first-run file");
+            fs::write(launcher_dir.join(".first-run"), "").expect("Failed to create .first-run file");
 
             let first_run = FirstRunApp::new(app).expect("Failed to init FirstRunApp");
 

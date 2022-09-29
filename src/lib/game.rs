@@ -110,13 +110,13 @@ pub fn run() -> anyhow::Result<()> {
             return Err(anyhow::anyhow!("Failed to update FPS unlocker config: {err}"));
         }
 
-        let bat_path = format!("{}/fpsunlocker.bat", config.game.path);
-        let original_bat_path = format!("{}/launcher.bat", config.game.path);
+        let bat_path = config.game.path.join("fpsunlocker.bat");
+        let original_bat_path = config.game.path.join("launcher.bat");
 
         // Generate fpsunlocker.bat from launcher.bat
         std::fs::write(bat_path, std::fs::read_to_string(original_bat_path)?
-            .replace("start GenshinImpact.exe %*", &format!("start GenshinImpact.exe %*\n\nZ:\ncd \"{}\"\nstart unlocker.exe", unlocker.dir()))
-            .replace("start YuanShen.exe %*", &format!("start YuanShen.exe %*\n\nZ:\ncd \"{}\"\nstart unlocker.exe", unlocker.dir())))?;
+            .replace("start GenshinImpact.exe %*", &format!("start GenshinImpact.exe %*\n\nZ:\ncd \"{}\"\nstart unlocker.exe", unlocker.dir().to_string_lossy()))
+            .replace("start YuanShen.exe %*", &format!("start YuanShen.exe %*\n\nZ:\ncd \"{}\"\nstart unlocker.exe", unlocker.dir().to_string_lossy())))?;
     }
 
     // Prepare bash -c '<command>'
@@ -127,7 +127,7 @@ pub fn run() -> anyhow::Result<()> {
         bash_chain += "gamemoderun ";
     }
 
-    bash_chain += &format!("'{wine_executable}' ");
+    bash_chain += &format!("'{}' ", wine_executable.to_string_lossy());
 
     if let Some(virtual_desktop) = config.game.wine.virtual_desktop.get_command() {
         bash_chain += &format!("{virtual_desktop} ");

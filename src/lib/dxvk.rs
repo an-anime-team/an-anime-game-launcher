@@ -33,12 +33,12 @@ impl List {
     }
 
     /// List only downloaded DXVK versions in some specific folder
-    pub fn list_downloaded<T: ToString>(folder: T) -> std::io::Result<Vec<Version>> {
+    pub fn list_downloaded<T: Into<PathBuf>>(folder: T) -> std::io::Result<Vec<Version>> {
         let mut downloaded = Vec::new();
 
         let list = Self::get();
 
-        for entry in std::fs::read_dir(folder.to_string())? {
+        for entry in std::fs::read_dir(folder.into())? {
             let name = entry?.file_name();
 
             for group in &list {
@@ -76,32 +76,34 @@ impl Version {
         Ok(List::get()[0].versions[0].clone())
     }
 
-    pub fn is_downloaded_in<T: ToString>(&self, folder: T) -> bool {
-        std::path::Path::new(&format!("{}/{}", folder.to_string(), self.name)).exists()
+    pub fn is_downloaded_in<T: Into<PathBuf>>(&self, folder: T) -> bool {
+        folder.into().join(&self.name).exists()
     }
 
-    pub fn apply<T: ToString>(&self, dxvks_folder: T, prefix_path: T) -> anyhow::Result<Output> {
-        let apply_path = format!("{}/{}/setup_dxvk.sh", dxvks_folder.to_string(), self.name);
+    pub fn apply<T: Into<PathBuf>>(&self, dxvks_folder: T, prefix_path: T) -> anyhow::Result<Output> {
+        let apply_path = dxvks_folder.into().join(&self.name).join("setup_dxvk.sh");
         let config = config::get()?;
 
         let (wine_path, wineserver_path, wineboot_path) = match config.try_get_selected_wine_info() {
             Some(wine) => {
-                let wine_path = format!("{}/{}/{}", &config.game.wine.builds, wine.name, wine.files.wine64);
-                let wineserver_path = format!("{}/{}/{}", &config.game.wine.builds, wine.name, wine.files.wineserver);
-                let wineboot_path = format!("{}/{}/{}", &config.game.wine.builds, wine.name, wine.files.wineboot);
+                let wine_folder = config.game.wine.builds.join(wine.name);
+
+                let wine_path = wine_folder.join(wine.files.wine64);
+                let wineserver_path = wine_folder.join(wine.files.wineserver);
+                let wineboot_path = wine_folder.join(wine.files.wineboot);
 
                 (wine_path, wineserver_path, wineboot_path)
             },
-            None => (String::from("wine64"), String::from("wineserver"), String::from("wineboot"))
+            None => (PathBuf::from("wine64"), PathBuf::from("wineserver"), PathBuf::from("wineboot"))
         };
 
         let result = Dxvk::install(
-            PathBuf::from(apply_path),
-            PathBuf::from(prefix_path.to_string()),
-            PathBuf::from(&wine_path),
-            PathBuf::from(wine_path),
-            PathBuf::from(wineboot_path),
-            PathBuf::from(wineserver_path)
+            apply_path,
+            prefix_path.into(),
+            wine_path.clone(),
+            wine_path,
+            wineboot_path,
+            wineserver_path
         );
 
         match result {

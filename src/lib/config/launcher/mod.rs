@@ -1,3 +1,5 @@
+use std::path::PathBuf;
+
 use serde::{Serialize, Deserialize};
 use serde_json::Value as JsonValue;
 
@@ -41,11 +43,11 @@ impl Default for GameEdition {
     }
 }
 
-impl Into<CoreGameEdition> for GameEdition {
-    fn into(self) -> CoreGameEdition {
-        match self {
-            Self::Global => CoreGameEdition::Global,
-            Self::China  => CoreGameEdition::China
+impl From<GameEdition> for CoreGameEdition {
+    fn from(edition: GameEdition) -> Self {
+        match edition {
+            GameEdition::Global => CoreGameEdition::Global,
+            GameEdition::China  => CoreGameEdition::China
         }
     }
 }
@@ -62,7 +64,7 @@ impl From<CoreGameEdition> for GameEdition {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Launcher {
     pub language: String,
-    pub temp: Option<String>,
+    pub temp: Option<PathBuf>,
     pub speed_limit: u64,
     pub repairer: Repairer,
     pub edition: GameEdition
@@ -96,7 +98,7 @@ impl From<&JsonValue> for Launcher {
                         None
                     } else {
                         match value.as_str() {
-                            Some(value) => Some(value.to_string()),
+                            Some(value) => Some(PathBuf::from(value)),
                             None => default.temp
                         }
                     }

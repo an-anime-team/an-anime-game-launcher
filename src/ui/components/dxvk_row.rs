@@ -1,6 +1,8 @@
 use gtk::prelude::*;
 use adw::prelude::*;
 
+use std::path::PathBuf;
+
 use crate::lib::dxvk::Version;
 use crate::ui::traits::download_component::*;
 
@@ -57,7 +59,7 @@ impl DxvkRow {
         }
     }
 
-    pub fn update_state<T: ToString>(&self, dxvks_folder: T) {
+    pub fn update_state<T: Into<PathBuf>>(&self, dxvks_folder: T) {
         if self.is_downloaded(dxvks_folder) {
             self.button.set_icon_name("user-trash-symbolic");
 
@@ -71,7 +73,7 @@ impl DxvkRow {
         }
     }
 
-    pub fn apply<T: ToString>(&self, dxvks_folder: T, prefix_path: T) -> anyhow::Result<std::process::Output> {
+    pub fn apply<T: Into<PathBuf>>(&self, dxvks_folder: T, prefix_path: T) -> anyhow::Result<std::process::Output> {
         self.button.set_sensitive(false);
         self.apply_button.set_sensitive(false);
 
@@ -85,8 +87,8 @@ impl DxvkRow {
 }
 
 impl DownloadComponent for DxvkRow {
-    fn get_component_path<T: ToString>(&self, installation_path: T) -> String {
-        format!("{}/{}", installation_path.to_string(), self.version.name)
+    fn get_component_path<T: Into<PathBuf>>(&self, installation_path: T) -> PathBuf {
+        installation_path.into().join(&self.version.name)
     }
 
     fn get_downloading_widgets(&self) -> (gtk::ProgressBar, gtk::Button) {

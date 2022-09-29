@@ -1,10 +1,12 @@
 use std::fs::File;
 use std::io::Read;
-use std::path::Path;
+use std::path::{Path, PathBuf};
 use std::io::Write;
 
 use serde::{Serialize, Deserialize};
 use serde_json::Value as JsonValue;
+
+use wincompatlib::dxvk::Dxvk;
 
 use crate::lib;
 use super::consts::*;
@@ -107,7 +109,7 @@ pub fn update_raw(config: Config) -> anyhow::Result<()> {
 
             match serde_json::to_string_pretty(&config) {
                 Ok(json) => {
-                    file.write_all(&mut json.as_bytes())?;
+                    file.write_all(json.as_bytes())?;
 
                     Ok(())
                 },
@@ -141,8 +143,7 @@ impl Config {
             Some(selected) => {
                 WineList::get().iter()
                     .flat_map(|group| group.versions.clone())
-                    .filter(|version| version.name.eq(selected))
-                    .next()
+                    .find(|version| version.name.eq(selected))
             },
             None => None
         }
@@ -153,12 +154,12 @@ impl Config {
     /// Returns `Some("wine64")` if:
     /// 1) `game.wine.selected = None`
     /// 2) wine64 installed and available in system
-    pub fn try_get_wine_executable(&self) -> Option<String> {
+    pub fn try_get_wine_executable(&self) -> Option<PathBuf> {
         match self.try_get_selected_wine_info() {
-            Some(selected) => Some(format!("{}/{}/{}", &self.game.wine.builds, selected.name, selected.files.wine64)),
+            Some(selected) => Some(self.game.wine.builds.join(selected.name).join(selected.files.wine64)),
             None => {
                 if lib::is_available("wine64") {
-                    Some(String::from("wine64"))
+                    Some(PathBuf::from("wine64"))
                 } else {
                     None
                 }
@@ -173,34 +174,14 @@ impl Config {
     /// 2) `Ok(None)` if version wasn't found, so too old or dxvk is not applied
     /// 3) `Err(..)` if failed to get applied dxvk version, likely because wrong prefix path specified
     pub fn try_get_selected_dxvk_info(&self) -> std::io::Result<Option<DxvkVersion>> {
-        let (bytes, from, to) = match std::fs::read(format!("{}/drive_c/windows/system32/dxgi.dll", &self.game.wine.prefix)) {
-            Ok(bytes) => (bytes, 1600000, 1700000),
-            Err(_) => {
-                let bytes = std::fs::read(format!("{}/drive_c/windows/system32/d3d11.dll", &self.game.wine.prefix))?;
-
-                (bytes, 2400000, 2500000)
-            }
-        };
-
-        let bytes = if bytes.len() > to {
-            bytes[from..to].to_vec()
-        } else {
-            return Ok(None);
-        };
-
-        Ok({
-            DxvkList::get()
-                .iter()
-                .flat_map(|group| group.versions.clone())
-                .filter(|version| {
-                    let version = format!("\0v{}\0", &version.version);
-                    let version = version.as_bytes();
-
-                    bytes.windows(version.len())
-                        .position(|window| window == version)
-                        .is_some()
-                })
-                .next()
+        Ok(match Dxvk::get_version(&self.game.wine.prefix)? {
+            Some(version) => {
+                DxvkList::get()
+                    .iter()
+                    .flat_map(|group| group.versions.clone())
+                    .find(move |dxvk| dxvk.version == version)
+            },
+            None => None
         })
     }
 }

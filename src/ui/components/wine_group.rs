@@ -1,5 +1,7 @@
 use adw::prelude::*;
 
+use std::path::PathBuf;
+
 use crate::lib::wine::Group;
 use super::wine_row::WineRow;
 
@@ -35,9 +37,11 @@ impl WineGroup {
         }
     }
 
-    pub fn update_states<T: ToString>(&self, runners_folder: T) {
+    pub fn update_states<T: Into<PathBuf>>(&self, runners_folder: T) {
+        let runners_folder = runners_folder.into();
+
         for component in &self.version_components {
-            component.update_state(runners_folder.to_string());
+            component.update_state(&runners_folder);
         }
     }
 }

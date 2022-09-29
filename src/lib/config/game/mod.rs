@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+use std::path::PathBuf;
 
 use serde::{Serialize, Deserialize};
 use serde_json::Value as JsonValue;
@@ -21,7 +22,7 @@ use prelude::*;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Game {
-    pub path: String,
+    pub path: PathBuf,
     pub voices: Vec<String>,
     pub wine: prelude::Wine,
     pub dxvk: prelude::Dxvk,
@@ -35,7 +36,7 @@ impl Default for Game {
         let launcher_dir = launcher_dir().expect("Failed to get launcher dir");
 
         Self {
-            path: format!("{launcher_dir}/game/drive_c/Program Files/Genshin Impact"),
+            path: launcher_dir.join("game/drive_c/Program Files/Genshin Impact"),
             voices: vec![
                 String::from("en-us")
             ],
@@ -54,7 +55,10 @@ impl From<&JsonValue> for Game {
 
         Self {
             path: match value.get("path") {
-                Some(value) => value.as_str().unwrap_or(&default.path).to_string(),
+                Some(value) => match value.as_str() {
+                    Some(value) => PathBuf::from(value),
+                    None => default.path
+                },
                 None => default.path
             },
 

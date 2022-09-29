@@ -1,3 +1,5 @@
+use std::path::PathBuf;
+
 use anime_game_core::installer::downloader::Downloader;
 
 use crate::lib::config::game::enhancements::fps_unlocker::config::Config as FpsUnlockerConfig;
@@ -11,7 +13,7 @@ const LATEST_INFO: (&str, &str) = (
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct FpsUnlocker {
-    dir: String
+    dir: PathBuf
 }
 
 impl FpsUnlocker {
@@ -21,28 +23,32 @@ impl FpsUnlocker {
     /// - `Err(..)` if failed to read `unlocker.exe` file
     /// - `Ok(None)` if version is not latest
     /// - `Ok(..)` if version is latest
-    pub fn from_dir<T: ToString>(dir: T) -> anyhow::Result<Option<Self>> {
-        let hash = format!("{:x}", md5::compute(std::fs::read(format!("{}/unlocker.exe", dir.to_string()))?));
+    pub fn from_dir<T: Into<PathBuf>>(dir: T) -> anyhow::Result<Option<Self>> {
+        let dir = dir.into();
 
-        if hash == LATEST_INFO.0 {
-            Ok(Some(Self { dir: dir.to_string() }))
+        let hash = format!("{:x}", md5::compute(std::fs::read(dir.join("unlocker.exe"))?));
+
+        Ok(if hash == LATEST_INFO.0 {
+            Some(Self { dir })
         } else {
-            Ok(None)
-        }
+            None
+        })
     }
 
     /// Download FPS unlocker to specified directory
-    pub fn download<T: ToString>(dir: T) -> anyhow::Result<Self> {
+    pub fn download<T: Into<PathBuf>>(dir: T) -> anyhow::Result<Self> {
         let mut downloader = Downloader::new(LATEST_INFO.1)?;
 
+        let dir = dir.into();
+
         // Create FPS unlocker folder if needed
-        if !std::path::Path::new(&dir.to_string()).exists() {
-            std::fs::create_dir_all(dir.to_string())?;
+        if !dir.exists() {
+            std::fs::create_dir_all(&dir)?;
         }
 
-        match downloader.download_to(format!("{}/unlocker.exe", dir.to_string()), |_, _| {}) {
+        match downloader.download_to(dir.join("unlocker.exe"), |_, _| {}) {
             Ok(_) => Ok(Self {
-                dir: dir.to_string()
+                dir
             }),
             Err(err) => {
                 let err: std::io::Error = err.into();
@@ -52,16 +58,16 @@ impl FpsUnlocker {
         }
     }
 
-    pub fn get_binary(&self) -> String {
+    pub fn get_binary(&self) -> PathBuf {
         Self::get_binary_in(&self.dir)
     }
 
-    pub fn get_binary_in<T: ToString>(dir: T) -> String {
-        format!("{}/unlocker.exe", dir.to_string())
+    pub fn get_binary_in<T: Into<PathBuf>>(dir: T) -> PathBuf {
+        dir.into().join("unlocker.exe")
     }
 
-    pub fn dir(&self) -> &str {
-        self.dir.as_str()
+    pub fn dir(&self) -> &PathBuf {
+        &self.dir
     }
 
     /// Generate and save FPS unlocker config file to the game's directory
@@ -69,7 +75,7 @@ impl FpsUnlocker {
         let config = config_schema::ConfigSchema::from_config(config);
 
         Ok(std::fs::write(
-            format!("{}/fps_config.json", self.dir),
+            self.dir.join("fps_config.json"),
             config.json()?
         )?)
     }

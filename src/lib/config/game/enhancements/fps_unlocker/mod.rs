@@ -1,3 +1,5 @@
+use std::path::PathBuf;
+
 use serde::{Serialize, Deserialize};
 use serde_json::Value as JsonValue;
 
@@ -15,7 +17,7 @@ use prelude::*;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct FpsUnlocker {
-    pub path: String,
+    pub path: PathBuf,
     pub enabled: bool,
     pub config: Config
 }
@@ -25,7 +27,7 @@ impl Default for FpsUnlocker {
         let launcher_dir = launcher_dir().expect("Failed to get launcher dir");
 
         Self {
-            path: format!("{launcher_dir}/fps-unlocker"),
+            path: launcher_dir.join("fps-unlocker"),
             enabled: false,
             config: Config::default()
         }
@@ -38,7 +40,10 @@ impl From<&JsonValue> for FpsUnlocker {
 
         Self {
             path: match value.get("path") {
-                Some(value) => value.as_str().unwrap_or(&default.path).to_string(),
+                Some(value) => match value.as_str() {
+                    Some(value) => PathBuf::from(value),
+                    None => default.path
+                },
                 None => default.path
             },
 

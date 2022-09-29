@@ -146,34 +146,32 @@ impl App {
                 Actions::Add(strs) => {
                     let (name, value) = &*strs;
 
-                    if !name.is_empty() && !value.is_empty() {
-                        if !values.rows.contains_key(name) {
-                            config.game.environment.insert(name.clone(), value.clone());
+                    if !name.is_empty() && !value.is_empty() && !values.rows.contains_key(name) {
+                        config.game.environment.insert(name.clone(), value.clone());
 
-                            let row = adw::ActionRow::new();
+                        let row = adw::ActionRow::new();
 
-                            row.set_title(name);
-                            row.set_subtitle(value);
+                        row.set_title(name);
+                        row.set_subtitle(value);
 
-                            let button = gtk::Button::new();
+                        let button = gtk::Button::new();
 
-                            button.set_icon_name("user-trash-symbolic");
-                            button.set_valign(gtk::Align::Center);
-                            button.add_css_class("flat");
+                        button.set_icon_name("user-trash-symbolic");
+                        button.set_valign(gtk::Align::Center);
+                        button.add_css_class("flat");
 
-                            button.connect_clicked(clone!(@weak this, @strong name => move |_| {
-                                this.update(Actions::Delete(Rc::new(name.clone()))).unwrap();
-                            }));
+                        button.connect_clicked(clone!(@weak this, @strong name => move |_| {
+                            this.update(Actions::Delete(Rc::new(name.clone()))).unwrap();
+                        }));
 
-                            row.add_suffix(&button);
+                        row.add_suffix(&button);
 
-                            this.widgets.variables.add(&row);
+                        this.widgets.variables.add(&row);
 
-                            values.rows.insert(name.clone(), row);
+                        values.rows.insert(name.clone(), row);
 
-                            this.widgets.name.set_text("");
-                            this.widgets.value.set_text("");
-                        }
+                        this.widgets.name.set_text("");
+                        this.widgets.value.set_text("");
                     }
                 }
 
@@ -230,7 +228,7 @@ impl App {
         status_page.set_description(Some("Loading environment..."));
 
         // Set game command
-        self.widgets.command.set_text(&config.game.command.unwrap_or(String::new()));
+        self.widgets.command.set_text(&config.game.command.unwrap_or_default());
 
         // Add environment variables
         for (name, value) in config.game.environment {

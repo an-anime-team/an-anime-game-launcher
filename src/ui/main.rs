@@ -7,7 +7,7 @@ use std::rc::Rc;
 use std::cell::Cell;
 use std::io::Error;
 use std::process::{Command, Stdio};
-use std::path::PathBuf;
+use std::path::Path;
 
 use wait_not_await::Await;
 
@@ -68,7 +68,7 @@ impl AppWidgets {
 
         let result = Self {
             window: window.clone(),
-            toast_overlay: toast_overlay.clone(),
+            toast_overlay,
 
             menu: get_object(&builder, "menu")?,
             about: get_object(&builder, "about")?,
@@ -127,6 +127,7 @@ impl AppWidgets {
 
         let curl_info = anime_game_core::curl_sys::Version::get();
 
+        #[allow(clippy::or_fun_call)]
         result.about.set_debug_info(&[
             format!("Anime Game core library version: {}", anime_game_core::VERSION),
             format!("Curl version: {}", curl_info.version()),
@@ -162,6 +163,7 @@ pub enum Actions {
 }
 
 impl Actions {
+    #[allow(clippy::expect_fun_call, clippy::wrong_self_convention)]
     pub fn into_fn<T: gtk::glib::IsA<gtk::Widget>>(&self, app: &App) -> Box<dyn Fn(&T)> {
         Box::new(clone!(@strong self as action, @weak app => move |_| {
             app.update(action.clone()).expect(&format!("Failed to execute action {:?}", &action));
@@ -443,7 +445,7 @@ impl App {
                                                         match Installer::new(wine.uri) {
                                                             Ok(mut installer) => {
                                                                 if let Some(temp_folder) = config.launcher.temp {
-                                                                    installer.temp_folder = PathBuf::from(temp_folder);
+                                                                    installer.temp_folder = temp_folder;
                                                                 }
 
                                                                 installer.downloader
@@ -750,7 +752,7 @@ impl App {
                                             }).unwrap();
                                         }
 
-                                        if broken.len() > 0 {
+                                        if !broken.is_empty() {
                                             this.update(Actions::UpdateProgress {
                                                 fraction: Rc::new(0.0),
                                                 title: Rc::new(String::from("Repairing files: 0%"))
@@ -771,7 +773,7 @@ impl App {
 
                                             println!("Patch status: {}", is_patch_applied);
 
-                                            fn should_ignore(path: &PathBuf) -> bool {
+                                            fn should_ignore(path: &Path) -> bool {
                                                 for part in ["UnityPlayer.dll", "xlua.dll", "crashreport.exe", "upload_crash.exe", "vulkan-1.dll"] {
                                                     if path.ends_with(part) {
                                                         return true;
@@ -890,7 +892,7 @@ impl App {
                 // Calculate size of the update
                 let size =
                     game.size().unwrap_or((0, 0)).0 +
-                    voices.into_iter().fold(0, |acc, voice| acc + voice.size().unwrap_or((0, 0)).0);
+                    voices.iter().fold(0, |acc, voice| acc + voice.size().unwrap_or((0, 0)).0);
 
                 // Update tooltip
                 self.widgets.predownload_game.set_tooltip_text(Some(&format!("Pre-download {} update ({})", game.latest(), prettify_bytes(size))));
@@ -902,12 +904,10 @@ impl App {
 
                 if let Ok(config) = config::get() {
                     if let Some(temp) = config.launcher.temp {
-                        let tmp = PathBuf::from(temp);
-
                         // If all the files were downloaded
                         let downloaded =
-                            tmp.join(game.file_name().unwrap()).exists() &&
-                            voices.into_iter().fold(true, move |acc, voice| acc && tmp.join(voice.file_name().unwrap()).exists());
+                            temp.join(game.file_name().unwrap()).exists() &&
+                            voices.iter().all(|voice| temp.join(voice.file_name().unwrap()).exists());
 
                         if downloaded {
                             self.widgets.predownload_game.remove_css_class("warning");

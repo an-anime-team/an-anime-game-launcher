@@ -17,15 +17,15 @@ pub enum DownloadingResult {
 }
 
 pub trait DownloadComponent {
-    fn get_component_path<T: ToString>(&self, installation_path: T) -> String;
+    fn get_component_path<T: Into<PathBuf>>(&self, installation_path: T) -> PathBuf;
     fn get_downloading_widgets(&self) -> (gtk::ProgressBar, gtk::Button);
     fn get_download_uri(&self) -> String;
 
-    fn is_downloaded<T: ToString>(&self, installation_path: T) -> bool {
+    fn is_downloaded<T: Into<PathBuf>>(&self, installation_path: T) -> bool {
         Path::new(&self.get_component_path(installation_path)).exists()
     }
 
-    fn download<T: ToString>(&self, installation_path: T) -> anyhow::Result<Await<DownloadingResult>> {
+    fn download<T: Into<PathBuf>>(&self, installation_path: T) -> anyhow::Result<Await<DownloadingResult>> {
         let (sender, receiver) = glib::MainContext::channel::<InstallerUpdate>(glib::PRIORITY_DEFAULT);
         let (progress_bar, button) = self.get_downloading_widgets();
 
@@ -66,11 +66,11 @@ pub trait DownloadComponent {
                 }
 
                 InstallerUpdate::DownloadingError(err) => {
-                    downl_send.send(DownloadingResult::DownloadingError(err.into())).unwrap();
+                    downl_send.send(DownloadingResult::DownloadingError(err)).unwrap();
                 }
 
                 InstallerUpdate::UnpackingError(err) => {
-                    downl_send.send(DownloadingResult::UnpackingError(err.to_string())).unwrap();
+                    downl_send.send(DownloadingResult::UnpackingError(err)).unwrap();
                 }
             }
 
@@ -83,16 +83,16 @@ pub trait DownloadComponent {
         let mut installer = Installer::new(self.get_download_uri())?;
 
         if let Some(temp_folder) = config.launcher.temp {
-            installer.temp_folder = PathBuf::from(temp_folder);
+            installer.temp_folder = temp_folder;
         }
 
         installer.downloader
             .set_downloading_speed(config.launcher.speed_limit)
             .expect("Failed to set downloading speed limit");
 
-        let installation_path = installation_path.to_string();
-
         send.send(installer).unwrap();
+
+        let installation_path = installation_path.into();
 
         std::thread::spawn(move || {
             let mut installer = recv.recv().unwrap();
@@ -107,7 +107,7 @@ pub trait DownloadComponent {
         }))
     }
 
-    fn delete<T: ToString>(&self, installation_path: T) -> std::io::Result<()> {
+    fn delete<T: Into<PathBuf>>(&self, installation_path: T) -> std::io::Result<()> {
         std::fs::remove_dir_all(self.get_component_path(installation_path))
     }
 }
