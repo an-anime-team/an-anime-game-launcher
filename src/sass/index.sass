@@ -133,23 +133,36 @@
 .downloader-panel
     user-select: none
 
+    position: absolute
+
+    bottom: 15px
+    left: 15px
+
+    width: 800px
+    height: 90px
+
+    border: 1px solid rgba(0, 0, 0, .2)
+    border-radius: 12px
+
+    background-color: rgba(0, 0, 0, .4)
+
     .downloader-label
         position: absolute
 
-        left: 48px
-        bottom: 100px
+        left: 23px
+        bottom: 57px
 
         color: white
         font-size: 18px
 
         #downloaded
-            max-width: 720px
+            max-width: 758px
             display: inline-block
             word-break: break-all
 
         #speed, #eta
             margin-left: 8px
-            color: #cccccc
+            color: #FFFFFF
             font-weight: 100
 
     .progress-bar
@@ -157,14 +170,14 @@
 
         padding: 0
 
-        left: 48px
-        bottom: 52px
+        left: 21px
+        bottom: 15px
 
-        width: 720px
+        width: 758px
         height: 36px
 
-        background-color: rgba(0, 0, 0, .1)
-        border: 1px solid rgba(0, 0, 0, .2)
+        background-color: rgba(0, 0, 0, .3)
+        border: 1px solid rgba(0, 0, 0, .4)
         border-radius: 8px
 
         .progress
