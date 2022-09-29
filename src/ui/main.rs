@@ -773,7 +773,7 @@ impl App {
 
                                             fn should_ignore(path: &PathBuf) -> bool {
                                                 for part in ["UnityPlayer.dll", "xlua.dll", "crashreport.exe", "upload_crash.exe", "vulkan-1.dll"] {
-                                                    if path.to_string_lossy().contains(part) {
+                                                    if path.ends_with(part) {
                                                         return true;
                                                     }
                                                 }
@@ -783,6 +783,8 @@ impl App {
 
                                             for (i, file) in broken.into_iter().enumerate() {
                                                 if !is_patch_applied || !should_ignore(&file.path) {
+                                                    println!("Repairing: {:?}", &file.path);
+
                                                     if let Err(err) = file.repair(&config.game.path) {
                                                         let err: Error = err.into();
 
