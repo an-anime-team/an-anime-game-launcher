@@ -1,5 +1,6 @@
 import type Launcher from '../../Launcher';
 import type { PatchInfo } from '../../types/Patch';
+import type { VoiceLang } from '../../types/Voice';
 
 import { fs, Downloader, fetch } from '../../../empathize';
 import { DebugThread } from '@empathize/framework/dist/meta/Debug';
@@ -11,17 +12,15 @@ import Voice from '../../Voice';
 import Game from '../../Game';
 import md5 from '../../core/md5';
 
-declare const Neutralino;
-
-type FileInfo = {
+export type FileInfo = {
     remoteName: string;
     md5: string;
     fileSize: number;
 };
 
-class FilesVerifier
+export class FilesVerifier
 {
-    protected files: string[];
+    protected files: FileInfo[];
     protected gameDir: string;
     protected patch: PatchInfo;
     protected launcher: Launcher;
@@ -39,10 +38,16 @@ class FilesVerifier
 
     protected ignoringFiles = [
         'crashreport.exe',
-        'upload_crash.exe'
+        'upload_crash.exe',
+        'vulkan-1.dll'
     ];
 
-    public constructor(files: string[], gameDir: string, patch: PatchInfo, launcher: Launcher, debugThread: DebugThread)
+    protected ignoringPatchedFiles = [
+        'UnityPlayer.dll',
+        'xlua.dll'
+    ];
+
+    public constructor(files: FileInfo[], gameDir: string, patch: PatchInfo, launcher: Launcher, debugThread: DebugThread)
     {
         this.files = files;
         this.gameDir = gameDir;
@@ -73,81 +78,87 @@ class FilesVerifier
         this.process();
     }
 
-    protected async process()
+    /**
+     * Returns same as `finish` event
+     */
+    public process(): Promise<FileInfo[]>
     {
-        const file = this.files[this.current++];
+        return new Promise(async (resolve) => {
+            const file = this.files[this.current++];
 
-        try
-        {
-            // {"remoteName": "AnAnimeGame_Data/StreamingAssets/AssetBundles/blocks/00/16567284.blk", "md5": "79ab71cfff894edeaaef025ef1152b77", "fileSize": 3232361}
-            const fileCheckInfo: FileInfo = JSON.parse(file);
-
-            let skipping = false;
-
-            for (const ignoringFile of this.ignoringFiles)
-                if (fileCheckInfo.remoteName.includes(ignoringFile))
-                {
-                    skipping = true;
-
-                    break;
-                }
-
-            if (!skipping)
+            try
             {
-                // If the file doesn't exist - we should download it
-                if (!await fs.exists(`${this.gameDir}/${fileCheckInfo.remoteName}`))
-                {
-                    this.mismatches.push(fileCheckInfo);
+                let skipping = false;
 
-                    this.debugThread.log({
-                        message: [
-                            'File is missing',
-                            `[path] ${fileCheckInfo.remoteName}`,
-                            `[hash] ${fileCheckInfo.md5}`
-                        ]
-                    });
-                }
-
-                // If the file exists, and the patch is not applied - verify its hash
-                // Otherwise if the patch is applied and the file doesn't contain unityplayer / xlua in its name - verify its hash
-                // because we shouldn't fix patched files
-                else if (!this.patch.applied || (!fileCheckInfo.remoteName.includes('UnityPlayer.dll') && !fileCheckInfo.remoteName.includes('xlua.dll')))
-                {
-                    const fileHash = await md5(`${this.gameDir}/${fileCheckInfo.remoteName}`);
-
-                    if (fileHash != fileCheckInfo.md5)
+                for (const ignoringFile of this.ignoringFiles)
+                    if (file.remoteName.includes(ignoringFile))
                     {
-                        this.mismatches.push(fileCheckInfo);
+                        skipping = true;
+
+                        break;
+                    }
+
+                if (!skipping && this.patch.applied)
+                    for (const ignore of this.ignoringPatchedFiles)
+                        if (file.remoteName.includes(ignore))
+                            skipping = true;
+
+                if (!skipping)
+                {
+                    // If the file doesn't exist - we should download it
+                    if (!await fs.exists(`${this.gameDir}/${file.remoteName}`))
+                    {
+                        this.mismatches.push(file);
 
                         this.debugThread.log({
                             message: [
-                                'Wrong file hash found',
-                                `[path] ${fileCheckInfo.remoteName}`,
-                                `[hash] ${fileHash}`,
-                                `[remote hash] ${fileCheckInfo.md5}`
+                                'File is missing',
+                                `[path] ${file.remoteName}`,
+                                `[hash] ${file.md5}`
                             ]
                         });
                     }
+
+                    else
+                    {
+                        const fileHash = await md5(`${this.gameDir}/${file.remoteName}`);
+
+                        if (fileHash != file.md5)
+                        {
+                            this.mismatches.push(file);
+
+                            this.debugThread.log({
+                                message: [
+                                    'Wrong file hash found',
+                                    `[path] ${file.remoteName}`,
+                                    `[hash] ${fileHash}`,
+                                    `[remote hash] ${file.md5}`
+                                ]
+                            });
+                        }
+                    }
                 }
             }
-        }
 
-        catch {}
+            catch {}
 
-        if (this.onProgress)
-            this.onProgress(this.current, this.total);
+            if (this.onProgress)
+                this.onProgress(this.current, this.total);
 
-        if (this.current == this.total)
-        {
-            if (this.onFinished)
-                this.onFinished(this.mismatches);
+            if (this.current == this.total)
+            {
+                if (this.onFinished)
+                    this.onFinished(this.mismatches);
 
-            // Hide pause/resume button
-            this.launcher.state!.pauseButton.style['display'] = 'none';
-        }
+                // Hide pause/resume button
+                this.launcher.state!.pauseButton.style['display'] = 'none';
 
-        else if (!this.paused)
-            this.process();
+                resolve(this.mismatches);
+            }
+
+            else if (!this.paused)
+                this.process();
+        });
     }
 
     public pause()
@@ -171,9 +182,46 @@ class FilesVerifier
     {
         this.onFinished = callback;
     }
+
+    /**
+     * Get list of integrity files directly from the API
+     * 
+     * @param includeVoice if false, then no voice packages will be included.
+     * If true, then all the packages will be included.
+     * Otherwise list of packages that should be included
+     */
+    public static getIntegrityFiles(includeVoice: VoiceLang[]|boolean = false): Promise<FileInfo[]>
+    {
+        return new Promise(async (resolve) => {
+            const decompressedUri = (await Game.getLatestData()).game.latest.decompressed_path;
+
+            const getFiles = (name: string): Promise<FileInfo[]> => {
+                return new Promise(async (resolve) => {
+                    const filesRaw = await (await fetch(`${decompressedUri}/${name}`)).body();
+                    let files: FileInfo[] = [];
+
+                    for (const line of filesRaw.split(/\r\n|\r|\n/))
+                        if (line.length > 30)
+                            files.push(JSON.parse(line.trim()));
+
+                    resolve(files);
+                });
+            };
+
+            let files: FileInfo[] = await getFiles('pkg_version');
+
+            let voices: VoiceLang[] = includeVoice === true ? Object.keys(Voice.langs) as VoiceLang[] :
+                includeVoice === false ? [] : includeVoice;
+
+            for (const lang of voices)
+                files = [...files, ...await getFiles(`Audio_${Voice.langs[lang]}_pkg_version`)];
+
+            resolve(files);
+        });
+    }
 }
 
-class FilesRepairer
+export class FilesRepairer
 {
     protected mismatches: FileInfo[];
     protected launcher: Launcher;
@@ -217,7 +265,7 @@ class FilesRepairer
     }
 
     /**
-     * Try to the repair game's file
+     * Try to repair game's file
      */
     protected repairFile(fileInfo: FileInfo): Promise<boolean>
     {
@@ -269,32 +317,36 @@ class FilesRepairer
         });
     }
 
-    protected async process()
+    public process(): Promise<void>
     {
-        if (this.mismatches[this.current] === undefined)
-            return;
+        return new Promise(async (resolve) => {
+            if (this.mismatches[this.current] === undefined)
+                return;
 
-        const fileInfo = this.mismatches[this.current++];
+            const fileInfo = this.mismatches[this.current++];
 
-        await this.repairFile(fileInfo).then((success) => {
-            if (!success)
-                this.debugThread.log(`Repair failed: ${fileInfo.remoteName}`);
+            await this.repairFile(fileInfo).then((success) => {
+                if (!success)
+                    this.debugThread.log(`Repair failed: ${fileInfo.remoteName}`);
+            });
+
+            if (this.onProgress)
+                this.onProgress(this.current, this.total);
+
+            if (this.current == this.total)
+            {
+                if (this.onFinished)
+                    this.onFinished();
+
+                // Hide pause/resume button
+                this.launcher.state!.pauseButton.style['display'] = 'none';
+
+                resolve();
+            }
+
+            else if (!this.paused)
+                this.process();
         });
-
-        if (this.onProgress)
-            this.onProgress(this.current, this.total);
-
-        if (this.current == this.total)
-        {
-            if (this.onFinished)
-                this.onFinished();
-
-            // Hide pause/resume button
-            this.launcher.state!.pauseButton.style['display'] = 'none';
-        }
-
-        else if (!this.paused)
-            this.process();
     }
 
     public pause()
@@ -322,102 +374,61 @@ class FilesRepairer
 
 export default (launcher: Launcher): Promise<void> => {
     return new Promise(async (resolve) => {
-        const gameDir = await constants.paths.gameDir;
-
         const debugThread = new DebugThread('Launcher/State/CheckIntegrity', 'Checking files integrity...');
 
-        if (!await fs.exists(`${gameDir}/pkg_version`))
-        {
-            debugThread.log('No pkg_version file provided. Downloading...');
-            debugThread.log(`pkg_version downloading result: ${await FilesRepairer.downloadFile('pkg_version') ? 'ok' : 'failed'}`);
-        }
+        const gameDir = await constants.paths.gameDir;
+        const files = await FilesVerifier.getIntegrityFiles((await Voice.installed).map((lang) => lang.lang));
 
-        // Check Game and Voice Pack integrity
-        Neutralino.filesystem.readFile(`${gameDir}/pkg_version`)
-            .then(async (files) => {
-                files = files.split(/\r\n|\r|\n/);
+        launcher.progressBar?.init({
+            label: Locales.translate<string>('launcher.progress.game.integrity_check'),
+            showSpeed: false,
+            showEta: true,
+            showPercents: true,
+            showTotals: false
+        });
 
-                // Add voice packages integrity info
-                for (const voice of await Voice.installed)
-                {
-                    const voicePkgFile = `Audio_${Voice.langs[voice.lang]}_pkg_version`;
+        launcher.progressBar?.show();
 
-                    if (!await fs.exists(`${gameDir}/${voicePkgFile}`))
-                    {
-                        debugThread.log(`No ${voicePkgFile} file provided. Downloading...`);
-                        debugThread.log(`${voicePkgFile} downloading result: ${await FilesRepairer.downloadFile(voicePkgFile) ? 'ok' : 'failed'}`);
-                    }
+        debugThread.log(`Verifying ${files.length} files...`);
 
-                    Neutralino.filesystem.readFile(`${gameDir}/${voicePkgFile}`)
-                        .then(async (voiceFiles) => files.push(...voiceFiles.split(/\r\n|\r|\n/)))
-                        .catch(() => debugThread.log(`Failed to read ${voicePkgFile} file`));
-                }
+        // Find broken files
+        const verifier = new FilesVerifier(files, gameDir, await Patch.latest, launcher, debugThread);
 
-                files = files
-                    .map((file) => file.trim())
-                    .filter((file: string) => file.length > 30);
+        verifier.progress((current, total) => launcher.progressBar?.update(current, total, 1));
 
-                if (files.length > 0)
-                {
-                    launcher.progressBar?.init({
-                        label: Locales.translate<string>('launcher.progress.game.integrity_check'),
-                        showSpeed: false,
-                        showEta: true,
-                        showPercents: true,
-                        showTotals: false
-                    });
-
-                    launcher.progressBar?.show();
-
-                    debugThread.log(`Verifying ${files.length} files...`);
-
-                    // Find broken files
-                    const verifier = new FilesVerifier(files, gameDir, await Patch.latest, launcher, debugThread);
-
-                    verifier.progress((current, total) => launcher.progressBar?.update(current, total, 1));
-
-                    verifier.finish(async (mismatches) => {
-                        debugThread.log({
-                            message: mismatches.length == 0 ?
-                                `Checked ${files.length} files with ${mismatches.length} mismatches` :
-                                [
-                                    `Checked ${files.length} files with ${mismatches.length} mismatch(es):`,
-                                    ...mismatches.map((mismatch) => `[${mismatch.md5}] ${mismatch.remoteName}`)
-                                ]
-                        });
-    
-                        // And then repair them
-                        if (mismatches.length > 0)
-                        {
-                            launcher.progressBar?.init({
-                                label: Locales.translate<string>('launcher.progress.game.download_mismatch_files'),
-                                showSpeed: false,
-                                showEta: true,
-                                showPercents: true,
-                                showTotals: false
-                            });
-
-                            const repairer = new FilesRepairer(mismatches, launcher, debugThread);
-
-                            repairer.progress((current, total) => launcher.progressBar?.update(current, total, 1));
-
-                            repairer.finish(() => {
-                                launcher.progressBar?.hide();
-
-                                resolve();
-                            });
-                        }
-
-                        else resolve();
-                    });
-                }
-
-                else resolve();
-            })
-            .catch(() => {
-                debugThread.log('Failed to read pkg_version file');
-
-                resolve();
+        verifier.finish(async (mismatches) => {
+            debugThread.log({
+                message: mismatches.length == 0 ?
+                    `Checked ${files.length} files with ${mismatches.length} mismatches` :
+                    [
+                        `Checked ${files.length} files with ${mismatches.length} mismatch(es):`,
+                        ...mismatches.map((mismatch) => `[${mismatch.md5}] ${mismatch.remoteName}`)
+                    ]
             });
+
+            // And then repair them
+            if (mismatches.length > 0)
+            {
+                launcher.progressBar?.init({
+                    label: Locales.translate<string>('launcher.progress.game.download_mismatch_files'),
+                    showSpeed: false,
+                    showEta: true,
+                    showPercents: true,
+                    showTotals: false
+                });
+
+                const repairer = new FilesRepairer(mismatches, launcher, debugThread);
+
+                repairer.progress((current, total) => launcher.progressBar?.update(current, total, 1));
+
+                repairer.finish(() => {
+                    launcher.progressBar?.hide();
+
+                    resolve();
+                });
+            }
+
+            else resolve();
+        });
     });
 }
