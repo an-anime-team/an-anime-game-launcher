@@ -1,3 +1,14 @@
+# 1.2.0
+
+- updated core library; now launcher will try to repair
+  failed that were unnable to be patched by the hdiff patcher
+- updated components list with new soda version
+- limited dxvk and wine versions
+  Now total amount is 12 versions, where (first) 6 are recommended
+- code refactoring based on clippy warnings
+- fixed about window re-opening issue
+- fixed game files repairing
+
 # 1.1.3
 
 - updated core library with fixed voiceovers versions prediction algorithm
