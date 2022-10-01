@@ -14,12 +14,12 @@ lazy_static! {
         Group {
             title: String::from("Vanilla"),
             subtitle: None,
-            versions: serde_json::from_str(include_str!("../../components/dxvk/vanilla.json")).unwrap()
+            versions: serde_json::from_str::<Vec<Version>>(include_str!("../../components/dxvk/vanilla.json")).unwrap().into_iter().take(12).collect()
         },
         Group {
             title: String::from("Async"),
             subtitle: Some(String::from("This version is not recommended for usage as can lead to anti-cheat detection. Automatically uses DXVK_ASYNC=1")),
-            versions: serde_json::from_str(include_str!("../../components/dxvk/async.json")).unwrap()
+            versions: serde_json::from_str::<Vec<Version>>(include_str!("../../components/dxvk/async.json")).unwrap().into_iter().take(12).collect()
         }
     ];
 }

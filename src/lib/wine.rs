@@ -9,22 +9,22 @@ lazy_static::lazy_static! {
         Group {
             title: String::from("Wine-GE-Proton"),
             subtitle: None,
-            versions: serde_json::from_str(include_str!("../../components/wine/wine-ge-proton.json")).unwrap()
+            versions: serde_json::from_str::<Vec<Version>>(include_str!("../../components/wine/wine-ge-proton.json")).unwrap().into_iter().take(12).collect()
         },
         Group {
             title: String::from("GE-Proton"),
             subtitle: Some(String::from("This version includes its own DXVK builds and you can use DXVK_ASYNC variable")),
-            versions: serde_json::from_str(include_str!("../../components/wine/ge-proton.json")).unwrap()
+            versions: serde_json::from_str::<Vec<Version>>(include_str!("../../components/wine/ge-proton.json")).unwrap().into_iter().take(12).collect()
         },
         Group {
             title: String::from("Soda"),
-            subtitle: Some(String::from("New runner based on Valve’s Wine, with patches from Proton, TKG and GE. Developed by Bottles")),
-            versions: serde_json::from_str(include_str!("../../components/wine/soda.json")).unwrap()
+            subtitle: Some(String::from("New runner based on Valve's Wine, with patches from Proton, TKG and GE. Developed by Bottles")),
+            versions: serde_json::from_str::<Vec<Version>>(include_str!("../../components/wine/soda.json")).unwrap().into_iter().take(12).collect()
         },
         Group {
             title: String::from("Lutris"),
             subtitle: None,
-            versions: serde_json::from_str(include_str!("../../components/wine/lutris.json")).unwrap()
+            versions: serde_json::from_str::<Vec<Version>>(include_str!("../../components/wine/lutris.json")).unwrap().into_iter().take(12).collect()
         }
     ];
 }
