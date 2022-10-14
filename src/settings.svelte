@@ -199,6 +199,12 @@
 
         Neutralino.app.exit();
     });
+
+    document.onkeydown = function (e) {
+        if ((e.altKey && e.key == "F4") || e.key == "Escape") {
+            Neutralino.events.dispatch("windowClose");
+        }
+    };
 </script>
 
 {#if typeof $locale === 'string'}
