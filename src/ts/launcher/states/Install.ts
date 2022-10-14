@@ -7,7 +7,7 @@ import Prefix from '../../core/Prefix';
 import constants from '../../Constants';
 import Locales from '../Locales';
 
-declare const Neutralino;
+
 
 export default (launcher: Launcher): Promise<void> => {
     return new Promise(async (resolve) => {

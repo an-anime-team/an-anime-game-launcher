@@ -5,7 +5,7 @@ import { DebugThread } from '@empathize/framework/dist/meta/Debug';
 
 import constants from '../Constants';
 
-declare const Neutralino;
+
 
 export default abstract class Installer
 {

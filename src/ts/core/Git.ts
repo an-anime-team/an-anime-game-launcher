@@ -5,7 +5,7 @@ type Tag = {
     commit: string
 };
 
-declare const Neutralino;
+
 
 export default class Git
 {

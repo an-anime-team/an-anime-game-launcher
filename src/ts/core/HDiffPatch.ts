@@ -1,7 +1,7 @@
 import { Debug } from '../../empathize';
 import { path } from '../../empathize';
 
-declare const Neutralino;
+
 
 export default class HDiffPatch
 {
@@ -10,14 +10,14 @@ export default class HDiffPatch
         return new Promise(async (resolve) => {
             let result = await Neutralino.os.execCommand(`./public/hdiffpatch/hpatchz -f "${path.addSlashes(file)}" "${path.addSlashes(patch)}" "${path.addSlashes(output)}"`);
 
-            result = (result.stdOut ?? result.stdErr).includes('patch ok!');
+            const ret = (result.stdOut ?? result.stdErr).includes('patch ok!');
 
             Debug.log({
                 function: 'HDiffPatch.patch',
-                message: { file, patch, output, result }
+                message: { file, patch, output, ret }
             });
 
-            resolve(result);
+            resolve(ret);
         });
     }
 };

@@ -10,7 +10,7 @@ import { FilesVerifier, FilesRepairer } from './CheckIntegrity';
 import Voice from '../../Voice';
 import Patch from '../../Patch';
 
-declare const Neutralino;
+
 
 export default (launcher: Launcher): Promise<void> => {
     return new Promise(async (resolve) => {
@@ -19,10 +19,10 @@ export default (launcher: Launcher): Promise<void> => {
         const gameDir = await constants.paths.gameDir;
 
         Neutralino.filesystem.readFile(`${gameDir}/hdifffiles.txt`)
-            .then(async (files) => {
+            .then(async (filesString) => {
                 let patchFails: string[] = [];
 
-                files = files.split(/\r\n|\r|\n/).filter((file) => file != '');
+                const files = filesString.split(/\r\n|\r|\n/).filter((file) => file != '');
 
                 if (files.length > 0)
                 {

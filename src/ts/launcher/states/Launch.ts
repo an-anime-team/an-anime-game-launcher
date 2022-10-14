@@ -9,7 +9,7 @@ import DXVK from '../../core/DXVK';
 
 import type Launcher from '../../Launcher';
 
-declare const Neutralino;
+
 
 export default (launcher: Launcher|null): Promise<void> => {
     return new Promise(async (resolve) => {
