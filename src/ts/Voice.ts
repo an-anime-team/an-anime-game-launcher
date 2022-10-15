@@ -10,7 +10,6 @@ import constants from './Constants';
 import Game from './Game';
 import AbstractInstaller from './core/AbstractInstaller';
 
-declare const Neutralino;
 
 class Stream extends AbstractInstaller
 {
@@ -105,8 +104,8 @@ export default class Voice
 
                     // Parse installed voice packages
                     Neutralino.filesystem.readDirectory(voiceDir)
-                        .then(async (files) => {
-                            files = files.filter((file) => file.type == 'DIRECTORY')
+                        .then(async (filesString) => {
+                            const files = filesString.filter((file) => file.type == 'DIRECTORY')
                                 .map((file) => file.entry);
 
                             for (const folder of Object.values(this.langs))

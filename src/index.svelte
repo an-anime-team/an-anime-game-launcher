@@ -1,5 +1,4 @@
 <script context="module" lang="ts">
-    declare const Neutralino;
     declare const NL_ARGS: string[];
 </script>
 
@@ -29,6 +28,8 @@
         ].join('\r\n - '));
     });
 
+    Debug.log("isSteamOS: " + isSteamOs)
+
     // Steam Deck users asked me to add something like that
     if (NL_ARGS.includes('--run-game') || NL_ARGS.includes('--rungame'))
     {
@@ -53,7 +54,7 @@
         constants.paths.launcherDir.then((launcherDir) => {
             Neutralino.filesystem.getStats(`${launcherDir}/logs/latest.log`)
                 .then(async () => {
-                    let created_at = (await Neutralino.os.execCommand(`stat -c '%W' "${path.addSlashes(`${launcherDir}/logs/latest.log`)}"`)).stdOut;
+                    let created_at = Number.parseInt((await Neutralino.os.execCommand(`stat -c '%W' "${path.addSlashes(`${launcherDir}/logs/latest.log`)}"`)).stdOut);
 
                     if (!created_at)
                         created_at = Date.now() / 1000;

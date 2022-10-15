@@ -1,12 +1,8 @@
 import '../i18n';
 import App from '../settings.svelte';
+import doInit from './common-init';
 
-declare const Neutralino;
 
-Neutralino.init();
+doInit(App)
 
-const app = new App({
-    target: document.getElementById('app')!
-});
-
-export default app;
+export default "";

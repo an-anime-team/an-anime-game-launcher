@@ -19,7 +19,6 @@ import Git from '../core/Git';
 import constants from '../Constants';
 import Background from './Background';
 
-declare const Neutralino;
 
 export default class State
 {

@@ -4,7 +4,6 @@ import { DebugThread } from '@empathize/framework/dist/meta/Debug';
 import constants from '../Constants';
 import Runners from './Runners';
 
-declare const Neutralino;
 
 export default class Prefix
 {

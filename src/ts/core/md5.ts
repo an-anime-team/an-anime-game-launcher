@@ -1,6 +1,5 @@
 import { fs, path } from '../../empathize';
 
-declare const Neutralino;
 
 export default function md5(file: string): Promise<string|null>
 {

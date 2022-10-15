@@ -15,7 +15,6 @@ import Runners from './Runners';
 // ! Should always be false for release builds
 const LOAD_DIRECTLY = false;
 
-declare const Neutralino;
 
 class Stream extends AbstractInstaller
 {

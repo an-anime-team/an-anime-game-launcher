@@ -8,7 +8,6 @@ import Game from './Game';
 import Launcher from './Launcher';
 import md5 from './core/md5';
 
-declare const Neutralino;
 
 /**
  * I made a copy of AbstractInstaller here

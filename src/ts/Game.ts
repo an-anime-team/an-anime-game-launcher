@@ -13,7 +13,6 @@ import { DebugThread } from '@empathize/framework/dist/meta/Debug';
 import constants from './Constants';
 import AbstractInstaller from './core/AbstractInstaller';
 
-declare const Neutralino;
 
 class Stream extends AbstractInstaller
 {

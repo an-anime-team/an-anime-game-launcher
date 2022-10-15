@@ -17,7 +17,6 @@ type AvailableLocales =
     | 'it-it' | 'hu-hu' | 'uwu'
     | 'nb-no';
 
-declare const Neutralino;
 
 export default class Locales
 {

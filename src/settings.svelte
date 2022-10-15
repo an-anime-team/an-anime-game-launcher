@@ -1,7 +1,3 @@
-<script context="module" lang="ts">
-    declare const Neutralino;
-</script>
-
 <script lang="ts">
     import { onMount } from 'svelte';
     import { _, locale, locales } from 'svelte-i18n';
@@ -26,6 +22,7 @@
     import RunnerSelectionList from './components/RunnerSelectionList.svelte';
     import ShadersSelection from './components/ShadersSelection.svelte';
     import EnvironmentManager from './components/EnvironmentManager.svelte';
+    import { loop_guard } from 'svelte/internal';
 
     /**
      * Launcher language
@@ -167,25 +164,29 @@
     // Do some stuff when all the content will be loaded
     onMount(async () => {
         await Windows.current.show();
-        await Windows.current.center(900, 600);
+        if(!window.isSteamOs) {
+            
+            await Windows.current.center(900, 600);
 
-        // This thing will fix window resizing
-        // in several cases (wayland + gnome + custom theme)
-        const resizer = () => {
-            if (window.innerWidth < 700)
-                setTimeout(resizer, 10);
+            // This thing will fix window resizing
+            // in several cases (wayland + gnome + custom theme)
+            const resizer = () => {
+                if (window.innerWidth < 700)
+                    setTimeout(resizer, 10);
 
-            else
-            {
-                Windows.current.setSize({
-                    width: 900 + (900 - window.innerWidth),
-                    height: 600 + (600 - window.innerHeight),
-                    resizable: false
-                });
+                else
+                {
+                    Windows.current.setSize({
+                        width: 900 + (900 - window.innerWidth),
+                        height: 600 + (600 - window.innerHeight),
+                        resizable: false
+                    });
+                }
             }
-        }
 
-        setTimeout(resizer, 10);
+            setTimeout(resizer, 10);
+
+        }
     });
 
     Neutralino.events.on('windowClose', async () => {
@@ -201,10 +202,16 @@
 
         Neutralino.app.exit();
     });
+
+    document.onkeydown = function (e) {
+        if ((e.altKey && e.key == "F4") || e.key == "Escape") {
+            Neutralino.events.dispatch("windowClose");
+        }
+    };
 </script>
 
 {#if typeof $locale === 'string'}
-    <main>
+    <main class="container">
         <div class="menu">
             {#each ['general', 'enhancements', 'runners', 'dxvks', 'shaders', 'environment'] as item}
                 <div
@@ -214,6 +221,12 @@
                     on:click={changeItem}
                 >{$_(`settings.${item}.title`)}</div>
             {/each}
+        </div>
+        
+        
+        <div class="save-button" >
+            <!-- svelte-ignore missing-declaration -->
+            <button class="button" on:click={()=>Neutralino.events.dispatch("windowClose")} >✔️</button>
         </div>
 
         <div class="settings" on:scroll={updateItems}>
