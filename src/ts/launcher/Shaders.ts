@@ -6,6 +6,7 @@ import { Configs, promisify } from '../../empathize';
 
 import constants from '../Constants';
 
+declare const Neutralino;
 
 export default class Shaders
 {

@@ -1,8 +1,6 @@
-import '../i18n';
 import App from '../analytics.svelte';
 import doInit from './common-init';
 
+doInit(App);
 
-doInit(App)
-
-export default "";
+export default App;

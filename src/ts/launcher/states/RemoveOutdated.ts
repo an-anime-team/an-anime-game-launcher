@@ -5,14 +5,15 @@ import { Debug } from '../../../empathize';
 import constants from '../../Constants';
 import Locales from '../Locales';
 
+declare const Neutralino;
 
 export default (launcher: Launcher): Promise<void> => {
     return new Promise(async (resolve) => {
         const gameDir = await constants.paths.gameDir;
 
         Neutralino.filesystem.readFile(`${gameDir}/deletefiles.txt`)
-            .then(async (filesString) => {
-                let files = filesString.split(/\r\n|\r|\n/).filter((file) => file != '');
+            .then(async (files) => {
+                files = files.split(/\r\n|\r|\n/).filter((file) => file != '');
 
                 if (files.length > 0)
                 {

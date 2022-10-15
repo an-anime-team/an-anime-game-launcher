@@ -17,6 +17,7 @@ import Game from './Game';
 
 import { version } from '../../package.json';
 
+declare const Neutralino;
 
 export default class Launcher
 {
