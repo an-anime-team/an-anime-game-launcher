@@ -105,7 +105,7 @@ export default (launcher: Launcher): Promise<void> => {
                     }
 
                     Debug.log({
-                        function: 'Launcher/States/Install',
+                        function: 'Launcher/States/ApplyChanges',
                         message: [
                             `Applied changes${patchFails.length > 0 ? ` (${patchFails.length} errors)` : ''}:`,
                             ...files
