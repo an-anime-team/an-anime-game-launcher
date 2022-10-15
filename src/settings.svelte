@@ -224,6 +224,12 @@
                 >{$_(`settings.${item}.title`)}</div>
             {/each}
         </div>
+        
+        
+        <div class="save-button" >
+            <!-- svelte-ignore missing-declaration -->
+            <button class="button" on:click={()=>Neutralino.events.dispatch("windowClose")} >✔️</button>
+        </div>
 
         <div class="settings" on:scroll={updateItems}>
             <div class="settings-item" id="general">
