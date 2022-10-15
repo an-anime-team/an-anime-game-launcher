@@ -208,7 +208,15 @@ export default (launcher: Launcher|null): Promise<void> => {
                         env: {
                             WINEPREFIX: await constants.paths.prefix.current,
                             ...env,
-                            ...((await Configs.get('env') as object|null) ?? {})
+                            ...((await Configs.get('env') as object | null) ?? {}),
+                            ...(isSteamOs ? {
+                                /**
+                                 * chinese version game launching will create a log folder with chinese game name in path.
+                                 * in steamos game mode, it will cause Wine createDirectory failed, 
+                                 * bacause steamos game mode use C encode by default. 
+                                 */
+                                LC_ALL: "en_US.UTF-8"
+                            } : {})
                         },
                         cwd: await constants.paths.gameDir
                     });
