@@ -18,7 +18,6 @@ import AbstractInstaller from './AbstractInstaller';
 const LOAD_DIRECTLY = false;
 
 
-
 class Stream extends AbstractInstaller
 {
     public constructor(runner: Runner)

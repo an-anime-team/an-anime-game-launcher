@@ -18,7 +18,6 @@ type AvailableLocales =
     | 'nb-no';
 
 
-
 export default class Locales
 {
     /**

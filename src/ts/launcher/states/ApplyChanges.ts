@@ -11,7 +11,6 @@ import Voice from '../../Voice';
 import Patch from '../../Patch';
 
 
-
 export default (launcher: Launcher): Promise<void> => {
     return new Promise(async (resolve) => {
         const debugThread = new DebugThread('Launcher/State/ApplyChanges', 'Applying hdiff patches...');

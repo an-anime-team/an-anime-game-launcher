@@ -14,7 +14,6 @@ import constants from './Constants';
 import AbstractInstaller from './core/AbstractInstaller';
 
 
-
 class Stream extends AbstractInstaller
 {
     public constructor(uri: string, predownloaded: boolean = false)

@@ -6,7 +6,6 @@ import { DebugThread } from '@empathize/framework/dist/meta/Debug';
 import constants from '../Constants';
 
 
-
 export default abstract class Installer
 {
     /**

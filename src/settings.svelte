@@ -1,5 +1,3 @@
-
-
 <script lang="ts">
     import { onMount } from 'svelte';
     import { _, locale, locales } from 'svelte-i18n';

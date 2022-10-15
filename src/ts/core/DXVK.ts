@@ -16,7 +16,6 @@ import Runners from './Runners';
 const LOAD_DIRECTLY = false;
 
 
-
 class Stream extends AbstractInstaller
 {
     public constructor(dxvk: TDXVK)

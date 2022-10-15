@@ -2,7 +2,6 @@ import { Debug } from '../../empathize';
 import { path } from '../../empathize';
 
 
-
 export default class HDiffPatch
 {
     public static patch(file: string, patch: string, output: string): Promise<boolean>

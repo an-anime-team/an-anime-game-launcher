@@ -20,7 +20,6 @@ import constants from '../Constants';
 import Background from './Background';
 
 
-
 export default class State
 {
     public launcher: Launcher;

@@ -1,5 +1,4 @@
 <script context="module" lang="ts">
-    
     declare const NL_ARGS: string[];
 </script>
 

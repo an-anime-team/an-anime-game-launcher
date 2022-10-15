@@ -3,7 +3,6 @@ import { Downloader, path } from '../empathize';
 import constants from './Constants';
 
 
-
 export default class FPSUnlock
 {
     /**

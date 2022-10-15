@@ -8,7 +8,6 @@ import constants from '../../Constants';
 import Locales from '../Locales';
 
 
-
 export default (launcher: Launcher): Promise<void> => {
     return new Promise(async (resolve) => {
         const prefixDir = await constants.paths.prefix.current;

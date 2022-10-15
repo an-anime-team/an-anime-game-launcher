@@ -6,7 +6,6 @@ type Tag = {
 };
 
 
-
 export default class Git
 {
     /**

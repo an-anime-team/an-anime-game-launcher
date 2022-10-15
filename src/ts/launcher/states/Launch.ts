@@ -10,7 +10,6 @@ import DXVK from '../../core/DXVK';
 import type Launcher from '../../Launcher';
 
 
-
 export default (launcher: Launcher|null): Promise<void> => {
     return new Promise(async (resolve) => {
         const debugThread = new DebugThread('State/Launch', 'Starting the game');

@@ -4,7 +4,6 @@ import { Configs } from '../empathize';
 
 import Game from './Game';
 
-
 declare const NL_CWD;
 
 class Prefix

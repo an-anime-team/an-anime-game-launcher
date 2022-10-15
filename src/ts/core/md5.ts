@@ -1,7 +1,6 @@
 import { fs, path } from '../../empathize';
 
 
-
 export default function md5(file: string): Promise<string|null>
 {
     return new Promise(async (resolve) => {

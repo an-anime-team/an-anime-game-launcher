@@ -9,7 +9,6 @@ import Launcher from './Launcher';
 import md5 from './core/md5';
 
 
-
 /**
  * I made a copy of AbstractInstaller here
  * because really don't want to make changes in AbstractInstaller

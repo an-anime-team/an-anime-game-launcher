@@ -1,7 +1,3 @@
-<script context="module" lang="ts">
-    
-</script>
-
 <script lang="ts">
     import { onMount } from 'svelte';
     import { _, locale } from 'svelte-i18n';

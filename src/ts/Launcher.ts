@@ -18,7 +18,6 @@ import Game from './Game';
 import { version } from '../../package.json';
 
 
-
 export default class Launcher
 {
     public state?: State;

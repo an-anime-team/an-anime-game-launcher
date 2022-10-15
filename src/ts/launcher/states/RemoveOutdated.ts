@@ -6,7 +6,6 @@ import constants from '../../Constants';
 import Locales from '../Locales';
 
 
-
 export default (launcher: Launcher): Promise<void> => {
     return new Promise(async (resolve) => {
         const gameDir = await constants.paths.gameDir;
