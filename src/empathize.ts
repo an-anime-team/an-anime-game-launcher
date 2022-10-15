@@ -33,6 +33,15 @@ Configs.unserialize = YAML.parse;
 
 Configs.autoFlush = false;
 
+const openWindow = Windows.open
+Windows.open = function (name, options) {
+    if (isSteamOs && options) {
+        // return openWindow(name, { ...options, width: window.screen.width, height: window.screen.height })
+        return openWindow(name, { ...options, width: 1280, height: 800 })
+    }
+    return openWindow(name, options)
+}
+
 export {
     // Paths API
     path, dir,

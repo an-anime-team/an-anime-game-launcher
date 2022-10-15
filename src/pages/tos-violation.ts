@@ -1,12 +1,7 @@
 import '../i18n';
 import App from '../tos-violation.svelte';
+import doInit from './common-init';
 
+doInit(App)
 
-
-Neutralino.init();
-
-const app = new App({
-    target: document.getElementById('app')!
-});
-
-export default app;
+export default "";

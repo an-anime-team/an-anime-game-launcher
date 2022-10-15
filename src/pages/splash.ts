@@ -1,12 +1,11 @@
 import '../i18n';
 import App from '../splash.svelte';
+import doInit from './common-init';
 
 
 
-Neutralino.init();
+doInit(App)
 
-const app = new App({
-    target: document.getElementById('app')!
-});
 
-export default app;
+
+export default "";

@@ -29,6 +29,8 @@
         ].join('\r\n - '));
     });
 
+    Debug.log("isSteamOS: " + isSteamOs)
+
     // Steam Deck users asked me to add something like that
     if (NL_ARGS.includes('--run-game') || NL_ARGS.includes('--rungame'))
     {
