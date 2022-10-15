@@ -275,4 +275,16 @@ export default class Launcher
                 .catch(() => resolve(false));
         });
     }
+
+    /**
+     * Check if the launcher is running in steam os
+     */
+    public static isSteamOs(): Promise<boolean>
+    {
+        return new Promise((resolve) => {
+            Neutralino.os.getEnv('SteamOS')
+                .then((env) => resolve(env === '1'))
+                .catch(() => resolve(false));
+        });
+    }
 };

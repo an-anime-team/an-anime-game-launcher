@@ -9,6 +9,7 @@
     import { Configs, Windows, fetch, IPC } from './empathize';
 
     import constants from './ts/Constants';
+    import Launcher from './ts/Launcher';
 
     import YanfeiIcon from './assets/images/yanfei.png';
 
@@ -35,25 +36,29 @@
 
     onMount(async () => {
         await Windows.current.show();
-        await Windows.current.center(700, 460);
 
-        // This thing will fix window resizing
-        // in several cases (wayland + gnome + custom theme)
-        const resizer = () => {
-            if (window.innerWidth < 640)
-                setTimeout(resizer, 10);
+        if ((!await Launcher.isSteamOs()))
+        {
+            await Windows.current.center(700, 460);
 
-            else
-            {
-                Windows.current.setSize({
-                    width: 700 + (700 - window.innerWidth),
-                    height: 460 + (460 - window.innerHeight),
-                    resizable: false
-                });
+            // This thing will fix window resizing
+            // in several cases (wayland + gnome + custom theme)
+            const resizer = () => {
+                if (window.innerWidth < 640)
+                    setTimeout(resizer, 10);
+
+                else
+                {
+                    Windows.current.setSize({
+                        width: 700 + (700 - window.innerWidth),
+                        height: 460 + (460 - window.innerHeight),
+                        resizable: false
+                    });
+                }
             }
-        }
 
-        setTimeout(resizer, 10);
+            setTimeout(resizer, 10);
+        }
     });
 
     Neutralino.events.on('windowClose', async () => {

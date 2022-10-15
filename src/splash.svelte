@@ -31,7 +31,8 @@
                 for (const record of launcherLoaded)
                     await record.pop();
 
-                Windows.current.hide();
+                await Windows.current.hide();
+
                 Neutralino.app.exit();
             }
 

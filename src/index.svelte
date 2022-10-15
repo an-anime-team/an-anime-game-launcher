@@ -25,11 +25,10 @@
         Debug.log([
             'An Anime Game Launcher',
             `Version: ${version}`,
-            `Sandboxed (flatpak): ${await Launcher.isFlatpak() ? 'yes' : 'no'}`
+            `Sandboxed (flatpak): ${await Launcher.isFlatpak() ? 'yes' : 'no'}`,
+            `SteamOS: ${await Launcher.isSteamOs() ? 'yes' : 'no'}`
         ].join('\r\n - '));
     });
-
-    Debug.log("isSteamOS: " + isSteamOs)
 
     // Steam Deck users asked me to add something like that
     if (NL_ARGS.includes('--run-game') || NL_ARGS.includes('--rungame'))

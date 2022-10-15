@@ -168,8 +168,9 @@
     // Do some stuff when all the content will be loaded
     onMount(async () => {
         await Windows.current.show();
-        if(!window.isSteamOs) {
-            
+
+        if ((!await Launcher.isSteamOs()))
+        {
             await Windows.current.center(900, 600);
 
             // This thing will fix window resizing
@@ -189,7 +190,6 @@
             }
 
             setTimeout(resizer, 10);
-
         }
     });
 
