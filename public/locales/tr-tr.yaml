@@ -1,0 +1,362 @@
+# Splash window
+splash:
+  title: Launcher yükleniyor
+  phrases:
+    - '"Önemli" şeyler ile uğraşılıyor'
+    - Yae için dua ediliyor...
+    - Materyaller farmlanıyor...
+    - Yokluktan geçiliyor...
+    - Başarımlar toplanıyor...
+    - 5* için fedakarlık ediliyor...
+    - co-op için arkadaş aranıyor...
+
+# Launcher window
+launcher:
+  # Progress bar
+  progress:
+    pause: Durdur
+    resume: Devam et
+    # Game installation
+    game:
+      downloading: Oyun indiriliyor...
+      unpacking: Oyun paketten çıkarılıyor...
+      applying_changes: Değişimler uygulanıyor...
+      deleting_outdated: Eski dosyalar siliniyor...
+      integrity_check: Dosyalar doğrulanıyor...
+      download_mismatch_files: Yanlış dosyalar tekrardan indiriliyor...
+
+    # Voice packages installation
+    voice:
+      deleting: Ses paketleri siliniyor...
+      downloading: '{voice} Ses paketi indiriliyor...'
+      unpacking: '{voice} Ses paketi paketten çıkarılıyor...'
+
+  # Launcher states
+  states:
+    # When the game should be installed or updated
+    installation:
+      install_wine: Wine indir
+      install_dxvk: DXVK indir
+      install: Indir
+      update: Güncelle
+
+      apply_changes:
+        title: Değişiklikleri uygula
+        hint: hdiff değişiklerini uygula
+
+      remove_outdated:
+        title: Eski dosyaları sil
+        hint: Eski oyun dosyalarını sil
+
+    # When the game should be patched
+    patching:
+      # Patch unavailable
+      unavailable:
+        title: Yama kullanılamaz
+        hint: Oyunun bu versiyonun anti-hile yaması yok.
+              Lütfen yeni bir yamanın çıkması için bir kaç gün bekle.
+
+      # Patch is in testing
+      test:
+        title: Test yamasını uygula
+        hint: Oyunun bu versiyonunun bir anti-hile yaması var fakat hala test aşamasında
+              Yamanın kararlı bir aşamaya gelmesi için bir kaç gün daha bekleyebilir veya riski alarak indirebilirsin.
+
+      # Patch is stable
+      stable: Yamayı uygula
+
+    # When the game is ready for playing
+    ready:
+      launch: Başlat
+      predownload: Oyun içi güncellemeyi önceden indir
+
+# Settings window
+settings:
+  # General
+  general:
+    title: Genel
+    items:
+      # Language selection
+      lang:
+        # Launcher language
+        launcher:
+          title: Başlatıcı
+          items:
+            en-us: English (US)
+            ru-ru: Русский
+            es-es: Español
+            de-de: Deutsch
+            fr-fr: Français
+            it-it: Italiano
+            ja-jp: 日本語
+            hu-hu: Magyar
+            id-id: Bahasa Indonesia
+            nb-no: Norsk
+            zh-cn: 简体中文
+            tr-tr: Türkçe (Türkiye)
+            uwu: Engwish
+
+        # Game voice pack language
+        voice:
+          title: Ses paketi
+          tooltip: Oyun içinden manuel olarak ses paketini seçmen gerektiğini unutma
+          items:
+            en-us: English (US)
+            ja-jp: Japanese
+            ko-kr: Korean
+            zh-cn: Chinese
+
+      # Launcher theme
+      theme:
+        title: Tema
+        items:
+          system: Sistem
+          light: Açık
+          dark: Gece
+
+      # Discord RPC
+      discord:
+        title: Discord RPC
+        settings:
+          title: Discord RPC ayarları
+          items:
+            timer: Oyun-içi geçirilen süreyi göster
+            in-launcher: Başlatıcıda iken gözüken yazı
+            in-game: Oyun içindeyken gözüken yazı
+            selectIcon: Simge seç
+
+      # Some buttons
+      buttons:
+        winetricks: winetricks
+        winecfg: winecfg
+        launcher: başlatıcı dosyası
+        game: oyunun dosyası
+        repair_game: oyun dosyalarını düzelt
+        clear_cache: cache'i temizle (arkaplan dosyalarını temizler)
+        close_window: pencereyi kapat
+
+      # Patch-related settings
+      patch:
+        title: Yama
+        items:
+          patch_version: 'Yama versiyonu:'
+          updating_info: 'Yama versiyonu bilgileri güncelleniyor...'
+          buttons:
+            revert_patch: yamayı geri al
+            apply_patch: yamayı uygula
+            reapply_patch: yamayı tekrar uygula
+
+  # Enhancements
+  enhancements:
+    title: İyileştirmeler
+
+    # Enhancements related to the wine
+    wine:
+      title: Wine
+      items:
+        # HUD
+        hud:
+          title: HUD
+          items:
+            none: Hiç biri
+            dxvk: DXVK
+            mangohud: MangoHUD
+
+        # Wine synchronization
+        winesync:
+          title: Wine Senkronizasyonu
+          tooltip: ESync çoklu çekirdek özelliğini senkronize eden bir mekanizmadır. Oyun performansını arttırabilir.
+                   FSync Esync'in sadece bazı kernellerde çalışan daha iyi bir versiyonudur.
+          items:
+            none: Hiç biri
+            esync: ESync
+            fsync: FSync
+            futex2: Futex2
+
+        # AMD FSR
+        fsr:
+          title: AMD FSR'ı etkinleştir
+          tooltip: bu ayar AMD FidelityFX Super Resolution (FSR)'ı etkinleştirir
+                   çok FPS kaybetmeden çözünürlük değişmeye yarar
+
+
+        # Wine Virtual Desktop
+        winevd:
+          title: Yapay Masaüstü
+          settings:
+            title: Yapay Masaüstü ayarları
+            items:
+              width: Genişlik
+              height: Uzunluk
+
+    # Enhancements related to the game
+    game:
+      title: Oyun
+      items:
+        # GameMode
+        gamemode:
+          title: GameMode kullan
+          tooltip:
+            enabled: Oyun performansını arttıran bir yazılımdır
+            disabled: ⚠️ Gamemode paketi inik değil
+
+        # Borderless Window
+        borderless_window:
+          title: Çerçevesiz pencere kullan
+          tooltip: Çerçevelide oynarken pencereleri kaldırır
+                   Penceresiz çerceve moduna geçmek için alt+enter tuşlarına bas.
+
+        # Unlock FPS
+        fps_unlocker:
+          title: FPS Limitini kaldır
+          tooltip: Bu ayar 60 FPS limitini kaldırır
+
+        # Use separate terminal window to run the game
+        use_terminal:
+          title: Terminali kullan
+          tooltip: Bu ayar açıkken Wine ayrı bir terminal penceresinde açılır
+
+    # Enhancements related to the launcher
+    launcher:
+      title: Başlatıcı
+      items:
+        # Delete logs
+        purge_logs:
+          # Game logs (DXVK)
+          game:
+            title: DXVK loglarını sil
+            tooltip: Bu ayar açıkken DXVK logların
+                     otomatik olarak silinecektir.
+
+          # Launcher logs
+          launcher:
+            title: Başlatıcı loglarını sil.
+            tooltip: Kaç günde bir başlatıcı loglarının silineceği seçilir
+            items:
+              1d: 1 gün
+              3d: 3 gün
+              5d: 5 gün
+              7d: 1 hafta
+              14d: 2 hafta
+              never: Asla
+
+  # Runners
+  runners:
+    title: Wine versiyonu
+    items:
+      recommended:
+        title: Sadece önerilen versiyonları göster
+        tooltip: Bu ayar oynanılamaz olan versiyonları saklayacaktır
+
+  # DXVKs
+  dxvks:
+    title: DXVK
+    items:
+      recommended:
+        title: Sadece önerilen versiyonları göster
+        tooltip: Bu ayar oynanılamaz olan versiyonları saklayacaktır
+
+  # Shaders
+  shaders:
+    title: Shaderlar
+    items:
+      shaders:
+        title: Shaderlar
+        tooltip: Oyun içinde Shaderları açmak için "Home" tuşunu kullan
+        items:
+          none: Hiç biri
+          custom: Özel
+
+      author: 'Yaratıcı: {author}'
+      no_images: Eklenen fotoğraf yok
+      not_installed: vkBasalt ReShade-Shaders Kütüphanesi indirilmemiş
+
+  # Environmantal variables manager
+  environment:
+    title: Ortam
+    items:
+      # Table rows
+      table:
+        name: Isim
+        value: Değer
+
+      # Table buttons
+      buttons:
+        add: Ekle
+        delete: Sil
+
+# Notifications
+notifications:
+  # Launcher update
+  launcher_update_available:
+    title: 'Başlatıcı güncellemesi mevcut {from} -> {to}'
+    body: Başlatıcının yeni versiyonunu indirebilersin
+
+  # Before telemetry check when iputils is not downloaded
+  iputils_package_required:
+    title: Bir Anime Oyunu Başlatıcısı
+    body: Telemetry kontrolü için sisteminde iputils olması gerekmekte
+
+  # When telemetry servers are not disabled
+  telemetry_not_disabled:
+    title: Bir Anime Oyunu Başlatıcısı
+    body: Telemetry sunucuları kapalı değil
+
+  # Before patch applying when xdelta3 package is not downloaded
+  xdelta3_package_required:
+    title: Bir Anime Oyunu Başlatıcısı
+    body: Yamayı uygulayabilmek için sisteminde xdelta3 paketi olması gerekmekte
+
+  # If patch wasn't applied because of some error
+  patch_applying_error:
+    title: Bir Anime Oyunu Başlatıcısı
+    body: Yama başarılı bir şekilde uygulanamadı ya sebebini bul ya da Discord sunucumuzda birine sor
+
+  # Patch repositories are not available
+  patch_repos_unavailable:
+    title: Bir Anime Oyunu Başlatıcısı
+    body: Başlatıcının gereksinimlerinin hiç biri inik değil oyunu açabilirsin ama başlatıcı yamanın uygulanıp uygulanmadığı hakkında bir fikri yok
+
+  # HDiffPatch couldn't successfully apply game files changes
+  game_changes_applying_error:
+    title: Oyun güncellenirken bir hata ile karşılaşıldı
+    body: '{files} Dosyaları hdiff tarafından uygulanamadı'
+
+# ToS violation warning window
+tos_violation:
+  title: ToS ihlal uyarısı
+  heading: ⚠️ DIKKAT!
+  body: Bu başlatıcı, resmi olmayan bir araçtır ve hiçbir şekilde {company} veya {company_alterego} ile alakası yoktur
+        Bu araç, Linux'ta {game} Oynamayı kolaylaştırmak için tasarlanmıştır.
+        ve yalnızca oyunu daha az güçlükle kurmak ve çalıştırmak amacıyla tasarlanmıştır.
+        Bunu, mevcut bileşenleri kullanarak ve kullanıcı için deneyimi basitleştirmeye çalışarak yapar.
+        Ancak burada kullanılan bazı bileşenler, {game} için {şirket} Hizmet Şartlarını ihlal ediyor olabilir.
+        Bu başlatıcıyı kullanıyorsanız oyun hesabınızın {company}/{company_alterego} tarafından Hizmet Şartları ile uyumlu olmadığı belirlenebilir.
+        Böyle bir durumda, hesabınız TOS'a uymadığı için {company}/{company_alterego} istediklerini yapmakta özgürdür. Yasaklama dahil.
+        Oyunu gayri resmi olarak oynamaya çalışmanın riskini anlıyorsanız, Tamam'a basın ve Teyvat'ın dünyasını araştırmaya başlayalım!
+# Analytics window
+analytics:
+  title: Yanfei'nin şartı...
+  header: Gizli şekilde data paylaşmaya izin verin
+
+  body:
+    - Linuxda oynayan oyuncuların sayısını tutmak için Yanfei sizden bilgi alışverişi istiyor
+    - IP adresinizi güvenlik amacıyla hashlenecektir
+
+  actions:
+    share_country:
+      title: Ülkeni paylaş
+      hint: Yanfeinin hangi ülkeden geldiği bilgisine erişmesine izin ver
+
+    participate: Katıl
+    skip: Atla
+    skip_forever: Atla ve Bir daha sorma
+
+# Screenshots window
+screenshots:
+  heading: Ekran görüntüleri
+  info: Ekran görünütüsünü açmak için üzerine tıklayın
+  buttons:
+    more: Daha fazla yükle
+    folder: Ekran görüntüleri dosyasını aç
+  no_images: Ekran Görüntüsü yok
