@@ -115,7 +115,7 @@ settings:
           system: System
           light: Light
           dark: Dark
-      
+
       # Discord RPC
       discord:
         title: Discord RPC
@@ -126,7 +126,7 @@ settings:
             in-launcher: Launcher text
             in-game: In-game text
             selectIcon: Select icon
-            
+
       # Some buttons
       buttons:
         winetricks: winetricks
@@ -135,6 +135,7 @@ settings:
         game: game folder
         repair_game: repair game files
         clear_cache: clear cache
+        close_window: close window
 
       # Patch-related settings
       patch:

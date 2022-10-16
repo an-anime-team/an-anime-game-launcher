@@ -115,7 +115,7 @@ settings:
           system: Rendszerbeállítás
           light: Világos
           dark: Sötét
-      
+
       # Discord RPC
       discord:
         title: Discord RPC
@@ -135,6 +135,7 @@ settings:
         game: játékmappa
         repair_game: Játékfájlok javítása
         clear_cache: gyorsítótár törlése
+        close_window: ablak bezárása
 
       # Patch-related settings
       patch:

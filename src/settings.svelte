@@ -26,7 +26,6 @@
     import RunnerSelectionList from './components/RunnerSelectionList.svelte';
     import ShadersSelection from './components/ShadersSelection.svelte';
     import EnvironmentManager from './components/EnvironmentManager.svelte';
-    import { loop_guard } from 'svelte/internal';
 
     /**
      * Launcher language
@@ -207,10 +206,9 @@
         Neutralino.app.exit();
     });
 
-    document.onkeydown = function (e) {
-        if ((e.altKey && e.key == "F4") || e.key == "Escape") {
-            Neutralino.events.dispatch("windowClose");
-        }
+    document.onkeydown = (e) => {
+        if (e.key == 'Escape')
+            Neutralino.events.dispatch('windowClose');
     };
 </script>
 
@@ -225,12 +223,6 @@
                     on:click={changeItem}
                 >{$_(`settings.${item}.title`)}</div>
             {/each}
-        </div>
-        
-        
-        <div class="save-button" >
-            <!-- svelte-ignore missing-declaration -->
-            <button class="button" on:click={()=>Neutralino.events.dispatch("windowClose")} >✔️</button>
         </div>
 
         <div class="settings" on:scroll={updateItems}>
@@ -333,7 +325,7 @@
                         click={async () => {
                             await IPC.write('check-files-integrity');
 
-                            Neutralino.app.exit();
+                            Neutralino.events.dispatch('windowClose');
                         }}
                     />
 
@@ -343,9 +335,12 @@
                         click={async () => {
                             await IPC.write('clear-cache');
 
-                            Neutralino.app.exit();
+                            Neutralino.events.dispatch('windowClose');
                         }}
                     />
+
+                    <!-- svelte-ignore missing-declaration -->
+                    <Button lang="settings.general.items.buttons.close_window" click={() => Neutralino.events.dispatch('windowClose')} />
                 </div>
 
                 <div class="patch">
@@ -406,7 +401,7 @@
                                     click={async () => {
                                         await IPC.write('update-state');
 
-                                        Neutralino.app.exit();
+                                        Neutralino.events.dispatch('windowClose');
                                     }}
                                 />
                             {/if}
@@ -583,7 +578,7 @@
                 <br>
 
                 <!-- svelte-ignore missing-declaration -->
-                <span><u on:click={() => Neutralino.os.open(constants.uri.launcher)}>GitLab</u></span>
+                <span><u on:click={() => Neutralino.os.open(constants.uri.launcher)}>GitHub</u></span>
 
                 <!-- svelte-ignore missing-declaration -->
                 <span><u on:click={() => Neutralino.os.open(constants.uri.discord)}>Discord</u></span>

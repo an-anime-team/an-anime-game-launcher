@@ -34,13 +34,20 @@ Configs.unserialize = YAML.parse;
 
 Configs.autoFlush = false;
 
+// Add handler on window opener to show windows in fullscreen mode on steam deck
 const openWindow = Windows.open;
 
-// Add handler on window opener to show windows in fullscreen mode on steam deck
-// FIXME: what about `fullscreen: true`? Can't check it
 Windows.open = async (name, options) => {
-    return openWindow(name, options && await Launcher.isSteamOs() ?
-        { ...options, width: window.screen.width, height: window.screen.height } : options);
+    if (options && await Launcher.isSteamOs())
+    {
+        options.width = window.screen.width;
+        options.height = window.screen.height;
+
+        // FIXME: what about `fullscreen: true`? Can't check it
+        // options.fullscreen = true;
+    }
+
+    return openWindow(name, options);
 };
 
 export {

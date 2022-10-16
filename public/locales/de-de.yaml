@@ -115,7 +115,7 @@ settings:
           system: System
           light: Hell
           dark: Dunkel
-      
+
       # Discord RPC
       discord:
         title: Discord RPC
@@ -135,6 +135,7 @@ settings:
         game: Spiel Ordner öffnen
         repair_game: Spieldaten reparieren
         clear_cache: Cache leeren
+        close_window: Fenster schließen
 
       # Patch-related settings
       patch:

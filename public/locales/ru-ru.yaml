@@ -115,7 +115,7 @@ settings:
           system: Системная
           light: Светлая
           dark: Тёмная
-      
+
       # Discord RPC
       discord:
         title: Discord RPC
@@ -135,6 +135,7 @@ settings:
         game: папка игры
         repair_game: исправить файлы игры
         clear_cache: очистить кэш
+        close_window: закрыть окно
 
       # Настроки патча
       patch:

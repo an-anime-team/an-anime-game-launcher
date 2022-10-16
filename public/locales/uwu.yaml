@@ -115,7 +115,7 @@ settings:
           system: system
           light: wight
           dark: dawk
-      
+
       # Discord RPC
       discord:
         title: discowd wpc
@@ -135,6 +135,7 @@ settings:
         game: game f-fowdew
         repair_game: wepaiw game fiwes
         clear_cache: cweaw cache
+        close_window: close window
 
       # Patch-related settings
       patch:

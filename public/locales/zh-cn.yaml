@@ -115,7 +115,7 @@ settings:
           system: 跟随系统
           light: 明亮
           dark: 暗色
-      
+
       # Discord RPC
       discord:
         title: Discord RPC
@@ -126,7 +126,7 @@ settings:
             in-launcher: 启动器内文本
             in-game: 游戏内文本
             selectIcon: 选择图标
-            
+
       # Some buttons
       buttons:
         winetricks: winetricks
@@ -135,6 +135,7 @@ settings:
         game: 游戏文件夹
         repair_game: 修复游戏文件
         clear_cache: 清理缓存
+        close_window: 关闭窗口
 
       # 补丁相关设置
       patch:

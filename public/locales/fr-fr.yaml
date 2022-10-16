@@ -119,7 +119,7 @@ settings:
           system: Système
           light: Lumineux
           dark: Sombre
-      
+
       # Discord RPC
       discord:
         title: Intégration Discord
@@ -139,6 +139,7 @@ settings:
         game: Dossier du jeu
         repair_game: Corriger les fichiers du jeu
         clear_cache: Nettoyer le cache
+        close_window: Fermer la fenêtre
 
       # Patch-related settings
       patch:

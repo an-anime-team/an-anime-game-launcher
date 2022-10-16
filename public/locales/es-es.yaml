@@ -115,7 +115,7 @@ settings:
           system: Del sistema
           light: Claro
           dark: Oscuro
-      
+
       # Discord RPC
       discord:
         title: Discord RPC
@@ -135,6 +135,7 @@ settings:
         game: carpeta del juego
         repair_game: reparar archivos del juego
         clear_cache: borrar el caché
+        close_window: cerrar la ventana
 
       # Opciones sobre el parche
       patch:

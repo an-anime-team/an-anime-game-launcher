@@ -126,7 +126,7 @@ settings:
             in-launcher: ゲーム開始前のテキスト
             in-game: ゲーム中のテキスト
             selectIcon: アイコンを選択
-            
+
       # Some buttons
       buttons:
         winetricks: winetricks
@@ -134,7 +134,8 @@ settings:
         launcher: ランチャーディレクトリ
         game: ゲームディレクトリ
         repair_game: ゲームファイルを修復
-        clear_cache: clear cache
+        clear_cache: クリアキャッシュ
+        close_window: クローズドウィンドウ
 
       # Patch-related settings
       patch:

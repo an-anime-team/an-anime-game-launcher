@@ -134,6 +134,7 @@ settings:
         game: Cartella del gioco
         repair_game: Ripara file di gioco
         clear_cache: Cancella cache
+        close_window: Chiudere la finestra
 
       # Patch-related settings
       patch:

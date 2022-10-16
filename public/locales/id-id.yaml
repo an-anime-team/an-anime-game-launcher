@@ -115,7 +115,7 @@ settings:
           system: Sistem
           light: Terang
           dark: Gelap
-      
+
       # Discord RPC
       discord:
         title: Discord RPC
@@ -135,6 +135,7 @@ settings:
         game: folder game
         repair_game: repair game files
         clear_cache: hapus cache
+        close_window: tutup jendela
 
       # Patch-related settings
       patch:

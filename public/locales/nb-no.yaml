@@ -135,6 +135,7 @@ settings:
         game: spill mappe
         repair_game: reparer spillfiler
         clear_cache: tøm buffer
+        close_window: lukk vindu
 
       # Patch-related settings
       patch:
