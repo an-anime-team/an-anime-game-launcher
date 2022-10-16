@@ -3,15 +3,17 @@ import type Launcher from '../../Launcher';
 import DXVK from '../../core/DXVK';
 import constants from '../../Constants';
 
+const DEFAULT_DXVK = '1.10.3';
+
 export default (launcher: Launcher): Promise<void> => {
     return new Promise(async (resolve) => {
         // Create prefix if it is not created
         import('./CreatePrefix').then((module) => {
             module.default(launcher).then(() => {
                 // And then download the DXVK
-                DXVK.download('1.10.3').then((stream) => {
+                DXVK.download(DEFAULT_DXVK).then((stream) => {
                     launcher.progressBar?.init({
-                        label: 'Downloading DXVK 1.10.3...',
+                        label: `Downloading DXVK ${DEFAULT_DXVK}...`,
                         showSpeed: true,
                         showEta: true,
                         showPercents: true,
@@ -28,7 +30,7 @@ export default (launcher: Launcher): Promise<void> => {
 
                     stream?.unpackStart(() => {
                         launcher.progressBar?.init({
-                            label: () => unpacking ? 'Unpacking DXVK 1.10.3...' : 'Applying DXVK 1.10.3...',
+                            label: () => unpacking ? `Unpacking DXVK ${DEFAULT_DXVK}...` : `Applying DXVK ${DEFAULT_DXVK}...`,
                             showSpeed: true,
                             showEta: true,
                             showPercents: true,
@@ -44,10 +46,10 @@ export default (launcher: Launcher): Promise<void> => {
                         unpacking = false;
 
                         // Select this DXVK
-                        await DXVK.current('1.10.3');
+                        await DXVK.current(DEFAULT_DXVK);
 
                         // And apply it
-                        DXVK.apply(await constants.paths.prefix.current, '1.10.3').then(() => {
+                        DXVK.apply(await constants.paths.prefix.current, DEFAULT_DXVK).then(() => {
                             launcher.progressBar?.hide();
 
                             resolve();

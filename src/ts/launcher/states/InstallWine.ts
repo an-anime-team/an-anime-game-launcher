@@ -3,11 +3,16 @@ import type Launcher from '../../Launcher';
 import Runners from '../../core/Runners';
 import DXVK from '../../core/DXVK';
 
+const DEFAULT_WINE = {
+    name: 'lutris-GE-Proton7-31-x86_64',
+    title: 'Wine-GE-Proton 7-31'
+};
+
 export default (launcher: Launcher): Promise<void> => {
     return new Promise(async (resolve) => {
-        Runners.download('lutris-GE-Proton7-29-x86_64').then((stream) => {
+        Runners.download(DEFAULT_WINE.name).then((stream) => {
             launcher.progressBar?.init({
-                label: 'Downloading Wine-GE-Proton 7-29...',
+                label: `Downloading ${DEFAULT_WINE.title}...`,
                 showSpeed: true,
                 showEta: true,
                 showPercents: true,
@@ -22,7 +27,7 @@ export default (launcher: Launcher): Promise<void> => {
 
             stream?.unpackStart(() => {
                 launcher.progressBar?.init({
-                    label: 'Unpacking Wine-GE-Proton 7-29...',
+                    label: `Unpacking ${DEFAULT_WINE.title}...`,
                     showSpeed: true,
                     showEta: true,
                     showPercents: true,
@@ -36,7 +41,7 @@ export default (launcher: Launcher): Promise<void> => {
 
             stream?.unpackFinish(async () => {
                 // Select this runner
-                await Runners.current('lutris-GE-Proton7-29-x86_64');
+                await Runners.current(DEFAULT_WINE.name);
 
                 // Create prefix if it is not created
                 import('./CreatePrefix').then((module) => {

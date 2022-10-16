@@ -122,7 +122,7 @@ export default class Launcher
         return new Promise(async (resolve) => {
             if (this.settingsMenu)
                 resolve(false);
-            
+
             else
             {
                 this.settingsMenu = undefined;
