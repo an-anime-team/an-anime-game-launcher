@@ -119,16 +119,16 @@ export default new Promise<void>(async (resolve) => {
                 /**
                  * Virtual Desktop Width
                  * 
-                 * @default 720
+                 * @default 1280
                  */
-                width: 720,
+                width: 1280,
 
                 /**
                  * Virtual Desktop Height
                  * 
-                 * @default 1280
+                 * @default 720
                  */
-                height: 1280
+                height: 720
             }
         },
     
