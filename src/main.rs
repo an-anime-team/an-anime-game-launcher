@@ -112,6 +112,7 @@ fn main() {
                         lib::launcher::states::LauncherState::Launch => {
                             main.update(ui::main::Actions::PerformButtonEvent).unwrap();
 
+                            std::thread::sleep(std::time::Duration::from_secs(5));
                             std::process::exit(0);
                         },
                         _ => main.show()

@@ -1,4 +1,3 @@
-use std::path::Path;
 use std::process::Command;
 
 use anime_game_core::genshin::telemetry;
@@ -67,7 +66,7 @@ pub fn try_get_terminal() -> Option<Terminal> {
 pub fn run() -> anyhow::Result<()> {
     let config = config::get()?;
 
-    if !Path::new(&config.game.path).exists() {
+    if !config.game.path.exists() {
         return Err(anyhow::anyhow!("Game is not installed"));
     }
 
