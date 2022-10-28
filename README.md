@@ -23,6 +23,7 @@ I wrote small documentation [here](https://github.com/an-anime-team/an-anime-gam
 | Native | [Releases](https://github.com/an-anime-team/an-anime-game-launcher-gtk/releases) page |
 | AUR | [an-anime-game-launcher-gtk-bin](https://aur.archlinux.org/packages/an-anime-game-launcher-gtk-bin) |
 | Pacstall | [an-anime-game-launcher-gtk-bin](https://pacstall.dev/packages/an-anime-game-launcher-gtk-bin) |
+| Ebuild | [an-anime-game-launcher-gtk](https://github.com/an-anime-team/aagl-ebuilds) |
 
 ## Flatpak support
 
