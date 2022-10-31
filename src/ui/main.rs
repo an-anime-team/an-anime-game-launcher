@@ -357,7 +357,7 @@ impl App {
                                             this.widgets.window.show();
                                         }
                                     });
-                                },
+                                }
 
                                 LauncherState::PatchAvailable(patch) => {
                                     match patch {
@@ -624,15 +624,15 @@ impl App {
                                     std::thread::spawn(clone!(@strong this => move || {
                                         for mut diff in diffs {
                                             let sender = sender.clone();
-    
+
                                             #[allow(unused_must_use)]
                                             let result = diff.download_in(config.launcher.temp.as_ref().unwrap(), move |curr, total| {
                                                 sender.send(InstallerUpdate::DownloadingProgress(curr, total));
                                             });
-    
+
                                             if let Err(err) = result {
                                                 let err: Error = err.into();
-    
+
                                                 this.update(Actions::Toast(Rc::new((
                                                     String::from("Downloading failed"), err.to_string()
                                                 )))).unwrap();

@@ -107,14 +107,46 @@ fn main() {
             }
 
             else {
+                use lib::launcher::states::LauncherState;
+
                 awaiter.then(move |state| {
-                    match state.as_ref().expect("Failed to load launcher state") {
-                        lib::launcher::states::LauncherState::Launch => {
+                    let mut state = state.as_ref().expect("Failed to load launcher state");
+
+                    #[allow(clippy::or_fun_call)]
+                    if let LauncherState::PredownloadAvailable { game, voices } = state {
+                        if let Ok(config) = lib::config::get() {
+                            let mut predownloaded = true;
+
+                            let temp = config.launcher.temp.unwrap_or("/tmp".into());
+
+                            if !temp.join(game.file_name().unwrap_or(String::from("\0"))).exists() {
+                                predownloaded = false;
+                            }
+
+                            else {
+                                for voice in voices {
+                                    if !temp.join(voice.file_name().unwrap_or(String::from("\0"))).exists() {
+                                        predownloaded = false;
+
+                                        break;
+                                    }
+                                }
+                            }
+
+                            if predownloaded {
+                                state = &LauncherState::Launch;
+                            }
+                        }
+                    }
+
+                    match state {
+                        LauncherState::Launch => {
                             main.update(ui::main::Actions::PerformButtonEvent).unwrap();
 
                             std::thread::sleep(std::time::Duration::from_secs(5));
                             std::process::exit(0);
-                        },
+                        }
+
                         _ => main.show()
                     }
                 });
