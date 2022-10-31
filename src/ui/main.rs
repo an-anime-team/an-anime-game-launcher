@@ -641,7 +641,8 @@ impl App {
                                             }
                                         }
 
-                                        this.update(Actions::HideProgressBar).unwrap();
+                                        // Update button from "predownload available" to "update predownloaded"
+                                        this.update_state();
                                     }));
 
                                     receiver.attach(None, clone!(@strong this => move |state| {
