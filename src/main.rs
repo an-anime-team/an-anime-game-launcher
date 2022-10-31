@@ -43,10 +43,24 @@ fn main() {
         None
     );
 
-    let run_game = std::rc::Rc::new(std::cell::Cell::new(false));
+    application.add_main_option(
+        "just-run-game", 
+        glib::Char::from(0),
+        glib::OptionFlags::empty(),
+        glib::OptionArg::None,
+        "Run the game whenever it possible, ignoring updates predownloads",
+        None
+    );
 
-    application.connect_handle_local_options(clone!(@strong run_game => move |_, arg| {
-        if arg.contains("run-game") {
+    let run_game = std::rc::Rc::new(std::cell::Cell::new(false));
+    let just_run_game = std::rc::Rc::new(std::cell::Cell::new(false));
+
+    application.connect_handle_local_options(clone!(@strong run_game, @strong just_run_game => move |_, arg| {
+        if arg.contains("just-run-game") {
+            just_run_game.set(true);
+        }
+
+        else if arg.contains("run-game") {
             run_game.set(true);
         }
 
@@ -102,19 +116,25 @@ fn main() {
             // Load initial launcher state
             let awaiter = main.update_state();
 
-            if !run_game.get() {
+            if !run_game.get() && !just_run_game.get() {
                 main.show();
             }
 
             else {
                 use lib::launcher::states::LauncherState;
 
+                let just_run_game = just_run_game.get();
+
                 awaiter.then(move |state| {
                     let mut state = state.as_ref().expect("Failed to load launcher state");
 
                     #[allow(clippy::or_fun_call)]
                     if let LauncherState::PredownloadAvailable { game, voices } = state {
-                        if let Ok(config) = lib::config::get() {
+                        if just_run_game {
+                            state = &LauncherState::Launch;
+                        }
+
+                        else if let Ok(config) = lib::config::get() {
                             let mut predownloaded = true;
 
                             let temp = config.launcher.temp.unwrap_or("/tmp".into());
