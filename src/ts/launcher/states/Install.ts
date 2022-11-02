@@ -106,9 +106,6 @@ export default (launcher: Launcher): Promise<void> => {
                         ]
                     });
 
-                    if (!await Configs.get('skip_analytics'))
-                        await Neutralino.filesystem.writeFile(`${await constants.paths.launcherDir}/.analytics`, '');
-
                     // Download voice package when the game itself has been installed
                     import('./InstallVoice').then((module) => {
                         module.default(launcher).then(() => resolve());

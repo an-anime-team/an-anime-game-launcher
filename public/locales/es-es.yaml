@@ -341,24 +341,6 @@ tos_violation:
     cancel: Cancelar
     discord: Nuestro servidor de Discord
 
-# Ventana de analíticas
-analytics:
-  title: La comisión de Yanfei...
-  header: Participar en recolección anónima de datos
-
-  body:
-    - Para poder contar la cantidad de usuarios activos en Linux, Yanfei necesita registrar tu IP cada vez que el juego se actualice
-    - La dirección IP será cifrada para mayor seguridad
-
-  actions:
-    share_country:
-      title: Compartir Pais
-      hint: Permite que Yanfei registre el pais asociado a tu IP para hacer generar estadísticas más detalladas. No se guardará ningún dato más que el pais.
-
-    participate: Participar
-    skip: Saltear
-    skip_forever: Saltear y no preguntar de nuevo
-
 # Ventana de Screenshots
 screenshots:
   heading: Screenshots

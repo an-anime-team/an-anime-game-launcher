@@ -343,24 +343,6 @@ tos_violation:
     cancel: キャンセル
     discord: 私達の Discord サーバー
 
-# Analytics window
-analytics:
-  title: 煙緋からのお願い...
-  header: 匿名データ収集に参加する
-
-  body:
-    - アクティブな Linux ユーザーを収集するため、煙緋はゲーム更新の度に IP アドレスを収集したいようです。
-    - IP アドレスはセキュリティー保護のためハッシュ化されます
-
-  actions:
-    share_country:
-      title: 国情報を共有する
-      hint: より詳細な統計を取るために、あなたの IP アドレスが登録された国を収集できるようにします。国以外のデータは保存されません。
-
-    participate: 参加
-    skip: スキップ
-    skip_forever: スキップして再質問しない
-
 # Screenshots window
 screenshots:
   heading: スクリーンショット

@@ -22,10 +22,14 @@ class Stream extends AbstractInstaller
 
 /**
  * List of voiceover sizes
- * 
- * 2.8.0 sizes are predicted and can be incorrect
  */
 const VOICE_PACKAGES_SIZES = {
+    '3.2.0': {
+        'en-us': 8636001252,
+        'ja-jp': 11644175924,
+        'ko-kr': 8956792496,
+        'zh-cn': 7563358032
+    },
     '3.1.0': {
         'en-us': 10160526140,
         'ja-jp': 11223463952,
@@ -37,12 +41,6 @@ const VOICE_PACKAGES_SIZES = {
         'ja-jp': 10314955860,
         'ko-kr': 7991164050,
         'zh-cn': 8103030886
-    },
-    '2.8.0': {
-        'en-us': 8621891855,
-        'ja-jp': 9479988966,
-        'ko-kr': 7361278235,
-        'zh-cn': 7464327416
     }
 };
 
@@ -125,7 +123,7 @@ export default class Voice
                                     {
                                         let t = {};
 
-                                        t[data.game.latest.version] = wma_predict(Object.values(sizes));
+                                        t[data.game.latest.version] = wma_predict(Object.values(sizes).reverse());
 
                                         sizes = Object.assign(t, sizes);
                                     }

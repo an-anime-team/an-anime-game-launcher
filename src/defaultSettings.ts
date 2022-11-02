@@ -231,14 +231,7 @@ export default new Promise<void>(async (resolve) => {
              * @default "5d"
              */
             launcher: '5d'
-        },
-
-        /**
-         * Skip analytics window
-         * 
-         * @default false
-         */
-        skip_analytics: false
+        }
     });
 
     await Configs.flush();

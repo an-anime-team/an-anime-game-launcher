@@ -270,7 +270,6 @@ export default class constants
         },
         launcher: 'https://github.com/an-anime-team/an-anime-game-launcher',
         discord: 'https://discord.gg/ck37X6UWBp',
-        analytics: 'https://aagl.launcher.moe/stat/',
         dxvk_list: 'https://github.com/an-anime-team/an-anime-game-launcher/raw/main/public/dxvks.yaml',
         runners_list: 'https://github.com/an-anime-team/an-anime-game-launcher/raw/main/public/runners.yaml'
     };

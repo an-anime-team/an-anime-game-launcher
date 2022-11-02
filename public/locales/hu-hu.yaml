@@ -343,24 +343,6 @@ tos_violation:
     cancel: Mégse
     discord: 'Discord szerverünk:'
 
-# Analytics window
-analytics:
-  title: Yanfei jussa...
-  header: Részvétel anoním adatgyűjtésben
-
-  body:
-    - Hogy számon tartsuk az aktív Linux felhasználók számát, Yanfei szeretné elkérni az IP-det minden játékfrissítésnél
-    - Az IP-d hashelve lesz biztonsági okokból
-
-  actions:
-    share_country:
-      title: Ország megosztása
-      hint: Engedély Yanfei-nek hogy tárolja az IP címed regisztrált országát, hogy részletesebbek lehessenek a statisztikák. Más adat nem lesz tárolva
-
-    participate: Részvétel
-    skip: Átugrás
-    skip_forever: Átugrás és többet ne kérdezd
-
 # Screenshots window
 screenshots:
   heading: Screenshotok

@@ -334,23 +334,6 @@ tos_violation:
         Bu başlatıcıyı kullanıyorsanız oyun hesabınızın {company}/{company_alterego} tarafından Hizmet Şartları ile uyumlu olmadığı belirlenebilir.
         Böyle bir durumda, hesabınız TOS'a uymadığı için {company}/{company_alterego} istediklerini yapmakta özgürdür. Yasaklama dahil.
         Oyunu gayri resmi olarak oynamaya çalışmanın riskini anlıyorsanız, Tamam'a basın ve Teyvat'ın dünyasını araştırmaya başlayalım!
-# Analytics window
-analytics:
-  title: Yanfei'nin şartı...
-  header: Gizli şekilde data paylaşmaya izin verin
-
-  body:
-    - Linuxda oynayan oyuncuların sayısını tutmak için Yanfei sizden bilgi alışverişi istiyor
-    - IP adresinizi güvenlik amacıyla hashlenecektir
-
-  actions:
-    share_country:
-      title: Ülkeni paylaş
-      hint: Yanfeinin hangi ülkeden geldiği bilgisine erişmesine izin ver
-
-    participate: Katıl
-    skip: Atla
-    skip_forever: Atla ve Bir daha sorma
 
 # Screenshots window
 screenshots:

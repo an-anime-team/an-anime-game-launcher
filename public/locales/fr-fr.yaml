@@ -354,25 +354,6 @@ tos_violation:
     cancel: Annuler
     discord: Notre serveur discord
 
-# Analytics window
-analytics:
-  title: Commission de Yanfei...
-  header: Participer à la collecte anonyme de données
-
-  body:
-    - Pour comptabiliser le nombre d'utilisateurs sur Linux, Yanfei aimerait collecter votre adresse IP à chaque mise à jour du jeu
-    - Votre adresse IP sera hashé pour votre sécurité
-
-  actions:
-    share_country:
-      title: Partager le pays
-      hint: Autoriser Yanfei à sauvegarder votre pays avec votre IP pour rendre les statistiques plus détaillées.
-            Aucune autre donnée que votre pays ne sera sauvegardée
-
-    participate: Participer
-    skip: Passer
-    skip_forever: Passer et ne plus demander
-
 # Screenshots window
 screenshots:
   heading: Captures d'écran

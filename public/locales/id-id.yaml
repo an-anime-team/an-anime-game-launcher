@@ -343,24 +343,6 @@ tos_violation:
     cancel: Batalkan
     discord: Peladen Discord kami
 
-# Analytics window
-analytics:
-  title: Komisi Yanfei...
-  header: Berpartisipasi dalam pengambilan data secara anonim
-
-  body:
-    - Untuk menghitung pengguna aktif di Linux, Yanfei ingin mengumpulkan alamat IP tiap kali Game diperbarui
-    - Alamat IP akan diacak(hashed) untuk tujuan keamanan
-
-  actions:
-    share_country:
-      title: Bagikan negara
-      hint: Memperbolehkan Yanfei untuk menyimpan lokasi negara dimana alamat IP kamu terdaftar untuk membantu melengkapi statistik kami. Tidak ada data lain yang akan disimpan.
-
-    participate: Berpartisipasi
-    skip: Lewati
-    skip_forever: Lewati dan jangan tanya lagi
-
 # Screenshots window
 screenshots:
   heading: Screenshots

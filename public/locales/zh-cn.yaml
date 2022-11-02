@@ -343,24 +343,6 @@ tos_violation:
     cancel: 取消
     discord: 我们的 discord 服务器
 
-# Analytics window
-analytics:
-  title: 烟绯的委托...
-  header: 参与匿名数据收集
-
-  body:
-    - 为了统计 Linux 的用户活跃数据，烟绯想在每次游戏更新时收集你的 IP 地址。
-    - 安全起见，  IP 地址将被加密。
-
-  actions:
-    share_country:
-      title: 分享地区
-      hint: 为使统计数据更加详细，允许烟绯存储你的 IP 地址注册国家。除了国家之外，没有其他数据会被存储
-
-    participate: 加入
-    skip: 跳过
-    skip_forever: 跳过并不再询问
-
 # Screenshots window
 screenshots:
   heading: 截图

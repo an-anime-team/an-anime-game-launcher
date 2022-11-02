@@ -343,24 +343,6 @@ tos_violation:
     cancel: Avbryt
     discord: Vår discord server
 
-# Analytics window
-analytics:
-  title: Yanfei sin kommisjon
-  header: Delta i anonym datainnhenting
-
-  body:
-    - For å telle den aktive brukerbasen for linux, vil Yanfei samle din IP addresse hver gang spillet oppdaterer
-    - IP adressen vil bli kryptert for sikkerhetsformål
-
-  actions:
-    share_country:
-      title: Del land
-      hint: Tillat Yanfei å lagre landet IP adressen din er registrert i for å gjøre statistikkene mer detaljert. Ingen annen data enn landet ditt vil bli lagret
-
-    participate: Delta
-    skip: Skipp
-    skip_forever: Skipp og ikke spør igjen
-
 # Screenshots window
 screenshots:
   heading: Skjermbilder

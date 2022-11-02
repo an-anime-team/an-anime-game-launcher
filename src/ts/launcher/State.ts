@@ -159,46 +159,6 @@ export default class State
                 });
             }
 
-            // If there's analytics window waits for its time
-            else if (await fs.exists(path.join(await constants.paths.launcherDir, '.analytics')))
-            {
-                Windows.open('analytics', {
-                    title: Locales.translate<string>('analytics.title'),
-                    width: 700,
-                    height: 460,
-                    exitProcessOnClose: false
-                });
-                
-                await new Promise<void>((resolve) => {
-                    const analyticsWaiter = async () => {
-                        let closed = false;
-
-                        for (const record of await IPC.read())
-                            if (record.data == 'analytics-close')
-                            {
-                                closed = true;
-
-                                record.pop();
-
-                                break;
-                            }
-
-                        if (closed)
-                            resolve();
-                        
-                        else
-                        {
-                            if (await fs.exists(path.join(await constants.paths.launcherDir, '.analytics')))
-                                setTimeout(analyticsWaiter, 1000);
-
-                            else resolve();
-                        }
-                    };
-
-                    setTimeout(analyticsWaiter, 1000);
-                });
-            }
-
             // Show launcher's window
             await Windows.current.show();
             await Windows.current.center(1280, 700);
