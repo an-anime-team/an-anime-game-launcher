@@ -1,6 +1,6 @@
 [package]
 name = "anime-game-launcher"
-version = "1.2.0"
+version = "1.2.1"
 description = "Anime Game launcher"
 authors = ["Nikita Podvirnyy <suimin.tu.mu.ga.mi@gmail.com>"]
 license = "GPL-3.0"
@@ -13,11 +13,11 @@ lto = true
 opt-level = 3
 
 [build-dependencies]
-gtk = { package = "gtk4", version = "0.4", features = ["v4_8"] }
+glib-build-tools = { version = "0.16" }
 
 [dependencies]
-gtk = { package = "gtk4", version = "0.4", features = ["v4_8"] }
-adw = { package = "libadwaita", version = "0.2.0-alpha.3", features = ["v1_2"] }
+gtk = { package = "gtk4", version = "0.5", features = ["v4_8"] }
+adw = { package = "libadwaita", version = "0.2", features = ["v1_2"] }
 rfd = { version = "0.10", features = ["xdg-portal"], default-features = false }
 
 anime-game-core = { path = "anime-game-core", features = ["all", "static", "genshin"] }
@@ -32,4 +32,4 @@ regex = "1.6.0"
 lazy_static = "1.4.0"
 anyhow = "1.0"
 md5 = "0.7"
-cached = { version = "0.39", features = ["proc_macro"]}
+cached = { version = "0.40", features = ["proc_macro"]}

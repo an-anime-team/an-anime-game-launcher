@@ -1,3 +1,13 @@
+# 1.2.1
+
+- Fixed `--run-game` flag work
+- Fixed predownload button's state updating
+- Now launcher will run the game with `--run-game` flag
+  even when predownloading is available, but if update was already predownloaded
+- Added `--just-run-game` flag to run game even when predownloading is available
+- Updated dependencies, components and the core library;
+  fixed voiceovers updating issue
+
 # 1.2.0
 
 - updated core library; now launcher will try to repair

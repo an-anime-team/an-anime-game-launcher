@@ -75,7 +75,7 @@ fn main() {
     blp_process_dir(String::new());
 
     if read_to_string("assets/resources.xml").is_ok() {
-        gtk::gio::compile_resources(
+        glib_build_tools::compile_resources(
             "assets",
             "assets/resources.xml",
             ".assets.gresource",

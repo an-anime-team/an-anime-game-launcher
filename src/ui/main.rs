@@ -135,7 +135,7 @@ impl AppWidgets {
             String::new(),
             format!("GTK version: {}.{}.{}", gtk::major_version(), gtk::minor_version(), gtk::micro_version()),
             format!("Libadwaita version: {}.{}.{}", adw::major_version(), adw::minor_version(), adw::micro_version()),
-            format!("Pango version: {}", gtk::pango::version_string().unwrap_or("?".into())),
+            format!("Pango version: {}", gtk::pango::version_string()),
             format!("Cairo version: {}", gtk::cairo::version_string()),
         ].join("\n"));
 
