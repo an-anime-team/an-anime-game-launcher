@@ -26,8 +26,8 @@ class Stream extends AbstractInstaller
 const VOICE_PACKAGES_SIZES = {
     '3.2.0': {
         'en-us': 8636001252,
-        'ja-jp': 11644175924,
-        'ko-kr': 8956792496,
+        'ja-jp': 9600770928,
+        'ko-kr': 7416414724,
         'zh-cn': 7563358032
     },
     '3.1.0': {
