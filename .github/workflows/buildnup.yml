@@ -46,10 +46,11 @@ jobs:
         DEBIAN_FRONTEND: noninteractive
 
     steps:
-    - name: Install Deps
+    - name: Install Deps & Rust
       run: |
         apt update
-        apt install -y libgtk-4-1 libgtk-4-dev libadwaita-1-0 libadwaita-1-dev git rustc rustfmt cargo curl openssl libssl-dev
+        apt install -y libgtk-4-1 libgtk-4-dev libadwaita-1-0 libadwaita-1-dev git curl openssl libssl-dev
+        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain stable -y
         
     - name: Checkout
       uses: actions/checkout@v3
