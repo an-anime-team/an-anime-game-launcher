@@ -116,20 +116,6 @@ sudo pacman -Syu unzip tar git curl xdelta3 cabextract libnotify
 sudo dnf install unzip tar git curl xdelta cabextract libnotify webkit2gtk3
 ```
 
-And `libayatana-appindicator` package with its requirements (since they haven't been pushed to the fedora's repos):
-
-| Name | Link |
-| - | - |
-| libayatana-ido | [rpm](https://download.opensuse.org/tumbleweed/repo/oss/x86_64/libayatana-ido3-0_4-0-0.9.0-1.4.x86_64.rpm) / [details](https://download.opensuse.org/tumbleweed/repo/oss/x86_64/libayatana-ido3-0_4-0-0.9.0-1.4.x86_64.rpm.mirrorlist) |
-| libayatana-indicator | [rpm](https://download.opensuse.org/tumbleweed/repo/oss/x86_64/libayatana-indicator3-7-0.9.0-1.7.x86_64.rpm) / [details](https://download.opensuse.org/tumbleweed/repo/oss/x86_64/libayatana-indicator3-7-0.9.0-1.7.x86_64.rpm.mirrorlist) |
-| libayatana-appindicator | [rpm](https://download.opensuse.org/tumbleweed/repo/oss/x86_64/libayatana-appindicator3-1-0.5.90-1.4.x86_64.rpm) / [details](https://download.opensuse.org/tumbleweed/repo/oss/x86_64/libayatana-appindicator3-1-0.5.90-1.4.x86_64.rpm.mirrorlist) |
-
-Install them in the same order as in the table above using the command:
-
-```sh
-sudo rpm -i <path to rpm file>
-```
-
 # Additional requirements
 
 | Name | Description |
