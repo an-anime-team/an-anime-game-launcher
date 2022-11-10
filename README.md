@@ -120,9 +120,9 @@ And `libayatana-appindicator` package with its requirements (since they haven't 
 
 | Name | Link |
 | - | - |
-| libayatana-ido | [rpm](https://download.opensuse.org/tumbleweed/repo/oss/x86_64/libayatana-ido3-0_4-0-0.9.0-1.4.x86_64.rpm) / [details](https://download.opensuse.org/tumbleweed/repo/oss/x86_64/libayatana-ido3-0_4-0-0.9.0-1.4.x86_64.rpm.mirrorlist) |
-| libayatana-indicator | [rpm](https://download.opensuse.org/tumbleweed/repo/oss/x86_64/libayatana-indicator3-7-0.9.0-1.7.x86_64.rpm) / [details](https://download.opensuse.org/tumbleweed/repo/oss/x86_64/libayatana-indicator3-7-0.9.0-1.7.x86_64.rpm.mirrorlist) |
-| libayatana-appindicator | [rpm](https://download.opensuse.org/tumbleweed/repo/oss/x86_64/libayatana-appindicator3-1-0.5.90-1.4.x86_64.rpm) / [details](https://download.opensuse.org/tumbleweed/repo/oss/x86_64/libayatana-appindicator3-1-0.5.90-1.4.x86_64.rpm.mirrorlist) |
+| libayatana-ido | [rpm](https://download.opensuse.org/tumbleweed/repo/oss/x86_64/libayatana-ido3-0_4-0-0.9.2-1.2.x86_64.rpm) / [details](https://download.opensuse.org/tumbleweed/repo/oss/x86_64/libayatana-ido3-0_4-0-0.9.2-1.2.x86_64.rpm.mirrorlist) |
+| libayatana-indicator | [rpm](https://download.opensuse.org/tumbleweed/repo/oss/x86_64/libayatana-indicator3-7-0.9.0-1.9.x86_64.rpm) / [details](https://download.opensuse.org/tumbleweed/repo/oss/x86_64/libayatana-indicator3-7-0.9.0-1.9.x86_64.rpm.mirrorlist) |
+| libayatana-appindicator | [rpm](https://download.opensuse.org/tumbleweed/repo/oss/x86_64/libayatana-appindicator3-1-0.5.91-1.2.x86_64.rpm) / [details](https://download.opensuse.org/tumbleweed/repo/oss/x86_64/libayatana-appindicator3-1-0.5.91-1.2.x86_64.rpm.mirrorlist) |
 
 Install them in the same order as in the table above using the command:
 
