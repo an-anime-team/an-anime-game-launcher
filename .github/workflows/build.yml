@@ -17,6 +17,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       
+      - run: |
+          apt install -y libwebkit2gtk-4.1-0 libwebkit2gtk-4.1-dev
+          apt remove -y libwebkit2gtk-4.0-37 libwebkit2gtk-4.0-dev
+      
       - name: Setup Node.js environment
         uses: actions/setup-node@v3.4.1
         with:
