@@ -13,32 +13,9 @@ on:
 env:
   CARGO_TERM_COLOR: always
 
-jobs:
+jobs:   
   build_and_upload:
-    runs-on: ubuntu-22.04
-
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v3
-      with:
-        submodules: true
-        
-    - name: Install Deps
-      run: sudo apt install -y libgtk-4-1 libgtk-4-dev libadwaita-1-0 libadwaita-1-dev
-    
-    - name: Build
-      run: cargo build --release --verbose
-      
-    - name: Upload a Build Artifact
-      uses: actions/upload-artifact@v3.1.0
-      with:
-        name: Launcher
-        path: target/release/anime-game-launcher
-        
-  build_and_upload_exp:
     runs-on: ubuntu-latest
-    needs: build_and_upload
-    if: ${{ always() && needs.build_and_upload.result == 'failure' }}
     
     container:
       image: ubuntu:devel
