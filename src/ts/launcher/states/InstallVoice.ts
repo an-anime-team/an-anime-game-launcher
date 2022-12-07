@@ -8,6 +8,9 @@ import { promisify } from '../../../empathize';
 
 import Voice from '../../Voice';
 import Game from '../../Game';
+import constants from '../../Constants';
+
+declare const Neutralino;
 
 export default (launcher: Launcher): Promise<void> => {
     return new Promise(async (resolve) => {
@@ -120,7 +123,19 @@ export default (launcher: Launcher): Promise<void> => {
                                     module.default(launcher).then(() => {
                                         // Remove outdated files
                                         import('./RemoveOutdated').then((module) => {
-                                            module.default(launcher).then(() => resolve());
+                                            module.default(launcher).then(async () => {
+                                                // Create .version file
+                                                let version = new Uint8Array(new ArrayBuffer(3));
+
+                                                version[0] = 3;
+                                                version[1] = 3;
+                                                version[2] = 0;
+
+                                                Neutralino.filesystem.writeBinaryFile(`${await constants.paths.voiceDir}/${Voice.langs[selectedVoice]}/.version`, version);
+
+                                                // Continue other actions
+                                                resolve();
+                                            });
                                         });
                                     });
                                 });

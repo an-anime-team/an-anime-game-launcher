@@ -456,11 +456,13 @@ export default class State
                                     {
                                         const patch = await Patch.latest;
 
-                                        // If the latest game version is, for example, 2.3.0
-                                        // and the patch is 2.4.0 preparation, it means that
-                                        // 2.4.0 will be released soon, but since it's still not released
-                                        // we shouldn't show something about it to user and just let him play the game
-                                        if (gameLatest.game.latest.version === patch.version && !patch.applied)
+                                        // Current version is newer than the patch version => it's unavailable
+                                        if (gameLatest.game.latest.version != patch.version)
+                                            state = 'patch-unavailable';
+
+                                        // Patch is not applied and we should allow user to decide what to do
+                                        // with this information
+                                        else if (!patch.applied)
                                         {
                                             state = patch.state == 'preparation' ?
                                                 'patch-unavailable' : (patch.state == 'testing' ?

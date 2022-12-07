@@ -24,23 +24,17 @@ class Stream extends AbstractInstaller
  * List of voiceover sizes
  */
 const VOICE_PACKAGES_SIZES = {
+    '3.3.0': {
+        'en-us': 9183929971,
+        'ja-jp': 10250403911,
+        'ko-kr': 7896362859,
+        'zh-cn': 8047012675
+    },
     '3.2.0': {
         'en-us': 8636001252,
         'ja-jp': 9600770928,
         'ko-kr': 7416414724,
         'zh-cn': 7563358032
-    },
-    '3.1.0': {
-        'en-us': 10160526140,
-        'ja-jp': 11223463952,
-        'ko-kr': 8674947588,
-        'zh-cn': 8796386584
-    },
-    '3.0.0': {
-        'en-us': 9359645164,
-        'ja-jp': 10314955860,
-        'ko-kr': 7991164050,
-        'zh-cn': 8103030886
     }
 };
 
@@ -110,36 +104,51 @@ export default class Voice
                             for (const folder of Object.values(this.langs))
                                 if (files.includes(folder))
                                 {
-                                    const actualSize = parseInt((await Neutralino.os.execCommand(`du -b "${path.addSlashes(`${voiceDir}/${folder}`)}"`))
-                                        .stdOut.split('\t')[0]);
-
                                     const locale = Object.keys(this.langs).find((lang) => this.langs[lang] === folder) as VoiceLang;
 
-                                    let sizes = getVoicePackageSizes(locale);
-
-                                    // If latest voice packages sizes aren't listed in `VOICE_PACKAGES_SIZES`
-                                    // then we should predict their sizes
-                                    if (Object.keys(sizes)[0] != data.game.latest.version)
+                                    // If we have a .version file there - read it and return its output
+                                    try
                                     {
-                                        let t = {};
+                                        const version = new Uint8Array(await Neutralino.filesystem.readBinaryFile(`${voiceDir}/${folder}/.version`));
 
-                                        t[data.game.latest.version] = wma_predict(Object.values(sizes).reverse());
-
-                                        sizes = Object.assign(t, sizes);
+                                        installedVoices.push({
+                                            lang: locale,
+                                            version: `${version[0]}.${version[1]}.${version[2]}`
+                                        } as InstalledVoice);
                                     }
 
-                                    // To predict voice package version we're going through saved voice packages sizes in the `VOICE_PACKAGES_SIZES` constant
-                                    // plus predicted voice packages sizes if needed. The version with closest folder size is version we have installed
-                                    for (const version in sizes)
-                                        if (actualSize > sizes[version] - 512 * 1024 * 1024)
-                                        {
-                                            installedVoices.push({
-                                                lang: locale,
-                                                version
-                                            } as InstalledVoice);
+                                    // Otherwise try to predict voiceover's version
+                                    catch
+                                    {
+                                        const actualSize = parseInt((await Neutralino.os.execCommand(`du -b "${path.addSlashes(`${voiceDir}/${folder}`)}"`))
+                                            .stdOut.split('\t')[0]);
 
-                                            break;
+                                        let sizes = getVoicePackageSizes(locale);
+
+                                        // If latest voice packages sizes aren't listed in `VOICE_PACKAGES_SIZES`
+                                        // then we should predict their sizes
+                                        if (Object.keys(sizes)[0] != data.game.latest.version)
+                                        {
+                                            let t = {};
+
+                                            t[data.game.latest.version] = wma_predict(Object.values(sizes).reverse());
+
+                                            sizes = Object.assign(t, sizes);
                                         }
+
+                                        // To predict voice package version we're going through saved voice packages sizes in the `VOICE_PACKAGES_SIZES` constant
+                                        // plus predicted voice packages sizes if needed. The version with closest folder size is version we have installed
+                                        for (const version in sizes)
+                                            if (actualSize > sizes[version] - 512 * 1024 * 1024)
+                                            {
+                                                installedVoices.push({
+                                                    lang: locale,
+                                                    version
+                                                } as InstalledVoice);
+
+                                                break;
+                                            }
+                                    }
                                 }
 
                                 resolveVoices();

@@ -249,6 +249,10 @@ export default class Patch
                             if (source === 'origin')
                                 resolve(await getLatestPatchInfo(versions, 'additional'));
 
+                            // If we still have more versions to check - we go ahead
+                            else if (versions.length > 1)
+                                resolve(await getLatestPatchInfo(versions.slice(1), 'origin'));
+
                             // Otherwise both of origin and additional repos
                             // are unreachable and we should notice about that
                             else reject(error);
