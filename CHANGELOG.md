@@ -1,3 +1,7 @@
+# 1.2.3 (bugfix)
+
+- fixed dxvk 2.0 version identification
+
 # 1.2.2
 
 - updated core library with a few fixes
