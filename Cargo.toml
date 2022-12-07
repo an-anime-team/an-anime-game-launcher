@@ -13,7 +13,7 @@ lto = true
 opt-level = 3
 
 [build-dependencies]
-glib-build-tools = { version = "0.16" }
+glib-build-tools = "0.16"
 
 [dependencies]
 gtk = { package = "gtk4", version = "0.5", features = ["v4_8"] }
@@ -28,8 +28,7 @@ serde_json = "1.0"
 
 dirs = "4.0.0"
 wait_not_await = "0.2.1"
-regex = "1.6.0"
 lazy_static = "1.4.0"
 anyhow = "1.0"
 md5 = "0.7"
-cached = { version = "0.40", features = ["proc_macro"]}
+cached = { version = "0.40", features = ["proc_macro"] }

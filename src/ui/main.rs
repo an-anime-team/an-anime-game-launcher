@@ -439,7 +439,7 @@ impl App {
                                                 }
                                             }
 
-                                            if config.game.wine.selected == None {
+                                            if config.game.wine.selected.is_none() {
                                                 match WineVersion::latest() {
                                                     Ok(wine) => {
                                                         match Installer::new(wine.uri) {
@@ -536,7 +536,12 @@ impl App {
                                 LauncherState::VoiceNotInstalled(diff) |
                                 LauncherState::GameUpdateAvailable(diff) |
                                 LauncherState::GameNotInstalled(diff) => {
-                                    let (sender, receiver) = glib::MainContext::channel::<InstallerUpdate>(glib::PRIORITY_DEFAULT);
+                                    enum UpdaterState {
+                                        State(anime_game_core::installer::installer::Update),
+                                        Finished
+                                    }
+
+                                    let (sender, receiver) = glib::MainContext::channel::<UpdaterState>(glib::PRIORITY_DEFAULT);
 
                                     let this = this.clone();
                                     let this_copy = this.clone();
@@ -546,16 +551,24 @@ impl App {
                                     // Download diff
                                     // We need to update components from the main thread
                                     receiver.attach(None, move |state| {
-                                        match this.widgets.progress_bar.update_from_state(state) {
-                                            ProgressUpdateResult::Updated => (),
+                                        match state {
+                                            UpdaterState::State(state) => {
+                                                match this.widgets.progress_bar.update_from_state(state) {
+                                                    ProgressUpdateResult::Updated => (),
 
-                                            ProgressUpdateResult::Error(msg, err) => {
-                                                this.widgets.progress_bar.hide();
+                                                    ProgressUpdateResult::Error(msg, err) => {
+                                                        this.widgets.progress_bar.hide();
 
-                                                this.toast(msg, err);
+                                                        this.toast(msg, err);
+                                                    }
+
+                                                    ProgressUpdateResult::Finished => {
+                                                        this.widgets.progress_bar.update(1.0, Some("Applying patches..."));
+                                                    }
+                                                }
                                             }
 
-                                            ProgressUpdateResult::Finished => {
+                                            UpdaterState::Finished => {
                                                 this.widgets.progress_bar.hide();
 
                                                 let this = this.clone();
@@ -573,6 +586,8 @@ impl App {
                                                         }
                                                     }
                                                 });
+
+                                                return glib::Continue(false);
                                             }
                                         }
 
@@ -581,8 +596,10 @@ impl App {
 
                                     // Download diff in separate thread to not to freeze the main one
                                     std::thread::spawn(move || {
+                                        let updater_sender = sender.clone();
+
                                         let result = diff.install_to_by(config.game.path, config.launcher.temp, move |state| {
-                                            sender.send(state).unwrap();
+                                            updater_sender.send(UpdaterState::State(state)).unwrap();
                                         });
 
                                         if let Err(err) = result {
@@ -592,6 +609,8 @@ impl App {
                                                 String::from("Downloading failed"), err.to_string()
                                             )))).unwrap();
                                         }
+
+                                        sender.send(UpdaterState::Finished).unwrap();
                                     });
                                 },
         

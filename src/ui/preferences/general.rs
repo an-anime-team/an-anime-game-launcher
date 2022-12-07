@@ -659,7 +659,7 @@ impl App {
             }
 
             Patch::Outdated { current, latest, .. } => {
-                self.widgets.patch_version.set_label("outdated");
+                self.widgets.patch_version.set_label(&format!("outdated ({})", current));
                 self.widgets.patch_version.set_css_classes(&["warning"]);
 
                 self.widgets.patch_version.set_tooltip_text(Some(&format!("Patch is outdated ({current} -> {latest})")));
