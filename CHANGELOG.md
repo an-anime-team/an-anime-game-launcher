@@ -1,3 +1,14 @@
+# 1.2.2
+
+- updated core library with a few fixes
+- improved game updater. Now it will not start to download next update
+  before the previous one was properly applied (hdiff and so on)
+
+Core library changes:
+- updated `VOICE_PACKAGES_SIZES`
+- added version prediction based on the `.version` file for voiceovers
+- fixed redownloading of downloaded files in `Downloader::download_to`
+
 # 1.2.1
 
 - Fixed `--run-game` flag work
