@@ -122,12 +122,32 @@ Adw.PreferencesPage page {
         }
 
         Adw.ActionRow {
-            title: "Fullscreen";
-            subtitle: "Open game window in fullscreen mode";
+            title: "Monitor";
+            subtitle: "Number of monitor you want to run the game on";
 
-            Gtk.Switch fps_unlocker_fullscreen_switcher {
+            Gtk.SpinButton fps_unlocker_monitor_num {
                 valign: center;
+
+                adjustment: Gtk.Adjustment {
+                    value: 1;
+                    lower: 1;
+                    upper: 10;
+                    page-increment: 1;
+                    step-increment: 1;
+                };
             }
+        }
+
+        Adw.ComboRow fps_unlocker_window_mode_combo {
+            title: "Window mode";
+
+            model: Gtk.StringList {
+                strings [
+                    "Default",
+                    "Popup",
+                    "Fullscreen"
+                ]
+            };
         }
 
         Adw.ComboRow fps_unlocker_priority_combo {

@@ -11,7 +11,8 @@ pub mod prelude {
 pub struct Config {
     pub fps: u64,
     pub power_saving: bool,
-    pub fullscreen: bool,
+    pub monitor: u64,
+    pub window_mode: u64,
     pub priority: u64
 }
 
@@ -20,7 +21,8 @@ impl Default for Config {
         Self {
             fps: 120,
             power_saving: false,
-            fullscreen: false,
+            monitor: 1,
+            window_mode: 0,
             priority: 3
         }
     }
@@ -41,9 +43,14 @@ impl From<&JsonValue> for Config {
                 None => default.power_saving
             },
 
-            fullscreen: match value.get("fullscreen") {
-                Some(value) => value.as_bool().unwrap_or(default.fullscreen),
-                None => default.fullscreen
+            monitor: match value.get("monitor") {
+                Some(value) => value.as_u64().unwrap_or(default.monitor),
+                None => default.monitor
+            },
+
+            window_mode: match value.get("window_mode") {
+                Some(value) => value.as_u64().unwrap_or(default.window_mode),
+                None => default.window_mode
             },
 
             priority: match value.get("priority") {

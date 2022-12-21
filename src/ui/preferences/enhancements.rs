@@ -43,7 +43,8 @@ pub struct AppWidgets {
     pub fps_unlocker_combo: adw::ComboRow,
     pub fps_unlocker_switcher: gtk::Switch,
     pub fps_unlocker_power_saving_switcher: gtk::Switch,
-    pub fps_unlocker_fullscreen_switcher: gtk::Switch,
+    pub fps_unlocker_monitor_num: gtk::SpinButton,
+    pub fps_unlocker_window_mode_combo: adw::ComboRow,
     pub fps_unlocker_priority_combo: adw::ComboRow
 }
 
@@ -76,7 +77,8 @@ impl AppWidgets {
             fps_unlocker_combo: get_object(&builder, "fps_unlocker_combo")?,
             fps_unlocker_switcher: get_object(&builder, "fps_unlocker_switcher")?,
             fps_unlocker_power_saving_switcher: get_object(&builder, "fps_unlocker_power_saving_switcher")?,
-            fps_unlocker_fullscreen_switcher: get_object(&builder, "fps_unlocker_fullscreen_switcher")?,
+            fps_unlocker_monitor_num: get_object(&builder, "fps_unlocker_monitor_num")?,
+            fps_unlocker_window_mode_combo: get_object(&builder, "fps_unlocker_window_mode_combo")?,
             fps_unlocker_priority_combo: get_object(&builder, "fps_unlocker_priority_combo")?
         };
 
@@ -271,10 +273,19 @@ impl App {
             }
         });
 
-        // FPS unlocker -> fullscreen swithing
-        self.widgets.fps_unlocker_fullscreen_switcher.connect_state_notify(move |switch| {
+        // FPS unlocker -> monitor number
+        self.widgets.fps_unlocker_monitor_num.connect_changed(move |button| {
             if let Ok(mut config) = config::get() {
-                config.game.enhancements.fps_unlocker.config.fullscreen = switch.state();
+                config.game.enhancements.fps_unlocker.config.monitor = button.value() as u64;
+
+                config::update(config);
+            }
+        });
+
+        // FPS unlocker -> window mode combo
+        self.widgets.fps_unlocker_window_mode_combo.connect_selected_notify(move |row| {
+            if let Ok(mut config) = config::get() {
+                config.game.enhancements.fps_unlocker.config.window_mode = row.selected() as u64;
 
                 config::update(config);
             }
@@ -371,8 +382,11 @@ impl App {
         // Switch FPS unlocker -> power saving
         self.widgets.fps_unlocker_power_saving_switcher.set_state(config.game.enhancements.fps_unlocker.config.power_saving);
 
-        // Switch FPS unlocker -> fullscreen
-        self.widgets.fps_unlocker_fullscreen_switcher.set_state(config.game.enhancements.fps_unlocker.config.fullscreen);
+        // Switch FPS unlocker -> monitor number
+        self.widgets.fps_unlocker_monitor_num.set_value(config.game.enhancements.fps_unlocker.config.monitor as f64);
+
+        // Switch FPS unlocker -> window mode
+        self.widgets.fps_unlocker_window_mode_combo.set_selected(config.game.enhancements.fps_unlocker.config.window_mode as u32);
 
         // Switch FPS unlocker -> priority
         self.widgets.fps_unlocker_priority_combo.set_selected(config.game.enhancements.fps_unlocker.config.priority as u32);
