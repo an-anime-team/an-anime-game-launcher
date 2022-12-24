@@ -1,3 +1,11 @@
+# 1.2.4
+
+- updated components and the core library;
+  fixed issue with an error message when the game's folder is empty
+
+From previous commits:
+- added new options to the fps unlocker
+
 # 1.2.3 (bugfix)
 
 - fixed dxvk 2.0 version identification

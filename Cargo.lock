@@ -31,11 +31,11 @@ dependencies = [
 
 [[package]]
 name = "anime-game-core"
-version = "1.3.1"
+version = "1.3.2"
 dependencies = [
  "anyhow",
  "bzip2",
- "cached",
+ "cached 0.40.0",
  "curl",
  "flate2",
  "fs_extra",
@@ -52,11 +52,11 @@ dependencies = [
 
 [[package]]
 name = "anime-game-launcher"
-version = "1.2.3"
+version = "1.2.4"
 dependencies = [
  "anime-game-core",
  "anyhow",
- "cached",
+ "cached 0.41.0",
  "dirs",
  "glib-build-tools",
  "gtk4",
@@ -272,6 +272,25 @@ name = "cached"
 version = "0.40.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "72b4147cd94d5fbdc2ab71b11d50a2f45493625576b3bb70257f59eedea69f3d"
+dependencies = [
+ "async-trait",
+ "async_once",
+ "cached_proc_macro",
+ "cached_proc_macro_types",
+ "futures",
+ "hashbrown",
+ "instant",
+ "lazy_static",
+ "once_cell",
+ "thiserror",
+ "tokio",
+]
+
+[[package]]
+name = "cached"
+version = "0.41.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ec6d20b3d24b6c74e2c5331d2d3d8d1976a9883c7da179aa851afa4c90d62e36"
 dependencies = [
  "async-trait",
  "async_once",
@@ -1278,9 +1297,9 @@ dependencies = [
 
 [[package]]
 name = "ntapi"
-version = "0.3.7"
+version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c28774a7fd2fbb4f0babd8237ce554b73af68021b5f695a3cebd6c59bac0980f"
+checksum = "bc51db7b362b205941f71232e56c625156eb9a929f8cf74a428fd5bc094a4afc"
 dependencies = [
  "winapi",
 ]
@@ -1958,9 +1977,9 @@ dependencies = [
 
 [[package]]
 name = "sysinfo"
-version = "0.26.1"
+version = "0.27.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "621609553b14bca49448b3c97e625d7187980cc2a42fd169b4c3b306dcc4a7e9"
+checksum = "ccb297c0afb439440834b4bcf02c5c9da8ec2e808e70f36b0d8e815ff403bd24"
 dependencies = [
  "cfg-if",
  "core-foundation-sys",
