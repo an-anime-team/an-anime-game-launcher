@@ -256,11 +256,11 @@ export default class constants
         telemetry: {
             global: [
                 atob('bG9nLXVwbG9hZC1vcy5ob3lvdmVyc2UuY29t'),
-                atob('b3ZlcnNlYXVzcGlkZXIueXVhbnNoZW4uY29t')
+                atob('c2ctcHVibGljLWRhdGEtYXBpLmhveW92ZXJzZS5jb20=')
             ],
             cn: [
                 atob('bG9nLXVwbG9hZC5taWhveW8uY29t'),
-                atob('dXNwaWRlci55dWFuc2hlbi5jb20=')
+                atob('cHVibGljLWRhdGEtYXBpLm1paG95by5jb20=')
             ]
         },
         winetricks: 'https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks',
