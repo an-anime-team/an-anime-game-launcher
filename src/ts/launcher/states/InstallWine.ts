@@ -4,8 +4,8 @@ import Runners from '../../core/Runners';
 import DXVK from '../../core/DXVK';
 
 const DEFAULT_WINE = {
-    name: 'lutris-GE-Proton7-31-x86_64',
-    title: 'Wine-GE-Proton 7-31'
+    name: 'lutris-GE-Proton7-35-x86_64',
+    title: 'Wine-GE-Proton 7-35'
 };
 
 export default (launcher: Launcher): Promise<void> => {
