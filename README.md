@@ -36,6 +36,7 @@ instead of the actual name of the game, to avoid search engine parsing.
 | AUR | [an-anime-game-launcher-bin](https://aur.archlinux.org/packages/an-anime-game-launcher-bin) |
 | Pacstall | [an-anime-game-launcher-bin](https://pacstall.dev/packages/an-anime-game-launcher-bin) |
 | Gentoo | [an-anime-game-launcher-bin](https://github.com/an-anime-team/aagl-ebuilds) |
+| RPM ![build result](https://build.opensuse.org/projects/home:Maroxy:AAT-Apps/packages/AAGL/badge.svg?type=default) | [an-anime-game-launcher](https://build.opensuse.org/repositories/home:Maroxy:AAT-Apps) |
 
 
 ## Flatpak support
