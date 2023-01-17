@@ -174,7 +174,6 @@ pub fn run() -> anyhow::Result<()> {
     command.envs(config.game.enhancements.hud.get_env_vars(&config));
     command.envs(config.game.enhancements.fsr.get_env_vars());
     command.envs(config.game.wine.language.get_env_vars());
-
     command.envs(config.game.environment);
 
     // Run command

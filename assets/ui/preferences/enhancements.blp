@@ -55,7 +55,14 @@ Adw.PreferencesPage page {
                 ]
             };
         }
-
+        Adw.ComboRow discord_rpc_row
+        {
+            title: "Discord Rpc";
+            subtitle: "placeholder";
+            Gtk.Switch discord_rpc_switch {
+                valign: center;
+            }
+        }
         Adw.ComboRow fsr_combo {
             title: "FSR";
             subtitle: "Upscales game to your monitor size. To use select lower\nresolution in the game's settings and press Alt+Enter";
@@ -73,6 +80,8 @@ Adw.PreferencesPage page {
                 valign: center;
             }
         }
+
+
 
         Adw.ActionRow gamemode_row {
             title: "Gamemode";

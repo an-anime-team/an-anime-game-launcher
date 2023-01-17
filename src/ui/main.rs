@@ -878,7 +878,6 @@ impl App {
         };
 
         self.actions.set(actions);
-
         result
     }
 
