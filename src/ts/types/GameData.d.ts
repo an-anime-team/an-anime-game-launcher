@@ -12,6 +12,7 @@ type Latest = {
     version: string;
     path: string;
     size: string;
+    package_size: string;
     md5: string;
     entry: string;
     voice_packs: VoicePack[];
@@ -24,6 +25,7 @@ type Diff = {
     version: string;
     path: string;
     size: string;
+    package_size: string;
     md5: string;
     is_recommended_update: boolean;
     voice_packs: VoicePack[];
@@ -83,6 +85,7 @@ export type {
     Game,
     Plugins,
     Plugin,
+    PreDownloadGame,
     DeprecatedPackage,
     Data,
     ServerResponse
