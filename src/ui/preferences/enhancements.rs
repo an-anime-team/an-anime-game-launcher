@@ -40,7 +40,7 @@ impl WidgetTemplate for Enhancements {
                         if is_ready() {
                             if let Ok(mut config) = config::get() {
                                 config.game.wine.sync = WineSync::try_from(row.selected()).unwrap();
-    
+
                                 config::update(config);
                             }
                         }
@@ -72,7 +72,7 @@ impl WidgetTemplate for Enhancements {
                         if is_ready() {
                             if let Ok(mut config) = config::get() {
                                 config.game.wine.language = WineLang::try_from(row.selected()).unwrap();
-    
+
                                 config::update(config);
                             }
                         }
@@ -83,7 +83,19 @@ impl WidgetTemplate for Enhancements {
                     set_title: &tr("borderless-window"),
 
                     add_suffix = &gtk::Switch {
-                        set_valign: gtk::Align::Center
+                        set_valign: gtk::Align::Center,
+
+                        set_state: CONFIG.game.wine.borderless,
+
+                        connect_state_notify => move |switch| {
+                            if is_ready() {
+                                if let Ok(mut config) = config::get() {
+                                    config.game.wine.borderless = switch.state();
+
+                                    config::update(config);
+                                }
+                            }
+                        }
                     }
                 },
 
@@ -109,7 +121,7 @@ impl WidgetTemplate for Enhancements {
 
                                 config.game.wine.virtual_desktop.width = width;
                                 config.game.wine.virtual_desktop.height = height;
-    
+
                                 config::update(config);
                             }
                         }
@@ -124,7 +136,7 @@ impl WidgetTemplate for Enhancements {
                             if is_ready() {
                                 if let Ok(mut config) = config::get() {
                                     config.game.wine.virtual_desktop.enabled = switch.state();
-        
+
                                     config::update(config);
                                 }
                             }
@@ -145,6 +157,18 @@ impl WidgetTemplate for Enhancements {
                         "DXVK",
                         "MangoHud"
                     ]),
+
+                    set_selected: CONFIG.game.enhancements.hud.into(),
+
+                    connect_selected_notify => move |row| {
+                        if is_ready() {
+                            if let Ok(mut config) = config::get() {
+                                config.game.enhancements.hud = HUD::try_from(row.selected()).unwrap();
+
+                                config::update(config);
+                            }
+                        }
+                    }
                 },
 
                 adw::ComboRow {
@@ -159,8 +183,40 @@ impl WidgetTemplate for Enhancements {
                         &tr("performance")
                     ]),
 
+                    // FSR strength selection
+                    // 
+                    // Ultra Quality = 5
+                    // Quality       = 4
+                    // Balanced      = 3
+                    // Performance   = 2
+                    // 
+                    // Source: Bottles (https://github.com/bottlesdevs/Bottles/blob/22fa3573a13f4e9b9c429e4cdfe4ca29787a2832/src/ui/details-preferences.ui#L88)
+                    set_selected: 5 - CONFIG.game.enhancements.fsr.strength as u32,
+
+                    connect_selected_notify => move |row| {
+                        if is_ready() {
+                            if let Ok(mut config) = config::get() {
+                                config.game.enhancements.fsr.strength = 5 - row.selected() as u64;
+
+                                config::update(config);
+                            }
+                        }
+                    },
+
                     add_suffix = &gtk::Switch {
-                        set_valign: gtk::Align::Center
+                        set_valign: gtk::Align::Center,
+
+                        set_state: CONFIG.game.enhancements.fsr.enabled,
+
+                        connect_state_notify => move |switch| {
+                            if is_ready() {
+                                if let Ok(mut config) = config::get() {
+                                    config.game.enhancements.fsr.enabled = switch.state();
+
+                                    config::update(config);
+                                }
+                            }
+                        }
                     }
                 },
 
@@ -169,7 +225,19 @@ impl WidgetTemplate for Enhancements {
                     set_subtitle: &tr("gamemode-description"),
 
                     add_suffix = &gtk::Switch {
-                        set_valign: gtk::Align::Center
+                        set_valign: gtk::Align::Center,
+
+                        set_state: CONFIG.game.enhancements.gamemode,
+
+                        connect_state_notify => move |switch| {
+                            if is_ready() {
+                                if let Ok(mut config) = config::get() {
+                                    config.game.enhancements.gamemode = switch.state();
+
+                                    config::update(config);
+                                }
+                            }
+                        }
                     }
                 }
             },
@@ -193,8 +261,41 @@ impl WidgetTemplate for Enhancements {
                         "240"
                     ]),
 
+                    set_selected: match Fps::from_num(CONFIG.game.enhancements.fps_unlocker.config.fps) {
+                        Fps::Custom(_)         => 0,
+                        Fps::Ninety            => 1,
+                        Fps::HundredTwenty     => 2,
+                        Fps::HundredFourtyFour => 3,
+                        Fps::HundredSixtyFive  => 4,
+                        Fps::HundredEighty     => 5,
+                        Fps::TwoHundred        => 6,
+                        Fps::TwoHundredFourty  => 7
+                    },
+
+                    connect_selected_notify => move |row| {
+                        if is_ready() && row.selected() > 0 {
+                            if let Ok(mut config) = config::get() {
+                                config.game.enhancements.fps_unlocker.config.fps = Fps::list()[row.selected() as usize - 1].to_num();
+
+                                config::update(config);
+                            }
+                        }
+                    },
+
                     add_suffix = &gtk::Switch {
-                        set_valign: gtk::Align::Center
+                        set_valign: gtk::Align::Center,
+
+                        set_state: CONFIG.game.enhancements.fps_unlocker.enabled,
+
+                        connect_state_notify => move |switch| {
+                            if is_ready() {
+                                if let Ok(mut config) = config::get() {
+                                    config.game.enhancements.fps_unlocker.enabled = switch.state();
+
+                                    config::update(config);
+                                }
+                            }
+                        }
                     }
                 },
 
@@ -203,7 +304,19 @@ impl WidgetTemplate for Enhancements {
                     set_subtitle: &tr("power-saving-description"),
 
                     add_suffix = &gtk::Switch {
-                        set_valign: gtk::Align::Center
+                        set_valign: gtk::Align::Center,
+
+                        set_state: CONFIG.game.enhancements.fps_unlocker.config.power_saving,
+
+                        connect_state_notify => move |switch| {
+                            if is_ready() {
+                                if let Ok(mut config) = config::get() {
+                                    config.game.enhancements.fps_unlocker.config.power_saving = switch.state();
+
+                                    config::update(config);
+                                }
+                            }
+                        }
                     }
                 }
             }
