@@ -301,12 +301,15 @@ export default class Voice
      */
     public static async isUpdatePredownloaded(lang: VoiceLang|VoiceLang[], predownloadData: PreDownloadGame | GameData, version: string | null): Promise<boolean>
     {
+        const debugThread = new DebugThread('Voice.isUpdatePredownloaded', `Checking if the voice update is predownloaded from version ${version} and language ${lang}. Data: ${JSON.stringify(predownloadData)}`);
         if (typeof lang === 'string')
         {
-            const voicePack = resolveVoicePack(lang, predownloadData, await Game.current);
+            const voicePack = resolveVoicePack(lang, predownloadData, version);
 
-            if (!voicePack)
+            if (!voicePack) {
+                debugThread.log(`voice pack not found for langugae ${lang} and version ${version}.`)
                 return false;
+            }
 
             const filePath = `${await constants.paths.launcherDir}/voice-${lang}-predownloaded.zip`;
 
