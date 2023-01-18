@@ -1,15 +1,18 @@
-use gtk::prelude::*;
-
-use gtk::{CssProvider, StyleContext, STYLE_PROVIDER_PRIORITY_APPLICATION};
+use discord_rich_presence::{
+    activity::{self, Activity, Party, Secrets},
+    DiscordIpc, DiscordIpcClient,
+};
 use gtk::gdk::Display;
 use gtk::glib;
 use gtk::glib::clone;
+use gtk::prelude::*;
+use gtk::{CssProvider, StyleContext, STYLE_PROVIDER_PRIORITY_APPLICATION};
 
-use std::path::Path;
 use std::fs;
+use std::path::Path;
 
-pub mod ui;
 pub mod lib;
+pub mod ui;
 
 use ui::*;
 
@@ -29,55 +32,112 @@ fn main() {
     glib::set_program_name(Some("An Anime Game Launcher"));
 
     // Create app
-    let application = gtk::Application::new(
-        Some(APP_ID),
-        Default::default()
-    );
+    let application = gtk::Application::new(Some(APP_ID), Default::default());
 
     application.add_main_option(
-        "run-game", 
+        "run-game",
         glib::Char::from(0),
         glib::OptionFlags::empty(),
         glib::OptionArg::None,
         "Run the game",
-        None
+        None,
     );
 
     application.add_main_option(
-        "just-run-game", 
+        "just-run-game",
         glib::Char::from(0),
         glib::OptionFlags::empty(),
         glib::OptionArg::None,
         "Run the game whenever it possible, ignoring updates predownloads",
-        None
+        None,
     );
 
     let run_game = std::rc::Rc::new(std::cell::Cell::new(false));
     let just_run_game = std::rc::Rc::new(std::cell::Cell::new(false));
 
-    application.connect_handle_local_options(clone!(@strong run_game, @strong just_run_game => move |_, arg| {
-        if arg.contains("just-run-game") {
-            just_run_game.set(true);
-        }
+    application.connect_handle_local_options(
+        clone!(@strong run_game, @strong just_run_game => move |_, arg| {
+            if arg.contains("just-run-game") {
+                just_run_game.set(true);
+            }
 
-        else if arg.contains("run-game") {
-            run_game.set(true);
-        }
+            else if arg.contains("run-game") {
+                run_game.set(true);
+            }
 
-        -1
-    }));
+            -1
+        }),
+    );
 
     // Init app window and show it
     application.connect_activate(move |app| {
+        let config = lib::config::get().expect("Failed to load config");
+
+        let mut client =
+            DiscordIpcClient::new(config.game.enhancements.discord_rpc.app_id.as_str())
+                .expect("Failed to create client");
+
+        match client.connect() {
+            Ok(_) => {
+                println!("Client connected to Discord successfully.");
+            }
+            Err(_) => {
+                println!(
+                    "Client failed to connect to Discord, Please try again or relaunch Discord."
+                );
+            }
+        };
+        let _thread = std::thread::spawn(move || loop {
+            let conf = lib::config::get().expect("Failed to load config");
+            if conf.game.enhancements.discord_rpc.enabled {
+                let act = activity::Activity::new();
+
+                let activity_state: Activity = if config.game.enhancements.discord_rpc.state != "" {
+                    act.state(config.game.enhancements.discord_rpc.state.as_str())
+                        .clone()
+                } else {
+                    act
+                };
+                let activity_details: Activity =
+                    if config.game.enhancements.discord_rpc.description != "" {
+                        activity_state
+                            .state(config.game.enhancements.discord_rpc.description.as_str())
+                            .clone()
+                    } else {
+                        activity_state
+                    };
+                let activity_li: Activity =
+                    if config.game.enhancements.discord_rpc.large_image_key != "" {
+                        activity_details
+                            .state(
+                                config.game.enhancements.discord_rpc.large_image_key.as_str(),
+                            )
+                            .clone()
+                    } else {
+                        activity_details
+                    };
+                match client.set_activity(activity_li) {
+                    Ok(_) => {println!("Client set activity successfully.");}
+                    Err(_) => {println!("Client failed to set activity, Please try again or relaunch Discord.");}
+                };
+                std::thread::sleep(std::time::Duration::from_millis(10));
+            } else {
+                match client.clear_activity(){
+                    Ok(_) => {println!("Client activity cleared successfully.");}
+                    Err(_) => {println!("Failed to clear.");}
+                }
+            }
+            std::thread::sleep(std::time::Duration::from_millis(10));
+        });
         // Apply CSS styles to the application
         let provider = CssProvider::new();
 
         provider.load_from_data(include_bytes!("../assets/styles.css"));
-        
+
         StyleContext::add_provider_for_display(
             &Display::default().expect("Could not connect to a display"),
             &provider,
-            STYLE_PROVIDER_PRIORITY_APPLICATION
+            STYLE_PROVIDER_PRIORITY_APPLICATION,
         );
 
         // Create default launcher folder if needed
@@ -85,16 +145,13 @@ fn main() {
 
         if !launcher_dir.exists() || launcher_dir.join(".first-run").exists() {
             fs::create_dir_all(&launcher_dir).expect("Failed to create default launcher dir");
-            fs::write(launcher_dir.join(".first-run"), "").expect("Failed to create .first-run file");
+            fs::write(launcher_dir.join(".first-run"), "")
+                .expect("Failed to create .first-run file");
 
             let first_run = FirstRunApp::new(app).expect("Failed to init FirstRunApp");
 
             first_run.show();
-        }
-
-        else {
-            let config = lib::config::get().expect("Failed to load config");
-
+        } else {
             // Create wine builds folder
             if !Path::new(&config.game.wine.builds).exists() {
                 fs::create_dir_all(config.game.wine.builds)
@@ -118,9 +175,7 @@ fn main() {
 
             if !run_game.get() && !just_run_game.get() {
                 main.show();
-            }
-
-            else {
+            } else {
                 use lib::launcher::states::LauncherState;
 
                 let just_run_game = just_run_game.get();
@@ -132,20 +187,22 @@ fn main() {
                     if let LauncherState::PredownloadAvailable { game, voices } = state {
                         if just_run_game {
                             state = &LauncherState::Launch;
-                        }
-
-                        else if let Ok(config) = lib::config::get() {
+                        } else if let Ok(config) = lib::config::get() {
                             let mut predownloaded = true;
 
                             let temp = config.launcher.temp.unwrap_or("/tmp".into());
 
-                            if !temp.join(game.file_name().unwrap_or(String::from("\0"))).exists() {
+                            if !temp
+                                .join(game.file_name().unwrap_or(String::from("\0")))
+                                .exists()
+                            {
                                 predownloaded = false;
-                            }
-
-                            else {
+                            } else {
                                 for voice in voices {
-                                    if !temp.join(voice.file_name().unwrap_or(String::from("\0"))).exists() {
+                                    if !temp
+                                        .join(voice.file_name().unwrap_or(String::from("\0")))
+                                        .exists()
+                                    {
                                         predownloaded = false;
 
                                         break;
@@ -167,7 +224,7 @@ fn main() {
                             std::process::exit(0);
                         }
 
-                        _ => main.show()
+                        _ => main.show(),
                     }
                 });
             }

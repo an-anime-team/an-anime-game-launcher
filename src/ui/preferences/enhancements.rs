@@ -49,7 +49,7 @@ pub struct AppWidgets {
     pub fps_unlocker_window_mode_combo: adw::ComboRow,
     pub fps_unlocker_priority_combo: adw::ComboRow,
 
-    pub discord_rpc_row: adw::ComboRow,
+    pub discord_rpc_row: adw::ActionRow,
     pub discord_rpc: gtk::Switch,
 }
 
@@ -109,6 +109,7 @@ impl AppWidgets {
             result.gamescope_row.set_sensitive(false);
             result.gamescope_row.set_tooltip_text(Some("Gamescope is not installed"));
         }
+        result.discord_rpc_row.set_sensitive(true);
         result.discord_rpc.set_sensitive(true);
 
         Ok(result)
@@ -166,8 +167,8 @@ impl App {
             if let Ok(mut config) = config::get() {
                 config.game.wine.borderless = switch.state();
                 config::update(config);
-                config::game::enhancements::discordrpc::rpc_start();
             }
+
         });
 
         // Virtual desktop resolution selection
@@ -232,7 +233,7 @@ impl App {
             if let Ok(mut config) = config::get()
             {
                 config.game.enhancements.discord_rpc.enabled = switch.state();
-                config.game.enhancements.discord_rpc.toggle();
+                // config.game.enhancements.discord_rpc.toggle();
                 config::update(config);
             }
         });
