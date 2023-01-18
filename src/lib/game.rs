@@ -65,16 +65,6 @@ pub fn try_get_terminal() -> Option<Terminal> {
 /// If `debug = true`, then the game will be run in the new terminal window
 pub fn run() -> anyhow::Result<()> {
     let config = config::get()?;
-
-    std::thread::spawn(move || loop {
-        while config.game.enhancements.discord_rpc.enabled {
-            println!("RPC ENABLE");
-            std::thread::sleep(std::time::Duration::from_millis(100));
-        }
-        println!("RPC ENABLE");
-        std::thread::sleep(std::time::Duration::from_millis(100));
-    }).join().expect("Thread has panicked");
-
     if !config.game.path.exists() {
         return Err(anyhow::anyhow!("Game is not installed"));
     }
