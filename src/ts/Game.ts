@@ -4,6 +4,7 @@ import type {
     Latest,
     Diff,
     PreDownloadGame,
+    Game as GameData,
 } from './types/GameData';
 
 import type { Stream as DownloadingStream } from '@empathize/framework/dist/network/Downloader';
@@ -218,16 +219,12 @@ export default class Game {
     /**
      * Checks whether the update was downloaded or not
      */
-    public static async isUpdatePredownloaded(pre_download_game?: PreDownloadGame): Promise<boolean>
+    public static async isUpdatePredownloaded(pre_download_game?: PreDownloadGame | GameData): Promise<boolean>
     {
         const debugThread = new DebugThread('Game.isUpdatePredownloaded', 'Checking if the the pre-download package is downloaded.');
         if (!pre_download_game) {
             const data = await this.getLatestData();
-            if (!data.pre_download_game) {
-                debugThread.log('There is no pre-download data.');
-                return false;
-            }
-            pre_download_game = data.pre_download_game;
+            pre_download_game = data.pre_download_game ?? data.game;
         }
         const version = await Game.current
         const target = resolveDownloadTarget(pre_download_game, version);

@@ -1,4 +1,4 @@
-import type { PreDownloadGame, VoicePack } from './types/GameData';
+import type { PreDownloadGame, VoicePack, Game as GameData } from './types/GameData';
 import type { VoiceLang, InstalledVoice } from './types/Voice';
 
 import type { Stream as DownloadingStream } from '@empathize/framework/dist/network/Downloader';
@@ -194,7 +194,8 @@ export default class Voice
         });
 
         const latestData = await Game.getLatestData();
-        const predownloaded = latestData.pre_download_game && await this.isUpdatePredownloaded(lang, latestData.pre_download_game, version);
+        const downloadData = latestData.pre_download_game ?? latestData.game
+        const predownloaded = await this.isUpdatePredownloaded(lang, downloadData, version);
         if (predownloaded) {
             Debug.log({
                 function: 'Voice.update',
@@ -293,7 +294,7 @@ export default class Voice
     /**
      * Checks whether the update was downloaded or not
      */
-    public static async isUpdatePredownloaded(lang: VoiceLang|VoiceLang[], predownloadData: PreDownloadGame, version: string | null): Promise<boolean>
+    public static async isUpdatePredownloaded(lang: VoiceLang|VoiceLang[], predownloadData: PreDownloadGame | GameData, version: string | null): Promise<boolean>
     {
         if (typeof lang === 'string')
         {
@@ -318,7 +319,7 @@ export default class Voice
     }
 }
 
-function resolveVoicePack(lang: VoiceLang, data: PreDownloadGame, version: string | null): VoicePack | null
+function resolveVoicePack(lang: VoiceLang, data: PreDownloadGame | GameData, version: string | null): VoicePack | null
 {
     const preDownloadTarget = resolveDownloadTarget(data, version);
     const voicePack = preDownloadTarget.voice_packs.filter(voice => voice.language === lang);
