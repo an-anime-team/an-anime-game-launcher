@@ -1,4 +1,4 @@
-import type { VoicePack } from './types/GameData';
+import type { PreDownloadGame, VoicePack, Game as GameData } from './types/GameData';
 import type { VoiceLang, InstalledVoice } from './types/Voice';
 
 import type { Stream as DownloadingStream } from '@empathize/framework/dist/network/Downloader';
@@ -9,6 +9,7 @@ import { DebugThread } from '@empathize/framework/dist/meta/Debug';
 import constants from './Constants';
 import Game from './Game';
 import AbstractInstaller from './core/AbstractInstaller';
+import { isDownloaded, resolveDownloadTarget } from './core/Download';
 
 declare const Neutralino;
 
@@ -178,41 +179,12 @@ export default class Voice
     }
 
     /**
-     * Get latest voice data info
-     * 
-     * @returns Latest Voice Pack information else throws Error if company's servers are unreachable or if they responded with an error
-     */
-    public static get latest(): Promise<VoicePack[]>
-    {
-        return new Promise((resolve, reject) => {
-            Game.getLatestData()
-                .then((data) => resolve(data.game.latest.voice_packs))
-                .catch((error) => reject(error));
-        });
-    }
-
-    /**
-     * Get updated voice data from the specified version to the latest
-     * 
-     * @returns null if the difference can't be calculated
-     * @returns Error object if company's servers are unreachable or they responded with an error
-     */
-    public static getDiff(version: string): Promise<VoicePack[]|null>
-    {
-        return new Promise((resolve, reject) => {
-            Game.getDiff(version)
-                .then((data) => resolve(data?.voice_packs ?? null))
-                .catch((error) => reject(error));
-        });
-    }
-
-    /**
      * Get the voice data installation stream
      * 
      * @returns null if the language or the version can't be found
      * @returns rejects Error object if company's servers are unreachable or they responded with an error
      */
-    public static update(lang: VoiceLang, version: string|null = null): Promise<Stream|null>
+    public static async update(lang: VoiceLang, version: string|null = null): Promise<Stream|null>
     {
         Debug.log({
             function: 'Voice.update',
@@ -221,36 +193,27 @@ export default class Voice
                 `Installing ${lang} voice package`
         });
 
-        return new Promise((resolve, reject) => {
-            this.isUpdatePredownloaded(lang).then(async (predownloaded) => {
-                if (predownloaded)
-                {
-                    Debug.log({
-                        function: 'Voice.update',
-                        message: 'Voice package update is already pre-downloaded. Unpacking started'
-                    });
-
-                    resolve(new Stream(`${await constants.paths.launcherDir}/voice-${lang}-predownloaded.zip`, true));
-                }
-
-                else
-                {
-                    (version === null ? this.latest : this.getDiff(version))
-                        .then((data: VoicePack[]|null) => {
-                            if (data === null)
-                                resolve(null);
-
-                            else
-                            {
-                                const voice = data.filter(voice => voice.language === lang);
-
-                                resolve(voice.length === 1 ? new Stream(voice[0].path) : null);
-                            }
-                        })
-                        .catch((error) => reject(error));
-                }
+        const latestData = await Game.getLatestData();
+        const downloadData = latestData.pre_download_game ?? latestData.game
+        const predownloaded = await this.isUpdatePredownloaded(lang, downloadData, version);
+        if (predownloaded) {
+            Debug.log({
+                function: 'Voice.update',
+                message: 'Voice package update is already pre-downloaded. Unpacking started'
             });
-        });
+
+            return new Stream(`${await constants.paths.launcherDir}/voice-${lang}-predownloaded.zip`, true);
+        }
+        else {
+            const voicePack = resolveVoicePack(lang, latestData.game, version);
+            if (voicePack === null) {
+                return null;
+            }
+            else
+            {
+                return new Stream(voicePack.path);
+            }
+        }
     }
 
     /**
@@ -306,16 +269,8 @@ export default class Voice
                 .then((data) => {
                     if (data.pre_download_game)
                     {
-                        let voicePack = data.pre_download_game.latest.voice_packs.filter(voice => voice.language === lang);
-
-                        if (version !== null)
-                            for (const diff of data.pre_download_game.diffs)
-                                if (diff.version == version)
-                                {
-                                    voicePack = diff.voice_packs.filter(voice => voice.language === lang);
-
-                                    break;
-                                }
+                        const preDownloadTarget = resolveDownloadTarget(data.pre_download_game, version);
+                        const voicePack = preDownloadTarget.voice_packs.filter(voice => voice.language === lang);
 
                         if (voicePack.length === 1)
                         {
@@ -339,27 +294,40 @@ export default class Voice
     /**
      * Checks whether the update was downloaded or not
      */
-    public static isUpdatePredownloaded(lang: VoiceLang|VoiceLang[]): Promise<boolean>
+    public static async isUpdatePredownloaded(lang: VoiceLang|VoiceLang[], predownloadData: PreDownloadGame | GameData, version: string | null): Promise<boolean>
     {
-        return new Promise(async (resolve) => {
-            if (typeof lang === 'string')
-            {
-                Neutralino.filesystem.getStats(`${await constants.paths.launcherDir}/voice-${lang}-predownloaded.zip`)
-                    .then(() => resolve(true))
-                    .catch(() => resolve(false));
+        if (typeof lang === 'string')
+        {
+            const voicePack = resolveVoicePack(lang, predownloadData, await Game.current);
+            if (!voicePack) {
+                return false;
             }
+            const filePath = `${await constants.paths.launcherDir}/voice-${lang}-predownloaded.zip`;
 
-            else
+            return await isDownloaded(voicePack, filePath);
+        }
+        else
+        {
+            let predownloaded = true;
+
+            for (const voiceLang of lang)
             {
-                let predownloaded = true;
-
-                for (const voiceLang of lang)
-                    predownloaded &&= await this.isUpdatePredownloaded(voiceLang);
-
-                resolve(predownloaded);
+                predownloaded &&= await this.isUpdatePredownloaded(voiceLang, predownloadData, version);
             }
-        });
+            return predownloaded;
+        }
     }
+}
+
+function resolveVoicePack(lang: VoiceLang, data: PreDownloadGame | GameData, version: string | null): VoicePack | null
+{
+    const preDownloadTarget = resolveDownloadTarget(data, version);
+    const voicePack = preDownloadTarget.voice_packs.filter(voice => voice.language === lang);
+    if (voicePack.length === 1)
+    {
+        return voicePack[0];
+    }
+    return null
 }
 
 export { Stream };

@@ -471,10 +471,10 @@ export default class State
 
                                         // Patch is more important than game pre-downloading
                                         // because otherwise we will not be able to play the game
-                                        else if (gameLatest.pre_download_game && !await Game.isUpdatePredownloaded())
+                                        else if (gameLatest.pre_download_game && !await Game.isUpdatePredownloaded(gameLatest.pre_download_game))
                                             state = 'game-pre-installation-available';
 
-                                        else if (gameLatest.pre_download_game && !await Voice.isUpdatePredownloaded(await Voice.selected))
+                                        else if (gameLatest.pre_download_game && !await Voice.isUpdatePredownloaded(await Voice.selected, gameLatest.pre_download_game, gameCurrent))
                                             state = 'game-voice-pre-installation-available';
 
                                         else state = 'game-launch-available';
