@@ -25,6 +25,12 @@ class Stream extends AbstractInstaller
  * List of voiceover sizes
  */
 const VOICE_PACKAGES_SIZES = {
+    '3.4.0': {
+        'en-us': 9702104595,
+        'ja-jp': 10879201351,
+        'ko-kr': 8329592851,
+        'zh-cn': 8498622343
+    },
     '3.3.0': {
         'en-us': 9183929971,
         'ja-jp': 10250403911,
@@ -194,9 +200,10 @@ export default class Voice
         });
 
         const latestData = await Game.getLatestData();
-        const downloadData = latestData.pre_download_game ?? latestData.game
-        const predownloaded = await this.isUpdatePredownloaded(lang, downloadData, version);
-        if (predownloaded) {
+        const predownloaded = await this.isUpdatePredownloaded(lang, latestData.pre_download_game ?? latestData.game, version);
+
+        if (predownloaded)
+        {
             Debug.log({
                 function: 'Voice.update',
                 message: 'Voice package update is already pre-downloaded. Unpacking started'
@@ -204,15 +211,12 @@ export default class Voice
 
             return new Stream(`${await constants.paths.launcherDir}/voice-${lang}-predownloaded.zip`, true);
         }
-        else {
+
+        else
+        {
             const voicePack = resolveVoicePack(lang, latestData.game, version);
-            if (voicePack === null) {
-                return null;
-            }
-            else
-            {
-                return new Stream(voicePack.path);
-            }
+
+            return voicePack !== null ? new Stream(voicePack.path) : null;
         }
     }
 
@@ -269,8 +273,9 @@ export default class Voice
                 .then((data) => {
                     if (data.pre_download_game)
                     {
-                        const preDownloadTarget = resolveDownloadTarget(data.pre_download_game, version);
-                        const voicePack = preDownloadTarget.voice_packs.filter(voice => voice.language === lang);
+                        const voicePack = resolveDownloadTarget(data.pre_download_game, version)
+                            .voice_packs
+                            .filter((voice) => voice.language === lang);
 
                         if (voicePack.length === 1)
                         {
@@ -299,21 +304,22 @@ export default class Voice
         if (typeof lang === 'string')
         {
             const voicePack = resolveVoicePack(lang, predownloadData, await Game.current);
-            if (!voicePack) {
+
+            if (!voicePack)
                 return false;
-            }
+
             const filePath = `${await constants.paths.launcherDir}/voice-${lang}-predownloaded.zip`;
 
             return await isDownloaded(voicePack, filePath);
         }
+
         else
         {
             let predownloaded = true;
 
             for (const voiceLang of lang)
-            {
                 predownloaded &&= await this.isUpdatePredownloaded(voiceLang, predownloadData, version);
-            }
+
             return predownloaded;
         }
     }
@@ -321,13 +327,11 @@ export default class Voice
 
 function resolveVoicePack(lang: VoiceLang, data: PreDownloadGame | GameData, version: string | null): VoicePack | null
 {
-    const preDownloadTarget = resolveDownloadTarget(data, version);
-    const voicePack = preDownloadTarget.voice_packs.filter(voice => voice.language === lang);
-    if (voicePack.length === 1)
-    {
-        return voicePack[0];
-    }
-    return null
+    const voicePack = resolveDownloadTarget(data, version)
+        .voice_packs
+        .filter((voice) => voice.language === lang);
+
+    return voicePack[0] ?? null;
 }
 
 export { Stream };

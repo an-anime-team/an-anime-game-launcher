@@ -27,13 +27,14 @@ class Stream extends AbstractInstaller {
 export default class Game {
     protected static _server: 'global' | 'cn' | null = null;
 
-    public static get server(): Promise<'global' | 'cn'> {
+    public static get server(): Promise<'global' | 'cn'>
+    {
         return new Promise(async (resolve) => {
             if (!this._server)
                 this._server = (await Configs.get('server')) as 'global' | 'cn';
 
             resolve(this._server);
-        })
+        });
     }
 
     /**
@@ -41,14 +42,11 @@ export default class Game {
      * 
      * @returns null if the game version can't be parsed
      */
-    public static get current(): Promise<string | null> {
+    public static get current(): Promise<string | null>
+    {
         return new Promise(async (resolve) => {
-            // const persistentPath = `${await constants.paths.gameDataDir}/Persistent/ScriptVersion`;
             const globalGameManagersPath = `${await constants.paths.gameDataDir}/globalgamemanagers`;
 
-            /*Neutralino.filesystem.readFile(persistentPath)
-                .then((version) => resolve(version))
-                .catch(() => {*/
             Neutralino.filesystem.readBinaryFile(globalGameManagersPath)
                 .then((config: ArrayBuffer) => {
                     const buffer = new TextDecoder('ascii').decode(new Uint8Array(config));
@@ -62,7 +60,6 @@ export default class Game {
                     resolve(version !== null ? version[1] : null);
                 })
                 .catch(() => resolve(null));
-            // });
         });
     }
 
@@ -71,20 +68,24 @@ export default class Game {
      * 
      * @returns JSON from API else throws Error if company's servers are unreachable or if they responded with an error
      */
-    public static getLatestData(): Promise<Data> {
+    public static getLatestData(): Promise<Data>
+    {
         return new Promise(async (resolve, reject) => {
             const response = await fetch(constants.versionsUri(await this.server));
 
-            if (response.ok) {
+            if (response.ok)
+            {
                 const cache = await Cache.get('Game.getLatestData.ServerResponse');
 
                 if (cache && !cache.expired)
                     resolve(cache.value as Data);
 
-                else {
+                else
+                {
                     const json: ServerResponse = JSON.parse(await response.body());
 
-                    if (json.message == 'OK') {
+                    if (json.message == 'OK')
+                    {
                         Cache.set('Game.getLatestData.ServerResponse', json.data, 6 * 3600);
 
                         resolve(json.data);
@@ -103,7 +104,8 @@ export default class Game {
      * 
      * @returns Latest version else throws Error if company's servers are unreachable or if they responded with an error
      */
-    public static get latest(): Promise<Latest> {
+    public static get latest(): Promise<Latest>
+    {
         return new Promise((resolve, reject) => {
             this.getLatestData()
                 .then((data) => resolve(data.game.latest))
@@ -117,7 +119,8 @@ export default class Game {
      * 
      * @returns Version else throws Error if company's servers are unreachable or if they responded with an error
      */
-    public static get versions(): Promise<string[]> {
+    public static get versions(): Promise<string[]>
+    {
         return new Promise((resolve, reject) => {
             this.getLatestData()
                 .then((data) => {
@@ -136,12 +139,14 @@ export default class Game {
      * 
      * @returns null if the difference can't be calculated
      */
-    public static getDiff(version: string): Promise<Diff | null> {
+    public static getDiff(version: string): Promise<Diff | null>
+    {
         return new Promise(async (resolve, reject) => {
             this.getLatestData()
                 .then((data) => {
                     for (const diff of data.game.diffs)
-                        if (diff.version == version) {
+                        if (diff.version == version)
+                        {
                             resolve(diff);
 
                             return;
@@ -161,7 +166,8 @@ export default class Game {
      * @returns null if the version can't be found
      * @returns Error if company's servers are unreachable or they responded with an error
      */
-    public static update(version: string | null = null): Promise<Stream | null> {
+    public static update(version: string | null = null): Promise<Stream | null>
+    {
         Debug.log({
             function: 'Game.update',
             message: version !== null ?
@@ -171,7 +177,8 @@ export default class Game {
 
         return new Promise((resolve, reject) => {
             this.isUpdatePredownloaded().then(async (predownloaded) => {
-                if (predownloaded) {
+                if (predownloaded)
+                {
                     Debug.log({
                         function: 'Game.update',
                         message: 'Update is already pre-downloaded. Unpacking started'
@@ -180,11 +187,9 @@ export default class Game {
                     resolve(new Stream(`${await constants.paths.launcherDir}/game-predownloaded.zip`, true));
                 }
 
-                else {
-                    (version === null ? this.latest : this.getDiff(version))
-                        .then((data: Latest | Diff | null) => resolve(data === null ? null : new Stream(data.path)))
-                        .catch((error) => reject(error));
-                }
+                else (version === null ? this.latest : this.getDiff(version))
+                    .then((data: Latest | Diff | null) => resolve(data === null ? null : new Stream(data.path)))
+                    .catch((error) => reject(error));
             });
         });
     }
@@ -197,23 +202,29 @@ export default class Game {
      * @returns null if the game pre-downloading is not available. Otherwise - downloading stream
      * @returns Error if company's servers are unreachable or they responded with an error
      */
-    public static async predownloadUpdate(version: string | null = null): Promise<DownloadingStream | null | unknown> {
-        const debugThread = new DebugThread('Game.predownloadUpdate', 'Predownloading game data...')
-        try {
-            const data = await this.getLatestData();
-            if (data.pre_download_game) {
-                const target = resolveDownloadTarget(data.pre_download_game, version);
-                debugThread.log(`Downloading update from the path: ${target.path}`);
+    public static predownloadUpdate(version: string | null = null): Promise<DownloadingStream | null | unknown>
+    {
+        return new Promise((resolve, reject) => {
+            const debugThread = new DebugThread('Game.predownloadUpdate', 'Predownloading game data...');
 
-                const dir = await constants.paths.launcherDir;
-                const stream = await Downloader.download(target.path, `${dir}/game-predownloaded.zip`);
-                return stream;
-            } else {
-                return null;
-            }
-        } catch(error) {
-            return error;
-        }
+            this.getLatestData()
+                .then(async (data) => {
+                    if (data.pre_download_game)
+                    {
+                        const target = resolveDownloadTarget(data.pre_download_game, version);
+
+                        debugThread.log(`Downloading update from the path: ${target.path}`);
+
+                        const dir = await constants.paths.launcherDir;
+                        const stream = await Downloader.download(target.path, `${dir}/game-predownloaded.zip`);
+
+                        resolve(stream);
+                    }
+
+                    else resolve(null);
+                })
+                .catch((error) => reject(error));
+        });
     }
 
     /**
@@ -221,14 +232,20 @@ export default class Game {
      */
     public static async isUpdatePredownloaded(pre_download_game?: PreDownloadGame | GameData): Promise<boolean>
     {
-        const debugThread = new DebugThread('Game.isUpdatePredownloaded', 'Checking if the the pre-download package is downloaded.');
-        if (!pre_download_game) {
+        const debugThread = new DebugThread('Game.isUpdatePredownloaded', 'Checking if the the pre-download package is downloaded');
+
+        if (!pre_download_game)
+        {
             const data = await this.getLatestData();
+
             pre_download_game = data.pre_download_game ?? data.game;
         }
+
         const version = await Game.current
         const target = resolveDownloadTarget(pre_download_game, version);
+
         debugThread.log(`Predownload target for version ${version}: ${JSON.stringify(target)}`);
+
         return await isDownloaded(target, `${await constants.paths.launcherDir}/game-predownloaded.zip`);
     }
 
@@ -238,41 +255,43 @@ export default class Game {
      * @returns throws Error object when iputils package (ping command) is not available
      */
     public static isTelemetryDisabled(): Promise<boolean>
-{
-    const debugThread = new DebugThread('Game.isTelemetryDisabled', 'Checking if the telemetry servers are disabled');
+    {
+        const debugThread = new DebugThread('Game.isTelemetryDisabled', 'Checking if the telemetry servers are disabled');
 
-    return new Promise(async (resolve, reject) => {
-        // If ping command is not available - throw an error
-        if (!await Package.exists('ping')) {
-            debugThread.log('iputils package is not installed');
+        return new Promise(async (resolve, reject) => {
+            // If ping command is not available - throw an error
+            if (!await Package.exists('ping'))
+            {
+                debugThread.log('iputils package is not installed');
 
-            reject(new Error('iputils package is not installed'));
-        }
+                reject(new Error('iputils package is not installed'));
+            }
 
-        // Otherwise - check if telemetry is disabled
-        else {
-            const pipeline = promisify({
-                callbacks: await constants.uri.telemetry[await this.server].map((domain) => {
-                    return new Promise((resolve) => {
-                        Domain.getInfo(domain).then((info) => resolve(info.available));
-                    });
-                }),
-                callAtOnce: true,
-                interval: 500
-            });
+            // Otherwise - check if telemetry is disabled
+            else
+            {
+                const pipeline = promisify({
+                    callbacks: await constants.uri.telemetry[await this.server].map((domain) => {
+                        return new Promise((resolve) => {
+                            Domain.getInfo(domain).then((info) => resolve(info.available));
+                        });
+                    }),
+                    callAtOnce: true,
+                    interval: 500
+                });
 
-            pipeline.then((result) => {
-                let disabled = false;
+                pipeline.then((result) => {
+                    let disabled = false;
 
-                Object.values(result).forEach((value) => disabled ||= value as boolean);
+                    Object.values(result).forEach((value) => disabled ||= value as boolean);
 
-                debugThread.log(`Telemetry is ${disabled ? 'not ' : ''}disabled`);
+                    debugThread.log(`Telemetry is ${disabled ? 'not ' : ''}disabled`);
 
-                resolve(disabled === false);
-            });
-        }
-    });
-}
+                    resolve(disabled === false);
+                });
+            }
+        });
+    }
 }
 
 export { Stream };
