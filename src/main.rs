@@ -77,23 +77,29 @@ fn main() {
             DiscordIpcClient::new(config.game.enhancements.discord_rpc.app_id.as_str())
                 .expect("Failed to create client");
 
-        match client.connect() {
-            Ok(_) => {
-                println!("Client connected to Discord successfully.");
-            }
-            Err(_) => {
-                println!(
-                    "Client failed to connect to Discord, Please try again or relaunch Discord."
-                );
-            }
-        };
+
+        let mut activity_set:bool = false;
+        let mut connected: bool = false;
         let _thread = std::thread::spawn(move || loop {
             let conf = lib::config::get().expect("Failed to load config");
+            // println!("activity_set: {:?} connected: {:?}",activity_set,connected);
             if conf.game.enhancements.discord_rpc.enabled {
+                if !connected{
+                    match client.connect() {
+                        Ok(_) => {
+                            println!("Client connected to Discord successfully.");connected=true;
+                        }
+                        Err(_) => {
+                            println!(
+                                "Client failed to connect to Discord, Please try again or relaunch Discord."
+                            );
+                        }
+                    };
+                }
                 let act = activity::Activity::new();
 
                 let activity_state: Activity = if config.game.enhancements.discord_rpc.state != "" {
-                    act.state(config.game.enhancements.discord_rpc.state.as_str())
+                    act.state(conf.game.enhancements.discord_rpc.state.as_str())
                         .clone()
                 } else {
                     act
@@ -101,33 +107,42 @@ fn main() {
                 let activity_details: Activity =
                     if config.game.enhancements.discord_rpc.description != "" {
                         activity_state
-                            .state(config.game.enhancements.discord_rpc.description.as_str())
+                            .details(conf.game.enhancements.discord_rpc.description.as_str())
                             .clone()
                     } else {
                         activity_state
                     };
                 let activity_li: Activity =
-                    if config.game.enhancements.discord_rpc.large_image_key != "" {
-                        activity_details
-                            .state(
-                                config.game.enhancements.discord_rpc.large_image_key.as_str(),
-                            )
-                            .clone()
+                    if conf.game.enhancements.discord_rpc.large_image_key != "" {
+                        activity_details.assets(activity::Assets::new().large_image(config.game.enhancements.discord_rpc.large_image_key.as_str())).clone()
                     } else {
                         activity_details
                     };
-                match client.set_activity(activity_li) {
-                    Ok(_) => {println!("Client set activity successfully.");}
-                    Err(_) => {println!("Client failed to set activity, Please try again or relaunch Discord.");}
-                };
-                std::thread::sleep(std::time::Duration::from_millis(10));
-            } else {
-                match client.clear_activity(){
-                    Ok(_) => {println!("Client activity cleared successfully.");}
-                    Err(_) => {println!("Failed to clear.");}
+                if !activity_set{
+                    match client.set_activity(activity_li) {
+                        Ok(_) => {println!("Client set activity successfully."); activity_set=true;}
+                        Err(_) => {println!("Client failed to set activity, Please try again or relaunch Discord.");}
+                    };
                 }
+
+                std::thread::sleep(std::time::Duration::from_millis(1000));
+            } else {
+                if activity_set{
+                    match client.clear_activity(){
+                        Ok(_) => {println!("Client activity cleared successfully.");connected=false;activity_set=false}
+                        Err(_) => {println!("Failed to clear.");}
+                    }
+                }
+
+                if connected{
+                    match client.close(){
+                        Ok(_) => {println!("Client connection closed.");connected=false;}
+                        Err(_) => {println!("Failed to clear.");}
+                    }
+                }
+
             }
-            std::thread::sleep(std::time::Duration::from_millis(10));
+            std::thread::sleep(std::time::Duration::from_millis(1000));
         });
         // Apply CSS styles to the application
         let provider = CssProvider::new();
