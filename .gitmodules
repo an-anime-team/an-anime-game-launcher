@@ -1,9 +1,3 @@
-[submodule "blueprint-compiler"]
-	path = blueprint-compiler
-	url = https://gitlab.gnome.org/jwestman/blueprint-compiler
-[submodule "anime-game-core"]
-	path = anime-game-core
-	url = https://github.com/an-anime-team/anime-game-core
-[submodule "components"]
-	path = components
-	url = https://github.com/an-anime-team/components
+[submodule "anime-launcher-sdk"]
+	path = anime-launcher-sdk
+	url = https://github.com/an-anime-team/anime-launcher-sdk

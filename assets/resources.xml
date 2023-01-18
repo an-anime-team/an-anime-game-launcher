@@ -1,26 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
-  <gresource prefix="/org/app/assets">
+  <gresource prefix="/org/app">
     <file compressed="true">images/icon.png</file>
-  </gresource>
-  <gresource prefix="/org/app/ui">
-    <file preprocess="xml-stripblanks" compressed="true" alias="main.ui">ui/.dist/main.ui</file>
-    <file preprocess="xml-stripblanks" compressed="true" alias="first_run.ui">ui/.dist/first_run.ui</file>
-    <file preprocess="xml-stripblanks" compressed="true" alias="preferences.ui">ui/.dist/preferences.ui</file>
-  </gresource>
-  <gresource prefix="/org/app/ui/first_run">
-    <file preprocess="xml-stripblanks" compressed="true" alias="welcome.ui">ui/.dist/first_run/welcome.ui</file>
-    <file preprocess="xml-stripblanks" compressed="true" alias="dependencies.ui">ui/.dist/first_run/dependencies.ui</file>
-    <file preprocess="xml-stripblanks" compressed="true" alias="tos_warning.ui">ui/.dist/first_run/tos_warning.ui</file>
-    <file preprocess="xml-stripblanks" compressed="true" alias="default_paths.ui">ui/.dist/first_run/default_paths.ui</file>
-    <file preprocess="xml-stripblanks" compressed="true" alias="voice_packages.ui">ui/.dist/first_run/voice_packages.ui</file>
-    <file preprocess="xml-stripblanks" compressed="true" alias="download_components.ui">ui/.dist/first_run/download_components.ui</file>
-    <file preprocess="xml-stripblanks" compressed="true" alias="finish.ui">ui/.dist/first_run/finish.ui</file>
-  </gresource>
-  <gresource prefix="/org/app/ui/preferences">
-    <file preprocess="xml-stripblanks" compressed="true" alias="general.ui">ui/.dist/preferences/general.ui</file>
-    <file preprocess="xml-stripblanks" compressed="true" alias="enhancements.ui">ui/.dist/preferences/enhancements.ui</file>
-    <file preprocess="xml-stripblanks" compressed="true" alias="gamescope.ui">ui/.dist/preferences/gamescope.ui</file>
-    <file preprocess="xml-stripblanks" compressed="true" alias="environment.ui">ui/.dist/preferences/environment.ui</file>
   </gresource>
 </gresources>
