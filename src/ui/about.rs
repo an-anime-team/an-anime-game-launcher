@@ -98,6 +98,8 @@ impl SimpleComponent for AboutDialog {
     }
 
     fn update(&mut self, msg: Self::Input, _sender: ComponentSender<Self>) {
+        tracing::debug!("Called about dialog event: {:?}", msg);
+
         match msg {
             AppMsg::Show => {
                 self.visible = true;

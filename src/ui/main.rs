@@ -125,6 +125,8 @@ impl SimpleComponent for App {
         root: &Self::Root,
         _sender: ComponentSender<Self>,
     ) -> ComponentParts<Self> {
+        tracing::info!("Initializing main window");
+
         let widgets = view_output!();
 
         if crate::APP_DEBUG {
@@ -168,10 +170,14 @@ impl SimpleComponent for App {
             READY = true;
         }
 
+        tracing::info!("Main window initialized. App is ready");
+
         ComponentParts { model, widgets }
     }
 
     fn update(&mut self, msg: Self::Input, _sender: ComponentSender<Self>) {
+        tracing::debug!("Called main window event: {:?}", msg);
+
         match msg {
             AppMsg::OpenPreferences => {
                 self.preferences_window.widgets().preferences_window.show();

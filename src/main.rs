@@ -30,6 +30,8 @@ fn main() {
     // Set UI language
     unsafe {
         i18n::LANG = config::get().unwrap().launcher.language.parse().unwrap();
+
+        tracing::info!("Set UI language to {}", i18n::LANG);
     }
 
     // Run the app
