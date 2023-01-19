@@ -96,30 +96,15 @@ fn main() {
                         }
                     };
                 }
-                let act = activity::Activity::new();
+                let act = activity::Activity::new()
+                                    .state(config.game.enhancements.discord_rpc.state.as_str())
+                                    .details(config.game.enhancements.discord_rpc.description.as_str())
+                                    .assets(activity::Assets::new()
+                                            .large_image(config.game.enhancements.discord_rpc.large_image_key.as_str()
+                                    ));
 
-                let activity_state: Activity = if config.game.enhancements.discord_rpc.state != "" {
-                    act.state(conf.game.enhancements.discord_rpc.state.as_str())
-                        .clone()
-                } else {
-                    act
-                };
-                let activity_details: Activity =
-                    if config.game.enhancements.discord_rpc.description != "" {
-                        activity_state
-                            .details(conf.game.enhancements.discord_rpc.description.as_str())
-                            .clone()
-                    } else {
-                        activity_state
-                    };
-                let activity_li: Activity =
-                    if conf.game.enhancements.discord_rpc.large_image_key != "" {
-                        activity_details.assets(activity::Assets::new().large_image(config.game.enhancements.discord_rpc.large_image_key.as_str())).clone()
-                    } else {
-                        activity_details
-                    };
                 if !activity_set{
-                    match client.set_activity(activity_li) {
+                    match client.set_activity(act) {
                         Ok(_) => {println!("Client set activity successfully."); activity_set=true;}
                         Err(_) => {println!("Client failed to set activity, Please try again or relaunch Discord.");}
                     };
