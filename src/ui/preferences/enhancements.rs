@@ -259,7 +259,7 @@ impl App {
                 let string =  state.text().as_str().to_string();
                 std::thread::sleep(std::time::Duration::from_millis(10));
                 config.game.enhancements.discord_rpc.state = string;
-                println!("Updated string: {}",config.game.enhancements.discord_rpc.state);
+                // println!("[Debug] Updated string: {}",config.game.enhancements.discord_rpc.state);
                 config::update(config);
             }
         });
@@ -272,7 +272,7 @@ impl App {
                     let string =  state.text().as_str().to_string();
                     std::thread::sleep(std::time::Duration::from_millis(10));
                     config.game.enhancements.discord_rpc.description = string;
-                    println!("Updated string: {}",config.game.enhancements.discord_rpc.description);
+                    // println!("[Debug] Updated string: {}",config.game.enhancements.discord_rpc.description);
                     config::update(config);
                 }
         });
