@@ -133,7 +133,7 @@ export default (launcher: Launcher): Promise<void> => {
                                                 const parts = current.split('.');
                                                 let version = new Uint8Array(new ArrayBuffer(parts.length));
 
-                                                for (let i of parts) {
+                                                for (let i = 0; i < parts.length; i++) {
                                                     version[i] = Number(parts[i]);
                                                 }
 
