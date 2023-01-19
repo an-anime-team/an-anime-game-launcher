@@ -125,11 +125,17 @@ export default (launcher: Launcher): Promise<void> => {
                                         import('./RemoveOutdated').then((module) => {
                                             module.default(launcher).then(async () => {
                                                 // Create .version file
-                                                let version = new Uint8Array(new ArrayBuffer(3));
+                                                const current = await Game.current;
+                                                if (!current) {
+                                                    resolve();
+                                                    return;
+                                                }
+                                                const parts = current.split('.');
+                                                let version = new Uint8Array(new ArrayBuffer(parts.length));
 
-                                                version[0] = 3;
-                                                version[1] = 3;
-                                                version[2] = 0;
+                                                for (let i of parts) {
+                                                    version[i] = Number(parts[i]);
+                                                }
 
                                                 Neutralino.filesystem.writeBinaryFile(`${await constants.paths.voiceDir}/${Voice.langs[selectedVoice]}/.version`, version);
 
