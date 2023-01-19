@@ -13,3 +13,12 @@ status = Status
 
 game-version = Game version
 patch-version = Patch version
+
+selected-version = Selected version
+recommended-only = Recommended only
+
+wine-version = Wine version
+wine-recommended-description = Show only recommended wine versions
+
+dxvk-version = DXVK version
+dxvk-recommended-description = Show only recommended dxvk versions

@@ -10,10 +10,11 @@ fluent_templates::static_loader! {
 
 pub static mut LANG: LanguageIdentifier = langid!("en");
 
+#[allow(clippy::expect_fun_call)]
 pub fn tr(id: &str) -> String {
     unsafe {
         LOCALES
             .lookup(&LANG, id)
-            .expect("Failed to get message with given id")
+            .expect(&format!("Failed to find message with a given id: {id}"))
     }
 }

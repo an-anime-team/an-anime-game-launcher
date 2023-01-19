@@ -129,7 +129,41 @@ impl WidgetTemplate for General {
                         add_css_class: "success"
                     }
                 }
-            }
+            },
+
+            add = &adw::PreferencesGroup {
+                set_title: &tr("wine-version"),
+
+                adw::ComboRow {
+                    set_title: &tr("selected-version")
+                },
+
+                adw::ActionRow {
+                    set_title: &tr("recommended-only"),
+                    set_subtitle: &tr("wine-recommended-description"),
+
+                    add_suffix = &gtk::Switch {
+                        set_valign: gtk::Align::Center
+                    }
+                }
+            },
+
+            add = &adw::PreferencesGroup {
+                set_title: &tr("dxvk-version"),
+
+                adw::ComboRow {
+                    set_title: &tr("selected-version")
+                },
+
+                adw::ActionRow {
+                    set_title: &tr("recommended-only"),
+                    set_subtitle: &tr("dxvk-recommended-description"),
+
+                    add_suffix = &gtk::Switch {
+                        set_valign: gtk::Align::Center
+                    }
+                }
+            },
         }
     }
 }
