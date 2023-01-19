@@ -125,17 +125,16 @@ export default (launcher: Launcher): Promise<void> => {
                                         import('./RemoveOutdated').then((module) => {
                                             module.default(launcher).then(async () => {
                                                 // Create .version file
-                                                const current = await Game.current;
-                                                if (!current) {
-                                                    resolve();
-                                                    return;
-                                                }
-                                                const parts = current.split('.');
-                                                let version = new Uint8Array(new ArrayBuffer(parts.length));
 
-                                                for (let i = 0; i < parts.length; i++) {
-                                                    version[i] = Number(parts[i]);
-                                                }
+                                                // We're in InstallVoice action which is called only when the game is installed
+                                                // so Game.current is always a string here
+                                                const current = ((await Game.current) as string).split('.');
+
+                                                let version = new Uint8Array(new ArrayBuffer(current.length));
+
+                                                version[0] = Number(current[0]);
+                                                version[1] = Number(current[1]);
+                                                version[2] = Number(current[2]);
 
                                                 Neutralino.filesystem.writeBinaryFile(`${await constants.paths.voiceDir}/${Voice.langs[selectedVoice]}/.version`, version);
 
