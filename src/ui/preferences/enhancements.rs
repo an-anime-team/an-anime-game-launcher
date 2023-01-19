@@ -318,7 +318,79 @@ impl WidgetTemplate for Enhancements {
                             }
                         }
                     }
-                }
+                },
+
+                adw::ActionRow {
+                    set_title: &tr("monitor"),
+                    set_subtitle: &tr("monitor-description"),
+
+                    add_suffix = &gtk::SpinButton {
+                        set_valign: gtk::Align::Center,
+                        set_adjustment: &gtk::Adjustment::new(1.0, 1.0, 10.0, 1.0, 1.0, 0.0),
+
+                        set_value: CONFIG.game.enhancements.fps_unlocker.config.monitor as f64,
+
+                        connect_changed => move |row| {
+                            if is_ready() {
+                                if let Ok(mut config) = config::get() {
+                                    config.game.enhancements.fps_unlocker.config.monitor = row.value() as u64;
+
+                                    config::update(config);
+                                }
+                            }
+                        }
+                    }
+                },
+
+                adw::ComboRow {
+                    set_title: &tr("window-mode"),
+
+                    #[wrap(Some)]
+                    set_model = &gtk::StringList::new(&[
+                        &tr("default"),
+                        &tr("popup"),
+                        &tr("fullscreen")
+                    ]),
+
+                    set_selected: CONFIG.game.enhancements.fps_unlocker.config.window_mode.into(),
+
+                    connect_selected_notify => move |row| {
+                        if is_ready() {
+                            if let Ok(mut config) = config::get() {
+                                config.game.enhancements.fps_unlocker.config.window_mode = WindowMode::try_from(row.selected()).unwrap();
+
+                                config::update(config);
+                            }
+                        }
+                    }
+                },
+
+                adw::ComboRow {
+                    set_title: &tr("priority"),
+                    set_subtitle: &tr("priority-description"),
+
+                    #[wrap(Some)]
+                    set_model = &gtk::StringList::new(&[
+                        &tr("realtime"),
+                        &tr("high"),
+                        &tr("above-normal"),
+                        &tr("normal"),
+                        &tr("below-normal"),
+                        &tr("low")
+                    ]),
+
+                    set_selected: CONFIG.game.enhancements.fps_unlocker.config.priority as u32,
+
+                    connect_selected_notify => move |row| {
+                        if is_ready() {
+                            if let Ok(mut config) = config::get() {
+                                config.game.enhancements.fps_unlocker.config.priority = row.selected() as u64;
+
+                                config::update(config);
+                            }
+                        }
+                    }
+                },
             }
         }
     }

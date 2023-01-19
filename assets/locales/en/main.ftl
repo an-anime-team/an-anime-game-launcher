@@ -1,5 +1,6 @@
 custom = Custom
 none = None
+default = Default
 
 
 
@@ -59,3 +60,19 @@ fps-unlocker-description = Remove frames rendering limitation by modifying the g
 
 power-saving = Power saving
 power-saving-description = Automatically set the FPS limit to 10 and low process priority upon losing focus to the game (e.g. tabbing out)
+
+monitor = Monitor
+monitor-description = Number of monitor you want to run the game on
+
+window-mode = Window Mode
+popup = Popup
+fullscreen = Fullscreen
+
+priority = Priority
+priority-description = Game process priority
+realtime = Realtime
+high = High
+above-normal = Above Normal
+normal = Normal
+below-normal = Below Normal
+low = Low
