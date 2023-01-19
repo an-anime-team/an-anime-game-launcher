@@ -24,6 +24,7 @@ impl WidgetTemplate for General {
 
                 adw::ComboRow {
                     set_title: &tr("launcher-language"),
+                    set_subtitle: &tr("launcher-language-description"),
 
                     // TODO: maybe simplify it by some way? e.g. specify such stuff in i18n mod
 

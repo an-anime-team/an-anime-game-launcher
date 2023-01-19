@@ -1,4 +1,4 @@
-use relm4::prelude::*;
+use relm4::{prelude::*, actions::*, MessageBroker};
 
 use gtk::prelude::*;
 use adw::prelude::*;
@@ -6,6 +6,15 @@ use adw::prelude::*;
 use crate::i18n::tr;
 
 use super::preferences::main::App as PreferencesApp;
+use super::about::{AboutDialog, AppMsg as AboutDialogMsg};
+
+relm4::new_action_group!(WindowActionGroup, "win");
+
+relm4::new_stateless_action!(LauncherFolder, WindowActionGroup, "launcher_folder");
+relm4::new_stateless_action!(GameFolder, WindowActionGroup, "game_folder");
+relm4::new_stateless_action!(ConfigFile, WindowActionGroup, "config_file");
+
+relm4::new_stateless_action!(About, WindowActionGroup, "about");
 
 /// Sets to `true` when the `App` component is ready (fully initialized)
 pub static mut READY: bool = false;
@@ -17,7 +26,10 @@ pub fn is_ready() -> bool {
 }
 
 pub struct App {
-    preferences_window: Controller<PreferencesApp>
+    preferences_window: Controller<PreferencesApp>,
+
+    #[allow(dead_code)]
+    about_dialog: Controller<AboutDialog>
 }
 
 #[derive(Debug)]
@@ -32,6 +44,20 @@ impl SimpleComponent for App {
     type Input = AppMsg;
     type Output = ();
 
+    menu! {
+        main_menu: {
+            section! {
+                "Launcher folder" => LauncherFolder,
+                "Game folder" => GameFolder,
+                "Config file" => ConfigFile,
+            },
+
+            section! {
+                "About" => About
+            }
+        }
+    }
+
     view! {
         main_window = adw::Window {
             set_title: Some("An Anime Game Launcher"),
@@ -40,7 +66,12 @@ impl SimpleComponent for App {
             gtk::Box {
                 set_orientation: gtk::Orientation::Vertical,
 
-                adw::HeaderBar {},
+                adw::HeaderBar {
+                    pack_end = &gtk::MenuButton {
+                        set_icon_name: "open-menu-symbolic",
+                        set_menu_model: Some(&main_menu)
+                    }
+                },
 
                 adw::PreferencesPage {
                     add = &adw::PreferencesGroup {
@@ -96,11 +127,38 @@ impl SimpleComponent for App {
     ) -> ComponentParts<Self> {
         let widgets = view_output!();
 
+        let about_dialog_broker: MessageBroker<AboutDialog> = MessageBroker::new();
+
         let model = App {
             preferences_window: PreferencesApp::builder()
                 .launch(widgets.main_window.clone().into())
+                .detach(),
+
+            about_dialog: AboutDialog::builder()
+                .transient_for(widgets.main_window.clone())
+                .launch_with_broker((), &about_dialog_broker)
                 .detach()
         };
+
+        let group = RelmActionGroup::<WindowActionGroup>::new();
+
+        group.add_action::<LauncherFolder>(&RelmAction::new_stateless(move |_| {
+            println!("Open launcher folder!");
+        }));
+
+        group.add_action::<GameFolder>(&RelmAction::new_stateless(move |_| {
+            println!("Open game folder!");
+        }));
+
+        group.add_action::<ConfigFile>(&RelmAction::new_stateless(move |_| {
+            println!("Open config file!");
+        }));
+
+        group.add_action::<About>(&RelmAction::new_stateless(move |_| {
+            about_dialog_broker.send(AboutDialogMsg::Show);
+        }));
+
+        widgets.main_window.insert_action_group("win", Some(&group.into_action_group()));
 
         unsafe {
             READY = true;
