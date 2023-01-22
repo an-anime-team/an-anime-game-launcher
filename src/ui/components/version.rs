@@ -1,11 +1,19 @@
 use relm4::prelude::*;
 
+use gtk::prelude::*;
 use adw::prelude::*;
+
+use gtk::glib::clone;
+
+use anime_launcher_sdk::config;
+use anime_launcher_sdk::anime_game_core::installer::installer::*;
 
 use std::path::PathBuf;
 
+#[derive(Debug)]
 pub enum VersionState {
     Downloaded,
+    Loading,
     Downloading(u64, u64),
     Unpacking(u64, u64),
     NotDownloaded
@@ -25,7 +33,8 @@ pub struct ComponentVersion {
 
 #[derive(Debug)]
 pub enum AppMsg {
-    ShowRecommendedOnly(bool)
+    ShowRecommendedOnly(bool),
+    PerformAction
 }
 
 #[relm4::component(pub)]
@@ -51,7 +60,9 @@ impl SimpleComponent for ComponentVersion {
                 },
 
                 add_css_class: "flat",
-                set_valign: gtk::Align::Center
+                set_valign: gtk::Align::Center,
+
+                connect_clicked => AppMsg::PerformAction
             }
         }
     }
@@ -86,10 +97,50 @@ impl SimpleComponent for ComponentVersion {
     }
 
     fn update(&mut self, msg: Self::Input, _sender: ComponentSender<Self>) {
-        tracing::debug!("Called component version [{}] event: {:?}", self.title, msg);
+        tracing::debug!("Called component version [{}] event: {:?} (state = {:?})", self.title, msg, self.state);
 
         match msg {
-            AppMsg::ShowRecommendedOnly(state) => self.show_recommended_only = state
+            AppMsg::ShowRecommendedOnly(state) => self.show_recommended_only = state,
+
+            AppMsg::PerformAction => {
+                match self.state {
+                    VersionState::Downloaded => {
+                        let path = self.download_folder.join(&self.name);
+
+                        if path.exists() {
+                            // todo
+                            std::fs::remove_dir_all(path).expect("Failed to delete component");
+
+                            self.state = VersionState::NotDownloaded;
+                        }
+                    }
+
+                    VersionState::NotDownloaded => {
+                        if let Ok(config) = config::get() {
+                            // todo
+                            let mut installer = Installer::new(&self.download_uri).expect("Failed to create installer instance for this version");
+
+                            if let Some(temp) = config.launcher.temp {
+                                installer.set_temp_folder(temp);
+                            }
+
+                            // self.state = VersionState::Loading;
+
+                            // todo sus
+                            std::thread::spawn(clone!(@strong self.download_folder as download_folder => move || {
+                                installer.install(download_folder, |status| {
+                                    match status {
+                                        Update::UnpackingFinished | Update::UnpackingError(_) => println!("sus"),
+                                        _ => (),
+                                    }
+                                });
+                            }));
+                        }
+                    }
+
+                    _ => ()
+                }
+            }
         }
     }
 }

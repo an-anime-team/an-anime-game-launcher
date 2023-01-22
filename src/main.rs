@@ -12,7 +12,11 @@ pub const APP_DEBUG: bool = cfg!(debug_assertions);
 fn main() {
     tracing_subscriber::fmt()
         .with_span_events(tracing_subscriber::fmt::format::FmtSpan::FULL)
-        .with_max_level(tracing::Level::TRACE)
+        .with_max_level(if APP_DEBUG {
+            tracing::Level::TRACE
+        } else {
+            tracing::Level::INFO
+        })
         .init();
 
     tracing::info!("Starting application");
