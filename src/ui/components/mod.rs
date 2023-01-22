@@ -1,10 +1,12 @@
 pub mod list;
 pub mod group;
 pub mod version;
+pub mod progress_bar;
 
 pub use list::*;
 pub use group::*;
 pub use version::*;
+pub use progress_bar::*;
 
 use anime_launcher_sdk::components::*;
 

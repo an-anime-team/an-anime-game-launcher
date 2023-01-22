@@ -5,17 +5,17 @@ use adw::prelude::*;
 
 use gtk::glib::clone;
 
+use super::progress_bar::AppMsg as ProgressBarMsg;
+
 use anime_launcher_sdk::config;
 use anime_launcher_sdk::anime_game_core::installer::installer::*;
 
 use std::path::PathBuf;
 
-#[derive(Debug)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum VersionState {
     Downloaded,
-    Loading,
-    Downloading(u64, u64),
-    Unpacking(u64, u64),
+    Downloading,
     NotDownloaded
 }
 
@@ -28,13 +28,16 @@ pub struct ComponentVersion {
     pub download_folder: PathBuf,
 
     pub show_recommended_only: bool,
-    pub state: VersionState
+    pub state: VersionState,
+
+    pub progress_bar: Controller<super::ProgressBar>
 }
 
 #[derive(Debug)]
 pub enum AppMsg {
     ShowRecommendedOnly(bool),
-    PerformAction
+    PerformAction,
+    SetState(VersionState)
 }
 
 #[relm4::component(pub)]
@@ -62,6 +65,9 @@ impl SimpleComponent for ComponentVersion {
                 add_css_class: "flat",
                 set_valign: gtk::Align::Center,
 
+                #[watch]
+                set_visible: model.state != VersionState::Downloading,
+
                 connect_clicked => AppMsg::PerformAction
             }
         }
@@ -81,7 +87,11 @@ impl SimpleComponent for ComponentVersion {
             download_folder: init.1,
 
             show_recommended_only: true,
-            state: VersionState::NotDownloaded
+            state: VersionState::NotDownloaded,
+
+            progress_bar: super::ProgressBar::builder()
+                .launch((None, false))
+                .detach()
         };
 
         // Set default component state
@@ -91,12 +101,17 @@ impl SimpleComponent for ComponentVersion {
             VersionState::NotDownloaded
         };
 
+        // Set progress bar width
+        model.progress_bar.widgets().progress_bar.set_width_request(200);
+
         let widgets = view_output!();
+
+        widgets.row.add_suffix(model.progress_bar.widget());
 
         ComponentParts { model, widgets }
     }
 
-    fn update(&mut self, msg: Self::Input, _sender: ComponentSender<Self>) {
+    fn update(&mut self, msg: Self::Input, sender: ComponentSender<Self>) {
         tracing::debug!("Called component version [{}] event: {:?} (state = {:?})", self.title, msg, self.state);
 
         match msg {
@@ -108,6 +123,9 @@ impl SimpleComponent for ComponentVersion {
                         let path = self.download_folder.join(&self.name);
 
                         if path.exists() {
+                            // To hide main button while it's deleting compontent's folder
+                            self.state = VersionState::Downloading;
+
                             // todo
                             std::fs::remove_dir_all(path).expect("Failed to delete component");
 
@@ -124,15 +142,33 @@ impl SimpleComponent for ComponentVersion {
                                 installer.set_temp_folder(temp);
                             }
 
-                            // self.state = VersionState::Loading;
+                            self.state = VersionState::Downloading;
 
-                            // todo sus
+                            let progress_bar_sender = self.progress_bar.sender().clone();
+
+                            #[allow(unused_must_use)]
                             std::thread::spawn(clone!(@strong self.download_folder as download_folder => move || {
-                                installer.install(download_folder, |status| {
-                                    match status {
-                                        Update::UnpackingFinished | Update::UnpackingError(_) => println!("sus"),
-                                        _ => (),
+                                progress_bar_sender.send(ProgressBarMsg::Reset);
+                                progress_bar_sender.send(ProgressBarMsg::SetVisible(true));
+
+                                installer.install(download_folder, move |state| {
+                                    match &state {
+                                        Update::UnpackingFinished |
+                                        Update::DownloadingError(_) |
+                                        Update::UnpackingError(_) => {
+                                            progress_bar_sender.send(ProgressBarMsg::SetVisible(false));
+
+                                            sender.input(AppMsg::SetState(if let Update::UnpackingFinished = &state {
+                                                VersionState::Downloaded
+                                            } else {
+                                                VersionState::NotDownloaded
+                                            }));
+                                        },
+
+                                        _ => ()
                                     }
+
+                                    progress_bar_sender.send(ProgressBarMsg::UpdateFromState(state));
                                 });
                             }));
                         }
@@ -141,6 +177,8 @@ impl SimpleComponent for ComponentVersion {
                     _ => ()
                 }
             }
+
+            AppMsg::SetState(state) => self.state = state
         }
     }
 }

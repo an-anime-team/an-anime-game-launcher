@@ -5,6 +5,10 @@ use anime_launcher_sdk::config;
 pub mod i18n;
 pub mod ui;
 
+mod prettify_bytes;
+
+pub use prettify_bytes::prettify_bytes;
+
 pub const APP_ID: &str = "moe.launcher.an-anime-game-launcher-gtk";
 pub const APP_VERSION: &str = env!("CARGO_PKG_VERSION");
 pub const APP_DEBUG: bool = cfg!(debug_assertions);
@@ -38,8 +42,16 @@ fn main() {
         tracing::info!("Set UI language to {}", i18n::LANG);
     }
 
-    // Run the app
+    // Create the app
     let app = RelmApp::new("moe.launcher.an-anime-game-launcher");
 
+    // Set global css
+    relm4::set_global_css("
+        progressbar > text {
+            margin-bottom: 4px;
+        }
+    ");
+
+    // Run the app
     app.run::<ui::main::App>(());
 }
