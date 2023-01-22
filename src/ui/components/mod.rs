@@ -8,9 +8,11 @@ pub use version::*;
 
 use anime_launcher_sdk::components::*;
 
+use std::path::PathBuf;
+
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ComponentsListPattern {
-    pub download_folder: String,
+    pub download_folder: PathBuf,
     pub groups: Vec<ComponentsListGroup>
 }
 
@@ -40,6 +42,7 @@ impl From<dxvk::Group> for ComponentsListGroup {
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ComponentsListVersion {
+    pub name: String,
     pub title: String,
     pub uri: String,
     pub recommended: bool
@@ -48,6 +51,7 @@ pub struct ComponentsListVersion {
 impl From<wine::Version> for ComponentsListVersion {
     fn from(version: wine::Version) -> Self {
         Self {
+            name: version.name,
             title: version.title,
             uri: version.uri,
             recommended: version.recommended
@@ -58,6 +62,7 @@ impl From<wine::Version> for ComponentsListVersion {
 impl From<dxvk::Version> for ComponentsListVersion {
     fn from(version: dxvk::Version) -> Self {
         Self {
+            name: version.name.clone(),
             title: version.name,
             uri: version.uri,
             recommended: version.recommended

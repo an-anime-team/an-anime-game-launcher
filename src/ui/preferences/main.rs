@@ -3,11 +3,16 @@ use relm4::prelude::*;
 use gtk::prelude::*;
 use adw::prelude::*;
 
+use anime_launcher_sdk::config;
 use anime_launcher_sdk::components::*;
 
 use crate::ui::components::{self, *};
 
 use crate::i18n::tr;
+
+lazy_static::lazy_static! {
+    static ref CONFIG: config::Config = config::get().expect("Failed to load config");
+}
 
 pub struct App {
     wine_components: Controller<ComponentsList>,
@@ -83,14 +88,14 @@ impl SimpleComponent for App {
         let model = App {
             wine_components: ComponentsList::builder()
                 .launch(ComponentsListPattern {
-                    download_folder: String::from("/tmp"),
+                    download_folder: CONFIG.game.wine.builds.clone(),
                     groups: wine::get_groups().into_iter().map(|group| group.into()).collect()
                 })
                 .detach(),
 
             dxvk_components: ComponentsList::builder()
                 .launch(ComponentsListPattern {
-                    download_folder: String::from("/tmp"),
+                    download_folder: CONFIG.game.dxvk.builds.clone(),
                     groups: dxvk::get_groups().into_iter().map(|group| group.into()).collect()
                 })
                 .detach(),

@@ -3,7 +3,6 @@ use relm4::prelude::*;
 use adw::prelude::*;
 
 pub struct ComponentsList {
-    pub _download_folder: String,
     pub show_recommended_only: bool,
 
     pub groups: Vec<Controller<super::ComponentGroup>>
@@ -30,14 +29,13 @@ impl SimpleComponent for ComponentsList {
         _sender: ComponentSender<Self>,
     ) -> ComponentParts<Self> {
         let model = ComponentsList {
-            _download_folder: init.download_folder,
             show_recommended_only: true,
 
             groups: init.groups
                 .into_iter()
                 .map(|group| {
                     super::ComponentGroup::builder()
-                        .launch(group)
+                        .launch((group, init.download_folder.clone()))
                         .detach()
                 })
                 .collect()

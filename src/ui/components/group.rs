@@ -2,6 +2,8 @@ use relm4::prelude::*;
 
 use adw::prelude::*;
 
+use std::path::PathBuf;
+
 pub struct ComponentGroup {
     pub title: String,
     pub show_recommended_only: bool,
@@ -16,7 +18,7 @@ pub enum AppMsg {
 
 #[relm4::component(pub)]
 impl SimpleComponent for ComponentGroup {
-    type Init = super::ComponentsListGroup;
+    type Init = (super::ComponentsListGroup, PathBuf);
     type Input = AppMsg;
     type Output = ();
 
@@ -32,14 +34,14 @@ impl SimpleComponent for ComponentGroup {
         _sender: ComponentSender<Self>,
     ) -> ComponentParts<Self> {
         let model = ComponentGroup {
-            title: init.title,
+            title: init.0.title,
             show_recommended_only: true,
 
-            versions: init.versions
+            versions: init.0.versions
                 .into_iter()
                 .map(|version| {
                     super::ComponentVersion::builder()
-                        .launch(version)
+                        .launch((version, init.1.clone()))
                         .detach()
                 })
                 .collect()
