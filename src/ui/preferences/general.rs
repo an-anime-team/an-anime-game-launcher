@@ -148,6 +148,9 @@ impl WidgetTemplate for General {
                 }
             },
 
+            #[name(wine_versions)]
+            add = &adw::PreferencesGroup {},
+
             add = &adw::PreferencesGroup {
                 set_title: &tr("dxvk-version"),
 
@@ -164,6 +167,9 @@ impl WidgetTemplate for General {
                     }
                 }
             },
+
+            #[name(dxvk_versions)]
+            add = &adw::PreferencesGroup {},
         }
     }
 }
