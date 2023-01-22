@@ -142,8 +142,10 @@ impl WidgetTemplate for General {
                     set_title: &tr("recommended-only"),
                     set_subtitle: &tr("wine-recommended-description"),
 
+                    #[name(wine_recommended_only)]
                     add_suffix = &gtk::Switch {
-                        set_valign: gtk::Align::Center
+                        set_valign: gtk::Align::Center,
+                        set_state: true
                     }
                 }
             },
@@ -162,8 +164,10 @@ impl WidgetTemplate for General {
                     set_title: &tr("recommended-only"),
                     set_subtitle: &tr("dxvk-recommended-description"),
 
+                    #[name(dxvk_recommended_only)]
                     add_suffix = &gtk::Switch {
-                        set_valign: gtk::Align::Center
+                        set_valign: gtk::Align::Center,
+                        set_state: true
                     }
                 }
             },

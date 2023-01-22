@@ -3,13 +3,14 @@ use relm4::prelude::*;
 use adw::prelude::*;
 
 pub struct ComponentVersion {
-    pub title: String
+    pub title: String,
+    pub recommended: bool,
+    pub show_recommended_only: bool
 }
 
 #[derive(Debug)]
 pub enum AppMsg {
-    Install,
-    Remove
+    ShowRecommendedOnly(bool)
 }
 
 #[relm4::component(pub)]
@@ -20,7 +21,10 @@ impl SimpleComponent for ComponentVersion {
 
     view! {
         row = adw::ActionRow {
-            set_title: &model.title
+            set_title: &model.title,
+
+            #[watch]
+            set_visible: !model.show_recommended_only || model.recommended
         }
     }
 
@@ -30,7 +34,9 @@ impl SimpleComponent for ComponentVersion {
         _sender: ComponentSender<Self>,
     ) -> ComponentParts<Self> {
         let model = ComponentVersion {
-            title: init.title
+            title: init.title,
+            recommended: init.recommended,
+            show_recommended_only: true
         };
 
         let widgets = view_output!();
@@ -39,8 +45,10 @@ impl SimpleComponent for ComponentVersion {
     }
 
     fn update(&mut self, msg: Self::Input, _sender: ComponentSender<Self>) {
-        tracing::debug!("Called about dialog event: {:?}", msg);
+        tracing::debug!("Called component version [{}] event: {:?}", self.title, msg);
 
-        // todo
+        match msg {
+            AppMsg::ShowRecommendedOnly(state) => self.show_recommended_only = state
+        }
     }
 }

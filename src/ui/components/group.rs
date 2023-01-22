@@ -3,13 +3,15 @@ use relm4::prelude::*;
 use adw::prelude::*;
 
 pub struct ComponentGroup {
-    pub title: String
+    pub title: String,
+    pub show_recommended_only: bool,
+
+    pub versions: Vec<Controller<super::ComponentVersion>>
 }
 
 #[derive(Debug)]
 pub enum AppMsg {
-    Install,
-    Remove
+    ShowRecommendedOnly(bool)
 }
 
 #[relm4::component(pub)]
@@ -30,16 +32,22 @@ impl SimpleComponent for ComponentGroup {
         _sender: ComponentSender<Self>,
     ) -> ComponentParts<Self> {
         let model = ComponentGroup {
-            title: init.title
+            title: init.title,
+            show_recommended_only: true,
+
+            versions: init.versions
+                .into_iter()
+                .map(|version| {
+                    super::ComponentVersion::builder()
+                        .launch(version)
+                        .detach()
+                })
+                .collect()
         };
 
         let widgets = view_output!();
 
-        for version in init.versions {
-            let version = super::ComponentVersion::builder()
-                .launch(version)
-                .detach();
-
+        for version in &model.versions {
             widgets.group.add_row(version.widget());
         }
 
@@ -47,8 +55,17 @@ impl SimpleComponent for ComponentGroup {
     }
 
     fn update(&mut self, msg: Self::Input, _sender: ComponentSender<Self>) {
-        tracing::debug!("Called about dialog event: {:?}", msg);
+        tracing::debug!("Called component group [{}] event: {:?}", self.title, msg);
 
-        // todo
+        match msg {
+            AppMsg::ShowRecommendedOnly(state) => {
+                self.show_recommended_only = state;
+
+                // todo
+                for version in &self.versions {
+                    version.sender().send(super::version::AppMsg::ShowRecommendedOnly(state)).unwrap();
+                }
+            }
+        }
     }
 }

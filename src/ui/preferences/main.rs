@@ -3,7 +3,9 @@ use relm4::prelude::*;
 use gtk::prelude::*;
 use adw::prelude::*;
 
-use crate::ui::components::*;
+use anime_launcher_sdk::components::*;
+
+use crate::ui::components::{self, *};
 
 use crate::i18n::tr;
 
@@ -12,10 +14,16 @@ pub struct App {
     dxvk_components: Controller<ComponentsList>
 }
 
+#[derive(Debug)]
+pub enum AppMsg {
+    WineRecommendedOnly(bool),
+    DxvkRecommendedOnly(bool)
+}
+
 #[relm4::component(pub)]
 impl SimpleComponent for App {
     type Init = gtk::Window;
-    type Input = ();
+    type Input = AppMsg;
     type Output = ();
 
     view! {
@@ -37,9 +45,23 @@ impl SimpleComponent for App {
                 },
 
                 #[template_child]
+                wine_recommended_only {
+                    connect_state_notify[sender] => move |switch| {
+                        sender.input(AppMsg::WineRecommendedOnly(switch.state()));
+                    }
+                },
+
+                #[template_child]
                 dxvk_versions {
                     add = model.dxvk_components.widget(),
-                }
+                },
+
+                #[template_child]
+                dxvk_recommended_only {
+                    connect_state_notify[sender] => move |switch| {
+                        sender.input(AppMsg::DxvkRecommendedOnly(switch.state()));
+                    }
+                },
             },
 
             #[template]
@@ -56,90 +78,20 @@ impl SimpleComponent for App {
     fn init(
         parent: Self::Init,
         root: &Self::Root,
-        _sender: ComponentSender<Self>,
+        sender: ComponentSender<Self>,
     ) -> ComponentParts<Self> {
         let model = App {
             wine_components: ComponentsList::builder()
                 .launch(ComponentsListPattern {
                     download_folder: String::from("/tmp"),
-                    groups: vec![
-                        ComponentsListGroup {
-                            title: String::from("Test group 1"),
-                            versions: vec![
-                                ComponentsListVersion {
-                                    title: String::from("Test version 1"),
-                                    url: String::from("/")
-                                },
-                                ComponentsListVersion {
-                                    title: String::from("Test version 2"),
-                                    url: String::from("/")
-                                },
-                                ComponentsListVersion {
-                                    title: String::from("Test version 3"),
-                                    url: String::from("/")
-                                }
-                            ]
-                        },
-                        ComponentsListGroup {
-                            title: String::from("Test group 2"),
-                            versions: vec![
-                                ComponentsListVersion {
-                                    title: String::from("Test version 1"),
-                                    url: String::from("/")
-                                },
-                                ComponentsListVersion {
-                                    title: String::from("Test version 2"),
-                                    url: String::from("/")
-                                },
-                                ComponentsListVersion {
-                                    title: String::from("Test version 3"),
-                                    url: String::from("/")
-                                }
-                            ]
-                        }
-                    ]
+                    groups: wine::get_groups().into_iter().map(|group| group.into()).collect()
                 })
                 .detach(),
 
             dxvk_components: ComponentsList::builder()
                 .launch(ComponentsListPattern {
                     download_folder: String::from("/tmp"),
-                    groups: vec![
-                        ComponentsListGroup {
-                            title: String::from("Test group 1"),
-                            versions: vec![
-                                ComponentsListVersion {
-                                    title: String::from("Test version 1"),
-                                    url: String::from("/")
-                                },
-                                ComponentsListVersion {
-                                    title: String::from("Test version 2"),
-                                    url: String::from("/")
-                                },
-                                ComponentsListVersion {
-                                    title: String::from("Test version 3"),
-                                    url: String::from("/")
-                                }
-                            ]
-                        },
-                        ComponentsListGroup {
-                            title: String::from("Test group 2"),
-                            versions: vec![
-                                ComponentsListVersion {
-                                    title: String::from("Test version 1"),
-                                    url: String::from("/")
-                                },
-                                ComponentsListVersion {
-                                    title: String::from("Test version 2"),
-                                    url: String::from("/")
-                                },
-                                ComponentsListVersion {
-                                    title: String::from("Test version 3"),
-                                    url: String::from("/")
-                                }
-                            ]
-                        }
-                    ]
+                    groups: dxvk::get_groups().into_iter().map(|group| group.into()).collect()
                 })
                 .detach(),
         };
@@ -149,5 +101,21 @@ impl SimpleComponent for App {
         widgets.preferences_window.set_transient_for(Some(&parent));
 
         ComponentParts { model, widgets }
+    }
+
+    fn update(&mut self, msg: Self::Input, _sender: ComponentSender<Self>) {
+        tracing::debug!("Called preferences window event: {:?}", msg);
+
+        match msg {
+            AppMsg::WineRecommendedOnly(state) => {
+                // todo
+                self.wine_components.sender().send(components::list::AppMsg::ShowRecommendedOnly(state)).unwrap();
+            }
+
+            AppMsg::DxvkRecommendedOnly(state) => {
+                // todo
+                self.dxvk_components.sender().send(components::list::AppMsg::ShowRecommendedOnly(state)).unwrap();
+            }
+        }
     }
 }

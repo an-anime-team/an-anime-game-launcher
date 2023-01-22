@@ -3,13 +3,15 @@ use relm4::prelude::*;
 use adw::prelude::*;
 
 pub struct ComponentsList {
-    _download_folder: String
+    pub _download_folder: String,
+    pub show_recommended_only: bool,
+
+    pub groups: Vec<Controller<super::ComponentGroup>>
 }
 
 #[derive(Debug)]
 pub enum AppMsg {
-    Install,
-    Remove
+    ShowRecommendedOnly(bool)
 }
 
 #[relm4::component(pub)]
@@ -28,16 +30,22 @@ impl SimpleComponent for ComponentsList {
         _sender: ComponentSender<Self>,
     ) -> ComponentParts<Self> {
         let model = ComponentsList {
-            _download_folder: init.download_folder
+            _download_folder: init.download_folder,
+            show_recommended_only: true,
+
+            groups: init.groups
+                .into_iter()
+                .map(|group| {
+                    super::ComponentGroup::builder()
+                        .launch(group)
+                        .detach()
+                })
+                .collect()
         };
 
         let widgets = view_output!();
 
-        for group in init.groups {
-            let group = super::ComponentGroup::builder()
-                .launch(group)
-                .detach();
-
+        for group in &model.groups {
             widgets.group.add(group.widget());
         }
 
@@ -45,8 +53,17 @@ impl SimpleComponent for ComponentsList {
     }
 
     fn update(&mut self, msg: Self::Input, _sender: ComponentSender<Self>) {
-        tracing::debug!("Called about dialog event: {:?}", msg);
+        tracing::debug!("Called components list event: {:?}", msg);
 
-        // todo
+        match msg {
+            AppMsg::ShowRecommendedOnly(state) => {
+                self.show_recommended_only = state;
+
+                // todo
+                for group in &self.groups {
+                    group.sender().send(super::group::AppMsg::ShowRecommendedOnly(state)).unwrap();
+                }
+            }
+        }
     }
 }
