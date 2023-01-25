@@ -2,6 +2,10 @@
   uri: https://github.com/Sporif/dxvk-async/releases/download/2.0/dxvk-async-2.0.tar.gz
   recommended: false
 
+- version: '2.1'
+  uri: https://github.com/doitsujin/dxvk/releases/download/v2.1/dxvk-2.1.tar.gz
+  recommended: true
+  
 - version: '2.0'
   uri: https://github.com/doitsujin/dxvk/releases/download/v2.0/dxvk-2.0.tar.gz
   recommended: true
