@@ -80,11 +80,10 @@ impl Version {
         folder.into().join(&self.name).exists()
     }
 
-    pub fn apply<T: Into<PathBuf>>(&self, dxvks_folder: T, prefix_path: T) -> anyhow::Result<Output> {
-        let apply_path = dxvks_folder.into().join(&self.name).join("setup_dxvk.sh");
+    pub fn install<T: Into<PathBuf>>(&self, dxvks_folder: T, prefix_path: T, params: InstallParams) -> anyhow::Result<()> {
         let config = config::get()?;
 
-        let (wine_path, wineserver_path, wineboot_path) = match config.try_get_selected_wine_info() {
+        let wine = match config.try_get_selected_wine_info() {
             Some(wine) => {
                 let wine_folder = config.game.wine.builds.join(wine.name);
 
@@ -92,23 +91,25 @@ impl Version {
                 let wineserver_path = wine_folder.join(wine.files.wineserver);
                 let wineboot_path = wine_folder.join(wine.files.wineboot);
 
-                (wine_path, wineserver_path, wineboot_path)
+                Wine::from_binary(wine_path)
+                    .with_server(wineserver_path)
+                    .with_boot(wineboot_path)
+                    .with_loader(WineLoader::Current)
+                    .with_arch(WineArch::Win64)
+                    .with_prefix(prefix_path)
             },
-            None => (PathBuf::from("wine64"), PathBuf::from("wineserver"), PathBuf::from("wineboot"))
+            None => Wine::default().with_prefix(prefix_path)
         };
-
+        
         let result = Dxvk::install(
-            apply_path,
-            prefix_path.into(),
-            wine_path.clone(),
-            wine_path,
-            wineboot_path,
-            wineserver_path
+            &wine,
+            dxvks_folder.into().join(&self.name),
+            params
         );
 
         match result {
-            Ok(output) => Ok(output),
-            Err(err) => Err(err.into())
+            Ok(()) => Ok(()),
+            Err(err) => Err(anyhow::anyhow!(err))
         }
     }
 }

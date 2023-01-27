@@ -73,11 +73,11 @@ impl DxvkRow {
         }
     }
 
-    pub fn apply<T: Into<PathBuf>>(&self, dxvks_folder: T, prefix_path: T) -> anyhow::Result<std::process::Output> {
+    pub fn apply<T: Into<PathBuf>>(&self, dxvks_folder: T, prefix_path: T) -> anyhow::Result<()> {
         self.button.set_sensitive(false);
         self.apply_button.set_sensitive(false);
 
-        let result = self.version.apply(dxvks_folder, prefix_path);
+        let result = self.version.install(dxvks_folder, prefix_path, wincompatlib::dxvk::InstallParams::default());
 
         self.button.set_sensitive(true);
         self.apply_button.set_sensitive(true);

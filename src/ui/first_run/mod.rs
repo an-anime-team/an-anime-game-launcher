@@ -386,10 +386,8 @@ impl App {
                                 let dxvk_version = dxvk_version.clone();
 
                                 std::thread::spawn(move || {
-                                    match dxvk_version.apply(&config.game.dxvk.builds, &config.game.wine.prefix) {
-                                        Ok(output) => {
-                                            println!("Applied DXVK:\n\n{}", String::from_utf8_lossy(&output.stdout));
-
+                                    match dxvk_version.install(&config.game.dxvk.builds, &config.game.wine.prefix, wincompatlib::dxvk::InstallParams::default()) {
+                                        Ok(_) => {
                                             // Remove .first-run file
                                             let launcher_dir = crate::lib::consts::launcher_dir().unwrap();
 
