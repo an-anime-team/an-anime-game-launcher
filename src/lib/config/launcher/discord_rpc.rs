@@ -17,8 +17,8 @@ impl Default for DiscordRpc {
             app_id: 901534333360304168,
             enabled: false,
 
-            title: String::from("of Teyvat"),
-            subtitle: String::from("Researching the world"),
+            title: String::from("Researching the world"),
+            subtitle: String::from("of Teyvat"),
             image: String::from("gi-icon")
         }
     }

@@ -42,11 +42,13 @@ impl DiscordRpc {
                 let mut client = DiscordIpcClient::new(&config.app_id.to_string())
                     .expect("Failed to register discord ipc client");
 
+                let mut connected = false;
+
                 while let Ok(update) = receiver.recv() {
                     match update {
                         RpcUpdates::Connect => {
-                            if !config.enabled {
-                                config.enabled = true;
+                            if !connected {
+                                connected = true;
 
                                 client.connect().expect("Failed to connect to discord");
 
@@ -56,8 +58,8 @@ impl DiscordRpc {
                         }
 
                         RpcUpdates::Disconnect => {
-                            if config.enabled {
-                                config.enabled = false;
+                            if connected {
+                                connected = false;
 
                                 client.close().expect("Failed to disconnect from discord");
                             }
@@ -68,14 +70,16 @@ impl DiscordRpc {
                             config.subtitle = subtitle;
                             config.image = image;
 
-                            if config.enabled {
+                            if connected {
                                 client.set_activity(Self::get_activity(&config))
                                     .expect("Failed to update discord rpc activity");
                             }
                         }
 
                         RpcUpdates::ClearActivity => {
-                            client.clear_activity().expect("Failed to clear discord rpc activity");
+                            if connected {
+                                client.clear_activity().expect("Failed to clear discord rpc activity");
+                            }
                         }
                     }
                 }
@@ -86,8 +90,8 @@ impl DiscordRpc {
 
     pub fn get_activity(config: &DiscordRpcConfig) -> Activity {
         Activity::new()
-            .state(&config.title)
-            .details(&config.subtitle)
+            .details(&config.title)
+            .state(&config.subtitle)
             .assets(Assets::new().large_image(&config.image))
     }
 

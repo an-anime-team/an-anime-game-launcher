@@ -358,7 +358,9 @@ impl App {
                                         else {
                                             std::thread::sleep(std::time::Duration::from_secs(2));
 
-                                            this.widgets.preferences_stack.enhancements_page.discord_rpc.update(RpcUpdates::Connect);
+                                            if config.launcher.discord_rpc.enabled {
+                                                this.widgets.preferences_stack.enhancements_page.discord_rpc.update(RpcUpdates::Connect);
+                                            }
 
                                             loop {
                                                 std::thread::sleep(std::time::Duration::from_secs(3));
@@ -375,7 +377,9 @@ impl App {
                                                 }
                                             }
 
-                                            this.widgets.preferences_stack.enhancements_page.discord_rpc.update(RpcUpdates::Disconnect);
+                                            if config.launcher.discord_rpc.enabled {
+                                                this.widgets.preferences_stack.enhancements_page.discord_rpc.update(RpcUpdates::Disconnect);
+                                            }
 
                                             this.widgets.window.show();
                                         }
