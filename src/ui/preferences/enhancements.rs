@@ -34,12 +34,12 @@ impl WidgetTemplate for Enhancements {
                         "Futex2"
                     ]),
 
-                    set_selected: CONFIG.game.wine.sync.into(),
+                    set_selected: CONFIG.game.wine.sync.ordinal() as u32,
 
-                    connect_selected_notify => move |row| {
+                    connect_selected_notify => move |row| unsafe {
                         if is_ready() {
                             if let Ok(mut config) = config::get() {
-                                config.game.wine.sync = WineSync::try_from(row.selected()).unwrap();
+                                config.game.wine.sync = WineSync::from_ordinal_unsafe(row.selected() as i8);
 
                                 config::update(config);
                             }
@@ -66,12 +66,12 @@ impl WidgetTemplate for Enhancements {
                         "한국어"
                     ]),
 
-                    set_selected: CONFIG.game.wine.language.into(),
+                    set_selected: CONFIG.game.wine.language.ordinal() as u32,
 
-                    connect_selected_notify => move |row| {
+                    connect_selected_notify => move |row| unsafe {
                         if is_ready() {
                             if let Ok(mut config) = config::get() {
-                                config.game.wine.language = WineLang::try_from(row.selected()).unwrap();
+                                config.game.wine.language = WineLang::from_ordinal_unsafe(row.selected() as i8);
 
                                 config::update(config);
                             }
@@ -104,12 +104,12 @@ impl WidgetTemplate for Enhancements {
 
                     #[wrap(Some)]
                     set_model = &gtk::StringList::new(&[
-                        &tr("custom"),
                         "960x540",
                         "1280x720",
                         "1920x1080",
                         "2560x1440",
-                        "3840x2160"
+                        "3840x2160",
+                        &tr("custom")
                     ]),
 
                     set_selected: CONFIG.game.wine.virtual_desktop.get_resolution().into(),
@@ -158,12 +158,12 @@ impl WidgetTemplate for Enhancements {
                         "MangoHud"
                     ]),
 
-                    set_selected: CONFIG.game.enhancements.hud.into(),
+                    set_selected: CONFIG.game.enhancements.hud.ordinal() as u32,
 
-                    connect_selected_notify => move |row| {
+                    connect_selected_notify => move |row| unsafe {
                         if is_ready() {
                             if let Ok(mut config) = config::get() {
-                                config.game.enhancements.hud = HUD::try_from(row.selected()).unwrap();
+                                config.game.enhancements.hud = HUD::from_ordinal_unsafe(row.selected() as i8);
 
                                 config::update(config);
                             }
@@ -352,12 +352,12 @@ impl WidgetTemplate for Enhancements {
                         &tr("fullscreen")
                     ]),
 
-                    set_selected: CONFIG.game.enhancements.fps_unlocker.config.window_mode.into(),
+                    set_selected: CONFIG.game.enhancements.fps_unlocker.config.window_mode.ordinal() as u32,
 
-                    connect_selected_notify => move |row| {
+                    connect_selected_notify => move |row| unsafe {
                         if is_ready() {
                             if let Ok(mut config) = config::get() {
-                                config.game.enhancements.fps_unlocker.config.window_mode = WindowMode::try_from(row.selected()).unwrap();
+                                config.game.enhancements.fps_unlocker.config.window_mode = WindowMode::from_ordinal_unsafe(row.selected() as i8);
 
                                 config::update(config);
                             }
