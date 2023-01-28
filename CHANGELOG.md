@@ -1,9 +1,12 @@
+# 1.2.5
+
+- added Discord RPC support (#28)
+- added DXVK 2.1
+
 # 1.2.4
 
 - updated components and the core library;
   fixed issue with an error message when the game's folder is empty
-
-From previous commits:
 - added new options to the fps unlocker
 
 # 1.2.3 (bugfix)
