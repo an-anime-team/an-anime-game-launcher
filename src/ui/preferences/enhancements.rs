@@ -1,3 +1,4 @@
+use gtk::ffi::gtk_text_view_set_overwrite;
 use gtk::prelude::*;
 use adw::prelude::*;
 
@@ -6,6 +7,7 @@ use gtk::glib::clone;
 
 use crate::lib;
 use crate::lib::config;
+use crate::lib::config::game::enhancements::discordrpc;
 use crate::lib::config::prelude::*;
 
 use crate::ui::*;
@@ -45,7 +47,16 @@ pub struct AppWidgets {
     pub fps_unlocker_power_saving_switcher: gtk::Switch,
     pub fps_unlocker_monitor_num: gtk::SpinButton,
     pub fps_unlocker_window_mode_combo: adw::ComboRow,
-    pub fps_unlocker_priority_combo: adw::ComboRow
+    pub fps_unlocker_priority_combo: adw::ComboRow,
+
+    pub discord_rpc_row: adw::ActionRow,
+    pub discord_rpc: gtk::Switch,
+
+    pub discord_rpc_state_row: adw::ActionRow,
+    pub discord_rpc_state: gtk::Entry,
+
+    pub discord_rpc_desc_row: adw::ActionRow,
+    pub discord_rpc_desc: gtk::Entry,
 }
 
 impl AppWidgets {
@@ -79,7 +90,14 @@ impl AppWidgets {
             fps_unlocker_power_saving_switcher: get_object(&builder, "fps_unlocker_power_saving_switcher")?,
             fps_unlocker_monitor_num: get_object(&builder, "fps_unlocker_monitor_num")?,
             fps_unlocker_window_mode_combo: get_object(&builder, "fps_unlocker_window_mode_combo")?,
-            fps_unlocker_priority_combo: get_object(&builder, "fps_unlocker_priority_combo")?
+            fps_unlocker_priority_combo: get_object(&builder, "fps_unlocker_priority_combo")?,
+            discord_rpc: get_object(&builder,"discord_rpc_switch")?,
+            discord_rpc_row: get_object(&builder, "discord_rpc_row")?,
+            discord_rpc_state: get_object(&builder, "discord_rpc_state")?,
+            discord_rpc_state_row: get_object(&builder, "discord_rpc_state_row")?,
+
+            discord_rpc_desc: get_object(&builder, "discord_rpc_desc")?,
+            discord_rpc_desc_row: get_object(&builder, "discord_rpc_desc_row")?,
         };
 
         // Set availale wine languages
@@ -102,6 +120,11 @@ impl AppWidgets {
             result.gamescope_row.set_sensitive(false);
             result.gamescope_row.set_tooltip_text(Some("Gamescope is not installed"));
         }
+        // result.discord_rpc_desc_row.set_sensitive(true);
+        // result.discord_rpc_state_row.set_sensitive(true);
+        result.discord_rpc_row.set_sensitive(true);
+        result.discord_rpc.set_sensitive(true);
+
 
         Ok(result)
     }
@@ -157,9 +180,9 @@ impl App {
         self.widgets.borderless.connect_state_notify(move |switch| {
             if let Ok(mut config) = config::get() {
                 config.game.wine.borderless = switch.state();
-
                 config::update(config);
             }
+
         });
 
         // Virtual desktop resolution selection
@@ -207,7 +230,6 @@ impl App {
         self.widgets.fsr_combo.connect_selected_notify(move |row| {
             if let Ok(mut config) = config::get() {
                 config.game.enhancements.fsr.strength = 5 - row.selected() as u64;
-
                 config::update(config);
             }
         });
@@ -220,12 +242,44 @@ impl App {
                 config::update(config);
             }
         });
-        
+
+        self.widgets.discord_rpc.connect_state_notify(move |switch|{
+            if let Ok(mut config) = config::get()
+            {
+                config.game.enhancements.discord_rpc.enabled = switch.state();
+                // config.game.enhancements.discord_rpc.toggle();
+                config::update(config);
+            }
+        });
+
+        self.widgets.discord_rpc_state.connect_changed(move |state|
+        {
+            if let Ok(mut config) =  config::get()
+            {
+                let string =  state.text().as_str().to_string();
+                std::thread::sleep(std::time::Duration::from_millis(10));
+                config.game.enhancements.discord_rpc.state = string;
+                // println!("[Debug] Updated string: {}",config.game.enhancements.discord_rpc.state);
+                config::update(config);
+            }
+        });
+
+
+        self.widgets.discord_rpc_desc.connect_changed(move |state|
+        {
+                if let Ok(mut config) =  config::get()
+                {
+                    let string =  state.text().as_str().to_string();
+                    std::thread::sleep(std::time::Duration::from_millis(10));
+                    config.game.enhancements.discord_rpc.description = string;
+                    // println!("[Debug] Updated string: {}",config.game.enhancements.discord_rpc.description);
+                    config::update(config);
+                }
+        });
         // Gamemode switching
         self.widgets.gamemode_switcher.connect_state_notify(move |switch| {
             if let Ok(mut config) = config::get() {
                 config.game.enhancements.gamemode = switch.state();
-
                 config::update(config);
             }
         });
@@ -264,11 +318,12 @@ impl App {
             }
         });
 
+    
+
         // FPS unlocker -> power saving swithing
         self.widgets.fps_unlocker_power_saving_switcher.connect_state_notify(move |switch| {
             if let Ok(mut config) = config::get() {
                 config.game.enhancements.fps_unlocker.config.power_saving = switch.state();
-
                 config::update(config);
             }
         });
@@ -286,7 +341,6 @@ impl App {
         self.widgets.fps_unlocker_window_mode_combo.connect_selected_notify(move |row| {
             if let Ok(mut config) = config::get() {
                 config.game.enhancements.fps_unlocker.config.window_mode = row.selected() as u64;
-
                 config::update(config);
             }
         });
@@ -295,10 +349,11 @@ impl App {
         self.widgets.fps_unlocker_priority_combo.connect_selected_notify(move |row| {
             if let Ok(mut config) = config::get() {
                 config.game.enhancements.fps_unlocker.config.priority = row.selected() as u64;
-
                 config::update(config);
             }
         });
+
+        
 
         self
     }
@@ -354,6 +409,11 @@ impl App {
 
         // FSR switching
         self.widgets.fsr_switcher.set_state(config.game.enhancements.fsr.enabled);
+
+        // Discord RPC
+        self.widgets.discord_rpc.set_state(config.game.enhancements.discord_rpc.enabled);
+        self.widgets.discord_rpc_state.set_placeholder_text(Some(config.game.enhancements.discord_rpc.state.as_str()));
+        self.widgets.discord_rpc_desc.set_placeholder_text(Some(config.game.enhancements.discord_rpc.description.as_str()));
 
         // Gamemode switching
         self.widgets.gamemode_switcher.set_state(config.game.enhancements.gamemode);

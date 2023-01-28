@@ -55,6 +55,35 @@ Adw.PreferencesPage page {
                 ]
             };
         }
+        Adw.ActionRow discord_rpc_row
+        {
+            title: "Discord RPC";
+            subtitle: "Discord RPC allows you to provide Discord the info that you are currently playing the game to let your friends know.";
+            Gtk.Switch discord_rpc_switch {
+                valign: center;
+            }
+        }
+
+        Adw.ActionRow discord_rpc_desc_row
+        {
+            title: "Discord RPC Heading";
+            subtitle: "Set a custom heading for the activity status!\n(Requires launcher restart, or disable and re-enable the RPC)";
+            Gtk.Entry discord_rpc_desc
+            {
+                valign:center;
+            }
+        }
+
+        Adw.ActionRow discord_rpc_state_row
+        {
+            title: "Discord RPC State";
+            subtitle: "Set a custom description for the activity status!\n(Requires launcher restart, or disable and re-enable the RPC)";
+            Gtk.Entry discord_rpc_state
+            {
+                valign:center;
+            }
+        }
+
 
         Adw.ComboRow fsr_combo {
             title: "FSR";
@@ -73,6 +102,8 @@ Adw.PreferencesPage page {
                 valign: center;
             }
         }
+
+
 
         Adw.ActionRow gamemode_row {
             title: "Gamemode";

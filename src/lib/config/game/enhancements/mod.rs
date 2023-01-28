@@ -5,7 +5,7 @@ pub mod fsr;
 pub mod hud;
 pub mod fps_unlocker;
 pub mod gamescope;
-
+pub mod discordrpc;
 pub mod prelude {
     pub use super::gamescope::prelude::*;
     pub use super::fps_unlocker::prelude::*;
@@ -14,9 +14,12 @@ pub mod prelude {
     pub use super::fsr::Fsr;
     pub use super::hud::HUD;
     pub use super::fps_unlocker::FpsUnlocker;
+    pub use super::discordrpc::DiscordRpc;
 }
 
 use prelude::*;
+
+use crate::lib::config;
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct Enhancements {
@@ -24,7 +27,8 @@ pub struct Enhancements {
     pub gamemode: bool,
     pub hud: HUD,
     pub fps_unlocker: FpsUnlocker,
-    pub gamescope: Gamescope
+    pub gamescope: Gamescope,
+    pub discord_rpc: DiscordRpc,
 }
 
 impl From<&JsonValue> for Enhancements {
@@ -55,7 +59,11 @@ impl From<&JsonValue> for Enhancements {
             gamescope: match value.get("gamescope") {
                 Some(value) => Gamescope::from(value),
                 None => default.gamescope
-            }
+            },
+            discord_rpc: match value.get("discord_rpc") {
+                Some(value) => DiscordRpc::from(value),
+                None => default.discord_rpc
+            },
         }
     }
 }

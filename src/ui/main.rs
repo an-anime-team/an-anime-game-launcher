@@ -275,6 +275,7 @@ impl App {
     /// 
     /// Changes will happen in the main thread so you can call `update` method from separate thread
     pub fn init_actions(self) -> Self {
+ 
         let (sender, receiver) = glib::MainContext::channel::<Actions>(glib::PRIORITY_DEFAULT);
 
         // I prefer to avoid using clone! here because it breaks my code autocompletion
@@ -878,7 +879,6 @@ impl App {
         };
 
         self.actions.set(actions);
-
         result
     }
 
