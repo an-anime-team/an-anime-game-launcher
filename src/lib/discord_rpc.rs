@@ -49,6 +49,9 @@ impl DiscordRpc {
                                 config.enabled = true;
 
                                 client.connect().expect("Failed to connect to discord");
+
+                                client.set_activity(Self::get_activity(&config))
+                                    .expect("Failed to update discord rpc activity");
                             }
                         }
 
@@ -65,8 +68,10 @@ impl DiscordRpc {
                             config.subtitle = subtitle;
                             config.image = image;
 
-                            client.set_activity(Self::get_activity(&config))
-                                .expect("Failed to update discord rpc activity");
+                            if config.enabled {
+                                client.set_activity(Self::get_activity(&config))
+                                    .expect("Failed to update discord rpc activity");
+                            }
                         }
 
                         RpcUpdates::ClearActivity => {
