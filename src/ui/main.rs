@@ -316,7 +316,7 @@ impl App {
                     let result = this.widgets.preferences_stack.enhancements_page.discord_rpc.update(RpcUpdates::UpdateActivity {
                         title: config.launcher.discord_rpc.title,
                         subtitle: config.launcher.discord_rpc.subtitle,
-                        image: config.launcher.discord_rpc.image
+                        icon: config.launcher.discord_rpc.icon
                     });
 
                     let this = this.clone();

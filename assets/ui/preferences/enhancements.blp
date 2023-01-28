@@ -103,11 +103,11 @@ Adw.PreferencesPage page {
     Adw.PreferencesGroup {
         title: "Discord RPC";
 
-        Adw.ActionRow discord_rpc_row {
+        Adw.ComboRow discord_rpc_combo {
             title: "Enabled";
             subtitle: "Discord RPC allows you to provide Discord the info that you are currently playing the game to let your friends know";
 
-            Gtk.Switch discord_rpc_switch {
+            Gtk.Switch discord_rpc_switcher {
                 valign: center;
             }
         }

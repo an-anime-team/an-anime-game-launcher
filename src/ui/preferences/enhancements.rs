@@ -43,17 +43,17 @@ pub struct AppWidgets {
 
     pub gamescope_app: GamescopeApp,
 
+    pub discord_rpc_combo: adw::ComboRow,
+    pub discord_rpc_switcher: gtk::Switch,
+    pub discord_rpc_title: adw::EntryRow,
+    pub discord_rpc_subtitle: adw::EntryRow,
+
     pub fps_unlocker_combo: adw::ComboRow,
     pub fps_unlocker_switcher: gtk::Switch,
     pub fps_unlocker_power_saving_switcher: gtk::Switch,
     pub fps_unlocker_monitor_num: gtk::SpinButton,
     pub fps_unlocker_window_mode_combo: adw::ComboRow,
-    pub fps_unlocker_priority_combo: adw::ComboRow,
-
-    pub discord_rpc_row: adw::ActionRow,
-    pub discord_rpc: gtk::Switch,
-    pub discord_rpc_title: adw::EntryRow,
-    pub discord_rpc_subtitle: adw::EntryRow
+    pub fps_unlocker_priority_combo: adw::ComboRow
 }
 
 impl AppWidgets {
@@ -82,17 +82,17 @@ impl AppWidgets {
 
             gamescope_app: GamescopeApp::new(window)?,
 
+            discord_rpc_combo: get_object(&builder, "discord_rpc_combo")?,
+            discord_rpc_switcher: get_object(&builder,"discord_rpc_switcher")?,
+            discord_rpc_title: get_object(&builder, "discord_rpc_title")?,
+            discord_rpc_subtitle: get_object(&builder, "discord_rpc_subtitle")?,
+
             fps_unlocker_combo: get_object(&builder, "fps_unlocker_combo")?,
             fps_unlocker_switcher: get_object(&builder, "fps_unlocker_switcher")?,
             fps_unlocker_power_saving_switcher: get_object(&builder, "fps_unlocker_power_saving_switcher")?,
             fps_unlocker_monitor_num: get_object(&builder, "fps_unlocker_monitor_num")?,
             fps_unlocker_window_mode_combo: get_object(&builder, "fps_unlocker_window_mode_combo")?,
-            fps_unlocker_priority_combo: get_object(&builder, "fps_unlocker_priority_combo")?,
-
-            discord_rpc_row: get_object(&builder, "discord_rpc_row")?,
-            discord_rpc: get_object(&builder,"discord_rpc_switch")?,
-            discord_rpc_title: get_object(&builder, "discord_rpc_title")?,
-            discord_rpc_subtitle: get_object(&builder, "discord_rpc_subtitle")?,
+            fps_unlocker_priority_combo: get_object(&builder, "fps_unlocker_priority_combo")?
         };
 
         // Set availale wine languages
@@ -100,6 +100,9 @@ impl AppWidgets {
 
         // Set availale virtual desktop resolutions
         result.virtual_desktop_row.set_model(Some(&Resolution::get_model()));
+
+        // Set discord rpc icons
+        result.discord_rpc_combo.set_model(Some(&DiscordRpcIcons::get_model()));
 
         // Set availale fps unlocker limits
         result.fps_unlocker_combo.set_model(Some(&Fps::get_model()));
@@ -238,10 +241,17 @@ impl App {
             }
         });
 
-        // TODO: update RPC here or after preferences window's closing
+        // Discord RPC icon
+        self.widgets.discord_rpc_combo.connect_selected_notify(move |row| {
+            if let Ok(mut config) = config::get() {
+                config.launcher.discord_rpc.icon = DiscordRpcIcons::list()[row.selected() as usize];
+
+                config::update(config);
+            }
+        });
 
         // Discord RPC switching
-        self.widgets.discord_rpc.connect_state_notify(move |switch| {
+        self.widgets.discord_rpc_switcher.connect_state_notify(move |switch| {
             if let Ok(mut config) = config::get() {
                 config.launcher.discord_rpc.enabled = switch.state();
 
@@ -398,7 +408,8 @@ impl App {
         self.widgets.fsr_switcher.set_state(config.game.enhancements.fsr.enabled);
 
         // Discord RPC
-        self.widgets.discord_rpc.set_state(config.launcher.discord_rpc.enabled);
+        self.widgets.discord_rpc_combo.set_selected(DiscordRpcIcons::list().binary_search(&config.launcher.discord_rpc.icon).unwrap() as u32);
+        self.widgets.discord_rpc_switcher.set_state(config.launcher.discord_rpc.enabled);
         self.widgets.discord_rpc_title.set_text(&config.launcher.discord_rpc.title);
         self.widgets.discord_rpc_subtitle.set_text(&config.launcher.discord_rpc.subtitle);
 

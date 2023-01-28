@@ -11,9 +11,10 @@ pub mod repairer;
 pub mod discord_rpc;
 
 pub mod prelude {
+    pub use super::discord_rpc::*;
+
     pub use super::Launcher;
     pub use super::repairer::Repairer;
-    pub use super::discord_rpc::DiscordRpc;
 }
 
 use prelude::*;

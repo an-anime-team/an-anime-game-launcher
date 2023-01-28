@@ -7,9 +7,12 @@ use discord_rich_presence::{
     DiscordIpcClient
 };
 
-use super::config::prelude::DiscordRpc as DiscordRpcConfig;
+use super::config::prelude::{
+    DiscordRpc as DiscordRpcConfig,
+    DiscordRpcIcons
+};
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone)]
 pub enum RpcUpdates {
     /// Establish RPC connection
     Connect,
@@ -21,7 +24,7 @@ pub enum RpcUpdates {
     UpdateActivity {
         title: String,
         subtitle: String,
-        image: String
+        icon: DiscordRpcIcons
     },
 
     /// Clear RPC activity
@@ -65,10 +68,10 @@ impl DiscordRpc {
                             }
                         }
 
-                        RpcUpdates::UpdateActivity { title, subtitle, image } => {
+                        RpcUpdates::UpdateActivity { title, subtitle, icon } => {
                             config.title = title;
                             config.subtitle = subtitle;
-                            config.image = image;
+                            config.icon = icon;
 
                             if connected {
                                 client.set_activity(Self::get_activity(&config))
@@ -92,7 +95,7 @@ impl DiscordRpc {
         Activity::new()
             .details(&config.title)
             .state(&config.subtitle)
-            .assets(Assets::new().large_image(&config.image))
+            .assets(Assets::new().large_image(config.icon.get_icon_name()))
     }
 
     pub fn update(&self, update: RpcUpdates) -> Result<(), SendError<RpcUpdates>> {
