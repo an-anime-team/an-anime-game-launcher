@@ -31,6 +31,7 @@ use crate::lib::wine::{
     List as WineList
 };
 use crate::lib::prettify_bytes::prettify_bytes;
+use crate::lib::discord_rpc::RpcUpdates;
 
 /// This structure is used to describe widgets used in application
 /// 
@@ -275,7 +276,6 @@ impl App {
     /// 
     /// Changes will happen in the main thread so you can call `update` method from separate thread
     pub fn init_actions(self) -> Self {
- 
         let (sender, receiver) = glib::MainContext::channel::<Actions>(glib::PRIORITY_DEFAULT);
 
         // I prefer to avoid using clone! here because it breaks my code autocompletion
@@ -309,6 +309,23 @@ impl App {
                     this.widgets.leaflet.navigate(adw::NavigationDirection::Back);
 
                     config::flush().expect("Failed to save config file");
+
+                    // Update Discord RPC state
+                    let config = config::get().expect("Failed to load config");
+
+                    let result = this.widgets.preferences_stack.enhancements_page.discord_rpc.update(RpcUpdates::UpdateActivity {
+                        title: config.launcher.discord_rpc.title,
+                        subtitle: config.launcher.discord_rpc.subtitle,
+                        image: config.launcher.discord_rpc.image
+                    });
+
+                    let this = this.clone();
+
+                    if let Err(err) = result {
+                        glib::MainContext::default().invoke(move || {
+                            this.toast("Failed to update Discord RPC", err);
+                        });
+                    }
                 }
 
                 Actions::PerformButtonEvent => {
@@ -327,6 +344,7 @@ impl App {
 
                                     this.widgets.window.hide();
 
+                                    #[allow(unused_must_use)]
                                     std::thread::spawn(move || {
                                         // Display toast message if the game is failed to run
                                         if let Err(err) = game::run() {
@@ -339,6 +357,8 @@ impl App {
 
                                         else {
                                             std::thread::sleep(std::time::Duration::from_secs(2));
+
+                                            this.widgets.preferences_stack.enhancements_page.discord_rpc.update(RpcUpdates::Connect);
 
                                             loop {
                                                 std::thread::sleep(std::time::Duration::from_secs(3));
@@ -354,6 +374,8 @@ impl App {
                                                     Err(_) => break
                                                 }
                                             }
+
+                                            this.widgets.preferences_stack.enhancements_page.discord_rpc.update(RpcUpdates::Disconnect);
 
                                             this.widgets.window.show();
                                         }
@@ -879,6 +901,7 @@ impl App {
         };
 
         self.actions.set(actions);
+
         result
     }
 

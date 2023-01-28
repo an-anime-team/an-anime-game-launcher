@@ -16,7 +16,6 @@ opt-level = 3
 glib-build-tools = "0.16"
 
 [dependencies]
-discord-rich-presence = "0.2.3"
 gtk = { package = "gtk4", version = "0.5", features = ["v4_8"] }
 adw = { package = "libadwaita", version = "0.2", features = ["v1_2"] }
 rfd = { version = "0.10", features = ["xdg-portal"], default-features = false }
@@ -33,3 +32,4 @@ lazy_static = "1.4.0"
 anyhow = "1.0"
 md5 = "0.7"
 cached = { version = "0.42", features = ["proc_macro"] }
+discord-rich-presence = "0.2.3"

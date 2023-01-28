@@ -8,10 +8,12 @@ use anime_game_core::genshin::consts::GameEdition as CoreGameEdition;
 use crate::lib::consts::launcher_dir;
 
 pub mod repairer;
+pub mod discord_rpc;
 
 pub mod prelude {
     pub use super::Launcher;
     pub use super::repairer::Repairer;
+    pub use super::discord_rpc::DiscordRpc;
 }
 
 use prelude::*;
@@ -67,7 +69,8 @@ pub struct Launcher {
     pub temp: Option<PathBuf>,
     pub speed_limit: u64,
     pub repairer: Repairer,
-    pub edition: GameEdition
+    pub edition: GameEdition,
+    pub discord_rpc: DiscordRpc
 }
 
 impl Default for Launcher {
@@ -77,7 +80,8 @@ impl Default for Launcher {
             temp: launcher_dir(),
             speed_limit: 0,
             repairer: Repairer::default(),
-            edition: GameEdition::default()
+            edition: GameEdition::default(),
+            discord_rpc: DiscordRpc::default()
         }
     }
 }
@@ -119,6 +123,11 @@ impl From<&JsonValue> for Launcher {
             edition: match value.get("edition") {
                 Some(value) => serde_json::from_value(value.clone()).unwrap_or(default.edition),
                 None => default.edition
+            },
+
+            discord_rpc: match value.get("discord_rpc") {
+                Some(value) => DiscordRpc::from(value),
+                None => default.discord_rpc
             }
         }
     }

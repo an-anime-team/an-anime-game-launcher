@@ -1,14 +1,15 @@
-use gtk::ffi::gtk_text_view_set_overwrite;
 use gtk::prelude::*;
 use adw::prelude::*;
 
 use gtk::glib;
 use gtk::glib::clone;
 
+use std::rc::Rc;
+
 use crate::lib;
 use crate::lib::config;
-use crate::lib::config::game::enhancements::discordrpc;
 use crate::lib::config::prelude::*;
+use crate::lib::discord_rpc::DiscordRpc;
 
 use crate::ui::*;
 
@@ -51,12 +52,8 @@ pub struct AppWidgets {
 
     pub discord_rpc_row: adw::ActionRow,
     pub discord_rpc: gtk::Switch,
-
-    pub discord_rpc_state_row: adw::ActionRow,
-    pub discord_rpc_state: gtk::Entry,
-
-    pub discord_rpc_desc_row: adw::ActionRow,
-    pub discord_rpc_desc: gtk::Entry,
+    pub discord_rpc_title: adw::EntryRow,
+    pub discord_rpc_subtitle: adw::EntryRow
 }
 
 impl AppWidgets {
@@ -91,13 +88,11 @@ impl AppWidgets {
             fps_unlocker_monitor_num: get_object(&builder, "fps_unlocker_monitor_num")?,
             fps_unlocker_window_mode_combo: get_object(&builder, "fps_unlocker_window_mode_combo")?,
             fps_unlocker_priority_combo: get_object(&builder, "fps_unlocker_priority_combo")?,
-            discord_rpc: get_object(&builder,"discord_rpc_switch")?,
-            discord_rpc_row: get_object(&builder, "discord_rpc_row")?,
-            discord_rpc_state: get_object(&builder, "discord_rpc_state")?,
-            discord_rpc_state_row: get_object(&builder, "discord_rpc_state_row")?,
 
-            discord_rpc_desc: get_object(&builder, "discord_rpc_desc")?,
-            discord_rpc_desc_row: get_object(&builder, "discord_rpc_desc_row")?,
+            discord_rpc_row: get_object(&builder, "discord_rpc_row")?,
+            discord_rpc: get_object(&builder,"discord_rpc_switch")?,
+            discord_rpc_title: get_object(&builder, "discord_rpc_title")?,
+            discord_rpc_subtitle: get_object(&builder, "discord_rpc_subtitle")?,
         };
 
         // Set availale wine languages
@@ -120,11 +115,6 @@ impl AppWidgets {
             result.gamescope_row.set_sensitive(false);
             result.gamescope_row.set_tooltip_text(Some("Gamescope is not installed"));
         }
-        // result.discord_rpc_desc_row.set_sensitive(true);
-        // result.discord_rpc_state_row.set_sensitive(true);
-        result.discord_rpc_row.set_sensitive(true);
-        result.discord_rpc.set_sensitive(true);
-
 
         Ok(result)
     }
@@ -143,14 +133,19 @@ impl AppWidgets {
 /// That's what we need and what we use in `App::update` method
 #[derive(Clone, glib::Downgrade)]
 pub struct App {
-    widgets: AppWidgets
+    widgets: AppWidgets,
+
+    pub discord_rpc: Rc<DiscordRpc>
 }
 
 impl App {
     /// Create new application
     pub fn new(window: &adw::ApplicationWindow) -> anyhow::Result<Self> {
+        let config = config::get()?;
+
         let result = Self {
-            widgets: AppWidgets::try_get(window)?
+            widgets: AppWidgets::try_get(window)?,
+            discord_rpc: Rc::new(DiscordRpc::new(config.launcher.discord_rpc))
         }.init_events();
 
         Ok(result)
@@ -243,39 +238,35 @@ impl App {
             }
         });
 
-        self.widgets.discord_rpc.connect_state_notify(move |switch|{
-            if let Ok(mut config) = config::get()
-            {
-                config.game.enhancements.discord_rpc.enabled = switch.state();
-                // config.game.enhancements.discord_rpc.toggle();
+        // TODO: update RPC here or after preferences window's closing
+
+        // Discord RPC switching
+        self.widgets.discord_rpc.connect_state_notify(move |switch| {
+            if let Ok(mut config) = config::get() {
+                config.launcher.discord_rpc.enabled = switch.state();
+
                 config::update(config);
             }
         });
 
-        self.widgets.discord_rpc_state.connect_changed(move |state|
-        {
-            if let Ok(mut config) =  config::get()
-            {
-                let string =  state.text().as_str().to_string();
-                std::thread::sleep(std::time::Duration::from_millis(10));
-                config.game.enhancements.discord_rpc.state = string;
-                // println!("[Debug] Updated string: {}",config.game.enhancements.discord_rpc.state);
+        // Discord RPC title
+        self.widgets.discord_rpc_title.connect_changed(move |state| {
+            if let Ok(mut config) = config::get() {
+                config.launcher.discord_rpc.title = state.text().as_str().to_string();
+
                 config::update(config);
             }
         });
 
+        // Discord RPC subtitle
+        self.widgets.discord_rpc_subtitle.connect_changed(move |state| {
+            if let Ok(mut config) = config::get() {
+                config.launcher.discord_rpc.subtitle = state.text().as_str().to_string();
 
-        self.widgets.discord_rpc_desc.connect_changed(move |state|
-        {
-                if let Ok(mut config) =  config::get()
-                {
-                    let string =  state.text().as_str().to_string();
-                    std::thread::sleep(std::time::Duration::from_millis(10));
-                    config.game.enhancements.discord_rpc.description = string;
-                    // println!("[Debug] Updated string: {}",config.game.enhancements.discord_rpc.description);
-                    config::update(config);
-                }
+                config::update(config);
+            }
         });
+
         // Gamemode switching
         self.widgets.gamemode_switcher.connect_state_notify(move |switch| {
             if let Ok(mut config) = config::get() {
@@ -318,8 +309,6 @@ impl App {
             }
         });
 
-    
-
         // FPS unlocker -> power saving swithing
         self.widgets.fps_unlocker_power_saving_switcher.connect_state_notify(move |switch| {
             if let Ok(mut config) = config::get() {
@@ -352,8 +341,6 @@ impl App {
                 config::update(config);
             }
         });
-
-        
 
         self
     }
@@ -411,9 +398,9 @@ impl App {
         self.widgets.fsr_switcher.set_state(config.game.enhancements.fsr.enabled);
 
         // Discord RPC
-        self.widgets.discord_rpc.set_state(config.game.enhancements.discord_rpc.enabled);
-        self.widgets.discord_rpc_state.set_placeholder_text(Some(config.game.enhancements.discord_rpc.state.as_str()));
-        self.widgets.discord_rpc_desc.set_placeholder_text(Some(config.game.enhancements.discord_rpc.description.as_str()));
+        self.widgets.discord_rpc.set_state(config.launcher.discord_rpc.enabled);
+        self.widgets.discord_rpc_title.set_text(&config.launcher.discord_rpc.title);
+        self.widgets.discord_rpc_subtitle.set_text(&config.launcher.discord_rpc.subtitle);
 
         // Gamemode switching
         self.widgets.gamemode_switcher.set_state(config.game.enhancements.gamemode);

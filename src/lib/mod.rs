@@ -6,6 +6,7 @@ pub mod wine;
 pub mod launcher;
 pub mod prettify_bytes;
 pub mod fps_unlocker;
+pub mod discord_rpc;
 
 use std::process::{Command, Stdio};
 

@@ -1,6 +1,5 @@
 use serde::{Serialize, Deserialize};
 
-use std::process::Output;
 use std::path::PathBuf;
 
 use lazy_static::lazy_static;

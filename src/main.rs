@@ -1,7 +1,3 @@
-use discord_rich_presence::{
-    activity::{self, Activity, Party, Secrets},
-    DiscordIpc, DiscordIpcClient,
-};
 use gtk::gdk::Display;
 use gtk::glib;
 use gtk::glib::clone;
@@ -40,7 +36,7 @@ fn main() {
         glib::OptionFlags::empty(),
         glib::OptionArg::None,
         "Run the game",
-        None,
+        None
     );
 
     application.add_main_option(
@@ -49,7 +45,7 @@ fn main() {
         glib::OptionFlags::empty(),
         glib::OptionArg::None,
         "Run the game whenever it possible, ignoring updates predownloads",
-        None,
+        None
     );
 
     let run_game = std::rc::Rc::new(std::cell::Cell::new(false));
@@ -73,62 +69,6 @@ fn main() {
     application.connect_activate(move |app| {
         let config = lib::config::get().expect("Failed to load config");
 
-        let mut client =
-            DiscordIpcClient::new(config.game.enhancements.discord_rpc.app_id.as_str())
-                .expect("Failed to create client");
-
-
-        let mut activity_set:bool = false;
-        let mut connected: bool = false;
-        let _thread = std::thread::spawn(move || loop {
-            let conf = lib::config::get().expect("Failed to load config");
-            // println!("activity_set: {:?} connected: {:?}",activity_set,connected);
-            if conf.game.enhancements.discord_rpc.enabled {
-                if !connected{
-                    match client.connect() {
-                        Ok(_) => {
-                            println!("Client connected to Discord successfully.");connected=true;
-                        }
-                        Err(_) => {
-                            println!(
-                                "Client failed to connect to Discord, Please try again or relaunch Discord."
-                            );
-                        }
-                    };
-                }
-                let act = activity::Activity::new()
-                                    .state(config.game.enhancements.discord_rpc.state.as_str())
-                                    .details(config.game.enhancements.discord_rpc.description.as_str())
-                                    .assets(activity::Assets::new()
-                                            .large_image(config.game.enhancements.discord_rpc.large_image_key.as_str()
-                                    ));
-
-                if !activity_set{
-                    match client.set_activity(act) {
-                        Ok(_) => {println!("Client set activity successfully."); activity_set=true;}
-                        Err(_) => {println!("Client failed to set activity, Please try again or relaunch Discord.");}
-                    };
-                }
-
-                std::thread::sleep(std::time::Duration::from_millis(1000));
-            } else {
-                if activity_set{
-                    match client.clear_activity(){
-                        Ok(_) => {println!("Client activity cleared successfully.");connected=false;activity_set=false}
-                        Err(_) => {println!("Failed to clear.");}
-                    }
-                }
-
-                if connected{
-                    match client.close(){
-                        Ok(_) => {println!("Client connection closed.");connected=false;}
-                        Err(_) => {println!("Failed to clear.");}
-                    }
-                }
-
-            }
-            std::thread::sleep(std::time::Duration::from_millis(1000));
-        });
         // Apply CSS styles to the application
         let provider = CssProvider::new();
 
@@ -137,7 +77,7 @@ fn main() {
         StyleContext::add_provider_for_display(
             &Display::default().expect("Could not connect to a display"),
             &provider,
-            STYLE_PROVIDER_PRIORITY_APPLICATION,
+            STYLE_PROVIDER_PRIORITY_APPLICATION
         );
 
         // Create default launcher folder if needed
@@ -145,13 +85,14 @@ fn main() {
 
         if !launcher_dir.exists() || launcher_dir.join(".first-run").exists() {
             fs::create_dir_all(&launcher_dir).expect("Failed to create default launcher dir");
-            fs::write(launcher_dir.join(".first-run"), "")
-                .expect("Failed to create .first-run file");
+            fs::write(launcher_dir.join(".first-run"), "").expect("Failed to create .first-run file");
 
             let first_run = FirstRunApp::new(app).expect("Failed to init FirstRunApp");
 
             first_run.show();
-        } else {
+        }
+
+        else {
             // Create wine builds folder
             if !Path::new(&config.game.wine.builds).exists() {
                 fs::create_dir_all(config.game.wine.builds)
@@ -175,7 +116,9 @@ fn main() {
 
             if !run_game.get() && !just_run_game.get() {
                 main.show();
-            } else {
+            }
+
+            else {
                 use lib::launcher::states::LauncherState;
 
                 let just_run_game = just_run_game.get();
@@ -187,22 +130,20 @@ fn main() {
                     if let LauncherState::PredownloadAvailable { game, voices } = state {
                         if just_run_game {
                             state = &LauncherState::Launch;
-                        } else if let Ok(config) = lib::config::get() {
+                        }
+
+                        else if let Ok(config) = lib::config::get() {
                             let mut predownloaded = true;
 
                             let temp = config.launcher.temp.unwrap_or("/tmp".into());
 
-                            if !temp
-                                .join(game.file_name().unwrap_or(String::from("\0")))
-                                .exists()
-                            {
+                            if !temp.join(game.file_name().unwrap_or(String::from("\0"))).exists() {
                                 predownloaded = false;
-                            } else {
+                            }
+
+                            else {
                                 for voice in voices {
-                                    if !temp
-                                        .join(voice.file_name().unwrap_or(String::from("\0")))
-                                        .exists()
-                                    {
+                                    if !temp.join(voice.file_name().unwrap_or(String::from("\0"))).exists() {
                                         predownloaded = false;
 
                                         break;
@@ -224,7 +165,7 @@ fn main() {
                             std::process::exit(0);
                         }
 
-                        _ => main.show(),
+                        _ => main.show()
                     }
                 });
             }
