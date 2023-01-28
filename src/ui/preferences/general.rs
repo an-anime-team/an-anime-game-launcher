@@ -4,12 +4,25 @@ use gtk::prelude::*;
 use adw::prelude::*;
 
 use anime_launcher_sdk::config;
+use anime_launcher_sdk::anime_game_core::prelude::*;
+use anime_launcher_sdk::anime_game_core::genshin::prelude::*;
 
-use crate::i18n::tr;
+use crate::i18n::*;
 use crate::ui::main::is_ready;
 
 lazy_static::lazy_static! {
     static ref CONFIG: config::Config = config::get().expect("Failed to load config");
+
+    static ref GAME: Game = Game::new(&CONFIG.game.path.join("fioweiofweuihj"));
+
+    static ref GAME_DIFF: Option<VersionDiff> = match GAME.try_get_diff() {
+        Ok(diff) => Some(diff),
+        Err(err) => {
+            tracing::error!("Failed to get game diff {err}");
+
+            None
+        }
+    };
 }
 
 #[relm4::widget_template(pub)]
@@ -116,8 +129,46 @@ impl WidgetTemplate for General {
                     set_title: &tr("game-version"),
 
                     add_suffix = &gtk::Label {
-                        set_text: "3.3.0",
-                        add_css_class: "success"
+                        set_text: &match GAME_DIFF.as_ref() {
+                            Some(diff) => match diff {
+                                VersionDiff::Latest(current) |
+                                VersionDiff::Predownload { current, .. } |
+                                VersionDiff::Diff { current, .. } |
+                                VersionDiff::Outdated { current, .. } => current.to_string(),
+
+                                VersionDiff::NotInstalled { .. } => tr("game-not-installed")
+                            }
+
+                            None => String::from("?")
+                        },
+
+                        add_css_class: match GAME_DIFF.as_ref() {
+                            Some(diff) => match diff {
+                                VersionDiff::Latest(_) => "success",
+                                VersionDiff::Predownload { .. } => "accent",
+                                VersionDiff::Diff { .. } => "warning",
+                                VersionDiff::Outdated { .. } => "error",
+                                VersionDiff::NotInstalled { .. } => ""
+                            }
+
+                            None => "success"
+                        },
+
+                        set_tooltip_text: Some(&match GAME_DIFF.as_ref().unwrap() {
+                            VersionDiff::Latest(_) => String::new(),
+                            VersionDiff::Predownload { current, latest, .. } => tr_args("game-predownload-available", [
+                                ("old", current.to_string().into()),
+                                ("new", latest.to_string().into())
+                            ]),
+                            VersionDiff::Diff { current, latest, .. } => tr_args("game-update-available", [
+                                ("old", current.to_string().into()),
+                                ("new", latest.to_string().into())
+                            ]),
+                            VersionDiff::Outdated { latest, ..} => tr_args("game-outdated", [
+                                ("latest", latest.to_string().into())
+                            ]),
+                            VersionDiff::NotInstalled { .. } => String::new()
+                        })
                     }
                 },
 

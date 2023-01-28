@@ -251,31 +251,32 @@ impl WidgetTemplate for Enhancements {
 
                     #[wrap(Some)]
                     set_model = &gtk::StringList::new(&[
-                        &tr("custom"),
                         "90",
                         "120",
                         "144",
                         "165",
                         "180",
                         "200",
-                        "240"
+                        "240",
+                        &tr("custom")
                     ]),
 
                     set_selected: match Fps::from_num(CONFIG.game.enhancements.fps_unlocker.config.fps) {
-                        Fps::Custom(_)         => 0,
-                        Fps::Ninety            => 1,
-                        Fps::HundredTwenty     => 2,
-                        Fps::HundredFourtyFour => 3,
-                        Fps::HundredSixtyFive  => 4,
-                        Fps::HundredEighty     => 5,
-                        Fps::TwoHundred        => 6,
-                        Fps::TwoHundredFourty  => 7
+                        Fps::Ninety            => 0,
+                        Fps::HundredTwenty     => 1,
+                        Fps::HundredFourtyFour => 2,
+                        Fps::HundredSixtyFive  => 3,
+                        Fps::HundredEighty     => 4,
+                        Fps::TwoHundred        => 5,
+                        Fps::TwoHundredFourty  => 6,
+
+                        Fps::Custom(_) => 7
                     },
 
                     connect_selected_notify => move |row| {
-                        if is_ready() && row.selected() > 0 {
+                        if is_ready() && row.selected() < Fps::list().len() as u32 - 1 {
                             if let Ok(mut config) = config::get() {
-                                config.game.enhancements.fps_unlocker.config.fps = Fps::list()[row.selected() as usize - 1].to_num();
+                                config.game.enhancements.fps_unlocker.config.fps = Fps::list()[row.selected() as usize].to_num();
 
                                 config::update(config);
                             }

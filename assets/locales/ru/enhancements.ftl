@@ -18,8 +18,8 @@ fsr = FSR
 fsr-description = Для использования установите меньшее разрешение в настройках игры и нажмите Alt+Enter
 ultra-quality = Ультра
 quality = Хорошо
-balanced = Сбалансированно
-performance = Производительно
+balanced = Баланс
+performance = Скорость
 
 gamemode = Gamemode
 gamemode-description = Выделять игре приоритет перед остальными процессами

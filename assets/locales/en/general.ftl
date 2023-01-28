@@ -12,6 +12,12 @@ repair-game = Repair game
 status = Status
 
 game-version = Game version
+game-not-installed = not installed
+
+game-predownload-available = Game update pre-downloading available: {$old} -> {$new}
+game-update-available = Game update available: {$old} -> {$new}
+game-outdated = Game is too outdated and can't be updated. Latest version: {$latest}
+
 patch-version = Patch version
 
 selected-version = Selected version

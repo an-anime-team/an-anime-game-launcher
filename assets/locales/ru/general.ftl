@@ -12,6 +12,12 @@ repair-game = Починить игру
 status = Статус
 
 game-version = Версия игры
+game-not-installed = не установлена
+
+game-predownload-available = Доступна предзагрузка обновления игры: {$old} -> {$new}
+game-update-available = Доступно обновление игры: {$old} -> {$new}
+game-outdated = Версия игры слишком устаревшая и не может быть обновлена. Последняя версия: {$latest}
+
 patch-version = Версия патча
 
 selected-version = Выбранная версия
