@@ -13,7 +13,7 @@ use crate::ui::main::is_ready;
 lazy_static::lazy_static! {
     static ref CONFIG: config::Config = config::get().expect("Failed to load config");
 
-    static ref GAME: Game = Game::new(&CONFIG.game.path.join("fioweiofweuihj"));
+    static ref GAME: Game = Game::new(&CONFIG.game.path);
 
     static ref GAME_DIFF: Option<VersionDiff> = match GAME.try_get_diff() {
         Ok(diff) => Some(diff),
