@@ -67,8 +67,6 @@ fn main() {
 
     // Init app window and show it
     application.connect_activate(move |app| {
-        let config = lib::config::get().expect("Failed to load config");
-
         // Apply CSS styles to the application
         let provider = CssProvider::new();
 
@@ -93,6 +91,8 @@ fn main() {
         }
 
         else {
+            let config = lib::config::get().expect("Failed to load config");
+
             // Create wine builds folder
             if !Path::new(&config.game.wine.builds).exists() {
                 fs::create_dir_all(config.game.wine.builds)
