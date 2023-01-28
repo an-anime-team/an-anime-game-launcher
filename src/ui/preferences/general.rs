@@ -281,14 +281,11 @@ impl App {
                 component.apply_button.connect_clicked(clone!(@strong component, @weak self as this => move |_| {
                     std::thread::spawn(clone!(@strong component, @strong this => move || {
                         let config = config::get().expect("Failed to load config");
-    
-                        match component.apply(&config.game.dxvk.builds, &config.game.wine.prefix) {
-                            Ok(output) => println!("{}", String::from_utf8_lossy(&output.stdout)),
-                            Err(err) => {
-                                this.update(Actions::Toast(Rc::new((
-                                    String::from("Failed to apply DXVK"), err.to_string()
-                                )))).unwrap();
-                            }
+
+                        if let Err(err) = component.apply(&config.game.dxvk.builds, &config.game.wine.prefix) {
+                            this.update(Actions::Toast(Rc::new((
+                                String::from("Failed to apply DXVK"), err.to_string()
+                            )))).unwrap();
                         }
                     }));
                 }));
@@ -385,13 +382,10 @@ impl App {
 
                     else if let Ok(awaiter) = component.download(&config.game.dxvk.builds) {
                         awaiter.then(clone!(@strong this => move |_| {
-                            match component.apply(&config.game.dxvk.builds, &config.game.wine.prefix) {
-                                Ok(output) => println!("{}", String::from_utf8_lossy(&output.stdout)),
-                                Err(err) => {
-                                    this.update(Actions::Toast(Rc::new((
-                                        String::from("Failed to apply DXVK"), err.to_string()
-                                    )))).unwrap();
-                                }
+                            if let Err(err) = component.apply(&config.game.dxvk.builds, &config.game.wine.prefix) {
+                                this.update(Actions::Toast(Rc::new((
+                                    String::from("Failed to apply DXVK"), err.to_string()
+                                )))).unwrap();
                             }
 
                             component.update_state(&config.game.dxvk.builds);
@@ -488,13 +482,10 @@ impl App {
                             this.widgets.dxvk_selected.set_sensitive(false);
 
                             std::thread::spawn(clone!(@strong config, @strong this => move || {
-                                match version.apply(&config.game.dxvk.builds, &config.game.wine.prefix) {
-                                    Ok(output) => println!("{}", String::from_utf8_lossy(&output.stdout)),
-                                    Err(err) => {
-                                        this.update(Actions::Toast(Rc::new((
-                                            String::from("Failed to apply DXVK"), err.to_string()
-                                        )))).unwrap();
-                                    }
+                                if let Err(err) = version.install(&config.game.dxvk.builds, &config.game.wine.prefix, wincompatlib::dxvk::InstallParams::default()) {
+                                    this.update(Actions::Toast(Rc::new((
+                                        String::from("Failed to apply DXVK"), err.to_string()
+                                    )))).unwrap();
                                 }
 
                                 this.widgets.dxvk_selected.set_sensitive(true);
