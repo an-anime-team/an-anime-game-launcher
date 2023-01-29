@@ -16,20 +16,11 @@ relm4::new_stateless_action!(ConfigFile, WindowActionGroup, "config_file");
 
 relm4::new_stateless_action!(About, WindowActionGroup, "about");
 
-/// Sets to `true` when the `App` component is ready (fully initialized)
-pub static mut READY: bool = false;
-
-// TODO: get rid of using this function in all the components' events
-//       e.g. by converting preferences pages into Relm4 Components
-pub fn is_ready() -> bool {
-    unsafe { READY }
-}
+static mut PREFERENCES_WINDOW: Option<Controller<PreferencesApp>> = None;
+static mut ABOUT_DIALOG: Option<Controller<AboutDialog>> = None;
 
 pub struct App {
-    preferences_window: Controller<PreferencesApp>,
-
-    #[allow(dead_code)]
-    about_dialog: Controller<AboutDialog>
+    loading: Option<Option<String>>
 }
 
 #[derive(Debug)]
@@ -73,7 +64,25 @@ impl SimpleComponent for App {
                     }
                 },
 
+                adw::StatusPage {
+                    set_title: "Loading data",
+                    set_icon_name: Some("process-working"),
+                    set_vexpand: true,
+
+                    #[watch]
+                    set_description: match &model.loading {
+                        Some(Some(desc)) => Some(desc),
+                        Some(None) | None => None
+                    },
+
+                    #[watch]
+                    set_visible: model.loading.is_some()
+                },
+
                 adw::PreferencesPage {
+                    #[watch]
+                    set_visible: model.loading.is_none(),
+
                     add = &adw::PreferencesGroup {
                         gtk::Image {
                             set_resource: Some("/org/app/images/icon.png"),
@@ -127,6 +136,10 @@ impl SimpleComponent for App {
     ) -> ComponentParts<Self> {
         tracing::info!("Initializing main window");
 
+        let model = App {
+            loading: None
+        };
+
         let widgets = view_output!();
 
         if crate::APP_DEBUG {
@@ -135,16 +148,16 @@ impl SimpleComponent for App {
 
         let about_dialog_broker: MessageBroker<AboutDialog> = MessageBroker::new();
 
-        let model = App {
-            preferences_window: PreferencesApp::builder()
+        unsafe {
+            PREFERENCES_WINDOW = Some(PreferencesApp::builder()
                 .launch(widgets.main_window.clone().into())
-                .detach(),
+                .detach());
 
-            about_dialog: AboutDialog::builder()
+            ABOUT_DIALOG = Some(AboutDialog::builder()
                 .transient_for(widgets.main_window.clone())
                 .launch_with_broker((), &about_dialog_broker)
-                .detach()
-        };
+                .detach());
+        }
 
         let group = RelmActionGroup::<WindowActionGroup>::new();
 
@@ -167,7 +180,7 @@ impl SimpleComponent for App {
         widgets.main_window.insert_action_group("win", Some(&group.into_action_group()));
 
         unsafe {
-            READY = true;
+            crate::READY = true;
         }
 
         tracing::info!("Main window initialized. App is ready");
@@ -179,12 +192,12 @@ impl SimpleComponent for App {
         tracing::debug!("Called main window event: {:?}", msg);
 
         match msg {
-            AppMsg::OpenPreferences => {
-                self.preferences_window.widgets().preferences_window.show();
+            AppMsg::OpenPreferences => unsafe {
+                PREFERENCES_WINDOW.as_ref().unwrap_unchecked().widgets().preferences_window.show();
             }
 
-            AppMsg::ClosePreferences => {
-                self.preferences_window.widgets().preferences_window.hide();
+            AppMsg::ClosePreferences => unsafe {
+                PREFERENCES_WINDOW.as_ref().unwrap_unchecked().widgets().preferences_window.hide();
             }
         }
     }

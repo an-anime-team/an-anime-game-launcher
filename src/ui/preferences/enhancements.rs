@@ -6,7 +6,7 @@ use anime_launcher_sdk::config;
 use anime_launcher_sdk::config::prelude::*;
 
 use crate::i18n::tr;
-use crate::ui::main::is_ready;
+use crate::*;
 
 lazy_static::lazy_static! {
     static ref CONFIG: config::Config = config::get().expect("Failed to load config");

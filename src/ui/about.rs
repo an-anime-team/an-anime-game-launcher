@@ -55,7 +55,8 @@ impl SimpleComponent for AboutDialog {
 
             add_credit_section: (Some("An Anime Team"), &[
                 "@Marie https://github.com/Mar0xy",
-                "@lane https://github.com/laurinneff"
+                "@lane https://github.com/laurinneff",
+                "@jiro-too https://github.com/jiro-too"
             ]),
 
             set_debug_info: &[
@@ -88,6 +89,8 @@ impl SimpleComponent for AboutDialog {
         root: &Self::Root,
         sender: ComponentSender<Self>,
     ) -> ComponentParts<Self> {
+        tracing::info!("Initializing about dialog");
+
         let model = AboutDialog {
             visible: false
         };

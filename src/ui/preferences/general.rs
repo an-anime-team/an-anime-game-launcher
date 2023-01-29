@@ -5,25 +5,9 @@ use adw::prelude::*;
 
 use anime_launcher_sdk::config;
 use anime_launcher_sdk::anime_game_core::prelude::*;
-use anime_launcher_sdk::anime_game_core::genshin::prelude::*;
 
 use crate::i18n::*;
-use crate::ui::main::is_ready;
-
-lazy_static::lazy_static! {
-    static ref CONFIG: config::Config = config::get().expect("Failed to load config");
-
-    static ref GAME: Game = Game::new(&CONFIG.game.path);
-
-    static ref GAME_DIFF: Option<VersionDiff> = match GAME.try_get_diff() {
-        Ok(diff) => Some(diff),
-        Err(err) => {
-            tracing::error!("Failed to get game diff {err}");
-
-            None
-        }
-    };
-}
+use crate::*;
 
 #[relm4::widget_template(pub)]
 impl WidgetTemplate for General {
@@ -154,20 +138,24 @@ impl WidgetTemplate for General {
                             None => "success"
                         },
 
-                        set_tooltip_text: Some(&match GAME_DIFF.as_ref().unwrap() {
-                            VersionDiff::Latest(_) => String::new(),
-                            VersionDiff::Predownload { current, latest, .. } => tr_args("game-predownload-available", [
-                                ("old", current.to_string().into()),
-                                ("new", latest.to_string().into())
-                            ]),
-                            VersionDiff::Diff { current, latest, .. } => tr_args("game-update-available", [
-                                ("old", current.to_string().into()),
-                                ("new", latest.to_string().into())
-                            ]),
-                            VersionDiff::Outdated { latest, ..} => tr_args("game-outdated", [
-                                ("latest", latest.to_string().into())
-                            ]),
-                            VersionDiff::NotInstalled { .. } => String::new()
+                        set_tooltip_text: Some(&match GAME_DIFF.as_ref() {
+                            Some(diff) => match diff {
+                                VersionDiff::Latest(_) => String::new(),
+                                VersionDiff::Predownload { current, latest, .. } => tr_args("game-predownload-available", [
+                                    ("old", current.to_string().into()),
+                                    ("new", latest.to_string().into())
+                                ]),
+                                VersionDiff::Diff { current, latest, .. } => tr_args("game-update-available", [
+                                    ("old", current.to_string().into()),
+                                    ("new", latest.to_string().into())
+                                ]),
+                                VersionDiff::Outdated { latest, ..} => tr_args("game-outdated", [
+                                    ("latest", latest.to_string().into())
+                                ]),
+                                VersionDiff::NotInstalled { .. } => String::new()
+                            }
+
+                            None => String::new()
                         })
                     }
                 },
@@ -176,8 +164,56 @@ impl WidgetTemplate for General {
                     set_title: &tr("patch-version"),
 
                     add_suffix = &gtk::Label {
-                        set_text: "3.3.0",
-                        add_css_class: "success"
+                        set_text: &match PATCH.as_ref() {
+                            Some(patch) => match patch {
+                                Patch::NotAvailable => tr("patch-not-available"),
+                                Patch::Outdated { current, .. } => tr_args("patch-outdated", [("current", current.to_string().into())]),
+                                Patch::Preparation { .. } => tr("patch-preparation"),
+                                Patch::Testing { version, .. } |
+                                Patch::Available { version, .. } => version.to_string()
+                            }
+
+                            None => String::from("?")
+                        },
+
+                        add_css_class: match PATCH.as_ref() {
+                            Some(patch) => match patch {
+                                Patch::NotAvailable => "error",
+                                Patch::Outdated { .. } |
+                                Patch::Preparation { .. } |
+                                Patch::Testing { .. } => "warning",
+                                Patch::Available { .. } => unsafe {
+                                    if let Ok(true) = PATCH.as_ref().unwrap_unchecked().is_applied(&CONFIG.game.path) {
+                                        "success"
+                                    } else {
+                                        "warning"
+                                    }
+                                }
+                            }
+
+                            None => ""
+                        },
+
+                        set_tooltip_text: Some(&match PATCH.as_ref() {
+                            Some(patch) => match patch {
+                                Patch::NotAvailable => tr("patch-not-available-tooltip"),
+                                Patch::Outdated { current, latest, .. } => tr_args("patch-outdated-tooltip", [
+                                    ("current", current.to_string().into()),
+                                    ("latest", latest.to_string().into())
+                                ]),
+                                Patch::Preparation { .. } => tr("patch-preparation-tooltip"),
+                                Patch::Testing { .. } => tr("patch-testing-tooltip"),
+                                Patch::Available { .. } => unsafe {
+                                    if let Ok(true) = PATCH.as_ref().unwrap_unchecked().is_applied(&CONFIG.game.path) {
+                                        String::new()
+                                    } else {
+                                        tr("patch-testing-tooltip")
+                                    }
+                                }
+                            }
+
+                            None => String::new()
+                        })
                     }
                 }
             },
