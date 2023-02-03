@@ -221,6 +221,7 @@ impl WidgetTemplate for General {
             add = &adw::PreferencesGroup {
                 set_title: &tr("wine-version"),
 
+                #[name(wine_version_selector)]
                 adw::ComboRow {
                     set_title: &tr("selected-version")
                 },
@@ -243,6 +244,7 @@ impl WidgetTemplate for General {
             add = &adw::PreferencesGroup {
                 set_title: &tr("dxvk-version"),
 
+                #[name(dxvk_version_selector)]
                 adw::ComboRow {
                     set_title: &tr("selected-version")
                 },
