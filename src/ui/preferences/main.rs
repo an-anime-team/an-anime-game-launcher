@@ -21,7 +21,7 @@ pub struct App {
     selected_dxvk_version: u32
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone, Copy)]
 pub enum AppMsg {
     WineRecommendedOnly(bool),
     DxvkRecommendedOnly(bool),
@@ -111,18 +111,26 @@ impl SimpleComponent for App {
 
         let model = App {
             wine_components: ComponentsList::builder()
-                .launch(ComponentsListPattern {
-                    download_folder: CONFIG.game.wine.builds.clone(),
-                    groups: wine::get_groups().into_iter().map(|group| group.into()).collect()
+                .launch(ComponentsListInit {
+                    pattern: ComponentsListPattern {
+                        download_folder: CONFIG.game.wine.builds.clone(),
+                        groups: wine::get_groups().into_iter().map(|group| group.into()).collect()
+                    },
+                    on_downloaded: Some(AppMsg::UpdateDownloadedWine),
+                    on_deleted: Some(AppMsg::UpdateDownloadedWine)
                 })
-                .detach(),
+                .forward(sender.input_sender(), std::convert::identity),
 
             dxvk_components: ComponentsList::builder()
-                .launch(ComponentsListPattern {
-                    download_folder: CONFIG.game.dxvk.builds.clone(),
-                    groups: dxvk::get_groups().into_iter().map(|group| group.into()).collect()
+                .launch(ComponentsListInit {
+                    pattern: ComponentsListPattern {
+                        download_folder: CONFIG.game.dxvk.builds.clone(),
+                        groups: dxvk::get_groups().into_iter().map(|group| group.into()).collect()
+                    },
+                    on_downloaded: Some(AppMsg::UpdateDownloadedDxvk),
+                    on_deleted: Some(AppMsg::UpdateDownloadedDxvk)
                 })
-                .detach(),
+                .forward(sender.input_sender(), std::convert::identity),
 
             downloaded_wine_versions: vec![],
             downloaded_dxvk_versions: vec![],

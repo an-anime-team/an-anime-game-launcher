@@ -50,7 +50,7 @@ impl SimpleComponent for ProgressBar {
             #[watch]
             set_text: match model.caption.as_ref() {
                 Some(caption) => Some({
-                    if let Some((curr, total)) = &model.downloaded {
+                    if let Some((_curr, _total)) = &model.downloaded {
                         // caption.push_str(&format!(": {:.2}% ({curr} of {total})", model.fraction));
                     }
 

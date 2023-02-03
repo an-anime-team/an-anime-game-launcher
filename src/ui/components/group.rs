@@ -13,14 +13,16 @@ pub struct ComponentGroup {
 
 #[derive(Debug)]
 pub enum AppMsg {
-    ShowRecommendedOnly(bool)
+    ShowRecommendedOnly(bool),
+    CallOnDownloaded,
+    CallOnDeleted
 }
 
 #[relm4::component(pub)]
 impl SimpleComponent for ComponentGroup {
     type Init = (super::ComponentsListGroup, PathBuf);
     type Input = AppMsg;
-    type Output = ();
+    type Output = super::list::AppMsg;
 
     view! {
         group = adw::ExpanderRow {
@@ -31,7 +33,7 @@ impl SimpleComponent for ComponentGroup {
     fn init(
         init: Self::Init,
         root: &Self::Root,
-        _sender: ComponentSender<Self>,
+        sender: ComponentSender<Self>,
     ) -> ComponentParts<Self> {
         let model = ComponentGroup {
             title: init.0.title,
@@ -42,7 +44,7 @@ impl SimpleComponent for ComponentGroup {
                 .map(|version| {
                     super::ComponentVersion::builder()
                         .launch((version, init.1.clone()))
-                        .detach()
+                        .forward(sender.input_sender(), std::convert::identity)
                 })
                 .collect()
         };
@@ -56,7 +58,7 @@ impl SimpleComponent for ComponentGroup {
         ComponentParts { model, widgets }
     }
 
-    fn update(&mut self, msg: Self::Input, _sender: ComponentSender<Self>) {
+    fn update(&mut self, msg: Self::Input, sender: ComponentSender<Self>) {
         tracing::debug!("Called component group [{}] event: {:?}", self.title, msg);
 
         match msg {
@@ -67,6 +69,16 @@ impl SimpleComponent for ComponentGroup {
                 for version in &self.versions {
                     version.sender().send(super::version::AppMsg::ShowRecommendedOnly(state)).unwrap();
                 }
+            }
+
+            #[allow(unused_must_use)]
+            AppMsg::CallOnDownloaded => {
+                sender.output(super::list::AppMsg::CallOnDownloaded);
+            }
+
+            #[allow(unused_must_use)]
+            AppMsg::CallOnDeleted => {
+                sender.output(super::list::AppMsg::CallOnDeleted);
             }
         }
     }

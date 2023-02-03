@@ -142,7 +142,7 @@ impl SimpleComponent for App {
 
         let widgets = view_output!();
 
-        if crate::APP_DEBUG {
+        if *crate::APP_DEBUG {
             widgets.main_window.add_css_class("devel");
         }
 

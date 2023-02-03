@@ -44,7 +44,7 @@ pub enum AppMsg {
 impl SimpleComponent for ComponentVersion {
     type Init = (super::ComponentsListVersion, PathBuf);
     type Input = AppMsg;
-    type Output = ();
+    type Output = super::group::AppMsg;
 
     view! {
         row = adw::ActionRow {
@@ -128,8 +128,12 @@ impl SimpleComponent for ComponentVersion {
 
                             // todo
                             std::fs::remove_dir_all(path).expect("Failed to delete component");
+                        }
 
-                            self.state = VersionState::NotDownloaded;
+                        self.state = VersionState::NotDownloaded;
+
+                        #[allow(unused_must_use)] {
+                            sender.output(super::group::AppMsg::CallOnDeleted);
                         }
                     }
 
@@ -158,11 +162,14 @@ impl SimpleComponent for ComponentVersion {
                                         Update::UnpackingError(_) => {
                                             progress_bar_sender.send(ProgressBarMsg::SetVisible(false));
 
-                                            sender.input(AppMsg::SetState(if let Update::UnpackingFinished = &state {
-                                                VersionState::Downloaded
-                                            } else {
-                                                VersionState::NotDownloaded
-                                            }));
+                                            if let Update::UnpackingFinished = &state {
+                                                sender.input(AppMsg::SetState(VersionState::Downloaded));
+                                                sender.output(super::group::AppMsg::CallOnDownloaded);
+                                            }
+
+                                            else {
+                                                sender.input(AppMsg::SetState(VersionState::NotDownloaded));
+                                            }
                                         },
 
                                         _ => ()

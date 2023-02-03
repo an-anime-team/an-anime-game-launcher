@@ -2,22 +2,32 @@ use relm4::prelude::*;
 
 use adw::prelude::*;
 
+#[derive(Debug, Clone)]
+pub struct ComponentsListInit {
+    pub pattern: super::ComponentsListPattern,
+    pub on_downloaded: Option<crate::ui::preferences::main::AppMsg>,
+    pub on_deleted: Option<crate::ui::preferences::main::AppMsg>
+}
+
 pub struct ComponentsList {
     pub show_recommended_only: bool,
+    pub init: ComponentsListInit,
 
     pub groups: Vec<Controller<super::ComponentGroup>>
 }
 
 #[derive(Debug)]
 pub enum AppMsg {
-    ShowRecommendedOnly(bool)
+    ShowRecommendedOnly(bool),
+    CallOnDownloaded,
+    CallOnDeleted
 }
 
 #[relm4::component(pub)]
 impl SimpleComponent for ComponentsList {
-    type Init = super::ComponentsListPattern;
+    type Init = ComponentsListInit;
     type Input = AppMsg;
-    type Output = ();
+    type Output = crate::ui::preferences::main::AppMsg;
 
     view! {
         group = adw::PreferencesGroup {}
@@ -26,17 +36,20 @@ impl SimpleComponent for ComponentsList {
     fn init(
         init: Self::Init,
         root: &Self::Root,
-        _sender: ComponentSender<Self>,
+        sender: ComponentSender<Self>,
     ) -> ComponentParts<Self> {
+        let init_copy = init.clone();
+
         let model = ComponentsList {
             show_recommended_only: true,
+            init: init_copy,
 
-            groups: init.groups
+            groups: init.pattern.groups
                 .into_iter()
                 .map(|group| {
                     super::ComponentGroup::builder()
-                        .launch((group, init.download_folder.clone()))
-                        .detach()
+                        .launch((group, init.pattern.download_folder.clone()))
+                        .forward(sender.input_sender(), std::convert::identity)
                 })
                 .collect()
         };
@@ -50,7 +63,7 @@ impl SimpleComponent for ComponentsList {
         ComponentParts { model, widgets }
     }
 
-    fn update(&mut self, msg: Self::Input, _sender: ComponentSender<Self>) {
+    fn update(&mut self, msg: Self::Input, sender: ComponentSender<Self>) {
         tracing::debug!("Called components list event: {:?}", msg);
 
         match msg {
@@ -61,6 +74,16 @@ impl SimpleComponent for ComponentsList {
                 for group in &self.groups {
                     group.sender().send(super::group::AppMsg::ShowRecommendedOnly(state)).unwrap();
                 }
+            }
+
+            #[allow(unused_must_use)]
+            AppMsg::CallOnDownloaded => if let Some(on_downloaded) = self.init.on_downloaded {
+                sender.output(on_downloaded);
+            }
+
+            #[allow(unused_must_use)]
+            AppMsg::CallOnDeleted => if let Some(on_deleted) = self.init.on_deleted {
+                sender.output(on_deleted);
             }
         }
     }
