@@ -13,6 +13,7 @@ pub use prettify_bytes::prettify_bytes;
 
 pub const APP_ID: &str = "moe.launcher.an-anime-game-launcher-gtk";
 pub const APP_VERSION: &str = env!("CARGO_PKG_VERSION");
+pub const APP_DEBUG: bool = cfg!(debug_assertions);
 
 /// Sets to `true` when the `App` component is ready (fully initialized)
 pub static mut READY: bool = false;
@@ -24,8 +25,6 @@ pub fn is_ready() -> bool {
 }
 
 lazy_static::lazy_static! {
-    pub static ref APP_DEBUG: bool = cfg!(debug_assertions) || std::env::args().any(|arg| &arg == "--debug");
-
     /// Config loaded on the app's start. Use `config::get()` to get up to date config instead.
     /// This one is used to prepare some launcher UI components on start
     pub static ref CONFIG: config::Config = config::get().expect("Failed to load config");
@@ -59,7 +58,7 @@ lazy_static::lazy_static! {
 fn main() {
     tracing_subscriber::fmt()
         .with_span_events(tracing_subscriber::fmt::format::FmtSpan::FULL)
-        .with_max_level(if *APP_DEBUG {
+        .with_max_level(if APP_DEBUG || std::env::args().any(|arg| &arg == "--debug") {
             tracing::Level::TRACE
         } else {
             tracing::Level::WARN

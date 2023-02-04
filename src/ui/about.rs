@@ -36,7 +36,7 @@ impl SimpleComponent for AboutDialog {
 
             set_version: &{
                 // Debug build & build's version doesn't contain any suffix (-dev, -beta, etc)
-                if *crate::APP_DEBUG && !crate::APP_VERSION.contains('-') {
+                if crate::APP_DEBUG && !crate::APP_VERSION.contains('-') {
                     format!("{}-dev", crate::APP_VERSION)
                 }
                 
