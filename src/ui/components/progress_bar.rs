@@ -130,7 +130,6 @@ impl SimpleAsyncComponent for ProgressBar {
                 ));
             }
 
-            // TODO: add translation
             AppMsg::UpdateFromState(state) => {
                 match state {
                     InstallerUpdate::CheckingFreeSpace(_)  => self.caption = Some(tr("checking-free-space")),
