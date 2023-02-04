@@ -1,4 +1,5 @@
 use relm4::prelude::*;
+use relm4::component::*;
 
 use adw::prelude::*;
 
@@ -8,7 +9,7 @@ pub struct ComponentGroup {
     pub title: String,
     pub show_recommended_only: bool,
 
-    pub versions: Vec<Controller<super::ComponentVersion>>
+    pub versions: Vec<AsyncController<super::ComponentVersion>>
 }
 
 #[derive(Debug)]
@@ -18,8 +19,8 @@ pub enum AppMsg {
     CallOnDeleted
 }
 
-#[relm4::component(pub)]
-impl SimpleComponent for ComponentGroup {
+#[relm4::component(async, pub)]
+impl SimpleAsyncComponent for ComponentGroup {
     type Init = (super::ComponentsListGroup, PathBuf);
     type Input = AppMsg;
     type Output = super::list::AppMsg;
@@ -30,11 +31,12 @@ impl SimpleComponent for ComponentGroup {
         }
     }
 
-    fn init(
+    #[allow(clippy::redundant_clone)]
+    async fn init(
         init: Self::Init,
-        root: &Self::Root,
-        sender: ComponentSender<Self>,
-    ) -> ComponentParts<Self> {
+        root: Self::Root,
+        sender: AsyncComponentSender<Self>,
+    ) -> AsyncComponentParts<Self> {
         let model = ComponentGroup {
             title: init.0.title,
             show_recommended_only: true,
@@ -55,10 +57,10 @@ impl SimpleComponent for ComponentGroup {
             widgets.group.add_row(version.widget());
         }
 
-        ComponentParts { model, widgets }
+        AsyncComponentParts { model, widgets }
     }
 
-    fn update(&mut self, msg: Self::Input, sender: ComponentSender<Self>) {
+    async fn update(&mut self, msg: Self::Input, sender: AsyncComponentSender<Self>) {
         tracing::debug!("Called component group [{}] event: {:?}", self.title, msg);
 
         match msg {

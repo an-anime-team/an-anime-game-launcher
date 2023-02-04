@@ -1,4 +1,5 @@
 use relm4::prelude::*;
+use relm4::component::*;
 
 use gtk::prelude::*;
 use adw::prelude::*;
@@ -30,7 +31,7 @@ pub struct ComponentVersion {
     pub show_recommended_only: bool,
     pub state: VersionState,
 
-    pub progress_bar: Controller<super::ProgressBar>
+    pub progress_bar: AsyncController<super::ProgressBar>
 }
 
 #[derive(Debug)]
@@ -40,8 +41,8 @@ pub enum AppMsg {
     SetState(VersionState)
 }
 
-#[relm4::component(pub)]
-impl SimpleComponent for ComponentVersion {
+#[relm4::component(async, pub)]
+impl SimpleAsyncComponent for ComponentVersion {
     type Init = (super::ComponentsListVersion, PathBuf);
     type Input = AppMsg;
     type Output = super::group::AppMsg;
@@ -73,11 +74,12 @@ impl SimpleComponent for ComponentVersion {
         }
     }
 
-    fn init(
+    #[allow(clippy::redundant_clone)]
+    async fn init(
         init: Self::Init,
-        root: &Self::Root,
-        _sender: ComponentSender<Self>,
-    ) -> ComponentParts<Self> {
+        root: Self::Root,
+        _sender: AsyncComponentSender<Self>,
+    ) -> AsyncComponentParts<Self> {
         let mut model = ComponentVersion {
             name: init.0.name,
             title: init.0.title,
@@ -102,16 +104,16 @@ impl SimpleComponent for ComponentVersion {
         };
 
         // Set progress bar width
-        model.progress_bar.widgets().progress_bar.set_width_request(200);
+        model.progress_bar.widget().set_width_request(200);
 
         let widgets = view_output!();
 
         widgets.row.add_suffix(model.progress_bar.widget());
 
-        ComponentParts { model, widgets }
+        AsyncComponentParts { model, widgets }
     }
 
-    fn update(&mut self, msg: Self::Input, sender: ComponentSender<Self>) {
+    async fn update(&mut self, msg: Self::Input, sender: AsyncComponentSender<Self>) {
         tracing::debug!("Called component version [{}] event: {:?} (state = {:?})", self.title, msg, self.state);
 
         match msg {

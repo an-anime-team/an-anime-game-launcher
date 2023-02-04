@@ -1,4 +1,5 @@
 use relm4::prelude::*;
+use relm4::component::*;
 
 use adw::prelude::*;
 
@@ -13,7 +14,7 @@ pub struct ComponentsList {
     pub show_recommended_only: bool,
     pub init: ComponentsListInit,
 
-    pub groups: Vec<Controller<super::ComponentGroup>>
+    pub groups: Vec<AsyncController<super::ComponentGroup>>
 }
 
 #[derive(Debug)]
@@ -23,8 +24,8 @@ pub enum AppMsg {
     CallOnDeleted
 }
 
-#[relm4::component(pub)]
-impl SimpleComponent for ComponentsList {
+#[relm4::component(async, pub)]
+impl SimpleAsyncComponent for ComponentsList {
     type Init = ComponentsListInit;
     type Input = AppMsg;
     type Output = crate::ui::preferences::main::AppMsg;
@@ -33,11 +34,12 @@ impl SimpleComponent for ComponentsList {
         group = adw::PreferencesGroup {}
     }
 
-    fn init(
+    #[allow(clippy::redundant_clone)]
+    async fn init(
         init: Self::Init,
-        root: &Self::Root,
-        sender: ComponentSender<Self>,
-    ) -> ComponentParts<Self> {
+        root: Self::Root,
+        sender: AsyncComponentSender<Self>,
+    ) -> AsyncComponentParts<Self> {
         let init_copy = init.clone();
 
         let model = ComponentsList {
@@ -60,10 +62,10 @@ impl SimpleComponent for ComponentsList {
             widgets.group.add(group.widget());
         }
 
-        ComponentParts { model, widgets }
+        AsyncComponentParts { model, widgets }
     }
 
-    fn update(&mut self, msg: Self::Input, sender: ComponentSender<Self>) {
+    async fn update(&mut self, msg: Self::Input, sender: AsyncComponentSender<Self>) {
         tracing::debug!("Called components list event: {:?}", msg);
 
         match msg {

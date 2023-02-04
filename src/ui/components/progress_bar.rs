@@ -1,4 +1,5 @@
 use relm4::prelude::*;
+use relm4::component::*;
 
 use adw::prelude::*;
 
@@ -28,14 +29,15 @@ pub enum AppMsg {
     SetVisible(bool)
 }
 
-#[relm4::component(pub)]
-impl SimpleComponent for ProgressBar {
+#[relm4::component(async, pub)]
+impl SimpleAsyncComponent for ProgressBar {
     type Init = (Option<String>, bool);
     type Input = AppMsg;
     type Output = ();
 
     view! {
-        progress_bar = gtk::ProgressBar {
+        #[root]
+        gtk::ProgressBar {
             set_valign: gtk::Align::Center,
 
             #[watch]
@@ -61,11 +63,12 @@ impl SimpleComponent for ProgressBar {
         }
     }
 
-    fn init(
+    #[allow(clippy::redundant_clone)]
+    async fn init(
         init: Self::Init,
-        root: &Self::Root,
-        _sender: ComponentSender<Self>,
-    ) -> ComponentParts<Self> {
+        root: Self::Root,
+        _sender: AsyncComponentSender<Self>,
+    ) -> AsyncComponentParts<Self> {
         let model = ProgressBar {
             fraction: 0.0,
             caption: init.0,
@@ -75,10 +78,10 @@ impl SimpleComponent for ProgressBar {
 
         let widgets = view_output!();
 
-        ComponentParts { model, widgets }
+        AsyncComponentParts { model, widgets }
     }
 
-    fn update(&mut self, msg: Self::Input, _sender: ComponentSender<Self>) {
+    async fn update(&mut self, msg: Self::Input, _sender: AsyncComponentSender<Self>) {
         tracing::debug!("Called components list event: {:?}", msg);
 
         match msg {

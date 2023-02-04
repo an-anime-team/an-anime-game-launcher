@@ -1,4 +1,5 @@
 use relm4::prelude::*;
+use relm4::component::*;
 
 use gtk::prelude::*;
 use adw::prelude::*;
@@ -11,8 +12,8 @@ use crate::i18n::tr;
 use crate::CONFIG;
 
 pub struct App {
-    wine_components: Controller<ComponentsList>,
-    dxvk_components: Controller<ComponentsList>,
+    wine_components: AsyncController<ComponentsList>,
+    dxvk_components: AsyncController<ComponentsList>,
 
     downloaded_wine_versions: Vec<wine::Version>,
     downloaded_dxvk_versions: Vec<dxvk::Version>,
@@ -29,13 +30,14 @@ pub enum AppMsg {
     UpdateDownloadedDxvk
 }
 
-#[relm4::component(pub)]
-impl SimpleComponent for App {
+#[relm4::component(async, pub)]
+impl SimpleAsyncComponent for App {
     type Init = gtk::Window;
     type Input = AppMsg;
     type Output = ();
 
     view! {
+        #[root]
         preferences_window = adw::PreferencesWindow {
             set_title: Some(&tr("preferences")),
             set_default_size: (700, 560),
@@ -102,11 +104,12 @@ impl SimpleComponent for App {
         }
     }
 
-    fn init(
+    #[allow(clippy::redundant_clone)]
+    async fn init(
         parent: Self::Init,
-        root: &Self::Root,
-        sender: ComponentSender<Self>,
-    ) -> ComponentParts<Self> {
+        root: Self::Root,
+        sender: AsyncComponentSender<Self>,
+    ) -> AsyncComponentParts<Self> {
         tracing::info!("Initializing preferences window");
 
         let model = App {
@@ -146,10 +149,10 @@ impl SimpleComponent for App {
         sender.input(AppMsg::UpdateDownloadedWine);
         sender.input(AppMsg::UpdateDownloadedDxvk);
 
-        ComponentParts { model, widgets }
+        AsyncComponentParts { model, widgets }
     }
 
-    fn update(&mut self, msg: Self::Input, _sender: ComponentSender<Self>) {
+    async fn update(&mut self, msg: Self::Input, _sender: AsyncComponentSender<Self>) {
         tracing::debug!("Called preferences window event: {:?}", msg);
 
         match msg {

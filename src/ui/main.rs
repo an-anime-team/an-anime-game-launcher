@@ -1,4 +1,9 @@
-use relm4::{prelude::*, actions::*, MessageBroker};
+use relm4::{
+    prelude::*,
+    component::*,
+    actions::*,
+    MessageBroker
+};
 
 use gtk::prelude::*;
 use adw::prelude::*;
@@ -16,7 +21,7 @@ relm4::new_stateless_action!(ConfigFile, WindowActionGroup, "config_file");
 
 relm4::new_stateless_action!(About, WindowActionGroup, "about");
 
-static mut PREFERENCES_WINDOW: Option<Controller<PreferencesApp>> = None;
+static mut PREFERENCES_WINDOW: Option<AsyncController<PreferencesApp>> = None;
 static mut ABOUT_DIALOG: Option<Controller<AboutDialog>> = None;
 
 pub struct App {
@@ -193,11 +198,11 @@ impl SimpleComponent for App {
 
         match msg {
             AppMsg::OpenPreferences => unsafe {
-                PREFERENCES_WINDOW.as_ref().unwrap_unchecked().widgets().preferences_window.show();
+                PREFERENCES_WINDOW.as_ref().unwrap_unchecked().widget().show();
             }
 
             AppMsg::ClosePreferences => unsafe {
-                PREFERENCES_WINDOW.as_ref().unwrap_unchecked().widgets().preferences_window.hide();
+                PREFERENCES_WINDOW.as_ref().unwrap_unchecked().widget().hide();
             }
         }
     }
