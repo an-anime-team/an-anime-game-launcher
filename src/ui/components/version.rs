@@ -92,7 +92,12 @@ impl SimpleAsyncComponent for ComponentVersion {
             state: VersionState::NotDownloaded,
 
             progress_bar: super::ProgressBar::builder()
-                .launch((None, false))
+                .launch(super::ProgressBarInit {
+                    caption: None,
+                    display_progress: true,
+                    display_fraction: false,
+                    visible: false,
+                })
                 .detach()
         };
 

@@ -7,12 +7,30 @@ use anime_launcher_sdk::anime_game_core::installer::installer::Update as Install
 
 use crate::prettify_bytes;
 
+pub struct ProgressBarInit {
+    pub caption: Option<String>,
+
+    /// Add progress percentage (`XX.YY%`) suffix
+    pub display_progress: bool,
+
+    /// Add `(XX MB of YY MB)` suffix
+    pub display_fraction: bool,
+
+    pub visible: bool
+}
+
 pub struct ProgressBar {
     pub fraction: f64,
     pub caption: Option<String>,
 
     /// e.g. (53.21 MB, 10 GB)
     pub downloaded: Option<(String, String)>,
+
+    /// Add progress percentage (`XX.YY%`) suffix
+    pub display_progress: bool,
+
+    /// Add `(XX MB of YY MB)` suffix
+    pub display_fraction: bool,
 
     pub visible: bool
 }
@@ -31,7 +49,8 @@ pub enum AppMsg {
 
 #[relm4::component(async, pub)]
 impl SimpleAsyncComponent for ProgressBar {
-    type Init = (Option<String>, bool);
+    /// (caption, display_progress, display_fraction, visible)
+    type Init = ProgressBarInit;
     type Input = AppMsg;
     type Output = ();
 
@@ -50,16 +69,22 @@ impl SimpleAsyncComponent for ProgressBar {
             set_show_text: model.caption.is_some(),
 
             #[watch]
-            set_text: match model.caption.as_ref() {
-                Some(caption) => Some({
-                    if let Some((_curr, _total)) = &model.downloaded {
-                        // caption.push_str(&format!(": {:.2}% ({curr} of {total})", model.fraction));
+            set_text: Some(&match model.caption.clone() {
+                Some(mut caption) => {
+                    if model.display_progress {
+                        caption = format!("{caption}: {:.2}%", model.fraction * 100.0);
+                    }
+
+                    if model.display_fraction {
+                        if let Some((curr, total)) = &model.downloaded {
+                            caption = format!("{caption} ({curr} of {total})");
+                        }
                     }
 
                     caption
-                }),
-                None => None
-            }
+                },
+                None => String::new()
+            })
         }
     }
 
@@ -71,9 +96,11 @@ impl SimpleAsyncComponent for ProgressBar {
     ) -> AsyncComponentParts<Self> {
         let model = ProgressBar {
             fraction: 0.0,
-            caption: init.0,
+            caption: init.caption,
             downloaded: None,
-            visible: init.1
+            display_progress: init.display_progress,
+            display_fraction: init.display_fraction,
+            visible: init.visible
         };
 
         let widgets = view_output!();
@@ -105,9 +132,9 @@ impl SimpleAsyncComponent for ProgressBar {
             // TODO: add translation
             AppMsg::UpdateFromState(state) => {
                 match state {
-                    InstallerUpdate::CheckingFreeSpace(_)  => self.caption = Some(String::from("Checking free space...")),
-                    InstallerUpdate::DownloadingStarted(_) => self.caption = Some(String::from("Downloading...")),
-                    InstallerUpdate::UnpackingStarted(_)   => self.caption = Some(String::from("Unpacking...")),
+                    InstallerUpdate::CheckingFreeSpace(_)  => self.caption = Some(String::from("Checking free space")),
+                    InstallerUpdate::DownloadingStarted(_) => self.caption = Some(String::from("Downloading")),
+                    InstallerUpdate::UnpackingStarted(_)   => self.caption = Some(String::from("Unpacking")),
 
                     InstallerUpdate::DownloadingProgress(curr, total) |
                     InstallerUpdate::UnpackingProgress(curr, total) => {
