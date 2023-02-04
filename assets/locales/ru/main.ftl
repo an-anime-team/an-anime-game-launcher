@@ -3,6 +3,11 @@ none = Нет
 default = По умолчанию
 
 
+checking-free-space = Проверка свободного места
+downloading = Загрузка
+unpacking = Распаковка
+
+
 launch = Запустить
 
 

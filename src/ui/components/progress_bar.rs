@@ -6,6 +6,7 @@ use adw::prelude::*;
 use anime_launcher_sdk::anime_game_core::installer::installer::Update as InstallerUpdate;
 
 use crate::prettify_bytes;
+use crate::i18n::*;
 
 pub struct ProgressBarInit {
     pub caption: Option<String>,
@@ -132,9 +133,9 @@ impl SimpleAsyncComponent for ProgressBar {
             // TODO: add translation
             AppMsg::UpdateFromState(state) => {
                 match state {
-                    InstallerUpdate::CheckingFreeSpace(_)  => self.caption = Some(String::from("Checking free space")),
-                    InstallerUpdate::DownloadingStarted(_) => self.caption = Some(String::from("Downloading")),
-                    InstallerUpdate::UnpackingStarted(_)   => self.caption = Some(String::from("Unpacking")),
+                    InstallerUpdate::CheckingFreeSpace(_)  => self.caption = Some(tr("checking-free-space")),
+                    InstallerUpdate::DownloadingStarted(_) => self.caption = Some(tr("downloading")),
+                    InstallerUpdate::UnpackingStarted(_)   => self.caption = Some(tr("unpacking")),
 
                     InstallerUpdate::DownloadingProgress(curr, total) |
                     InstallerUpdate::UnpackingProgress(curr, total) => {

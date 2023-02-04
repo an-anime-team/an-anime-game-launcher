@@ -3,6 +3,11 @@ none = None
 default = Default
 
 
+checking-free-space = Checking free space
+downloading = Downloading
+unpacking = Unpacking
+
+
 launch = Launch
 
 
