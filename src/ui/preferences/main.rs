@@ -4,10 +4,13 @@ use relm4::component::*;
 use gtk::prelude::*;
 use adw::prelude::*;
 
+use anime_launcher_sdk::config;
 use anime_launcher_sdk::components::*;
+use anime_launcher_sdk::wincompatlib::prelude::*;
 
 use crate::ui::components::{self, *};
 use crate::i18n::tr;
+use crate::is_ready;
 
 use crate::CONFIG;
 
@@ -19,7 +22,10 @@ pub struct App {
     downloaded_dxvk_versions: Vec<dxvk::Version>,
 
     selected_wine_version: u32,
-    selected_dxvk_version: u32
+    selected_dxvk_version: u32,
+
+    selecting_wine_version: bool,
+    selecting_dxvk_version: bool
 }
 
 #[derive(Debug, Clone, Copy)]
@@ -27,7 +33,11 @@ pub enum AppMsg {
     WineRecommendedOnly(bool),
     DxvkRecommendedOnly(bool),
     UpdateDownloadedWine,
-    UpdateDownloadedDxvk
+    UpdateDownloadedDxvk,
+    SelectWine(usize),
+    SelectDxvk(usize),
+    ResetWineSelection(usize),
+    ResetDxvkSelection(usize)
 }
 
 #[relm4::component(async, pub)]
@@ -58,10 +68,28 @@ impl SimpleAsyncComponent for App {
                 #[template_child]
                 wine_version_selector {
                     #[watch]
+                    #[block_signal(wine_selected_notify)]
                     set_model: Some(&gtk::StringList::new(&model.downloaded_wine_versions.iter().map(|version| version.title.as_str()).collect::<Vec<&str>>())),
 
                     #[watch]
-                    set_selected: model.selected_wine_version
+                    #[block_signal(wine_selected_notify)]
+                    set_selected: model.selected_wine_version,
+
+                    #[watch]
+                    set_activatable: !model.selecting_wine_version,
+
+                    #[watch]
+                    set_icon_name: if model.selecting_wine_version {
+                        Some("process-working")
+                    } else {
+                        None
+                    },
+
+                    connect_selected_notify[sender] => move |row| {
+                        if is_ready() {
+                            sender.input(AppMsg::SelectWine(row.selected() as usize));
+                        }
+                    } @wine_selected_notify
                 },
 
                 #[template_child]
@@ -79,10 +107,28 @@ impl SimpleAsyncComponent for App {
                 #[template_child]
                 dxvk_version_selector {
                     #[watch]
+                    #[block_signal(dxvk_selected_notify)]
                     set_model: Some(&gtk::StringList::new(&model.downloaded_dxvk_versions.iter().map(|version| version.name.as_str()).collect::<Vec<&str>>())),
 
                     #[watch]
-                    set_selected: model.selected_dxvk_version
+                    #[block_signal(dxvk_selected_notify)]
+                    set_selected: model.selected_dxvk_version,
+
+                    #[watch]
+                    set_activatable: !model.selecting_dxvk_version,
+
+                    #[watch]
+                    set_icon_name: if model.selecting_dxvk_version {
+                        Some("process-working")
+                    } else {
+                        None
+                    },
+
+                    connect_selected_notify[sender] => move |row| {
+                        if is_ready() {
+                            sender.input(AppMsg::SelectDxvk(row.selected() as usize));
+                        }
+                    } @dxvk_selected_notify
                 },
 
                 #[template_child]
@@ -139,7 +185,10 @@ impl SimpleAsyncComponent for App {
             downloaded_dxvk_versions: vec![],
 
             selected_wine_version: 0,
-            selected_dxvk_version: 0
+            selected_dxvk_version: 0,
+
+            selecting_wine_version: false,
+            selecting_dxvk_version: false
         };
 
         let widgets = view_output!();
@@ -152,7 +201,7 @@ impl SimpleAsyncComponent for App {
         AsyncComponentParts { model, widgets }
     }
 
-    async fn update(&mut self, msg: Self::Input, _sender: AsyncComponentSender<Self>) {
+    async fn update(&mut self, msg: Self::Input, sender: AsyncComponentSender<Self>) {
         tracing::debug!("Called preferences window event: {:?}", msg);
 
         match msg {
@@ -208,6 +257,68 @@ impl SimpleAsyncComponent for App {
                 else {
                     0
                 };
+            }
+
+            AppMsg::SelectWine(index) => {
+                if let Ok(mut config) = config::get() {
+                    if let Some(version) = self.downloaded_wine_versions.get(index) {
+                        if config.game.wine.selected.as_ref().unwrap_or(&String::new()) != &version.title {
+                            self.selecting_wine_version = true;
+
+                            let wine = version.to_wine(Some(config.game.wine.builds.join(&version.name)));
+                            let wine_name = version.name.to_string();
+
+                            std::thread::spawn(move || {
+                                wine.update_prefix(&config.game.wine.prefix)
+                                    .expect("Failed to update wine prefix");
+
+                                config.game.wine.selected = Some(wine_name); 
+
+                                config::update(config);
+
+                                sender.input(AppMsg::ResetWineSelection(index));
+                            });
+                        }
+                    }
+                }
+            }
+
+            AppMsg::ResetWineSelection(index) => {
+                self.selecting_wine_version = false;
+                self.selected_wine_version = index as u32;
+            }
+
+            AppMsg::SelectDxvk(index) => {
+                if let Ok(config) = config::get() {
+                    if let Some(version) = self.downloaded_dxvk_versions.get(index) {
+                        if let Ok(selected) = config.try_get_selected_dxvk_info() {
+                            if selected.is_none() || selected.unwrap().name != version.name {
+                                self.selecting_dxvk_version = true;
+
+                                let mut wine = match config.try_get_selected_wine_info() {
+                                    Some(version) => version.to_wine(Some(config.game.wine.builds.join(&version.name))),
+                                    None => Wine::default()
+                                };
+
+                                wine = wine.with_prefix(config.game.wine.prefix);
+
+                                let dxvk_folder = config.game.dxvk.builds.join(&version.name);
+
+                                std::thread::spawn(move || {
+                                    Dxvk::install(&wine, dxvk_folder, InstallParams::default())
+                                        .expect("Failed to install dxvk");
+
+                                    sender.input(AppMsg::ResetDxvkSelection(index));
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+
+            AppMsg::ResetDxvkSelection(index) => {
+                self.selecting_dxvk_version = false;
+                self.selected_dxvk_version = index as u32;
             }
         }
     }
