@@ -277,8 +277,9 @@ export default class Patch
     public static getPatchInfo(version: string, source: 'origin' | 'additional' = 'origin'): Promise<PatchInfo|null>
     {
         return new Promise(async (resolve, reject) => {
+            const patchCacheKey = `Patch.getPatchInfo.${version}.${source}.${await Game.server}`;
             const resolveOutput = async (output: PatchInfo|null, unityPlayerHash: string|null = null) => {
-                await Cache.set(`Patch.getPatchInfo.${version}.${source}`, {
+                await Cache.set(patchCacheKey, {
                     available: true,
                     output: output,
                     playerHash: unityPlayerHash
@@ -290,7 +291,7 @@ export default class Patch
             const rejectOutput = async (error: Error) => {
                 // Cache this error only on an hour
                 // because then the server can become alive
-                await Cache.set(`Patch.getPatchInfo.${version}.${source}`, {
+                await Cache.set(patchCacheKey, {
                     available: false,
                     error: error.message
                 }, 3600);
@@ -298,7 +299,7 @@ export default class Patch
                 reject(error);
             };
 
-            const cache = await Cache.get(`Patch.getPatchInfo.${version}.${source}`);
+            const cache = await Cache.get(patchCacheKey);
 
             // If we have result cached
             if (cache && !cache.expired)
