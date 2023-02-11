@@ -3,6 +3,7 @@ none = Нет
 default = По умолчанию
 details = Подробнее
 close = Закрыть
+save = Сохранить
 
 
 checking-free-space = Проверка свободного места

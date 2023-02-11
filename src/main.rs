@@ -4,6 +4,8 @@ use anime_launcher_sdk::config;
 use anime_launcher_sdk::anime_game_core::prelude::*;
 use anime_launcher_sdk::anime_game_core::genshin::prelude::*;
 
+use tracing_subscriber::prelude::*;
+
 pub mod i18n;
 pub mod ui;
 
@@ -25,6 +27,9 @@ pub fn is_ready() -> bool {
 }
 
 lazy_static::lazy_static! {
+    /// Path to `debug.log` file. Standard is `$HOME/.local/share/anime-game-launcher/debug.log`
+    pub static ref DEBUG_FILE: std::path::PathBuf = anime_launcher_sdk::consts::launcher_dir().unwrap_or_default().join("debug.log");
+
     /// Config loaded on the app's start. Use `config::get()` to get up to date config instead.
     /// This one is used to prepare some launcher UI components on start
     pub static ref CONFIG: config::Config = config::get().expect("Failed to load config");
@@ -56,12 +61,32 @@ lazy_static::lazy_static! {
 }
 
 fn main() {
-    tracing_subscriber::fmt()
-        .with_span_events(tracing_subscriber::fmt::format::FmtSpan::FULL)
-        .with_max_level(if APP_DEBUG || std::env::args().any(|arg| &arg == "--debug") {
-            tracing::Level::TRACE
-        } else {
-            tracing::Level::WARN
+    let stdout = tracing_subscriber::fmt::layer().pretty();
+
+    let file = match std::fs::File::create(DEBUG_FILE.as_path()) {
+        Ok(file) => file,
+        Err(error) => panic!("Failed to create debug.log file: {:?}", error)
+    };
+
+    let mut debug_log = tracing_subscriber::fmt::layer()
+        .with_writer(std::sync::Arc::new(file));
+
+    debug_log.set_ansi(false);
+
+    tracing_subscriber::registry()
+        .with({
+            stdout
+                .with_filter(tracing_subscriber::filter::LevelFilter::from_level({
+                    if APP_DEBUG || std::env::args().any(|arg| &arg == "--debug") {
+                        tracing::Level::TRACE
+                    } else {
+                        tracing::Level::WARN
+                    }
+                }))
+                .with_filter(tracing_subscriber::filter::filter_fn(|metadata| {
+                    !metadata.target().starts_with("rustls")
+                }))
+                .and_then(debug_log)
         })
         .init();
 

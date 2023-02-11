@@ -222,7 +222,7 @@ impl SimpleAsyncComponent for App {
             AppMsg::Toast { title, description } => unsafe {
                 let toast = adw::Toast::new(&title);
 
-                toast.set_timeout(5000);
+                toast.set_timeout(5);
 
                 if let Some(description) = description {
                     toast.set_button_label(Some(&tr("details")));
@@ -230,6 +230,20 @@ impl SimpleAsyncComponent for App {
                     let dialog = adw::MessageDialog::new(PREFERENCES_WINDOW.as_ref(), Some(&title), Some(&description));
 
                     dialog.add_response("close", &tr("close"));
+                    dialog.add_response("save", &tr("save"));
+
+                    dialog.set_response_appearance("save", adw::ResponseAppearance::Suggested);
+
+                    #[allow(unused_must_use)]
+                    dialog.connect_response(Some("save"), |_, _| {
+                        let result = std::process::Command::new("xdg-open")
+                            .arg(crate::DEBUG_FILE.as_os_str())
+                            .output();
+
+                        if let Err(err) = result {
+                            tracing::error!("Failed to open debug file: {}", err);
+                        }
+                    });
 
                     toast.connect_button_clicked(move |_| {
                         dialog.show();
