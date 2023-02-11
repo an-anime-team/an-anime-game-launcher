@@ -14,6 +14,8 @@ use crate::is_ready;
 
 use crate::CONFIG;
 
+pub static mut PREFERENCES_WINDOW: Option<adw::PreferencesWindow> = None;
+
 pub struct App {
     wine_components: AsyncController<ComponentsList>,
     dxvk_components: AsyncController<ComponentsList>,
@@ -28,8 +30,12 @@ pub struct App {
     selecting_dxvk_version: bool
 }
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub enum AppMsg {
+    Toast {
+        title: String,
+        description: Option<String>
+    },
     WineRecommendedOnly(bool),
     DxvkRecommendedOnly(bool),
     UpdateDownloadedWine,
@@ -47,7 +53,6 @@ impl SimpleAsyncComponent for App {
     type Output = ();
 
     view! {
-        #[root]
         preferences_window = adw::PreferencesWindow {
             set_title: Some(&tr("preferences")),
             set_default_size: (700, 560),
@@ -141,9 +146,14 @@ impl SimpleAsyncComponent for App {
 
             #[template]
             add = &super::enhancements::Enhancements,
-            
-            connect_close_request => |_| {
-                anime_launcher_sdk::config::flush().unwrap(); // FIXME
+
+            connect_close_request[sender] => move |_| {
+                if let Err(err) = anime_launcher_sdk::config::flush() {
+                    sender.input(AppMsg::Toast {
+                        title: tr("config-flush-error"),
+                        description: Some(err.to_string())
+                    });
+                }
 
                 gtk::Inhibit::default()
             }
@@ -195,6 +205,10 @@ impl SimpleAsyncComponent for App {
 
         widgets.preferences_window.set_transient_for(Some(&parent));
 
+        unsafe {
+            PREFERENCES_WINDOW = Some(widgets.preferences_window.clone());
+        }
+
         sender.input(AppMsg::UpdateDownloadedWine);
         sender.input(AppMsg::UpdateDownloadedDxvk);
 
@@ -205,6 +219,26 @@ impl SimpleAsyncComponent for App {
         tracing::debug!("Called preferences window event: {:?}", msg);
 
         match msg {
+            AppMsg::Toast { title, description } => unsafe {
+                let toast = adw::Toast::new(&title);
+
+                toast.set_timeout(5000);
+
+                if let Some(description) = description {
+                    toast.set_button_label(Some(&tr("details")));
+
+                    let dialog = adw::MessageDialog::new(PREFERENCES_WINDOW.as_ref(), Some(&title), Some(&description));
+
+                    dialog.add_response("close", &tr("close"));
+
+                    toast.connect_button_clicked(move |_| {
+                        dialog.show();
+                    });
+                }
+
+                PREFERENCES_WINDOW.as_ref().unwrap_unchecked().add_toast(&toast);
+            }
+
             AppMsg::WineRecommendedOnly(state) => {
                 // todo
                 self.wine_components.sender().send(components::list::AppMsg::ShowRecommendedOnly(state)).unwrap();
@@ -269,12 +303,20 @@ impl SimpleAsyncComponent for App {
                             let wine_name = version.name.to_string();
 
                             std::thread::spawn(move || {
-                                wine.update_prefix(&config.game.wine.prefix)
-                                    .expect("Failed to update wine prefix");
+                                match wine.update_prefix(&config.game.wine.prefix) {
+                                    Ok(_) => {
+                                        config.game.wine.selected = Some(wine_name); 
 
-                                config.game.wine.selected = Some(wine_name); 
+                                        config::update(config);
+                                    }
 
-                                config::update(config);
+                                    Err(err) => {
+                                        sender.input(AppMsg::Toast {
+                                            title: tr("wine-prefix-update-failed"),
+                                            description: Some(err.to_string())
+                                        });
+                                    }
+                                }
 
                                 sender.input(AppMsg::ResetWineSelection(index));
                             });
@@ -305,8 +347,12 @@ impl SimpleAsyncComponent for App {
                                 let dxvk_folder = config.game.dxvk.builds.join(&version.name);
 
                                 std::thread::spawn(move || {
-                                    Dxvk::install(&wine, dxvk_folder, InstallParams::default())
-                                        .expect("Failed to install dxvk");
+                                    if let Err(err) = Dxvk::install(&wine, dxvk_folder, InstallParams::default()) {
+                                        sender.input(AppMsg::Toast {
+                                            title: tr("dxvk-install-failed"),
+                                            description: Some(err.to_string())
+                                        });
+                                    }
 
                                     sender.input(AppMsg::ResetDxvkSelection(index));
                                 });

@@ -79,13 +79,13 @@ impl SimpleAsyncComponent for ComponentsList {
             }
 
             #[allow(unused_must_use)]
-            AppMsg::CallOnDownloaded => if let Some(on_downloaded) = self.init.on_downloaded {
-                sender.output(on_downloaded);
+            AppMsg::CallOnDownloaded => if let Some(on_downloaded) = &self.init.on_downloaded {
+                sender.output(on_downloaded.to_owned());
             }
 
             #[allow(unused_must_use)]
-            AppMsg::CallOnDeleted => if let Some(on_deleted) = self.init.on_deleted {
-                sender.output(on_deleted);
+            AppMsg::CallOnDeleted => if let Some(on_deleted) = &self.init.on_deleted {
+                sender.output(on_deleted.to_owned());
             }
         }
     }

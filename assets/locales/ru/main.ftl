@@ -1,6 +1,8 @@
 custom = Свое значение
 none = Нет
 default = По умолчанию
+details = Подробнее
+close = Закрыть
 
 
 checking-free-space = Проверка свободного места

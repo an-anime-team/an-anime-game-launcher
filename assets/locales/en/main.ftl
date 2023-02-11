@@ -1,6 +1,8 @@
 custom = Custom
 none = None
 default = Default
+details = Details
+close = Close
 
 
 checking-free-space = Checking free space
