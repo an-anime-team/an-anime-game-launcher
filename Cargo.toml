@@ -13,10 +13,10 @@ lto = true
 opt-level = 3
 
 [build-dependencies]
-glib-build-tools = "0.16"
+glib-build-tools = "0.17"
 
 [dependencies]
-relm4 = { version = "0.5.0-rc.1", features = ["macros", "libadwaita"] }
+relm4 = { version = "0.5", features = ["macros", "libadwaita"] }
 gtk = { package = "gtk4", version = "0.5", features = ["v4_8"] }
 adw = { package = "libadwaita", version = "0.2", features = ["v1_2"] }
 
