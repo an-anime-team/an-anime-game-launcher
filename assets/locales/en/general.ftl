@@ -20,6 +20,17 @@ game-outdated = Game is too outdated and can't be updated. Latest version: {$lat
 
 patch-version = Patch version
 
+patch-not-available = not available
+patch-not-available-tooltip = Patch servers are unreachable
+
+patch-outdated = outdated ({$current})
+patch-outdated-tooltip = Patch is outdated: {$current} -> {$latest}
+
+patch-preparation = preparation
+patch-preparation-tooltip = Patch is in development
+
+patch-testing-tooltip = Test patch is available
+
 selected-version = Selected version
 recommended-only = Recommended only
 

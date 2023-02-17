@@ -20,6 +20,17 @@ game-outdated = Версия игры слишком устаревшая и н�
 
 patch-version = Версия патча
 
+patch-not-available = недоступен
+patch-not-available-tooltip = Серверы патча недоступны
+
+patch-outdated = устарел ({$current})
+patch-outdated-tooltip = Версия патча устарела: {$current} -> {$latest}
+
+patch-preparation = подготовка
+patch-preparation-tooltip = Патч в разработке
+
+patch-testing-tooltip = Доступна тестовая версия патча
+
 selected-version = Выбранная версия
 recommended-only = Только рекомендуемое
 
