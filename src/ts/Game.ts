@@ -68,23 +68,28 @@ export default class Game {
      *
      * @returns JSON from API else throws Error if company's servers are unreachable or if they responded with an error
      */
-    public static async getLatestData(): Promise<Data> {
+    public static async getLatestData(): Promise<Data>
+    {
         const cache = await Cache.get(`Game.getLatestData.ServerResponse.${await this.server}`);
-        if (cache && !cache.expired) {
+
+        if (cache && !cache.expired)
             return cache.value as Data;
-        }
+
         const response = await fetch(constants.versionsUri(await this.server));
-        if (response.ok) {
+
+        if (response.ok)
+        {
             const json: ServerResponse = JSON.parse(await response.body());
-            if (json.message == 'OK') {
-                Cache.set(`Game.getLatestData.ServerResponse.${await this.server}`, json.data, 6 * 3600);
-                return json.data;
-            } else {
+
+            if (json.message != 'OK')
                 throw new Error(`${constants.placeholders.uppercase.company}'s versions server responds with an error: [${json.retcode}] ${json.message}`);
-            }
-        } else {
-            throw new Error(`${constants.placeholders.uppercase.company}'s versions server is unreachable`);
+
+            Cache.set(`Game.getLatestData.ServerResponse.${await this.server}`, json.data, 6 * 3600);
+
+            return json.data;
         }
+
+        else throw new Error(`${constants.placeholders.uppercase.company}'s versions server is unreachable`);
     }
 
     /**

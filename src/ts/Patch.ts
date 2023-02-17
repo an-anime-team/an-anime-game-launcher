@@ -278,6 +278,7 @@ export default class Patch
     {
         return new Promise(async (resolve, reject) => {
             const patchCacheKey = `Patch.getPatchInfo.${version}.${source}.${await Game.server}`;
+
             const resolveOutput = async (output: PatchInfo|null, unityPlayerHash: string|null = null) => {
                 await Cache.set(patchCacheKey, {
                     available: true,
