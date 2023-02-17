@@ -65,38 +65,26 @@ export default class Game {
 
     /**
      * Get latest game data, including voice data and packages difference
-     * 
+     *
      * @returns JSON from API else throws Error if company's servers are unreachable or if they responded with an error
      */
-    public static getLatestData(): Promise<Data>
-    {
-        return new Promise(async (resolve, reject) => {
-            const response = await fetch(constants.versionsUri(await this.server));
-
-            if (response.ok)
-            {
-                const cache = await Cache.get('Game.getLatestData.ServerResponse');
-
-                if (cache && !cache.expired)
-                    resolve(cache.value as Data);
-
-                else
-                {
-                    const json: ServerResponse = JSON.parse(await response.body());
-
-                    if (json.message == 'OK')
-                    {
-                        Cache.set('Game.getLatestData.ServerResponse', json.data, 6 * 3600);
-
-                        resolve(json.data);
-                    }
-
-                    else reject(new Error(`${constants.placeholders.uppercase.company}'s versions server responds with an error: [${json.retcode}] ${json.message}`));
-                }
+    public static async getLatestData(): Promise<Data> {
+        const cache = await Cache.get(`Game.getLatestData.ServerResponse.${await this.server}`);
+        if (cache && !cache.expired) {
+            return cache.value as Data;
+        }
+        const response = await fetch(constants.versionsUri(await this.server));
+        if (response.ok) {
+            const json: ServerResponse = JSON.parse(await response.body());
+            if (json.message == 'OK') {
+                Cache.set(`Game.getLatestData.ServerResponse.${await this.server}`, json.data, 6 * 3600);
+                return json.data;
+            } else {
+                throw new Error(`${constants.placeholders.uppercase.company}'s versions server responds with an error: [${json.retcode}] ${json.message}`);
             }
-
-            else reject(new Error(`${constants.placeholders.uppercase.company}'s versions server is unreachable`));
-        });
+        } else {
+            throw new Error(`${constants.placeholders.uppercase.company}'s versions server is unreachable`);
+        }
     }
 
     /**
