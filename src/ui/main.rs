@@ -8,6 +8,9 @@ use relm4::{
 use gtk::prelude::*;
 use adw::prelude::*;
 
+use anime_launcher_sdk::config::launcher::LauncherStyle;
+
+use crate::*;
 use crate::i18n::tr;
 
 use super::preferences::main::App as PreferencesApp;
@@ -25,13 +28,16 @@ static mut PREFERENCES_WINDOW: Option<AsyncController<PreferencesApp>> = None;
 static mut ABOUT_DIALOG: Option<Controller<AboutDialog>> = None;
 
 pub struct App {
-    loading: Option<Option<String>>
+    loading: Option<Option<String>>,
+    style: LauncherStyle
 }
 
 #[derive(Debug)]
 pub enum AppMsg {
+    PerformAction,
     OpenPreferences,
-    ClosePreferences
+    ClosePreferences,
+    UpdateLauncherStyle(LauncherStyle)
 }
 
 #[relm4::component(pub)]
@@ -57,12 +63,47 @@ impl SimpleComponent for App {
     view! {
         main_window = adw::Window {
             set_title: Some("An Anime Game Launcher"),
-            set_default_size: (900, 600),
+
+            #[watch]
+            set_default_size: (
+                match model.style {
+                    LauncherStyle::Modern => 900,
+                    LauncherStyle::Classic => 1094 // (w = 1280 / 730 * h, where 1280x730 is default background picture resolution)
+                },
+                match model.style {
+                    LauncherStyle::Modern => 600,
+                    LauncherStyle::Classic => 624
+                }
+            ),
+
+            #[watch]
+            add_css_class: match model.style {
+                LauncherStyle::Modern => "",
+                LauncherStyle::Classic => "classic-style"
+            },
+
+            #[watch]
+            remove_css_class: match model.style {
+                LauncherStyle::Modern => "classic-style",
+                LauncherStyle::Classic => ""
+            },
 
             gtk::Box {
                 set_orientation: gtk::Orientation::Vertical,
 
                 adw::HeaderBar {
+                    #[watch]
+                    add_css_class: match model.style {
+                        LauncherStyle::Modern => "",
+                        LauncherStyle::Classic => "flat"
+                    },
+
+                    #[watch]
+                    remove_css_class: match model.style {
+                        LauncherStyle::Modern => "flat",
+                        LauncherStyle::Classic => ""
+                    },
+
                     pack_end = &gtk::MenuButton {
                         set_icon_name: "open-menu-symbolic",
                         set_menu_model: Some(&main_menu)
@@ -89,6 +130,9 @@ impl SimpleComponent for App {
                     set_visible: model.loading.is_none(),
 
                     add = &adw::PreferencesGroup {
+                        #[watch]
+                        set_visible: model.style == LauncherStyle::Modern,
+
                         gtk::Image {
                             set_resource: Some("/org/app/images/icon.png"),
                             set_vexpand: true,
@@ -103,11 +147,33 @@ impl SimpleComponent for App {
                     },
 
                     add = &adw::PreferencesGroup {
-                        set_valign: gtk::Align::Center,
+                        #[watch]
+                        set_valign: match model.style {
+                            LauncherStyle::Modern => gtk::Align::Center,
+                            LauncherStyle::Classic => gtk::Align::End
+                        },
+
+                        #[watch]
+                        set_width_request: match model.style {
+                            LauncherStyle::Modern => -1,
+                            LauncherStyle::Classic => 800
+                        },
+
                         set_vexpand: true,
 
                         gtk::Box {
-                            set_halign: gtk::Align::Center,
+                            #[watch]
+                            set_halign: match model.style {
+                                LauncherStyle::Modern => gtk::Align::Center,
+                                LauncherStyle::Classic => gtk::Align::End
+                            },
+
+                            #[watch]
+                            set_height_request: match model.style {
+                                LauncherStyle::Modern => -1,
+                                LauncherStyle::Classic => 40
+                            },
+
                             set_margin_top: 64,
                             set_spacing: 8,
 
@@ -117,12 +183,16 @@ impl SimpleComponent for App {
                                 set_width_request: 200,
                                 add_css_class: "suggested-action",
 
-                                connect_clicked => |_| {
-                                    anime_launcher_sdk::game::run().expect("Failed to run the game");
-                                }
+                                connect_clicked => AppMsg::PerformAction
                             },
 
                             gtk::Button {
+                                #[watch]
+                                set_width_request: match model.style {
+                                    LauncherStyle::Modern => -1,
+                                    LauncherStyle::Classic => 40
+                                },
+
                                 set_icon_name: "emblem-system-symbolic",
 
                                 connect_clicked => AppMsg::OpenPreferences
@@ -137,12 +207,13 @@ impl SimpleComponent for App {
     fn init(
         _counter: Self::Init,
         root: &Self::Root,
-        _sender: ComponentSender<Self>,
+        sender: ComponentSender<Self>,
     ) -> ComponentParts<Self> {
         tracing::info!("Initializing main window");
 
         let model = App {
-            loading: None
+            loading: None,
+            style: CONFIG.launcher.style
         };
 
         let widgets = view_output!();
@@ -156,7 +227,7 @@ impl SimpleComponent for App {
         unsafe {
             PREFERENCES_WINDOW = Some(PreferencesApp::builder()
                 .launch(widgets.main_window.clone().into())
-                .detach());
+                .forward(sender.input_sender(), std::convert::identity));
 
             ABOUT_DIALOG = Some(AboutDialog::builder()
                 .transient_for(widgets.main_window.clone())
@@ -166,6 +237,7 @@ impl SimpleComponent for App {
 
         let group = RelmActionGroup::<WindowActionGroup>::new();
 
+        // TODO
         group.add_action::<LauncherFolder>(&RelmAction::new_stateless(move |_| {
             println!("Open launcher folder!");
         }));
@@ -197,12 +269,20 @@ impl SimpleComponent for App {
         tracing::debug!("Called main window event: {:?}", msg);
 
         match msg {
+            AppMsg::PerformAction => {
+                anime_launcher_sdk::game::run().expect("Failed to run the game");
+            }
+
             AppMsg::OpenPreferences => unsafe {
                 PREFERENCES_WINDOW.as_ref().unwrap_unchecked().widget().show();
             }
 
             AppMsg::ClosePreferences => unsafe {
                 PREFERENCES_WINDOW.as_ref().unwrap_unchecked().widget().hide();
+            }
+
+            AppMsg::UpdateLauncherStyle(style) => {
+                self.style = style;
             }
         }
     }

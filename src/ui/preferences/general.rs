@@ -17,6 +17,61 @@ impl WidgetTemplate for General {
             set_icon_name: Some("applications-system-symbolic"),
 
             add = &adw::PreferencesGroup {
+                set_title: "Appearance",
+
+                gtk::Box {
+                    set_orientation: gtk::Orientation::Horizontal,
+                    set_halign: gtk::Align::Center,
+
+                    set_spacing: 32,
+
+                    gtk::Box {
+                        set_orientation: gtk::Orientation::Vertical,
+
+                        #[name(modern_style_button)]
+                        gtk::ToggleButton {
+                            add_css_class: "card",
+
+                            set_width_request: 180,
+                            set_height_request: 120,
+
+                            gtk::Image {
+                                set_from_resource: Some("/org/app/images/modern.svg")
+                            }
+                        },
+
+                        gtk::Label {
+                            set_text: "Modern",
+
+                            set_margin_top: 16
+                        }
+                    },
+
+                    gtk::Box {
+                        set_orientation: gtk::Orientation::Vertical,
+
+                        #[name(classic_style_button)]
+                        gtk::ToggleButton {
+                            add_css_class: "card",
+    
+                            set_width_request: 180,
+                            set_height_request: 120,
+    
+                            gtk::Image {
+                                set_from_resource: Some("/org/app/images/classic.svg")
+                            }
+                        },
+
+                        gtk::Label {
+                            set_text: "Classic",
+
+                            set_margin_top: 16
+                        }
+                    }
+                }
+            },
+
+            add = &adw::PreferencesGroup {
                 set_title: &tr("general"),
 
                 adw::ComboRow {

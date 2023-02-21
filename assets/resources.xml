@@ -3,4 +3,10 @@
   <gresource prefix="/org/app">
     <file compressed="true">images/icon.png</file>
   </gresource>
+  <gresource prefix="/org/app">
+    <file compressed="true">images/modern.svg</file>
+  </gresource>
+  <gresource prefix="/org/app">
+    <file compressed="true">images/classic.svg</file>
+  </gresource>
 </gresources>

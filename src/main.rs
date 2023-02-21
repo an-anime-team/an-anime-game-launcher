@@ -6,6 +6,8 @@ use anime_launcher_sdk::anime_game_core::genshin::prelude::*;
 
 use tracing_subscriber::prelude::*;
 
+use std::path::PathBuf;
+
 pub mod i18n;
 pub mod ui;
 
@@ -110,14 +112,22 @@ fn main() {
     }
 
     // Create the app
-    let app = RelmApp::new("moe.launcher.an-anime-game-launcher");
+    let app = RelmApp::new(APP_ID);
 
     // Set global css
-    relm4::set_global_css("
-        progressbar > text {
+    relm4::set_global_css(&format!("
+        progressbar > text {{
             margin-bottom: 4px;
-        }
-    ");
+        }}
+
+        window.classic-style {{
+            background: url(\"file://{}/background\");
+            background-repeat: no-repeat;
+            background-size: cover;
+        }}
+    ",
+        CONFIG.launcher.temp.as_ref().unwrap_or(&PathBuf::from("/tmp")).to_string_lossy()
+    ));
 
     // Run the app
     app.run::<ui::main::App>(());

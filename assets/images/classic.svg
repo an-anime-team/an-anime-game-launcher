@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="90" height="60" viewBox="0 0 90 60" xml:space="preserve">
+<defs>
+</defs>
+<g transform="matrix(1.58 0 0 0.39 62.57 51.18)" id="HUkKwqLQOm47Zs9qaMmTc"  >
+<path style="stroke: rgb(242,144,30); stroke-width: 0; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(53,132,228); fill-rule: nonzero; opacity: 1;" vector-effect="non-scaling-stroke"  transform=" translate(0, 0)" d="M -8.25689 0.69081 C -8.25689 -4.25086 -7.26151 -8.256879999999999 -6.03365 -8.256879999999999 L 6.03365 -8.256879999999999 L 6.03365 -8.256879999999999 C 7.2615099999999995 -8.256879999999999 8.25689 -4.2508599999999985 8.25689 0.6908100000000008 L 8.25689 0.6908100000000008 L 8.25689 0.6908100000000008 C 8.25689 4.869440000000001 7.41521 8.256890000000002 6.37694 8.256890000000002 L -6.37694 8.256890000000002 L -6.37694 8.256890000000002 C -7.41521 8.256890000000002 -8.25689 4.869440000000003 -8.25689 0.6908100000000017 z" stroke-linecap="round" />
+</g>
+<g transform="matrix(0.39 0 0 0.39 79.98 51.2)" id="3u3imhfuSenPkHHelxk_U"  >
+<path style="stroke: rgb(242,144,30); stroke-width: 0; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(230,230,230); fill-rule: nonzero; opacity: 1;" vector-effect="non-scaling-stroke"  transform=" translate(0, 0)" d="M -8.25689 0.72542 C -8.25689 -4.2353700000000005 -4.26412 -8.25688 0.6612200000000001 -8.25688 L 0.6612200000000001 -8.25688 L 0.6612200000000001 -8.25688 C 4.85619 -8.25688 8.25689 -4.8317000000000005 8.25689 -0.6065400000000007 L 8.25689 0.6615399999999994 L 8.25689 0.6615399999999994 C 8.25689 4.85633 4.88064 8.256889999999999 0.7158300000000004 8.256889999999999 L -0.7792399999999995 8.256889999999999 L -0.7792399999999995 8.256889999999999 C -4.90902 8.256889999999999 -8.256879999999999 4.8849399999999985 -8.256879999999999 0.7254299999999985 z" stroke-linecap="round" />
+</g>
+</svg>

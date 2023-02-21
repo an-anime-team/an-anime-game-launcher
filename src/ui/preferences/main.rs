@@ -5,6 +5,7 @@ use gtk::prelude::*;
 use adw::prelude::*;
 
 use anime_launcher_sdk::config;
+use anime_launcher_sdk::config::launcher::LauncherStyle;
 use anime_launcher_sdk::components::*;
 use anime_launcher_sdk::wincompatlib::prelude::*;
 
@@ -19,6 +20,8 @@ pub static mut PREFERENCES_WINDOW: Option<adw::PreferencesWindow> = None;
 pub struct App {
     wine_components: AsyncController<ComponentsList>,
     dxvk_components: AsyncController<ComponentsList>,
+
+    style: LauncherStyle,
 
     downloaded_wine_versions: Vec<wine::Version>,
     downloaded_dxvk_versions: Vec<dxvk::Version>,
@@ -36,6 +39,7 @@ pub enum AppMsg {
         title: String,
         description: Option<String>
     },
+    UpdateLauncherStyle(LauncherStyle),
     WineRecommendedOnly(bool),
     DxvkRecommendedOnly(bool),
     UpdateDownloadedWine,
@@ -50,7 +54,7 @@ pub enum AppMsg {
 impl SimpleAsyncComponent for App {
     type Init = gtk::Window;
     type Input = AppMsg;
-    type Output = ();
+    type Output = crate::ui::main::AppMsg;
 
     view! {
         preferences_window = adw::PreferencesWindow {
@@ -64,6 +68,22 @@ impl SimpleAsyncComponent for App {
                 // Here technically it's AdwPreferencesGroup inside of AdwPreferencesGroup
                 // but I have no idea how to do it other way
                 // There're no graphical glitches so don't care
+
+                #[template_child]
+                modern_style_button {
+                    #[watch]
+                    set_active: model.style == LauncherStyle::Modern,
+
+                    connect_clicked => AppMsg::UpdateLauncherStyle(LauncherStyle::Modern)
+                },
+
+                #[template_child]
+                classic_style_button {
+                    #[watch]
+                    set_active: model.style == LauncherStyle::Classic,
+
+                    connect_clicked => AppMsg::UpdateLauncherStyle(LauncherStyle::Classic)
+                },
 
                 #[template_child]
                 wine_versions {
@@ -191,6 +211,8 @@ impl SimpleAsyncComponent for App {
                 })
                 .forward(sender.input_sender(), std::convert::identity),
 
+            style: CONFIG.launcher.style,
+
             downloaded_wine_versions: vec![],
             downloaded_dxvk_versions: vec![],
 
@@ -251,6 +273,19 @@ impl SimpleAsyncComponent for App {
                 }
 
                 PREFERENCES_WINDOW.as_ref().unwrap_unchecked().add_toast(&toast);
+            }
+
+            #[allow(unused_must_use)]
+            AppMsg::UpdateLauncherStyle(style) => {
+                if let Ok(mut config) = config::get() {
+                    config.launcher.style = style;
+
+                    config::update(config);
+                }
+
+                self.style = style;
+
+                sender.output(Self::Output::UpdateLauncherStyle(style));
             }
 
             AppMsg::WineRecommendedOnly(state) => {
