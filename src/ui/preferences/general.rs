@@ -15,9 +15,12 @@ use crate::ui::components::*;
 use crate::i18n::*;
 use crate::*;
 
-pub struct General {
-    wine_components: AsyncController<ComponentsList<AppMsg>>,
-    dxvk_components: AsyncController<ComponentsList<AppMsg>>,
+pub struct GeneralApp {
+    wine_components: AsyncController<ComponentsList<GeneralAppMsg>>,
+    dxvk_components: AsyncController<ComponentsList<GeneralAppMsg>>,
+
+    game_diff: Option<VersionDiff>,
+    patch: Option<Patch>,
 
     style: LauncherStyle,
 
@@ -32,7 +35,15 @@ pub struct General {
 }
 
 #[derive(Debug, Clone)]
-pub enum AppMsg {
+pub enum GeneralAppMsg {
+    /// Supposed to be called automatically on app's run when the latest game version
+    /// was retrieved from the API
+    UpdateGameDiff(Option<VersionDiff>),
+
+    /// Supposed to be called automatically on app's run when the latest patch version
+    /// was retrieved from remote repos
+    UpdatePatch(Option<Patch>),
+
     Toast {
         title: String,
         description: Option<String>
@@ -49,10 +60,10 @@ pub enum AppMsg {
 }
 
 #[relm4::component(pub)]
-impl SimpleComponent for General {
+impl SimpleComponent for GeneralApp {
     type Init = ();
-    type Input = AppMsg;
-    type Output = super::main::AppMsg;
+    type Input = GeneralAppMsg;
+    type Output = super::main::PreferencesAppMsg;
 
     view! {
         adw::PreferencesPage {
@@ -84,7 +95,7 @@ impl SimpleComponent for General {
                                 set_from_resource: Some("/org/app/images/modern.svg")
                             },
 
-                            connect_clicked => AppMsg::UpdateLauncherStyle(LauncherStyle::Modern)
+                            connect_clicked => GeneralAppMsg::UpdateLauncherStyle(LauncherStyle::Modern)
                         },
 
                         gtk::Label {
@@ -110,7 +121,7 @@ impl SimpleComponent for General {
                                 set_from_resource: Some("/org/app/images/classic.svg")
                             },
 
-                            connect_clicked => AppMsg::UpdateLauncherStyle(LauncherStyle::Classic)
+                            connect_clicked => GeneralAppMsg::UpdateLauncherStyle(LauncherStyle::Classic)
                         },
 
                         gtk::Label {
@@ -233,7 +244,8 @@ impl SimpleComponent for General {
                     set_title: &tr("game-version"),
 
                     add_suffix = &gtk::Label {
-                        set_text: &match GAME_DIFF.as_ref() {
+                        #[watch]
+                        set_text: &match model.game_diff.as_ref() {
                             Some(diff) => match diff {
                                 VersionDiff::Latest(current) |
                                 VersionDiff::Predownload { current, .. } |
@@ -246,19 +258,21 @@ impl SimpleComponent for General {
                             None => String::from("?")
                         },
 
-                        add_css_class: match GAME_DIFF.as_ref() {
+                        #[watch]
+                        set_css_classes: match model.game_diff.as_ref() {
                             Some(diff) => match diff {
-                                VersionDiff::Latest(_) => "success",
-                                VersionDiff::Predownload { .. } => "accent",
-                                VersionDiff::Diff { .. } => "warning",
-                                VersionDiff::Outdated { .. } => "error",
-                                VersionDiff::NotInstalled { .. } => ""
+                                VersionDiff::Latest(_) => &["success"],
+                                VersionDiff::Predownload { .. } => &["accent"],
+                                VersionDiff::Diff { .. } => &["warning"],
+                                VersionDiff::Outdated { .. } => &["error"],
+                                VersionDiff::NotInstalled { .. } => &[]
                             }
 
-                            None => "success"
+                            None => &["success"]
                         },
 
-                        set_tooltip_text: Some(&match GAME_DIFF.as_ref() {
+                        #[watch]
+                        set_tooltip_text: Some(&match model.game_diff.as_ref() {
                             Some(diff) => match diff {
                                 VersionDiff::Latest(_) => String::new(),
                                 VersionDiff::Predownload { current, latest, .. } => tr_args("game-predownload-available", [
@@ -284,7 +298,8 @@ impl SimpleComponent for General {
                     set_title: &tr("patch-version"),
 
                     add_suffix = &gtk::Label {
-                        set_text: &match PATCH.as_ref() {
+                        #[watch]
+                        set_text: &match model.patch.as_ref() {
                             Some(patch) => match patch {
                                 Patch::NotAvailable => tr("patch-not-available"),
                                 Patch::Outdated { current, .. } => tr_args("patch-outdated", [("current", current.to_string().into())]),
@@ -296,25 +311,27 @@ impl SimpleComponent for General {
                             None => String::from("?")
                         },
 
-                        add_css_class: match PATCH.as_ref() {
+                        #[watch]
+                        set_css_classes: match model.patch.as_ref() {
                             Some(patch) => match patch {
-                                Patch::NotAvailable => "error",
+                                Patch::NotAvailable => &["error"],
                                 Patch::Outdated { .. } |
                                 Patch::Preparation { .. } |
-                                Patch::Testing { .. } => "warning",
+                                Patch::Testing { .. } => &["warning"],
                                 Patch::Available { .. } => unsafe {
-                                    if let Ok(true) = PATCH.as_ref().unwrap_unchecked().is_applied(&CONFIG.game.path) {
-                                        "success"
+                                    if let Ok(true) = model.patch.as_ref().unwrap_unchecked().is_applied(&CONFIG.game.path) {
+                                        &["success"]
                                     } else {
-                                        "warning"
+                                        &["warning"]
                                     }
                                 }
                             }
 
-                            None => ""
+                            None => &[]
                         },
 
-                        set_tooltip_text: Some(&match PATCH.as_ref() {
+                        #[watch]
+                        set_tooltip_text: Some(&match model.patch.as_ref() {
                             Some(patch) => match patch {
                                 Patch::NotAvailable => tr("patch-not-available-tooltip"),
                                 Patch::Outdated { current, latest, .. } => tr_args("patch-outdated-tooltip", [
@@ -324,7 +341,7 @@ impl SimpleComponent for General {
                                 Patch::Preparation { .. } => tr("patch-preparation-tooltip"),
                                 Patch::Testing { .. } => tr("patch-testing-tooltip"),
                                 Patch::Available { .. } => unsafe {
-                                    if let Ok(true) = PATCH.as_ref().unwrap_unchecked().is_applied(&CONFIG.game.path) {
+                                    if let Ok(true) = model.patch.as_ref().unwrap_unchecked().is_applied(&CONFIG.game.path) {
                                         String::new()
                                     } else {
                                         tr("patch-testing-tooltip")
@@ -364,7 +381,7 @@ impl SimpleComponent for General {
 
                     connect_selected_notify[sender] => move |row| {
                         if is_ready() {
-                            sender.input(AppMsg::SelectWine(row.selected() as usize));
+                            sender.input(GeneralAppMsg::SelectWine(row.selected() as usize));
                         }
                     } @wine_selected_notify
                 },
@@ -378,7 +395,7 @@ impl SimpleComponent for General {
                         set_state: true,
 
                         connect_state_notify[sender] => move |switch| {
-                            sender.input(AppMsg::WineRecommendedOnly(switch.state()));
+                            sender.input(GeneralAppMsg::WineRecommendedOnly(switch.state()));
                         }
                     }
                 }
@@ -414,7 +431,7 @@ impl SimpleComponent for General {
 
                     connect_selected_notify[sender] => move |row| {
                         if is_ready() {
-                            sender.input(AppMsg::SelectDxvk(row.selected() as usize));
+                            sender.input(GeneralAppMsg::SelectDxvk(row.selected() as usize));
                         }
                     } @dxvk_selected_notify
                 },
@@ -428,7 +445,7 @@ impl SimpleComponent for General {
                         set_state: true,
 
                         connect_state_notify[sender] => move |switch| {
-                            sender.input(AppMsg::DxvkRecommendedOnly(switch.state()));
+                            sender.input(GeneralAppMsg::DxvkRecommendedOnly(switch.state()));
                         }
                     }
                 }
@@ -445,7 +462,7 @@ impl SimpleComponent for General {
         root: &Self::Root,
         sender: ComponentSender<Self>,
     ) -> ComponentParts<Self> {
-        tracing::info!("Initializing about dialog");
+        tracing::info!("Initializing general settings");
 
         let model = Self {
             wine_components: ComponentsList::builder()
@@ -454,8 +471,8 @@ impl SimpleComponent for General {
                         download_folder: CONFIG.game.wine.builds.clone(),
                         groups: wine::get_groups().into_iter().map(|group| group.into()).collect()
                     },
-                    on_downloaded: Some(AppMsg::UpdateDownloadedWine),
-                    on_deleted: Some(AppMsg::UpdateDownloadedWine)
+                    on_downloaded: Some(GeneralAppMsg::UpdateDownloadedWine),
+                    on_deleted: Some(GeneralAppMsg::UpdateDownloadedWine)
                 })
                 .forward(sender.input_sender(), std::convert::identity),
 
@@ -465,10 +482,13 @@ impl SimpleComponent for General {
                         download_folder: CONFIG.game.dxvk.builds.clone(),
                         groups: dxvk::get_groups().into_iter().map(|group| group.into()).collect()
                     },
-                    on_downloaded: Some(AppMsg::UpdateDownloadedDxvk),
-                    on_deleted: Some(AppMsg::UpdateDownloadedDxvk)
+                    on_downloaded: Some(GeneralAppMsg::UpdateDownloadedDxvk),
+                    on_deleted: Some(GeneralAppMsg::UpdateDownloadedDxvk)
                 })
                 .forward(sender.input_sender(), std::convert::identity),
+
+            game_diff: None,
+            patch: None,
 
             style: CONFIG.launcher.style,
 
@@ -488,11 +508,19 @@ impl SimpleComponent for General {
     }
 
     fn update(&mut self, msg: Self::Input, sender: ComponentSender<Self>) {
-        tracing::debug!("Called enhancements settings event: {:?}", msg);
+        tracing::debug!("Called general settings event: {:?}", msg);
 
         match msg {
+            GeneralAppMsg::UpdateGameDiff(diff) => {
+                self.game_diff = diff;
+            },
+
+            GeneralAppMsg::UpdatePatch(patch) => {
+                self.patch = patch;
+            },
+
             #[allow(unused_must_use)]
-            AppMsg::UpdateLauncherStyle(style) => {
+            GeneralAppMsg::UpdateLauncherStyle(style) => {
                 if let Ok(mut config) = config::get() {
                     config.launcher.style = style;
 
@@ -505,21 +533,21 @@ impl SimpleComponent for General {
             }
 
             #[allow(unused_must_use)]
-            AppMsg::Toast { title, description } => {
+            GeneralAppMsg::Toast { title, description } => {
                 sender.output(Self::Output::Toast { title, description });
             }
 
-            AppMsg::WineRecommendedOnly(state) => {
+            GeneralAppMsg::WineRecommendedOnly(state) => {
                 // todo
                 self.wine_components.sender().send(components::list::AppMsg::ShowRecommendedOnly(state)).unwrap();
             }
 
-            AppMsg::DxvkRecommendedOnly(state) => {
+            GeneralAppMsg::DxvkRecommendedOnly(state) => {
                 // todo
                 self.dxvk_components.sender().send(components::list::AppMsg::ShowRecommendedOnly(state)).unwrap();
             }
 
-            AppMsg::UpdateDownloadedWine => {
+            GeneralAppMsg::UpdateDownloadedWine => {
                 self.downloaded_wine_versions = wine::get_downloaded(&CONFIG.game.wine.builds).unwrap_or_default();
 
                 self.selected_wine_version = if let Some(selected) = &CONFIG.game.wine.selected {
@@ -541,7 +569,7 @@ impl SimpleComponent for General {
                 };
             }
 
-            AppMsg::UpdateDownloadedDxvk => {
+            GeneralAppMsg::UpdateDownloadedDxvk => {
                 self.downloaded_dxvk_versions = dxvk::get_downloaded(&CONFIG.game.dxvk.builds).unwrap_or_default();
 
                 self.selected_dxvk_version = if let Ok(Some(selected)) = CONFIG.try_get_selected_dxvk_info() {
@@ -563,7 +591,7 @@ impl SimpleComponent for General {
                 };
             }
 
-            AppMsg::SelectWine(index) => {
+            GeneralAppMsg::SelectWine(index) => {
                 if let Ok(mut config) = config::get() {
                     if let Some(version) = self.downloaded_wine_versions.get(index) {
                         if config.game.wine.selected.as_ref().unwrap_or(&String::new()) != &version.title {
@@ -581,26 +609,26 @@ impl SimpleComponent for General {
                                     }
 
                                     Err(err) => {
-                                        sender.input(AppMsg::Toast {
+                                        sender.input(GeneralAppMsg::Toast {
                                             title: tr("wine-prefix-update-failed"),
                                             description: Some(err.to_string())
                                         });
                                     }
                                 }
 
-                                sender.input(AppMsg::ResetWineSelection(index));
+                                sender.input(GeneralAppMsg::ResetWineSelection(index));
                             });
                         }
                     }
                 }
             }
 
-            AppMsg::ResetWineSelection(index) => {
+            GeneralAppMsg::ResetWineSelection(index) => {
                 self.selecting_wine_version = false;
                 self.selected_wine_version = index as u32;
             }
 
-            AppMsg::SelectDxvk(index) => {
+            GeneralAppMsg::SelectDxvk(index) => {
                 if let Ok(config) = config::get() {
                     if let Some(version) = self.downloaded_dxvk_versions.get(index) {
                         if let Ok(selected) = config.try_get_selected_dxvk_info() {
@@ -618,13 +646,13 @@ impl SimpleComponent for General {
 
                                 std::thread::spawn(move || {
                                     if let Err(err) = Dxvk::install(&wine, dxvk_folder, InstallParams::default()) {
-                                        sender.input(AppMsg::Toast {
+                                        sender.input(GeneralAppMsg::Toast {
                                             title: tr("dxvk-install-failed"),
                                             description: Some(err.to_string())
                                         });
                                     }
 
-                                    sender.input(AppMsg::ResetDxvkSelection(index));
+                                    sender.input(GeneralAppMsg::ResetDxvkSelection(index));
                                 });
                             }
                         }
@@ -632,7 +660,7 @@ impl SimpleComponent for General {
                 }
             }
 
-            AppMsg::ResetDxvkSelection(index) => {
+            GeneralAppMsg::ResetDxvkSelection(index) => {
                 self.selecting_dxvk_version = false;
                 self.selected_dxvk_version = index as u32;
             }

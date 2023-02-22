@@ -12,8 +12,8 @@ use anime_launcher_sdk::config::launcher::LauncherStyle;
 use crate::*;
 use crate::i18n::tr;
 
-use super::preferences::main::App as PreferencesApp;
-use super::about::{AboutDialog, AppMsg as AboutDialogMsg};
+use super::preferences::main::*;
+use super::about::*;
 
 relm4::new_action_group!(WindowActionGroup, "win");
 
@@ -33,6 +33,14 @@ pub struct App {
 
 #[derive(Debug)]
 pub enum AppMsg {
+    /// Supposed to be called automatically on app's run when the latest game version
+    /// was retrieved from the API
+    UpdateGameDiff(Option<VersionDiff>),
+
+    /// Supposed to be called automatically on app's run when the latest patch version
+    /// was retrieved from remote repos
+    UpdatePatch(Option<Patch>),
+
     PerformAction,
     OpenPreferences,
     ClosePreferences,
@@ -261,11 +269,42 @@ impl SimpleComponent for App {
 
         widgets.main_window.insert_action_group("win", Some(&group.into_action_group()));
 
-        unsafe {
-            crate::READY = true;
-        }
+        tracing::info!("Main window initialized");
 
-        tracing::info!("Main window initialized. App is ready");
+        // Initialize some heavy tasks
+        std::thread::spawn(move || {
+            tracing::info!("Initializing heavy tasks");
+
+            // Update initial game version status
+            sender.input(AppMsg::UpdateGameDiff(match GAME.try_get_diff() {
+                Ok(diff) => Some(diff),
+                Err(err) => {
+                    tracing::error!("Failed to get game diff {err}");
+            
+                    None
+                }
+            }));
+
+            tracing::info!("Updated game version status");
+
+            // Update initial patch status
+            sender.input(AppMsg::UpdatePatch(match Patch::try_fetch(&CONFIG.patch.servers, None) {
+                Ok(patch) => Some(patch),
+                Err(err) => {
+                    tracing::error!("Failed to fetch patch info {err}");
+            
+                    None
+                }
+            }));
+
+            tracing::info!("Updated patch status");
+
+            unsafe {
+                crate::READY = true;
+            }
+
+            tracing::info!("App is ready");
+        });
 
         ComponentParts { model, widgets }
     }
@@ -274,6 +313,16 @@ impl SimpleComponent for App {
         tracing::debug!("Called main window event: {:?}", msg);
 
         match msg {
+            #[allow(unused_must_use)]
+            AppMsg::UpdateGameDiff(diff) => unsafe {
+                PREFERENCES_WINDOW.as_ref().unwrap_unchecked().sender().send(PreferencesAppMsg::UpdateGameDiff(diff));
+            },
+
+            #[allow(unused_must_use)]
+            AppMsg::UpdatePatch(patch) => unsafe {
+                PREFERENCES_WINDOW.as_ref().unwrap_unchecked().sender().send(PreferencesAppMsg::UpdatePatch(patch));
+            },
+
             AppMsg::PerformAction => {
                 anime_launcher_sdk::game::run().expect("Failed to run the game");
             }

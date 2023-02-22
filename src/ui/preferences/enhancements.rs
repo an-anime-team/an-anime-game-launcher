@@ -8,10 +8,10 @@ use anime_launcher_sdk::config::prelude::*;
 use crate::i18n::tr;
 use crate::*;
 
-pub struct Enhancements;
+pub struct EnhancementsApp;
 
 #[relm4::component(pub)]
-impl SimpleComponent for Enhancements {
+impl SimpleComponent for EnhancementsApp {
     type Init = ();
     type Input = ();
     type Output = ();
@@ -403,7 +403,7 @@ impl SimpleComponent for Enhancements {
         root: &Self::Root,
         _sender: ComponentSender<Self>,
     ) -> ComponentParts<Self> {
-        tracing::info!("Initializing about dialog");
+        tracing::info!("Initializing enhancements settings");
 
         let model = Self;
         let widgets = view_output!();

@@ -3,19 +3,32 @@ use relm4::prelude::*;
 use gtk::prelude::*;
 use adw::prelude::*;
 
+use anime_launcher_sdk::anime_game_core::prelude::*;
+use anime_launcher_sdk::anime_game_core::genshin::prelude::*;
 use anime_launcher_sdk::config::launcher::LauncherStyle;
 
 use crate::i18n::tr;
 
+use super::general::*;
+use super::enhancements::*;
+
 pub static mut PREFERENCES_WINDOW: Option<adw::PreferencesWindow> = None;
 
-pub struct App {
-    general: Controller<super::general::General>,
-    enhancements: Controller<super::enhancements::Enhancements>
+pub struct PreferencesApp {
+    general: Controller<GeneralApp>,
+    enhancements: Controller<EnhancementsApp>
 }
 
 #[derive(Debug, Clone)]
-pub enum AppMsg {
+pub enum PreferencesAppMsg {
+    /// Supposed to be called automatically on app's run when the latest game version
+    /// was retrieved from the API
+    UpdateGameDiff(Option<VersionDiff>),
+
+    /// Supposed to be called automatically on app's run when the latest patch version
+    /// was retrieved from remote repos
+    UpdatePatch(Option<Patch>),
+
     Toast {
         title: String,
         description: Option<String>
@@ -24,9 +37,9 @@ pub enum AppMsg {
 }
 
 #[relm4::component(pub)]
-impl SimpleComponent for App {
+impl SimpleComponent for PreferencesApp {
     type Init = gtk::Window;
-    type Input = AppMsg;
+    type Input = PreferencesAppMsg;
     type Output = crate::ui::main::AppMsg;
 
     view! {
@@ -41,7 +54,7 @@ impl SimpleComponent for App {
 
             connect_close_request[sender] => move |_| {
                 if let Err(err) = anime_launcher_sdk::config::flush() {
-                    sender.input(AppMsg::Toast {
+                    sender.input(PreferencesAppMsg::Toast {
                         title: tr("config-flush-error"),
                         description: Some(err.to_string())
                     });
@@ -60,11 +73,11 @@ impl SimpleComponent for App {
         tracing::info!("Initializing preferences window");
 
         let model = Self {
-            general: super::general::General::builder()
+            general: GeneralApp::builder()
                 .launch(())
                 .forward(sender.input_sender(), std::convert::identity),
 
-            enhancements: super::enhancements::Enhancements::builder()
+            enhancements: EnhancementsApp::builder()
                 .launch(())
                 .detach()
         };
@@ -78,8 +91,8 @@ impl SimpleComponent for App {
         }
 
         #[allow(unused_must_use)] {
-            model.general.sender().send(super::general::AppMsg::UpdateDownloadedWine);
-            model.general.sender().send(super::general::AppMsg::UpdateDownloadedDxvk);
+            model.general.sender().send(GeneralAppMsg::UpdateDownloadedWine);
+            model.general.sender().send(GeneralAppMsg::UpdateDownloadedDxvk);
         }
 
         ComponentParts { model, widgets }
@@ -89,7 +102,17 @@ impl SimpleComponent for App {
         tracing::debug!("Called preferences window event: {:?}", msg);
 
         match msg {
-            AppMsg::Toast { title, description } => unsafe {
+            #[allow(unused_must_use)]
+            PreferencesAppMsg::UpdateGameDiff(diff) => {
+                self.general.sender().send(GeneralAppMsg::UpdateGameDiff(diff));
+            },
+
+            #[allow(unused_must_use)]
+            PreferencesAppMsg::UpdatePatch(patch) => {
+                self.general.sender().send(GeneralAppMsg::UpdatePatch(patch));
+            },
+
+            PreferencesAppMsg::Toast { title, description } => unsafe {
                 let toast = adw::Toast::new(&title);
 
                 toast.set_timeout(5);
@@ -124,7 +147,7 @@ impl SimpleComponent for App {
             }
 
             #[allow(unused_must_use)]
-            AppMsg::UpdateLauncherStyle(style) => {
+            PreferencesAppMsg::UpdateLauncherStyle(style) => {
                 sender.output(Self::Output::UpdateLauncherStyle(style));
             }
         }

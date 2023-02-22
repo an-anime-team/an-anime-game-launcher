@@ -13,7 +13,7 @@ pub struct AboutDialog {
 }
 
 #[derive(Debug)]
-pub enum AppMsg {
+pub enum AboutDialogMsg {
     Show,
     Hide
 }
@@ -21,7 +21,7 @@ pub enum AppMsg {
 #[relm4::component(pub)]
 impl SimpleComponent for AboutDialog {
     type Init = ();
-    type Input = AppMsg;
+    type Input = AboutDialogMsg;
     type Output = ();
 
     view! {
@@ -77,7 +77,7 @@ impl SimpleComponent for AboutDialog {
             set_visible: model.visible,
 
             connect_close_request[sender] => move |_| {
-                sender.input(AppMsg::Hide);
+                sender.input(AboutDialogMsg::Hide);
 
                 gtk::Inhibit(false)
             }
@@ -104,11 +104,11 @@ impl SimpleComponent for AboutDialog {
         tracing::debug!("Called about dialog event: {:?}", msg);
 
         match msg {
-            AppMsg::Show => {
+            AboutDialogMsg::Show => {
                 self.visible = true;
             }
 
-            AppMsg::Hide => {
+            AboutDialogMsg::Hide => {
                 self.visible = false;
             }
         }

@@ -37,29 +37,6 @@ lazy_static::lazy_static! {
     pub static ref CONFIG: config::Config = config::get().expect("Failed to load config");
 
     pub static ref GAME: Game = Game::new(&CONFIG.game.path);
-
-    // TODO: add loading screen for heavy tasks like this
-    //  UPD: tried once. The problem is that I use this variable, as well as ones above,
-    //       in the view! macro, which makes it times harder to make the main window load
-    //       faster than this variable calculates its value to show StatusPage with loader.
-    //       As for now I have no idea how to fix this
-    pub static ref GAME_DIFF: Option<VersionDiff> = match GAME.try_get_diff() {
-        Ok(diff) => Some(diff),
-        Err(err) => {
-            tracing::error!("Failed to get game diff {err}");
-
-            None
-        }
-    };
-
-    pub static ref PATCH: Option<Patch> = match Patch::try_fetch(&CONFIG.patch.servers, None) {
-        Ok(patch) => Some(patch),
-        Err(err) => {
-            tracing::error!("Failed to fetch patch info {err}");
-
-            None
-        }
-    };
 }
 
 fn main() {
