@@ -11,9 +11,10 @@ use adw::prelude::*;
 use gtk::glib::clone;
 
 use anime_launcher_sdk::config::launcher::LauncherStyle;
+use anime_launcher_sdk::states::LauncherState;
 
 use crate::*;
-use crate::i18n::tr;
+use crate::i18n::*;
 
 use super::preferences::main::*;
 use super::about::*;
@@ -34,7 +35,8 @@ pub struct App {
     toast_overlay: adw::ToastOverlay,
 
     loading: Option<Option<String>>,
-    style: LauncherStyle
+    style: LauncherStyle,
+    state: Option<LauncherState>
 }
 
 #[derive(Debug)]
@@ -47,16 +49,19 @@ pub enum AppMsg {
     /// was retrieved from remote repos
     UpdatePatch(Option<Patch>),
 
+    /// Supposed to be called automatically on app's run when the launcher state was chosen
+    UpdateLauncherState(Option<LauncherState>),
+
     Toast {
         title: String,
         description: Option<String>
     },
 
     UpdateLoadingStatus(Option<Option<String>>),
-    PerformAction,
     OpenPreferences,
     ClosePreferences,
-    UpdateLauncherStyle(LauncherStyle)
+    UpdateLauncherStyle(LauncherStyle),
+    PerformAction
 }
 
 #[relm4::component(pub)]
@@ -241,8 +246,10 @@ impl SimpleComponent for App {
 
         let model = App {
             toast_overlay: adw::ToastOverlay::new(),
+
             loading: Some(None),
-            style: CONFIG.launcher.style
+            style: CONFIG.launcher.style,
+            state: None
         };
 
         let toast_overlay = &model.toast_overlay;
@@ -274,13 +281,7 @@ impl SimpleComponent for App {
 
         group.add_action::<LauncherFolder>(&RelmAction::new_stateless(clone!(@strong sender => move |_| {
             if let Some(dir) = anime_launcher_sdk::consts::launcher_dir() {
-                let child = std::process::Command::new("xdg-open")
-                    .arg(dir)
-                    .stdout(std::process::Stdio::null())
-                    .stderr(std::process::Stdio::null())
-                    .spawn();
-
-                if let Err(err) = child {
+                if let Err(err) = std::process::Command::new("xdg-open").arg(dir).spawn() {
                     sender.input(AppMsg::Toast {
                         title: tr("launcher-folder-opening-error"),
                         description: Some(err.to_string())
@@ -292,13 +293,7 @@ impl SimpleComponent for App {
         })));
 
         group.add_action::<GameFolder>(&RelmAction::new_stateless(clone!(@strong sender => move |_| {
-            let child = std::process::Command::new("xdg-open")
-                .arg(&CONFIG.game.path)
-                .stdout(std::process::Stdio::null())
-                .stderr(std::process::Stdio::null())
-                .spawn();
-
-            if let Err(err) = child {
+            if let Err(err) = std::process::Command::new("xdg-open").arg(&CONFIG.game.path).spawn() {
                 sender.input(AppMsg::Toast {
                     title: tr("game-folder-opening-error"),
                     description: Some(err.to_string())
@@ -310,13 +305,7 @@ impl SimpleComponent for App {
 
         group.add_action::<ConfigFile>(&RelmAction::new_stateless(clone!(@strong sender => move |_| {
             if let Some(file) = anime_launcher_sdk::consts::config_file() {
-                let child = std::process::Command::new("xdg-open")
-                    .arg(file)
-                    .stdout(std::process::Stdio::null())
-                    .stderr(std::process::Stdio::null())
-                    .spawn();
-
-                if let Err(err) = child {
+                if let Err(err) = std::process::Command::new("xdg-open").arg(file).spawn() {
                     sender.input(AppMsg::Toast {
                         title: tr("config-file-opening-error"),
                         description: Some(err.to_string())
@@ -347,7 +336,7 @@ impl SimpleComponent for App {
                 Ok(diff) => Some(diff),
                 Err(err) => {
                     tracing::error!("Failed to get game diff: {err}");
-            
+
                     None
                 }
             }));
@@ -362,12 +351,47 @@ impl SimpleComponent for App {
                 Ok(patch) => Some(patch),
                 Err(err) => {
                     tracing::error!("Failed to fetch patch info: {err}");
-            
+
                     None
                 }
             }));
 
             tracing::info!("Updated patch status");
+
+            // Update launcher state
+
+            let updater = clone!(@strong sender => move |state| {
+                use anime_launcher_sdk::states::StateUpdating;
+
+                match state {
+                    StateUpdating::Game => {
+                        sender.input(AppMsg::UpdateLoadingStatus(Some(Some(tr("loading-launcher-state--game")))));
+                    }
+
+                    StateUpdating::Voice(locale) => {
+                        sender.input(AppMsg::UpdateLoadingStatus(Some(Some(tr_args("loading-launcher-state--voice", [
+                            ("locale", locale.to_name().to_owned().into())
+                        ])))));
+                    }
+
+                    StateUpdating::Patch => {
+                        sender.input(AppMsg::UpdateLoadingStatus(Some(Some(tr("loading-launcher-state--patch")))));
+                    }
+                }
+            });
+
+            sender.input(AppMsg::UpdateLoadingStatus(Some(Some(tr("loading-launcher-state")))));
+
+            sender.input(AppMsg::UpdateLauncherState(match LauncherState::get_from_config(updater) {
+                Ok(state) => Some(state),
+                Err(err) => {
+                    tracing::error!("Failed to fetch patch info: {err}");
+
+                    None
+                }
+            }));
+
+            tracing::info!("Updated launcher state");
 
             // Hide loading page
             sender.input(AppMsg::UpdateLoadingStatus(None));
@@ -383,7 +407,7 @@ impl SimpleComponent for App {
         ComponentParts { model, widgets }
     }
 
-    fn update(&mut self, msg: Self::Input, _sender: ComponentSender<Self>) {
+    fn update(&mut self, msg: Self::Input, sender: ComponentSender<Self>) {
         tracing::debug!("Called main window event: {:?}", msg);
 
         match msg {
@@ -395,6 +419,10 @@ impl SimpleComponent for App {
             #[allow(unused_must_use)]
             AppMsg::UpdatePatch(patch) => unsafe {
                 PREFERENCES_WINDOW.as_ref().unwrap_unchecked().sender().send(PreferencesAppMsg::UpdatePatch(patch));
+            }
+
+            AppMsg::UpdateLauncherState(state) => {
+                self.state = state;
             }
 
             AppMsg::Toast { title, description } => unsafe {
@@ -435,10 +463,6 @@ impl SimpleComponent for App {
                 self.loading = status;
             }
 
-            AppMsg::PerformAction => {
-                anime_launcher_sdk::game::run().expect("Failed to run the game");
-            }
-
             AppMsg::OpenPreferences => unsafe {
                 PREFERENCES_WINDOW.as_ref().unwrap_unchecked().widget().show();
             }
@@ -449,6 +473,32 @@ impl SimpleComponent for App {
 
             AppMsg::UpdateLauncherStyle(style) => {
                 self.style = style;
+            }
+
+            AppMsg::PerformAction => unsafe {
+                match self.state.as_ref().unwrap_unchecked() {
+                    LauncherState::Launch => {
+                        if let Err(err) = anime_launcher_sdk::game::run() {
+                            sender.input(AppMsg::Toast {
+                                title: tr("game-launching-failed"),
+                                description: Some(err.to_string())
+                            });
+
+                            tracing::error!("Failed to launch game: {err}");
+                        }
+                    }
+
+                    LauncherState::PredownloadAvailable { .. } => todo!(),
+                    LauncherState::PatchAvailable(_) => todo!(),
+                    LauncherState::WineNotInstalled => todo!(),
+                    LauncherState::PrefixNotExists => todo!(),
+                    LauncherState::VoiceUpdateAvailable(_) => todo!(),
+                    LauncherState::VoiceOutdated(_) => todo!(),
+                    LauncherState::VoiceNotInstalled(_) => todo!(),
+                    LauncherState::GameUpdateAvailable(_) => todo!(),
+                    LauncherState::GameOutdated(_) => todo!(),
+                    LauncherState::GameNotInstalled(_) => todo!(),
+                }
             }
         }
     }
