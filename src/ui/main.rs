@@ -232,18 +232,62 @@ impl SimpleComponent for App {
                                     },
 
                                     #[watch]
-                                    set_sensitive: match model.state {
-                                        Some(LauncherState::GameOutdated { .. }) => false,
+                                    set_sensitive: match model.state.as_ref() {
+                                        Some(LauncherState::GameOutdated { .. }) |
                                         Some(LauncherState::VoiceOutdated(_)) => false,
+
+                                        Some(LauncherState::PatchAvailable(patch)) => match patch {
+                                            Patch::NotAvailable |
+                                            Patch::Outdated { .. } |
+                                            Patch::Preparation { .. } => false,
+
+                                            Patch::Testing { .. } |
+                                            Patch::Available { .. } => true
+                                        },
 
                                         Some(_) => true,
 
                                         None => false
                                     },
 
+                                    #[watch]
+                                    set_css_classes: match model.state.as_ref() {
+                                        Some(LauncherState::GameOutdated { .. }) |
+                                        Some(LauncherState::VoiceOutdated(_)) => &["warning"],
+
+                                        Some(LauncherState::PatchAvailable(patch)) => match patch {
+                                            Patch::NotAvailable |
+                                            Patch::Outdated { .. } |
+                                            Patch::Preparation { .. } => &["error"],
+
+                                            Patch::Testing { .. } => &["warning"],
+                                            Patch::Available { .. } => &["suggested-action"]
+                                        },
+
+                                        Some(_) => &["suggested-action"],
+
+                                        None => &[]
+                                    },
+
+                                    #[watch]
+                                    set_tooltip_text: Some(&match model.state.as_ref() {
+                                        Some(LauncherState::GameOutdated { .. }) |
+                                        Some(LauncherState::VoiceOutdated(_)) => tr("main-window--version-outdated-tooltip"),
+
+                                        Some(LauncherState::PatchAvailable(patch)) => match patch {
+                                            Patch::NotAvailable => tr("main-window--patch-unavailable-tooltip"),
+
+                                            Patch::Outdated { .. } |
+                                            Patch::Preparation { .. } => tr("main-window--patch-outdated-tooltip"),
+
+                                            _ => String::new()
+                                        },
+
+                                        _ => String::new()
+                                    }),
+
                                     set_hexpand: false,
                                     set_width_request: 200,
-                                    add_css_class: "suggested-action",
 
                                     connect_clicked => AppMsg::PerformAction
                                 },
