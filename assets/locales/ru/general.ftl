@@ -1,3 +1,9 @@
+appearance = Внешний вид
+modern = Современный
+classic = Стандартный
+update-background = Обновлять фоновое изображение
+update-background-description = Скачивать фоновое изображение для лаунчера. Вы можете отключить это чтобы использовать ваше собственное изображение
+
 launcher-language = Язык лаунчера
 launcher-language-description = Применяется после перезапуска
 

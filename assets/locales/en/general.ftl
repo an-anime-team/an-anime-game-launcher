@@ -1,3 +1,9 @@
+appearance = Appearance
+modern = Modern
+classic = Classic
+update-background = Update background picture
+update-background-description = Download official background picture for the launcher. You can disable it to use your custom image instead
+
 launcher-language = Launcher language
 launcher-language-description = Applies after restart
 

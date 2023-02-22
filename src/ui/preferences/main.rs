@@ -86,6 +86,12 @@ impl SimpleAsyncComponent for App {
                 },
 
                 #[template_child]
+                classic_appearance_params {
+                    #[watch]
+                    set_visible: model.style == LauncherStyle::Classic
+                },
+
+                #[template_child]
                 wine_versions {
                     add = model.wine_components.widget(),
                 },

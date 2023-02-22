@@ -8,6 +8,8 @@ use anime_launcher_sdk::config::prelude::*;
 use crate::i18n::tr;
 use crate::*;
 
+// TODO: change to relm4::SimpleComponent
+
 #[relm4::widget_template(pub)]
 impl WidgetTemplate for Enhancements {
     view! {

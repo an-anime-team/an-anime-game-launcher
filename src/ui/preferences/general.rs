@@ -9,6 +9,8 @@ use anime_launcher_sdk::anime_game_core::prelude::*;
 use crate::i18n::*;
 use crate::*;
 
+// TODO: change to relm4::SimpleComponent
+
 #[relm4::widget_template(pub)]
 impl WidgetTemplate for General {
     view! {
@@ -17,7 +19,7 @@ impl WidgetTemplate for General {
             set_icon_name: Some("applications-system-symbolic"),
 
             add = &adw::PreferencesGroup {
-                set_title: "Appearance",
+                set_title: &tr("appearance"),
 
                 gtk::Box {
                     set_orientation: gtk::Orientation::Horizontal,
@@ -41,7 +43,7 @@ impl WidgetTemplate for General {
                         },
 
                         gtk::Label {
-                            set_text: "Modern",
+                            set_text: &tr("modern"),
 
                             set_margin_top: 16
                         }
@@ -53,20 +55,32 @@ impl WidgetTemplate for General {
                         #[name(classic_style_button)]
                         gtk::ToggleButton {
                             add_css_class: "card",
-    
+
                             set_width_request: 180,
                             set_height_request: 120,
-    
+
                             gtk::Image {
                                 set_from_resource: Some("/org/app/images/classic.svg")
                             }
                         },
 
                         gtk::Label {
-                            set_text: "Classic",
+                            set_text: &tr("classic"),
 
                             set_margin_top: 16
                         }
+                    }
+                }
+            },
+
+            #[name(classic_appearance_params)]
+            add = &adw::PreferencesGroup {
+                adw::ActionRow {
+                    set_title: &tr("update-background"),
+                    set_subtitle: &tr("update-background-description"),
+
+                    add_suffix = &gtk::Switch {
+                        set_valign: gtk::Align::Center
                     }
                 }
             },
