@@ -26,6 +26,11 @@ unpacking = Распаковка
 
 
 launch = Запустить
+apply-patch = Применить патч
+download-wine = Установить Wine
+create-prefix = Создать префикс
+update = Обновить
+download = Установить
 
 
 preferences = Настройки
