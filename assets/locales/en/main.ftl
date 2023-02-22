@@ -6,6 +6,10 @@ close = Close
 save = Save
 
 
+loading-game-version = Loading game version
+loading-patch-status = Loading patch status
+
+
 checking-free-space = Checking free space
 downloading = Downloading
 unpacking = Unpacking

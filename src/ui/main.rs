@@ -1,5 +1,6 @@
 use relm4::{
     prelude::*,
+    component::*,
     actions::*,
     MessageBroker
 };
@@ -23,7 +24,7 @@ relm4::new_stateless_action!(ConfigFile, WindowActionGroup, "config_file");
 
 relm4::new_stateless_action!(About, WindowActionGroup, "about");
 
-static mut PREFERENCES_WINDOW: Option<Controller<PreferencesApp>> = None;
+static mut PREFERENCES_WINDOW: Option<AsyncController<PreferencesApp>> = None;
 static mut ABOUT_DIALOG: Option<Controller<AboutDialog>> = None;
 
 pub struct App {
@@ -41,6 +42,7 @@ pub enum AppMsg {
     /// was retrieved from remote repos
     UpdatePatch(Option<Patch>),
 
+    UpdateLoadingStatus(Option<Option<String>>),
     PerformAction,
     OpenPreferences,
     ClosePreferences,
@@ -225,7 +227,7 @@ impl SimpleComponent for App {
         tracing::info!("Initializing main window");
 
         let model = App {
-            loading: None,
+            loading: Some(None),
             style: CONFIG.launcher.style
         };
 
@@ -276,10 +278,13 @@ impl SimpleComponent for App {
             tracing::info!("Initializing heavy tasks");
 
             // Update initial game version status
+
+            sender.input(AppMsg::UpdateLoadingStatus(Some(Some(tr("loading-game-version")))));
+
             sender.input(AppMsg::UpdateGameDiff(match GAME.try_get_diff() {
                 Ok(diff) => Some(diff),
                 Err(err) => {
-                    tracing::error!("Failed to get game diff {err}");
+                    tracing::error!("Failed to get game diff: {err}");
             
                     None
                 }
@@ -288,10 +293,13 @@ impl SimpleComponent for App {
             tracing::info!("Updated game version status");
 
             // Update initial patch status
+
+            sender.input(AppMsg::UpdateLoadingStatus(Some(Some(tr("loading-patch-status")))));
+
             sender.input(AppMsg::UpdatePatch(match Patch::try_fetch(&CONFIG.patch.servers, None) {
                 Ok(patch) => Some(patch),
                 Err(err) => {
-                    tracing::error!("Failed to fetch patch info {err}");
+                    tracing::error!("Failed to fetch patch info: {err}");
             
                     None
                 }
@@ -299,6 +307,10 @@ impl SimpleComponent for App {
 
             tracing::info!("Updated patch status");
 
+            // Hide loading page
+            sender.input(AppMsg::UpdateLoadingStatus(None));
+
+            // Mark app as loaded
             unsafe {
                 crate::READY = true;
             }
@@ -321,6 +333,10 @@ impl SimpleComponent for App {
             #[allow(unused_must_use)]
             AppMsg::UpdatePatch(patch) => unsafe {
                 PREFERENCES_WINDOW.as_ref().unwrap_unchecked().sender().send(PreferencesAppMsg::UpdatePatch(patch));
+            },
+
+            AppMsg::UpdateLoadingStatus(status) => {
+                self.loading = status;
             },
 
             AppMsg::PerformAction => {

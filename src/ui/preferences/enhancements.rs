@@ -1,4 +1,5 @@
 use relm4::prelude::*;
+use relm4::component::*;
 
 use adw::prelude::*;
 
@@ -10,8 +11,8 @@ use crate::*;
 
 pub struct EnhancementsApp;
 
-#[relm4::component(pub)]
-impl SimpleComponent for EnhancementsApp {
+#[relm4::component(async, pub)]
+impl SimpleAsyncComponent for EnhancementsApp {
     type Init = ();
     type Input = ();
     type Output = ();
@@ -398,20 +399,20 @@ impl SimpleComponent for EnhancementsApp {
         }
     }
 
-    fn init(
+    async fn init(
         _init: Self::Init,
-        root: &Self::Root,
-        _sender: ComponentSender<Self>,
-    ) -> ComponentParts<Self> {
+        root: Self::Root,
+        _sender: AsyncComponentSender<Self>,
+    ) -> AsyncComponentParts<Self> {
         tracing::info!("Initializing enhancements settings");
 
         let model = Self;
         let widgets = view_output!();
 
-        ComponentParts { model, widgets }
+        AsyncComponentParts { model, widgets }
     }
 
-    fn update(&mut self, msg: Self::Input, _sender: ComponentSender<Self>) {
+    async fn update(&mut self, msg: Self::Input, _sender: AsyncComponentSender<Self>) {
         tracing::debug!("Called enhancements settings event: {:?}", msg);
     }
 }

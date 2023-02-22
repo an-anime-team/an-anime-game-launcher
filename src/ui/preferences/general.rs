@@ -59,8 +59,8 @@ pub enum GeneralAppMsg {
     ResetDxvkSelection(usize)
 }
 
-#[relm4::component(pub)]
-impl SimpleComponent for GeneralApp {
+#[relm4::component(async, pub)]
+impl SimpleAsyncComponent for GeneralApp {
     type Init = ();
     type Input = GeneralAppMsg;
     type Output = super::main::PreferencesAppMsg;
@@ -457,11 +457,11 @@ impl SimpleComponent for GeneralApp {
         }
     }
 
-    fn init(
+    async fn init(
         _init: Self::Init,
-        root: &Self::Root,
-        sender: ComponentSender<Self>,
-    ) -> ComponentParts<Self> {
+        root: Self::Root,
+        sender: AsyncComponentSender<Self>,
+    ) -> AsyncComponentParts<Self> {
         tracing::info!("Initializing general settings");
 
         let model = Self {
@@ -504,10 +504,10 @@ impl SimpleComponent for GeneralApp {
 
         let widgets = view_output!();
 
-        ComponentParts { model, widgets }
+        AsyncComponentParts { model, widgets }
     }
 
-    fn update(&mut self, msg: Self::Input, sender: ComponentSender<Self>) {
+    async fn update(&mut self, msg: Self::Input, sender: AsyncComponentSender<Self>) {
         tracing::debug!("Called general settings event: {:?}", msg);
 
         match msg {

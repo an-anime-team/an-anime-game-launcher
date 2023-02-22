@@ -6,6 +6,10 @@ close = Закрыть
 save = Сохранить
 
 
+loading-game-version = Загрузка версии игры
+loading-patch-status = Загрузка статуса патча
+
+
 checking-free-space = Проверка свободного места
 downloading = Загрузка
 unpacking = Распаковка

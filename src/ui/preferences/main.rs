@@ -1,4 +1,5 @@
 use relm4::prelude::*;
+use relm4::component::*;
 
 use gtk::prelude::*;
 use adw::prelude::*;
@@ -15,8 +16,8 @@ use super::enhancements::*;
 pub static mut PREFERENCES_WINDOW: Option<adw::PreferencesWindow> = None;
 
 pub struct PreferencesApp {
-    general: Controller<GeneralApp>,
-    enhancements: Controller<EnhancementsApp>
+    general: AsyncController<GeneralApp>,
+    enhancements: AsyncController<EnhancementsApp>
 }
 
 #[derive(Debug, Clone)]
@@ -36,8 +37,8 @@ pub enum PreferencesAppMsg {
     UpdateLauncherStyle(LauncherStyle)
 }
 
-#[relm4::component(pub)]
-impl SimpleComponent for PreferencesApp {
+#[relm4::component(async, pub)]
+impl SimpleAsyncComponent for PreferencesApp {
     type Init = gtk::Window;
     type Input = PreferencesAppMsg;
     type Output = crate::ui::main::AppMsg;
@@ -65,11 +66,11 @@ impl SimpleComponent for PreferencesApp {
         }
     }
 
-    fn init(
+    async fn init(
         parent: Self::Init,
-        root: &Self::Root,
-        sender: ComponentSender<Self>,
-    ) -> ComponentParts<Self> {
+        root: Self::Root,
+        sender: AsyncComponentSender<Self>,
+    ) -> AsyncComponentParts<Self> {
         tracing::info!("Initializing preferences window");
 
         let model = Self {
@@ -95,10 +96,10 @@ impl SimpleComponent for PreferencesApp {
             model.general.sender().send(GeneralAppMsg::UpdateDownloadedDxvk);
         }
 
-        ComponentParts { model, widgets }
+        AsyncComponentParts { model, widgets }
     }
 
-    fn update(&mut self, msg: Self::Input, sender: ComponentSender<Self>) {
+    async fn update(&mut self, msg: Self::Input, sender: AsyncComponentSender<Self>) {
         tracing::debug!("Called preferences window event: {:?}", msg);
 
         match msg {
