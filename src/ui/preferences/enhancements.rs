@@ -8,10 +8,14 @@ use anime_launcher_sdk::config::prelude::*;
 use crate::i18n::tr;
 use crate::*;
 
-// TODO: change to relm4::SimpleComponent
+pub struct Enhancements;
 
-#[relm4::widget_template(pub)]
-impl WidgetTemplate for Enhancements {
+#[relm4::component(pub)]
+impl SimpleComponent for Enhancements {
+    type Init = ();
+    type Input = ();
+    type Output = ();
+
     view! {
         adw::PreferencesPage {
             set_title: &tr("enhancements"),
@@ -392,5 +396,22 @@ impl WidgetTemplate for Enhancements {
                 },
             }
         }
+    }
+
+    fn init(
+        _init: Self::Init,
+        root: &Self::Root,
+        _sender: ComponentSender<Self>,
+    ) -> ComponentParts<Self> {
+        tracing::info!("Initializing about dialog");
+
+        let model = Self;
+        let widgets = view_output!();
+
+        ComponentParts { model, widgets }
+    }
+
+    fn update(&mut self, msg: Self::Input, _sender: ComponentSender<Self>) {
+        tracing::debug!("Called enhancements settings event: {:?}", msg);
     }
 }

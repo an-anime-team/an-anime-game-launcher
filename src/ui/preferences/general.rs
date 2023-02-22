@@ -1,18 +1,59 @@
 use relm4::prelude::*;
+use relm4::component::*;
 
 use gtk::prelude::*;
 use adw::prelude::*;
 
 use anime_launcher_sdk::config;
+use anime_launcher_sdk::config::launcher::LauncherStyle;
 use anime_launcher_sdk::anime_game_core::prelude::*;
+use anime_launcher_sdk::components::*;
+use anime_launcher_sdk::wincompatlib::prelude::*;
 
+use crate::ui::components;
+use crate::ui::components::*;
 use crate::i18n::*;
 use crate::*;
 
-// TODO: change to relm4::SimpleComponent
+pub struct General {
+    wine_components: AsyncController<ComponentsList<AppMsg>>,
+    dxvk_components: AsyncController<ComponentsList<AppMsg>>,
 
-#[relm4::widget_template(pub)]
-impl WidgetTemplate for General {
+    style: LauncherStyle,
+
+    downloaded_wine_versions: Vec<wine::Version>,
+    downloaded_dxvk_versions: Vec<dxvk::Version>,
+
+    selected_wine_version: u32,
+    selected_dxvk_version: u32,
+
+    selecting_wine_version: bool,
+    selecting_dxvk_version: bool
+}
+
+#[derive(Debug, Clone)]
+pub enum AppMsg {
+    Toast {
+        title: String,
+        description: Option<String>
+    },
+    UpdateLauncherStyle(LauncherStyle),
+    WineRecommendedOnly(bool),
+    DxvkRecommendedOnly(bool),
+    UpdateDownloadedWine,
+    UpdateDownloadedDxvk,
+    SelectWine(usize),
+    SelectDxvk(usize),
+    ResetWineSelection(usize),
+    ResetDxvkSelection(usize)
+}
+
+#[relm4::component(pub)]
+impl SimpleComponent for General {
+    type Init = ();
+    type Input = AppMsg;
+    type Output = super::main::AppMsg;
+
     view! {
         adw::PreferencesPage {
             set_title: &tr("general"),
@@ -30,16 +71,20 @@ impl WidgetTemplate for General {
                     gtk::Box {
                         set_orientation: gtk::Orientation::Vertical,
 
-                        #[name(modern_style_button)]
                         gtk::ToggleButton {
                             add_css_class: "card",
 
                             set_width_request: 180,
                             set_height_request: 120,
 
+                            #[watch]
+                            set_active: model.style == LauncherStyle::Modern,
+
                             gtk::Image {
                                 set_from_resource: Some("/org/app/images/modern.svg")
-                            }
+                            },
+
+                            connect_clicked => AppMsg::UpdateLauncherStyle(LauncherStyle::Modern)
                         },
 
                         gtk::Label {
@@ -52,16 +97,20 @@ impl WidgetTemplate for General {
                     gtk::Box {
                         set_orientation: gtk::Orientation::Vertical,
 
-                        #[name(classic_style_button)]
                         gtk::ToggleButton {
                             add_css_class: "card",
 
                             set_width_request: 180,
                             set_height_request: 120,
 
+                            #[watch]
+                            set_active: model.style == LauncherStyle::Classic,
+
                             gtk::Image {
                                 set_from_resource: Some("/org/app/images/classic.svg")
-                            }
+                            },
+
+                            connect_clicked => AppMsg::UpdateLauncherStyle(LauncherStyle::Classic)
                         },
 
                         gtk::Label {
@@ -73,8 +122,10 @@ impl WidgetTemplate for General {
                 }
             },
 
-            #[name(classic_appearance_params)]
             add = &adw::PreferencesGroup {
+                #[watch]
+                set_visible: model.style == LauncherStyle::Classic,
+
                 adw::ActionRow {
                     set_title: &tr("update-background"),
                     set_subtitle: &tr("update-background-description"),
@@ -290,48 +341,301 @@ impl WidgetTemplate for General {
             add = &adw::PreferencesGroup {
                 set_title: &tr("wine-version"),
 
-                #[name(wine_version_selector)]
                 adw::ComboRow {
-                    set_title: &tr("selected-version")
+                    set_title: &tr("selected-version"),
+
+                    #[watch]
+                    #[block_signal(wine_selected_notify)]
+                    set_model: Some(&gtk::StringList::new(&model.downloaded_wine_versions.iter().map(|version| version.title.as_str()).collect::<Vec<&str>>())),
+
+                    #[watch]
+                    #[block_signal(wine_selected_notify)]
+                    set_selected: model.selected_wine_version,
+
+                    #[watch]
+                    set_activatable: !model.selecting_wine_version,
+
+                    #[watch]
+                    set_icon_name: if model.selecting_wine_version {
+                        Some("process-working")
+                    } else {
+                        None
+                    },
+
+                    connect_selected_notify[sender] => move |row| {
+                        if is_ready() {
+                            sender.input(AppMsg::SelectWine(row.selected() as usize));
+                        }
+                    } @wine_selected_notify
                 },
 
                 adw::ActionRow {
                     set_title: &tr("recommended-only"),
                     set_subtitle: &tr("wine-recommended-description"),
 
-                    #[name(wine_recommended_only)]
                     add_suffix = &gtk::Switch {
                         set_valign: gtk::Align::Center,
-                        set_state: true
+                        set_state: true,
+
+                        connect_state_notify[sender] => move |switch| {
+                            sender.input(AppMsg::WineRecommendedOnly(switch.state()));
+                        }
                     }
                 }
             },
 
-            #[name(wine_versions)]
-            add = &adw::PreferencesGroup {},
+            add = &adw::PreferencesGroup {
+                add = model.wine_components.widget(),
+            },
 
             add = &adw::PreferencesGroup {
                 set_title: &tr("dxvk-version"),
 
-                #[name(dxvk_version_selector)]
                 adw::ComboRow {
-                    set_title: &tr("selected-version")
+                    set_title: &tr("selected-version"),
+
+                    #[watch]
+                    #[block_signal(dxvk_selected_notify)]
+                    set_model: Some(&gtk::StringList::new(&model.downloaded_dxvk_versions.iter().map(|version| version.name.as_str()).collect::<Vec<&str>>())),
+
+                    #[watch]
+                    #[block_signal(dxvk_selected_notify)]
+                    set_selected: model.selected_dxvk_version,
+
+                    #[watch]
+                    set_activatable: !model.selecting_dxvk_version,
+
+                    #[watch]
+                    set_icon_name: if model.selecting_dxvk_version {
+                        Some("process-working")
+                    } else {
+                        None
+                    },
+
+                    connect_selected_notify[sender] => move |row| {
+                        if is_ready() {
+                            sender.input(AppMsg::SelectDxvk(row.selected() as usize));
+                        }
+                    } @dxvk_selected_notify
                 },
 
                 adw::ActionRow {
                     set_title: &tr("recommended-only"),
                     set_subtitle: &tr("dxvk-recommended-description"),
 
-                    #[name(dxvk_recommended_only)]
                     add_suffix = &gtk::Switch {
                         set_valign: gtk::Align::Center,
-                        set_state: true
+                        set_state: true,
+
+                        connect_state_notify[sender] => move |switch| {
+                            sender.input(AppMsg::DxvkRecommendedOnly(switch.state()));
+                        }
                     }
                 }
             },
 
-            #[name(dxvk_versions)]
-            add = &adw::PreferencesGroup {},
+            add = &adw::PreferencesGroup {
+                add = model.dxvk_components.widget(),
+            },
+        }
+    }
+
+    fn init(
+        _init: Self::Init,
+        root: &Self::Root,
+        sender: ComponentSender<Self>,
+    ) -> ComponentParts<Self> {
+        tracing::info!("Initializing about dialog");
+
+        let model = Self {
+            wine_components: ComponentsList::builder()
+                .launch(ComponentsListInit {
+                    pattern: ComponentsListPattern {
+                        download_folder: CONFIG.game.wine.builds.clone(),
+                        groups: wine::get_groups().into_iter().map(|group| group.into()).collect()
+                    },
+                    on_downloaded: Some(AppMsg::UpdateDownloadedWine),
+                    on_deleted: Some(AppMsg::UpdateDownloadedWine)
+                })
+                .forward(sender.input_sender(), std::convert::identity),
+
+            dxvk_components: ComponentsList::builder()
+                .launch(ComponentsListInit {
+                    pattern: ComponentsListPattern {
+                        download_folder: CONFIG.game.dxvk.builds.clone(),
+                        groups: dxvk::get_groups().into_iter().map(|group| group.into()).collect()
+                    },
+                    on_downloaded: Some(AppMsg::UpdateDownloadedDxvk),
+                    on_deleted: Some(AppMsg::UpdateDownloadedDxvk)
+                })
+                .forward(sender.input_sender(), std::convert::identity),
+
+            style: CONFIG.launcher.style,
+
+            downloaded_wine_versions: vec![],
+            downloaded_dxvk_versions: vec![],
+
+            selected_wine_version: 0,
+            selected_dxvk_version: 0,
+
+            selecting_wine_version: false,
+            selecting_dxvk_version: false
+        };
+
+        let widgets = view_output!();
+
+        ComponentParts { model, widgets }
+    }
+
+    fn update(&mut self, msg: Self::Input, sender: ComponentSender<Self>) {
+        tracing::debug!("Called enhancements settings event: {:?}", msg);
+
+        match msg {
+            #[allow(unused_must_use)]
+            AppMsg::UpdateLauncherStyle(style) => {
+                if let Ok(mut config) = config::get() {
+                    config.launcher.style = style;
+
+                    config::update(config);
+                }
+
+                self.style = style;
+
+                sender.output(Self::Output::UpdateLauncherStyle(style));
+            }
+
+            #[allow(unused_must_use)]
+            AppMsg::Toast { title, description } => {
+                sender.output(Self::Output::Toast { title, description });
+            }
+
+            AppMsg::WineRecommendedOnly(state) => {
+                // todo
+                self.wine_components.sender().send(components::list::AppMsg::ShowRecommendedOnly(state)).unwrap();
+            }
+
+            AppMsg::DxvkRecommendedOnly(state) => {
+                // todo
+                self.dxvk_components.sender().send(components::list::AppMsg::ShowRecommendedOnly(state)).unwrap();
+            }
+
+            AppMsg::UpdateDownloadedWine => {
+                self.downloaded_wine_versions = wine::get_downloaded(&CONFIG.game.wine.builds).unwrap_or_default();
+
+                self.selected_wine_version = if let Some(selected) = &CONFIG.game.wine.selected {
+                    let mut index = 0;
+        
+                    for (i, version) in self.downloaded_wine_versions.iter().enumerate() {
+                        if &version.name == selected {
+                            index = i;
+        
+                            break;
+                        }
+                    }
+        
+                    index as u32
+                }
+
+                else {
+                    0
+                };
+            }
+
+            AppMsg::UpdateDownloadedDxvk => {
+                self.downloaded_dxvk_versions = dxvk::get_downloaded(&CONFIG.game.dxvk.builds).unwrap_or_default();
+
+                self.selected_dxvk_version = if let Ok(Some(selected)) = CONFIG.try_get_selected_dxvk_info() {
+                    let mut index = 0;
+        
+                    for (i, version) in self.downloaded_dxvk_versions.iter().enumerate() {
+                        if version.name == selected.name {
+                            index = i;
+        
+                            break;
+                        }
+                    }
+        
+                    index as u32
+                }
+
+                else {
+                    0
+                };
+            }
+
+            AppMsg::SelectWine(index) => {
+                if let Ok(mut config) = config::get() {
+                    if let Some(version) = self.downloaded_wine_versions.get(index) {
+                        if config.game.wine.selected.as_ref().unwrap_or(&String::new()) != &version.title {
+                            self.selecting_wine_version = true;
+
+                            let wine = version.to_wine(Some(config.game.wine.builds.join(&version.name)));
+                            let wine_name = version.name.to_string();
+
+                            std::thread::spawn(move || {
+                                match wine.update_prefix(&config.game.wine.prefix) {
+                                    Ok(_) => {
+                                        config.game.wine.selected = Some(wine_name); 
+
+                                        config::update(config);
+                                    }
+
+                                    Err(err) => {
+                                        sender.input(AppMsg::Toast {
+                                            title: tr("wine-prefix-update-failed"),
+                                            description: Some(err.to_string())
+                                        });
+                                    }
+                                }
+
+                                sender.input(AppMsg::ResetWineSelection(index));
+                            });
+                        }
+                    }
+                }
+            }
+
+            AppMsg::ResetWineSelection(index) => {
+                self.selecting_wine_version = false;
+                self.selected_wine_version = index as u32;
+            }
+
+            AppMsg::SelectDxvk(index) => {
+                if let Ok(config) = config::get() {
+                    if let Some(version) = self.downloaded_dxvk_versions.get(index) {
+                        if let Ok(selected) = config.try_get_selected_dxvk_info() {
+                            if selected.is_none() || selected.unwrap().name != version.name {
+                                self.selecting_dxvk_version = true;
+
+                                let mut wine = match config.try_get_selected_wine_info() {
+                                    Some(version) => version.to_wine(Some(config.game.wine.builds.join(&version.name))),
+                                    None => Wine::default()
+                                };
+
+                                wine = wine.with_prefix(config.game.wine.prefix);
+
+                                let dxvk_folder = config.game.dxvk.builds.join(&version.name);
+
+                                std::thread::spawn(move || {
+                                    if let Err(err) = Dxvk::install(&wine, dxvk_folder, InstallParams::default()) {
+                                        sender.input(AppMsg::Toast {
+                                            title: tr("dxvk-install-failed"),
+                                            description: Some(err.to_string())
+                                        });
+                                    }
+
+                                    sender.input(AppMsg::ResetDxvkSelection(index));
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+
+            AppMsg::ResetDxvkSelection(index) => {
+                self.selecting_dxvk_version = false;
+                self.selected_dxvk_version = index as u32;
+            }
         }
     }
 }

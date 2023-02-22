@@ -91,7 +91,7 @@ impl SimpleComponent for AboutDialog {
     ) -> ComponentParts<Self> {
         tracing::info!("Initializing about dialog");
 
-        let model = AboutDialog {
+        let model = Self {
             visible: false
         };
 

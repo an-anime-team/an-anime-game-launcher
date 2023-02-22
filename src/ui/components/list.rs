@@ -4,15 +4,15 @@ use relm4::component::*;
 use adw::prelude::*;
 
 #[derive(Debug, Clone)]
-pub struct ComponentsListInit {
+pub struct ComponentsListInit<T> {
     pub pattern: super::ComponentsListPattern,
-    pub on_downloaded: Option<crate::ui::preferences::main::AppMsg>,
-    pub on_deleted: Option<crate::ui::preferences::main::AppMsg>
+    pub on_downloaded: Option<T>,
+    pub on_deleted: Option<T>
 }
 
-pub struct ComponentsList {
+pub struct ComponentsList<T> {
     pub show_recommended_only: bool,
-    pub init: ComponentsListInit,
+    pub init: ComponentsListInit<T>,
 
     pub groups: Vec<AsyncController<super::ComponentGroup>>
 }
@@ -25,10 +25,10 @@ pub enum AppMsg {
 }
 
 #[relm4::component(async, pub)]
-impl SimpleAsyncComponent for ComponentsList {
-    type Init = ComponentsListInit;
+impl<T: std::fmt::Debug + Clone + 'static> SimpleAsyncComponent for ComponentsList<T> {
+    type Init = ComponentsListInit<T>;
     type Input = AppMsg;
-    type Output = crate::ui::preferences::main::AppMsg;
+    type Output = T;
 
     view! {
         group = adw::PreferencesGroup {}

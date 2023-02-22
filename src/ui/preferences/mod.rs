@@ -1,4 +1,3 @@
 pub mod main;
-
-mod general;
-mod enhancements;
+pub mod general;
+pub mod enhancements;
