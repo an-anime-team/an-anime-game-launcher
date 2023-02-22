@@ -79,7 +79,13 @@ impl SimpleComponent for App {
             #[watch]
             add_css_class: match model.style {
                 LauncherStyle::Modern => "",
-                LauncherStyle::Classic => "classic-style"
+                LauncherStyle::Classic => {
+                    if model.loading.is_none() {
+                        "classic-style"
+                    } else {
+                        ""
+                    }
+                }
             },
 
             #[watch]
