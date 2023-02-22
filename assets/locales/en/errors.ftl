@@ -1,6 +1,7 @@
 launcher-folder-opening-error = Failed to open launcher folder
 game-folder-opening-error = Failed to open game folder
 config-file-opening-error = Failed to open config file
+debug-file-opening-error = Failed to open debug file
 
 game-launching-failed = Failed to launch game
 

@@ -20,6 +20,11 @@ unpacking = Unpacking
 
 
 launch = Launch
+apply-patch = Apply patch
+download-wine = Download wine
+create-prefix = Create prefix
+update = Update
+download = Download
 
 
 preferences = Preferences

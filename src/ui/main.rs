@@ -24,6 +24,7 @@ relm4::new_action_group!(WindowActionGroup, "win");
 relm4::new_stateless_action!(LauncherFolder, WindowActionGroup, "launcher_folder");
 relm4::new_stateless_action!(GameFolder, WindowActionGroup, "game_folder");
 relm4::new_stateless_action!(ConfigFile, WindowActionGroup, "config_file");
+relm4::new_stateless_action!(DebugFile, WindowActionGroup, "debug_file");
 
 relm4::new_stateless_action!(About, WindowActionGroup, "about");
 
@@ -76,6 +77,7 @@ impl SimpleComponent for App {
                 "Launcher folder" => LauncherFolder,
                 "Game folder" => GameFolder,
                 "Config file" => ConfigFile,
+                "Debug file" => DebugFile,
             },
 
             section! {
@@ -209,8 +211,36 @@ impl SimpleComponent for App {
                                 set_margin_top: 64,
                                 set_spacing: 8,
 
+                                // TODO: add tooltips
+
                                 gtk::Button {
-                                    set_label: &tr("launch"),
+                                    #[watch]
+                                    set_label: &match model.state {
+                                        Some(LauncherState::Launch)                      => tr("launch"),
+                                        Some(LauncherState::PredownloadAvailable { .. }) => tr("launch"),
+                                        Some(LauncherState::PatchAvailable(_))           => tr("apply-patch"),
+                                        Some(LauncherState::WineNotInstalled)            => tr("download-wine"),
+                                        Some(LauncherState::PrefixNotExists)             => tr("create-prefix"),
+                                        Some(LauncherState::VoiceUpdateAvailable(_))     => tr("update"),
+                                        Some(LauncherState::VoiceOutdated(_))            => tr("update"),
+                                        Some(LauncherState::VoiceNotInstalled(_))        => tr("download"),
+                                        Some(LauncherState::GameUpdateAvailable(_))      => tr("update"),
+                                        Some(LauncherState::GameOutdated(_))             => tr("update"),
+                                        Some(LauncherState::GameNotInstalled(_))         => tr("download"),
+
+                                        None => String::from("...")
+                                    },
+
+                                    #[watch]
+                                    set_sensitive: match model.state {
+                                        Some(LauncherState::GameOutdated { .. }) => false,
+                                        Some(LauncherState::VoiceOutdated(_)) => false,
+
+                                        Some(_) => true,
+
+                                        None => false
+                                    },
+
                                     set_hexpand: false,
                                     set_width_request: 200,
                                     add_css_class: "suggested-action",
@@ -313,6 +343,17 @@ impl SimpleComponent for App {
 
                     tracing::error!("Failed to open config file: {err}");
                 }
+            }
+        })));
+
+        group.add_action::<DebugFile>(&RelmAction::new_stateless(clone!(@strong sender => move |_| {
+            if let Err(err) = std::process::Command::new("xdg-open").arg(DEBUG_FILE.as_os_str()).spawn() {
+                sender.input(AppMsg::Toast {
+                    title: tr("debug-file-opening-error"),
+                    description: Some(err.to_string())
+                });
+
+                tracing::error!("Failed to open debug file: {err}");
             }
         })));
 

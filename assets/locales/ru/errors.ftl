@@ -1,6 +1,7 @@
 launcher-folder-opening-error = Не удалось открыть папку лаунчера
 game-folder-opening-error = Не удалось открыть папку игры
 config-file-opening-error = Не удалось открыть файл настроек
+debug-file-opening-error = Не удалось открыть файл отладки
 
 game-launching-failed = Не удалось запустить игру
 
