@@ -8,6 +8,8 @@ use relm4::{
 use gtk::prelude::*;
 use adw::prelude::*;
 
+use gtk::glib::clone;
+
 use anime_launcher_sdk::config::launcher::LauncherStyle;
 
 use crate::*;
@@ -24,10 +26,13 @@ relm4::new_stateless_action!(ConfigFile, WindowActionGroup, "config_file");
 
 relm4::new_stateless_action!(About, WindowActionGroup, "about");
 
+static mut MAIN_WINDOW: Option<adw::Window> = None;
 static mut PREFERENCES_WINDOW: Option<AsyncController<PreferencesApp>> = None;
 static mut ABOUT_DIALOG: Option<Controller<AboutDialog>> = None;
 
 pub struct App {
+    toast_overlay: adw::ToastOverlay,
+
     loading: Option<Option<String>>,
     style: LauncherStyle
 }
@@ -41,6 +46,11 @@ pub enum AppMsg {
     /// Supposed to be called automatically on app's run when the latest patch version
     /// was retrieved from remote repos
     UpdatePatch(Option<Patch>),
+
+    Toast {
+        title: String,
+        description: Option<String>
+    },
 
     UpdateLoadingStatus(Option<Option<String>>),
     PerformAction,
@@ -103,114 +113,117 @@ impl SimpleComponent for App {
                 LauncherStyle::Classic => ""
             },
 
-            gtk::Box {
-                set_orientation: gtk::Orientation::Vertical,
+            #[local_ref]
+            toast_overlay -> adw::ToastOverlay {
+                gtk::Box {
+                    set_orientation: gtk::Orientation::Vertical,
 
-                adw::HeaderBar {
-                    #[watch]
-                    add_css_class: match model.style {
-                        LauncherStyle::Modern => "",
-                        LauncherStyle::Classic => "flat"
-                    },
-
-                    #[watch]
-                    remove_css_class: match model.style {
-                        LauncherStyle::Modern => "flat",
-                        LauncherStyle::Classic => ""
-                    },
-
-                    pack_end = &gtk::MenuButton {
-                        set_icon_name: "open-menu-symbolic",
-                        set_menu_model: Some(&main_menu)
-                    }
-                },
-
-                adw::StatusPage {
-                    set_title: "Loading data",
-                    set_icon_name: Some("process-working"),
-                    set_vexpand: true,
-
-                    #[watch]
-                    set_description: match &model.loading {
-                        Some(Some(desc)) => Some(desc),
-                        Some(None) | None => None
-                    },
-
-                    #[watch]
-                    set_visible: model.loading.is_some()
-                },
-
-                adw::PreferencesPage {
-                    #[watch]
-                    set_visible: model.loading.is_none(),
-
-                    add = &adw::PreferencesGroup {
+                    adw::HeaderBar {
                         #[watch]
-                        set_visible: model.style == LauncherStyle::Modern,
-
-                        gtk::Image {
-                            set_resource: Some("/org/app/images/icon.png"),
-                            set_vexpand: true,
-                            set_margin_top: 48
+                        add_css_class: match model.style {
+                            LauncherStyle::Modern => "",
+                            LauncherStyle::Classic => "flat"
                         },
 
-                        gtk::Label {
-                            set_label: "An Anime Game Launcher",
-                            set_margin_top: 32,
-                            add_css_class: "title-1"
+                        #[watch]
+                        remove_css_class: match model.style {
+                            LauncherStyle::Modern => "flat",
+                            LauncherStyle::Classic => ""
+                        },
+
+                        pack_end = &gtk::MenuButton {
+                            set_icon_name: "open-menu-symbolic",
+                            set_menu_model: Some(&main_menu)
                         }
                     },
 
-                    add = &adw::PreferencesGroup {
-                        #[watch]
-                        set_valign: match model.style {
-                            LauncherStyle::Modern => gtk::Align::Center,
-                            LauncherStyle::Classic => gtk::Align::End
-                        },
-
-                        #[watch]
-                        set_width_request: match model.style {
-                            LauncherStyle::Modern => -1,
-                            LauncherStyle::Classic => 800
-                        },
-
+                    adw::StatusPage {
+                        set_title: "Loading data",
+                        set_icon_name: Some(APP_ID),
                         set_vexpand: true,
 
-                        gtk::Box {
+                        #[watch]
+                        set_description: match &model.loading {
+                            Some(Some(desc)) => Some(desc),
+                            Some(None) | None => None
+                        },
+
+                        #[watch]
+                        set_visible: model.loading.is_some()
+                    },
+
+                    adw::PreferencesPage {
+                        #[watch]
+                        set_visible: model.loading.is_none(),
+
+                        add = &adw::PreferencesGroup {
                             #[watch]
-                            set_halign: match model.style {
+                            set_visible: model.style == LauncherStyle::Modern,
+
+                            gtk::Image {
+                                set_resource: Some("/org/app/images/icon.png"),
+                                set_vexpand: true,
+                                set_margin_top: 48
+                            },
+
+                            gtk::Label {
+                                set_label: "An Anime Game Launcher",
+                                set_margin_top: 32,
+                                add_css_class: "title-1"
+                            }
+                        },
+
+                        add = &adw::PreferencesGroup {
+                            #[watch]
+                            set_valign: match model.style {
                                 LauncherStyle::Modern => gtk::Align::Center,
                                 LauncherStyle::Classic => gtk::Align::End
                             },
 
                             #[watch]
-                            set_height_request: match model.style {
+                            set_width_request: match model.style {
                                 LauncherStyle::Modern => -1,
-                                LauncherStyle::Classic => 40
+                                LauncherStyle::Classic => 800
                             },
 
-                            set_margin_top: 64,
-                            set_spacing: 8,
+                            set_vexpand: true,
 
-                            gtk::Button {
-                                set_label: &tr("launch"),
-                                set_hexpand: false,
-                                set_width_request: 200,
-                                add_css_class: "suggested-action",
-
-                                connect_clicked => AppMsg::PerformAction
-                            },
-
-                            gtk::Button {
+                            gtk::Box {
                                 #[watch]
-                                set_width_request: match model.style {
+                                set_halign: match model.style {
+                                    LauncherStyle::Modern => gtk::Align::Center,
+                                    LauncherStyle::Classic => gtk::Align::End
+                                },
+
+                                #[watch]
+                                set_height_request: match model.style {
                                     LauncherStyle::Modern => -1,
                                     LauncherStyle::Classic => 40
                                 },
 
-                                set_icon_name: "emblem-system-symbolic",
+                                set_margin_top: 64,
+                                set_spacing: 8,
 
-                                connect_clicked => AppMsg::OpenPreferences
+                                gtk::Button {
+                                    set_label: &tr("launch"),
+                                    set_hexpand: false,
+                                    set_width_request: 200,
+                                    add_css_class: "suggested-action",
+
+                                    connect_clicked => AppMsg::PerformAction
+                                },
+
+                                gtk::Button {
+                                    #[watch]
+                                    set_width_request: match model.style {
+                                        LauncherStyle::Modern => -1,
+                                        LauncherStyle::Classic => 40
+                                    },
+
+                                    set_icon_name: "emblem-system-symbolic",
+
+                                    connect_clicked => AppMsg::OpenPreferences
+                                }
                             }
                         }
                     }
@@ -227,9 +240,12 @@ impl SimpleComponent for App {
         tracing::info!("Initializing main window");
 
         let model = App {
+            toast_overlay: adw::ToastOverlay::new(),
             loading: Some(None),
             style: CONFIG.launcher.style
         };
+
+        let toast_overlay = &model.toast_overlay;
 
         let widgets = view_output!();
 
@@ -240,6 +256,8 @@ impl SimpleComponent for App {
         let about_dialog_broker: MessageBroker<AboutDialog> = MessageBroker::new();
 
         unsafe {
+            MAIN_WINDOW = Some(widgets.main_window.clone());
+
             PREFERENCES_WINDOW = Some(PreferencesApp::builder()
                 .launch(widgets.main_window.clone().into())
                 .forward(sender.input_sender(), std::convert::identity));
@@ -252,18 +270,62 @@ impl SimpleComponent for App {
 
         let group = RelmActionGroup::<WindowActionGroup>::new();
 
-        // TODO
-        group.add_action::<LauncherFolder>(&RelmAction::new_stateless(move |_| {
-            println!("Open launcher folder!");
-        }));
+        // TODO: reduce code somehow
 
-        group.add_action::<GameFolder>(&RelmAction::new_stateless(move |_| {
-            println!("Open game folder!");
-        }));
+        group.add_action::<LauncherFolder>(&RelmAction::new_stateless(clone!(@strong sender => move |_| {
+            if let Some(dir) = anime_launcher_sdk::consts::launcher_dir() {
+                let child = std::process::Command::new("xdg-open")
+                    .arg(dir)
+                    .stdout(std::process::Stdio::null())
+                    .stderr(std::process::Stdio::null())
+                    .spawn();
 
-        group.add_action::<ConfigFile>(&RelmAction::new_stateless(move |_| {
-            println!("Open config file!");
-        }));
+                if let Err(err) = child {
+                    sender.input(AppMsg::Toast {
+                        title: tr("launcher-folder-opening-error"),
+                        description: Some(err.to_string())
+                    });
+
+                    tracing::error!("Failed to open launcher folder: {err}");
+                }
+            }
+        })));
+
+        group.add_action::<GameFolder>(&RelmAction::new_stateless(clone!(@strong sender => move |_| {
+            let child = std::process::Command::new("xdg-open")
+                .arg(&CONFIG.game.path)
+                .stdout(std::process::Stdio::null())
+                .stderr(std::process::Stdio::null())
+                .spawn();
+
+            if let Err(err) = child {
+                sender.input(AppMsg::Toast {
+                    title: tr("game-folder-opening-error"),
+                    description: Some(err.to_string())
+                });
+
+                tracing::error!("Failed to open game folder: {err}");
+            }
+        })));
+
+        group.add_action::<ConfigFile>(&RelmAction::new_stateless(clone!(@strong sender => move |_| {
+            if let Some(file) = anime_launcher_sdk::consts::config_file() {
+                let child = std::process::Command::new("xdg-open")
+                    .arg(file)
+                    .stdout(std::process::Stdio::null())
+                    .stderr(std::process::Stdio::null())
+                    .spawn();
+
+                if let Err(err) = child {
+                    sender.input(AppMsg::Toast {
+                        title: tr("config-file-opening-error"),
+                        description: Some(err.to_string())
+                    });
+
+                    tracing::error!("Failed to open config file: {err}");
+                }
+            }
+        })));
 
         group.add_action::<About>(&RelmAction::new_stateless(move |_| {
             about_dialog_broker.send(AboutDialogMsg::Show);
@@ -328,16 +390,50 @@ impl SimpleComponent for App {
             #[allow(unused_must_use)]
             AppMsg::UpdateGameDiff(diff) => unsafe {
                 PREFERENCES_WINDOW.as_ref().unwrap_unchecked().sender().send(PreferencesAppMsg::UpdateGameDiff(diff));
-            },
+            }
 
             #[allow(unused_must_use)]
             AppMsg::UpdatePatch(patch) => unsafe {
                 PREFERENCES_WINDOW.as_ref().unwrap_unchecked().sender().send(PreferencesAppMsg::UpdatePatch(patch));
-            },
+            }
+
+            AppMsg::Toast { title, description } => unsafe {
+                let toast = adw::Toast::new(&title);
+
+                toast.set_timeout(5);
+
+                if let Some(description) = description {
+                    toast.set_button_label(Some(&tr("details")));
+
+                    let dialog = adw::MessageDialog::new(Some(MAIN_WINDOW.as_ref().unwrap_unchecked()), Some(&title), Some(&description));
+
+                    dialog.add_response("close", &tr("close"));
+                    dialog.add_response("save", &tr("save"));
+
+                    dialog.set_response_appearance("save", adw::ResponseAppearance::Suggested);
+
+                    #[allow(unused_must_use)]
+                    dialog.connect_response(Some("save"), |_, _| {
+                        let result = std::process::Command::new("xdg-open")
+                            .arg(crate::DEBUG_FILE.as_os_str())
+                            .output();
+
+                        if let Err(err) = result {
+                            tracing::error!("Failed to open debug file: {}", err);
+                        }
+                    });
+
+                    toast.connect_button_clicked(move |_| {
+                        dialog.show();
+                    });
+                }
+
+                self.toast_overlay.add_toast(&toast);
+            }
 
             AppMsg::UpdateLoadingStatus(status) => {
                 self.loading = status;
-            },
+            }
 
             AppMsg::PerformAction => {
                 anime_launcher_sdk::game::run().expect("Failed to run the game");
