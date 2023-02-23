@@ -1,5 +1,8 @@
 {
     "conventionalCommits.scopes": [
-        "tracing"
+        "tracing",
+        "core",
+        "ui",
+        "i18n"
     ]
 }
