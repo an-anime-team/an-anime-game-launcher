@@ -42,6 +42,11 @@ lazy_static::lazy_static! {
 
     /// Path to `background` file. Standard is `$HOME/.local/share/anime-game-launcher/background`
     pub static ref BACKGROUND_FILE: PathBuf = anime_launcher_sdk::consts::launcher_dir().unwrap_or_default().join("background");
+
+    /// Path to `.keep-background` file. Used to mark launcher that it shouldn't update background picture
+    /// 
+    /// Standard is `$HOME/.local/share/anime-game-launcher/.keep-background`
+    pub static ref KEEP_BACKGROUND_FILE: PathBuf = anime_launcher_sdk::consts::launcher_dir().unwrap_or_default().join(".keep-background");
 }
 
 fn main() {

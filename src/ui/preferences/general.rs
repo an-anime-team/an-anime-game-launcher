@@ -48,6 +48,7 @@ pub enum GeneralAppMsg {
         title: String,
         description: Option<String>
     },
+
     UpdateLauncherStyle(LauncherStyle),
     WineRecommendedOnly(bool),
     DxvkRecommendedOnly(bool),
@@ -142,7 +143,17 @@ impl SimpleAsyncComponent for GeneralApp {
                     set_subtitle: &tr("update-background-description"),
 
                     add_suffix = &gtk::Switch {
-                        set_valign: gtk::Align::Center
+                        set_valign: gtk::Align::Center,
+                        set_active: !KEEP_BACKGROUND_FILE.exists(),
+
+                        connect_state_notify => |switch| {
+                            #[allow(unused_must_use)]
+                            if switch.state() {
+                                std::fs::remove_file(KEEP_BACKGROUND_FILE.as_path());
+                            } else {
+                                std::fs::write(KEEP_BACKGROUND_FILE.as_path(), "");
+                            }
+                        }
                     }
                 }
             },
@@ -513,11 +524,11 @@ impl SimpleAsyncComponent for GeneralApp {
         match msg {
             GeneralAppMsg::UpdateGameDiff(diff) => {
                 self.game_diff = diff;
-            },
+            }
 
             GeneralAppMsg::UpdatePatch(patch) => {
                 self.patch = patch;
-            },
+            }
 
             #[allow(unused_must_use)]
             GeneralAppMsg::UpdateLauncherStyle(style) => {

@@ -401,7 +401,7 @@ impl SimpleComponent for App {
 
         tracing::info!("Main window initialized");
 
-        let download_picture = model.style == LauncherStyle::Classic;
+        let download_picture = model.style == LauncherStyle::Classic && !KEEP_BACKGROUND_FILE.exists();
 
         // Initialize some heavy tasks
         std::thread::spawn(move || {
