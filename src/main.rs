@@ -11,6 +11,7 @@ use std::path::PathBuf;
 
 pub mod i18n;
 pub mod ui;
+pub mod background;
 
 mod prettify_bytes;
 
@@ -30,14 +31,17 @@ pub fn is_ready() -> bool {
 }
 
 lazy_static::lazy_static! {
-    /// Path to `debug.log` file. Standard is `$HOME/.local/share/anime-game-launcher/debug.log`
-    pub static ref DEBUG_FILE: std::path::PathBuf = anime_launcher_sdk::consts::launcher_dir().unwrap_or_default().join("debug.log");
-
     /// Config loaded on the app's start. Use `config::get()` to get up to date config instead.
     /// This one is used to prepare some launcher UI components on start
     pub static ref CONFIG: config::Config = config::get().expect("Failed to load config");
 
     pub static ref GAME: Game = Game::new(&CONFIG.game.path);
+
+    /// Path to `debug.log` file. Standard is `$HOME/.local/share/anime-game-launcher/debug.log`
+    pub static ref DEBUG_FILE: PathBuf = anime_launcher_sdk::consts::launcher_dir().unwrap_or_default().join("debug.log");
+
+    /// Path to `background` file. Standard is `$HOME/.local/share/anime-game-launcher/background`
+    pub static ref BACKGROUND_FILE: PathBuf = anime_launcher_sdk::consts::launcher_dir().unwrap_or_default().join("background");
 }
 
 fn main() {
@@ -66,7 +70,7 @@ fn main() {
 
     let debug_log = tracing_subscriber::fmt::layer()
         .pretty()
-        // .with_ansi(false) // sadly doesn't work with pretty style
+        .with_ansi(false)
         .with_writer(std::sync::Arc::new(file))
         .with_filter(filter_fn(|metadata| {
             !metadata.target().contains("rustls")
@@ -77,7 +81,7 @@ fn main() {
         .with(debug_log)
         .init();
 
-    tracing::info!("Starting application");
+    tracing::info!("Starting application ({APP_VERSION})");
 
     adw::init().expect("Libadwaita initialization failed");
 
@@ -106,13 +110,11 @@ fn main() {
         }}
 
         window.classic-style {{
-            background: url(\"file://{}/background\");
+            background: url(\"file://{}\");
             background-repeat: no-repeat;
             background-size: cover;
         }}
-    ",
-        CONFIG.launcher.temp.as_ref().unwrap_or(&PathBuf::from("/tmp")).to_string_lossy()
-    ));
+    ", BACKGROUND_FILE.to_string_lossy()));
 
     // Run the app
     app.run::<ui::main::App>(());

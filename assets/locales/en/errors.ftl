@@ -5,6 +5,7 @@ debug-file-opening-error = Failed to open debug file
 
 game-launching-failed = Failed to launch game
 
+background-downloading-failed = Failed to download background picture
 config-flush-error = Failed to flush config
 wine-prefix-update-failed = Failed to update wine prefix
 dxvk-install-failed = Failed to install DXVK

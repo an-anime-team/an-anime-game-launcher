@@ -6,6 +6,7 @@ close = Close
 save = Save
 
 
+downloading-background-picture = Downloading background picture
 loading-game-version = Loading game version
 loading-patch-status = Loading patch status
 loading-launcher-state = Loading launcher state

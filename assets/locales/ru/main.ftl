@@ -6,6 +6,7 @@ close = Закрыть
 save = Сохранить
 
 
+downloading-background-picture = Загрузка фонового изображения
 loading-game-version = Загрузка версии игры
 loading-patch-status = Загрузка статуса патча
 loading-launcher-state = Загрузка статуса лаунчера

@@ -401,9 +401,26 @@ impl SimpleComponent for App {
 
         tracing::info!("Main window initialized");
 
+        let download_picture = model.style == LauncherStyle::Classic;
+
         // Initialize some heavy tasks
         std::thread::spawn(move || {
             tracing::info!("Initializing heavy tasks");
+
+            // Download background picture if needed
+
+            if download_picture {
+                sender.input(AppMsg::UpdateLoadingStatus(Some(Some(tr("downloading-background-picture")))));
+
+                if let Err(err) = crate::background::download_background() {
+                    tracing::error!("Failed to download background picture");
+
+                    sender.input(AppMsg::Toast {
+                        title: tr("background-downloading-failed"),
+                        description: Some(err.to_string())
+                    });
+                }
+            }
 
             // Update initial game version status
 
