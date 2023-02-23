@@ -60,14 +60,14 @@ impl SimpleComponent for AboutDialog {
             ]),
 
             set_debug_info: &[
-                format!("Anime Game core library version: {CORE_VERSION}"),
-                format!("Curl version: {}", CURL_INFO.version()),
-                format!("SSL version: {}", CURL_INFO.ssl_version().unwrap_or("?")),
+                format!("Anime Game core: {CORE_VERSION}"),
+                format!("curl: {}", CURL_INFO.version()),
+                format!("SSL: {}", CURL_INFO.ssl_version().unwrap_or("?")),
                 String::new(),
-                format!("GTK version: {}.{}.{}", gtk::major_version(), gtk::minor_version(), gtk::micro_version()),
-                format!("Libadwaita version: {}.{}.{}", adw::major_version(), adw::minor_version(), adw::micro_version()),
-                format!("Pango version: {}", gtk::pango::version_string()),
-                format!("Cairo version: {}", gtk::cairo::version_string()),
+                format!("GTK: {}.{}.{}", gtk::major_version(), gtk::minor_version(), gtk::micro_version()),
+                format!("libadwaita: {}.{}.{}", adw::major_version(), adw::minor_version(), adw::micro_version()),
+                format!("pango: {}", gtk::pango::version_string()),
+                format!("cairo: {}", gtk::cairo::version_string()),
             ].join("\n"),
 
             set_modal: true,
