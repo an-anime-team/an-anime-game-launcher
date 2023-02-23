@@ -44,21 +44,19 @@ fn main() {
     // Force debug output
     let force_debug = std::env::args().any(|arg| &arg == "--debug");
 
-    // Update RUST_LOG env variable if needed
-    if !std::env::vars().any(|(key, _)| key == "RUST_LOG") {
-        std::env::set_var("RUST_LOG", {
-            if APP_DEBUG || force_debug {
-                "trace"
-            } else {
-                "warn"
-            }
-        });
-    }
-
     // Prepare stdout logger
     let stdout = tracing_subscriber::fmt::layer()
         .pretty()
-        .with_filter(EnvFilter::from_default_env());
+        .with_filter({
+            if APP_DEBUG || force_debug {
+                LevelFilter::TRACE
+            } else {
+                LevelFilter::WARN
+            }
+        })
+        .with_filter(filter_fn(|metadata| {
+            !metadata.target().contains("rustls")
+        }));
 
     // Prepare debug file logger
     let file = match std::fs::File::create(DEBUG_FILE.as_path()) {
@@ -69,7 +67,9 @@ fn main() {
     let debug_log = tracing_subscriber::fmt::layer()
         .with_writer(std::sync::Arc::new(file))
         .with_ansi(false)
-        .with_filter(EnvFilter::from_default_env());
+        .with_filter(filter_fn(|metadata| {
+            !metadata.target().contains("rustls")
+        }));
 
     tracing_subscriber::registry()
         .with(stdout)

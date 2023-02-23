@@ -23,7 +23,7 @@ adw = { package = "libadwaita", version = "0.2", features = ["v1_2"] }
 anime-launcher-sdk = { path = "anime-launcher-sdk" }
 
 tracing = "0.1"
-tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+tracing-subscriber = "0.3"
 
 fluent-templates = "0.8"
 unic-langid = "0.9"
