@@ -110,8 +110,6 @@ impl SimpleAsyncComponent for ProgressBar {
     }
 
     async fn update(&mut self, msg: Self::Input, _sender: AsyncComponentSender<Self>) {
-        tracing::debug!("Called components list event: {:?}", msg);
-
         match msg {
             AppMsg::Reset => {
                 self.fraction = 0.0;

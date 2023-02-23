@@ -119,8 +119,6 @@ impl SimpleAsyncComponent for ComponentVersion {
     }
 
     async fn update(&mut self, msg: Self::Input, sender: AsyncComponentSender<Self>) {
-        tracing::debug!("Called component version [{}] event: {:?} (state = {:?})", self.title, msg, self.state);
-
         match msg {
             AppMsg::ShowRecommendedOnly(state) => self.show_recommended_only = state,
 

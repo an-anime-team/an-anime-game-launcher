@@ -61,8 +61,6 @@ impl SimpleAsyncComponent for ComponentGroup {
     }
 
     async fn update(&mut self, msg: Self::Input, sender: AsyncComponentSender<Self>) {
-        tracing::debug!("Called component group [{}] event: {:?}", self.title, msg);
-
         match msg {
             AppMsg::ShowRecommendedOnly(state) => {
                 self.show_recommended_only = state;

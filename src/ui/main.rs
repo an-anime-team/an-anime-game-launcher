@@ -103,21 +103,23 @@ impl SimpleComponent for App {
             ),
 
             #[watch]
-            add_css_class: match model.style {
-                LauncherStyle::Modern => "",
-                LauncherStyle::Classic => {
-                    if model.loading.is_none() {
-                        "classic-style"
-                    } else {
-                        ""
+            set_css_classes: &{
+                let mut classes = vec!["background", "csd"];
+
+                if APP_DEBUG {
+                    classes.push("devel");
+                }
+
+                match model.style {
+                    LauncherStyle::Modern => (),
+                    LauncherStyle::Classic => {
+                        if model.loading.is_none() {
+                            classes.push("classic-style");
+                        }
                     }
                 }
-            },
 
-            #[watch]
-            remove_css_class: match model.style {
-                LauncherStyle::Modern => "classic-style",
-                LauncherStyle::Classic => ""
+                classes
             },
 
             #[local_ref]
@@ -127,15 +129,9 @@ impl SimpleComponent for App {
 
                     adw::HeaderBar {
                         #[watch]
-                        add_css_class: match model.style {
-                            LauncherStyle::Modern => "",
-                            LauncherStyle::Classic => "flat"
-                        },
-
-                        #[watch]
-                        remove_css_class: match model.style {
-                            LauncherStyle::Modern => "flat",
-                            LauncherStyle::Classic => ""
+                        set_css_classes: match model.style {
+                            LauncherStyle::Modern => &[""],
+                            LauncherStyle::Classic => &["flat"]
                         },
 
                         pack_end = &gtk::MenuButton {
@@ -329,10 +325,6 @@ impl SimpleComponent for App {
         let toast_overlay = &model.toast_overlay;
 
         let widgets = view_output!();
-
-        if crate::APP_DEBUG {
-            widgets.main_window.add_css_class("devel");
-        }
 
         let about_dialog_broker: MessageBroker<AboutDialog> = MessageBroker::new();
 

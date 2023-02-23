@@ -66,8 +66,6 @@ impl<T: std::fmt::Debug + Clone + 'static> SimpleAsyncComponent for ComponentsLi
     }
 
     async fn update(&mut self, msg: Self::Input, sender: AsyncComponentSender<Self>) {
-        tracing::debug!("Called components list event: {:?}", msg);
-
         match msg {
             AppMsg::ShowRecommendedOnly(state) => {
                 self.show_recommended_only = state;

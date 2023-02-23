@@ -5,6 +5,7 @@ use anime_launcher_sdk::anime_game_core::prelude::*;
 use anime_launcher_sdk::anime_game_core::genshin::prelude::*;
 
 use tracing_subscriber::prelude::*;
+use tracing_subscriber::filter::*;
 
 use std::path::PathBuf;
 
@@ -40,33 +41,39 @@ lazy_static::lazy_static! {
 }
 
 fn main() {
-    let stdout = tracing_subscriber::fmt::layer().pretty();
+    // Force debug output
+    let force_debug = std::env::args().any(|arg| &arg == "--debug");
 
+    // Update RUST_LOG env variable if needed
+    if !std::env::vars().any(|(key, _)| key == "RUST_LOG") {
+        std::env::set_var("RUST_LOG", {
+            if APP_DEBUG || force_debug {
+                "trace"
+            } else {
+                "warn"
+            }
+        });
+    }
+
+    // Prepare stdout logger
+    let stdout = tracing_subscriber::fmt::layer()
+        .pretty()
+        .with_filter(EnvFilter::from_default_env());
+
+    // Prepare debug file logger
     let file = match std::fs::File::create(DEBUG_FILE.as_path()) {
         Ok(file) => file,
         Err(error) => panic!("Failed to create debug.log file: {:?}", error)
     };
 
-    let mut debug_log = tracing_subscriber::fmt::layer()
-        .with_writer(std::sync::Arc::new(file));
-
-    debug_log.set_ansi(false);
+    let debug_log = tracing_subscriber::fmt::layer()
+        .with_writer(std::sync::Arc::new(file))
+        .with_ansi(false)
+        .with_filter(EnvFilter::from_default_env());
 
     tracing_subscriber::registry()
-        .with({
-            stdout
-                .with_filter(tracing_subscriber::filter::LevelFilter::from_level({
-                    if APP_DEBUG || std::env::args().any(|arg| &arg == "--debug") {
-                        tracing::Level::TRACE
-                    } else {
-                        tracing::Level::WARN
-                    }
-                }))
-                .with_filter(tracing_subscriber::filter::filter_fn(|metadata| {
-                    !metadata.target().starts_with("rustls")
-                }))
-                .and_then(debug_log)
-        })
+        .with(stdout)
+        .with(debug_log)
         .init();
 
     tracing::info!("Starting application");
