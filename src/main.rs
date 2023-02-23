@@ -65,8 +65,9 @@ fn main() {
     };
 
     let debug_log = tracing_subscriber::fmt::layer()
+        .pretty()
+        // .with_ansi(false) // sadly doesn't work with pretty style
         .with_writer(std::sync::Arc::new(file))
-        .with_ansi(false)
         .with_filter(filter_fn(|metadata| {
             !metadata.target().contains("rustls")
         }));
