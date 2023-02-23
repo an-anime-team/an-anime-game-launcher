@@ -3,6 +3,7 @@ use relm4::prelude::*;
 use anime_launcher_sdk::config;
 use anime_launcher_sdk::anime_game_core::prelude::*;
 use anime_launcher_sdk::anime_game_core::genshin::prelude::*;
+use anime_launcher_sdk::consts::launcher_dir;
 
 use tracing_subscriber::prelude::*;
 use tracing_subscriber::filter::*;
@@ -37,19 +38,35 @@ lazy_static::lazy_static! {
 
     pub static ref GAME: Game = Game::new(&CONFIG.game.path);
 
+    /// Path to launcher folder. Standard is `$HOME/.local/share/anime-game-launcher`
+    pub static ref LAUNCHER_FOLDER: PathBuf = launcher_dir().unwrap_or_default();
+
     /// Path to `debug.log` file. Standard is `$HOME/.local/share/anime-game-launcher/debug.log`
-    pub static ref DEBUG_FILE: PathBuf = anime_launcher_sdk::consts::launcher_dir().unwrap_or_default().join("debug.log");
+    pub static ref DEBUG_FILE: PathBuf = LAUNCHER_FOLDER.join("debug.log");
 
     /// Path to `background` file. Standard is `$HOME/.local/share/anime-game-launcher/background`
-    pub static ref BACKGROUND_FILE: PathBuf = anime_launcher_sdk::consts::launcher_dir().unwrap_or_default().join("background");
+    pub static ref BACKGROUND_FILE: PathBuf = LAUNCHER_FOLDER.join("background");
 
     /// Path to `.keep-background` file. Used to mark launcher that it shouldn't update background picture
     /// 
     /// Standard is `$HOME/.local/share/anime-game-launcher/.keep-background`
-    pub static ref KEEP_BACKGROUND_FILE: PathBuf = anime_launcher_sdk::consts::launcher_dir().unwrap_or_default().join(".keep-background");
+    pub static ref KEEP_BACKGROUND_FILE: PathBuf = LAUNCHER_FOLDER.join(".keep-background");
+
+    /// Path to `.first-run` file. Used to mark launcher that it should run FirstRun window
+    /// 
+    /// Standard is `$HOME/.local/share/anime-game-launcher/.first-run`
+    pub static ref FIRST_RUN_FILE: PathBuf = LAUNCHER_FOLDER.join(".first-run");
 }
 
 fn main() {
+    // Create launcher folder if it isn't
+    if !LAUNCHER_FOLDER.exists() {
+        std::fs::create_dir_all(LAUNCHER_FOLDER.as_path()).expect("Failed to create launcher folder");
+
+        // This one is kinda critical buy well, I can't do something with it
+        std::fs::write(FIRST_RUN_FILE.as_path(), "").expect("Failed to create .first-run file");
+    }
+
     // Force debug output
     let force_debug = std::env::args().any(|arg| &arg == "--debug");
 
@@ -98,13 +115,6 @@ fn main() {
     gtk::glib::set_application_name("An Anime Game Launcher");
     gtk::glib::set_program_name(Some("An Anime Game Launcher"));
 
-    // Set UI language
-    unsafe {
-        i18n::LANG = config::get().unwrap().launcher.language.parse().unwrap();
-
-        tracing::info!("Set UI language to {}", i18n::LANG);
-    }
-
     // Create the app
     let app = RelmApp::new(APP_ID);
 
@@ -120,7 +130,21 @@ fn main() {
             background-size: cover;
         }}
     ", BACKGROUND_FILE.to_string_lossy()));
+    
+    // Run FirstRun window if .first-run file persist
+    if FIRST_RUN_FILE.exists() {
+        app.run::<ui::first_run::main::FirstRunApp>(());
+    }
 
-    // Run the app
-    app.run::<ui::main::App>(());
+    // Run the app if everything's ready
+    else {
+        // Set UI language
+        unsafe {
+            i18n::LANG = config::get().unwrap().launcher.language.parse().unwrap();
+
+            tracing::info!("Set UI language to {}", i18n::LANG);
+        }
+
+        app.run::<ui::main::App>(());
+    }
 }

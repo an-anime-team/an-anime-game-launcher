@@ -106,12 +106,12 @@ impl SimpleAsyncComponent for PreferencesApp {
             #[allow(unused_must_use)]
             PreferencesAppMsg::UpdateGameDiff(diff) => {
                 self.general.sender().send(GeneralAppMsg::UpdateGameDiff(diff));
-            },
+            }
 
             #[allow(unused_must_use)]
             PreferencesAppMsg::UpdatePatch(patch) => {
                 self.general.sender().send(GeneralAppMsg::UpdatePatch(patch));
-            },
+            }
 
             PreferencesAppMsg::Toast { title, description } => unsafe {
                 let toast = adw::Toast::new(&title);

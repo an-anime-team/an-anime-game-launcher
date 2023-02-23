@@ -346,15 +346,13 @@ impl SimpleComponent for App {
         // TODO: reduce code somehow
 
         group.add_action::<LauncherFolder>(&RelmAction::new_stateless(clone!(@strong sender => move |_| {
-            if let Some(dir) = anime_launcher_sdk::consts::launcher_dir() {
-                if let Err(err) = std::process::Command::new("xdg-open").arg(dir).spawn() {
-                    sender.input(AppMsg::Toast {
-                        title: tr("launcher-folder-opening-error"),
-                        description: Some(err.to_string())
-                    });
+            if let Err(err) = std::process::Command::new("xdg-open").arg(LAUNCHER_FOLDER.as_path()).spawn() {
+                sender.input(AppMsg::Toast {
+                    title: tr("launcher-folder-opening-error"),
+                    description: Some(err.to_string())
+                });
 
-                    tracing::error!("Failed to open launcher folder: {err}");
-                }
+                tracing::error!("Failed to open launcher folder: {err}");
             }
         })));
 
