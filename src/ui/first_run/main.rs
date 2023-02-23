@@ -7,19 +7,30 @@ use adw::prelude::*;
 use crate::i18n::tr;
 
 use super::welcome::*;
+use super::tos_warning::*;
+use super::dependencies::*;
 
 static mut MAIN_WINDOW: Option<adw::Window> = None;
 
 pub struct FirstRunApp {
     welcome: AsyncController<WelcomeApp>,
+    tos_warning: AsyncController<TosWarningApp>,
+    dependencies: AsyncController<DependenciesApp>,
 
     toast_overlay: adw::ToastOverlay,
-    carousel: adw::Carousel
+    carousel: adw::Carousel,
+
+    title: String
 }
 
 #[derive(Debug, Clone)]
 pub enum FirstRunAppMsg {
     ScrollToTosWarning,
+    ScrollToDependencies,
+    ScrollToDefaultPaths,
+    ScrollToDownloadComponents,
+    ScrollToChooseVoiceovers,
+    ScrollToFinish,
 
     Toast {
         title: String,
@@ -35,8 +46,10 @@ impl SimpleComponent for FirstRunApp {
 
     view! {
         window = adw::Window {
-            set_title: Some("Welcome"), // TODO: update this based on currently open page
             set_default_size: (780, 560),
+
+            #[watch]
+            set_title: Some(&model.title),
 
             #[local_ref]
             toast_overlay -> adw::ToastOverlay {
@@ -52,10 +65,12 @@ impl SimpleComponent for FirstRunApp {
                         set_allow_mouse_drag: false,
 
                         append = model.welcome.widget(),
+                        append = model.tos_warning.widget(),
+                        append = model.dependencies.widget(),
                     },
 
                     adw::CarouselIndicatorDots {
-                        set_carousel: Some(&carousel),
+                        set_carousel: Some(carousel),
                         set_height_request: 32
                     }
                 }
@@ -66,7 +81,7 @@ impl SimpleComponent for FirstRunApp {
     fn init(
         _parent: Self::Init,
         root: &Self::Root,
-        _sender: ComponentSender<Self>,
+        sender: ComponentSender<Self>,
     ) -> ComponentParts<Self> {
         tracing::info!("Initializing first run window");
 
@@ -76,10 +91,20 @@ impl SimpleComponent for FirstRunApp {
         let model = Self {
             welcome: WelcomeApp::builder()
                 .launch(())
-                .detach(),
+                .forward(sender.input_sender(), std::convert::identity),
+
+            tos_warning: TosWarningApp::builder()
+                .launch(())
+                .forward(sender.input_sender(), std::convert::identity),
+
+            dependencies: DependenciesApp::builder()
+                .launch(())
+                .forward(sender.input_sender(), std::convert::identity),
 
             toast_overlay,
-            carousel
+            carousel,
+
+            title: String::from("Welcome")
         };
 
         let toast_overlay = &model.toast_overlay;
@@ -94,11 +119,43 @@ impl SimpleComponent for FirstRunApp {
         ComponentParts { model, widgets } // will return soon
     }
 
-    fn update(&mut self, msg: Self::Input, sender: ComponentSender<Self>) {
+    fn update(&mut self, msg: Self::Input, _sender: ComponentSender<Self>) {
         tracing::debug!("Called first run window event: {:?}", msg);
 
         match msg {
             FirstRunAppMsg::ScrollToTosWarning => {
+                self.title = String::from("ToS Warning");
+
+                self.carousel.scroll_to(self.tos_warning.widget(), true);
+            }
+
+            FirstRunAppMsg::ScrollToDependencies => {
+                self.title = String::from("Dependencies");
+
+                self.carousel.scroll_to(self.dependencies.widget(), true);
+            }
+
+            FirstRunAppMsg::ScrollToDefaultPaths => {
+                self.title = String::from("Default paths");
+
+                self.carousel.scroll_to(self.welcome.widget(), true);
+            }
+
+            FirstRunAppMsg::ScrollToDownloadComponents => {
+                self.title = String::from("Download components");
+
+                self.carousel.scroll_to(self.welcome.widget(), true);
+            }
+
+            FirstRunAppMsg::ScrollToChooseVoiceovers => {
+                self.title = String::from("Select voiceovers");
+
+                self.carousel.scroll_to(self.welcome.widget(), true);
+            }
+
+            FirstRunAppMsg::ScrollToFinish => {
+                self.title = String::from("Finish");
+
                 self.carousel.scroll_to(self.welcome.widget(), true);
             }
 

@@ -3,7 +3,6 @@ use relm4::component::*;
 
 use adw::prelude::*;
 
-use crate::*;
 use super::main::FirstRunAppMsg;
 
 pub struct WelcomeApp;
