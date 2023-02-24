@@ -144,11 +144,16 @@ impl SimpleAsyncComponent for ComponentVersion {
                     VersionState::NotDownloaded => {
                         if let Ok(config) = config::get() {
                             // todo
-                            let mut installer = Installer::new(&self.download_uri).expect("Failed to create installer instance for this version");
+                            let mut installer = Installer::new(&self.download_uri)
+                                .expect("Failed to create installer instance for this version");
 
                             if let Some(temp) = config.launcher.temp {
                                 installer.set_temp_folder(temp);
                             }
+
+                            installer.downloader
+                                .set_downloading_speed(config.launcher.speed_limit)
+                                .expect("Failed to set downloading speed limit");
 
                             self.state = VersionState::Downloading;
 
