@@ -258,7 +258,7 @@ impl SimpleAsyncComponent for DefaultPathsApp {
             #[allow(unused_must_use)]
             DefaultPathsAppMsg::Continue => {
                 match self.update_config() {
-                    Ok(_) => sender.output(Self::Output::ScrollToDownloadComponents),
+                    Ok(_) => sender.output(Self::Output::ScrollToSelectVoiceovers),
     
                     Err(err) => sender.output(Self::Output::Toast {
                         title: tr("config-update-error"),

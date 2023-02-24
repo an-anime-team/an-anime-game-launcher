@@ -12,6 +12,7 @@ use std::path::PathBuf;
 
 use super::main::FirstRunAppMsg;
 use crate::ui::components::*;
+use crate::i18n::*;
 
 fn get_installer(uri: &str, temp: Option<&PathBuf>, speed_limit: u64) -> anyhow::Result<Installer> {
     let mut installer = Installer::new(uri)?;
@@ -302,7 +303,20 @@ impl SimpleAsyncComponent for DownloadComponentsApp {
                                     }
 
                                     // Create prefix
-                                    InstallerUpdate::UnpackingFinished => sender.input(DownloadComponentsAppMsg::CreatePrefix),
+                                    InstallerUpdate::UnpackingFinished => {
+                                        let mut config = config::get().unwrap_or_default();
+
+                                        config.game.wine.selected = Some(wine.name.clone());
+
+                                        if let Err(err) = config::update_raw(config) {
+                                            sender.output(Self::Output::Toast {
+                                                title: tr("config-update-error"),
+                                                description: Some(err.to_string())
+                                            });
+                                        }
+
+                                        sender.input(DownloadComponentsAppMsg::CreatePrefix);
+                                    },
 
                                     _ => ()
                                 }
@@ -466,7 +480,7 @@ impl SimpleAsyncComponent for DownloadComponentsApp {
 
             #[allow(unused_must_use)]
             DownloadComponentsAppMsg::Continue => {
-                sender.output(Self::Output::ScrollToChooseVoiceovers);
+                sender.output(Self::Output::ScrollToFinish);
             }
 
             DownloadComponentsAppMsg::Exit => {

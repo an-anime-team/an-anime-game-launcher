@@ -10,6 +10,7 @@ use super::welcome::*;
 use super::tos_warning::*;
 use super::dependencies::*;
 use super::default_paths::*;
+use super::select_voiceovers::*;
 use super::download_components::*;
 
 pub static mut MAIN_WINDOW: Option<adw::Window> = None;
@@ -19,6 +20,7 @@ pub struct FirstRunApp {
     tos_warning: AsyncController<TosWarningApp>,
     dependencies: AsyncController<DependenciesApp>,
     default_paths: AsyncController<DefaultPathsApp>,
+    select_voiceovers: AsyncController<SelectVoiceoversApp>,
     download_components: AsyncController<DownloadComponentsApp>,
 
     toast_overlay: adw::ToastOverlay,
@@ -32,8 +34,8 @@ pub enum FirstRunAppMsg {
     ScrollToTosWarning,
     ScrollToDependencies,
     ScrollToDefaultPaths,
+    ScrollToSelectVoiceovers,
     ScrollToDownloadComponents,
-    ScrollToChooseVoiceovers,
     ScrollToFinish,
 
     Toast {
@@ -72,6 +74,7 @@ impl SimpleComponent for FirstRunApp {
                         append = model.tos_warning.widget(),
                         append = model.dependencies.widget(),
                         append = model.default_paths.widget(),
+                        append = model.select_voiceovers.widget(),
                         append = model.download_components.widget(),
                     },
 
@@ -108,6 +111,10 @@ impl SimpleComponent for FirstRunApp {
                 .forward(sender.input_sender(), std::convert::identity),
 
             default_paths: DefaultPathsApp::builder()
+                .launch(())
+                .forward(sender.input_sender(), std::convert::identity),
+
+            select_voiceovers: SelectVoiceoversApp::builder()
                 .launch(())
                 .forward(sender.input_sender(), std::convert::identity),
 
@@ -157,16 +164,16 @@ impl SimpleComponent for FirstRunApp {
                 self.carousel.scroll_to(self.default_paths.widget(), true);
             }
 
+            FirstRunAppMsg::ScrollToSelectVoiceovers => {
+                self.title = String::from("Select voiceovers");
+
+                self.carousel.scroll_to(self.select_voiceovers.widget(), true);
+            }
+
             FirstRunAppMsg::ScrollToDownloadComponents => {
                 self.title = String::from("Download components");
 
                 self.carousel.scroll_to(self.download_components.widget(), true);
-            }
-
-            FirstRunAppMsg::ScrollToChooseVoiceovers => {
-                self.title = String::from("Select voiceovers");
-
-                self.carousel.scroll_to(self.welcome.widget(), true);
             }
 
             FirstRunAppMsg::ScrollToFinish => {
