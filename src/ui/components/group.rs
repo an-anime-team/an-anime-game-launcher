@@ -31,7 +31,6 @@ impl SimpleAsyncComponent for ComponentGroup {
         }
     }
 
-    #[allow(clippy::redundant_clone)]
     async fn init(
         init: Self::Init,
         root: Self::Root,

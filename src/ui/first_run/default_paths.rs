@@ -176,13 +176,14 @@ impl SimpleAsyncComponent for DefaultPathsApp {
     
                     gtk::Button {
                         set_label: "Continue",
-                        add_css_class: "suggested-action",
+                        set_css_classes: &["suggested-action", "pill"],
 
                         connect_clicked => DefaultPathsAppMsg::Continue
                     },
 
                     gtk::Button {
                         set_label: "Exit",
+                        add_css_class: "pill",
 
                         connect_clicked => DefaultPathsAppMsg::Exit
                     }

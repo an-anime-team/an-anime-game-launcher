@@ -50,7 +50,6 @@ pub enum AppMsg {
 
 #[relm4::component(async, pub)]
 impl SimpleAsyncComponent for ProgressBar {
-    /// (caption, display_progress, display_fraction, visible)
     type Init = ProgressBarInit;
     type Input = AppMsg;
     type Output = ();
@@ -89,7 +88,6 @@ impl SimpleAsyncComponent for ProgressBar {
         }
     }
 
-    #[allow(clippy::redundant_clone)]
     async fn init(
         init: Self::Init,
         root: Self::Root,

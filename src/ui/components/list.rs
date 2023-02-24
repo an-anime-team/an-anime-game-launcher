@@ -34,7 +34,6 @@ impl<T: std::fmt::Debug + Clone + 'static> SimpleAsyncComponent for ComponentsLi
         group = adw::PreferencesGroup {}
     }
 
-    #[allow(clippy::redundant_clone)]
     async fn init(
         init: Self::Init,
         root: Self::Root,

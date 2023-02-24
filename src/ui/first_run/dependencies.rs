@@ -120,13 +120,14 @@ impl SimpleAsyncComponent for DependenciesApp {
 
                     gtk::Button {
                         set_label: "Check",
-                        add_css_class: "suggested-action",
+                        set_css_classes: &["suggested-action", "pill"],
 
                         connect_clicked => DependenciesAppMsg::Continue
                     },
 
                     gtk::Button {
                         set_label: "Exit",
+                        add_css_class: "pill",
 
                         connect_clicked => DependenciesAppMsg::Exit
                     }

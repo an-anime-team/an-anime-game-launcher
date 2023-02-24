@@ -55,7 +55,7 @@ impl SimpleAsyncComponent for WelcomeApp {
     
                     gtk::Button {
                         set_label: "Continue",
-                        add_css_class: "suggested-action",
+                        set_css_classes: &["suggested-action", "pill"],
 
                         connect_clicked => WelcomeAppMsg::Continue
                     }

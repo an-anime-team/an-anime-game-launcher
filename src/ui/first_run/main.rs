@@ -10,6 +10,7 @@ use super::welcome::*;
 use super::tos_warning::*;
 use super::dependencies::*;
 use super::default_paths::*;
+use super::download_components::*;
 
 pub static mut MAIN_WINDOW: Option<adw::Window> = None;
 
@@ -18,6 +19,7 @@ pub struct FirstRunApp {
     tos_warning: AsyncController<TosWarningApp>,
     dependencies: AsyncController<DependenciesApp>,
     default_paths: AsyncController<DefaultPathsApp>,
+    download_components: AsyncController<DownloadComponentsApp>,
 
     toast_overlay: adw::ToastOverlay,
     carousel: adw::Carousel,
@@ -70,6 +72,7 @@ impl SimpleComponent for FirstRunApp {
                         append = model.tos_warning.widget(),
                         append = model.dependencies.widget(),
                         append = model.default_paths.widget(),
+                        append = model.download_components.widget(),
                     },
 
                     adw::CarouselIndicatorDots {
@@ -105,6 +108,10 @@ impl SimpleComponent for FirstRunApp {
                 .forward(sender.input_sender(), std::convert::identity),
 
             default_paths: DefaultPathsApp::builder()
+                .launch(())
+                .forward(sender.input_sender(), std::convert::identity),
+
+            download_components: DownloadComponentsApp::builder()
                 .launch(())
                 .forward(sender.input_sender(), std::convert::identity),
 
@@ -151,7 +158,7 @@ impl SimpleComponent for FirstRunApp {
             FirstRunAppMsg::ScrollToDownloadComponents => {
                 self.title = String::from("Download components");
 
-                self.carousel.scroll_to(self.welcome.widget(), true);
+                self.carousel.scroll_to(self.download_components.widget(), true);
             }
 
             FirstRunAppMsg::ScrollToChooseVoiceovers => {
