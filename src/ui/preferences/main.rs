@@ -56,7 +56,7 @@ impl SimpleAsyncComponent for PreferencesApp {
             connect_close_request[sender] => move |_| {
                 if let Err(err) = anime_launcher_sdk::config::flush() {
                     sender.input(PreferencesAppMsg::Toast {
-                        title: tr("config-flush-error"),
+                        title: tr("config-update-error"),
                         description: Some(err.to_string())
                     });
                 }
