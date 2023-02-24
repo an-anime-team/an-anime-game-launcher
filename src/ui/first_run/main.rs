@@ -16,6 +16,8 @@ use super::finish::*;
 
 pub static mut MAIN_WINDOW: Option<adw::Window> = None;
 
+// TODO: add special page for launcher style selection
+
 pub struct FirstRunApp {
     welcome: AsyncController<WelcomeApp>,
     tos_warning: AsyncController<TosWarningApp>,
