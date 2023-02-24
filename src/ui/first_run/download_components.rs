@@ -13,6 +13,7 @@ use std::path::PathBuf;
 use super::main::FirstRunAppMsg;
 use crate::ui::components::*;
 use crate::i18n::*;
+use crate::FIRST_RUN_FILE;
 
 fn get_installer(uri: &str, temp: Option<&PathBuf>, speed_limit: u64) -> anyhow::Result<Installer> {
     let mut installer = Installer::new(uri)?;
@@ -159,8 +160,15 @@ impl SimpleAsyncComponent for DownloadComponentsApp {
                     #[watch]
                     set_icon_name: match model.downloading_wine {
                         Some(true) => Some("emblem-ok"),
-                        Some(false) => Some("process-working"),
+                        Some(false) => None, // Some("process-working"),
                         None => None
+                    },
+
+                    add_prefix = &gtk::Spinner {
+                        set_spinning: true,
+
+                        #[watch]
+                        set_visible: model.downloading_wine == Some(false),
                     }
                 },
 
@@ -170,8 +178,15 @@ impl SimpleAsyncComponent for DownloadComponentsApp {
                     #[watch]
                     set_icon_name: match model.creating_prefix {
                         Some(true) => Some("emblem-ok"),
-                        Some(false) => Some("process-working"),
+                        Some(false) => None, // Some("process-working"),
                         None => None
+                    },
+
+                    add_prefix = &gtk::Spinner {
+                        set_spinning: true,
+
+                        #[watch]
+                        set_visible: model.creating_prefix == Some(false),
                     }
                 },
 
@@ -181,8 +196,15 @@ impl SimpleAsyncComponent for DownloadComponentsApp {
                     #[watch]
                     set_icon_name: match model.downloading_dxvk {
                         Some(true) => Some("emblem-ok"),
-                        Some(false) => Some("process-working"),
+                        Some(false) => None, // Some("process-working"),
                         None => None
+                    },
+
+                    add_prefix = &gtk::Spinner {
+                        set_spinning: true,
+
+                        #[watch]
+                        set_visible: model.downloading_dxvk == Some(false),
                     }
                 },
 
@@ -192,8 +214,15 @@ impl SimpleAsyncComponent for DownloadComponentsApp {
                     #[watch]
                     set_icon_name: match model.applying_dxvk {
                         Some(true) => Some("emblem-ok"),
-                        Some(false) => Some("process-working"),
+                        Some(false) => None, // Some("process-working"),
                         None => None
+                    },
+
+                    add_prefix = &gtk::Spinner {
+                        set_spinning: true,
+
+                        #[watch]
+                        set_visible: model.applying_dxvk == Some(false),
                     }
                 }
             },
@@ -480,6 +509,8 @@ impl SimpleAsyncComponent for DownloadComponentsApp {
 
             #[allow(unused_must_use)]
             DownloadComponentsAppMsg::Continue => {
+                std::fs::remove_file(FIRST_RUN_FILE.as_path());
+
                 sender.output(Self::Output::ScrollToFinish);
             }
 
