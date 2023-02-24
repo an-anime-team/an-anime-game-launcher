@@ -35,9 +35,11 @@ impl SimpleAsyncComponent for DownloadComponentsApp {
             set_hexpand: true,
 
             add = &adw::PreferencesGroup {
+                set_valign: gtk::Align::Center,
+                set_vexpand: true,
+
                 gtk::Label {
                     set_label: "Download components",
-                    set_margin_top: 16,
                     add_css_class: "title-1"
                 }
             },

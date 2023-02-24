@@ -26,9 +26,11 @@ impl SimpleAsyncComponent for TosWarningApp {
             set_hexpand: true,
 
             add = &adw::PreferencesGroup {
+                set_valign: gtk::Align::Center,
+                set_vexpand: true,
+
                 gtk::Label {
                     set_label: "ToS violation warning",
-                    set_margin_top: 8,
                     add_css_class: "title-1"
                 },
 

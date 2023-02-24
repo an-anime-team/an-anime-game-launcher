@@ -32,10 +32,11 @@ impl SimpleAsyncComponent for DependenciesApp {
             set_hexpand: true,
 
             add = &adw::PreferencesGroup {
+                set_valign: gtk::Align::Center,
+                set_vexpand: true,
+
                 gtk::Label {
                     set_label: "You're missing some dependencies!",
-                    set_margin_top: 32,
-
                     add_css_class: "title-1"
                 },
 

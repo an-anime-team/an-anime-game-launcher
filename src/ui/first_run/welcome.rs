@@ -23,10 +23,12 @@ impl SimpleAsyncComponent for WelcomeApp {
             set_hexpand: true,
 
             add = &adw::PreferencesGroup {
+                set_valign: gtk::Align::Center,
+                set_vexpand: true,
+
                 gtk::Image {
                     set_resource: Some("/org/app/images/icon.png"),
-                    set_height_request: 128,
-                    set_margin_top: 16
+                    set_height_request: 128
                 },
 
                 gtk::Label {

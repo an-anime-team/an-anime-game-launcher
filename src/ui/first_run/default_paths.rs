@@ -53,6 +53,9 @@ impl SimpleAsyncComponent for DefaultPathsApp {
             set_hexpand: true,
 
             add = &adw::PreferencesGroup {
+                set_valign: gtk::Align::Center,
+                set_vexpand: true,
+
                 gtk::Label {
                     set_label: "Choose default paths",
                     add_css_class: "title-1"
