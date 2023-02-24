@@ -37,7 +37,7 @@ pub struct ProgressBar {
 }
 
 #[derive(Debug)]
-pub enum AppMsg {
+pub enum ProgressBarMsg {
     Reset,
     UpdateCaption(Option<String>),
 
@@ -51,7 +51,7 @@ pub enum AppMsg {
 #[relm4::component(async, pub)]
 impl SimpleAsyncComponent for ProgressBar {
     type Init = ProgressBarInit;
-    type Input = AppMsg;
+    type Input = ProgressBarMsg;
     type Output = ();
 
     view! {
@@ -109,15 +109,15 @@ impl SimpleAsyncComponent for ProgressBar {
 
     async fn update(&mut self, msg: Self::Input, _sender: AsyncComponentSender<Self>) {
         match msg {
-            AppMsg::Reset => {
+            ProgressBarMsg::Reset => {
                 self.fraction = 0.0;
                 self.downloaded = None;
                 self.caption = None;
             }
 
-            AppMsg::UpdateCaption(caption) => self.caption = caption,
+            ProgressBarMsg::UpdateCaption(caption) => self.caption = caption,
 
-            AppMsg::UpdateProgress(curr, total) => {
+            ProgressBarMsg::UpdateProgress(curr, total) => {
                 self.fraction = curr as f64 / total as f64;
 
                 self.downloaded = Some((
@@ -126,7 +126,7 @@ impl SimpleAsyncComponent for ProgressBar {
                 ));
             }
 
-            AppMsg::UpdateFromState(state) => {
+            ProgressBarMsg::UpdateFromState(state) => {
                 match state {
                     InstallerUpdate::CheckingFreeSpace(_)  => self.caption = Some(tr("checking-free-space")),
                     InstallerUpdate::DownloadingStarted(_) => self.caption = Some(tr("downloading")),
@@ -150,7 +150,7 @@ impl SimpleAsyncComponent for ProgressBar {
                 }
             }
 
-            AppMsg::SetVisible(visible) => self.visible = visible
+            ProgressBarMsg::SetVisible(visible) => self.visible = visible
         }
     }
 }

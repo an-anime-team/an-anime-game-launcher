@@ -211,6 +211,8 @@ impl SimpleAsyncComponent for DefaultPathsApp {
             prefix: config.game.wine.prefix,
             game: config.game.path,
             patch: config.patch.path,
+
+            #[allow(clippy::or_fun_call)]
             temp: config.launcher.temp.unwrap_or(PathBuf::from("/tmp"))
         };
 

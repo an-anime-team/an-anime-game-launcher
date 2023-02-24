@@ -130,6 +130,8 @@ impl SimpleComponent for FirstRunApp {
             MAIN_WINDOW = Some(widgets.window.clone());
         }
 
+        tracing::info!("First run window initialized");
+
         ComponentParts { model, widgets } // will return soon
     }
 

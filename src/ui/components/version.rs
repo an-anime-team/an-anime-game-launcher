@@ -6,7 +6,7 @@ use adw::prelude::*;
 
 use gtk::glib::clone;
 
-use super::progress_bar::AppMsg as ProgressBarMsg;
+use super::progress_bar::ProgressBarMsg;
 
 use anime_launcher_sdk::config;
 use anime_launcher_sdk::anime_game_core::installer::installer::*;
