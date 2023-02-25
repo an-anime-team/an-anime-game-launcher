@@ -1,2 +1,4 @@
 /target
-/assets/locales/TODO.*
+
+flamegraph.svg
+perf.data*

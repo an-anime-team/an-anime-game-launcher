@@ -713,11 +713,12 @@ impl SimpleComponent for App {
                     }
 
                     LauncherState::VoiceUpdateAvailable(_) => todo!(),
-                    LauncherState::VoiceOutdated(_) => todo!(),
                     LauncherState::VoiceNotInstalled(_) => todo!(),
                     LauncherState::GameUpdateAvailable(_) => todo!(),
-                    LauncherState::GameOutdated(_) => todo!(),
                     LauncherState::GameNotInstalled(_) => todo!(),
+
+                    LauncherState::VoiceOutdated(_) |
+                    LauncherState::GameOutdated(_) => ()
                 }
             }
 
