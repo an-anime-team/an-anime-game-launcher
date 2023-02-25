@@ -2,8 +2,13 @@ custom = Свое значение
 none = Нет
 default = По умолчанию
 details = Подробнее
+
 close = Закрыть
 save = Сохранить
+continue = Продолжить
+exit = Выйти
+check = Проверить
+restart = Перезапустить
 
 
 downloading-background-picture = Загрузка фонового изображения

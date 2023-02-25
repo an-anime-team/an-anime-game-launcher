@@ -3,6 +3,7 @@ use relm4::component::*;
 
 use adw::prelude::*;
 
+use crate::i18n::*;
 use super::main::FirstRunAppMsg;
 
 pub struct WelcomeApp;
@@ -36,9 +37,9 @@ impl SimpleAsyncComponent for WelcomeApp {
                     set_margin_top: 32,
                     add_css_class: "title-1"
                 },
-    
+
                 gtk::Label {
-                    set_label: "Hi there! Welcome to the An Anime Game Launcher. We need to prepare some stuff and download default components before you could run the game",
+                    set_label: &tr("welcome-page-message"),
     
                     set_justify: gtk::Justification::Center,
                     set_wrap: true,
@@ -56,7 +57,7 @@ impl SimpleAsyncComponent for WelcomeApp {
                     set_spacing: 8,
     
                     gtk::Button {
-                        set_label: "Continue",
+                        set_label: &tr("continue"),
                         set_css_classes: &["suggested-action", "pill"],
 
                         connect_clicked => WelcomeAppMsg::Continue

@@ -57,7 +57,7 @@ impl SimpleAsyncComponent for DefaultPathsApp {
                 set_vexpand: true,
 
                 gtk::Label {
-                    set_label: "Choose default paths",
+                    set_label: &tr("choose-default-paths"),
                     add_css_class: "title-1"
                 }
             },
@@ -67,7 +67,7 @@ impl SimpleAsyncComponent for DefaultPathsApp {
                 set_vexpand: true,
 
                 adw::ActionRow {
-                    set_title: "Launcher folder",
+                    set_title: &tr("launcher-folder"),
                     set_icon_name: Some("folder-symbolic"),
                     set_activatable: true,
 
@@ -83,8 +83,8 @@ impl SimpleAsyncComponent for DefaultPathsApp {
                 set_vexpand: true,
 
                 adw::ActionRow {
-                    set_title: "I know what I'm doing",
-                    set_subtitle: "Show additional path selection settings. Do as I say...",
+                    set_title: &tr("show-all-folders"),
+                    set_subtitle: &tr("show-all-folders-subtitle"),
 
                     add_suffix = &gtk::Switch {
                         set_valign: gtk::Align::Center,
@@ -102,7 +102,7 @@ impl SimpleAsyncComponent for DefaultPathsApp {
                 set_visible: model.show_additional,
 
                 adw::ActionRow {
-                    set_title: "Runners folder",
+                    set_title: &tr("runners-folder"),
                     set_icon_name: Some("folder-symbolic"),
                     set_activatable: true,
 
@@ -113,7 +113,7 @@ impl SimpleAsyncComponent for DefaultPathsApp {
                 },
 
                 adw::ActionRow {
-                    set_title: "DXVKs folder",
+                    set_title: &tr("dxvks-folder"),
                     set_icon_name: Some("folder-symbolic"),
                     set_activatable: true,
 
@@ -124,7 +124,7 @@ impl SimpleAsyncComponent for DefaultPathsApp {
                 },
 
                 adw::ActionRow {
-                    set_title: "Wine prefix folder",
+                    set_title: &tr("wine-prefix-folder"),
                     set_icon_name: Some("folder-symbolic"),
                     set_activatable: true,
 
@@ -135,7 +135,7 @@ impl SimpleAsyncComponent for DefaultPathsApp {
                 },
 
                 adw::ActionRow {
-                    set_title: "Game installation folder",
+                    set_title: &tr("game-installation-folder"),
                     set_icon_name: Some("folder-symbolic"),
                     set_activatable: true,
 
@@ -146,7 +146,7 @@ impl SimpleAsyncComponent for DefaultPathsApp {
                 },
 
                 adw::ActionRow {
-                    set_title: "Patch folder",
+                    set_title: &tr("patch-folder"),
                     set_icon_name: Some("folder-symbolic"),
                     set_activatable: true,
 
@@ -157,7 +157,7 @@ impl SimpleAsyncComponent for DefaultPathsApp {
                 },
 
                 adw::ActionRow {
-                    set_title: "Temp folder",
+                    set_title: &tr("temp-folder"),
                     set_icon_name: Some("folder-symbolic"),
                     set_activatable: true,
 
@@ -178,14 +178,14 @@ impl SimpleAsyncComponent for DefaultPathsApp {
                     set_spacing: 8,
     
                     gtk::Button {
-                        set_label: "Continue",
+                        set_label: &tr("continue"),
                         set_css_classes: &["suggested-action", "pill"],
 
                         connect_clicked => DefaultPathsAppMsg::Continue
                     },
 
                     gtk::Button {
-                        set_label: "Exit",
+                        set_label: &tr("exit"),
                         add_css_class: "pill",
 
                         connect_clicked => DefaultPathsAppMsg::Exit

@@ -4,6 +4,7 @@ use unic_langid::{langid, LanguageIdentifier};
 fluent_templates::static_loader! {
     static LOCALES = {
         locales: "./assets/locales",
+        core_locales: "./assets/locales/common.ftl",
         fallback_language: "en"
     };
 }

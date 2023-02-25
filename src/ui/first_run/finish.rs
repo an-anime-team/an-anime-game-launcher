@@ -29,12 +29,12 @@ impl SimpleAsyncComponent for FinishApp {
                 set_vexpand: true,
 
                 gtk::Label {
-                    set_label: "Everything's done!",
+                    set_label: &tr("finish-title"),
                     add_css_class: "title-1"
                 },
 
                 gtk::Label {
-                    set_label: "All the basic components were downloaded. Now you can restart the launcher and download the game. Welcome to our club!",
+                    set_label: &tr("finish-message"),
     
                     set_justify: gtk::Justification::Center,
                     set_wrap: true,
@@ -52,14 +52,14 @@ impl SimpleAsyncComponent for FinishApp {
                     set_spacing: 8,
     
                     gtk::Button {
-                        set_label: "Restart",
+                        set_label: &tr("restart"),
                         set_css_classes: &["suggested-action", "pill"],
 
                         connect_clicked => FinishAppMsg::Restart
                     },
 
                     gtk::Button {
-                        set_label: "Exit",
+                        set_label: &tr("exit"),
                         add_css_class: "pill",
 
                         connect_clicked => FinishAppMsg::Exit

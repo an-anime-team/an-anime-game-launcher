@@ -134,7 +134,7 @@ impl SimpleComponent for FirstRunApp {
             toast_overlay,
             carousel,
 
-            title: String::from("Welcome")
+            title: tr("welcome")
         };
 
         let toast_overlay = &model.toast_overlay;
@@ -156,37 +156,37 @@ impl SimpleComponent for FirstRunApp {
 
         match msg {
             FirstRunAppMsg::ScrollToTosWarning => {
-                self.title = String::from("ToS Warning");
+                self.title = tr("tos-violation-warning");
 
                 self.carousel.scroll_to(self.tos_warning.widget(), true);
             }
 
             FirstRunAppMsg::ScrollToDependencies => {
-                self.title = String::from("Dependencies");
+                self.title = tr("dependencies");
 
                 self.carousel.scroll_to(self.dependencies.widget(), true);
             }
 
             FirstRunAppMsg::ScrollToDefaultPaths => {
-                self.title = String::from("Default paths");
+                self.title = tr("default-paths");
 
                 self.carousel.scroll_to(self.default_paths.widget(), true);
             }
 
             FirstRunAppMsg::ScrollToSelectVoiceovers => {
-                self.title = String::from("Select voiceovers");
+                self.title = tr("select-voice-packages");
 
                 self.carousel.scroll_to(self.select_voiceovers.widget(), true);
             }
 
             FirstRunAppMsg::ScrollToDownloadComponents => {
-                self.title = String::from("Download components");
+                self.title = tr("download-components");
 
                 self.carousel.scroll_to(self.download_components.widget(), true);
             }
 
             FirstRunAppMsg::ScrollToFinish => {
-                self.title = String::from("Finish");
+                self.title = tr("finish");
 
                 self.carousel.scroll_to(self.finish.widget(), true);
             }

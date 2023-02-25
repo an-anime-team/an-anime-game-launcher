@@ -5,6 +5,7 @@ use adw::prelude::*;
 
 use anime_launcher_sdk::is_available;
 
+use crate::i18n::*;
 use super::main::FirstRunAppMsg;
 
 pub struct TosWarningApp;
@@ -30,66 +31,16 @@ impl SimpleAsyncComponent for TosWarningApp {
                 set_vexpand: true,
 
                 gtk::Label {
-                    set_label: "ToS violation warning",
+                    set_label: &tr("tos-violation-warning"),
                     add_css_class: "title-1"
-                },
+                }
+            },
 
-                gtk::Box {
-                    set_orientation: gtk::Orientation::Vertical,
-                    set_margin_top: 32,
-                    set_spacing: 12,
-                    set_hexpand: true,
-
-                    // TODO: use some kind of multiline text field
-
-                    gtk::Label {
-                        set_label: "This launcher is an unofficial tool, in no way related to miHoYo nor COGNOSPHERE.",
-
-                        set_wrap: true,
-                        set_halign: gtk::Align::Center
-                    },
-
-                    gtk::Label {
-                        set_label: "This tool is designed to facilitate playing Genshin Impact on Linux, and was built with the sole purpose of installing and running the game with less hassle.",
-
-                        set_wrap: true,
-                        set_halign: gtk::Align::Center
-                    },
-
-                    gtk::Label {
-                        set_label: "It does so by using existing components and making the experience simple for the user.",
-
-                        set_wrap: true,
-                        set_halign: gtk::Align::Center
-                    },
-
-                    gtk::Label {
-                        set_label: "However, some components used here likely break the miHoYo Terms of Service for Genshin Impact.",
-
-                        set_wrap: true,
-                        set_halign: gtk::Align::Center
-                    },
-
-                    gtk::Label {
-                        set_label: "If you are using this launcher, your player account could become identified as TOS-non-compliant by miHoYo/COGNOSPHERE.",
-
-                        set_wrap: true,
-                        set_halign: gtk::Align::Center
-                    },
-
-                    gtk::Label {
-                        set_label: "If this happens, as your account would be disobeying TOS, miHoYo/COGNOSPHERE are free to do what they want. Including banning.",
-
-                        set_wrap: true,
-                        set_halign: gtk::Align::Center
-                    },
-
-                    gtk::Label {
-                        set_label: "If you understand the risk of trying to play the game in an unofficial capacity, press OK and let's go researching the world of Teyvat!",
-
-                        set_wrap: true,
-                        set_halign: gtk::Align::Center
-                    }
+            add = &adw::PreferencesGroup {
+                gtk::Label {
+                    set_label: &tr("tos-violation-warning-message"),
+                    set_wrap: true,
+                    set_selectable: true
                 }
             },
 
@@ -103,14 +54,14 @@ impl SimpleAsyncComponent for TosWarningApp {
                     set_spacing: 8,
     
                     gtk::Button {
-                        set_label: "Continue",
+                        set_label: &tr("continue"),
                         set_css_classes: &["suggested-action", "pill"],
 
                         connect_clicked => TosWarningAppMsg::Continue
                     },
 
                     gtk::Button {
-                        set_label: "Exit",
+                        set_label: &tr("exit"),
                         add_css_class: "pill",
 
                         connect_clicked => TosWarningAppMsg::Exit

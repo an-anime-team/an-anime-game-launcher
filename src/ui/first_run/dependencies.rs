@@ -7,6 +7,7 @@ use anime_launcher_sdk::is_available;
 
 use std::process::{Command, Stdio};
 
+use crate::i18n::*;
 use super::main::FirstRunAppMsg;
 
 pub struct DependenciesApp {
@@ -36,12 +37,12 @@ impl SimpleAsyncComponent for DependenciesApp {
                 set_vexpand: true,
 
                 gtk::Label {
-                    set_label: "You're missing some dependencies!",
+                    set_label: &tr("missing-dependencies-title"),
                     add_css_class: "title-1"
                 },
 
                 gtk::Label {
-                    set_label: "You must install some packages to your system before continue installation process",
+                    set_label: &tr("missing-dependencies-message"),
     
                     set_justify: gtk::Justification::Center,
                     set_wrap: true,
@@ -120,14 +121,14 @@ impl SimpleAsyncComponent for DependenciesApp {
                     set_spacing: 8,
 
                     gtk::Button {
-                        set_label: "Check",
+                        set_label: &tr("check"),
                         set_css_classes: &["suggested-action", "pill"],
 
                         connect_clicked => DependenciesAppMsg::Continue
                     },
 
                     gtk::Button {
-                        set_label: "Exit",
+                        set_label: &tr("exit"),
                         add_css_class: "pill",
 
                         connect_clicked => DependenciesAppMsg::Exit
@@ -149,13 +150,13 @@ impl SimpleAsyncComponent for DependenciesApp {
         };
 
         // Decide which packaging format used in system
-        match Command::new("pacman").stdout(Stdio::null()).spawn() {
+        match Command::new("pacman").stdout(Stdio::null()).stderr(Stdio::null()).spawn() {
             Ok(_) => model.show_arch = true,
 
-            Err(_) => match Command::new("apt").stdout(Stdio::null()).spawn() {
+            Err(_) => match Command::new("apt").stdout(Stdio::null()).stderr(Stdio::null()).spawn() {
                 Ok(_) => model.show_debian = true,
 
-                Err(_) => match Command::new("dnf").stdout(Stdio::null()).spawn() {
+                Err(_) => match Command::new("dnf").stdout(Stdio::null()).stderr(Stdio::null()).spawn() {
                     Ok(_) => model.show_fedora = true,
 
                     Err(_) => {
@@ -181,7 +182,7 @@ impl SimpleAsyncComponent for DependenciesApp {
                 for package in packages {
                     if !is_available(package) {
                         sender.output(Self::Output::Toast {
-                            title: format!("Package is not available: {package}"),
+                            title: tr_args("package-not-available", [("package", package.into())]),
                             description: None
                         });
 

@@ -36,7 +36,7 @@ impl SimpleAsyncComponent for SelectVoiceoversApp {
                 set_vexpand: true,
 
                 gtk::Label {
-                    set_label: "Select voice packages",
+                    set_label: &tr("select-voice-packages"),
                     add_css_class: "title-1"
                 }
             },
@@ -46,7 +46,7 @@ impl SimpleAsyncComponent for SelectVoiceoversApp {
                 set_vexpand: true,
 
                 adw::ActionRow {
-                    set_title: "English",
+                    set_title: &tr("english"),
 
                     #[local_ref]
                     add_suffix = english -> gtk::Switch {
@@ -56,7 +56,7 @@ impl SimpleAsyncComponent for SelectVoiceoversApp {
                 },
 
                 adw::ActionRow {
-                    set_title: "Japanese",
+                    set_title: &tr("japanese"),
 
                     #[local_ref]
                     add_suffix = japanese -> gtk::Switch {
@@ -65,7 +65,7 @@ impl SimpleAsyncComponent for SelectVoiceoversApp {
                 },
 
                 adw::ActionRow {
-                    set_title: "Korean",
+                    set_title: &tr("korean"),
 
                     #[local_ref]
                     add_suffix = korean -> gtk::Switch {
@@ -74,7 +74,7 @@ impl SimpleAsyncComponent for SelectVoiceoversApp {
                 },
 
                 adw::ActionRow {
-                    set_title: "Chinese",
+                    set_title: &tr("chinese"),
 
                     #[local_ref]
                     add_suffix = chinese -> gtk::Switch {
@@ -93,14 +93,14 @@ impl SimpleAsyncComponent for SelectVoiceoversApp {
                     set_spacing: 8,
     
                     gtk::Button {
-                        set_label: "Continue",
+                        set_label: &tr("continue"),
                         set_css_classes: &["suggested-action", "pill"],
 
                         connect_clicked => SelectVoiceoversAppMsg::Continue
                     },
 
                     gtk::Button {
-                        set_label: "Exit",
+                        set_label: &tr("exit"),
                         add_css_class: "pill",
 
                         connect_clicked => SelectVoiceoversAppMsg::Exit

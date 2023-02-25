@@ -2,8 +2,13 @@ custom = Custom
 none = None
 default = Default
 details = Details
+
 close = Close
 save = Save
+continue = Continue
+exit = Exit
+check = Check
+restart = Restart
 
 
 downloading-background-picture = Downloading background picture
