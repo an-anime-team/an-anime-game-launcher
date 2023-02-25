@@ -65,6 +65,13 @@ fn main() {
 
         // This one is kinda critical buy well, I can't do something with it
         std::fs::write(FIRST_RUN_FILE.as_path(), "").expect("Failed to create .first-run file");
+
+        // Set initial launcher language based on system language
+        let mut config = config::get().expect("Failed to get config");
+
+        config.launcher.language = i18n::get_default_lang();
+
+        config::update_raw(config).expect("Failed to update config");
     }
 
     // Force debug output
@@ -130,7 +137,12 @@ fn main() {
             background-size: cover;
         }}
     ", BACKGROUND_FILE.to_string_lossy()));
-    
+
+    // Set UI language
+    i18n::set_lang(config::get().unwrap().launcher.language).expect("Failed to set launcher language");
+
+    tracing::info!("Set UI language to {}", i18n::get_lang());
+
     // Run FirstRun window if .first-run file persist
     if FIRST_RUN_FILE.exists() {
         app.run::<ui::first_run::main::FirstRunApp>(());
@@ -138,13 +150,6 @@ fn main() {
 
     // Run the app if everything's ready
     else {
-        // Set UI language
-        unsafe {
-            i18n::LANG = config::get().unwrap().launcher.language.parse().unwrap();
-
-            tracing::info!("Set UI language to {}", i18n::LANG);
-        }
-
         app.run::<ui::main::App>(());
     }
 }

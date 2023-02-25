@@ -8,20 +8,9 @@ pub struct Background {
 }
 
 pub fn get_uri() -> String {
-    let mut lang;
-
-    unsafe {
-        lang = crate::i18n::LANG.language.as_str().to_string();
-
-        if let Some(region) = crate::i18n::LANG.region {
-            lang += "-";
-            lang += &region.as_str().to_ascii_lowercase();
-        }
-    }
-
     let uri = concat!("https://sdk-os-static.", "ho", "yo", "verse", ".com/hk4e_global/mdk/launcher/api/content?filter_adv=true&key=gcStgarh&launcher_id=10&language=");
 
-    uri.to_owned() + &lang
+    uri.to_owned() + crate::i18n::get_lang()
 }
 
 #[cached::proc_macro::cached(result)]
