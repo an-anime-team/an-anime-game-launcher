@@ -5,6 +5,8 @@ debug-file-opening-error = Failed to open debug file
 
 game-launching-failed = Failed to launch game
 failed-get-selected-wine = Failed to get selected wine version
+downloading-failed = Downloading failed
+unpacking-failed = Unpacking failed
 
 background-downloading-failed = Failed to download background picture
 config-update-error = Failed to save config

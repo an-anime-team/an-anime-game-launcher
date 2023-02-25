@@ -16,6 +16,7 @@ use anime_launcher_sdk::wincompatlib::prelude::*;
 
 use crate::*;
 use crate::i18n::*;
+use crate::ui::components::*;
 
 use super::preferences::main::*;
 use super::about::*;
@@ -34,18 +35,28 @@ static mut PREFERENCES_WINDOW: Option<AsyncController<PreferencesApp>> = None;
 static mut ABOUT_DIALOG: Option<Controller<AboutDialog>> = None;
 
 pub struct App {
+    progress_bar: AsyncController<ProgressBar>,
+
     toast_overlay: adw::ToastOverlay,
 
     loading: Option<Option<String>>,
     style: LauncherStyle,
     state: Option<LauncherState>,
 
-    disable_buttons: bool
+    downloading: bool,
+    disabled_buttons: bool
 }
 
 #[derive(Debug)]
 pub enum AppMsg {
-    UpdateLauncherState,
+    UpdateLauncherState {
+        /// Perform action when game or voice downloading is required
+        /// Needed for chained executions (e.g. update one voice after another)
+        perform_on_download_needed: bool,
+
+        /// Show status gathering progress page
+        show_status_page: bool
+    },
 
     /// Supposed to be called automatically on app's run when the latest game version
     /// was retrieved from the API
@@ -63,6 +74,7 @@ pub enum AppMsg {
 
     OpenPreferences,
     ClosePreferences,
+    SetDownloading(bool),
     DisableButtons(bool),
     PerformAction,
 
@@ -196,6 +208,30 @@ impl SimpleComponent for App {
                                 LauncherStyle::Classic => 800
                             },
 
+                            #[watch]
+                            set_visible: model.downloading,
+
+                            set_vexpand: true,
+
+                            add = model.progress_bar.widget(),
+                        },
+
+                        add = &adw::PreferencesGroup {
+                            #[watch]
+                            set_valign: match model.style {
+                                LauncherStyle::Modern => gtk::Align::Center,
+                                LauncherStyle::Classic => gtk::Align::End
+                            },
+
+                            #[watch]
+                            set_width_request: match model.style {
+                                LauncherStyle::Modern => -1,
+                                LauncherStyle::Classic => 800
+                            },
+
+                            #[watch]
+                            set_visible: !model.downloading,
+
                             set_vexpand: true,
 
                             gtk::Box {
@@ -290,7 +326,7 @@ impl SimpleComponent for App {
                                     }),
 
                                     #[watch]
-                                    set_sensitive: !model.disable_buttons,
+                                    set_sensitive: !model.disabled_buttons,
 
                                     set_hexpand: false,
                                     set_width_request: 200,
@@ -306,7 +342,7 @@ impl SimpleComponent for App {
                                     },
 
                                     #[watch]
-                                    set_sensitive: !model.disable_buttons,
+                                    set_sensitive: !model.disabled_buttons,
 
                                     set_icon_name: "emblem-system-symbolic",
 
@@ -328,14 +364,27 @@ impl SimpleComponent for App {
         tracing::info!("Initializing main window");
 
         let model = App {
+            progress_bar: ProgressBar::builder()
+                .launch(ProgressBarInit {
+                    caption: None,
+                    display_progress: true,
+                    display_fraction: true,
+                    visible: true
+                })
+                .detach(),
+
             toast_overlay: adw::ToastOverlay::new(),
 
             loading: Some(None),
             style: CONFIG.launcher.style,
             state: None,
 
-            disable_buttons: false
+            downloading: false,
+            disabled_buttons: false
         };
+
+        model.progress_bar.widget().set_halign(gtk::Align::Center);
+        model.progress_bar.widget().set_width_request(360);
 
         let toast_overlay = &model.toast_overlay;
 
@@ -476,7 +525,10 @@ impl SimpleComponent for App {
             tracing::info!("Updated patch status");
 
             // Update launcher state
-            sender.input(AppMsg::UpdateLauncherState);
+            sender.input(AppMsg::UpdateLauncherState {
+                perform_on_download_needed: false,
+                show_status_page: true
+            });
 
             // Mark app as loaded
             unsafe {
@@ -493,25 +545,29 @@ impl SimpleComponent for App {
         tracing::debug!("Called main window event: {:?}", msg);
 
         match msg {
-            AppMsg::UpdateLauncherState => {
-                sender.input(AppMsg::SetLoadingStatus(Some(Some(tr("loading-launcher-state")))));
+            AppMsg::UpdateLauncherState { perform_on_download_needed, show_status_page } => {
+                if show_status_page {
+                    sender.input(AppMsg::SetLoadingStatus(Some(Some(tr("loading-launcher-state")))));
+                }
 
                 let updater = clone!(@strong sender => move |state| {
                     use anime_launcher_sdk::states::StateUpdating;
-    
-                    match state {
-                        StateUpdating::Game => {
-                            sender.input(AppMsg::SetLoadingStatus(Some(Some(tr("loading-launcher-state--game")))));
-                        }
-    
-                        StateUpdating::Voice(locale) => {
-                            sender.input(AppMsg::SetLoadingStatus(Some(Some(tr_args("loading-launcher-state--voice", [
-                                ("locale", locale.to_name().to_owned().into())
-                            ])))));
-                        }
-    
-                        StateUpdating::Patch => {
-                            sender.input(AppMsg::SetLoadingStatus(Some(Some(tr("loading-launcher-state--patch")))));
+
+                    if show_status_page {
+                        match state {
+                            StateUpdating::Game => {
+                                sender.input(AppMsg::SetLoadingStatus(Some(Some(tr("loading-launcher-state--game")))));
+                            }
+
+                            StateUpdating::Voice(locale) => {
+                                sender.input(AppMsg::SetLoadingStatus(Some(Some(tr_args("loading-launcher-state--voice", [
+                                    ("locale", locale.to_name().to_owned().into())
+                                ])))));
+                            }
+
+                            StateUpdating::Patch => {
+                                sender.input(AppMsg::SetLoadingStatus(Some(Some(tr("loading-launcher-state--patch")))));
+                            }
                         }
                     }
                 });
@@ -530,8 +586,26 @@ impl SimpleComponent for App {
                     }
                 };
 
-                sender.input(AppMsg::SetLauncherState(state));
-                sender.input(AppMsg::SetLoadingStatus(None));
+                sender.input(AppMsg::SetLauncherState(state.clone()));
+
+                if show_status_page {
+                    sender.input(AppMsg::SetLoadingStatus(None));
+                }
+
+                if perform_on_download_needed {
+                    if let Some(state) = state {
+                        match state {
+                            LauncherState::VoiceUpdateAvailable(_) |
+                            LauncherState::VoiceNotInstalled(_) |
+                            LauncherState::GameUpdateAvailable(_) |
+                            LauncherState::GameNotInstalled(_) => {
+                                sender.input(AppMsg::PerformAction);
+                            }
+
+                            _ => ()
+                        }
+                    }
+                }
             }
 
             #[allow(unused_must_use)]
@@ -564,8 +638,12 @@ impl SimpleComponent for App {
                 PREFERENCES_WINDOW.as_ref().unwrap_unchecked().widget().hide();
             }
 
+            AppMsg::SetDownloading(state) => {
+                self.downloading = state;
+            }
+
             AppMsg::DisableButtons(state) => {
-                self.disable_buttons = state;
+                self.disabled_buttons = state;
             }
 
             AppMsg::PerformAction => unsafe {
@@ -623,7 +701,7 @@ impl SimpleComponent for App {
 
                             Patch::Testing { version, host, .. } |
                             Patch::Available { version, host, .. } => {
-                                self.disable_buttons = true;
+                                self.disabled_buttons = true;
 
                                 let config = config::get().unwrap();
 
@@ -636,10 +714,12 @@ impl SimpleComponent for App {
                                         Ok(true) => synced = true,
 
                                         Ok(false) => {
-                                            match applier.sync(host) {
+                                            match applier.sync(&host) {
                                                 Ok(true) => synced = true,
 
                                                 Ok(false) => {
+                                                    tracing::error!("Failed to sync patch folder with remote: {host}");
+
                                                     sender.input(AppMsg::Toast {
                                                         title: tr("patch-sync-failed"),
                                                         description: None
@@ -647,6 +727,8 @@ impl SimpleComponent for App {
                                                 }
 
                                                 Err(err) => {
+                                                    tracing::error!("Failed to sync patch folder with remote: {host}: {err}");
+
                                                     sender.input(AppMsg::Toast {
                                                         title: tr("patch-sync-failed"),
                                                         description: Some(err.to_string())
@@ -656,6 +738,8 @@ impl SimpleComponent for App {
                                         }
 
                                         Err(err) => {
+                                            tracing::error!("Failed to compare local patch folder with remote: {host}");
+
                                             sender.input(AppMsg::Toast {
                                                 title: tr("patch-state-check-failed"),
                                                 description: Some(err.to_string())
@@ -665,6 +749,8 @@ impl SimpleComponent for App {
 
                                     if synced {
                                         if let Err(err) = applier.apply(&config.game.path, version, config.patch.root) {
+                                            tracing::error!("Failed to patch the game using remote: {host}");
+
                                             sender.input(AppMsg::Toast {
                                                 title: tr("game-patching-error"),
                                                 description: Some(err.to_string())
@@ -673,7 +759,10 @@ impl SimpleComponent for App {
                                     }
 
                                     sender.input(AppMsg::DisableButtons(false));
-                                    sender.input(AppMsg::UpdateLauncherState);
+                                    sender.input(AppMsg::UpdateLauncherState {
+                                        perform_on_download_needed: false,
+                                        show_status_page: true
+                                    });
                                 });
                             }
                         }
@@ -694,6 +783,8 @@ impl SimpleComponent for App {
                                         .with_arch(WineArch::Win64);
 
                                     if let Err(err) = wine.update_prefix(&config.game.wine.prefix) {
+                                        tracing::error!("Failed to create wine prefix");
+
                                         sender.input(AppMsg::Toast {
                                             title: tr("wine-prefix-update-failed"),
                                             description: Some(err.to_string())
@@ -701,21 +792,83 @@ impl SimpleComponent for App {
                                     }
 
                                     sender.input(AppMsg::DisableButtons(true));
-                                    sender.input(AppMsg::UpdateLauncherState);
+                                    sender.input(AppMsg::UpdateLauncherState {
+                                        perform_on_download_needed: false,
+                                        show_status_page: true
+                                    });
                                 });
                             }
 
-                            None => sender.input(AppMsg::Toast {
-                                title: tr("failed-get-selected-wine"),
-                                description: None
-                            })
+                            None => {
+                                tracing::error!("Failed to get selected wine executable");
+
+                                sender.input(AppMsg::Toast {
+                                    title: tr("failed-get-selected-wine"),
+                                    description: None
+                                });
+                            }
                         }
                     }
 
-                    LauncherState::VoiceUpdateAvailable(_) => todo!(),
-                    LauncherState::VoiceNotInstalled(_) => todo!(),
-                    LauncherState::GameUpdateAvailable(_) => todo!(),
-                    LauncherState::GameNotInstalled(_) => todo!(),
+                    LauncherState::VoiceUpdateAvailable(diff) |
+                    LauncherState::VoiceNotInstalled(diff) |
+                    LauncherState::GameUpdateAvailable(diff) |
+                    LauncherState::GameNotInstalled(diff) => {
+                        self.downloading = true;
+
+                        let progress_bar_input = self.progress_bar.sender().clone();
+
+                        // TODO: add speed limit
+                        std::thread::spawn(clone!(@strong diff => move || {
+                            let config = config::get().unwrap();
+
+                            #[allow(unused_must_use)]
+                            let result = diff.install_to_by(config.game.path, config.launcher.temp, clone!(@strong sender => move |state| {
+                                match &state {
+                                    InstallerUpdate::DownloadingError(err) => {
+                                        let err: std::io::Error = err.clone().into();
+
+                                        tracing::error!("Downloading failed: {err}");
+
+                                        sender.input(AppMsg::Toast {
+                                            title: tr("downloading-failed"),
+                                            description: Some(err.to_string())
+                                        });
+                                    }
+
+                                    InstallerUpdate::UnpackingError(err) => {
+                                        tracing::error!("Unpacking failed: {err}");
+
+                                        sender.input(AppMsg::Toast {
+                                            title: tr("unpacking-failed"),
+                                            description: Some(err.clone())
+                                        });
+                                    }
+
+                                    _ => ()
+                                }
+
+                                progress_bar_input.send(ProgressBarMsg::UpdateFromState(state));
+                            }));
+
+                            if let Err(err) = result {
+                                let err: std::io::Error = err.into();
+
+                                tracing::error!("Downloading failed: {err}");
+
+                                sender.input(AppMsg::Toast {
+                                    title: tr("downloading-failed"),
+                                    description: Some(err.to_string())
+                                });
+                            }
+
+                            sender.input(AppMsg::SetDownloading(false));
+                            sender.input(AppMsg::UpdateLauncherState {
+                                perform_on_download_needed: true,
+                                show_status_page: false
+                            });
+                        }));
+                    }
 
                     LauncherState::VoiceOutdated(_) |
                     LauncherState::GameOutdated(_) => ()
