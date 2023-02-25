@@ -10,37 +10,31 @@ fluent_templates::static_loader! {
 }
 
 /// Map of supported languages
-pub const SUPPORTED_LANGUAGES: &[(&str, LanguageIdentifier)] = &[
-    ("en-us", langid!("en")),
-    ("ru-ru", langid!("ru"))
+pub const SUPPORTED_LANGUAGES: &[LanguageIdentifier] = &[
+    langid!("en"),
+    langid!("ru")
 ];
 
 static mut LANG: LanguageIdentifier = langid!("en");
 
 /// Set launcher language
-pub fn set_lang<T: AsRef<str>>(lang: T) -> anyhow::Result<()> {
-    for (key, id) in SUPPORTED_LANGUAGES {
-        if key == &lang.as_ref() {
-            unsafe {
-                LANG = id.to_owned()
-            }
-
-            return Ok(());
+pub fn set_lang(lang: LanguageIdentifier) -> anyhow::Result<()> {
+    if SUPPORTED_LANGUAGES.iter().any(|item| item.language == lang.language) {
+        unsafe {
+            LANG = lang
         }
+
+        Ok(())
     }
 
-    anyhow::bail!("Language {} is not supported", lang.as_ref())
+    else {
+        anyhow::bail!("Language '{lang}' is not supported")
+    }
 }
 
 /// Get launcher language
-pub fn get_lang() -> &'static str {
-    for (key, lang) in SUPPORTED_LANGUAGES {
-        if lang == unsafe { &LANG } {
-            return key;
-        }
-    }
-
-    unreachable!()
+pub fn get_lang() -> LanguageIdentifier {
+    unsafe { LANG.clone() }
 }
 
 /// Get system language or default language if system one is not supported
@@ -49,25 +43,24 @@ pub fn get_lang() -> &'static str {
 /// - `LC_ALL`
 /// - `LC_MESSAGES`
 /// - `LANG`
-pub fn get_default_lang() -> String {
+pub fn get_default_lang() -> LanguageIdentifier {
     let lang = std::env::var("LC_ALL")
         .unwrap_or_else(|_| std::env::var("LC_MESSAGES")
         .unwrap_or_else(|_| std::env::var("LANG")
         .unwrap_or_else(|_| String::from("en_US.UTF-8"))));
 
-    let lang = lang.split('.')
-        .next()
-        .unwrap_or("en_US")
-        .replace('_', "-")
-        .to_ascii_lowercase();
+    lang.parse().unwrap_or_else(|_| langid!("en-us"))
+}
 
-    for (key, _) in SUPPORTED_LANGUAGES {
-        if key == &lang {
-            return lang;
-        }
+pub fn format_lang(lang: LanguageIdentifier) -> String {
+    let mut formatted = lang.language.to_string();
+
+    if let Some(region) = lang.region {
+        formatted += "-";
+        formatted += &region.to_string().to_ascii_lowercase();
     }
 
-    String::from("en-us")
+    formatted
 }
 
 /// Get translated message by key

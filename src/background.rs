@@ -10,7 +10,7 @@ pub struct Background {
 pub fn get_uri() -> String {
     let uri = concat!("https://sdk-os-static.", "ho", "yo", "verse", ".com/hk4e_global/mdk/launcher/api/content?filter_adv=true&key=gcStgarh&launcher_id=10&language=");
 
-    uri.to_owned() + crate::i18n::get_lang()
+    uri.to_owned() + &crate::i18n::format_lang(crate::i18n::get_lang())
 }
 
 #[cached::proc_macro::cached(result)]

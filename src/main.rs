@@ -69,7 +69,7 @@ fn main() {
         // Set initial launcher language based on system language
         let mut config = config::get().expect("Failed to get config");
 
-        config.launcher.language = i18n::get_default_lang();
+        config.launcher.language = i18n::format_lang(i18n::get_default_lang());
 
         config::update_raw(config).expect("Failed to update config");
     }
@@ -139,7 +139,9 @@ fn main() {
     ", BACKGROUND_FILE.to_string_lossy()));
 
     // Set UI language
-    i18n::set_lang(config::get().unwrap().launcher.language).expect("Failed to set launcher language");
+    let lang = config::get().unwrap().launcher.language.parse().expect("Wrong language format used in config");
+
+    i18n::set_lang(lang).expect("Failed to set launcher language");
 
     tracing::info!("Set UI language to {}", i18n::get_lang());
 
