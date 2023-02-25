@@ -38,11 +38,11 @@ pub struct GeneralApp {
 pub enum GeneralAppMsg {
     /// Supposed to be called automatically on app's run when the latest game version
     /// was retrieved from the API
-    UpdateGameDiff(Option<VersionDiff>),
+    SetGameDiff(Option<VersionDiff>),
 
     /// Supposed to be called automatically on app's run when the latest patch version
     /// was retrieved from remote repos
-    UpdatePatch(Option<Patch>),
+    SetPatch(Option<Patch>),
 
     Toast {
         title: String,
@@ -522,11 +522,11 @@ impl SimpleAsyncComponent for GeneralApp {
         tracing::debug!("Called general settings event: {:?}", msg);
 
         match msg {
-            GeneralAppMsg::UpdateGameDiff(diff) => {
+            GeneralAppMsg::SetGameDiff(diff) => {
                 self.game_diff = diff;
             }
 
-            GeneralAppMsg::UpdatePatch(patch) => {
+            GeneralAppMsg::SetPatch(patch) => {
                 self.patch = patch;
             }
 
@@ -553,7 +553,7 @@ impl SimpleAsyncComponent for GeneralApp {
 
                 self.style = style;
 
-                sender.output(Self::Output::UpdateLauncherStyle(style));
+                sender.output(Self::Output::SetLauncherStyle(style));
             }
 
             #[allow(unused_must_use)]

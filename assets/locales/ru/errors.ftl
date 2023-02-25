@@ -10,6 +10,10 @@ config-update-error = Ошибка сохранения настроек
 wine-prefix-update-failed = Ошибка обновления префикса Wine
 dxvk-install-failed = Ошибка установки DXVK
 
+game-diff-finding-error = Не удалось вычислить обновление игры
+patch-info-fetching-error = Не удалось получить информацию о патче
+launcher-state-updating-error = Не удалось обновить состояние лаунчера
+
 package-not-available = Пакет недоступен: {$package}
 wine-download-error = Ошибка скачивания Wine
 wine-unpack-errror = Ошибка распаковки Wine
@@ -17,3 +21,7 @@ wine-install-failed = Ошибка установки Wine
 dxvk-download-error = Ошибка скачивания DXVK
 dxvk-unpack-error = Ошибка распаковки DXVK
 dxvk-apply-error = Не удалось применить DXVK
+
+patch-sync-failed = Ошибка синхронизации папки патча
+patch-state-check-failed = Ошибка проверки статуса папки патча
+game-patching-error = Не удалось установить патч игры

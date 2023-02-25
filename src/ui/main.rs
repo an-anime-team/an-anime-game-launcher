@@ -37,32 +37,38 @@ pub struct App {
 
     loading: Option<Option<String>>,
     style: LauncherStyle,
-    state: Option<LauncherState>
+    state: Option<LauncherState>,
+
+    disable_buttons: bool
 }
 
 #[derive(Debug)]
 pub enum AppMsg {
+    UpdateLauncherState,
+
     /// Supposed to be called automatically on app's run when the latest game version
     /// was retrieved from the API
-    UpdateGameDiff(Option<VersionDiff>),
+    SetGameDiff(Option<VersionDiff>),
 
     /// Supposed to be called automatically on app's run when the latest patch version
     /// was retrieved from remote repos
-    UpdatePatch(Option<Patch>),
+    SetPatch(Option<Patch>),
 
     /// Supposed to be called automatically on app's run when the launcher state was chosen
-    UpdateLauncherState(Option<LauncherState>),
+    SetLauncherState(Option<LauncherState>),
+
+    SetLauncherStyle(LauncherStyle),
+    SetLoadingStatus(Option<Option<String>>),
+
+    OpenPreferences,
+    ClosePreferences,
+    DisableButtons(bool),
+    PerformAction,
 
     Toast {
         title: String,
         description: Option<String>
-    },
-
-    UpdateLoadingStatus(Option<Option<String>>),
-    OpenPreferences,
-    ClosePreferences,
-    UpdateLauncherStyle(LauncherStyle),
-    PerformAction
+    }
 }
 
 #[relm4::component(pub)]
@@ -282,6 +288,9 @@ impl SimpleComponent for App {
                                         _ => String::new()
                                     }),
 
+                                    #[watch]
+                                    set_sensitive: !model.disable_buttons,
+
                                     set_hexpand: false,
                                     set_width_request: 200,
 
@@ -294,6 +303,9 @@ impl SimpleComponent for App {
                                         LauncherStyle::Modern => -1,
                                         LauncherStyle::Classic => 40
                                     },
+
+                                    #[watch]
+                                    set_sensitive: !model.disable_buttons,
 
                                     set_icon_name: "emblem-system-symbolic",
 
@@ -319,7 +331,9 @@ impl SimpleComponent for App {
 
             loading: Some(None),
             style: CONFIG.launcher.style,
-            state: None
+            state: None,
+
+            disable_buttons: false
         };
 
         let toast_overlay = &model.toast_overlay;
@@ -408,7 +422,7 @@ impl SimpleComponent for App {
             // Download background picture if needed
 
             if download_picture {
-                sender.input(AppMsg::UpdateLoadingStatus(Some(Some(tr("downloading-background-picture")))));
+                sender.input(AppMsg::SetLoadingStatus(Some(Some(tr("downloading-background-picture")))));
 
                 if let Err(err) = crate::background::download_background() {
                     tracing::error!("Failed to download background picture");
@@ -422,12 +436,17 @@ impl SimpleComponent for App {
 
             // Update initial game version status
 
-            sender.input(AppMsg::UpdateLoadingStatus(Some(Some(tr("loading-game-version")))));
+            sender.input(AppMsg::SetLoadingStatus(Some(Some(tr("loading-game-version")))));
 
-            sender.input(AppMsg::UpdateGameDiff(match GAME.try_get_diff() {
+            sender.input(AppMsg::SetGameDiff(match GAME.try_get_diff() {
                 Ok(diff) => Some(diff),
                 Err(err) => {
-                    tracing::error!("Failed to get game diff: {err}");
+                    tracing::error!("Failed to find game diff: {err}");
+
+                    sender.input(AppMsg::Toast {
+                        title: tr("game-diff-finding-error"),
+                        description: Some(err.to_string())
+                    });
 
                     None
                 }
@@ -437,12 +456,17 @@ impl SimpleComponent for App {
 
             // Update initial patch status
 
-            sender.input(AppMsg::UpdateLoadingStatus(Some(Some(tr("loading-patch-status")))));
+            sender.input(AppMsg::SetLoadingStatus(Some(Some(tr("loading-patch-status")))));
 
-            sender.input(AppMsg::UpdatePatch(match Patch::try_fetch(&CONFIG.patch.servers, None) {
+            sender.input(AppMsg::SetPatch(match Patch::try_fetch(&CONFIG.patch.servers, None) {
                 Ok(patch) => Some(patch),
                 Err(err) => {
                     tracing::error!("Failed to fetch patch info: {err}");
+
+                    sender.input(AppMsg::Toast {
+                        title: tr("patch-info-fetching-error"),
+                        description: Some(err.to_string())
+                    });
 
                     None
                 }
@@ -451,42 +475,7 @@ impl SimpleComponent for App {
             tracing::info!("Updated patch status");
 
             // Update launcher state
-
-            let updater = clone!(@strong sender => move |state| {
-                use anime_launcher_sdk::states::StateUpdating;
-
-                match state {
-                    StateUpdating::Game => {
-                        sender.input(AppMsg::UpdateLoadingStatus(Some(Some(tr("loading-launcher-state--game")))));
-                    }
-
-                    StateUpdating::Voice(locale) => {
-                        sender.input(AppMsg::UpdateLoadingStatus(Some(Some(tr_args("loading-launcher-state--voice", [
-                            ("locale", locale.to_name().to_owned().into())
-                        ])))));
-                    }
-
-                    StateUpdating::Patch => {
-                        sender.input(AppMsg::UpdateLoadingStatus(Some(Some(tr("loading-launcher-state--patch")))));
-                    }
-                }
-            });
-
-            sender.input(AppMsg::UpdateLoadingStatus(Some(Some(tr("loading-launcher-state")))));
-
-            sender.input(AppMsg::UpdateLauncherState(match LauncherState::get_from_config(updater) {
-                Ok(state) => Some(state),
-                Err(err) => {
-                    tracing::error!("Failed to fetch patch info: {err}");
-
-                    None
-                }
-            }));
-
-            tracing::info!("Updated launcher state");
-
-            // Hide loading page
-            sender.input(AppMsg::UpdateLoadingStatus(None));
+            sender.input(AppMsg::UpdateLauncherState);
 
             // Mark app as loaded
             unsafe {
@@ -503,18 +492,201 @@ impl SimpleComponent for App {
         tracing::debug!("Called main window event: {:?}", msg);
 
         match msg {
-            #[allow(unused_must_use)]
-            AppMsg::UpdateGameDiff(diff) => unsafe {
-                PREFERENCES_WINDOW.as_ref().unwrap_unchecked().sender().send(PreferencesAppMsg::UpdateGameDiff(diff));
+            AppMsg::UpdateLauncherState => {
+                sender.input(AppMsg::SetLoadingStatus(Some(Some(tr("loading-launcher-state")))));
+
+                let updater = clone!(@strong sender => move |state| {
+                    use anime_launcher_sdk::states::StateUpdating;
+    
+                    match state {
+                        StateUpdating::Game => {
+                            sender.input(AppMsg::SetLoadingStatus(Some(Some(tr("loading-launcher-state--game")))));
+                        }
+    
+                        StateUpdating::Voice(locale) => {
+                            sender.input(AppMsg::SetLoadingStatus(Some(Some(tr_args("loading-launcher-state--voice", [
+                                ("locale", locale.to_name().to_owned().into())
+                            ])))));
+                        }
+    
+                        StateUpdating::Patch => {
+                            sender.input(AppMsg::SetLoadingStatus(Some(Some(tr("loading-launcher-state--patch")))));
+                        }
+                    }
+                });
+
+                let state = match LauncherState::get_from_config(updater) {
+                    Ok(state) => Some(state),
+                    Err(err) => {
+                        tracing::error!("Failed to update launcher state: {err}");
+
+                        sender.input(AppMsg::Toast {
+                            title: tr("launcher-state-updating-error"),
+                            description: Some(err.to_string())
+                        });
+    
+                        None
+                    }
+                };
+
+                sender.input(AppMsg::SetLauncherState(state));
+                sender.input(AppMsg::SetLoadingStatus(None));
             }
 
             #[allow(unused_must_use)]
-            AppMsg::UpdatePatch(patch) => unsafe {
-                PREFERENCES_WINDOW.as_ref().unwrap_unchecked().sender().send(PreferencesAppMsg::UpdatePatch(patch));
+            AppMsg::SetGameDiff(diff) => unsafe {
+                PREFERENCES_WINDOW.as_ref().unwrap_unchecked().sender().send(PreferencesAppMsg::SetGameDiff(diff));
             }
 
-            AppMsg::UpdateLauncherState(state) => {
+            #[allow(unused_must_use)]
+            AppMsg::SetPatch(patch) => unsafe {
+                PREFERENCES_WINDOW.as_ref().unwrap_unchecked().sender().send(PreferencesAppMsg::SetPatch(patch));
+            }
+
+            AppMsg::SetLauncherState(state) => {
                 self.state = state;
+            }
+
+            AppMsg::SetLoadingStatus(status) => {
+                self.loading = status;
+            }
+
+            AppMsg::SetLauncherStyle(style) => {
+                self.style = style;
+            }
+
+            AppMsg::OpenPreferences => unsafe {
+                PREFERENCES_WINDOW.as_ref().unwrap_unchecked().widget().show();
+            }
+
+            AppMsg::ClosePreferences => unsafe {
+                PREFERENCES_WINDOW.as_ref().unwrap_unchecked().widget().hide();
+            }
+
+            AppMsg::DisableButtons(state) => {
+                self.disable_buttons = state;
+            }
+
+            AppMsg::PerformAction => unsafe {
+                match self.state.as_ref().unwrap_unchecked() {
+                    LauncherState::PatchAvailable(Patch::NotAvailable) |
+                    LauncherState::PredownloadAvailable { .. } |
+                    LauncherState::Launch  => {
+                        if let Err(err) = anime_launcher_sdk::game::run() {
+                            tracing::error!("Failed to launch game: {err}");
+
+                            sender.input(AppMsg::Toast {
+                                title: tr("game-launching-failed"),
+                                description: Some(err.to_string())
+                            });
+                        }
+
+                        else {
+                            MAIN_WINDOW.as_ref().unwrap_unchecked().hide();
+
+                            std::thread::sleep(std::time::Duration::from_secs(2));
+
+                            /*if config.launcher.discord_rpc.enabled {
+                                this.widgets.preferences_stack.enhancements_page.discord_rpc.update(RpcUpdates::Connect);
+                            }*/
+
+                            loop {
+                                std::thread::sleep(std::time::Duration::from_secs(3));
+
+                                match std::process::Command::new("ps").arg("-A").stdout(std::process::Stdio::piped()).output() {
+                                    Ok(output) => {
+                                        let output = String::from_utf8_lossy(&output.stdout);
+
+                                        if !output.contains("GenshinImpact.e") && !output.contains("unlocker.exe") {
+                                            break;
+                                        }
+                                    }
+
+                                    Err(_) => break
+                                }
+                            }
+
+                            /*if config.launcher.discord_rpc.enabled {
+                                this.widgets.preferences_stack.enhancements_page.discord_rpc.update(RpcUpdates::Disconnect);
+                            }*/
+
+                            MAIN_WINDOW.as_ref().unwrap_unchecked().show();
+                        }
+                    }
+
+                    LauncherState::PatchAvailable(patch) => {
+                        match patch.to_owned() {
+                            Patch::NotAvailable |
+                            Patch::Outdated { .. } |
+                            Patch::Preparation { .. } => unreachable!(),
+
+                            Patch::Testing { version, host, .. } |
+                            Patch::Available { version, host, .. } => {
+                                self.disable_buttons = true;
+
+                                let config = config::get().unwrap();
+
+                                std::thread::spawn(move || {
+                                    let applier = PatchApplier::new(&config.patch.path);
+
+                                    let mut synced = false;
+
+                                    match applier.is_sync_with(&host) {
+                                        Ok(true) => synced = true,
+
+                                        Ok(false) => {
+                                            match applier.sync(host) {
+                                                Ok(true) => synced = true,
+
+                                                Ok(false) => {
+                                                    sender.input(AppMsg::Toast {
+                                                        title: tr("patch-sync-failed"),
+                                                        description: None
+                                                    });
+                                                }
+
+                                                Err(err) => {
+                                                    sender.input(AppMsg::Toast {
+                                                        title: tr("patch-sync-failed"),
+                                                        description: Some(err.to_string())
+                                                    });
+                                                }
+                                            }
+                                        }
+
+                                        Err(err) => {
+                                            sender.input(AppMsg::Toast {
+                                                title: tr("patch-state-check-failed"),
+                                                description: Some(err.to_string())
+                                            });
+                                        }
+                                    }
+
+                                    if synced {
+                                        if let Err(err) = applier.apply(&config.game.path, version, config.patch.root) {
+                                            sender.input(AppMsg::Toast {
+                                                title: tr("game-patching-error"),
+                                                description: Some(err.to_string())
+                                            });
+                                        }
+                                    }
+
+                                    sender.input(AppMsg::DisableButtons(false));
+                                    sender.input(AppMsg::UpdateLauncherState);
+                                });
+                            }
+                        }
+                    }
+
+                    LauncherState::WineNotInstalled => todo!(),
+                    LauncherState::PrefixNotExists => todo!(),
+                    LauncherState::VoiceUpdateAvailable(_) => todo!(),
+                    LauncherState::VoiceOutdated(_) => todo!(),
+                    LauncherState::VoiceNotInstalled(_) => todo!(),
+                    LauncherState::GameUpdateAvailable(_) => todo!(),
+                    LauncherState::GameOutdated(_) => todo!(),
+                    LauncherState::GameNotInstalled(_) => todo!(),
+                }
             }
 
             AppMsg::Toast { title, description } => unsafe {
@@ -549,48 +721,6 @@ impl SimpleComponent for App {
                 }
 
                 self.toast_overlay.add_toast(&toast);
-            }
-
-            AppMsg::UpdateLoadingStatus(status) => {
-                self.loading = status;
-            }
-
-            AppMsg::OpenPreferences => unsafe {
-                PREFERENCES_WINDOW.as_ref().unwrap_unchecked().widget().show();
-            }
-
-            AppMsg::ClosePreferences => unsafe {
-                PREFERENCES_WINDOW.as_ref().unwrap_unchecked().widget().hide();
-            }
-
-            AppMsg::UpdateLauncherStyle(style) => {
-                self.style = style;
-            }
-
-            AppMsg::PerformAction => unsafe {
-                match self.state.as_ref().unwrap_unchecked() {
-                    LauncherState::Launch => {
-                        if let Err(err) = anime_launcher_sdk::game::run() {
-                            sender.input(AppMsg::Toast {
-                                title: tr("game-launching-failed"),
-                                description: Some(err.to_string())
-                            });
-
-                            tracing::error!("Failed to launch game: {err}");
-                        }
-                    }
-
-                    LauncherState::PredownloadAvailable { .. } => todo!(),
-                    LauncherState::PatchAvailable(_) => todo!(),
-                    LauncherState::WineNotInstalled => todo!(),
-                    LauncherState::PrefixNotExists => todo!(),
-                    LauncherState::VoiceUpdateAvailable(_) => todo!(),
-                    LauncherState::VoiceOutdated(_) => todo!(),
-                    LauncherState::VoiceNotInstalled(_) => todo!(),
-                    LauncherState::GameUpdateAvailable(_) => todo!(),
-                    LauncherState::GameOutdated(_) => todo!(),
-                    LauncherState::GameNotInstalled(_) => todo!(),
-                }
             }
         }
     }

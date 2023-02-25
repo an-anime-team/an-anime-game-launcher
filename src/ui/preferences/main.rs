@@ -24,17 +24,18 @@ pub struct PreferencesApp {
 pub enum PreferencesAppMsg {
     /// Supposed to be called automatically on app's run when the latest game version
     /// was retrieved from the API
-    UpdateGameDiff(Option<VersionDiff>),
+    SetGameDiff(Option<VersionDiff>),
 
     /// Supposed to be called automatically on app's run when the latest patch version
     /// was retrieved from remote repos
-    UpdatePatch(Option<Patch>),
+    SetPatch(Option<Patch>),
+
+    SetLauncherStyle(LauncherStyle),
 
     Toast {
         title: String,
         description: Option<String>
-    },
-    UpdateLauncherStyle(LauncherStyle)
+    }
 }
 
 #[relm4::component(async, pub)]
@@ -104,13 +105,18 @@ impl SimpleAsyncComponent for PreferencesApp {
 
         match msg {
             #[allow(unused_must_use)]
-            PreferencesAppMsg::UpdateGameDiff(diff) => {
-                self.general.sender().send(GeneralAppMsg::UpdateGameDiff(diff));
+            PreferencesAppMsg::SetGameDiff(diff) => {
+                self.general.sender().send(GeneralAppMsg::SetGameDiff(diff));
             }
 
             #[allow(unused_must_use)]
-            PreferencesAppMsg::UpdatePatch(patch) => {
-                self.general.sender().send(GeneralAppMsg::UpdatePatch(patch));
+            PreferencesAppMsg::SetPatch(patch) => {
+                self.general.sender().send(GeneralAppMsg::SetPatch(patch));
+            }
+
+            #[allow(unused_must_use)]
+            PreferencesAppMsg::SetLauncherStyle(style) => {
+                sender.output(Self::Output::SetLauncherStyle(style));
             }
 
             PreferencesAppMsg::Toast { title, description } => unsafe {
@@ -145,11 +151,6 @@ impl SimpleAsyncComponent for PreferencesApp {
                 }
 
                 PREFERENCES_WINDOW.as_ref().unwrap_unchecked().add_toast(&toast);
-            }
-
-            #[allow(unused_must_use)]
-            PreferencesAppMsg::UpdateLauncherStyle(style) => {
-                sender.output(Self::Output::UpdateLauncherStyle(style));
             }
         }
     }
