@@ -4,6 +4,7 @@ config-file-opening-error = Не удалось открыть файл наст
 debug-file-opening-error = Не удалось открыть файл отладки
 
 game-launching-failed = Не удалось запустить игру
+failed-get-selected-wine = Не удалось найти выбранную версию Wine
 
 background-downloading-failed = Не удалось загрузить фоновое изображение
 config-update-error = Ошибка сохранения настроек

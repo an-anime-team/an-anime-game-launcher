@@ -4,6 +4,7 @@ config-file-opening-error = Failed to open config file
 debug-file-opening-error = Failed to open debug file
 
 game-launching-failed = Failed to launch game
+failed-get-selected-wine = Failed to get selected wine version
 
 background-downloading-failed = Failed to download background picture
 config-update-error = Failed to save config

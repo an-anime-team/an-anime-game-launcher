@@ -12,6 +12,7 @@ use gtk::glib::clone;
 
 use anime_launcher_sdk::config::launcher::LauncherStyle;
 use anime_launcher_sdk::states::LauncherState;
+use anime_launcher_sdk::wincompatlib::prelude::*;
 
 use crate::*;
 use crate::i18n::*;
@@ -679,7 +680,38 @@ impl SimpleComponent for App {
                     }
 
                     LauncherState::WineNotInstalled => todo!(),
-                    LauncherState::PrefixNotExists => todo!(),
+
+                    LauncherState::PrefixNotExists => {
+                        let config = config::get().unwrap();
+
+                        match config.try_get_wine_executable() {
+                            Some(wine) => {
+                                sender.input(AppMsg::DisableButtons(true));
+
+                                std::thread::spawn(move || {
+                                    let wine = Wine::from_binary(wine)
+                                        .with_loader(WineLoader::Current)
+                                        .with_arch(WineArch::Win64);
+
+                                    if let Err(err) = wine.update_prefix(&config.game.wine.prefix) {
+                                        sender.input(AppMsg::Toast {
+                                            title: tr("wine-prefix-update-failed"),
+                                            description: Some(err.to_string())
+                                        });
+                                    }
+
+                                    sender.input(AppMsg::DisableButtons(true));
+                                    sender.input(AppMsg::UpdateLauncherState);
+                                });
+                            }
+
+                            None => sender.input(AppMsg::Toast {
+                                title: tr("failed-get-selected-wine"),
+                                description: None
+                            })
+                        }
+                    }
+
                     LauncherState::VoiceUpdateAvailable(_) => todo!(),
                     LauncherState::VoiceOutdated(_) => todo!(),
                     LauncherState::VoiceNotInstalled(_) => todo!(),
