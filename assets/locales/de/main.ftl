@@ -10,7 +10,7 @@ exit = Beenden
 check = Überprüfen
 restart = Neustarten
 
-
+loading-data = Laden Daten
 downloading-background-picture = Hintergrundbild am Herunterladen
 loading-game-version = Lade version des Spiels
 loading-patch-status = Lade version des Patch
