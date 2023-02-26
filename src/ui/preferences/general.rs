@@ -24,6 +24,8 @@ pub struct GeneralApp {
 
     style: LauncherStyle,
 
+    languages: Vec<String>,
+
     downloaded_wine_versions: Vec<wine::Version>,
     downloaded_dxvk_versions: Vec<dxvk::Version>,
 
@@ -167,25 +169,23 @@ impl SimpleAsyncComponent for GeneralApp {
 
                     // TODO: maybe simplify it by some way? e.g. specify such stuff in i18n mod
 
-                    #[wrap(Some)]
-                    set_model = &gtk::StringList::new(&[
-                        "English",
-                        "Русский"
-                    ]),
+                    set_model: Some(&gtk::StringList::new(&model.languages.iter().map(|lang| lang.as_str()).collect::<Vec<&str>>())),
 
-                    set_selected: match CONFIG.launcher.language.as_str() {
-                        "en-us" => 0,
-                        "ru-ru" => 1,
-                        _ => 0
+                    set_selected: {
+                        let selected = crate::i18n::get_lang().language;
+
+                        SUPPORTED_LANGUAGES.iter()
+                            .position(|lang| lang.language == selected)
+                            .unwrap_or(0) as u32
                     },
 
                     connect_selected_notify => move |row| {
                         if is_ready() {
                             if let Ok(mut config) = config::get() {
-                                config.launcher.language = String::from(*[
-                                    "en-us",
-                                    "ru-ru"
-                                ].get(row.selected() as usize).unwrap_or(&"en-us"));
+                                config.launcher.language = SUPPORTED_LANGUAGES
+                                    .get(row.selected() as usize)
+                                    .unwrap_or(&SUPPORTED_LANGUAGES[0])
+                                    .language.to_string();
     
                                 config::update(config);
                             }
@@ -502,6 +502,8 @@ impl SimpleAsyncComponent for GeneralApp {
             patch: None,
 
             style: CONFIG.launcher.style,
+
+            languages: SUPPORTED_LANGUAGES.iter().map(|lang| tr(lang.language.as_str())).collect(),
 
             downloaded_wine_versions: vec![],
             downloaded_dxvk_versions: vec![],
