@@ -11,6 +11,7 @@ check = Проверить
 restart = Перезапустить
 
 
+loading-data = Загрузка данных
 downloading-background-picture = Загрузка фонового изображения
 loading-game-version = Загрузка версии игры
 loading-patch-status = Загрузка статуса патча

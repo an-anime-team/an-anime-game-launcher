@@ -10,7 +10,7 @@ exit = Exit
 check = Check
 restart = Restart
 
-
+loading-data = Loading data
 downloading-background-picture = Downloading background picture
 loading-game-version = Loading game version
 loading-patch-status = Loading patch status

@@ -13,6 +13,7 @@ use gtk::glib::clone;
 use anime_launcher_sdk::config::launcher::LauncherStyle;
 use anime_launcher_sdk::states::LauncherState;
 use anime_launcher_sdk::wincompatlib::prelude::*;
+use anime_launcher_sdk::components::wine;
 
 use crate::*;
 use crate::i18n::*;
@@ -160,7 +161,7 @@ impl SimpleComponent for App {
                     },
 
                     adw::StatusPage {
-                        set_title: "Loading data",
+                        set_title: &tr("loading-data"),
                         set_icon_name: Some(APP_ID),
                         set_vexpand: true,
 
@@ -352,6 +353,17 @@ impl SimpleComponent for App {
                         }
                     }
                 }
+            },
+
+            connect_close_request[sender] => move |_| {
+                if let Err(err) = config::flush() {
+                    sender.input(AppMsg::Toast {
+                        title: tr("config-update-error"),
+                        description: Some(err.to_string())
+                    });
+                }
+
+                gtk::Inhibit::default()
             }
         }
     }
@@ -545,6 +557,7 @@ impl SimpleComponent for App {
         tracing::debug!("Called main window event: {:?}", msg);
 
         match msg {
+            // TODO: make function from this message like with toast
             AppMsg::UpdateLauncherState { perform_on_download_needed, show_status_page } => {
                 if show_status_page {
                     sender.input(AppMsg::SetLoadingStatus(Some(Some(tr("loading-launcher-state")))));
@@ -577,10 +590,7 @@ impl SimpleComponent for App {
                     Err(err) => {
                         tracing::error!("Failed to update launcher state: {err}");
 
-                        sender.input(AppMsg::Toast {
-                            title: tr("launcher-state-updating-error"),
-                            description: Some(err.to_string())
-                        });
+                        self.toast(tr("launcher-state-updating-error"), Some(err.to_string()));
     
                         None
                     }
@@ -654,10 +664,7 @@ impl SimpleComponent for App {
                         if let Err(err) = anime_launcher_sdk::game::run() {
                             tracing::error!("Failed to launch game: {err}");
 
-                            sender.input(AppMsg::Toast {
-                                title: tr("game-launching-failed"),
-                                description: Some(err.to_string())
-                            });
+                            self.toast(tr("game-launching-failed"), Some(err.to_string()));
                         }
 
                         else {
@@ -768,7 +775,91 @@ impl SimpleComponent for App {
                         }
                     }
 
-                    LauncherState::WineNotInstalled => todo!(),
+                    LauncherState::WineNotInstalled => {
+                        let mut config = config::get().unwrap();
+
+                        match wine::get_downloaded(&config.game.wine.builds) {
+                            Ok(list) => {
+                                if let Some(version) = list.into_iter().find(|version| version.recommended) {
+                                    config.game.wine.selected = Some(version.name);
+
+                                    config::update(config.clone());
+                                }
+
+                                if config.game.wine.selected.is_none() {
+                                    let wine = wine::Version::latest();
+
+                                    match Installer::new(wine.uri) {
+                                        Ok(mut installer) => {
+                                            if let Some(temp_folder) = &config.launcher.temp {
+                                                installer.temp_folder = temp_folder.to_path_buf();
+                                            }
+
+                                            installer.downloader
+                                                .set_downloading_speed(config.launcher.speed_limit)
+                                                .expect("Failed to set downloading speed limit");
+
+                                            let progress_bar_input = self.progress_bar.sender().clone();
+
+                                            self.downloading = true;
+
+                                            std::thread::spawn(clone!(@strong sender => move || {
+                                                #[allow(unused_must_use)]
+                                                installer.install(&config.game.wine.builds, clone!(@strong sender => move |state| {
+                                                    match &state {
+                                                        InstallerUpdate::DownloadingError(err) => {
+                                                            let err: std::io::Error = err.clone().into();
+                    
+                                                            tracing::error!("Downloading failed: {err}");
+                    
+                                                            sender.input(AppMsg::Toast {
+                                                                title: tr("downloading-failed"),
+                                                                description: Some(err.to_string())
+                                                            });
+                                                        }
+                    
+                                                        InstallerUpdate::UnpackingError(err) => {
+                                                            tracing::error!("Unpacking failed: {err}");
+                    
+                                                            sender.input(AppMsg::Toast {
+                                                                title: tr("unpacking-failed"),
+                                                                description: Some(err.clone())
+                                                            });
+                                                        }
+                    
+                                                        _ => ()
+                                                    }
+                    
+                                                    progress_bar_input.send(ProgressBarMsg::UpdateFromState(state));
+                                                }));
+
+                                                config.game.wine.selected = Some(wine.name.clone());
+
+                                                config::update(config);
+
+                                                sender.input(AppMsg::SetDownloading(false));
+                                                sender.input(AppMsg::UpdateLauncherState {
+                                                    perform_on_download_needed: false,
+                                                    show_status_page: true
+                                                });
+                                            }));
+                                        }
+
+                                        Err(err) => self.toast("Failed to init wine version installer", Some(&err.to_string()))
+                                    }
+                                }
+
+                                else {
+                                    sender.input(AppMsg::UpdateLauncherState {
+                                        perform_on_download_needed: false,
+                                        show_status_page: true
+                                    });
+                                }
+                            }
+
+                            Err(err) => self.toast("Failed to list downloaded wine versions", Some(&err.to_string()))
+                        }
+                    }
 
                     LauncherState::PrefixNotExists => {
                         let config = config::get().unwrap();
@@ -875,39 +966,47 @@ impl SimpleComponent for App {
                 }
             }
 
-            AppMsg::Toast { title, description } => unsafe {
-                let toast = adw::Toast::new(&title);
-
-                toast.set_timeout(5);
-
-                if let Some(description) = description {
-                    toast.set_button_label(Some(&tr("details")));
-
-                    let dialog = adw::MessageDialog::new(Some(MAIN_WINDOW.as_ref().unwrap_unchecked()), Some(&title), Some(&description));
-
-                    dialog.add_response("close", &tr("close"));
-                    dialog.add_response("save", &tr("save"));
-
-                    dialog.set_response_appearance("save", adw::ResponseAppearance::Suggested);
-
-                    #[allow(unused_must_use)]
-                    dialog.connect_response(Some("save"), |_, _| {
-                        let result = std::process::Command::new("xdg-open")
-                            .arg(crate::DEBUG_FILE.as_os_str())
-                            .output();
-
-                        if let Err(err) = result {
-                            tracing::error!("Failed to open debug file: {}", err);
-                        }
-                    });
-
-                    toast.connect_button_clicked(move |_| {
-                        dialog.show();
-                    });
-                }
-
-                self.toast_overlay.add_toast(&toast);
-            }
+            AppMsg::Toast { title, description } => self.toast(title, description)
         }
+    }
+}
+
+impl App {
+    pub fn toast<T: AsRef<str>>(&mut self, title: T, description: Option<T>) {
+        let toast = adw::Toast::new(title.as_ref());
+
+        toast.set_timeout(5);
+
+        if let Some(description) = description {
+            toast.set_button_label(Some(&tr("details")));
+
+            let dialog = adw::MessageDialog::new(
+                Some(unsafe { MAIN_WINDOW.as_ref().unwrap_unchecked() }),
+                Some(title.as_ref()),
+                Some(description.as_ref())
+            );
+
+            dialog.add_response("close", &tr("close"));
+            dialog.add_response("save", &tr("save"));
+
+            dialog.set_response_appearance("save", adw::ResponseAppearance::Suggested);
+
+            #[allow(unused_must_use)]
+            dialog.connect_response(Some("save"), |_, _| {
+                let result = std::process::Command::new("xdg-open")
+                    .arg(crate::DEBUG_FILE.as_os_str())
+                    .output();
+
+                if let Err(err) = result {
+                    tracing::error!("Failed to open debug file: {}", err);
+                }
+            });
+
+            toast.connect_button_clicked(move |_| {
+                dialog.show();
+            });
+        }
+
+        self.toast_overlay.add_toast(&toast);
     }
 }
