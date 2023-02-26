@@ -12,12 +12,14 @@ use crate::i18n::tr;
 
 use super::general::*;
 use super::enhancements::*;
+use super::environment::*;
 
 pub static mut PREFERENCES_WINDOW: Option<adw::PreferencesWindow> = None;
 
 pub struct PreferencesApp {
     general: AsyncController<GeneralApp>,
-    enhancements: AsyncController<EnhancementsApp>
+    enhancements: AsyncController<EnhancementsApp>,
+    environment: AsyncController<EnvironmentApp>
 }
 
 #[derive(Debug, Clone)]
@@ -53,6 +55,7 @@ impl SimpleAsyncComponent for PreferencesApp {
 
             add = model.general.widget(),
             add = model.enhancements.widget(),
+            add = model.environment.widget(),
 
             connect_close_request[sender] => move |_| {
                 if let Err(err) = anime_launcher_sdk::config::flush() {
@@ -80,6 +83,10 @@ impl SimpleAsyncComponent for PreferencesApp {
                 .forward(sender.input_sender(), std::convert::identity),
 
             enhancements: EnhancementsApp::builder()
+                .launch(())
+                .detach(),
+
+            environment: EnvironmentApp::builder()
                 .launch(())
                 .detach()
         };

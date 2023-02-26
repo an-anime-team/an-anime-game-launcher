@@ -151,7 +151,7 @@ fn main() {
     ", BACKGROUND_FILE.to_string_lossy()));
 
     // Set UI language
-    let lang = config::get().unwrap().launcher.language.parse().expect("Wrong language format used in config");
+    let lang = CONFIG.launcher.language.parse().expect("Wrong language format used in config");
 
     i18n::set_lang(lang).expect("Failed to set launcher language");
 

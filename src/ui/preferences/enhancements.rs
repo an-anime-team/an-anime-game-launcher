@@ -411,8 +411,4 @@ impl SimpleAsyncComponent for EnhancementsApp {
 
         AsyncComponentParts { model, widgets }
     }
-
-    async fn update(&mut self, msg: Self::Input, _sender: AsyncComponentSender<Self>) {
-        tracing::debug!("Called enhancements settings event: {:?}", msg);
-    }
 }

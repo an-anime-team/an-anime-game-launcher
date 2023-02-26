@@ -200,20 +200,18 @@ impl SimpleAsyncComponent for DefaultPathsApp {
         root: Self::Root,
         _sender: AsyncComponentSender<Self>,
     ) -> AsyncComponentParts<Self> {
-        let config = config::get().unwrap_or_default();
-
         let model = Self {
             show_additional: false,
 
             launcher: LAUNCHER_FOLDER.to_path_buf(),
-            runners: config.game.wine.builds,
-            dxvks: config.game.dxvk.builds,
-            prefix: config.game.wine.prefix,
-            game: config.game.path,
-            patch: config.patch.path,
+            runners: CONFIG.game.wine.builds.clone(),
+            dxvks: CONFIG.game.dxvk.builds.clone(),
+            prefix: CONFIG.game.wine.prefix.clone(),
+            game: CONFIG.game.path.clone(),
+            patch: CONFIG.patch.path.clone(),
 
             #[allow(clippy::or_fun_call)]
-            temp: config.launcher.temp.unwrap_or(PathBuf::from("/tmp"))
+            temp: CONFIG.launcher.temp.clone().unwrap_or(PathBuf::from("/tmp"))
         };
 
         let widgets = view_output!();
