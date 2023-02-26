@@ -69,7 +69,7 @@ fn main() {
         // Set initial launcher language based on system language
         let mut config = config::get().expect("Failed to get config");
 
-        config.launcher.language = i18n::format_lang(i18n::get_default_lang());
+        config.launcher.language = i18n::format_lang(&i18n::get_default_lang());
 
         config::update_raw(config).expect("Failed to update config");
     }
