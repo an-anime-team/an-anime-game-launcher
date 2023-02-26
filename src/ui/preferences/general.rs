@@ -182,10 +182,9 @@ impl SimpleAsyncComponent for GeneralApp {
                     connect_selected_notify => move |row| {
                         if is_ready() {
                             if let Ok(mut config) = config::get() {
-                                config.launcher.language = SUPPORTED_LANGUAGES
+                                config.launcher.language = crate::i18n::format_lang(SUPPORTED_LANGUAGES
                                     .get(row.selected() as usize)
-                                    .unwrap_or(&SUPPORTED_LANGUAGES[0])
-                                    .language.to_string();
+                                    .unwrap_or(&SUPPORTED_LANGUAGES[0]));
     
                                 config::update(config);
                             }

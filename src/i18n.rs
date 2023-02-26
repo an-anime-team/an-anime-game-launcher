@@ -53,7 +53,7 @@ pub fn get_default_lang() -> LanguageIdentifier {
     lang.parse().unwrap_or_else(|_| langid!("en-us"))
 }
 
-pub fn format_lang(lang: LanguageIdentifier) -> String {
+pub fn format_lang(lang: &LanguageIdentifier) -> String {
     let mut formatted = lang.language.to_string();
 
     if let Some(region) = lang.region {
