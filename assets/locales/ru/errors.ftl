@@ -25,6 +25,8 @@ dxvk-download-error = Ошибка скачивания DXVK
 dxvk-unpack-error = Ошибка распаковки DXVK
 dxvk-apply-error = Не удалось применить DXVK
 
+downloaded-wine-list-failed = Не удалось получить список установленных версий Wine
+
 patch-sync-failed = Ошибка синхронизации папки патча
 patch-state-check-failed = Ошибка проверки статуса папки патча
 game-patching-error = Не удалось установить патч игры

@@ -845,7 +845,7 @@ impl SimpleComponent for App {
                                             }));
                                         }
 
-                                        Err(err) => self.toast("Failed to init wine version installer", Some(&err.to_string()))
+                                        Err(err) => self.toast(tr("wine-install-failed"), Some(err.to_string()))
                                     }
                                 }
 
@@ -857,7 +857,7 @@ impl SimpleComponent for App {
                                 }
                             }
 
-                            Err(err) => self.toast("Failed to list downloaded wine versions", Some(&err.to_string()))
+                            Err(err) => self.toast(tr("downloaded-wine-list-failed"), Some(err.to_string()))
                         }
                     }
 

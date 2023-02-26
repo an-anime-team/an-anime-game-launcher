@@ -21,9 +21,11 @@ package-not-available = Package is not available: {$package}
 wine-download-error = Failed to download wine
 wine-unpack-errror = Failed to unpack wine
 wine-install-failed = Failed to install wine
-dxvk-download-error = Failed to download dxvk
-dxvk-unpack-error = Failed to unpack dxvk
+dxvk-download-error = Failed to download DXVK
+dxvk-unpack-error = Failed to unpack DXVK
 dxvk-apply-error = Failed to apply DXVK
+
+downloaded-wine-list-failed = Failed to list downloaded wine versions
 
 patch-sync-failed = Failed to sync patch folder
 patch-state-check-failed = Failed to check patch folder state
