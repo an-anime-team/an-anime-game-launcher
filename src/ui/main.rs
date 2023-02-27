@@ -262,6 +262,8 @@ impl SimpleComponent for App {
                                         LauncherStyle::Classic => 40
                                     },
 
+                                    // TODO: update tooltip for predownloaded update
+
                                     #[watch]
                                     set_tooltip_text: Some(&tr_args("predownload-update", [
                                         ("version", match model.state.as_ref() {
@@ -287,9 +289,41 @@ impl SimpleComponent for App {
                                     #[watch]
                                     set_visible: matches!(model.state.as_ref(), Some(LauncherState::PredownloadAvailable { .. })),
 
-                                    set_icon_name: "document-save-symbolic",
-                                    add_css_class: "warning",
+                                    #[watch]
+                                    set_sensitive: match model.state.as_ref() {
+                                        Some(LauncherState::PredownloadAvailable { game, voices }) => {
+                                            let config = config::get().unwrap();
+                                            let temp = config.launcher.temp.unwrap_or_else(|| PathBuf::from("/tmp"));
 
+                                            let downloaded = temp.join(game.file_name().unwrap()).exists() &&
+                                                voices.iter().all(|voice| temp.join(voice.file_name().unwrap()).exists());
+
+                                            !downloaded
+                                        }
+
+                                        _ => false
+                                    },
+
+                                    #[watch]
+                                    set_css_classes: match model.state.as_ref() {
+                                        Some(LauncherState::PredownloadAvailable { game, voices }) => {
+                                            let config = config::get().unwrap();
+                                            let temp = config.launcher.temp.unwrap_or_else(|| PathBuf::from("/tmp"));
+
+                                            let downloaded = temp.join(game.file_name().unwrap()).exists() &&
+                                                voices.iter().all(|voice| temp.join(voice.file_name().unwrap()).exists());
+
+                                            if downloaded {
+                                                &["success"]
+                                            } else {
+                                                &["warning"]
+                                            }
+                                        }
+
+                                        _ => &["warning"]
+                                    },
+
+                                    set_icon_name: "document-save-symbolic",
                                     set_hexpand: false,
 
                                     connect_clicked => AppMsg::PredownloadUpdate
@@ -731,6 +765,7 @@ impl SimpleComponent for App {
                             }
                         }
 
+                        sender.input(AppMsg::SetDownloading(false));
                         sender.input(AppMsg::UpdateLauncherState {
                             perform_on_download_needed: false,
                             show_status_page: true
