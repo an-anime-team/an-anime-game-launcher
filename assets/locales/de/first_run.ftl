@@ -1,4 +1,4 @@
-welcome = Willkomen
+welcome = Willkommen
 
 welcome-page-message =
     Hallo! Willkommen bei An Anime Game Launcher
@@ -51,5 +51,5 @@ apply-dxvk = DXVK anwenden
 
 
 finish = Fertig
-finish-title = Alles ist fertig!
+finish-title = Alles ist erledigt!
 finish-message = Alle grundlegenden Komponenten wurden heruntergeladen. Jetzt können Sie den Launcher neu starten und das Spiel herunterladen. Willkommen in unserem Club!
