@@ -77,6 +77,8 @@ pub enum AppMsg {
     ClosePreferences,
     SetDownloading(bool),
     DisableButtons(bool),
+
+    PredownloadUpdate,
     PerformAction,
 
     Toast {
@@ -252,6 +254,46 @@ impl SimpleComponent for App {
                                 set_spacing: 8,
 
                                 // TODO: add tooltips
+
+                                gtk::Button {
+                                    #[watch]
+                                    set_width_request: match model.style {
+                                        LauncherStyle::Modern => -1,
+                                        LauncherStyle::Classic => 40
+                                    },
+
+                                    #[watch]
+                                    set_tooltip_text: Some(&tr_args("predownload-update", [
+                                        ("version", match model.state.as_ref() {
+                                            Some(LauncherState::PredownloadAvailable { game, .. }) => game.latest().to_string(),
+                                            _ => String::from("?")
+                                        }.into()),
+
+                                        ("size", match model.state.as_ref() {
+                                            Some(LauncherState::PredownloadAvailable { game, voices }) => {
+                                                let mut size = game.size().unwrap_or((0, 0)).0;
+
+                                                for voice in voices {
+                                                    size += voice.size().unwrap_or((0, 0)).0;
+                                                }
+
+                                                prettify_bytes(size)
+                                            }
+
+                                            _ => String::from("?")
+                                        }.into())
+                                    ])),
+
+                                    #[watch]
+                                    set_visible: matches!(model.state.as_ref(), Some(LauncherState::PredownloadAvailable { .. })),
+
+                                    set_icon_name: "document-save-symbolic",
+                                    add_css_class: "warning",
+
+                                    set_hexpand: false,
+
+                                    connect_clicked => AppMsg::PredownloadUpdate
+                                },
 
                                 gtk::Button {
                                     #[watch]
@@ -654,6 +696,47 @@ impl SimpleComponent for App {
 
             AppMsg::DisableButtons(state) => {
                 self.disabled_buttons = state;
+            }
+
+            #[allow(unused_must_use)]
+            AppMsg::PredownloadUpdate => {
+                if let Some(LauncherState::PredownloadAvailable { game, mut voices }) = self.state.clone() {
+                    let tmp = config::get().unwrap().launcher.temp.unwrap_or_else(|| PathBuf::from("/tmp"));
+
+                    self.downloading = true;
+
+                    let progress_bar_input = self.progress_bar.sender().clone();
+
+                    progress_bar_input.send(ProgressBarMsg::UpdateCaption(Some(tr("downloading"))));
+
+                    let mut diffs: Vec<VersionDiff> = vec![game];
+
+                    diffs.append(&mut voices);
+
+                    std::thread::spawn(move || {
+                        for mut diff in diffs {
+                            let result = diff.download_in(&tmp, clone!(@strong progress_bar_input => move |curr, total| {
+                                progress_bar_input.send(ProgressBarMsg::UpdateProgress(curr, total));
+                            }));
+
+                            if let Err(err) = result {
+                                let err: std::io::Error = err.into();
+
+                                sender.input(AppMsg::Toast {
+                                    title: tr("downloading-failed"),
+                                    description: Some(err.to_string())
+                                });
+
+                                break;
+                            }
+                        }
+
+                        sender.input(AppMsg::UpdateLauncherState {
+                            perform_on_download_needed: false,
+                            show_status_page: true
+                        });
+                    });
+                }
             }
 
             AppMsg::PerformAction => unsafe {

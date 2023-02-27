@@ -31,6 +31,7 @@ download-wine = Wine Herunterladen
 create-prefix = Prefix erstellen
 update = Updaten
 download = Herunterladen
+predownload-update = Pre-download {$version} update ({$size})
 
 main-window--patch-unavailable-tooltip = Die Patch-Server sind nicht verfügbar und der Launcher kann den Patch-Status des Spiels nicht überprüfen. Du darfst das Spiel auf eigene Gefahr spielen.
 main-window--patch-outdated-tooltip = Der Patch ist veraltet oder befindet sich in Vorbereitung und kann daher nicht verwendet werden. Kehren Sie später zurück, um den Status zu sehen.
