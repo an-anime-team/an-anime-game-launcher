@@ -1,7 +1,7 @@
-environment = Environment
-game-command = Game command
-game-command-description = Command used to launch the game. Placeholder %command% is generated automatically by the launcher. For example: gamemoderun '%command%'
-new-variable = New variable
+environment = Umgebung
+game-command = Spielbefehl
+game-command-description = Befehl zum Starten des Spiels. Der Platzhalter %command% wird automatisch vom Launcher generiert. Zum Beispiel: gamemoderun '%command%'
+new-variable = Neue Variable
 name = Name
-value = Value
-add = Add
+value = Wert
+add = Hinzufügen
