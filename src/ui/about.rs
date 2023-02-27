@@ -49,15 +49,20 @@ impl SimpleComponent for AboutDialog {
                 "Nikita Podvirnyy https://github.com/krypt0nn"
             ],
 
-            add_credit_section: (Some("Logo"), &[
-                "@nightany https://pinterest.com/pin/356206651788051017"
-            ]),
-
             add_credit_section: (Some("An Anime Team"), &[
                 "@Marie https://github.com/Mar0xy",
                 "@lane https://github.com/laurinneff",
                 "@jiro-too https://github.com/jiro-too"
             ]),
+
+            set_artists: &[
+                "@nightany https://pinterest.com/pin/356206651788051017"
+            ],
+
+            set_translator_credits: &[
+                "Русский, English — Nikita Podvirnyy https://github.com/krypt0nn",
+                "Deutsch — @Marie https://github.com/Mar0xy"
+            ].join("\n"),
 
             set_debug_info: &[
                 format!("Anime Game core: {CORE_VERSION}"),
@@ -101,8 +106,6 @@ impl SimpleComponent for AboutDialog {
     }
 
     fn update(&mut self, msg: Self::Input, _sender: ComponentSender<Self>) {
-        tracing::debug!("Called about dialog event: {:?}", msg);
-
         match msg {
             AboutDialogMsg::Show => {
                 self.visible = true;
