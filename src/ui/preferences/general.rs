@@ -626,19 +626,25 @@ impl SimpleAsyncComponent for GeneralApp {
 
                         let package = VoicePackage::with_locale(package.locale).unwrap();
 
-                        std::thread::spawn(move || {
-                            if let Err(err) = package.delete_in(&config.game.path) {
-                                tracing::error!("Failed to delete voice package: {:?}", package.locale());
+                        if !package.is_installed_in(&config.game.path) {
+                            std::thread::spawn(move || {
+                                if let Err(err) = package.delete_in(&config.game.path) {
+                                    tracing::error!("Failed to delete voice package: {:?}", package.locale());
+    
+                                    sender.input(GeneralAppMsg::Toast {
+                                        title: tr("voice-package-deletion-error"),
+                                        description: Some(err.to_string())
+                                    });
+                                }
+    
+                                sender.input(GeneralAppMsg::SetVoicePackageSensitivity(index, true));
+                                sender.output(PreferencesAppMsg::UpdateLauncherState);
+                            });
+                        }
 
-                                sender.input(GeneralAppMsg::Toast {
-                                    title: tr("voice-package-deletion-error"),
-                                    description: Some(err.to_string())
-                                });
-                            }
-
+                        else {
                             sender.input(GeneralAppMsg::SetVoicePackageSensitivity(index, true));
-                            sender.output(PreferencesAppMsg::UpdateLauncherState);
-                        });
+                        }
                     }
                 }
             }
