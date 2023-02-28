@@ -34,6 +34,8 @@ pub enum PreferencesAppMsg {
 
     SetLauncherStyle(LauncherStyle),
 
+    UpdateLauncherState,
+
     Toast {
         title: String,
         description: Option<String>
@@ -52,6 +54,9 @@ impl SimpleAsyncComponent for PreferencesApp {
             set_default_size: (700, 560),
             set_hide_on_close: true,
             set_modal: true,
+
+            // FIXME: doesn't work for any reason
+            set_search_enabled: false,
 
             add = model.general.widget(),
             add = model.enhancements.widget(),
@@ -124,6 +129,14 @@ impl SimpleAsyncComponent for PreferencesApp {
             #[allow(unused_must_use)]
             PreferencesAppMsg::SetLauncherStyle(style) => {
                 sender.output(Self::Output::SetLauncherStyle(style));
+            }
+
+            #[allow(unused_must_use)]
+            PreferencesAppMsg::UpdateLauncherState => {
+                sender.output(Self::Output::UpdateLauncherState {
+                    perform_on_download_needed: false,
+                    show_status_page: false
+                });
             }
 
             PreferencesAppMsg::Toast { title, description } => unsafe {

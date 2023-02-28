@@ -12,6 +12,7 @@ background-downloading-failed = Download des Hintergrundbildes fehlgeschlagen
 config-update-error = Speichern der Konfiguration fehlgeschlagen
 wine-prefix-update-failed = Aktualisierung des wine prefix fehlgeschlagen
 dxvk-install-failed = DXVK konnte nicht installiert werden
+voice-package-deletion-error = Failed to delete voice package
 
 game-diff-finding-error = Spiel-Diff nicht gefunden
 patch-info-fetching-error = Patch-Informationen konnten nicht abgerufen werden

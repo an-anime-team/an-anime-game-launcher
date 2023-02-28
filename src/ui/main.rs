@@ -637,6 +637,8 @@ impl SimpleComponent for App {
             AppMsg::UpdateLauncherState { perform_on_download_needed, show_status_page } => {
                 if show_status_page {
                     sender.input(AppMsg::SetLoadingStatus(Some(Some(tr("loading-launcher-state")))));
+                } else {
+                    self.disabled_buttons = true;
                 }
 
                 let updater = clone!(@strong sender => move |state| {
@@ -676,6 +678,8 @@ impl SimpleComponent for App {
 
                 if show_status_page {
                     sender.input(AppMsg::SetLoadingStatus(None));
+                } else {
+                    self.disabled_buttons = false;
                 }
 
                 if perform_on_download_needed {

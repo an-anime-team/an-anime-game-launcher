@@ -1,5 +1,10 @@
 use relm4::prelude::*;
 use relm4::component::*;
+use relm4::factory::{
+    AsyncFactoryVecDeque,
+    AsyncFactoryComponent,
+    AsyncFactorySender
+};
 
 use gtk::prelude::*;
 use adw::prelude::*;
@@ -10,12 +15,92 @@ use anime_launcher_sdk::anime_game_core::prelude::*;
 use anime_launcher_sdk::components::*;
 use anime_launcher_sdk::wincompatlib::prelude::*;
 
+use super::main::PreferencesAppMsg;
 use crate::ui::components;
 use crate::ui::components::*;
 use crate::i18n::*;
 use crate::*;
 
+#[derive(Debug)]
+struct VoicePackageComponent {
+    locale: VoiceLocale,
+    installed: bool,
+    sensitive: bool
+}
+
+#[relm4::factory(async)]
+impl AsyncFactoryComponent for VoicePackageComponent {
+    type Init = (VoiceLocale, bool);
+    type Input = GeneralAppMsg;
+    type Output = GeneralAppMsg;
+    type CommandOutput = ();
+    type ParentInput = GeneralAppMsg;
+    type ParentWidget = adw::ExpanderRow;
+
+    view! {
+        root = adw::ActionRow {
+            set_title: &tr(&self.locale.to_name().to_ascii_lowercase()),
+
+            add_suffix = &gtk::Button {
+                #[watch]
+                set_visible: self.installed,
+
+                #[watch]
+                set_sensitive: self.sensitive,
+
+                set_icon_name: "user-trash-symbolic",
+                add_css_class: "flat",
+                set_valign: gtk::Align::Center,
+
+                connect_clicked[sender, index] => move |_| {
+                    sender.input(GeneralAppMsg::RemoveVoicePackage(index.clone()));
+                }
+            },
+
+            add_suffix = &gtk::Button {
+                #[watch]
+                set_visible: !self.installed,
+
+                #[watch]
+                set_sensitive: self.sensitive,
+
+                set_icon_name: "document-save-symbolic",
+                add_css_class: "flat",
+                set_valign: gtk::Align::Center,
+
+                connect_clicked[sender, index] => move |_| {
+                    sender.input(GeneralAppMsg::AddVoicePackage(index.clone()));
+                }
+            }
+        }
+    }
+
+    fn output_to_parent_input(output: Self::Output) -> Option<Self::ParentInput> {
+        Some(output)
+    }
+
+    async fn init_model(
+        init: Self::Init,
+        _index: &DynamicIndex,
+        _sender: AsyncFactorySender<Self>,
+    ) -> Self {
+        Self {
+            locale: init.0,
+            installed: init.1,
+            sensitive: true
+        }
+    }
+
+    async fn update(&mut self, msg: Self::Input, sender: AsyncFactorySender<Self>) {
+        self.installed = !self.installed;
+
+        sender.output(msg);
+    }
+}
+
 pub struct GeneralApp {
+    voice_packages: AsyncFactoryVecDeque<VoicePackageComponent>,
+
     wine_components: AsyncController<ComponentsList<GeneralAppMsg>>,
     dxvk_components: AsyncController<ComponentsList<GeneralAppMsg>>,
 
@@ -46,27 +131,38 @@ pub enum GeneralAppMsg {
     /// was retrieved from remote repos
     SetPatch(Option<Patch>),
 
+    // If one ever wich to change it to accept VoiceLocale
+    // I'd recommend to use clone!(@strong self.locale as locale => move |_| { .. })
+    // in the VoicePackage component
+    AddVoicePackage(DynamicIndex),
+    RemoveVoicePackage(DynamicIndex),
+    SetVoicePackageSensitivity(DynamicIndex, bool),
+
+    UpdateLauncherStyle(LauncherStyle),
+
+    WineRecommendedOnly(bool),
+    DxvkRecommendedOnly(bool),
+
+    UpdateDownloadedWine,
+    UpdateDownloadedDxvk,
+
+    SelectWine(usize),
+    SelectDxvk(usize),
+
+    ResetWineSelection(usize),
+    ResetDxvkSelection(usize),
+
     Toast {
         title: String,
         description: Option<String>
-    },
-
-    UpdateLauncherStyle(LauncherStyle),
-    WineRecommendedOnly(bool),
-    DxvkRecommendedOnly(bool),
-    UpdateDownloadedWine,
-    UpdateDownloadedDxvk,
-    SelectWine(usize),
-    SelectDxvk(usize),
-    ResetWineSelection(usize),
-    ResetDxvkSelection(usize)
+    }
 }
 
 #[relm4::component(async, pub)]
 impl SimpleAsyncComponent for GeneralApp {
     type Init = ();
     type Input = GeneralAppMsg;
-    type Output = super::main::PreferencesAppMsg;
+    type Output = PreferencesAppMsg;
 
     view! {
         adw::PreferencesPage {
@@ -192,48 +288,9 @@ impl SimpleAsyncComponent for GeneralApp {
                     }
                 },
 
-                adw::ExpanderRow {
-                    set_title: &tr("game-voiceovers"),
-
-                    add_row = &adw::ActionRow {
-                        set_title: &tr("english"),
-
-                        add_suffix = &gtk::Button {
-                            add_css_class: "flat",
-                            set_icon_name: "user-trash-symbolic",
-                            set_valign: gtk::Align::Center
-                        }
-                    },
-
-                    add_row = &adw::ActionRow {
-                        set_title: &tr("japanese"),
-
-                        add_suffix = &gtk::Button {
-                            add_css_class: "flat",
-                            set_icon_name: "user-trash-symbolic",
-                            set_valign: gtk::Align::Center
-                        }
-                    },
-
-                    add_row = &adw::ActionRow {
-                        set_title: &tr("korean"),
-
-                        add_suffix = &gtk::Button {
-                            add_css_class: "flat",
-                            set_icon_name: "user-trash-symbolic",
-                            set_valign: gtk::Align::Center
-                        }
-                    },
-
-                    add_row = &adw::ActionRow {
-                        set_title: &tr("chinese"),
-
-                        add_suffix = &gtk::Button {
-                            add_css_class: "flat",
-                            set_icon_name: "user-trash-symbolic",
-                            set_valign: gtk::Align::Center
-                        }
-                    }
+                #[local_ref]
+                voice_packages -> adw::ExpanderRow {
+                    set_title: &tr("game-voiceovers")
                 },
 
                 gtk::Box {
@@ -474,7 +531,9 @@ impl SimpleAsyncComponent for GeneralApp {
     ) -> AsyncComponentParts<Self> {
         tracing::info!("Initializing general settings");
 
-        let model = Self {
+        let mut model = Self {
+            voice_packages: AsyncFactoryVecDeque::new(adw::ExpanderRow::new(), sender.input_sender()),
+
             wine_components: ComponentsList::builder()
                 .launch(ComponentsListInit {
                     pattern: ComponentsListPattern {
@@ -514,6 +573,15 @@ impl SimpleAsyncComponent for GeneralApp {
             selecting_dxvk_version: false
         };
 
+        for package in VoiceLocale::list() {
+            model.voice_packages.guard().push_back((
+                *package,
+                CONFIG.game.voices.iter().any(|voice| VoiceLocale::from_str(voice) == Some(*package))
+            ));
+        }
+
+        let voice_packages = model.voice_packages.widget();
+
         let widgets = view_output!();
 
         AsyncComponentParts { model, widgets }
@@ -529,6 +597,56 @@ impl SimpleAsyncComponent for GeneralApp {
 
             GeneralAppMsg::SetPatch(patch) => {
                 self.patch = patch;
+            }
+
+            #[allow(unused_must_use)]
+            GeneralAppMsg::AddVoicePackage(index) => {
+                if let Some(package) = self.voice_packages.get(index.current_index()) {
+                    if let Ok(mut config) = config::get() {
+                        if !config.game.voices.iter().any(|voice| VoiceLocale::from_str(voice) == Some(package.locale)) {
+                            config.game.voices.push(package.locale.to_code().to_string());
+
+                            config::update(config);
+    
+                            sender.output(PreferencesAppMsg::UpdateLauncherState);
+                        }
+                    }
+                }
+            }
+
+            #[allow(unused_must_use)]
+            GeneralAppMsg::RemoveVoicePackage(index) => {
+                if let Some(package) = self.voice_packages.guard().get_mut(index.current_index()) {
+                    if let Ok(mut config) = config::get() {
+                        package.sensitive = false;
+
+                        config.game.voices.retain(|voice| VoiceLocale::from_str(voice) != Some(package.locale));
+
+                        config::update(config.clone());
+
+                        let package = VoicePackage::with_locale(package.locale).unwrap();
+
+                        std::thread::spawn(move || {
+                            if let Err(err) = package.delete_in(&config.game.path) {
+                                tracing::error!("Failed to delete voice package: {:?}", package.locale());
+
+                                sender.input(GeneralAppMsg::Toast {
+                                    title: tr("voice-package-deletion-error"),
+                                    description: Some(err.to_string())
+                                });
+                            }
+
+                            sender.input(GeneralAppMsg::SetVoicePackageSensitivity(index, true));
+                            sender.output(PreferencesAppMsg::UpdateLauncherState);
+                        });
+                    }
+                }
+            }
+
+            GeneralAppMsg::SetVoicePackageSensitivity(index, sensitive) => {
+                if let Some(package) = self.voice_packages.guard().get_mut(index.current_index()) {
+                    package.sensitive = sensitive;
+                }
             }
 
             #[allow(unused_must_use)]
@@ -555,11 +673,6 @@ impl SimpleAsyncComponent for GeneralApp {
                 self.style = style;
 
                 sender.output(Self::Output::SetLauncherStyle(style));
-            }
-
-            #[allow(unused_must_use)]
-            GeneralAppMsg::Toast { title, description } => {
-                sender.output(Self::Output::Toast { title, description });
             }
 
             GeneralAppMsg::WineRecommendedOnly(state) => {
@@ -688,6 +801,11 @@ impl SimpleAsyncComponent for GeneralApp {
             GeneralAppMsg::ResetDxvkSelection(index) => {
                 self.selecting_dxvk_version = false;
                 self.selected_dxvk_version = index as u32;
+            }
+
+            #[allow(unused_must_use)]
+            GeneralAppMsg::Toast { title, description } => {
+                sender.output(Self::Output::Toast { title, description });
             }
         }
     }
