@@ -626,7 +626,7 @@ impl SimpleAsyncComponent for GeneralApp {
 
                         let package = VoicePackage::with_locale(package.locale).unwrap();
 
-                        if !package.is_installed_in(&config.game.path) {
+                        if package.is_installed_in(&config.game.path) {
                             std::thread::spawn(move || {
                                 if let Err(err) = package.delete_in(&config.game.path) {
                                     tracing::error!("Failed to delete voice package: {:?}", package.locale());
