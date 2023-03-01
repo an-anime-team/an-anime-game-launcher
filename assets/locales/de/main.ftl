@@ -6,10 +6,10 @@ details = Einzelheiten
 # Menu items
 
 launcher-folder = Launcher-Ordner
-game-folder = Game folder
-config-file = Config file
-debug-file = Debug file
-about = About
+game-folder = Spielordner
+config-file = Konfig-Datei
+debug-file = Debug-Datei
+about = Über
 
 
 close = Schließen
