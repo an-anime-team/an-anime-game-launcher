@@ -1,6 +1,8 @@
 use anime_launcher_sdk::anime_game_core::installer::downloader::Downloader;
 use anime_launcher_sdk::anime_game_core::curl::fetch;
 
+use md5::{Md5, Digest};
+
 #[derive(Debug, Clone)]
 pub struct Background {
     pub uri: String,
@@ -45,7 +47,7 @@ pub fn download_background() -> anyhow::Result<()> {
     let info = get_background_info()?;
 
     if crate::BACKGROUND_FILE.exists() {
-        let hash = md5::compute(std::fs::read(crate::BACKGROUND_FILE.as_path())?);
+        let hash = Md5::digest(std::fs::read(crate::BACKGROUND_FILE.as_path())?);
 
         if format!("{:x}", hash).to_lowercase() == info.hash {
             tracing::debug!("Background picture is already downloaded. Skipping");
@@ -55,6 +57,8 @@ pub fn download_background() -> anyhow::Result<()> {
     }
 
     let mut downloader = Downloader::new(info.uri)?;
+
+    downloader.continue_downloading = false;
 
     if let Err(err) = downloader.download_to(crate::BACKGROUND_FILE.as_path(), |_, _| {}) {
         let err: std::io::Error = err.into();

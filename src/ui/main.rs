@@ -110,7 +110,11 @@ impl SimpleComponent for App {
 
     view! {
         main_window = adw::Window {
-            set_title: Some("An Anime Game Launcher"),
+            #[watch]
+            set_title: match model.style {
+                LauncherStyle::Modern => Some("An Anime Game Launcher"),
+                LauncherStyle::Classic => Some("")
+            },
 
             #[watch]
             set_default_size: (
@@ -551,7 +555,7 @@ impl SimpleComponent for App {
 
         tracing::info!("Main window initialized");
 
-        let download_picture = model.style == LauncherStyle::Classic && !KEEP_BACKGROUND_FILE.exists();
+        let download_picture = model.style == LauncherStyle::Classic;
 
         // Initialize some heavy tasks
         std::thread::spawn(move || {
