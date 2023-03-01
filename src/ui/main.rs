@@ -96,14 +96,14 @@ impl SimpleComponent for App {
     menu! {
         main_menu: {
             section! {
-                "Launcher folder" => LauncherFolder,
-                "Game folder" => GameFolder,
-                "Config file" => ConfigFile,
-                "Debug file" => DebugFile,
+                &tr("launcher-folder") => LauncherFolder,
+                &tr("game-folder") => GameFolder,
+                &tr("config-file") => ConfigFile,
+                &tr("debug-file") => DebugFile,
             },
 
             section! {
-                "About" => About
+                &tr("about") => About
             }
         }
     }

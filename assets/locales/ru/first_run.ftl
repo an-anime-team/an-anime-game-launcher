@@ -33,7 +33,6 @@ missing-dependencies-message = Вы должны установить некот
 
 default-paths = Пути по умолчанию
 choose-default-paths = Выбрать пути по умолчанию
-launcher-folder = Папка лаунчера
 show-all-folders = Я знаю что я делаю
 show-all-folders-subtitle = Отобразить дополнительные опции выбора путей
 runners-folder = Папка версий Wine

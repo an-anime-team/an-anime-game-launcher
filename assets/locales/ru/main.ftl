@@ -3,6 +3,15 @@ none = Нет
 default = По умолчанию
 details = Подробнее
 
+# Menu items
+
+launcher-folder = Папка лаунчера
+game-folder = Папка игры
+config-file = Файл настроек
+debug-file = Журнал отладки
+about = О программе
+
+
 close = Закрыть
 save = Сохранить
 continue = Продолжить

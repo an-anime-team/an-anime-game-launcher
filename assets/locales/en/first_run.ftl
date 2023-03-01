@@ -31,7 +31,6 @@ missing-dependencies-message = You must install some packages to your system bef
 
 default-paths = Default paths
 choose-default-paths = Choose default paths
-launcher-folder = Launcher folder
 show-all-folders = I know what I'm doing
 show-all-folders-subtitle = Show additional path selection settings. Do as I say...
 runners-folder = Runners folder

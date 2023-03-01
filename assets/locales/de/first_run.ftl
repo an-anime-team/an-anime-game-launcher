@@ -31,7 +31,6 @@ missing-dependencies-message = Sie müssen einige Pakete auf Ihrem System instal
 
 default-paths = Standardpfade
 choose-default-paths = Standardpfade wählen
-launcher-folder = Launcher-Ordner
 show-all-folders = Ich weiß, was ich tue
 show-all-folders-subtitle = Zusätzliche Pfadauswahl-Einstellungen anzeigen. Tu was ich sage...
 runners-folder = Runners-Ordner

@@ -3,6 +3,15 @@ none = None
 default = Default
 details = Details
 
+# Menu items
+
+launcher-folder = Launcher folder
+game-folder = Game folder
+config-file = Config file
+debug-file = Debug file
+about = About
+
+
 close = Close
 save = Save
 continue = Continue
