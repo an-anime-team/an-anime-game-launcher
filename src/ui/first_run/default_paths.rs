@@ -265,10 +265,7 @@ impl SimpleAsyncComponent for DefaultPathsApp {
                 };
             }
 
-            DefaultPathsAppMsg::Exit => {
-                // TODO: relm4 has some function for it
-                std::process::exit(0);
-            }
+            DefaultPathsAppMsg::Exit => relm4::main_application().quit()
         }
     }
 }

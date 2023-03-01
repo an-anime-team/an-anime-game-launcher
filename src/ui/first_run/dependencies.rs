@@ -193,10 +193,7 @@ impl SimpleAsyncComponent for DependenciesApp {
                 sender.output(Self::Output::ScrollToDefaultPaths);
             }
 
-            DependenciesAppMsg::Exit => {
-                // TODO: relm4 has some function for it
-                std::process::exit(0);
-            }
+            DependenciesAppMsg::Exit => relm4::main_application().quit()
         }
     }
 }

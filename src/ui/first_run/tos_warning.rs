@@ -93,10 +93,7 @@ impl SimpleAsyncComponent for TosWarningApp {
                 }
             }
 
-            TosWarningAppMsg::Exit => {
-                // TODO: relm4 has some function for it
-                std::process::exit(0);
-            }
+            TosWarningAppMsg::Exit => relm4::main_application().quit()
         }
     }
 }

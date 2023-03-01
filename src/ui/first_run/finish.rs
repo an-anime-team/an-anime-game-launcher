@@ -85,14 +85,10 @@ impl SimpleAsyncComponent for FinishApp {
             FinishAppMsg::Restart => {
                 std::process::Command::new(std::env::current_exe().unwrap()).spawn().unwrap();
 
-                // TODO: relm4 has some function for it
-                std::process::exit(0);
+                relm4::main_application().quit();
             }
 
-            FinishAppMsg::Exit => {
-                // TODO: relm4 has some function for it
-                std::process::exit(0);
-            }
+            FinishAppMsg::Exit => relm4::main_application().quit()
         }
     }
 }

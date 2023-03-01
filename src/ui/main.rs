@@ -461,7 +461,7 @@ impl SimpleComponent for App {
     }
 
     fn init(
-        _counter: Self::Init,
+        _init: Self::Init,
         root: &Self::Root,
         sender: ComponentSender<Self>,
     ) -> ComponentParts<Self> {

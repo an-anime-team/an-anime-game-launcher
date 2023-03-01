@@ -1,9 +1,11 @@
 use relm4::prelude::*;
 
 use anime_launcher_sdk::config;
+use anime_launcher_sdk::states::LauncherState;
+use anime_launcher_sdk::consts::launcher_dir;
+
 use anime_launcher_sdk::anime_game_core::prelude::*;
 use anime_launcher_sdk::anime_game_core::genshin::prelude::*;
-use anime_launcher_sdk::consts::launcher_dir;
 
 use tracing_subscriber::prelude::*;
 use tracing_subscriber::filter::*;
@@ -13,6 +15,9 @@ use std::path::PathBuf;
 pub mod i18n;
 pub mod ui;
 pub mod background;
+
+use ui::main::*;
+use ui::first_run::main::*;
 
 mod prettify_bytes;
 
@@ -77,6 +82,12 @@ fn main() {
     // Force debug output
     let force_debug = std::env::args().any(|arg| &arg == "--debug");
 
+    // Run the game
+    let run_game = std::env::args().any(|arg| &arg == "--run-game");
+
+    // Forcely run the game
+    let just_run_game = std::env::args().any(|arg| &arg == "--just-run-game");
+
     // Prepare stdout logger
     let stdout = tracing_subscriber::fmt::layer()
         .pretty()
@@ -122,9 +133,6 @@ fn main() {
     gtk::glib::set_application_name("An Anime Game Launcher");
     gtk::glib::set_program_name(Some("An Anime Game Launcher"));
 
-    // Create the app
-    let app = RelmApp::new(APP_ID);
-
     // Set global css
     relm4::set_global_css(&format!("
         progressbar > text {{
@@ -154,6 +162,9 @@ fn main() {
         }}
     ", BACKGROUND_FILE.to_string_lossy()));
 
+    // Set game edition
+    genshin::set_game_edition(CONFIG.launcher.edition.into());
+
     // Set UI language
     let lang = CONFIG.launcher.language.parse().expect("Wrong language format used in config");
 
@@ -161,13 +172,40 @@ fn main() {
 
     tracing::info!("Set UI language to {}", i18n::get_lang());
 
+    // Create the app
+    let app = RelmApp::new(APP_ID);
+
     // Run FirstRun window if .first-run file persist
     if FIRST_RUN_FILE.exists() {
-        app.run::<ui::first_run::main::FirstRunApp>(());
+        app.run::<FirstRunApp>(());
     }
 
     // Run the app if everything's ready
     else {
-        app.run::<ui::main::App>(());
+        if run_game || just_run_game {
+            let state = LauncherState::get_from_config(|_| {})
+                .expect("Failed to get launcher state");
+
+            match state {
+                LauncherState::Launch => {
+                    anime_launcher_sdk::game::run().expect("Failed to run the game");
+
+                    return;
+                }
+
+                LauncherState::PredownloadAvailable { .. } |
+                LauncherState::PatchAvailable(Patch::NotAvailable) => {
+                    if just_run_game {
+                        anime_launcher_sdk::game::run().expect("Failed to run the game");
+
+                        return;
+                    }
+                }
+
+                _ => ()
+            }
+        }
+
+        app.run::<App>(());
     }
 }
