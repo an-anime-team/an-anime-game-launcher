@@ -259,175 +259,187 @@ impl SimpleComponent for App {
 
                                 // TODO: add tooltips
 
-                                gtk::Button {
-                                    #[watch]
-                                    set_width_request: match model.style {
-                                        LauncherStyle::Modern => -1,
-                                        LauncherStyle::Classic => 40
-                                    },
+                                adw::Bin {
+                                    set_css_classes: &["background", "round-bin"],
 
-                                    // TODO: update tooltip for predownloaded update
+                                    gtk::Button {
+                                        #[watch]
+                                        set_width_request: match model.style {
+                                            LauncherStyle::Modern => -1,
+                                            LauncherStyle::Classic => 40
+                                        },
 
-                                    #[watch]
-                                    set_tooltip_text: Some(&tr_args("predownload-update", [
-                                        ("version", match model.state.as_ref() {
-                                            Some(LauncherState::PredownloadAvailable { game, .. }) => game.latest().to_string(),
-                                            _ => String::from("?")
-                                        }.into()),
+                                        // TODO: update tooltip for predownloaded update
 
-                                        ("size", match model.state.as_ref() {
-                                            Some(LauncherState::PredownloadAvailable { game, voices }) => {
-                                                let mut size = game.size().unwrap_or((0, 0)).0;
+                                        #[watch]
+                                        set_tooltip_text: Some(&tr_args("predownload-update", [
+                                            ("version", match model.state.as_ref() {
+                                                Some(LauncherState::PredownloadAvailable { game, .. }) => game.latest().to_string(),
+                                                _ => String::from("?")
+                                            }.into()),
 
-                                                for voice in voices {
-                                                    size += voice.size().unwrap_or((0, 0)).0;
+                                            ("size", match model.state.as_ref() {
+                                                Some(LauncherState::PredownloadAvailable { game, voices }) => {
+                                                    let mut size = game.size().unwrap_or((0, 0)).0;
+
+                                                    for voice in voices {
+                                                        size += voice.size().unwrap_or((0, 0)).0;
+                                                    }
+
+                                                    prettify_bytes(size)
                                                 }
 
-                                                prettify_bytes(size)
+                                                _ => String::from("?")
+                                            }.into())
+                                        ])),
+
+                                        #[watch]
+                                        set_visible: matches!(model.state.as_ref(), Some(LauncherState::PredownloadAvailable { .. })),
+
+                                        #[watch]
+                                        set_sensitive: match model.state.as_ref() {
+                                            Some(LauncherState::PredownloadAvailable { game, voices }) => {
+                                                let config = config::get().unwrap();
+                                                let temp = config.launcher.temp.unwrap_or_else(|| PathBuf::from("/tmp"));
+
+                                                let downloaded = temp.join(game.file_name().unwrap()).exists() &&
+                                                    voices.iter().all(|voice| temp.join(voice.file_name().unwrap()).exists());
+
+                                                !downloaded
                                             }
 
-                                            _ => String::from("?")
-                                        }.into())
-                                    ])),
+                                            _ => false
+                                        },
 
-                                    #[watch]
-                                    set_visible: matches!(model.state.as_ref(), Some(LauncherState::PredownloadAvailable { .. })),
+                                        #[watch]
+                                        set_css_classes: match model.state.as_ref() {
+                                            Some(LauncherState::PredownloadAvailable { game, voices }) => {
+                                                let config = config::get().unwrap();
+                                                let temp = config.launcher.temp.unwrap_or_else(|| PathBuf::from("/tmp"));
 
-                                    #[watch]
-                                    set_sensitive: match model.state.as_ref() {
-                                        Some(LauncherState::PredownloadAvailable { game, voices }) => {
-                                            let config = config::get().unwrap();
-                                            let temp = config.launcher.temp.unwrap_or_else(|| PathBuf::from("/tmp"));
+                                                let downloaded = temp.join(game.file_name().unwrap()).exists() &&
+                                                    voices.iter().all(|voice| temp.join(voice.file_name().unwrap()).exists());
 
-                                            let downloaded = temp.join(game.file_name().unwrap()).exists() &&
-                                                voices.iter().all(|voice| temp.join(voice.file_name().unwrap()).exists());
-
-                                            !downloaded
-                                        }
-
-                                        _ => false
-                                    },
-
-                                    #[watch]
-                                    set_css_classes: match model.state.as_ref() {
-                                        Some(LauncherState::PredownloadAvailable { game, voices }) => {
-                                            let config = config::get().unwrap();
-                                            let temp = config.launcher.temp.unwrap_or_else(|| PathBuf::from("/tmp"));
-
-                                            let downloaded = temp.join(game.file_name().unwrap()).exists() &&
-                                                voices.iter().all(|voice| temp.join(voice.file_name().unwrap()).exists());
-
-                                            if downloaded {
-                                                &["success"]
-                                            } else {
-                                                &["warning"]
+                                                if downloaded {
+                                                    &["success"]
+                                                } else {
+                                                    &["warning"]
+                                                }
                                             }
-                                        }
 
-                                        _ => &["warning"]
-                                    },
+                                            _ => &["warning"]
+                                        },
 
-                                    set_icon_name: "document-save-symbolic",
-                                    set_hexpand: false,
+                                        set_icon_name: "document-save-symbolic",
+                                        set_hexpand: false,
 
-                                    connect_clicked => AppMsg::PredownloadUpdate
+                                        connect_clicked => AppMsg::PredownloadUpdate
+                                    }
                                 },
 
-                                gtk::Button {
-                                    #[watch]
-                                    set_label: &match model.state {
-                                        Some(LauncherState::Launch)                      => tr("launch"),
-                                        Some(LauncherState::PredownloadAvailable { .. }) => tr("launch"),
-                                        Some(LauncherState::PatchAvailable(_))           => tr("apply-patch"),
-                                        Some(LauncherState::WineNotInstalled)            => tr("download-wine"),
-                                        Some(LauncherState::PrefixNotExists)             => tr("create-prefix"),
-                                        Some(LauncherState::VoiceUpdateAvailable(_))     => tr("update"),
-                                        Some(LauncherState::VoiceOutdated(_))            => tr("update"),
-                                        Some(LauncherState::VoiceNotInstalled(_))        => tr("download"),
-                                        Some(LauncherState::GameUpdateAvailable(_))      => tr("update"),
-                                        Some(LauncherState::GameOutdated(_))             => tr("update"),
-                                        Some(LauncherState::GameNotInstalled(_))         => tr("download"),
+                                adw::Bin {
+                                    set_css_classes: &["background", "round-bin"],
 
-                                        None => String::from("...")
-                                    },
+                                    gtk::Button {
+                                        #[watch]
+                                        set_label: &match model.state {
+                                            Some(LauncherState::Launch)                      => tr("launch"),
+                                            Some(LauncherState::PredownloadAvailable { .. }) => tr("launch"),
+                                            Some(LauncherState::PatchAvailable(_))           => tr("apply-patch"),
+                                            Some(LauncherState::WineNotInstalled)            => tr("download-wine"),
+                                            Some(LauncherState::PrefixNotExists)             => tr("create-prefix"),
+                                            Some(LauncherState::VoiceUpdateAvailable(_))     => tr("update"),
+                                            Some(LauncherState::VoiceOutdated(_))            => tr("update"),
+                                            Some(LauncherState::VoiceNotInstalled(_))        => tr("download"),
+                                            Some(LauncherState::GameUpdateAvailable(_))      => tr("update"),
+                                            Some(LauncherState::GameOutdated(_))             => tr("update"),
+                                            Some(LauncherState::GameNotInstalled(_))         => tr("download"),
 
-                                    #[watch]
-                                    set_sensitive: match model.state.as_ref() {
-                                        Some(LauncherState::GameOutdated { .. }) |
-                                        Some(LauncherState::VoiceOutdated(_)) => false,
-
-                                        Some(LauncherState::PatchAvailable(patch)) => match patch {
-                                            Patch::NotAvailable |
-                                            Patch::Outdated { .. } |
-                                            Patch::Preparation { .. } => false,
-
-                                            Patch::Testing { .. } |
-                                            Patch::Available { .. } => true
+                                            None => String::from("...")
                                         },
 
-                                        Some(_) => true,
+                                        #[watch]
+                                        set_sensitive: match model.state.as_ref() {
+                                            Some(LauncherState::GameOutdated { .. }) |
+                                            Some(LauncherState::VoiceOutdated(_)) => false,
 
-                                        None => false
-                                    },
+                                            Some(LauncherState::PatchAvailable(patch)) => match patch {
+                                                Patch::NotAvailable |
+                                                Patch::Outdated { .. } |
+                                                Patch::Preparation { .. } => false,
 
-                                    #[watch]
-                                    set_css_classes: match model.state.as_ref() {
-                                        Some(LauncherState::GameOutdated { .. }) |
-                                        Some(LauncherState::VoiceOutdated(_)) => &["warning"],
+                                                Patch::Testing { .. } |
+                                                Patch::Available { .. } => true
+                                            },
 
-                                        Some(LauncherState::PatchAvailable(patch)) => match patch {
-                                            Patch::NotAvailable |
-                                            Patch::Outdated { .. } |
-                                            Patch::Preparation { .. } => &["error"],
+                                            Some(_) => true,
 
-                                            Patch::Testing { .. } => &["warning"],
-                                            Patch::Available { .. } => &["suggested-action"]
+                                            None => false
                                         },
 
-                                        Some(_) => &["suggested-action"],
+                                        #[watch]
+                                        set_css_classes: match model.state.as_ref() {
+                                            Some(LauncherState::GameOutdated { .. }) |
+                                            Some(LauncherState::VoiceOutdated(_)) => &["warning"],
 
-                                        None => &[]
-                                    },
+                                            Some(LauncherState::PatchAvailable(patch)) => match patch {
+                                                Patch::NotAvailable |
+                                                Patch::Outdated { .. } |
+                                                Patch::Preparation { .. } => &["error"],
 
-                                    #[watch]
-                                    set_tooltip_text: Some(&match model.state.as_ref() {
-                                        Some(LauncherState::GameOutdated { .. }) |
-                                        Some(LauncherState::VoiceOutdated(_)) => tr("main-window--version-outdated-tooltip"),
+                                                Patch::Testing { .. } => &["warning"],
+                                                Patch::Available { .. } => &["suggested-action"]
+                                            },
 
-                                        Some(LauncherState::PatchAvailable(patch)) => match patch {
-                                            Patch::NotAvailable => tr("main-window--patch-unavailable-tooltip"),
+                                            Some(_) => &["suggested-action"],
 
-                                            Patch::Outdated { .. } |
-                                            Patch::Preparation { .. } => tr("main-window--patch-outdated-tooltip"),
+                                            None => &[]
+                                        },
+
+                                        #[watch]
+                                        set_tooltip_text: Some(&match model.state.as_ref() {
+                                            Some(LauncherState::GameOutdated { .. }) |
+                                            Some(LauncherState::VoiceOutdated(_)) => tr("main-window--version-outdated-tooltip"),
+
+                                            Some(LauncherState::PatchAvailable(patch)) => match patch {
+                                                Patch::NotAvailable => tr("main-window--patch-unavailable-tooltip"),
+
+                                                Patch::Outdated { .. } |
+                                                Patch::Preparation { .. } => tr("main-window--patch-outdated-tooltip"),
+
+                                                _ => String::new()
+                                            },
 
                                             _ => String::new()
-                                        },
+                                        }),
 
-                                        _ => String::new()
-                                    }),
+                                        #[watch]
+                                        set_sensitive: !model.disabled_buttons,
 
-                                    #[watch]
-                                    set_sensitive: !model.disabled_buttons,
+                                        set_hexpand: false,
+                                        set_width_request: 200,
 
-                                    set_hexpand: false,
-                                    set_width_request: 200,
-
-                                    connect_clicked => AppMsg::PerformAction
+                                        connect_clicked => AppMsg::PerformAction
+                                    }
                                 },
 
-                                gtk::Button {
-                                    #[watch]
-                                    set_width_request: match model.style {
-                                        LauncherStyle::Modern => -1,
-                                        LauncherStyle::Classic => 40
-                                    },
+                                adw::Bin {
+                                    set_css_classes: &["background", "round-bin"],
 
-                                    #[watch]
-                                    set_sensitive: !model.disabled_buttons,
+                                    gtk::Button {
+                                        #[watch]
+                                        set_width_request: match model.style {
+                                            LauncherStyle::Modern => -1,
+                                            LauncherStyle::Classic => 40
+                                        },
 
-                                    set_icon_name: "emblem-system-symbolic",
+                                        #[watch]
+                                        set_sensitive: !model.disabled_buttons,
 
-                                    connect_clicked => AppMsg::OpenPreferences
+                                        set_icon_name: "emblem-system-symbolic",
+
+                                        connect_clicked => AppMsg::OpenPreferences
+                                    }
                                 }
                             }
                         }

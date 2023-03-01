@@ -148,6 +148,10 @@ fn main() {
             transition-duration: 0.5s;
             transition-timing-function: linear;
         }}
+
+        .round-bin {{
+            border-radius: 8px;
+        }}
     ", BACKGROUND_FILE.to_string_lossy()));
 
     // Set UI language
