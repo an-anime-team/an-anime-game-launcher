@@ -275,7 +275,7 @@ impl SimpleAsyncComponent for GeneralApp {
                             .unwrap_or(0) as u32
                     },
 
-                    connect_selected_notify => move |row| {
+                    connect_selected_notify => |row| {
                         if is_ready() {
                             if let Ok(mut config) = config::get() {
                                 config.launcher.language = crate::i18n::format_lang(SUPPORTED_LANGUAGES

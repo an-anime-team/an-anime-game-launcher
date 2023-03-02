@@ -23,6 +23,8 @@ impl SimpleAsyncComponent for GamescopeApp {
 
             set_modal: true,
             set_hide_on_close: true,
+
+            // FIXME: doesn't work for any reason
             set_search_enabled: false,
 
             add = &adw::PreferencesPage {
@@ -40,10 +42,12 @@ impl SimpleAsyncComponent for GamescopeApp {
                         },
 
                         connect_changed => |row| {
-                            if let Ok(mut config) = config::get() {
-                                config.game.enhancements.gamescope.game.width = row.text().parse().unwrap_or_default();
-
-                                config::update(config);
+                            if is_ready() {
+                                if let Ok(mut config) = config::get() {
+                                    config.game.enhancements.gamescope.game.width = row.text().parse().unwrap_or_default();
+    
+                                    config::update(config);
+                                }
                             }
                         }
                     },
@@ -59,10 +63,12 @@ impl SimpleAsyncComponent for GamescopeApp {
                         },
 
                         connect_changed => |row| {
-                            if let Ok(mut config) = config::get() {
-                                config.game.enhancements.gamescope.game.height = row.text().parse().unwrap_or_default();
-
-                                config::update(config);
+                            if is_ready() {
+                                if let Ok(mut config) = config::get() {
+                                    config.game.enhancements.gamescope.game.height = row.text().parse().unwrap_or_default();
+    
+                                    config::update(config);
+                                }
                             }
                         }
                     }
@@ -82,10 +88,12 @@ impl SimpleAsyncComponent for GamescopeApp {
                         },
 
                         connect_changed => |row| {
-                            if let Ok(mut config) = config::get() {
-                                config.game.enhancements.gamescope.gamescope.width = row.text().parse().unwrap_or_default();
-
-                                config::update(config);
+                            if is_ready() {
+                                if let Ok(mut config) = config::get() {
+                                    config.game.enhancements.gamescope.gamescope.width = row.text().parse().unwrap_or_default();
+    
+                                    config::update(config);
+                                }
                             }
                         }
                     },
@@ -101,10 +109,12 @@ impl SimpleAsyncComponent for GamescopeApp {
                         },
 
                         connect_changed => |row| {
-                            if let Ok(mut config) = config::get() {
-                                config.game.enhancements.gamescope.gamescope.height = row.text().parse().unwrap_or_default();
-
-                                config::update(config);
+                            if is_ready() {
+                                if let Ok(mut config) = config::get() {
+                                    config.game.enhancements.gamescope.gamescope.height = row.text().parse().unwrap_or_default();
+    
+                                    config::update(config);
+                                }
                             }
                         }
                     }
@@ -126,10 +136,12 @@ impl SimpleAsyncComponent for GamescopeApp {
                         },
 
                         connect_changed => |row| {
-                            if let Ok(mut config) = config::get() {
-                                config.game.enhancements.gamescope.framerate.focused = row.text().parse().unwrap_or_default();
-
-                                config::update(config);
+                            if is_ready() {
+                                if let Ok(mut config) = config::get() {
+                                    config.game.enhancements.gamescope.framerate.focused = row.text().parse().unwrap_or_default();
+    
+                                    config::update(config);
+                                }
                             }
                         }
                     },
@@ -145,10 +157,12 @@ impl SimpleAsyncComponent for GamescopeApp {
                         },
 
                         connect_changed => |row| {
-                            if let Ok(mut config) = config::get() {
-                                config.game.enhancements.gamescope.framerate.unfocused = row.text().parse().unwrap_or_default();
-
-                                config::update(config);
+                            if is_ready() {
+                                if let Ok(mut config) = config::get() {
+                                    config.game.enhancements.gamescope.framerate.unfocused = row.text().parse().unwrap_or_default();
+    
+                                    config::update(config);
+                                }
                             }
                         }
                     },
@@ -161,10 +175,12 @@ impl SimpleAsyncComponent for GamescopeApp {
                             set_state: CONFIG.game.enhancements.gamescope.integer_scaling,
 
                             connect_state_notify => |switch| {
-                                if let Ok(mut config) = config::get() {
-                                    config.game.enhancements.gamescope.integer_scaling = switch.state();
-    
-                                    config::update(config);
+                                if is_ready() {
+                                    if let Ok(mut config) = config::get() {
+                                        config.game.enhancements.gamescope.integer_scaling = switch.state();
+        
+                                        config::update(config);
+                                    }
                                 }
                             }
                         }
@@ -178,10 +194,12 @@ impl SimpleAsyncComponent for GamescopeApp {
                             set_state: CONFIG.game.enhancements.gamescope.fsr,
 
                             connect_state_notify => |switch| {
-                                if let Ok(mut config) = config::get() {
-                                    config.game.enhancements.gamescope.fsr = switch.state();
-    
-                                    config::update(config);
+                                if is_ready() {
+                                    if let Ok(mut config) = config::get() {
+                                        config.game.enhancements.gamescope.fsr = switch.state();
+        
+                                        config::update(config);
+                                    }
                                 }
                             }
                         }
@@ -195,10 +213,12 @@ impl SimpleAsyncComponent for GamescopeApp {
                             set_state: CONFIG.game.enhancements.gamescope.nis,
 
                             connect_state_notify => |switch| {
-                                if let Ok(mut config) = config::get() {
-                                    config.game.enhancements.gamescope.nis = switch.state();
-    
-                                    config::update(config);
+                                if is_ready() {
+                                    if let Ok(mut config) = config::get() {
+                                        config.game.enhancements.gamescope.nis = switch.state();
+        
+                                        config::update(config);
+                                    }
                                 }
                             }
                         }
@@ -216,10 +236,12 @@ impl SimpleAsyncComponent for GamescopeApp {
                         set_selected: CONFIG.game.enhancements.gamescope.window_type.ordinal() as u32,
 
                         connect_selected_notify => |row| unsafe {
-                            if let Ok(mut config) = config::get() {
-                                config.game.enhancements.gamescope.window_type = WindowType::from_ordinal_unsafe(row.selected() as i8);
-
-                                config::update(config);
+                            if is_ready() {
+                                if let Ok(mut config) = config::get() {
+                                    config.game.enhancements.gamescope.window_type = WindowType::from_ordinal_unsafe(row.selected() as i8);
+    
+                                    config::update(config);
+                                }
                             }
                         }
                     }

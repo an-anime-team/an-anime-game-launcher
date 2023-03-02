@@ -810,29 +810,15 @@ impl SimpleComponent for App {
 
                             std::thread::sleep(std::time::Duration::from_secs(2));
 
-                            /*if config.launcher.discord_rpc.enabled {
-                                this.widgets.preferences_stack.enhancements_page.discord_rpc.update(RpcUpdates::Connect);
-                            }*/
+                            while let Ok(output) = std::process::Command::new("ps").arg("-A").stdout(std::process::Stdio::piped()).output() {
+                                let output = String::from_utf8_lossy(&output.stdout);
 
-                            loop {
-                                std::thread::sleep(std::time::Duration::from_secs(3));
-
-                                match std::process::Command::new("ps").arg("-A").stdout(std::process::Stdio::piped()).output() {
-                                    Ok(output) => {
-                                        let output = String::from_utf8_lossy(&output.stdout);
-
-                                        if !output.contains("GenshinImpact.e") && !output.contains("unlocker.exe") {
-                                            break;
-                                        }
-                                    }
-
-                                    Err(_) => break
+                                if !output.contains("GenshinImpact.e") && !output.contains("unlocker.exe") {
+                                    break;
                                 }
-                            }
 
-                            /*if config.launcher.discord_rpc.enabled {
-                                this.widgets.preferences_stack.enhancements_page.discord_rpc.update(RpcUpdates::Disconnect);
-                            }*/
+                                std::thread::sleep(std::time::Duration::from_secs(3));
+                            }
 
                             MAIN_WINDOW.as_ref().unwrap_unchecked().show();
                         }

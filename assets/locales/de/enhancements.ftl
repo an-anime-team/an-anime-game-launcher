@@ -27,6 +27,11 @@ gamemode-description = Dem Spiel den Vorrang vor den übrigen Prozessen geben
 gamescope = Gamescope
 gamescope-description = Gamescope ist ein Tool von Valve das es ermöglicht, Spiele in einer isolierten Xwayland-Instanz laufen zu lassen und unterstützt AMD-, Intel- und Nvidia-GPUs
 
+discord-rpc = Discord RPC
+discord-rpc-description = Discord RPC allows you to provide Discord the info that you are currently playing the game to let your friends know
+title = Title
+description = Description
+
 fps-unlocker = FPS Freischalter
 
 enabled = Aktiviert

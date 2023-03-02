@@ -50,7 +50,7 @@ impl SimpleAsyncComponent for EnhancementsApp {
 
                     set_selected: CONFIG.game.wine.sync.ordinal() as u32,
 
-                    connect_selected_notify => move |row| unsafe {
+                    connect_selected_notify => |row| unsafe {
                         if is_ready() {
                             if let Ok(mut config) = config::get() {
                                 config.game.wine.sync = WineSync::from_ordinal_unsafe(row.selected() as i8);
@@ -82,7 +82,7 @@ impl SimpleAsyncComponent for EnhancementsApp {
 
                     set_selected: CONFIG.game.wine.language.ordinal() as u32,
 
-                    connect_selected_notify => move |row| unsafe {
+                    connect_selected_notify => |row| unsafe {
                         if is_ready() {
                             if let Ok(mut config) = config::get() {
                                 config.game.wine.language = WineLang::from_ordinal_unsafe(row.selected() as i8);
@@ -101,7 +101,7 @@ impl SimpleAsyncComponent for EnhancementsApp {
 
                         set_state: CONFIG.game.wine.borderless,
 
-                        connect_state_notify => move |switch| {
+                        connect_state_notify => |switch| {
                             if is_ready() {
                                 if let Ok(mut config) = config::get() {
                                     config.game.wine.borderless = switch.state();
@@ -128,7 +128,7 @@ impl SimpleAsyncComponent for EnhancementsApp {
 
                     set_selected: CONFIG.game.wine.virtual_desktop.get_resolution().into(),
 
-                    connect_selected_notify => move |row| {
+                    connect_selected_notify => |row| {
                         if is_ready() {
                             if let Ok(mut config) = config::get() {
                                 let (width, height) = Resolution::try_from(row.selected()).unwrap().get_pair();
@@ -146,7 +146,7 @@ impl SimpleAsyncComponent for EnhancementsApp {
 
                         set_state: CONFIG.game.wine.virtual_desktop.enabled,
 
-                        connect_state_notify => move |switch| {
+                        connect_state_notify => |switch| {
                             if is_ready() {
                                 if let Ok(mut config) = config::get() {
                                     config.game.wine.virtual_desktop.enabled = switch.state();
@@ -174,7 +174,7 @@ impl SimpleAsyncComponent for EnhancementsApp {
 
                     set_selected: CONFIG.game.enhancements.hud.ordinal() as u32,
 
-                    connect_selected_notify => move |row| unsafe {
+                    connect_selected_notify => |row| unsafe {
                         if is_ready() {
                             if let Ok(mut config) = config::get() {
                                 config.game.enhancements.hud = HUD::from_ordinal_unsafe(row.selected() as i8);
@@ -207,7 +207,7 @@ impl SimpleAsyncComponent for EnhancementsApp {
                     // Source: Bottles (https://github.com/bottlesdevs/Bottles/blob/22fa3573a13f4e9b9c429e4cdfe4ca29787a2832/src/ui/details-preferences.ui#L88)
                     set_selected: 5 - CONFIG.game.enhancements.fsr.strength as u32,
 
-                    connect_selected_notify => move |row| {
+                    connect_selected_notify => |row| {
                         if is_ready() {
                             if let Ok(mut config) = config::get() {
                                 config.game.enhancements.fsr.strength = 5 - row.selected() as u64;
@@ -222,7 +222,7 @@ impl SimpleAsyncComponent for EnhancementsApp {
 
                         set_state: CONFIG.game.enhancements.fsr.enabled,
 
-                        connect_state_notify => move |switch| {
+                        connect_state_notify => |switch| {
                             if is_ready() {
                                 if let Ok(mut config) = config::get() {
                                     config.game.enhancements.fsr.enabled = switch.state();
@@ -245,7 +245,7 @@ impl SimpleAsyncComponent for EnhancementsApp {
 
                         set_state: CONFIG.game.enhancements.gamemode,
 
-                        connect_state_notify => move |switch| {
+                        connect_state_notify => |switch| {
                             if is_ready() {
                                 if let Ok(mut config) = config::get() {
                                     config.game.enhancements.gamemode = switch.state();
@@ -277,13 +277,67 @@ impl SimpleAsyncComponent for EnhancementsApp {
 
                         set_state: CONFIG.game.enhancements.gamescope.enabled,
 
-                        connect_state_notify => move |switch| {
+                        connect_state_notify => |switch| {
                             if is_ready() {
                                 if let Ok(mut config) = config::get() {
                                     config.game.enhancements.gamescope.enabled = switch.state();
 
                                     config::update(config);
                                 }
+                            }
+                        }
+                    }
+                }
+            },
+
+            add = &adw::PreferencesGroup {
+                set_title: &tr("discord-rpc"),
+
+                adw::ActionRow {
+                    set_title: &tr("enabled"),
+                    set_subtitle: &tr("discord-rpc-description"),
+
+                    add_suffix = &gtk::Switch {
+                        set_valign: gtk::Align::Center,
+                        set_state: CONFIG.launcher.discord_rpc.enabled,
+
+                        connect_state_notify => |switch| {
+                            if is_ready() {
+                                if let Ok(mut config) = config::get() {
+                                    config.launcher.discord_rpc.enabled = switch.state();
+
+                                    config::update(config);
+                                }
+                            }
+                        }
+                    }
+                },
+
+                adw::EntryRow {
+                    set_title: &tr("title"),
+                    set_text: &CONFIG.launcher.discord_rpc.title,
+
+                    connect_changed: |row| {
+                        if is_ready() {
+                            if let Ok(mut config) = config::get() {
+                                config.launcher.discord_rpc.title = row.text().to_string();
+
+                                config::update(config);
+                            }
+                        }
+                    }
+                },
+
+                adw::EntryRow {
+                    set_title: &tr("description"),
+                    set_text: &CONFIG.launcher.discord_rpc.subtitle,
+
+                    connect_changed: |row| {
+                        if is_ready() {
+                            if let Ok(mut config) = config::get() {
+                                config.launcher.discord_rpc.subtitle = row.text().to_string();
+
+                                config::update(config);
                             }
                         }
                     }
@@ -321,7 +375,7 @@ impl SimpleAsyncComponent for EnhancementsApp {
                         Fps::Custom(_) => 7
                     },
 
-                    connect_selected_notify => move |row| {
+                    connect_selected_notify => |row| {
                         if is_ready() && row.selected() < Fps::list().len() as u32 - 1 {
                             if let Ok(mut config) = config::get() {
                                 config.game.enhancements.fps_unlocker.config.fps = Fps::list()[row.selected() as usize].to_num();
@@ -336,7 +390,7 @@ impl SimpleAsyncComponent for EnhancementsApp {
 
                         set_state: CONFIG.game.enhancements.fps_unlocker.enabled,
 
-                        connect_state_notify => move |switch| {
+                        connect_state_notify => |switch| {
                             if is_ready() {
                                 if let Ok(mut config) = config::get() {
                                     config.game.enhancements.fps_unlocker.enabled = switch.state();
@@ -357,7 +411,7 @@ impl SimpleAsyncComponent for EnhancementsApp {
 
                         set_state: CONFIG.game.enhancements.fps_unlocker.config.power_saving,
 
-                        connect_state_notify => move |switch| {
+                        connect_state_notify => |switch| {
                             if is_ready() {
                                 if let Ok(mut config) = config::get() {
                                     config.game.enhancements.fps_unlocker.config.power_saving = switch.state();
@@ -379,7 +433,7 @@ impl SimpleAsyncComponent for EnhancementsApp {
 
                         set_value: CONFIG.game.enhancements.fps_unlocker.config.monitor as f64,
 
-                        connect_changed => move |row| {
+                        connect_changed => |row| {
                             if is_ready() {
                                 if let Ok(mut config) = config::get() {
                                     config.game.enhancements.fps_unlocker.config.monitor = row.value() as u64;
@@ -403,7 +457,7 @@ impl SimpleAsyncComponent for EnhancementsApp {
 
                     set_selected: CONFIG.game.enhancements.fps_unlocker.config.window_mode.ordinal() as u32,
 
-                    connect_selected_notify => move |row| unsafe {
+                    connect_selected_notify => |row| unsafe {
                         if is_ready() {
                             if let Ok(mut config) = config::get() {
                                 config.game.enhancements.fps_unlocker.config.window_mode = WindowMode::from_ordinal_unsafe(row.selected() as i8);
@@ -430,7 +484,7 @@ impl SimpleAsyncComponent for EnhancementsApp {
 
                     set_selected: CONFIG.game.enhancements.fps_unlocker.config.priority as u32,
 
-                    connect_selected_notify => move |row| {
+                    connect_selected_notify => |row| {
                         if is_ready() {
                             if let Ok(mut config) = config::get() {
                                 config.game.enhancements.fps_unlocker.config.priority = row.selected() as u64;
