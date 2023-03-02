@@ -28,9 +28,9 @@ gamescope = Gamescope
 gamescope-description = Gamescope ist ein Tool von Valve das es ermöglicht, Spiele in einer isolierten Xwayland-Instanz laufen zu lassen und unterstützt AMD-, Intel- und Nvidia-GPUs
 
 discord-rpc = Discord RPC
-discord-rpc-description = Discord RPC allows you to provide Discord the info that you are currently playing the game to let your friends know
-title = Title
-description = Description
+discord-rpc-description = Discord RPC ermöglicht es dir Discord die Information zu geben dass du gerade spielst, damit deine Freunde Bescheid wissen
+title = Titel
+description = Beschreibung
 
 fps-unlocker = FPS Freischalter
 
