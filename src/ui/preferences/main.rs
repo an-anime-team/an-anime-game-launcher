@@ -105,6 +105,8 @@ impl SimpleAsyncComponent for PreferencesApp {
         }
 
         #[allow(unused_must_use)] {
+            model.enhancements.sender().send(EnhancementsAppMsg::SetGamescopeParent(widgets.preferences_window.clone()));
+
             model.general.sender().send(GeneralAppMsg::UpdateDownloadedWine);
             model.general.sender().send(GeneralAppMsg::UpdateDownloadedDxvk);
         }

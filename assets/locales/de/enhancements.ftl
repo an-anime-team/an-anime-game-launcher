@@ -24,6 +24,9 @@ performance = Leistung
 gamemode = Gamemode
 gamemode-description = Dem Spiel den Vorrang vor den übrigen Prozessen geben
 
+gamescope = Gamescope
+gamescope-description = Gamescope is a tool from Valve that allows for games to run in an isolated Xwayland instance and supports AMD, Intel, and Nvidia GPUs
+
 fps-unlocker = FPS Freischalter
 
 enabled = Aktiviert
@@ -36,6 +39,7 @@ monitor = Monitor
 monitor-description = Nummer des Monitors, auf dem das Spiel laufen soll
 
 window-mode = Fenster Modus
+borderless = Borderless
 popup = Popup
 fullscreen = Vollbild
 

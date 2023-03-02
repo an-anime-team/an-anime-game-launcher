@@ -3,6 +3,9 @@ none = Kein
 default = Standard
 details = Einzelheiten
 
+width = Width
+height = Height
+
 # Menu items
 
 launcher-folder = Launcher-Ordner

@@ -2,6 +2,7 @@ use relm4::prelude::*;
 
 use gtk::prelude::*;
 
+use anime_launcher_sdk::VERSION as SDK_VERSION;
 use anime_launcher_sdk::anime_game_core::{VERSION as CORE_VERSION, curl_sys};
 
 lazy_static::lazy_static! {
@@ -65,7 +66,9 @@ impl SimpleComponent for AboutDialog {
             ].join("\n"),
 
             set_debug_info: &[
-                format!("Anime Game core: {CORE_VERSION}"),
+                format!("Anime Launcher SDK: {SDK_VERSION}"),
+                format!("Anime Game Core: {CORE_VERSION}"),
+                String::new(),
                 format!("curl: {}", CURL_INFO.version()),
                 format!("SSL: {}", CURL_INFO.ssl_version().unwrap_or("?")),
                 String::new(),

@@ -5,16 +5,27 @@ use adw::prelude::*;
 
 use anime_launcher_sdk::config;
 use anime_launcher_sdk::config::prelude::*;
+use anime_launcher_sdk::is_available;
 
 use crate::i18n::tr;
 use crate::*;
 
-pub struct EnhancementsApp;
+use super::gamescope::*;
+
+pub struct EnhancementsApp {
+    gamescope: AsyncController<GamescopeApp>
+}
+
+#[derive(Debug)]
+pub enum EnhancementsAppMsg {
+    SetGamescopeParent(adw::PreferencesWindow),
+    OpenGamescope
+}
 
 #[relm4::component(async, pub)]
 impl SimpleAsyncComponent for EnhancementsApp {
     type Init = ();
-    type Input = ();
+    type Input = EnhancementsAppMsg;
     type Output = ();
 
     view! {
@@ -227,6 +238,8 @@ impl SimpleAsyncComponent for EnhancementsApp {
                     set_title: &tr("gamemode"),
                     set_subtitle: &tr("gamemode-description"),
 
+                    set_sensitive: is_available("gamemoderun"),
+
                     add_suffix = &gtk::Switch {
                         set_valign: gtk::Align::Center,
 
@@ -236,6 +249,38 @@ impl SimpleAsyncComponent for EnhancementsApp {
                             if is_ready() {
                                 if let Ok(mut config) = config::get() {
                                     config.game.enhancements.gamemode = switch.state();
+
+                                    config::update(config);
+                                }
+                            }
+                        }
+                    }
+                },
+
+                adw::ActionRow {
+                    set_title: &tr("gamescope"),
+                    set_subtitle: &tr("gamescope-description"),
+
+                    set_sensitive: is_available("gamescope"),
+
+                    add_suffix = &gtk::Button {
+                        set_icon_name: "emblem-system-symbolic",
+                        add_css_class: "flat",
+
+                        set_valign: gtk::Align::Center,
+
+                        connect_clicked => EnhancementsAppMsg::OpenGamescope
+                    },
+
+                    add_suffix = &gtk::Switch {
+                        set_valign: gtk::Align::Center,
+
+                        set_state: CONFIG.game.enhancements.gamescope.enabled,
+
+                        connect_state_notify => move |switch| {
+                            if is_ready() {
+                                if let Ok(mut config) = config::get() {
+                                    config.game.enhancements.gamescope.enabled = switch.state();
 
                                     config::update(config);
                                 }
@@ -402,13 +447,30 @@ impl SimpleAsyncComponent for EnhancementsApp {
     async fn init(
         _init: Self::Init,
         root: Self::Root,
-        _sender: AsyncComponentSender<Self>,
+        sender: AsyncComponentSender<Self>,
     ) -> AsyncComponentParts<Self> {
         tracing::info!("Initializing enhancements settings");
 
-        let model = Self;
+        let model = Self {
+            gamescope: GamescopeApp::builder()
+                .launch(())
+                .detach()
+        };
+
         let widgets = view_output!();
 
         AsyncComponentParts { model, widgets }
+    }
+
+    async fn update(&mut self, msg: Self::Input, _sender: AsyncComponentSender<Self>) {
+        match msg {
+            EnhancementsAppMsg::SetGamescopeParent(parent) => {
+                self.gamescope.widget().set_transient_for(Some(&parent));
+            }
+
+            EnhancementsAppMsg::OpenGamescope => {
+                self.gamescope.widget().show();
+            }
+        }
     }
 }

@@ -24,6 +24,9 @@ performance = Скорость
 gamemode = Gamemode
 gamemode-description = Выделять игре приоритет перед остальными процессами
 
+gamescope = Gamescope
+gamescope-description = Программа от Valve, позволяющая запускать игры в изолированном окружении Xwayland и поддерживает видеокарты от AMD, Intel, и Nvidia
+
 fps-unlocker = FPS Unlocker
 
 enabled = Включен
@@ -36,6 +39,7 @@ monitor = Монитор
 monitor-description = Номер монитора, на котором стоит запустить игру
 
 window-mode = Режим окна
+borderless = Безрамочный
 popup = Всплывающий
 fullscreen = Полноэкранный
 

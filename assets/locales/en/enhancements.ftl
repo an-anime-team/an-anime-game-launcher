@@ -24,6 +24,9 @@ performance = Performance
 gamemode = Gamemode
 gamemode-description = Prioritize the game over the rest of the processes
 
+gamescope = Gamescope
+gamescope-description = Gamescope is a tool from Valve that allows for games to run in an isolated Xwayland instance and supports AMD, Intel, and Nvidia GPUs
+
 fps-unlocker = FPS Unlocker
 
 enabled = Enabled
@@ -36,6 +39,7 @@ monitor = Monitor
 monitor-description = Number of monitor you want to run the game on
 
 window-mode = Window Mode
+borderless = Borderless
 popup = Popup
 fullscreen = Fullscreen
 

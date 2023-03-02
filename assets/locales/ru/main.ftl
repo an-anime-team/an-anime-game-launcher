@@ -3,6 +3,9 @@ none = Нет
 default = По умолчанию
 details = Подробнее
 
+width = Ширина
+height = Высота
+
 # Menu items
 
 launcher-folder = Папка лаунчера
