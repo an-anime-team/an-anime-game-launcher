@@ -1,6 +1,6 @@
-game-resolution = Game resolution
-gamescope-resolution = Gamescope resolution
-other-settings = Other settings
-framerate-limit = Framerate limit
-unfocused-framerate-limit = Unfocused framerate limit
-integer-scaling = Integer scaling
+game-resolution = Spiel-Auflösung
+gamescope-resolution = Gamescope-Auflösung
+other-settings = Andere Einstellungen
+framerate-limit = Framerate-Limit
+unfocused-framerate-limit = Unfokussiert Framerate-Limit
+integer-scaling = Integer-Skalierung

@@ -3,8 +3,8 @@ none = Kein
 default = Standard
 details = Einzelheiten
 
-width = Width
-height = Height
+width = Breite
+height = Höhe
 
 # Menu items
 
