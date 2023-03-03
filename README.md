@@ -4,11 +4,13 @@
 
 <img src="repository/pics/launcher-settings.png">
 
-<br>
-
-<p align="center">You could also try <a href="https://github.com/an-anime-team/an-anime-game-launcher-gtk">the GTK branch</a></p>
-
 <br><br>
+
+# ⚠️ Launcher is outdated
+
+Launcher is greatly outdated and will not receive proper updates (only bug fixes). After a public poll in our discord server we decided to replace it by <a href="https://github.com/an-anime-team/an-anime-game-launcher-gtk">the GTK branch</a> in some future. Until it's done we recommend to use GTK version instead
+
+<br>
 
 # Please don't link to this repository
 
@@ -77,7 +79,7 @@ field in your `config.yaml` file (settings -> launcher folder). If your system u
 
 | Game version | Launcher version | Patch version |
 | :---: | :---: | :---: |
-| 3.4 | 2.4.5 | 3.4 stable ✅ |
+| 3.5 | 2.4.5 | 3.5 testing ⚠️ |
 
 We have our own [An Anime Game](https://discord.gg/ck37X6UWBp) discord server where you can ask any questions
 
@@ -130,6 +132,7 @@ These requirements can't be easily installed so you should do it manually
 They're required only for some specific functions
 
 # Development
+
 ## Dependency required for bundling to AppImage
 
 ### apt
