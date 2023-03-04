@@ -38,7 +38,7 @@ I wrote small documentation [here](https://github.com/an-anime-team/an-anime-gam
 
 | Source | Link |
 | --- | --- |
-| Native | [Releases](https://github.com/an-anime-team/an-anime-game-launcher-gtk/releases) page |
+| Native | [Releases](https://github.com/an-anime-team/an-anime-game-launcher/releases) page |
 | AUR | [an-anime-game-launcher-bin](https://aur.archlinux.org/packages/an-anime-game-launcher-bin) |
 | Pacstall | [an-anime-game-launcher-bin](https://pacstall.dev/packages/an-anime-game-launcher-bin) |
 | Gentoo | [an-anime-game-launcher-bin](https://github.com/an-anime-team/aagl-ebuilds) |
