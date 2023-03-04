@@ -35,6 +35,8 @@ loading-launcher-state--patch = Launcher status am laden: Verifizierung des inst
 checking-free-space = Überprüfe Freien Speicherplatz
 downloading = Lade Herunter
 unpacking = Entpacken
+verifying-files = Verifying files
+repairing-files = Repairing files
 
 
 launch = Starten

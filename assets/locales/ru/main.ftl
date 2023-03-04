@@ -42,6 +42,8 @@ loading-launcher-state--patch = Загрузка статуса лаунчера
 checking-free-space = Проверка свободного места
 downloading = Загрузка
 unpacking = Распаковка
+verifying-files = Проверка файлов
+repairing-files = Починка файлов
 
 
 launch = Запустить

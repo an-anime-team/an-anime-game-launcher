@@ -35,6 +35,7 @@ pub enum PreferencesAppMsg {
     SetLauncherStyle(LauncherStyle),
 
     UpdateLauncherState,
+    RepairGame,
 
     Toast {
         title: String,
@@ -139,6 +140,13 @@ impl SimpleAsyncComponent for PreferencesApp {
                     perform_on_download_needed: false,
                     show_status_page: false
                 });
+            }
+
+            #[allow(unused_must_use)]
+            PreferencesAppMsg::RepairGame => unsafe {
+                PREFERENCES_WINDOW.as_ref().unwrap_unchecked().close();
+
+                sender.output(Self::Output::RepairGame);
             }
 
             PreferencesAppMsg::Toast { title, description } => unsafe {

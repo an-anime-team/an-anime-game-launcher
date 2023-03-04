@@ -8,6 +8,9 @@ failed-get-selected-wine = Failed to get selected wine version
 downloading-failed = Downloading failed
 unpacking-failed = Unpacking failed
 
+game-file-repairing-error = Failed to repair game file
+integrity-files-getting-error = Failed to get integrity files
+
 background-downloading-failed = Failed to download background picture
 config-update-error = Failed to save config
 wine-prefix-update-failed = Failed to update wine prefix

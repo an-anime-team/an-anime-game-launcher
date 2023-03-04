@@ -138,6 +138,8 @@ pub enum GeneralAppMsg {
     RemoveVoicePackage(DynamicIndex),
     SetVoicePackageSensitivity(DynamicIndex, bool),
 
+    RepairGame,
+
     UpdateLauncherStyle(LauncherStyle),
 
     WineRecommendedOnly(bool),
@@ -293,16 +295,17 @@ impl SimpleAsyncComponent for GeneralApp {
                     set_title: &tr("game-voiceovers")
                 },
 
-                // TODO for 3.1.0
-                /*gtk::Box {
+                gtk::Box {
                     set_orientation: gtk::Orientation::Horizontal,
                     set_spacing: 8,
                     set_margin_top: 16,
 
                     gtk::Button {
-                        set_label: &tr("repair-game")
+                        set_label: &tr("repair-game"),
+
+                        connect_clicked => GeneralAppMsg::RepairGame
                     }
-                }*/
+                }
             },
 
             add = &adw::PreferencesGroup {
@@ -654,6 +657,11 @@ impl SimpleAsyncComponent for GeneralApp {
                 if let Some(package) = self.voice_packages.guard().get_mut(index.current_index()) {
                     package.sensitive = sensitive;
                 }
+            }
+
+            #[allow(unused_must_use)]
+            GeneralAppMsg::RepairGame => {
+                sender.output(Self::Output::RepairGame);
             }
 
             #[allow(unused_must_use)]
