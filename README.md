@@ -32,7 +32,7 @@ instead of the actual name of the game, to avoid search engine parsing.
 
 # Documentation
 
-I wrote small documentation [here](https://github.com/an-anime-team/an-anime-game-launcher-gtk/wiki). It may contain some useful information
+Documentation for the launcher can be found in the [repository wiki](https://github.com/an-anime-team/an-anime-game-launcher/wiki).
 
 # Download
 
