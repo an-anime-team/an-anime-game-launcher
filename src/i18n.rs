@@ -16,7 +16,7 @@ pub const SUPPORTED_LANGUAGES: &[LanguageIdentifier] = &[
     langid!("de-de")
 ];
 
-static mut LANG: LanguageIdentifier = langid!("en");
+static mut LANG: LanguageIdentifier = langid!("en-us");
 
 /// Set launcher language
 pub fn set_lang(lang: LanguageIdentifier) -> anyhow::Result<()> {
