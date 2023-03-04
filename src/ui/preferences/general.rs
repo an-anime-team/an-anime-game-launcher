@@ -657,7 +657,7 @@ impl SimpleAsyncComponent for GeneralApp {
 
             #[allow(unused_must_use)]
             GeneralAppMsg::UpdateLauncherStyle(style) => {
-                if style == LauncherStyle::Classic && !BACKGROUND_FILE.exists() {
+                if style == LauncherStyle::Classic && !KEEP_BACKGROUND_FILE.exists() {
                     if let Err(err) = crate::background::download_background() {
                         tracing::error!("Failed to download background picture");
     
