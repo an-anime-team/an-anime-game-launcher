@@ -63,7 +63,7 @@ flatpak remote-add --if-not-exists launcher.moe https://gol.launcher.moe/gol.lau
 Now the only thing remaining is to install the launcher
 
 ```zsh
-flatpak install launcher.moe moe.launcher.an-anime-game-launcher-gtk
+flatpak install launcher.moe moe.launcher.an-anime-game-launcher
 ```
 
 Some additional configuration is possible when using the flatpak. For info about this, see [this page](https://github.com/an-anime-team/an-anime-game-launcher-flatpak/blob/rust-launcher/README.md)
