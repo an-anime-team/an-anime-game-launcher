@@ -4,5 +4,7 @@
         "core",
         "ui",
         "i18n"
-    ]
+    ],
+    "editor.tabCompletion": "on",
+    "diffEditor.codeLens": true
 }
