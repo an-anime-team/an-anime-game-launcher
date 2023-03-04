@@ -81,6 +81,9 @@ pub enum AppMsg {
     PredownloadUpdate,
     PerformAction,
 
+    HideWindow,
+    ShowWindow,
+
     Toast {
         title: String,
         description: Option<String>
@@ -799,30 +802,20 @@ impl SimpleComponent for App {
                     LauncherState::PatchAvailable(Patch::NotAvailable) |
                     LauncherState::PredownloadAvailable { .. } |
                     LauncherState::Launch  => {
-                        // TODO: make game::run() freeze current process while the game is running
-                        if let Err(err) = anime_launcher_sdk::game::run() {
-                            tracing::error!("Failed to launch game: {err}");
+                        sender.input(AppMsg::HideWindow);
 
-                            self.toast(tr("game-launching-failed"), Some(err.to_string()));
-                        }
+                        std::thread::spawn(move || {
+                            if let Err(err) = anime_launcher_sdk::game::run() {
+                                tracing::error!("Failed to launch game: {err}");
 
-                        else {
-                            MAIN_WINDOW.as_ref().unwrap_unchecked().hide();
-
-                            std::thread::sleep(std::time::Duration::from_secs(2));
-
-                            while let Ok(output) = std::process::Command::new("ps").arg("-A").stdout(std::process::Stdio::piped()).output() {
-                                let output = String::from_utf8_lossy(&output.stdout);
-
-                                if !output.contains("GenshinImpact.e") && !output.contains("unlocker.exe") {
-                                    break;
-                                }
-
-                                std::thread::sleep(std::time::Duration::from_secs(3));
+                                sender.input(AppMsg::Toast {
+                                    title: tr("game-launching-failed"),
+                                    description: Some(err.to_string())
+                                });
                             }
 
-                            MAIN_WINDOW.as_ref().unwrap_unchecked().show();
-                        }
+                            sender.input(AppMsg::ShowWindow);
+                        });
                     }
 
                     LauncherState::PatchAvailable(patch) => {
@@ -1089,6 +1082,14 @@ impl SimpleComponent for App {
                     LauncherState::VoiceOutdated(_) |
                     LauncherState::GameOutdated(_) => ()
                 }
+            }
+
+            AppMsg::HideWindow => unsafe {
+                MAIN_WINDOW.as_ref().unwrap_unchecked().hide();
+            }
+
+            AppMsg::ShowWindow => unsafe {
+                MAIN_WINDOW.as_ref().unwrap_unchecked().show();
             }
 
             AppMsg::Toast { title, description } => self.toast(title, description)
