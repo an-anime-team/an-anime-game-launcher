@@ -159,7 +159,7 @@ impl SimpleAsyncComponent for DownloadComponentsApp {
 
                     #[watch]
                     set_icon_name: match model.downloading_wine {
-                        Some(true) => Some("emblem-ok"),
+                        Some(true) => Some("emblem-ok-symbolic"),
                         Some(false) => None, // Some("process-working"),
                         None => None
                     },
@@ -177,7 +177,7 @@ impl SimpleAsyncComponent for DownloadComponentsApp {
 
                     #[watch]
                     set_icon_name: match model.creating_prefix {
-                        Some(true) => Some("emblem-ok"),
+                        Some(true) => Some("emblem-ok-symbolic"),
                         Some(false) => None, // Some("process-working"),
                         None => None
                     },
@@ -195,7 +195,7 @@ impl SimpleAsyncComponent for DownloadComponentsApp {
 
                     #[watch]
                     set_icon_name: match model.downloading_dxvk {
-                        Some(true) => Some("emblem-ok"),
+                        Some(true) => Some("emblem-ok-symbolic"),
                         Some(false) => None, // Some("process-working"),
                         None => None
                     },
@@ -213,7 +213,7 @@ impl SimpleAsyncComponent for DownloadComponentsApp {
 
                     #[watch]
                     set_icon_name: match model.applying_dxvk {
-                        Some(true) => Some("emblem-ok"),
+                        Some(true) => Some("emblem-ok-symbolic"),
                         Some(false) => None, // Some("process-working"),
                         None => None
                     },

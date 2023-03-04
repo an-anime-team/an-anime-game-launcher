@@ -84,7 +84,7 @@ impl SimpleAsyncComponent for EnvironmentApp {
     view! {
         adw::PreferencesPage {
             set_title: &tr("environment"),
-            set_icon_name: Some("document-properties"),
+            set_icon_name: Some("document-properties-symbolic"),
 
             add = &adw::PreferencesGroup {
                 set_title: &tr("game-command"),

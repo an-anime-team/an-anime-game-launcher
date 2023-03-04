@@ -441,7 +441,7 @@ impl SimpleAsyncComponent for GeneralApp {
 
                     #[watch]
                     set_icon_name: if model.selecting_wine_version {
-                        Some("process-working")
+                        Some("process-working-symbolic")
                     } else {
                         None
                     },
@@ -491,7 +491,7 @@ impl SimpleAsyncComponent for GeneralApp {
 
                     #[watch]
                     set_icon_name: if model.selecting_dxvk_version {
-                        Some("process-working")
+                        Some("process-working-symbolic")
                     } else {
                         None
                     },

@@ -5,6 +5,8 @@ use gtk::prelude::*;
 use anime_launcher_sdk::VERSION as SDK_VERSION;
 use anime_launcher_sdk::anime_game_core::{VERSION as CORE_VERSION, curl_sys};
 
+use crate::*;
+
 lazy_static::lazy_static! {
     static ref CURL_INFO: curl_sys::Version = curl_sys::Version::get();
 }
@@ -28,7 +30,7 @@ impl SimpleComponent for AboutDialog {
     view! {
         dialog = adw::AboutWindow {
             set_application_name: "An Anime Game Launcher",
-            set_application_icon: "moe.launcher.an-anime-game-launcher-gtk",
+            set_application_icon: APP_ID,
 
             set_website: "https://github.com/an-anime-team/an-anime-game-launcher-gtk",
             set_issue_url: "https://github.com/an-anime-team/an-anime-game-launcher-gtk/issues",
