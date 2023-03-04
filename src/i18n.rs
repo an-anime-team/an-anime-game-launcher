@@ -54,14 +54,10 @@ pub fn get_default_lang() -> LanguageIdentifier {
 }
 
 pub fn format_lang(lang: &LanguageIdentifier) -> String {
-    let mut formatted = lang.language.to_string();
-
-    if let Some(region) = lang.region {
-        formatted += "-";
-        formatted += &region.to_string().to_ascii_lowercase();
-    }
-
-    formatted
+    format!("{}-{}", lang.language, match lang.region {
+        Some(region) => region.to_string().to_ascii_lowercase(),
+        None => lang.language.to_string()
+    })
 }
 
 /// Get translated message by key
