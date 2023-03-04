@@ -293,7 +293,8 @@ impl SimpleAsyncComponent for GeneralApp {
                     set_title: &tr("game-voiceovers")
                 },
 
-                gtk::Box {
+                // TODO for 3.1.0
+                /*gtk::Box {
                     set_orientation: gtk::Orientation::Horizontal,
                     set_spacing: 8,
                     set_margin_top: 16,
@@ -301,7 +302,7 @@ impl SimpleAsyncComponent for GeneralApp {
                     gtk::Button {
                         set_label: &tr("repair-game")
                     }
-                }
+                }*/
             },
 
             add = &adw::PreferencesGroup {
