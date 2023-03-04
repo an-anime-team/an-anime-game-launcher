@@ -799,6 +799,7 @@ impl SimpleComponent for App {
                     LauncherState::PatchAvailable(Patch::NotAvailable) |
                     LauncherState::PredownloadAvailable { .. } |
                     LauncherState::Launch  => {
+                        // TODO: make game::run() freeze current process while the game is running
                         if let Err(err) = anime_launcher_sdk::game::run() {
                             tracing::error!("Failed to launch game: {err}");
 
