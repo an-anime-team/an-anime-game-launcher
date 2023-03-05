@@ -17,3 +17,4 @@ game-name = {-game-name-1}{-game-name-2} {-game-name-3}{-game-name-4}
 en = English
 ru = Русский
 de = Deutsch
+fr = Français
