@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Added game repairing function
+- Added french translations (#81)
 
 ### Fixed
 
@@ -18,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Changed default language from en to en-us
+- Moved integer scaling, fsr and nis into separate group in gamescope settings
 
 ## 3.0.1
 

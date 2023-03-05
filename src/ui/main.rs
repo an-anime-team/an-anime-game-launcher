@@ -33,7 +33,7 @@ relm4::new_stateless_action!(DebugFile, WindowActionGroup, "debug_file");
 
 relm4::new_stateless_action!(About, WindowActionGroup, "about");
 
-static mut MAIN_WINDOW: Option<adw::Window> = None;
+static mut MAIN_WINDOW: Option<adw::ApplicationWindow> = None;
 static mut PREFERENCES_WINDOW: Option<AsyncController<PreferencesApp>> = None;
 static mut ABOUT_DIALOG: Option<Controller<AboutDialog>> = None;
 
@@ -116,12 +116,8 @@ impl SimpleComponent for App {
     }
 
     view! {
-        main_window = adw::Window {
-            #[watch]
-            set_title: match model.style {
-                LauncherStyle::Modern => Some("An Anime Game Launcher"),
-                LauncherStyle::Classic => Some("")
-            },
+        main_window = adw::ApplicationWindow {
+            set_icon_name: Some(APP_ID),
 
             #[watch]
             set_default_size: (
@@ -165,6 +161,15 @@ impl SimpleComponent for App {
                         set_css_classes: match model.style {
                             LauncherStyle::Modern => &[""],
                             LauncherStyle::Classic => &["flat"]
+                        },
+
+                        #[wrap(Some)]
+                        set_title_widget = &adw::WindowTitle {
+                            #[watch]
+                            set_title: match model.style {
+                                LauncherStyle::Modern => "An Anime Game Launcher",
+                                LauncherStyle::Classic => ""
+                            }
                         },
 
                         pack_end = &gtk::MenuButton {
