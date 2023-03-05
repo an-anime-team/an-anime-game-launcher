@@ -891,8 +891,6 @@ impl SimpleComponent for App {
                                         tracing::debug!("Repairing: {}", file.path.to_string_lossy());
 
                                         if let Err(err) = file.repair(&config.game.path) {
-                                            let err: std::io::Error = err.into();
-
                                             sender.input(AppMsg::Toast {
                                                 title: tr("game-file-repairing-error"),
                                                 description: Some(err.to_string())
@@ -943,8 +941,6 @@ impl SimpleComponent for App {
                             }));
 
                             if let Err(err) = result {
-                                let err: std::io::Error = err.into();
-
                                 sender.input(AppMsg::Toast {
                                     title: tr("downloading-failed"),
                                     description: Some(err.to_string())
@@ -1094,28 +1090,26 @@ impl SimpleComponent for App {
                                                 installer.install(&config.game.wine.builds, clone!(@strong sender => move |state| {
                                                     match &state {
                                                         InstallerUpdate::DownloadingError(err) => {
-                                                            let err: std::io::Error = err.clone().into();
-                    
                                                             tracing::error!("Downloading failed: {err}");
-                    
+
                                                             sender.input(AppMsg::Toast {
                                                                 title: tr("downloading-failed"),
                                                                 description: Some(err.to_string())
                                                             });
                                                         }
-                    
+
                                                         InstallerUpdate::UnpackingError(err) => {
                                                             tracing::error!("Unpacking failed: {err}");
-                    
+
                                                             sender.input(AppMsg::Toast {
                                                                 title: tr("unpacking-failed"),
                                                                 description: Some(err.clone())
                                                             });
                                                         }
-                    
+
                                                         _ => ()
                                                     }
-                    
+
                                                     progress_bar_input.send(ProgressBarMsg::UpdateFromState(state));
                                                 }));
 
@@ -1203,8 +1197,6 @@ impl SimpleComponent for App {
                             let result = diff.install_to_by(config.game.path, config.launcher.temp, clone!(@strong sender => move |state| {
                                 match &state {
                                     InstallerUpdate::DownloadingError(err) => {
-                                        let err: std::io::Error = err.clone().into();
-
                                         tracing::error!("Downloading failed: {err}");
 
                                         sender.input(AppMsg::Toast {
@@ -1229,8 +1221,6 @@ impl SimpleComponent for App {
                             }));
 
                             if let Err(err) = result {
-                                let err: std::io::Error = err.into();
-
                                 tracing::error!("Downloading failed: {err}");
 
                                 sender.input(AppMsg::Toast {

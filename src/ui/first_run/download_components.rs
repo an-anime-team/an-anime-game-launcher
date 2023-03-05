@@ -312,8 +312,6 @@ impl SimpleAsyncComponent for DownloadComponentsApp {
                             installer.install(&config.game.wine.builds, move |update| {
                                 match &update {
                                     InstallerUpdate::DownloadingError(err) => {
-                                        let err: std::io::Error = err.clone().into();
-
                                         tracing::error!("Failed to download wine: {err}");
 
                                         sender.output(Self::Output::Toast {
@@ -427,8 +425,6 @@ impl SimpleAsyncComponent for DownloadComponentsApp {
                             installer.install(&config.game.dxvk.builds, move |update| {
                                 match &update {
                                     InstallerUpdate::DownloadingError(err) => {
-                                        let err: std::io::Error = err.clone().into();
-
                                         tracing::error!("Failed to download dxvk: {err}");
 
                                         sender.output(Self::Output::Toast {

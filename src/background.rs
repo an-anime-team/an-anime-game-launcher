@@ -61,8 +61,6 @@ pub fn download_background() -> anyhow::Result<()> {
     downloader.continue_downloading = false;
 
     if let Err(err) = downloader.download_to(crate::BACKGROUND_FILE.as_path(), |_, _| {}) {
-        let err: std::io::Error = err.into();
-
         anyhow::bail!(err);
     }
 

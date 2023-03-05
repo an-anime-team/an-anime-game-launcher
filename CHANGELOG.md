@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Forced `format_lang` to return regions for language codes
+- Fixed titlebar behavior on some DEs 
 
 ### Changed
 
