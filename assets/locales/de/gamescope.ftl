@@ -4,9 +4,9 @@ gamescope-resolution = Gamescope-Auflösung
 upscaling = Upscaling
 
 integer-scaling = Integer-Skalierung
-integer-scaling-description = Turns each pixel into a square or rectangular group of integer number of same-color pixels. Prevents sharpness loss when scaling Full HD to 4K
-gamescope-fsr-description = An open-source upscaling technique developed by AMD for better upscaling quality
-nis-description = An open source upscaling technique developed by Nvidia as a cross-vendor, low-overhead alternative to their proprietary DLSS solution, meaning it works on AMD and Intel GPUs as well as Nvidia GPUs
+integer-scaling-description = Verwandelt jeden Pixel in eine quadratische oder rechteckige Gruppe mit einer ganzzahligen Anzahl gleichfarbiger Pixel. Verhindert Schärfeverluste bei der Skalierung von Full HD auf 4K
+gamescope-fsr-description = Eine von AMD entwickelte Open-Source-Upscaling-Technik für bessere Upscaling-Qualität
+nis-description = Eine Open-Source-Upscaling-Technik, die von Nvidia als herstellerübergreifende, kostengünstige Alternative zu ihrer proprietären DLSS-Lösung entwickelt wurde, d. h. sie funktioniert sowohl auf AMD- und Intel-GPUs als auch auf Nvidia-GPUs
 
 other-settings = Andere Einstellungen
 framerate-limit = Framerate-Limit
