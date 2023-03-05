@@ -164,11 +164,9 @@ impl SimpleAsyncComponent for PreferencesApp {
 
                     dialog.set_response_appearance("save", adw::ResponseAppearance::Suggested);
 
-                    #[allow(unused_must_use)]
                     dialog.connect_response(Some("save"), |_, _| {
-                        match open::that(crate::DEBUG_FILE.as_os_str()) {
-                            Ok(()) => {},
-                            Err(err) => tracing::error!("Failed to open debug file: {}", err)
+                        if let Err(err) = open::that(crate::DEBUG_FILE.as_os_str()) {
+                            tracing::error!("Failed to open debug file: {err}");
                         }
                     });
 
