@@ -121,6 +121,70 @@ impl SimpleAsyncComponent for GamescopeApp {
                 },
 
                 add = &adw::PreferencesGroup {
+                    set_title: &tr("upscaling"),
+
+                    adw::ActionRow {
+                        set_title: &tr("integer-scaling"),
+                        set_subtitle: &tr("integer-scaling-description"),
+
+                        add_suffix = &gtk::Switch {
+                            set_valign: gtk::Align::Center,
+                            set_state: CONFIG.game.enhancements.gamescope.integer_scaling,
+
+                            connect_state_notify => |switch| {
+                                if is_ready() {
+                                    if let Ok(mut config) = config::get() {
+                                        config.game.enhancements.gamescope.integer_scaling = switch.state();
+        
+                                        config::update(config);
+                                    }
+                                }
+                            }
+                        }
+                    },
+
+                    adw::ActionRow {
+                        set_title: "FSR",
+                        set_subtitle: &tr("gamescope-fsr-description"),
+
+                        add_suffix = &gtk::Switch {
+                            set_valign: gtk::Align::Center,
+                            set_state: CONFIG.game.enhancements.gamescope.fsr,
+
+                            connect_state_notify => |switch| {
+                                if is_ready() {
+                                    if let Ok(mut config) = config::get() {
+                                        config.game.enhancements.gamescope.fsr = switch.state();
+        
+                                        config::update(config);
+                                    }
+                                }
+                            }
+                        }
+                    },
+
+                    adw::ActionRow {
+                        set_title: "Nvidia Image Scaling",
+                        set_subtitle: &tr("nis-description"),
+
+                        add_suffix = &gtk::Switch {
+                            set_valign: gtk::Align::Center,
+                            set_state: CONFIG.game.enhancements.gamescope.nis,
+
+                            connect_state_notify => |switch| {
+                                if is_ready() {
+                                    if let Ok(mut config) = config::get() {
+                                        config.game.enhancements.gamescope.nis = switch.state();
+        
+                                        config::update(config);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+
+                add = &adw::PreferencesGroup {
                     set_title: &tr("other-settings"),
 
                     // TODO: maybe use Fps enum like in fps unlocker settings
@@ -162,63 +226,6 @@ impl SimpleAsyncComponent for GamescopeApp {
                                     config.game.enhancements.gamescope.framerate.unfocused = row.text().parse().unwrap_or_default();
     
                                     config::update(config);
-                                }
-                            }
-                        }
-                    },
-
-                    adw::ActionRow {
-                        set_title: &tr("integer-scaling"),
-
-                        add_suffix = &gtk::Switch {
-                            set_valign: gtk::Align::Center,
-                            set_state: CONFIG.game.enhancements.gamescope.integer_scaling,
-
-                            connect_state_notify => |switch| {
-                                if is_ready() {
-                                    if let Ok(mut config) = config::get() {
-                                        config.game.enhancements.gamescope.integer_scaling = switch.state();
-        
-                                        config::update(config);
-                                    }
-                                }
-                            }
-                        }
-                    },
-
-                    adw::ActionRow {
-                        set_title: "FSR",
-
-                        add_suffix = &gtk::Switch {
-                            set_valign: gtk::Align::Center,
-                            set_state: CONFIG.game.enhancements.gamescope.fsr,
-
-                            connect_state_notify => |switch| {
-                                if is_ready() {
-                                    if let Ok(mut config) = config::get() {
-                                        config.game.enhancements.gamescope.fsr = switch.state();
-        
-                                        config::update(config);
-                                    }
-                                }
-                            }
-                        }
-                    },
-
-                    adw::ActionRow {
-                        set_title: "Nvidia Image Scaling",
-
-                        add_suffix = &gtk::Switch {
-                            set_valign: gtk::Align::Center,
-                            set_state: CONFIG.game.enhancements.gamescope.nis,
-
-                            connect_state_notify => |switch| {
-                                if is_ready() {
-                                    if let Ok(mut config) = config::get() {
-                                        config.game.enhancements.gamescope.nis = switch.state();
-        
-                                        config::update(config);
-                                    }
                                 }
                             }
                         }
