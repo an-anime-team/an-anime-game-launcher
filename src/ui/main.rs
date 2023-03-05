@@ -22,6 +22,8 @@ use crate::ui::components::*;
 use super::preferences::main::*;
 use super::about::*;
 
+use open::*;
+
 relm4::new_action_group!(WindowActionGroup, "win");
 
 relm4::new_stateless_action!(LauncherFolder, WindowActionGroup, "launcher_folder");
@@ -517,48 +519,56 @@ impl SimpleComponent for App {
         // TODO: reduce code somehow
 
         group.add_action::<LauncherFolder>(&RelmAction::new_stateless(clone!(@strong sender => move |_| {
-            if let Err(err) = std::process::Command::new("xdg-open").arg(LAUNCHER_FOLDER.as_path()).spawn() {
-                sender.input(AppMsg::Toast {
-                    title: tr("launcher-folder-opening-error"),
-                    description: Some(err.to_string())
-                });
-
-                tracing::error!("Failed to open launcher folder: {err}");
+            match open::that(LAUNCHER_FOLDER.as_path()) {
+                Ok(()) => {},
+                Err(err) => {
+                    sender.input(AppMsg::Toast {
+                        title: tr("launcher-folder-opening-error"),
+                        description: Some(err.to_string())
+                    });
+                    tracing::error!("Failed to open launcher folder: {err}");
+                }
             }
         })));
 
         group.add_action::<GameFolder>(&RelmAction::new_stateless(clone!(@strong sender => move |_| {
-            if let Err(err) = std::process::Command::new("xdg-open").arg(&CONFIG.game.path).spawn() {
-                sender.input(AppMsg::Toast {
-                    title: tr("game-folder-opening-error"),
-                    description: Some(err.to_string())
-                });
-
-                tracing::error!("Failed to open game folder: {err}");
+            match open::that(&CONFIG.game.path) {
+                Ok(()) => {},
+                Err(err) => {
+                    sender.input(AppMsg::Toast {
+                        title: tr("game-folder-opening-error"),
+                        description: Some(err.to_string())
+                    });
+                    tracing::error!("Failed to open game folder: {err}");
+                }
             }
         })));
 
         group.add_action::<ConfigFile>(&RelmAction::new_stateless(clone!(@strong sender => move |_| {
             if let Some(file) = anime_launcher_sdk::consts::config_file() {
-                if let Err(err) = std::process::Command::new("xdg-open").arg(file).spawn() {
-                    sender.input(AppMsg::Toast {
-                        title: tr("config-file-opening-error"),
-                        description: Some(err.to_string())
-                    });
-
-                    tracing::error!("Failed to open config file: {err}");
+                match open::that(file) {
+                    Ok(()) => {},
+                    Err(err) => {
+                        sender.input(AppMsg::Toast {
+                            title: tr("config-file-opening-error"),
+                            description: Some(err.to_string())
+                        });
+                        tracing::error!("Failed to open config file: {err}");
+                    }
                 }
             }
         })));
 
         group.add_action::<DebugFile>(&RelmAction::new_stateless(clone!(@strong sender => move |_| {
-            if let Err(err) = std::process::Command::new("xdg-open").arg(DEBUG_FILE.as_os_str()).spawn() {
-                sender.input(AppMsg::Toast {
-                    title: tr("debug-file-opening-error"),
-                    description: Some(err.to_string())
-                });
-
-                tracing::error!("Failed to open debug file: {err}");
+            match open::that(crate::DEBUG_FILE.as_os_str()) {
+                Ok(()) => {},
+                Err(err) => {
+                    sender.input(AppMsg::Toast {
+                        title: tr("debug-file-opening-error"),
+                        description: Some(err.to_string())
+                    });
+                    tracing::error!("Failed to open debug file: {err}");
+                }
             }
         })));
 
@@ -1119,12 +1129,9 @@ impl App {
 
             #[allow(unused_must_use)]
             dialog.connect_response(Some("save"), |_, _| {
-                let result = std::process::Command::new("xdg-open")
-                    .arg(crate::DEBUG_FILE.as_os_str())
-                    .output();
-
-                if let Err(err) = result {
-                    tracing::error!("Failed to open debug file: {}", err);
+                match open::that(crate::DEBUG_FILE.as_os_str()) {
+                    Ok(()) => {},
+                    Err(err) => tracing::error!("Failed to open debug file: {}", err),
                 }
             });
 

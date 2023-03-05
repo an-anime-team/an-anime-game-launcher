@@ -158,12 +158,9 @@ impl SimpleAsyncComponent for PreferencesApp {
 
                     #[allow(unused_must_use)]
                     dialog.connect_response(Some("save"), |_, _| {
-                        let result = std::process::Command::new("xdg-open")
-                            .arg(crate::DEBUG_FILE.as_os_str())
-                            .output();
-
-                        if let Err(err) = result {
-                            tracing::error!("Failed to open debug file: {}", err);
+                        match open::that(crate::DEBUG_FILE.as_os_str()) {
+                            Ok(()) => {},
+                            Err(err) => tracing::error!("Failed to open debug file: {}", err)
                         }
                     });
 
