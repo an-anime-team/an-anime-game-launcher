@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Used `open` library for xdg (#84)
 - Added dynamic components loading
 - Added commit hashes to core/sdk versions in about window
+- Added translation for Simplified Chinese (#88)
 
 ### Fixed
 
