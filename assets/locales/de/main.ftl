@@ -24,7 +24,7 @@ restart = Neustarten
 
 loading-data = Laden Daten
 downloading-background-picture = Hintergrundbild am Herunterladen
-updating-components-index = Updating components index
+updating-components-index = Aktualisiere index der Komponenten
 loading-game-version = Lade version des Spiels
 loading-patch-status = Lade version des Patch
 loading-launcher-state = Lade Launcher status
