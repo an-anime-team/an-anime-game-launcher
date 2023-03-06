@@ -463,11 +463,15 @@ impl SimpleAsyncComponent for GeneralApp {
 
                     add_suffix = &gtk::Switch {
                         set_valign: gtk::Align::Center,
+
+                        #[block_signal(wine_recommended_notify)]
                         set_state: true,
 
                         connect_state_notify[sender] => move |switch| {
-                            sender.input(GeneralAppMsg::WineRecommendedOnly(switch.state()));
-                        }
+                            if is_ready() {
+                                sender.input(GeneralAppMsg::WineRecommendedOnly(switch.state()));
+                            }
+                        } @wine_recommended_notify
                     }
                 }
             },
@@ -513,11 +517,15 @@ impl SimpleAsyncComponent for GeneralApp {
 
                     add_suffix = &gtk::Switch {
                         set_valign: gtk::Align::Center,
+
+                        #[block_signal(dxvk_recommended_notify)]
                         set_state: true,
 
                         connect_state_notify[sender] => move |switch| {
-                            sender.input(GeneralAppMsg::DxvkRecommendedOnly(switch.state()));
-                        }
+                            if is_ready() {
+                                sender.input(GeneralAppMsg::DxvkRecommendedOnly(switch.state()));
+                            }
+                        } @dxvk_recommended_notify
                     }
                 }
             },
@@ -544,6 +552,7 @@ impl SimpleAsyncComponent for GeneralApp {
                         download_folder: CONFIG.game.wine.builds.clone(),
                         groups: wine::get_groups(&CONFIG.components.path).unwrap_or_default()
                             .into_iter()
+                            .filter(|group| !["wine-staging", "wine-staging-tkg"].contains(&group.name.as_str()))
                             .map(|mut group| {
                                 group.versions = group.versions.into_iter().take(12).collect();
 
