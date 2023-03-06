@@ -4,8 +4,8 @@ use relm4::component::*;
 use adw::prelude::*;
 
 use anime_launcher_sdk::anime_game_core::installer::installer::Update as InstallerUpdate;
+use anime_launcher_sdk::anime_game_core::prettify_bytes::prettify_bytes;
 
-use crate::prettify_bytes;
 use crate::i18n::*;
 
 pub struct ProgressBarInit {
