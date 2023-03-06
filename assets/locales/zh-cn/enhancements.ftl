@@ -41,7 +41,7 @@ power-saving = 省电模式
 power-saving-description = 当游戏失去焦点时 (例如切出游戏) 自动当帧率设为 10, 并降低进程优先级
 
 monitor = 显示器
-monitor-description = Number of monitor you want to run the game on
+monitor-description = 运行游戏的显示器编号
 
 window-mode = 窗口模式
 borderless = 无边框
