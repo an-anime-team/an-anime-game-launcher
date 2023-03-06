@@ -603,7 +603,7 @@ impl SimpleComponent for App {
 
             // Update components index
 
-            sender.input(AppMsg::SetLoadingStatus(Some(Some(String::from("Updating components index")))));
+            sender.input(AppMsg::SetLoadingStatus(Some(Some(tr("updating-components-index")))));
 
             let components = ComponentsLoader::new(&CONFIG.components.path);
 
@@ -620,7 +620,7 @@ impl SimpleComponent for App {
                                 tracing::error!("Failed to sync components index");
 
                                 sender.input(AppMsg::Toast {
-                                    title: String::from("Failed to sync components index"),
+                                    title: tr("components-index-sync-failed"),
                                     description: Some(err.to_string())
                                 });
                             }
@@ -632,7 +632,7 @@ impl SimpleComponent for App {
                     tracing::error!("Failed to verify that components index synced");
 
                     sender.input(AppMsg::Toast {
-                        title: String::from("Failed to verify components index"),
+                        title: tr("components-index-verify-failed"),
                         description: Some(err.to_string())
                     });
                 }

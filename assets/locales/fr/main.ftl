@@ -24,6 +24,7 @@ restart = Redémarer
 
 loading-data = Chargement des données
 downloading-background-picture = Téléchargement de l'image de fond
+updating-components-index = Updating components index
 loading-game-version = Chargement de la version du jeu
 loading-patch-status = Chargement du statut du patch
 loading-launcher-state = Chargement de l'état du launcher

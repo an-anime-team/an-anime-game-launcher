@@ -12,6 +12,8 @@ game-file-repairing-error = Reparieren der Spieldatei fehlgeschlagen
 integrity-files-getting-error = Integritätsdateien konnten nicht abgerufen werden
 
 background-downloading-failed = Download des Hintergrundbildes fehlgeschlagen
+components-index-sync-failed = Failed to sync components index
+components-index-verify-failed = Failed to verify components index
 config-update-error = Speichern der Konfiguration fehlgeschlagen
 wine-prefix-update-failed = Aktualisierung des wine prefix fehlgeschlagen
 dxvk-install-failed = DXVK konnte nicht installiert werden
