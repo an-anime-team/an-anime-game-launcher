@@ -14,7 +14,8 @@ company-alter-name = {-company-alter-name-1}{-company-alter-name-2}{-company-alt
 -game-name-4 = act
 game-name = {-game-name-1}{-game-name-2} {-game-name-3}{-game-name-4}
 
-en = English
-ru = Русский
-de = Deutsch
-fr = Français
+en-us = English
+ru-ru = Русский
+de-de = Deutsch
+fr-fr = Français
+zh-cn = 简体中文
