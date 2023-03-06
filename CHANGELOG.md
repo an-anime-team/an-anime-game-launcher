@@ -10,14 +10,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Added game repairing function
+- Added french translations (#81)
+- Used `open` library for xdg (#84)
+- Added dynamic components loading
 
 ### Fixed
 
 - Forced `format_lang` to return regions for language codes
+- Fixed titlebar behavior on some DEs
 
 ### Changed
 
 - Changed default language from en to en-us
+- Moved integer scaling, fsr and nis into separate group in gamescope settings
 
 ## 3.0.1
 

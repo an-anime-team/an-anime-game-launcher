@@ -8,10 +8,12 @@ failed-get-selected-wine = Die ausgewählte Wine version konnte nicht abgerufen 
 downloading-failed = Herunterladen fehlgeschlagen
 unpacking-failed = Entpacken fehlgeschlagen
 
-game-file-repairing-error = Failed to repair game file
-integrity-files-getting-error = Failed to get integrity files
+game-file-repairing-error = Reparieren der Spieldatei fehlgeschlagen
+integrity-files-getting-error = Integritätsdateien konnten nicht abgerufen werden
 
 background-downloading-failed = Download des Hintergrundbildes fehlgeschlagen
+components-index-sync-failed = Failed to sync components index
+components-index-verify-failed = Failed to verify components index
 config-update-error = Speichern der Konfiguration fehlgeschlagen
 wine-prefix-update-failed = Aktualisierung des wine prefix fehlgeschlagen
 dxvk-install-failed = DXVK konnte nicht installiert werden

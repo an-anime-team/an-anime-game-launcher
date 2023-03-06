@@ -25,6 +25,7 @@ restart = Перезапустить
 
 loading-data = Загрузка данных
 downloading-background-picture = Загрузка фонового изображения
+updating-components-index = Обновление индекса компонентов
 loading-game-version = Загрузка версии игры
 loading-patch-status = Загрузка статуса патча
 loading-launcher-state = Загрузка статуса лаунчера

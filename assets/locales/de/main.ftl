@@ -24,6 +24,7 @@ restart = Neustarten
 
 loading-data = Laden Daten
 downloading-background-picture = Hintergrundbild am Herunterladen
+updating-components-index = Updating components index
 loading-game-version = Lade version des Spiels
 loading-patch-status = Lade version des Patch
 loading-launcher-state = Lade Launcher status
@@ -35,8 +36,8 @@ loading-launcher-state--patch = Launcher status am laden: Verifizierung des inst
 checking-free-space = Überprüfe Freien Speicherplatz
 downloading = Lade Herunter
 unpacking = Entpacken
-verifying-files = Verifying files
-repairing-files = Repairing files
+verifying-files = Verifiziere Dateien
+repairing-files = Repariere Dateien
 
 
 launch = Starten

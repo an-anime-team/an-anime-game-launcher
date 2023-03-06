@@ -13,7 +13,7 @@ use std::path::PathBuf;
 use super::main::FirstRunAppMsg;
 use crate::ui::components::*;
 use crate::i18n::*;
-use crate::FIRST_RUN_FILE;
+use crate::*;
 
 fn get_installer(uri: &str, temp: Option<&PathBuf>, speed_limit: u64) -> anyhow::Result<Installer> {
     let mut installer = Installer::new(uri)?;
@@ -264,8 +264,9 @@ impl SimpleAsyncComponent for DownloadComponentsApp {
             wine_combo: adw::ComboRow::new(),
             dxvk_combo: adw::ComboRow::new(),
 
-            wine_versions: wine::get_groups()[0].versions.clone().into_iter().filter(|version| version.recommended).collect(),
-            dxvk_versions: dxvk::get_groups()[0].versions.clone().into_iter().filter(|version| version.recommended).collect(),
+            // FIXME: .filter(|version| version.recommended)
+            wine_versions: wine::get_groups(&CONFIG.components.path).unwrap_or_default()[0].versions.clone().into_iter().collect(),
+            dxvk_versions: dxvk::get_groups(&CONFIG.components.path).unwrap_or_default()[0].versions.clone().into_iter().collect(),
 
             downloading_wine: None,
             creating_prefix: None,
@@ -312,8 +313,6 @@ impl SimpleAsyncComponent for DownloadComponentsApp {
                             installer.install(&config.game.wine.builds, move |update| {
                                 match &update {
                                     InstallerUpdate::DownloadingError(err) => {
-                                        let err: std::io::Error = err.clone().into();
-
                                         tracing::error!("Failed to download wine: {err}");
 
                                         sender.output(Self::Output::Toast {
@@ -427,8 +426,6 @@ impl SimpleAsyncComponent for DownloadComponentsApp {
                             installer.install(&config.game.dxvk.builds, move |update| {
                                 match &update {
                                     InstallerUpdate::DownloadingError(err) => {
-                                        let err: std::io::Error = err.clone().into();
-
                                         tracing::error!("Failed to download dxvk: {err}");
 
                                         sender.output(Self::Output::Toast {

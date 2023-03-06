@@ -12,6 +12,8 @@ game-file-repairing-error = Не удалось починить игровой 
 integrity-files-getting-error = Не удалось получить верные данные о файлах игры
 
 background-downloading-failed = Не удалось загрузить фоновое изображение
+components-index-sync-failed = Не удалось синхронизировать индекс компонентов
+components-index-verify-failed = Не удалось проверить индекс компонентов
 config-update-error = Ошибка сохранения настроек
 wine-prefix-update-failed = Ошибка обновления префикса Wine
 dxvk-install-failed = Ошибка установки DXVK

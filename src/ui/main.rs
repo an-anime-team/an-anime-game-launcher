@@ -13,6 +13,7 @@ use gtk::glib::clone;
 use anime_launcher_sdk::config::launcher::LauncherStyle;
 use anime_launcher_sdk::states::LauncherState;
 use anime_launcher_sdk::wincompatlib::prelude::*;
+use anime_launcher_sdk::components::loader::ComponentsLoader;
 use anime_launcher_sdk::components::wine;
 
 use std::path::Path;
@@ -33,7 +34,7 @@ relm4::new_stateless_action!(DebugFile, WindowActionGroup, "debug_file");
 
 relm4::new_stateless_action!(About, WindowActionGroup, "about");
 
-static mut MAIN_WINDOW: Option<adw::Window> = None;
+static mut MAIN_WINDOW: Option<adw::ApplicationWindow> = None;
 static mut PREFERENCES_WINDOW: Option<AsyncController<PreferencesApp>> = None;
 static mut ABOUT_DIALOG: Option<Controller<AboutDialog>> = None;
 
@@ -116,12 +117,8 @@ impl SimpleComponent for App {
     }
 
     view! {
-        main_window = adw::Window {
-            #[watch]
-            set_title: match model.style {
-                LauncherStyle::Modern => Some("An Anime Game Launcher"),
-                LauncherStyle::Classic => Some("")
-            },
+        main_window = adw::ApplicationWindow {
+            set_icon_name: Some(APP_ID),
 
             #[watch]
             set_default_size: (
@@ -165,6 +162,15 @@ impl SimpleComponent for App {
                         set_css_classes: match model.style {
                             LauncherStyle::Modern => &[""],
                             LauncherStyle::Classic => &["flat"]
+                        },
+
+                        #[wrap(Some)]
+                        set_title_widget = &adw::WindowTitle {
+                            #[watch]
+                            set_title: match model.style {
+                                LauncherStyle::Modern => "An Anime Game Launcher",
+                                LauncherStyle::Classic => ""
+                            }
                         },
 
                         pack_end = &gtk::MenuButton {
@@ -521,7 +527,7 @@ impl SimpleComponent for App {
         // TODO: reduce code somehow
 
         group.add_action::<LauncherFolder>(&RelmAction::new_stateless(clone!(@strong sender => move |_| {
-            if let Err(err) = std::process::Command::new("xdg-open").arg(LAUNCHER_FOLDER.as_path()).spawn() {
+            if let Err(err) = open::that(LAUNCHER_FOLDER.as_path()) {
                 sender.input(AppMsg::Toast {
                     title: tr("launcher-folder-opening-error"),
                     description: Some(err.to_string())
@@ -532,7 +538,7 @@ impl SimpleComponent for App {
         })));
 
         group.add_action::<GameFolder>(&RelmAction::new_stateless(clone!(@strong sender => move |_| {
-            if let Err(err) = std::process::Command::new("xdg-open").arg(&CONFIG.game.path).spawn() {
+            if let Err(err) = open::that(&CONFIG.game.path) {
                 sender.input(AppMsg::Toast {
                     title: tr("game-folder-opening-error"),
                     description: Some(err.to_string())
@@ -544,7 +550,7 @@ impl SimpleComponent for App {
 
         group.add_action::<ConfigFile>(&RelmAction::new_stateless(clone!(@strong sender => move |_| {
             if let Some(file) = anime_launcher_sdk::consts::config_file() {
-                if let Err(err) = std::process::Command::new("xdg-open").arg(file).spawn() {
+                if let Err(err) = open::that(file) {
                     sender.input(AppMsg::Toast {
                         title: tr("config-file-opening-error"),
                         description: Some(err.to_string())
@@ -556,7 +562,7 @@ impl SimpleComponent for App {
         })));
 
         group.add_action::<DebugFile>(&RelmAction::new_stateless(clone!(@strong sender => move |_| {
-            if let Err(err) = std::process::Command::new("xdg-open").arg(DEBUG_FILE.as_os_str()).spawn() {
+            if let Err(err) = open::that(crate::DEBUG_FILE.as_os_str()) {
                 sender.input(AppMsg::Toast {
                     title: tr("debug-file-opening-error"),
                     description: Some(err.to_string())
@@ -590,6 +596,43 @@ impl SimpleComponent for App {
 
                     sender.input(AppMsg::Toast {
                         title: tr("background-downloading-failed"),
+                        description: Some(err.to_string())
+                    });
+                }
+            }
+
+            // Update components index
+
+            sender.input(AppMsg::SetLoadingStatus(Some(Some(tr("updating-components-index")))));
+
+            let components = ComponentsLoader::new(&CONFIG.components.path);
+
+            match components.is_sync(&CONFIG.components.servers) {
+                Ok(true) => (),
+
+                Ok(false) => {
+                    for host in &CONFIG.components.servers {
+                        match components.sync(host) {
+                            Ok(true) => break,
+                            Ok(false) => continue,
+
+                            Err(err) => {
+                                tracing::error!("Failed to sync components index");
+
+                                sender.input(AppMsg::Toast {
+                                    title: tr("components-index-sync-failed"),
+                                    description: Some(err.to_string())
+                                });
+                            }
+                        }
+                    }
+                }
+
+                Err(err) => {
+                    tracing::error!("Failed to verify that components index synced");
+
+                    sender.input(AppMsg::Toast {
+                        title: tr("components-index-verify-failed"),
                         description: Some(err.to_string())
                     });
                 }
@@ -876,8 +919,6 @@ impl SimpleComponent for App {
                                         tracing::debug!("Repairing: {}", file.path.to_string_lossy());
 
                                         if let Err(err) = file.repair(&config.game.path) {
-                                            let err: std::io::Error = err.into();
-
                                             sender.input(AppMsg::Toast {
                                                 title: tr("game-file-repairing-error"),
                                                 description: Some(err.to_string())
@@ -928,8 +969,6 @@ impl SimpleComponent for App {
                             }));
 
                             if let Err(err) = result {
-                                let err: std::io::Error = err.into();
-
                                 sender.input(AppMsg::Toast {
                                     title: tr("downloading-failed"),
                                     description: Some(err.to_string())
@@ -1049,16 +1088,17 @@ impl SimpleComponent for App {
                     LauncherState::WineNotInstalled => {
                         let mut config = config::get().unwrap();
 
-                        match wine::get_downloaded(&config.game.wine.builds) {
+                        match wine::get_downloaded(&CONFIG.components.path, &config.game.wine.builds) {
                             Ok(list) => {
-                                if let Some(version) = list.into_iter().find(|version| version.recommended) {
-                                    config.game.wine.selected = Some(version.name);
+                                // FIXME: .find(|version| version.recommended)
+                                if !list.is_empty() {
+                                    config.game.wine.selected = Some(list[0].name.clone());
 
                                     config::update(config.clone());
                                 }
 
                                 if config.game.wine.selected.is_none() {
-                                    let wine = wine::Version::latest();
+                                    let wine = wine::Version::latest(&CONFIG.components.path).expect("Failed to get latest wine version");
 
                                     match Installer::new(wine.uri) {
                                         Ok(mut installer) => {
@@ -1079,28 +1119,26 @@ impl SimpleComponent for App {
                                                 installer.install(&config.game.wine.builds, clone!(@strong sender => move |state| {
                                                     match &state {
                                                         InstallerUpdate::DownloadingError(err) => {
-                                                            let err: std::io::Error = err.clone().into();
-                    
                                                             tracing::error!("Downloading failed: {err}");
-                    
+
                                                             sender.input(AppMsg::Toast {
                                                                 title: tr("downloading-failed"),
                                                                 description: Some(err.to_string())
                                                             });
                                                         }
-                    
+
                                                         InstallerUpdate::UnpackingError(err) => {
                                                             tracing::error!("Unpacking failed: {err}");
-                    
+
                                                             sender.input(AppMsg::Toast {
                                                                 title: tr("unpacking-failed"),
                                                                 description: Some(err.clone())
                                                             });
                                                         }
-                    
+
                                                         _ => ()
                                                     }
-                    
+
                                                     progress_bar_input.send(ProgressBarMsg::UpdateFromState(state));
                                                 }));
 
@@ -1135,12 +1173,13 @@ impl SimpleComponent for App {
                     LauncherState::PrefixNotExists => {
                         let config = config::get().unwrap();
 
-                        match config.try_get_wine_executable() {
-                            Some(wine) => {
+                        match config.try_get_selected_wine_info() {
+                            Ok(Some(wine)) => {
                                 sender.input(AppMsg::DisableButtons(true));
 
                                 std::thread::spawn(move || {
-                                    let wine = Wine::from_binary(wine)
+                                    let wine = wine
+                                        .to_wine(Some(config.game.wine.builds.join(&wine.name)))
                                         .with_loader(WineLoader::Current)
                                         .with_arch(WineArch::Win64);
 
@@ -1161,12 +1200,21 @@ impl SimpleComponent for App {
                                 });
                             }
 
-                            None => {
+                            Ok(None) => {
                                 tracing::error!("Failed to get selected wine executable");
 
                                 sender.input(AppMsg::Toast {
                                     title: tr("failed-get-selected-wine"),
                                     description: None
+                                });
+                            }
+
+                            Err(err) => {
+                                tracing::error!("Failed to get selected wine executable: {err}");
+
+                                sender.input(AppMsg::Toast {
+                                    title: tr("failed-get-selected-wine"),
+                                    description: Some(err.to_string())
                                 });
                             }
                         }
@@ -1188,8 +1236,6 @@ impl SimpleComponent for App {
                             let result = diff.install_to_by(config.game.path, config.launcher.temp, clone!(@strong sender => move |state| {
                                 match &state {
                                     InstallerUpdate::DownloadingError(err) => {
-                                        let err: std::io::Error = err.clone().into();
-
                                         tracing::error!("Downloading failed: {err}");
 
                                         sender.input(AppMsg::Toast {
@@ -1214,8 +1260,6 @@ impl SimpleComponent for App {
                             }));
 
                             if let Err(err) = result {
-                                let err: std::io::Error = err.into();
-
                                 tracing::error!("Downloading failed: {err}");
 
                                 sender.input(AppMsg::Toast {
@@ -1270,14 +1314,9 @@ impl App {
 
             dialog.set_response_appearance("save", adw::ResponseAppearance::Suggested);
 
-            #[allow(unused_must_use)]
             dialog.connect_response(Some("save"), |_, _| {
-                let result = std::process::Command::new("xdg-open")
-                    .arg(crate::DEBUG_FILE.as_os_str())
-                    .output();
-
-                if let Err(err) = result {
-                    tracing::error!("Failed to open debug file: {}", err);
+                if let Err(err) = open::that(crate::DEBUG_FILE.as_os_str()) {
+                    tracing::error!("Failed to open debug file: {err}");
                 }
             });
 

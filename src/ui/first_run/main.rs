@@ -206,14 +206,9 @@ impl SimpleComponent for FirstRunApp {
 
                     dialog.set_response_appearance("save", adw::ResponseAppearance::Suggested);
 
-                    #[allow(unused_must_use)]
                     dialog.connect_response(Some("save"), |_, _| {
-                        let result = std::process::Command::new("xdg-open")
-                            .arg(crate::DEBUG_FILE.as_os_str())
-                            .output();
-
-                        if let Err(err) = result {
-                            tracing::error!("Failed to open debug file: {}", err);
+                        if let Err(err) = open::that(crate::DEBUG_FILE.as_os_str()) {
+                            tracing::error!("Failed to open debug file: {err}");
                         }
                     });
 

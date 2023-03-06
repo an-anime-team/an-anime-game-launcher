@@ -24,6 +24,7 @@ restart = Restart
 
 loading-data = Loading data
 downloading-background-picture = Downloading background picture
+updating-components-index = Updating components index
 loading-game-version = Loading game version
 loading-patch-status = Loading patch status
 loading-launcher-state = Loading launcher state

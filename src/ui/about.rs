@@ -55,7 +55,8 @@ impl SimpleComponent for AboutDialog {
             add_credit_section: (Some("An Anime Team"), &[
                 "@Marie https://github.com/Mar0xy",
                 "@lane https://github.com/laurinneff",
-                "@jiro-too https://github.com/jiro-too"
+                "@jiro-too https://github.com/jiro-too",
+                "@cybik https://github.com/cybik"
             ]),
 
             set_artists: &[
@@ -64,7 +65,8 @@ impl SimpleComponent for AboutDialog {
 
             set_translator_credits: &[
                 "Русский, English — Nikita Podvirnyy https://github.com/krypt0nn",
-                "Deutsch — @Marie https://github.com/Mar0xy"
+                "Deutsch — @Marie https://github.com/Mar0xy",
+                "Français — @zeGolem https://github.com/zeGolem"
             ].join("\n"),
 
             set_debug_info: &[
