@@ -13,6 +13,7 @@ use gtk::glib::clone;
 use anime_launcher_sdk::config::launcher::LauncherStyle;
 use anime_launcher_sdk::states::LauncherState;
 use anime_launcher_sdk::wincompatlib::prelude::*;
+use anime_launcher_sdk::components::loader::ComponentsLoader;
 use anime_launcher_sdk::components::wine;
 
 use std::path::Path;
@@ -600,6 +601,43 @@ impl SimpleComponent for App {
                 }
             }
 
+            // Update components index
+
+            sender.input(AppMsg::SetLoadingStatus(Some(Some(String::from("Updating components index")))));
+
+            let components = ComponentsLoader::new(&CONFIG.components.path);
+
+            match components.is_sync(&CONFIG.components.servers) {
+                Ok(true) => (),
+
+                Ok(false) => {
+                    for host in &CONFIG.components.servers {
+                        match components.sync(host) {
+                            Ok(true) => break,
+                            Ok(false) => continue,
+
+                            Err(err) => {
+                                tracing::error!("Failed to sync components index");
+
+                                sender.input(AppMsg::Toast {
+                                    title: String::from("Failed to sync components index"),
+                                    description: Some(err.to_string())
+                                });
+                            }
+                        }
+                    }
+                }
+
+                Err(err) => {
+                    tracing::error!("Failed to verify that components index synced");
+
+                    sender.input(AppMsg::Toast {
+                        title: String::from("Failed to verify components index"),
+                        description: Some(err.to_string())
+                    });
+                }
+            }
+
             // Update initial game version status
 
             sender.input(AppMsg::SetLoadingStatus(Some(Some(tr("loading-game-version")))));
@@ -1050,16 +1088,17 @@ impl SimpleComponent for App {
                     LauncherState::WineNotInstalled => {
                         let mut config = config::get().unwrap();
 
-                        match wine::get_downloaded(&config.game.wine.builds) {
+                        match wine::get_downloaded(&CONFIG.components.path, &config.game.wine.builds) {
                             Ok(list) => {
-                                if let Some(version) = list.into_iter().find(|version| version.recommended) {
-                                    config.game.wine.selected = Some(version.name);
+                                // FIXME: .find(|version| version.recommended)
+                                if !list.is_empty() {
+                                    config.game.wine.selected = Some(list[0].name.clone());
 
                                     config::update(config.clone());
                                 }
 
                                 if config.game.wine.selected.is_none() {
-                                    let wine = wine::Version::latest();
+                                    let wine = wine::Version::latest(&CONFIG.components.path).expect("Failed to get latest wine version");
 
                                     match Installer::new(wine.uri) {
                                         Ok(mut installer) => {
@@ -1134,12 +1173,13 @@ impl SimpleComponent for App {
                     LauncherState::PrefixNotExists => {
                         let config = config::get().unwrap();
 
-                        match config.try_get_wine_executable() {
-                            Some(wine) => {
+                        match config.try_get_selected_wine_info() {
+                            Ok(Some(wine)) => {
                                 sender.input(AppMsg::DisableButtons(true));
 
                                 std::thread::spawn(move || {
-                                    let wine = Wine::from_binary(wine)
+                                    let wine = wine
+                                        .to_wine(Some(config.game.wine.builds.join(&wine.name)))
                                         .with_loader(WineLoader::Current)
                                         .with_arch(WineArch::Win64);
 
@@ -1160,12 +1200,21 @@ impl SimpleComponent for App {
                                 });
                             }
 
-                            None => {
+                            Ok(None) => {
                                 tracing::error!("Failed to get selected wine executable");
 
                                 sender.input(AppMsg::Toast {
                                     title: tr("failed-get-selected-wine"),
                                     description: None
+                                });
+                            }
+
+                            Err(err) => {
+                                tracing::error!("Failed to get selected wine executable: {err}");
+
+                                sender.input(AppMsg::Toast {
+                                    title: tr("failed-get-selected-wine"),
+                                    description: Some(err.to_string())
                                 });
                             }
                         }

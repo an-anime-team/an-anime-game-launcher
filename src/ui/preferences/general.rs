@@ -542,7 +542,7 @@ impl SimpleAsyncComponent for GeneralApp {
                 .launch(ComponentsListInit {
                     pattern: ComponentsListPattern {
                         download_folder: CONFIG.game.wine.builds.clone(),
-                        groups: wine::get_groups().into_iter().map(|group| group.into()).collect()
+                        groups: wine::get_groups(&CONFIG.components.path).unwrap_or_default().into_iter().map(|group| group.into()).collect()
                     },
                     on_downloaded: Some(GeneralAppMsg::UpdateDownloadedWine),
                     on_deleted: Some(GeneralAppMsg::UpdateDownloadedWine)
@@ -553,7 +553,7 @@ impl SimpleAsyncComponent for GeneralApp {
                 .launch(ComponentsListInit {
                     pattern: ComponentsListPattern {
                         download_folder: CONFIG.game.dxvk.builds.clone(),
-                        groups: dxvk::get_groups().into_iter().map(|group| group.into()).collect()
+                        groups: dxvk::get_groups(&CONFIG.components.path).unwrap_or_default().into_iter().map(|group| group.into()).collect()
                     },
                     on_downloaded: Some(GeneralAppMsg::UpdateDownloadedDxvk),
                     on_deleted: Some(GeneralAppMsg::UpdateDownloadedDxvk)
@@ -701,7 +701,7 @@ impl SimpleAsyncComponent for GeneralApp {
             }
 
             GeneralAppMsg::UpdateDownloadedWine => {
-                self.downloaded_wine_versions = wine::get_downloaded(&CONFIG.game.wine.builds).unwrap_or_default();
+                self.downloaded_wine_versions = wine::get_downloaded(&CONFIG.components.path, &CONFIG.game.wine.builds).unwrap_or_default();
 
                 self.selected_wine_version = if let Some(selected) = &CONFIG.game.wine.selected {
                     let mut index = 0;
@@ -723,7 +723,7 @@ impl SimpleAsyncComponent for GeneralApp {
             }
 
             GeneralAppMsg::UpdateDownloadedDxvk => {
-                self.downloaded_dxvk_versions = dxvk::get_downloaded(&CONFIG.game.dxvk.builds).unwrap_or_default();
+                self.downloaded_dxvk_versions = dxvk::get_downloaded(&CONFIG.components.path, &CONFIG.game.dxvk.builds).unwrap_or_default();
 
                 self.selected_dxvk_version = if let Ok(Some(selected)) = CONFIG.try_get_selected_dxvk_info() {
                     let mut index = 0;
@@ -789,8 +789,8 @@ impl SimpleAsyncComponent for GeneralApp {
                                 self.selecting_dxvk_version = true;
 
                                 let mut wine = match config.try_get_selected_wine_info() {
-                                    Some(version) => version.to_wine(Some(config.game.wine.builds.join(&version.name))),
-                                    None => Wine::default()
+                                    Ok(Some(version)) => version.to_wine(Some(config.game.wine.builds.join(&version.name))),
+                                    _ => Wine::default()
                                 };
 
                                 wine = wine.with_prefix(config.game.wine.prefix);

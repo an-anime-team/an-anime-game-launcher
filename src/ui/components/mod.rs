@@ -27,7 +27,7 @@ pub struct ComponentsListGroup {
 impl From<wine::Group> for ComponentsListGroup {
     fn from(group: wine::Group) -> Self {
         Self {
-            title: group.name,
+            title: group.title,
             versions: group.versions.into_iter().map(|version| version.into()).collect()
         }
     }
@@ -56,7 +56,7 @@ impl From<wine::Version> for ComponentsListVersion {
             name: version.name,
             title: version.title,
             uri: version.uri,
-            recommended: version.recommended
+            recommended: true // FIXME
         }
     }
 }
@@ -67,7 +67,7 @@ impl From<dxvk::Version> for ComponentsListVersion {
             name: version.name.clone(),
             title: version.name,
             uri: version.uri,
-            recommended: version.recommended
+            recommended: true // FIXME
         }
     }
 }
