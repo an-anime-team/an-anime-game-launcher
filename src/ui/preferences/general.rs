@@ -542,7 +542,22 @@ impl SimpleAsyncComponent for GeneralApp {
                 .launch(ComponentsListInit {
                     pattern: ComponentsListPattern {
                         download_folder: CONFIG.game.wine.builds.clone(),
-                        groups: wine::get_groups(&CONFIG.components.path).unwrap_or_default().into_iter().map(|group| group.into()).collect()
+                        groups: wine::get_groups(&CONFIG.components.path).unwrap_or_default()
+                            .into_iter()
+                            .map(|mut group| {
+                                group.versions = group.versions.into_iter().take(12).collect();
+
+                                let mut group: ComponentsListGroup = group.into();
+
+                                if group.versions.len() > 6 {
+                                    for i in 6..group.versions.len() {
+                                        group.versions[i].recommended = false;
+                                    }
+                                }
+
+                                group
+                            })
+                            .collect()
                     },
                     on_downloaded: Some(GeneralAppMsg::UpdateDownloadedWine),
                     on_deleted: Some(GeneralAppMsg::UpdateDownloadedWine)
@@ -553,7 +568,22 @@ impl SimpleAsyncComponent for GeneralApp {
                 .launch(ComponentsListInit {
                     pattern: ComponentsListPattern {
                         download_folder: CONFIG.game.dxvk.builds.clone(),
-                        groups: dxvk::get_groups(&CONFIG.components.path).unwrap_or_default().into_iter().map(|group| group.into()).collect()
+                        groups: dxvk::get_groups(&CONFIG.components.path).unwrap_or_default()
+                            .into_iter()
+                            .map(|mut group| {
+                                group.versions = group.versions.into_iter().take(12).collect();
+
+                                let mut group: ComponentsListGroup = group.into();
+
+                                if group.versions.len() > 6 {
+                                    for i in 6..group.versions.len() {
+                                        group.versions[i].recommended = false;
+                                    }
+                                }
+
+                                group
+                            })
+                            .collect()
                     },
                     on_downloaded: Some(GeneralAppMsg::UpdateDownloadedDxvk),
                     on_deleted: Some(GeneralAppMsg::UpdateDownloadedDxvk)

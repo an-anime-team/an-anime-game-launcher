@@ -36,7 +36,7 @@ impl From<wine::Group> for ComponentsListGroup {
 impl From<dxvk::Group> for ComponentsListGroup {
     fn from(group: dxvk::Group) -> Self {
         Self {
-            title: group.name,
+            title: group.title,
             versions: group.versions.into_iter().map(|version| version.into()).collect()
         }
     }
