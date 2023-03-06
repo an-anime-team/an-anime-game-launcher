@@ -43,6 +43,7 @@ Documentation for the launcher can be found in the [repository wiki](https://git
 | Pacstall | [an-anime-game-launcher-bin](https://pacstall.dev/packages/an-anime-game-launcher-bin) |
 | Gentoo | [an-anime-game-launcher-bin](https://github.com/an-anime-team/aagl-ebuilds) |
 | RPM | [an-anime-game-launcher](https://build.opensuse.org/repositories/home:Maroxy:AAT-Apps/AAGL) |
+| NixOS | [an-anime-game-launcher](https://github.com/ezKEa/aagl-gtk-on-nix) |
 
 ## Flatpak support
 
