@@ -565,7 +565,7 @@ impl SimpleAsyncComponent for GeneralApp {
 
             style: CONFIG.launcher.style,
 
-            languages: SUPPORTED_LANGUAGES.iter().map(|lang| tr(lang.language.as_str())).collect(),
+            languages: SUPPORTED_LANGUAGES.iter().map(|lang| tr(format_lang(lang).as_str())).collect(),
 
             downloaded_wine_versions: vec![],
             downloaded_dxvk_versions: vec![],
