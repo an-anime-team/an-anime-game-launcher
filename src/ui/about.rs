@@ -40,8 +40,8 @@ impl SimpleComponent for AboutDialog {
             set_application_name: "An Anime Game Launcher",
             set_application_icon: APP_ID,
 
-            set_website: "https://github.com/an-anime-team/an-anime-game-launcher-gtk",
-            set_issue_url: "https://github.com/an-anime-team/an-anime-game-launcher-gtk/issues",
+            set_website: "https://github.com/an-anime-team/an-anime-game-launcher",
+            set_issue_url: "https://github.com/an-anime-team/an-anime-game-launcher/issues",
 
             set_license_type: gtk::License::Gpl30,
 
