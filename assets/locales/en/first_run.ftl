@@ -37,6 +37,7 @@ runners-folder = Runners folder
 dxvks-folder = DXVKs folder
 wine-prefix-folder = Wine prefix folder
 game-installation-folder = Game installation folder
+components-index = Components index
 patch-folder = Patch folder
 temp-folder = Temp folder
 

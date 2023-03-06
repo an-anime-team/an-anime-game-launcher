@@ -37,6 +37,7 @@ runners-folder = Emplacement des runners
 dxvks-folder = Emplacement des versions de DXVK
 wine-prefix-folder = Emplacement du préfix wine
 game-installation-folder = Emplacement d'installation du jeu
+components-index = Indice des composants
 patch-folder = Emplacement du patch
 temp-folder = Dossier temporaire
 

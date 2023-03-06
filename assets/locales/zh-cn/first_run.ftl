@@ -37,6 +37,7 @@ runners-folder = 运行程序文件夹
 dxvks-folder = DXVK 文件夹
 wine-prefix-folder = Wine prefix 文件夹
 game-installation-folder = 游戏安装文件夹
+components-index = 成分指数
 patch-folder = 补丁文件夹
 temp-folder = 临时文件夹
 

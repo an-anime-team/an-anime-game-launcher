@@ -19,6 +19,7 @@ pub struct DefaultPathsApp {
     dxvks: PathBuf,
     prefix: PathBuf,
     game: PathBuf,
+    components: PathBuf,
     patch: PathBuf,
     temp: PathBuf
 }
@@ -30,6 +31,7 @@ pub enum Folders {
     DXVK,
     Prefix,
     Game,
+    Components,
     Patch,
     Temp
 }
@@ -146,6 +148,17 @@ impl SimpleAsyncComponent for DefaultPathsApp {
                 },
 
                 adw::ActionRow {
+                    set_title: &tr("components-index"),
+                    set_icon_name: Some("folder-symbolic"),
+                    set_activatable: true,
+
+                    #[watch]
+                    set_subtitle: model.components.to_str().unwrap(),
+
+                    connect_activated => DefaultPathsAppMsg::ChoosePath(Folders::Components)
+                },
+
+                adw::ActionRow {
                     set_title: &tr("patch-folder"),
                     set_icon_name: Some("folder-symbolic"),
                     set_activatable: true,
@@ -208,6 +221,7 @@ impl SimpleAsyncComponent for DefaultPathsApp {
             dxvks: CONFIG.game.dxvk.builds.clone(),
             prefix: CONFIG.game.wine.prefix.clone(),
             game: CONFIG.game.path.clone(),
+            components: CONFIG.components.path.clone(),
             patch: CONFIG.patch.path.clone(),
 
             #[allow(clippy::or_fun_call)]
@@ -233,22 +247,24 @@ impl SimpleAsyncComponent for DefaultPathsApp {
 
                     match folder {
                         Folders::Launcher => {
-                            self.runners = result.join("runners");
-                            self.dxvks   = result.join("dxvks");
-                            self.prefix  = result.join("game");
-                            self.game    = result.join("game/drive_c/Program Files/Genshin Impact");
-                            self.patch   = result.join("patch");
-                            self.temp    = result.join("temp");
+                            self.runners    = result.join("runners");
+                            self.dxvks      = result.join("dxvks");
+                            self.prefix     = result.join("game");
+                            self.game       = result.join("game/drive_c/Program Files/Genshin Impact");
+                            self.components = result.join("components");
+                            self.patch      = result.join("patch");
+                            self.temp       = result.join("temp");
 
                             self.launcher = result;
                         }
 
-                        Folders::Runners => self.runners = result,
-                        Folders::DXVK    => self.dxvks   = result,
-                        Folders::Prefix  => self.prefix  = result,
-                        Folders::Game    => self.game    = result,
-                        Folders::Patch   => self.patch   = result,
-                        Folders::Temp    => self.temp    = result
+                        Folders::Runners    => self.runners    = result,
+                        Folders::DXVK       => self.dxvks      = result,
+                        Folders::Prefix     => self.prefix     = result,
+                        Folders::Game       => self.game       = result,
+                        Folders::Components => self.components = result,
+                        Folders::Patch      => self.patch      = result,
+                        Folders::Temp       => self.temp       = result
                     }
                 }
             }
@@ -278,6 +294,7 @@ impl DefaultPathsApp {
         config.game.dxvk.builds = self.dxvks.clone();
         config.game.wine.prefix = self.prefix.clone();
         config.game.path        = self.game.clone();
+        config.components.path  = self.components.clone();
         config.patch.path       = self.patch.clone();
         config.launcher.temp    = Some(self.temp.clone());
 

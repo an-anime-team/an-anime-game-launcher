@@ -39,6 +39,7 @@ runners-folder = Папка версий Wine
 dxvks-folder = Папка версий DXVK
 wine-prefix-folder = Папка префикса Wine
 game-installation-folder = Путь установки игры
+components-index = Индекс компонентов
 patch-folder = Папка скачивания патча
 temp-folder = Временная папка
 
