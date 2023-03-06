@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## 3.1.0
 
 ### Added
 
@@ -20,6 +20,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Forced `format_lang` to return regions for language codes
 - Fixed titlebar behavior on some DEs
+- Fixed wine `LANG` values
+- Updated launcher URLs in about window
 
 ### Changed
 
