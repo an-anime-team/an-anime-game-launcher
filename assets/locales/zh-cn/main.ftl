@@ -24,6 +24,7 @@ restart = 重启
 
 loading-data = 正在加载数据
 downloading-background-picture = 正在下载背景图片
+updating-components-index = 正在更新组件索引
 loading-game-version = 正在获取游戏版本号
 loading-patch-status = 正在获取补丁状态
 loading-launcher-state = 正在计算启动器状态
