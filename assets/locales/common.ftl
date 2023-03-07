@@ -17,5 +17,6 @@ game-name = {-game-name-1}{-game-name-2} {-game-name-3}{-game-name-4}
 en-us = English
 ru-ru = Русский
 de-de = Deutsch
+es-es = Español
 fr-fr = Français
 zh-cn = 简体中文
