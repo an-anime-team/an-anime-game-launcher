@@ -552,7 +552,6 @@ impl SimpleAsyncComponent for GeneralApp {
                         download_folder: CONFIG.game.wine.builds.clone(),
                         groups: wine::get_groups(&CONFIG.components.path).unwrap_or_default()
                             .into_iter()
-                            .filter(|group| !["wine-staging", "wine-staging-tkg"].contains(&group.name.as_str()))
                             .map(|mut group| {
                                 group.versions = group.versions.into_iter().take(12).collect();
 
