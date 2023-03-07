@@ -108,6 +108,9 @@ impl SimpleComponent for FirstRunApp {
                     },
 
                     adw::CarouselIndicatorDots {
+                        #[watch]
+                        set_visible: model.loading.is_none(),
+
                         set_carousel: Some(carousel),
                         set_height_request: 32
                     }
