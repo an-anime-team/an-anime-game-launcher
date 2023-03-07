@@ -61,6 +61,7 @@ pub struct DownloadComponentsApp {
 
 #[derive(Debug, Clone)]
 pub enum DownloadComponentsAppMsg {
+    UpdateVersionsLists,
     DownloadWine,
     CreatePrefix,
     DownloadDXVK,
@@ -265,8 +266,8 @@ impl SimpleAsyncComponent for DownloadComponentsApp {
             dxvk_combo: adw::ComboRow::new(),
 
             // FIXME: .filter(|version| version.recommended)
-            wine_versions: wine::get_groups(&CONFIG.components.path).unwrap_or_default()[0].versions.clone().into_iter().collect(),
-            dxvk_versions: dxvk::get_groups(&CONFIG.components.path).unwrap_or_default()[0].versions.clone().into_iter().collect(),
+            wine_versions: vec![],
+            dxvk_versions: vec![],
 
             downloading_wine: None,
             creating_prefix: None,
@@ -288,6 +289,11 @@ impl SimpleAsyncComponent for DownloadComponentsApp {
 
     async fn update(&mut self, msg: Self::Input, sender: AsyncComponentSender<Self>) {
         match msg {
+            DownloadComponentsAppMsg::UpdateVersionsLists => {
+                self.wine_versions = wine::get_groups(&CONFIG.components.path).unwrap()[0].versions.clone().into_iter().collect();
+                self.dxvk_versions = dxvk::get_groups(&CONFIG.components.path).unwrap()[0].versions.clone().into_iter().collect();
+            }
+
             #[allow(unused_must_use)]
             DownloadComponentsAppMsg::DownloadWine => {
                 self.downloading = true;

@@ -4,7 +4,10 @@ use relm4::component::*;
 use gtk::prelude::*;
 use adw::prelude::*;
 
+use anime_launcher_sdk::components::loader::ComponentsLoader;
+
 use crate::i18n::tr;
+use crate::*;
 
 use super::welcome::*;
 use super::tos_warning::*;
@@ -30,11 +33,14 @@ pub struct FirstRunApp {
     toast_overlay: adw::ToastOverlay,
     carousel: adw::Carousel,
 
+    loading: Option<Option<String>>,
     title: String
 }
 
 #[derive(Debug, Clone)]
 pub enum FirstRunAppMsg {
+    SetLoadingStatus(Option<Option<String>>),
+
     ScrollToTosWarning,
     ScrollToDependencies,
     ScrollToDefaultPaths,
@@ -70,8 +76,26 @@ impl SimpleComponent for FirstRunApp {
                         add_css_class: "flat"
                     },
 
+                    adw::StatusPage {
+                        set_title: &tr("loading-data"),
+                        set_icon_name: Some(APP_ID),
+                        set_vexpand: true,
+
+                        #[watch]
+                        set_description: match &model.loading {
+                            Some(Some(desc)) => Some(desc),
+                            Some(None) | None => None
+                        },
+
+                        #[watch]
+                        set_visible: model.loading.is_some()
+                    },
+
                     #[local_ref]
                     carousel -> adw::Carousel {
+                        #[watch]
+                        set_visible: model.loading.is_none(),
+
                         set_allow_mouse_drag: false,
 
                         append = model.welcome.widget(),
@@ -134,6 +158,7 @@ impl SimpleComponent for FirstRunApp {
             toast_overlay,
             carousel,
 
+            loading: Some(None),
             title: tr("welcome")
         };
 
@@ -148,6 +173,62 @@ impl SimpleComponent for FirstRunApp {
 
         tracing::info!("First run window initialized");
 
+        let components_sender = model.download_components.sender().clone();
+
+        // Initialize some heavy tasks
+        #[allow(unused_must_use)]
+        std::thread::spawn(move || {
+            tracing::info!("Initializing heavy tasks");
+
+            // Update components index
+
+            sender.input(FirstRunAppMsg::SetLoadingStatus(Some(Some(tr("updating-components-index")))));
+
+            let components = ComponentsLoader::new(&CONFIG.components.path);
+
+            match components.is_sync(&CONFIG.components.servers) {
+                Ok(true) => (),
+
+                Ok(false) => {
+                    for host in &CONFIG.components.servers {
+                        match components.sync(host) {
+                            Ok(true) => break,
+                            Ok(false) => continue,
+
+                            Err(err) => {
+                                tracing::error!("Failed to sync components index");
+
+                                sender.input(FirstRunAppMsg::Toast {
+                                    title: tr("components-index-sync-failed"),
+                                    description: Some(err.to_string())
+                                });
+                            }
+                        }
+                    }
+                }
+
+                Err(err) => {
+                    tracing::error!("Failed to verify that components index synced");
+
+                    sender.input(FirstRunAppMsg::Toast {
+                        title: tr("components-index-verify-failed"),
+                        description: Some(err.to_string())
+                    });
+                }
+            }
+
+            // Update versions lists in download components page and hide status page
+            components_sender.send(DownloadComponentsAppMsg::UpdateVersionsLists);
+            sender.input(FirstRunAppMsg::SetLoadingStatus(None));
+
+            // Mark app as loaded
+            unsafe {
+                crate::READY = true;
+            }
+
+            tracing::info!("App is ready");
+        });
+
         ComponentParts { model, widgets } // will return soon
     }
 
@@ -155,6 +236,10 @@ impl SimpleComponent for FirstRunApp {
         tracing::debug!("Called first run window event: {:?}", msg);
 
         match msg {
+            FirstRunAppMsg::SetLoadingStatus(status) => {
+                self.loading = status;
+            }
+
             FirstRunAppMsg::ScrollToTosWarning => {
                 self.title = tr("tos-violation-warning");
 
