@@ -11,6 +11,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Removed commit hash from core/SDK versions in about window
 
+## [3.1.3]
+
+### Added
+
+- Added Spanish translations
+
+### Fixed
+
+- Fixed compatibility with GE-Proton
+
+### Changed
+
+- Improved components downloading in initial setup 
+
 ## [3.1.2]
 
 ### Added
