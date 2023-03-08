@@ -1173,7 +1173,7 @@ impl SimpleComponent for App {
                     LauncherState::PrefixNotExists => {
                         let config = config::get().unwrap();
 
-                        match config.try_get_selected_wine_info() {
+                        match config.get_selected_wine() {
                             Ok(Some(wine)) => {
                                 sender.input(AppMsg::DisableButtons(true));
 

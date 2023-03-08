@@ -111,8 +111,9 @@ pub struct GeneralApp {
 
     languages: Vec<String>,
 
-    downloaded_wine_versions: Vec<wine::Version>,
+    downloaded_wine_versions: Vec<(wine::Version, wine::Features)>,
     downloaded_dxvk_versions: Vec<dxvk::Version>,
+    allow_dxvk_selection: bool,
 
     selected_wine_version: u32,
     selected_dxvk_version: u32,
@@ -434,7 +435,7 @@ impl SimpleAsyncComponent for GeneralApp {
 
                     #[watch]
                     #[block_signal(wine_selected_notify)]
-                    set_model: Some(&gtk::StringList::new(&model.downloaded_wine_versions.iter().map(|version| version.title.as_str()).collect::<Vec<&str>>())),
+                    set_model: Some(&gtk::StringList::new(&model.downloaded_wine_versions.iter().map(|(version, _)| version.title.as_str()).collect::<Vec<&str>>())),
 
                     #[watch]
                     #[block_signal(wine_selected_notify)]
@@ -482,6 +483,16 @@ impl SimpleAsyncComponent for GeneralApp {
 
             add = &adw::PreferencesGroup {
                 set_title: &tr("dxvk-version"),
+
+                #[watch]
+                set_description: if !model.allow_dxvk_selection {
+                    Some("DXVK selection is disabled by your wine group preferences")
+                } else {
+                    None
+                },
+
+                #[watch]
+                set_sensitive: model.allow_dxvk_selection,
 
                 adw::ComboRow {
                     set_title: &tr("selected-version"),
@@ -531,6 +542,9 @@ impl SimpleAsyncComponent for GeneralApp {
             },
 
             add = &adw::PreferencesGroup {
+                #[watch]
+                set_sensitive: model.allow_dxvk_selection,
+
                 add = model.dxvk_components.widget(),
             },
         }
@@ -607,6 +621,15 @@ impl SimpleAsyncComponent for GeneralApp {
 
             downloaded_wine_versions: vec![],
             downloaded_dxvk_versions: vec![],
+
+            allow_dxvk_selection: match &CONFIG.game.wine.selected {
+                Some(version) => match wine::Group::find_in(&CONFIG.components.path, version) {
+                    Ok(Some(group)) => group.features.need_dxvk,
+                    _ => true
+                }
+
+                None => true
+            },
 
             selected_wine_version: 0,
             selected_dxvk_version: 0,
@@ -739,19 +762,23 @@ impl SimpleAsyncComponent for GeneralApp {
             }
 
             GeneralAppMsg::UpdateDownloadedWine => {
-                self.downloaded_wine_versions = wine::get_downloaded(&CONFIG.components.path, &CONFIG.game.wine.builds).unwrap_or_default();
+                self.downloaded_wine_versions = wine::get_downloaded(&CONFIG.components.path, &CONFIG.game.wine.builds)
+                    .unwrap_or_default()
+                    .into_iter()
+                    .flat_map(|group| group.versions.into_iter().map(move |version| (version, group.features.clone())))
+                    .collect();
 
                 self.selected_wine_version = if let Some(selected) = &CONFIG.game.wine.selected {
                     let mut index = 0;
-        
-                    for (i, version) in self.downloaded_wine_versions.iter().enumerate() {
+
+                    for (i, (version, _)) in self.downloaded_wine_versions.iter().enumerate() {
                         if &version.name == selected {
                             index = i;
-        
+
                             break;
                         }
                     }
-        
+
                     index as u32
                 }
 
@@ -761,9 +788,13 @@ impl SimpleAsyncComponent for GeneralApp {
             }
 
             GeneralAppMsg::UpdateDownloadedDxvk => {
-                self.downloaded_dxvk_versions = dxvk::get_downloaded(&CONFIG.components.path, &CONFIG.game.dxvk.builds).unwrap_or_default();
+                self.downloaded_dxvk_versions = dxvk::get_downloaded(&CONFIG.components.path, &CONFIG.game.dxvk.builds)
+                    .unwrap_or_default()
+                    .into_iter()
+                    .flat_map(|group| group.versions)
+                    .collect();
 
-                self.selected_dxvk_version = if let Ok(Some(selected)) = CONFIG.try_get_selected_dxvk_info() {
+                self.selected_dxvk_version = if let Ok(Some(selected)) = CONFIG.get_selected_dxvk() {
                     let mut index = 0;
         
                     for (i, version) in self.downloaded_dxvk_versions.iter().enumerate() {
@@ -784,9 +815,10 @@ impl SimpleAsyncComponent for GeneralApp {
 
             GeneralAppMsg::SelectWine(index) => {
                 if let Ok(mut config) = config::get() {
-                    if let Some(version) = self.downloaded_wine_versions.get(index) {
-                        if config.game.wine.selected.as_ref().unwrap_or(&String::new()) != &version.title {
+                    if let Some((version, features)) = self.downloaded_wine_versions.get(index) {
+                        if config.game.wine.selected.as_ref() != Some(&version.title) {
                             self.selecting_wine_version = true;
+                            self.allow_dxvk_selection = features.need_dxvk;
 
                             let wine = version.to_wine(Some(config.game.wine.builds.join(&version.name)));
                             let wine_name = version.name.to_string();
@@ -822,11 +854,11 @@ impl SimpleAsyncComponent for GeneralApp {
             GeneralAppMsg::SelectDxvk(index) => {
                 if let Ok(config) = config::get() {
                     if let Some(version) = self.downloaded_dxvk_versions.get(index) {
-                        if let Ok(selected) = config.try_get_selected_dxvk_info() {
+                        if let Ok(selected) = config.get_selected_dxvk() {
                             if selected.is_none() || selected.unwrap().name != version.name {
                                 self.selecting_dxvk_version = true;
 
-                                let mut wine = match config.try_get_selected_wine_info() {
+                                let mut wine = match config.get_selected_wine() {
                                     Ok(Some(version)) => version.to_wine(Some(config.game.wine.builds.join(&version.name))),
                                     _ => Wine::default()
                                 };

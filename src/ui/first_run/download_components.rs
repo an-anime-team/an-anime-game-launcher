@@ -526,34 +526,44 @@ impl SimpleAsyncComponent for DownloadComponentsApp {
                 let wine = self.selected_wine.clone().unwrap();
                 let dxvk = self.selected_dxvk.clone().unwrap();
 
-                let wine = wine
-                    .to_wine(Some(config.game.wine.builds.join(&wine.name)))
-                    .with_loader(WineLoader::Current)
-                    .with_arch(WineArch::Win64)
-                    .with_prefix(config.game.wine.prefix);
+                let group = wine.find_group(&config.components.path).unwrap().unwrap();
 
-                std::thread::spawn(move || {
-                    let params = InstallParams {
-                        // We just created prefix so don't need to repair it
-                        repair_dlls: false,
+                // Apply DXVK if we need it
+                if group.features.need_dxvk {
+                    let wine = wine
+                        .to_wine(Some(config.game.wine.builds.join(&wine.name)))
+                        .with_loader(WineLoader::Current)
+                        .with_arch(WineArch::Win64)
+                        .with_prefix(config.game.wine.prefix);
 
-                        ..InstallParams::default()
-                    };
+                    std::thread::spawn(move || {
+                        let params = InstallParams {
+                            // We just created prefix so don't need to repair it
+                            repair_dlls: false,
 
-                    match wine.install_dxvk(config.game.dxvk.builds.join(&dxvk.name), params) {
-                        // Go to next page
-                        Ok(_) => sender.input(DownloadComponentsAppMsg::Continue),
+                            ..InstallParams::default()
+                        };
 
-                        Err(err) => {
-                            tracing::error!("Failed to apply DXVK: {err}");
+                        match wine.install_dxvk(config.game.dxvk.builds.join(&dxvk.name), params) {
+                            // Go to next page
+                            Ok(_) => sender.input(DownloadComponentsAppMsg::Continue),
 
-                            sender.output(Self::Output::Toast {
-                                title: tr("dxvk-apply-error"),
-                                description: Some(err.to_string())
-                            });
+                            Err(err) => {
+                                tracing::error!("Failed to apply DXVK: {err}");
+
+                                sender.output(Self::Output::Toast {
+                                    title: tr("dxvk-apply-error"),
+                                    description: Some(err.to_string())
+                                });
+                            }
                         }
-                    }
-                });
+                    });
+                }
+
+                // Skip DXVK applying if we don't need it
+                else {
+                    sender.input(DownloadComponentsAppMsg::Continue);
+                }
             }
 
             #[allow(unused_must_use)]
