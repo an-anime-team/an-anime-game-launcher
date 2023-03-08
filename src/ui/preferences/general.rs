@@ -485,11 +485,11 @@ impl SimpleAsyncComponent for GeneralApp {
                 set_title: &tr("dxvk-version"),
 
                 #[watch]
-                set_description: if !model.allow_dxvk_selection {
-                    Some("DXVK selection is disabled by your wine group preferences")
+                set_description: Some(&if !model.allow_dxvk_selection {
+                    tr("dxvk-selection-disabled")
                 } else {
-                    None
-                },
+                    String::new()
+                }),
 
                 #[watch]
                 set_sensitive: model.allow_dxvk_selection,
