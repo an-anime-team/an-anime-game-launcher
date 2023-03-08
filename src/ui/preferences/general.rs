@@ -765,7 +765,13 @@ impl SimpleAsyncComponent for GeneralApp {
                 self.downloaded_wine_versions = wine::get_downloaded(&CONFIG.components.path, &CONFIG.game.wine.builds)
                     .unwrap_or_default()
                     .into_iter()
-                    .flat_map(|group| group.versions.into_iter().map(move |version| (version, group.features.clone())))
+                    .flat_map(|group| group.versions
+                        .into_iter()
+                        .map(move |version| (
+                            version.clone(),
+                            version.features.unwrap_or_else(|| group.features.clone()))
+                        )
+                    )
                     .collect();
 
                 self.selected_wine_version = if let Some(selected) = &CONFIG.game.wine.selected {

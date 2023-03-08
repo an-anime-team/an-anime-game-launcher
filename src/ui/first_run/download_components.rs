@@ -529,7 +529,7 @@ impl SimpleAsyncComponent for DownloadComponentsApp {
                 let group = wine.find_group(&config.components.path).unwrap().unwrap();
 
                 // Apply DXVK if we need it
-                if group.features.need_dxvk {
+                if wine.features.as_ref().unwrap_or(&group.features).need_dxvk {
                     let wine = wine
                         .to_wine(Some(config.game.wine.builds.join(&wine.name)))
                         .with_loader(WineLoader::Current)
