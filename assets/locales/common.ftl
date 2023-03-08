@@ -19,4 +19,5 @@ ru-ru = Русский
 de-de = Deutsch
 es-es = Español
 fr-fr = Français
+tr-tr = Türk
 zh-cn = 简体中文

@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added support for `features` entry in wine/dxvk components index
 - Added caching to `ComponentsLoader` methods
+- Added Turkish
 
 ## [3.1.4]
 
