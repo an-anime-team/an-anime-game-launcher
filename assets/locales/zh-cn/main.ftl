@@ -22,6 +22,7 @@ exit = 退出
 check = 检查
 restart = 重启
 
+
 loading-data = 正在加载数据
 downloading-background-picture = 正在下载背景图片
 updating-components-index = 正在更新组件索引
@@ -38,6 +39,9 @@ downloading = 正在下载
 unpacking = 正在解压缩
 verifying-files = 正在检验文件
 repairing-files = 正在修复文件
+
+
+components-index-updated = Components index was updated
 
 
 launch = 启动

@@ -22,6 +22,7 @@ exit = Salir
 check = Comprobar
 restart = Reiniciar
 
+
 loading-data = Cargando datos
 downloading-background-picture = Descargando imagen de fondo
 updating-components-index = Actualizando índice de componentes
@@ -38,6 +39,9 @@ downloading = Descargando
 unpacking = Descomprimiendo
 verifying-files = Verifying files
 repairing-files = Repairing files
+
+
+components-index-updated = Components index was updated
 
 
 launch = Iniciar

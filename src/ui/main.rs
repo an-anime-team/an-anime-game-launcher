@@ -613,7 +613,15 @@ impl SimpleComponent for App {
                 Ok(false) => {
                     for host in &CONFIG.components.servers {
                         match components.sync(host) {
-                            Ok(true) => break,
+                            Ok(true) => {
+                                // TODO: add changelog log here
+
+                                sender.input(AppMsg::Toast {
+                                    title: tr("components-index-updated"),
+                                    description: None
+                                });
+                            }
+
                             Ok(false) => continue,
 
                             Err(err) => {

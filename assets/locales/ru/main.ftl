@@ -47,6 +47,9 @@ verifying-files = Проверка файлов
 repairing-files = Починка файлов
 
 
+components-index-updated = Индекс компонентов был обновлен
+
+
 launch = Запустить
 apply-patch = Применить патч
 download-wine = Установить Wine

@@ -22,6 +22,7 @@ exit = Çıkış yap
 check = Kontrol et
 restart = Tekrardan başlat 
 
+
 loading-data = Bilgiler yükleniyor
 downloading-background-picture = Arkaplan dosyasi indiriliyor
 updating-components-index = Bileşenlerin dizini güncelleniyor
@@ -38,6 +39,9 @@ downloading = İndiriliyor
 unpacking = Paketten çıkartılıyor
 verifying-files = Dosyalar Doğrulanıyor
 repairing-files = Dosyalar tamir ediliyor
+
+
+components-index-updated = Components index was updated
 
 
 launch = Çalıştır
