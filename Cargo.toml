@@ -10,7 +10,7 @@ build = "build.rs"
 [profile.release]
 strip = true
 lto = true
-opt-level = 3
+opt-level = "s"
 
 [build-dependencies]
 glib-build-tools = "0.17"
