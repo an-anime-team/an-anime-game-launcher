@@ -2,3 +2,7 @@
 
 flamegraph.svg
 perf.data*
+
+*.patch
+*.diff
+*.log

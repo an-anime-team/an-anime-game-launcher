@@ -1186,12 +1186,13 @@ impl SimpleComponent for App {
                                 sender.input(AppMsg::DisableButtons(true));
 
                                 std::thread::spawn(move || {
+                                    let true_prefix = wine.prefix_path(&config.components.path, config.game.wine.prefix.clone());
                                     let wine = wine
                                         .to_wine(Some(config.game.wine.builds.join(&wine.name)))
                                         .with_loader(WineLoader::Current)
                                         .with_arch(WineArch::Win64);
 
-                                    if let Err(err) = wine.update_prefix(&config.game.wine.prefix) {
+                                    if let Err(err) = wine.update_prefix(&true_prefix) {
                                         tracing::error!("Failed to create wine prefix");
 
                                         sender.input(AppMsg::Toast {

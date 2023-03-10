@@ -828,9 +828,10 @@ impl SimpleAsyncComponent for GeneralApp {
 
                             let wine = version.to_wine(Some(config.game.wine.builds.join(&version.name)));
                             let wine_name = version.name.to_string();
+                            let true_prefix = version.prefix_path(&config.components.path, config.game.wine.prefix.clone());
 
                             std::thread::spawn(move || {
-                                match wine.update_prefix(&config.game.wine.prefix) {
+                                match wine.update_prefix(true_prefix) {
                                     Ok(_) => {
                                         config.game.wine.selected = Some(wine_name); 
 
