@@ -67,7 +67,7 @@ Now the only thing remaining is to install the launcher
 flatpak install launcher.moe moe.launcher.an-anime-game-launcher
 ```
 
-Some additional configuration is possible when using the flatpak. For info about this, see [this page](https://github.com/an-anime-team/an-anime-game-launcher-flatpak/blob/rust-launcher/README.md)
+Some additional configuration is possible when using the flatpak. For info about this, see [this page](https://github.com/an-anime-team/an-anime-game-launcher/wiki/Additional-configuration)
 
 ## Chinese version support
 
