@@ -7,7 +7,7 @@
 
 <br>
 
-<p align="center">We have our own <a href="https://discord.gg/ck37X6UWBp">An Anime Game</a> discord server where you can ask any questions</p>
+<p align="center">We have our own <a href="https://discord.gg/ck37X6UWBp">An Anime Game</a> discord server or <a href="https://matrix.to/#/#an-anime-game:envs.net">An Anime Game</a> matrix space where you can ask any questions</p>
 
 <br><br>
 
