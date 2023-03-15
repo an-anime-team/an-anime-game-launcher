@@ -37,6 +37,7 @@ runners-folder = Başlatıcılar(Runnerlar) klasörü
 dxvks-folder = DXVKnın klasörü
 wine-prefix-folder = Wine prefixnin klasörü
 game-installation-folder = Oyunun indrildiği klasör
+fps-unlocker-folder = FPS Unlocker folder
 components-index = Bileşenlerin dizini
 patch-folder = Yama klasörü
 temp-folder = "Geçici" klasörü

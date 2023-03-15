@@ -37,6 +37,7 @@ runners-folder = Carpeta de runners
 dxvks-folder = Carpeta de DXVKs
 wine-prefix-folder = Carpeta de prefijo de Wine
 game-installation-folder = Carpeta de instalación del juego
+fps-unlocker-folder = FPS Unlocker folder
 components-index = Índice de componentes
 patch-folder = Carpeta del parche
 temp-folder = Carpeta temporal
