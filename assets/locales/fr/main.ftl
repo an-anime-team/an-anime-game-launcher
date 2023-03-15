@@ -41,7 +41,7 @@ verifying-files = Vérification des fichiers
 repairing-files = Réparation des fichiers
 
 
-components-index-updated = Components index was updated
+components-index-updated = L'index des composants a été mis à jour
 
 
 launch = Lancer

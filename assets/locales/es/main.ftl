@@ -37,11 +37,11 @@ loading-launcher-state--patch = Cargando estado del launcher: Verificando parche
 checking-free-space = Comprobando espacio libre
 downloading = Descargando
 unpacking = Descomprimiendo
-verifying-files = Verifying files
-repairing-files = Repairing files
+verifying-files = Verificación de archivos
+repairing-files = Reparación de archivos
 
 
-components-index-updated = Components index was updated
+components-index-updated = Se actualizó el índice de componentes
 
 
 launch = Iniciar
