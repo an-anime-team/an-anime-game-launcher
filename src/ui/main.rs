@@ -1200,7 +1200,7 @@ impl SimpleComponent for App {
                                         });
                                     }
 
-                                    sender.input(AppMsg::DisableButtons(true));
+                                    sender.input(AppMsg::DisableButtons(false));
                                     sender.input(AppMsg::UpdateLauncherState {
                                         perform_on_download_needed: false,
                                         show_status_page: true
