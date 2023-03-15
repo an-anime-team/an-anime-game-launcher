@@ -5,11 +5,12 @@
 | <img src="repository/main-modern.png"> | <img src="repository/main-classic.png"> |
 | <img src="repository/settings-modern.png"> | <img src="repository/settings-classic.png"> |
 
+<p align="center">
+    <a href="https://discord.gg/ck37X6UWBp">Discord</a> ·
+    <a href="https://matrix.to/#/#an-anime-game:envs.net">Matrix</a>
+</p>
+
 <br>
-
-<p align="center">We have our own <a href="https://discord.gg/ck37X6UWBp">An Anime Game</a> discord server or <a href="https://matrix.to/#/#an-anime-game:envs.net">An Anime Game</a> matrix space where you can ask any questions</p>
-
-<br><br>
 
 # Please don't link to this repository
 
@@ -26,9 +27,6 @@ Or share them and ruin it for the dozens of Linux players. It's up to you.
 
 Do what you must, but we would respectfully request that you try to label the game as "An Anime Game"
 instead of the actual name of the game, to avoid search engine parsing.
-
-<br><br>
-
 
 # Documentation
 
