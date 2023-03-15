@@ -4,6 +4,7 @@ use relm4::component::*;
 use adw::prelude::*;
 
 use anime_launcher_sdk::components::*;
+use anime_launcher_sdk::components::wine::WincompatlibWine;
 use anime_launcher_sdk::anime_game_core::installer::prelude::*;
 use anime_launcher_sdk::config;
 use anime_launcher_sdk::wincompatlib::prelude::*;
@@ -434,12 +435,13 @@ impl SimpleAsyncComponent for DownloadComponentsApp {
                 let wine = self.selected_wine.as_ref().unwrap();
 
                 let wine = wine
-                    .to_wine(Some(config.game.wine.builds.join(&wine.name)))
+                    .to_wine(config.components.path, Some(config.game.wine.builds.join(&wine.name)))
+                    .with_prefix(&config.game.wine.prefix)
                     .with_loader(WineLoader::Current)
                     .with_arch(WineArch::Win64);
 
                 std::thread::spawn(move || {
-                    match wine.update_prefix(config.game.wine.prefix) {
+                    match wine.update_prefix::<&str>(None) {
                         // Download DXVK
                         Ok(_) => sender.input(DownloadComponentsAppMsg::DownloadDXVK),
 
@@ -547,9 +549,9 @@ impl SimpleAsyncComponent for DownloadComponentsApp {
                 let group = wine.find_group(&config.components.path).unwrap().unwrap();
 
                 // Apply DXVK if we need it
-                if wine.features.as_ref().unwrap_or(&group.features).need_dxvk {
+                if wine.features_in(&group).unwrap_or_default().need_dxvk {
                     let wine = wine
-                        .to_wine(Some(config.game.wine.builds.join(&wine.name)))
+                        .to_wine(config.components.path, Some(config.game.wine.builds.join(&wine.name)))
                         .with_loader(WineLoader::Current)
                         .with_arch(WineArch::Win64)
                         .with_prefix(config.game.wine.prefix);
@@ -560,6 +562,12 @@ impl SimpleAsyncComponent for DownloadComponentsApp {
                             repair_dlls: false,
 
                             ..InstallParams::default()
+                        };
+
+                        let WincompatlibWine::Default(wine) = wine else {
+                            sender.input(DownloadComponentsAppMsg::Continue);
+
+                            return;
                         };
 
                         match wine.install_dxvk(config.game.dxvk.builds.join(&dxvk.name), params) {

@@ -13,6 +13,7 @@ use anime_launcher_sdk::config;
 use anime_launcher_sdk::config::launcher::LauncherStyle;
 use anime_launcher_sdk::anime_game_core::prelude::*;
 use anime_launcher_sdk::components::*;
+use anime_launcher_sdk::components::wine::WincompatlibWine;
 use anime_launcher_sdk::wincompatlib::prelude::*;
 
 use super::main::PreferencesAppMsg;
@@ -624,7 +625,7 @@ impl SimpleAsyncComponent for GeneralApp {
 
             allow_dxvk_selection: match &CONFIG.game.wine.selected {
                 Some(version) => match wine::Group::find_in(&CONFIG.components.path, version) {
-                    Ok(Some(group)) => group.features.need_dxvk,
+                    Ok(Some(group)) => group.features.unwrap_or_default().need_dxvk,
                     _ => true
                 }
 
@@ -769,7 +770,9 @@ impl SimpleAsyncComponent for GeneralApp {
                         .into_iter()
                         .map(move |version| (
                             version.clone(),
-                            version.features.unwrap_or_else(|| group.features.clone()))
+                            version.features.unwrap_or_else(
+                                || group.features.to_owned().unwrap_or_default()
+                            ))
                         )
                     )
                     .collect();
@@ -826,11 +829,16 @@ impl SimpleAsyncComponent for GeneralApp {
                             self.selecting_wine_version = true;
                             self.allow_dxvk_selection = features.need_dxvk;
 
-                            let wine = version.to_wine(Some(config.game.wine.builds.join(&version.name)));
+                            let wine = version
+                                .to_wine(&config.components.path, Some(&config.game.wine.builds.join(&version.name)))
+                                .with_prefix(&config.game.wine.prefix)
+                                .with_loader(WineLoader::Current)
+                                .with_arch(WineArch::Win64);
+
                             let wine_name = version.name.to_string();
 
                             std::thread::spawn(move || {
-                                match wine.update_prefix(&config.game.wine.prefix) {
+                                match wine.update_prefix::<&str>(None) {
                                     Ok(_) => {
                                         config.game.wine.selected = Some(wine_name); 
 
@@ -865,7 +873,13 @@ impl SimpleAsyncComponent for GeneralApp {
                                 self.selecting_dxvk_version = true;
 
                                 let mut wine = match config.get_selected_wine() {
-                                    Ok(Some(version)) => version.to_wine(Some(config.game.wine.builds.join(&version.name))),
+                                    Ok(Some(version)) => {
+                                        match version.to_wine(config.components.path, Some(config.game.wine.builds.join(&version.name))) {
+                                            WincompatlibWine::Default(wine) => wine,
+                                            WincompatlibWine::Proton(_) => return
+                                        }
+                                    }
+
                                     _ => Wine::default()
                                 };
 

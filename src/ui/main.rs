@@ -1187,11 +1187,12 @@ impl SimpleComponent for App {
 
                                 std::thread::spawn(move || {
                                     let wine = wine
-                                        .to_wine(Some(config.game.wine.builds.join(&wine.name)))
+                                        .to_wine(config.components.path, Some(config.game.wine.builds.join(&wine.name)))
+                                        .with_prefix(&config.game.wine.prefix)
                                         .with_loader(WineLoader::Current)
                                         .with_arch(WineArch::Win64);
 
-                                    if let Err(err) = wine.update_prefix(&config.game.wine.prefix) {
+                                    if let Err(err) = wine.update_prefix::<&str>(None) {
                                         tracing::error!("Failed to create wine prefix");
 
                                         sender.input(AppMsg::Toast {
