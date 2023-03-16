@@ -10,6 +10,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Added "components index updated" toast
+- Added wine / dxvk downloading skipping in initial setup if you already downloaded them
+- Added fps unlocker path chooser in initial setup
+
+### Fixed
+
+- Fixed main button sensitivity after prefix creation
+- Fixed components related error on changing default path
+- Fixed "wine not installed" button work
+
+### Changed
+
+- Changed `opt-level` to `s` (optimize for size). Decreased build size by 2 MB
+- Changed default game and prefix paths
+- Improved Proton-builds compatibility
 
 ## [3.1.5]
 
