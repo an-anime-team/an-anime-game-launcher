@@ -161,7 +161,7 @@ impl SimpleComponent for FirstRunApp {
             toast_overlay,
             carousel,
 
-            loading: Some(None),
+            loading: None,
             title: tr("welcome")
         };
 
@@ -172,70 +172,16 @@ impl SimpleComponent for FirstRunApp {
 
         unsafe {
             MAIN_WINDOW = Some(widgets.window.clone());
+
+            crate::READY = true;
         }
 
-        tracing::info!("First run window initialized");
-
-        let components_sender = model.download_components.sender().clone();
-
-        // Initialize some heavy tasks
-        #[allow(unused_must_use)]
-        std::thread::spawn(move || {
-            tracing::info!("Initializing heavy tasks");
-
-            // Update components index
-
-            sender.input(FirstRunAppMsg::SetLoadingStatus(Some(Some(tr("updating-components-index")))));
-
-            let components = ComponentsLoader::new(&CONFIG.components.path);
-
-            match components.is_sync(&CONFIG.components.servers) {
-                Ok(true) => (),
-
-                Ok(false) => {
-                    for host in &CONFIG.components.servers {
-                        match components.sync(host) {
-                            Ok(true) => break,
-                            Ok(false) => continue,
-
-                            Err(err) => {
-                                tracing::error!("Failed to sync components index");
-
-                                sender.input(FirstRunAppMsg::Toast {
-                                    title: tr("components-index-sync-failed"),
-                                    description: Some(err.to_string())
-                                });
-                            }
-                        }
-                    }
-                }
-
-                Err(err) => {
-                    tracing::error!("Failed to verify that components index synced");
-
-                    sender.input(FirstRunAppMsg::Toast {
-                        title: tr("components-index-verify-failed"),
-                        description: Some(err.to_string())
-                    });
-                }
-            }
-
-            // Update versions lists in download components page and hide status page
-            components_sender.send(DownloadComponentsAppMsg::UpdateVersionsLists);
-            sender.input(FirstRunAppMsg::SetLoadingStatus(None));
-
-            // Mark app as loaded
-            unsafe {
-                crate::READY = true;
-            }
-
-            tracing::info!("App is ready");
-        });
+        tracing::info!("First run window initialized. App is ready");
 
         ComponentParts { model, widgets } // will return soon
     }
 
-    fn update(&mut self, msg: Self::Input, _sender: ComponentSender<Self>) {
+    fn update(&mut self, msg: Self::Input, sender: ComponentSender<Self>) {
         tracing::debug!("Called first run window event: {:?}", msg);
 
         match msg {
@@ -268,6 +214,54 @@ impl SimpleComponent for FirstRunApp {
             }
 
             FirstRunAppMsg::ScrollToDownloadComponents => {
+                // Update components index
+                sender.input(FirstRunAppMsg::SetLoadingStatus(Some(Some(tr("updating-components-index")))));
+
+                let components_sender = self.download_components.sender().clone();
+                let components = ComponentsLoader::new(&CONFIG.components.path);
+
+                #[allow(unused_must_use)]
+                std::thread::spawn(move || {
+                    match components.is_sync(&CONFIG.components.servers) {
+                        Ok(true) => (),
+
+                        Ok(false) => {
+                            for host in &CONFIG.components.servers {
+                                match components.sync(host) {
+                                    Ok(true) => break,
+                                    Ok(false) => continue,
+
+                                    Err(err) => {
+                                        tracing::error!("Failed to sync components index");
+
+                                        sender.input(FirstRunAppMsg::Toast {
+                                            title: tr("components-index-sync-failed"),
+                                            description: Some(err.to_string())
+                                        });
+                                    }
+                                }
+                            }
+                        }
+
+                        Err(err) => {
+                            tracing::error!("Failed to verify that components index synced");
+
+                            sender.input(FirstRunAppMsg::Toast {
+                                title: tr("components-index-verify-failed"),
+                                description: Some(err.to_string())
+                            });
+                        }
+                    }
+
+                    // Update versions lists in download components page
+                    components_sender.send(DownloadComponentsAppMsg::UpdateVersionsLists);
+
+                    // Hide status page
+                    sender.input(FirstRunAppMsg::SetLoadingStatus(None));
+                });
+
+                // Scroll to download components page
+                // This will happen in background behind StatusPage
                 self.title = tr("download-components");
 
                 self.carousel.scroll_to(self.download_components.widget(), true);
