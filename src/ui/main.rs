@@ -1097,17 +1097,34 @@ impl SimpleComponent for App {
                         let mut config = config::get().unwrap();
 
                         match wine::get_downloaded(&CONFIG.components.path, &config.game.wine.builds) {
-                            Ok(list) => {
-                                // FIXME: .find(|version| version.recommended)
-                                if !list.is_empty() {
-                                    config.game.wine.selected = Some(list[0].name.clone());
+                            Ok(downloaded) => {
+                                // Select downloaded version
+                                if !downloaded.is_empty() {
+                                    config.game.wine.selected = Some(downloaded[0].name.clone());
 
                                     config::update(config.clone());
+
+                                    sender.input(AppMsg::UpdateLauncherState {
+                                        perform_on_download_needed: false,
+                                        show_status_page: true
+                                    });
                                 }
 
-                                if config.game.wine.selected.is_none() {
-                                    let wine = wine::Version::latest(&CONFIG.components.path).expect("Failed to get latest wine version");
+                                // Or download new one if none is available
+                                else {
+                                    let latest = wine::Version::latest(&CONFIG.components.path).expect("Failed to get latest wine version");
 
+                                    // Choose selected wine version or use latest available one
+                                    let wine = match &config.game.wine.selected {
+                                        Some(version) => match wine::Version::find_in(&config.components.path, version) {
+                                            Ok(Some(version)) => version,
+                                            _ => latest
+                                        }
+
+                                        None => latest
+                                    };
+
+                                    // Download wine version
                                     match Installer::new(wine.uri) {
                                         Ok(mut installer) => {
                                             if let Some(temp_folder) = &config.launcher.temp {
@@ -1164,13 +1181,6 @@ impl SimpleComponent for App {
 
                                         Err(err) => self.toast(tr("wine-install-failed"), Some(err.to_string()))
                                     }
-                                }
-
-                                else {
-                                    sender.input(AppMsg::UpdateLauncherState {
-                                        perform_on_download_needed: false,
-                                        show_status_page: true
-                                    });
                                 }
                             }
 
