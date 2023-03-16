@@ -155,7 +155,7 @@ impl SimpleAsyncComponent for DefaultPathsApp {
                     set_activatable: true,
 
                     #[watch]
-                    set_subtitle: model.components.to_str().unwrap(),
+                    set_subtitle: model.fps_unlocker.to_str().unwrap(),
 
                     connect_activated => DefaultPathsAppMsg::ChoosePath(Folders::FpsUnlocker)
                 },
@@ -263,12 +263,12 @@ impl SimpleAsyncComponent for DefaultPathsApp {
                         Folders::Launcher => {
                             self.runners      = result.join("runners");
                             self.dxvks        = result.join("dxvks");
-                            self.prefix       = result.join("game");
-                            self.game         = result.join("game/drive_c/Program Files/Genshin Impact");
+                            self.prefix       = result.join("prefix");
+                            self.game         = result.join("Genshin Impact"); // TODO: change it based on GameEdition
                             self.fps_unlocker = result.join("fps-unlocker");
                             self.components   = result.join("components");
                             self.patch        = result.join("patch");
-                            self.temp         = result.join("temp");
+                            self.temp         = result.clone();
 
                             self.launcher = result;
                         }
