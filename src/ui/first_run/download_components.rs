@@ -314,15 +314,17 @@ impl SimpleAsyncComponent for DownloadComponentsApp {
     async fn update(&mut self, msg: Self::Input, sender: AsyncComponentSender<Self>) {
         match msg {
             DownloadComponentsAppMsg::UpdateVersionsLists => {
+                let config = config::get().unwrap_or_else(|_| CONFIG.clone());
+
                 // 4 latest versions of 4 first available wine group
-                self.wine_versions = wine::get_groups(&CONFIG.components.path).unwrap()
+                self.wine_versions = wine::get_groups(&config.components.path).unwrap()
                     .into_iter()
                     .take(4)
                     .flat_map(|group| group.versions.into_iter().take(4))
                     .collect();
 
                 // 4 latest versions of 4 first available dxvk group
-                self.dxvk_versions = dxvk::get_groups(&CONFIG.components.path).unwrap()
+                self.dxvk_versions = dxvk::get_groups(&config.components.path).unwrap()
                     .into_iter()
                     .take(4)
                     .flat_map(|group| group.versions.into_iter().take(4))
@@ -331,7 +333,7 @@ impl SimpleAsyncComponent for DownloadComponentsApp {
 
             #[allow(unused_must_use)]
             DownloadComponentsAppMsg::DownloadWine => {
-                let config = config::get().unwrap_or_default();
+                let config = config::get().unwrap_or_else(|_| CONFIG.clone());
 
                 self.selected_wine = Some(self.wine_versions[self.wine_combo.selected() as usize].clone());
                 self.selected_dxvk = Some(self.dxvk_versions[self.dxvk_combo.selected() as usize].clone());
@@ -350,7 +352,7 @@ impl SimpleAsyncComponent for DownloadComponentsApp {
                 if wine.is_downloaded_in(&config.game.wine.builds) {
                     tracing::info!("Wine already installed: {}", wine.name);
 
-                    let mut config = config::get().unwrap_or_default();
+                    let mut config = config::get().unwrap_or_else(|_| CONFIG.clone());
 
                     config.game.wine.selected = Some(wine.name);
 
@@ -402,7 +404,7 @@ impl SimpleAsyncComponent for DownloadComponentsApp {
 
                                         // Create prefix
                                         InstallerUpdate::UnpackingFinished => {
-                                            let mut config = config::get().unwrap_or_default();
+                                            let mut config = config::get().unwrap_or_else(|_| CONFIG.clone());
 
                                             config.game.wine.selected = Some(wine.name.clone());
 
@@ -443,7 +445,7 @@ impl SimpleAsyncComponent for DownloadComponentsApp {
                 self.downloading_wine = Some(true);
                 self.creating_prefix = Some(false);
 
-                let config = config::get().unwrap_or_default();
+                let config = config::get().unwrap_or_else(|_| CONFIG.clone());
 
                 tracing::info!("Creating wine prefix");
 
@@ -477,7 +479,7 @@ impl SimpleAsyncComponent for DownloadComponentsApp {
                 self.creating_prefix = Some(true);
                 self.downloading_dxvk = Some(false);
 
-                let config = config::get().unwrap_or_default();
+                let config = config::get().unwrap_or_else(|_| CONFIG.clone());
 
                 let dxvk = self.selected_dxvk.clone().unwrap();
                 let progress_bar_input = self.progress_bar.sender().clone();
@@ -554,7 +556,7 @@ impl SimpleAsyncComponent for DownloadComponentsApp {
                 self.downloading_dxvk = Some(true);
                 self.applying_dxvk = Some(false);
 
-                let config = config::get().unwrap_or_default();
+                let config = config::get().unwrap_or_else(|_| CONFIG.clone());
 
                 tracing::info!("Applying DXVK");
 
@@ -603,6 +605,8 @@ impl SimpleAsyncComponent for DownloadComponentsApp {
 
                 // Skip DXVK applying if we don't need it
                 else {
+                    tracing::info!("Selected wine version has `need_dxvk = false` feature. Skipping DXVK applying...");
+
                     sender.input(DownloadComponentsAppMsg::Continue);
                 }
             }

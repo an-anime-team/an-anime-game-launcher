@@ -97,6 +97,8 @@ impl SimpleComponent for FirstRunApp {
                         set_visible: model.loading.is_none(),
 
                         set_allow_mouse_drag: false,
+                        set_allow_long_swipes: false,
+                        set_allow_scroll_wheel: false,
 
                         append = model.welcome.widget(),
                         append = model.tos_warning.widget(),
@@ -217,12 +219,14 @@ impl SimpleComponent for FirstRunApp {
                 // Update components index
                 sender.input(FirstRunAppMsg::SetLoadingStatus(Some(Some(tr("updating-components-index")))));
 
+                let config = config::get().unwrap_or_else(|_| CONFIG.clone());
+
                 let components_sender = self.download_components.sender().clone();
-                let components = ComponentsLoader::new(&CONFIG.components.path);
+                let components = ComponentsLoader::new(config.components.path);
 
                 #[allow(unused_must_use)]
                 std::thread::spawn(move || {
-                    match components.is_sync(&CONFIG.components.servers) {
+                    match components.is_sync(config.components.servers) {
                         Ok(true) => (),
 
                         Ok(false) => {
