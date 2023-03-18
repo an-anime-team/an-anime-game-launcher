@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.2.1] - 18.03.2023
+
+### Fixed
+
+- Fixed DXVK applying on changed default path during initial setup
+- Disabled long swipes and wheel scrolling for carousel in initial setup window
+
 ## [3.2.0] - 18.03.2023
 
 ### Added
@@ -114,7 +121,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <br>
 
-[unreleased]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.2.0...HEAD
+[unreleased]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.2.1...HEAD
+[3.2.0]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.2.0...3.2.1
 [3.2.0]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.1.5...3.2.0
 [3.1.5]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.1.4...3.1.5
 [3.1.4]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.1.3...3.1.4
