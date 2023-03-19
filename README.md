@@ -99,3 +99,32 @@ cargo run
 ```sh
 cargo build --release
 ```
+
+## Updates strategy
+
+Starting from 3.2.1 ([fcab428](https://github.com/an-anime-team/an-anime-game-launcher/commit/fcab428cb40b1457f41e0856f9d1e1473acbe653)) we have 2 branches: stable ([main](https://github.com/an-anime-team/an-anime-game-launcher/tree/main)) and dev ([next](https://github.com/an-anime-team/an-anime-game-launcher/tree/next)). Code changes will be pushed into dev branch and merged into stable once they're ready for new version release
+
+```
+ main:        next:           pull request:
+
+┌─────┐
+│3.2.1├───────────┬─────────────────┐
+└──┬──┘           │                 │
+   │              │                 │
+   │        ┌─────▼────┐            │ *checkout from both
+   │        │ fix: ... ├─ ── ── ── ─┤  branches accepted
+   │        └─────┬────┘            │
+   │              │            ┌────▼────┐
+   │              │            │feat: ...│
+   │        ┌─────▼────┐       └────┬────┘
+   │        │feat: ... │            │
+   │        └─────┬────┘            │
+   │              │                 │
+   │        ┌─────▼────┐            │
+   │        │merge: ...◄────────────┘
+   │        └─────┬────┘
+   │              │
+┌──▼──┐           │
+│3.2.2◄───────────┘
+└─────┘
+```
