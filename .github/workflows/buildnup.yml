@@ -2,12 +2,13 @@ name: Build & Upload Launcher
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "next" ]
     paths: [ "src/**" ]
+
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main", "next" ]
     paths: [ "src/**" ]
-    
+
   workflow_dispatch:
 
 env:
@@ -16,7 +17,7 @@ env:
 jobs:   
   build_and_upload:
     runs-on: ubuntu-latest
-    
+
     container:
       image: ubuntu:devel
       env:
@@ -27,17 +28,17 @@ jobs:
       run: |
         apt update
         apt install -y libgtk-4-1 libgtk-4-dev libadwaita-1-0 libadwaita-1-dev git curl openssl libssl-dev
-      
+
     - uses: dtolnay/rust-toolchain@stable
-      
+
     - name: Checkout
       uses: actions/checkout@v3
       with:
         submodules: recursive
-    
+
     - name: Build
       run: cargo build --release --verbose
-      
+
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3.1.0
       with:
