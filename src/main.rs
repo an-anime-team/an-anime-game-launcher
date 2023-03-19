@@ -168,11 +168,12 @@ fn main() {
 
     tracing::info!("Set UI language to {}", i18n::get_lang());
 
-    // Create the app
-    let app = RelmApp::new(APP_ID);
-
     // Run FirstRun window if .first-run file persist
     if FIRST_RUN_FILE.exists() {
+        // Create the app
+        let app = RelmApp::new(APP_ID);
+
+        // Show first run window
         app.run::<FirstRunApp>(());
     }
 
@@ -202,6 +203,10 @@ fn main() {
             }
         }
 
+        // Create the app
+        let app = RelmApp::new(APP_ID);
+
+        // Show main window
         app.run::<App>(());
     }
 }

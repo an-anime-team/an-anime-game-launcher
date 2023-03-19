@@ -299,11 +299,11 @@ impl SimpleComponent for FirstRunApp {
                     });
 
                     toast.connect_button_clicked(move |_| {
-                        dialog.show();
+                        dialog.present();
                     });
                 }
 
-                self.toast_overlay.add_toast(&toast);
+                self.toast_overlay.add_toast(toast);
             }
         }
     }

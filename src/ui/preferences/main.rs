@@ -171,11 +171,11 @@ impl SimpleAsyncComponent for PreferencesApp {
                     });
 
                     toast.connect_button_clicked(move |_| {
-                        dialog.show();
+                        dialog.present();
                     });
                 }
 
-                PREFERENCES_WINDOW.as_ref().unwrap_unchecked().add_toast(&toast);
+                PREFERENCES_WINDOW.as_ref().unwrap_unchecked().add_toast(toast);
             }
         }
     }

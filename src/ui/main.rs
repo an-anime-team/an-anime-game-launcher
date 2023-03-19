@@ -80,7 +80,6 @@ pub enum AppMsg {
     DisableButtons(bool),
 
     OpenPreferences,
-    ClosePreferences,
     RepairGame,
 
     PredownloadUpdate,
@@ -507,7 +506,7 @@ impl SimpleComponent for App {
 
         let widgets = view_output!();
 
-        let about_dialog_broker: MessageBroker<AboutDialog> = MessageBroker::new();
+        let about_dialog_broker: MessageBroker<AboutDialogMsg> = MessageBroker::new();
 
         unsafe {
             MAIN_WINDOW = Some(widgets.main_window.clone());
@@ -803,11 +802,7 @@ impl SimpleComponent for App {
             }
 
             AppMsg::OpenPreferences => unsafe {
-                PREFERENCES_WINDOW.as_ref().unwrap_unchecked().widget().show();
-            }
-
-            AppMsg::ClosePreferences => unsafe {
-                PREFERENCES_WINDOW.as_ref().unwrap_unchecked().widget().hide();
+                PREFERENCES_WINDOW.as_ref().unwrap_unchecked().widget().present();
             }
 
             #[allow(unused_must_use)]
@@ -1301,11 +1296,11 @@ impl SimpleComponent for App {
             }
 
             AppMsg::HideWindow => unsafe {
-                MAIN_WINDOW.as_ref().unwrap_unchecked().hide();
+                MAIN_WINDOW.as_ref().unwrap_unchecked().set_visible(false);
             }
 
             AppMsg::ShowWindow => unsafe {
-                MAIN_WINDOW.as_ref().unwrap_unchecked().show();
+                MAIN_WINDOW.as_ref().unwrap_unchecked().present();
             }
 
             AppMsg::Toast { title, description } => self.toast(title, description)
@@ -1340,10 +1335,10 @@ impl App {
             });
 
             toast.connect_button_clicked(move |_| {
-                dialog.show();
+                dialog.present();
             });
         }
 
-        self.toast_overlay.add_toast(&toast);
+        self.toast_overlay.add_toast(toast);
     }
 }
