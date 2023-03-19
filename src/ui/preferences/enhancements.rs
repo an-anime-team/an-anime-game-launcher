@@ -523,7 +523,7 @@ impl SimpleAsyncComponent for EnhancementsApp {
             }
 
             EnhancementsAppMsg::OpenGamescope => {
-                self.gamescope.widget().show();
+                self.gamescope.widget().present();
             }
         }
     }
