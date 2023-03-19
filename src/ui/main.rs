@@ -1100,9 +1100,9 @@ impl SimpleComponent for App {
                             Ok(downloaded) => {
                                 // Select downloaded version
                                 if !downloaded.is_empty() {
-                                    config.game.wine.selected = Some(downloaded[0].name.clone());
+                                    config.game.wine.selected = Some(downloaded[0].versions[0].name.clone());
 
-                                    config::update(config.clone());
+                                    config::update(config);
 
                                     sender.input(AppMsg::UpdateLauncherState {
                                         perform_on_download_needed: false,
