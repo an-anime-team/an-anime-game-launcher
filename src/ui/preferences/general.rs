@@ -106,7 +106,7 @@ pub struct GeneralApp {
     dxvk_components: AsyncController<ComponentsList<GeneralAppMsg>>,
 
     game_diff: Option<VersionDiff>,
-    patch: Option<Patch>,
+    unity_player_patch: Option<UnityPlayerPatch>,
 
     style: LauncherStyle,
 
@@ -131,7 +131,7 @@ pub enum GeneralAppMsg {
 
     /// Supposed to be called automatically on app's run when the latest patch version
     /// was retrieved from remote repos
-    SetPatch(Option<Patch>),
+    SetUnityPlayerPatch(Option<UnityPlayerPatch>),
 
     // If one ever wich to change it to accept VoiceLocale
     // I'd recommend to use clone!(@strong self.locale as locale => move |_| { .. })
@@ -372,27 +372,27 @@ impl SimpleAsyncComponent for GeneralApp {
 
                     add_suffix = &gtk::Label {
                         #[watch]
-                        set_text: &match model.patch.as_ref() {
-                            Some(patch) => match patch {
-                                Patch::NotAvailable => tr("patch-not-available"),
-                                Patch::Outdated { current, .. } => tr_args("patch-outdated", [("current", current.to_string().into())]),
-                                Patch::Preparation { .. } => tr("patch-preparation"),
-                                Patch::Testing { version, .. } |
-                                Patch::Available { version, .. } => version.to_string()
+                        set_text: &match model.unity_player_patch.as_ref() {
+                            Some(patch) => match patch.status() {
+                                PatchStatus::NotAvailable => tr("patch-not-available"),
+                                PatchStatus::Outdated { current, .. } => tr_args("patch-outdated", [("current", current.to_string().into())]),
+                                PatchStatus::Preparation { .. } => tr("patch-preparation"),
+                                PatchStatus::Testing { version, .. } |
+                                PatchStatus::Available { version, .. } => version.to_string()
                             }
 
                             None => String::from("?")
                         },
 
                         #[watch]
-                        set_css_classes: match model.patch.as_ref() {
-                            Some(patch) => match patch {
-                                Patch::NotAvailable => &["error"],
-                                Patch::Outdated { .. } |
-                                Patch::Preparation { .. } |
-                                Patch::Testing { .. } => &["warning"],
-                                Patch::Available { .. } => unsafe {
-                                    if let Ok(true) = model.patch.as_ref().unwrap_unchecked().is_applied(&CONFIG.game.path) {
+                        set_css_classes: match model.unity_player_patch.as_ref() {
+                            Some(patch) => match patch.status() {
+                                PatchStatus::NotAvailable => &["error"],
+                                PatchStatus::Outdated { .. } |
+                                PatchStatus::Preparation { .. } |
+                                PatchStatus::Testing { .. } => &["warning"],
+                                PatchStatus::Available { .. } => unsafe {
+                                    if let Ok(true) = model.unity_player_patch.as_ref().unwrap_unchecked().is_applied(&CONFIG.game.path) {
                                         &["success"]
                                     } else {
                                         &["warning"]
@@ -404,17 +404,17 @@ impl SimpleAsyncComponent for GeneralApp {
                         },
 
                         #[watch]
-                        set_tooltip_text: Some(&match model.patch.as_ref() {
-                            Some(patch) => match patch {
-                                Patch::NotAvailable => tr("patch-not-available-tooltip"),
-                                Patch::Outdated { current, latest, .. } => tr_args("patch-outdated-tooltip", [
+                        set_tooltip_text: Some(&match model.unity_player_patch.as_ref() {
+                            Some(patch) => match patch.status() {
+                                PatchStatus::NotAvailable => tr("patch-not-available-tooltip"),
+                                PatchStatus::Outdated { current, latest, .. } => tr_args("patch-outdated-tooltip", [
                                     ("current", current.to_string().into()),
                                     ("latest", latest.to_string().into())
                                 ]),
-                                Patch::Preparation { .. } => tr("patch-preparation-tooltip"),
-                                Patch::Testing { .. } => tr("patch-testing-tooltip"),
-                                Patch::Available { .. } => unsafe {
-                                    if let Ok(true) = model.patch.as_ref().unwrap_unchecked().is_applied(&CONFIG.game.path) {
+                                PatchStatus::Preparation { .. } => tr("patch-preparation-tooltip"),
+                                PatchStatus::Testing { .. } => tr("patch-testing-tooltip"),
+                                PatchStatus::Available { .. } => unsafe {
+                                    if let Ok(true) = model.unity_player_patch.as_ref().unwrap_unchecked().is_applied(&CONFIG.game.path) {
                                         String::new()
                                     } else {
                                         tr("patch-testing-tooltip")
@@ -614,7 +614,7 @@ impl SimpleAsyncComponent for GeneralApp {
                 .forward(sender.input_sender(), std::convert::identity),
 
             game_diff: None,
-            patch: None,
+            unity_player_patch: None,
 
             style: CONFIG.launcher.style,
 
@@ -661,8 +661,8 @@ impl SimpleAsyncComponent for GeneralApp {
                 self.game_diff = diff;
             }
 
-            GeneralAppMsg::SetPatch(patch) => {
-                self.patch = patch;
+            GeneralAppMsg::SetUnityPlayerPatch(patch) => {
+                self.unity_player_patch = patch;
             }
 
             #[allow(unused_must_use)]

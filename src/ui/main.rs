@@ -68,7 +68,9 @@ pub enum AppMsg {
 
     /// Supposed to be called automatically on app's run when the latest patch version
     /// was retrieved from remote repos
-    SetPatch(Option<Patch>),
+    SetUnityPlayerPatch(Option<UnityPlayerPatch>),
+
+    // TODO: xlua patch status
 
     /// Supposed to be called automatically on app's run when the launcher state was chosen
     SetLauncherState(Option<LauncherState>),
@@ -357,7 +359,7 @@ impl SimpleComponent for App {
                                         set_label: &match model.state {
                                             Some(LauncherState::Launch)                      => tr("launch"),
                                             Some(LauncherState::PredownloadAvailable { .. }) => tr("launch"),
-                                            Some(LauncherState::PatchAvailable(_))           => tr("apply-patch"),
+                                            Some(LauncherState::MainPatchAvailable(_))       => tr("apply-patch"),
                                             Some(LauncherState::WineNotInstalled)            => tr("download-wine"),
                                             Some(LauncherState::PrefixNotExists)             => tr("create-prefix"),
                                             Some(LauncherState::VoiceUpdateAvailable(_))     => tr("update"),
@@ -375,13 +377,13 @@ impl SimpleComponent for App {
                                             Some(LauncherState::GameOutdated { .. }) |
                                             Some(LauncherState::VoiceOutdated(_)) => false,
 
-                                            Some(LauncherState::PatchAvailable(patch)) => match patch {
-                                                Patch::NotAvailable |
-                                                Patch::Outdated { .. } |
-                                                Patch::Preparation { .. } => false,
+                                            Some(LauncherState::MainPatchAvailable(UnityPlayerPatch { status, .. })) => match status {
+                                                PatchStatus::NotAvailable |
+                                                PatchStatus::Outdated { .. } |
+                                                PatchStatus::Preparation { .. } => false,
 
-                                                Patch::Testing { .. } |
-                                                Patch::Available { .. } => true
+                                                PatchStatus::Testing { .. } |
+                                                PatchStatus::Available { .. } => true
                                             },
 
                                             Some(_) => true,
@@ -394,13 +396,13 @@ impl SimpleComponent for App {
                                             Some(LauncherState::GameOutdated { .. }) |
                                             Some(LauncherState::VoiceOutdated(_)) => &["warning"],
 
-                                            Some(LauncherState::PatchAvailable(patch)) => match patch {
-                                                Patch::NotAvailable |
-                                                Patch::Outdated { .. } |
-                                                Patch::Preparation { .. } => &["error"],
+                                            Some(LauncherState::MainPatchAvailable(UnityPlayerPatch { status, .. })) => match status {
+                                                PatchStatus::NotAvailable |
+                                                PatchStatus::Outdated { .. } |
+                                                PatchStatus::Preparation { .. } => &["error"],
 
-                                                Patch::Testing { .. } => &["warning"],
-                                                Patch::Available { .. } => &["suggested-action"]
+                                                PatchStatus::Testing { .. } => &["warning"],
+                                                PatchStatus::Available { .. } => &["suggested-action"]
                                             },
 
                                             Some(_) => &["suggested-action"],
@@ -413,11 +415,11 @@ impl SimpleComponent for App {
                                             Some(LauncherState::GameOutdated { .. }) |
                                             Some(LauncherState::VoiceOutdated(_)) => tr("main-window--version-outdated-tooltip"),
 
-                                            Some(LauncherState::PatchAvailable(patch)) => match patch {
-                                                Patch::NotAvailable => tr("main-window--patch-unavailable-tooltip"),
+                                            Some(LauncherState::MainPatchAvailable(UnityPlayerPatch { status, .. })) => match status {
+                                                PatchStatus::NotAvailable => tr("main-window--patch-unavailable-tooltip"),
 
-                                                Patch::Outdated { .. } |
-                                                Patch::Preparation { .. } => tr("main-window--patch-outdated-tooltip"),
+                                                PatchStatus::Outdated { .. } |
+                                                PatchStatus::Preparation { .. } => tr("main-window--patch-outdated-tooltip"),
 
                                                 _ => String::new()
                                             },
@@ -607,9 +609,9 @@ impl SimpleComponent for App {
             let components = ComponentsLoader::new(&CONFIG.components.path);
 
             match components.is_sync(&CONFIG.components.servers) {
-                Ok(true) => (),
+                Ok(Some(_)) => (),
 
-                Ok(false) => {
+                Ok(None) => {
                     for host in &CONFIG.components.servers {
                         match components.sync(host) {
                             Ok(true) => {
@@ -669,10 +671,54 @@ impl SimpleComponent for App {
 
             sender.input(AppMsg::SetLoadingStatus(Some(Some(tr("loading-patch-status")))));
 
-            sender.input(AppMsg::SetPatch(match Patch::try_fetch(&CONFIG.patch.servers, None) {
-                Ok(patch) => Some(patch),
+            // Sync local patch repo
+            let patch = Patch::new(&CONFIG.patch.path);
+
+            match patch.is_sync(&CONFIG.patch.servers) {
+                Ok(Some(_)) => (),
+
+                Ok(None) => {
+                    for server in &CONFIG.patch.servers {
+                        match patch.sync(server) {
+                            Ok(true) => break,
+
+                            Ok(false) => {
+                                tracing::error!("Failed to sync patch folder with remote: {server}");
+
+                                sender.input(AppMsg::Toast {
+                                    title: tr("patch-sync-failed"),
+                                    description: None
+                                });
+                            }
+
+                            Err(err) => {
+                                tracing::error!("Failed to sync patch folder with remote: {server}: {err}");
+
+                                sender.input(AppMsg::Toast {
+                                    title: tr("patch-sync-failed"),
+                                    description: Some(err.to_string())
+                                });
+                            }
+                        }
+                    }
+                }
+
                 Err(err) => {
-                    tracing::error!("Failed to fetch patch info: {err}");
+                    tracing::error!("Failed to compare local patch folder with remote: {err}");
+
+                    sender.input(AppMsg::Toast {
+                        title: tr("patch-state-check-failed"),
+                        description: Some(err.to_string())
+                    });
+                }
+            }
+
+            // Get main patch status
+            let main_patch = match patch.unity_player_patch() {
+                Ok(patch) => Some(patch),
+
+                Err(err) => {
+                    tracing::error!("Failed to fetch unity player patch info: {err}");
 
                     sender.input(AppMsg::Toast {
                         title: tr("patch-info-fetching-error"),
@@ -681,7 +727,9 @@ impl SimpleComponent for App {
 
                     None
                 }
-            }));
+            };
+
+            sender.input(AppMsg::SetUnityPlayerPatch(main_patch));
 
             tracing::info!("Updated patch status");
 
@@ -777,8 +825,8 @@ impl SimpleComponent for App {
             }
 
             #[allow(unused_must_use)]
-            AppMsg::SetPatch(patch) => unsafe {
-                PREFERENCES_WINDOW.as_ref().unwrap_unchecked().sender().send(PreferencesAppMsg::SetPatch(patch));
+            AppMsg::SetUnityPlayerPatch(patch) => unsafe {
+                PREFERENCES_WINDOW.as_ref().unwrap_unchecked().sender().send(PreferencesAppMsg::SetUnityPlayerPatch(patch));
             }
 
             AppMsg::SetLauncherState(state) => {
@@ -900,10 +948,9 @@ impl SimpleComponent for App {
 
                                 let total = broken.len() as f64;
 
-                                let is_patch_applied = match Patch::try_fetch(config.patch.servers, anime_launcher_sdk::consts::PATCH_FETCHING_TIMEOUT) {
-                                    Ok(patch) => patch.is_applied(&config.game.path).unwrap_or(true),
-                                    Err(_) => true
-                                };
+                                // TODO: properly handle xlua patch
+                                let is_patch_applied = UnityPlayerPatch::from_folder(&config.patch.path).unwrap()
+                                    .is_applied(&config.game.path).unwrap();
 
                                 tracing::debug!("Patch status: {}", is_patch_applied);
 
@@ -994,9 +1041,9 @@ impl SimpleComponent for App {
 
             AppMsg::PerformAction => unsafe {
                 match self.state.as_ref().unwrap_unchecked() {
-                    LauncherState::PatchAvailable(Patch::NotAvailable) |
+                    LauncherState::MainPatchAvailable(UnityPlayerPatch { status: PatchStatus::NotAvailable, .. }) |
                     LauncherState::PredownloadAvailable { .. } |
-                    LauncherState::Launch  => {
+                    LauncherState::Launch => {
                         sender.input(AppMsg::HideWindow);
 
                         std::thread::spawn(move || {
@@ -1013,69 +1060,28 @@ impl SimpleComponent for App {
                         });
                     }
 
-                    LauncherState::PatchAvailable(patch) => {
-                        match patch.to_owned() {
-                            Patch::NotAvailable |
-                            Patch::Outdated { .. } |
-                            Patch::Preparation { .. } => unreachable!(),
+                    LauncherState::MainPatchAvailable(patch) => {
+                        let patch = patch.to_owned();
 
-                            Patch::Testing { version, host, .. } |
-                            Patch::Available { version, host, .. } => {
+                        match patch.status() {
+                            PatchStatus::NotAvailable |
+                            PatchStatus::Outdated { .. } |
+                            PatchStatus::Preparation { .. } => unreachable!(),
+
+                            PatchStatus::Testing { .. } |
+                            PatchStatus::Available { .. } => {
                                 self.disabled_buttons = true;
 
                                 let config = config::get().unwrap();
 
                                 std::thread::spawn(move || {
-                                    let applier = PatchApplier::new(&config.patch.path);
+                                    if let Err(err) = patch.apply(&config.game.path, config.patch.root) {
+                                        tracing::error!("Failed to patch the game");
 
-                                    let mut synced = false;
-
-                                    match applier.is_sync_with(&host) {
-                                        Ok(true) => synced = true,
-
-                                        Ok(false) => {
-                                            match applier.sync(&host) {
-                                                Ok(true) => synced = true,
-
-                                                Ok(false) => {
-                                                    tracing::error!("Failed to sync patch folder with remote: {host}");
-
-                                                    sender.input(AppMsg::Toast {
-                                                        title: tr("patch-sync-failed"),
-                                                        description: None
-                                                    });
-                                                }
-
-                                                Err(err) => {
-                                                    tracing::error!("Failed to sync patch folder with remote: {host}: {err}");
-
-                                                    sender.input(AppMsg::Toast {
-                                                        title: tr("patch-sync-failed"),
-                                                        description: Some(err.to_string())
-                                                    });
-                                                }
-                                            }
-                                        }
-
-                                        Err(err) => {
-                                            tracing::error!("Failed to compare local patch folder with remote: {host}");
-
-                                            sender.input(AppMsg::Toast {
-                                                title: tr("patch-state-check-failed"),
-                                                description: Some(err.to_string())
-                                            });
-                                        }
-                                    }
-
-                                    if synced {
-                                        if let Err(err) = applier.apply(&config.game.path, version, config.patch.root) {
-                                            tracing::error!("Failed to patch the game using remote: {host}");
-
-                                            sender.input(AppMsg::Toast {
-                                                title: tr("game-patching-error"),
-                                                description: Some(err.to_string())
-                                            });
-                                        }
+                                        sender.input(AppMsg::Toast {
+                                            title: tr("game-patching-error"),
+                                            description: Some(err.to_string())
+                                        });
                                     }
 
                                     sender.input(AppMsg::DisableButtons(false));

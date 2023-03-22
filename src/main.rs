@@ -191,7 +191,7 @@ fn main() {
                 }
 
                 LauncherState::PredownloadAvailable { .. } |
-                LauncherState::PatchAvailable(Patch::NotAvailable) => {
+                LauncherState::MainPatchAvailable(UnityPlayerPatch { status: PatchStatus::NotAvailable, .. }) => {
                     if just_run_game {
                         anime_launcher_sdk::game::run().expect("Failed to run the game");
 

@@ -30,7 +30,7 @@ pub enum PreferencesAppMsg {
 
     /// Supposed to be called automatically on app's run when the latest patch version
     /// was retrieved from remote repos
-    SetPatch(Option<Patch>),
+    SetUnityPlayerPatch(Option<UnityPlayerPatch>),
 
     SetLauncherStyle(LauncherStyle),
 
@@ -125,8 +125,8 @@ impl SimpleAsyncComponent for PreferencesApp {
             }
 
             #[allow(unused_must_use)]
-            PreferencesAppMsg::SetPatch(patch) => {
-                self.general.sender().send(GeneralAppMsg::SetPatch(patch));
+            PreferencesAppMsg::SetUnityPlayerPatch(patch) => {
+                self.general.sender().send(GeneralAppMsg::SetUnityPlayerPatch(patch));
             }
 
             #[allow(unused_must_use)]

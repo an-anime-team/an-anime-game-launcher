@@ -227,9 +227,9 @@ impl SimpleComponent for FirstRunApp {
                 #[allow(unused_must_use)]
                 std::thread::spawn(move || {
                     match components.is_sync(config.components.servers) {
-                        Ok(true) => (),
+                        Ok(Some(_)) => (),
 
-                        Ok(false) => {
+                        Ok(None) => {
                             for host in &CONFIG.components.servers {
                                 match components.sync(host) {
                                     Ok(true) => break,
