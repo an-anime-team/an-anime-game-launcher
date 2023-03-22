@@ -24,11 +24,11 @@ game-predownload-available = Vorab-Download von Spiel-Updates verfügbar: {$old}
 game-update-available = Spiel-Update verfügbar: {$old} -> {$new}
 game-outdated = Das Spiel ist zu veraltet und kann nicht mehr aktualisiert werden. Letzte Version: {$latest}
 
-player-patch-version = Player patch version
-player-patch-version-description = Main patch that lets you play the game on Linux
+player-patch-version = Hauptpatch-Version
+player-patch-version-description = Hauptpatch, mit dem du das Spiel unter Linux spielen kannst
 
-xlua-patch-version = Xlua patch version
-xlua-patch-version-description = Additional patch that fixes some issues and improves performance on low-end PCs
+xlua-patch-version = zusätzliche Patch-Version
+xlua-patch-version-description = Zusätzlicher Patch, der einige Probleme behebt und die Leistung auf Low-End-PCs verbessert
 
 patch-not-available = nicht verfügbar
 patch-not-available-tooltip = Patch-Server sind unerreichbar
@@ -40,12 +40,12 @@ patch-preparation = Vorbereitung
 patch-preparation-tooltip = Patch ist in Entwicklung
 
 patch-testing-tooltip = Test-Patch ist verfügbar
-patch-not-applied-tooltip = Patch is not applied
+patch-not-applied-tooltip = Patch ist nicht angewendet
 
-apply-xlua-patch = Apply xlua patch
+apply-xlua-patch = Zusätzlichen Patch anwenden
 
-ask-superuser-permissions = Ask superuser permissions
-ask-superuser-permissions-description = Launcher will use them to automatically update your hosts file. This is not needed in flatpak edition
+ask-superuser-permissions = Superuser-Berechtigungen anfordern
+ask-superuser-permissions-description = Launcher benötigt Superuser-Zugriff, um Ihre Hosts-Datei automatisch zu aktualisieren. Dies ist in der Flatpak-Edition nicht erforderlich
 
 selected-version = Ausgewählte version
 recommended-only = Nur empfohlene
