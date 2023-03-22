@@ -68,6 +68,7 @@ dependencies = [
  "open",
  "relm4",
  "rfd",
+ "rust-strings",
  "serde_json",
  "tracing",
  "tracing-subscriber",
@@ -2144,6 +2145,12 @@ dependencies = [
  "web-sys",
  "winapi",
 ]
+
+[[package]]
+name = "rust-strings"
+version = "0.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8d7119567cd5cf73fcb5a7c99457bee37bf879c9a16bc6dcd88afa68c0e8944d"
 
 [[package]]
 name = "rustc-hash"

@@ -21,6 +21,7 @@ gtk = { package = "gtk4", version = "0.6", features = ["v4_8"] }
 adw = { package = "libadwaita", version = "0.3", features = ["v1_2"] }
 rfd = { version = "0.11", features = ["xdg-portal"], default-features = false }
 open = "4.0.0"
+rust-strings = "0.4.0"
 
 anime-launcher-sdk = { path = "anime-launcher-sdk" }
 

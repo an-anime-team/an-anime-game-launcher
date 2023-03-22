@@ -12,6 +12,10 @@ launcher-folder = Launcher folder
 game-folder = Game folder
 config-file = Config file
 debug-file = Debug file
+wish-url = Find & Open Wishes
+wish-url-error = Could not open wishes
+wish-url-error-none = No Wish URL found
+wish-url-error-none-text = No Wish URL was found in the CEF cache.
 about = About
 
 
