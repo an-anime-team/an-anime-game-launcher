@@ -24,7 +24,11 @@ game-predownload-available = Pre-descarga de actualización disponible: {$old} -
 game-update-available = Actualización disponible: {$old} -> {$new}
 game-outdated = El juego está demasiado desactualizado y no puede actualizarse. Última versión: {$latest}
 
-patch-version = Versión del parche
+player-patch-version = Player patch version
+player-patch-version-description = Main patch that lets you play the game on Linux
+
+xlua-patch-version = Xlua patch version
+xlua-patch-version-description = Additional patch that fixes some issues and improves performance on low-end PCs
 
 patch-not-available = No disponible
 patch-not-available-tooltip = Los servidores del parche no pudieron contactarse
@@ -36,6 +40,12 @@ patch-preparation = Preparación
 patch-preparation-tooltip = El parche está en desarrollo
 
 patch-testing-tooltip = Está disponible un parche de prueba
+patch-not-applied-tooltip = Patch is not applied
+
+apply-xlua-patch = Apply xlua patch
+
+ask-superuser-permissions = Ask superuser permissions
+ask-superuser-permissions-description = Launcher will use them to automatically update your hosts file. This is not needed in flatpak edition
 
 selected-version = Versión seleccionada
 recommended-only = Sólo recomendadas

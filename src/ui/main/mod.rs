@@ -10,13 +10,16 @@ use adw::prelude::*;
 
 use gtk::glib::clone;
 
+mod repair_game;
+mod apply_patch;
+mod download_wine;
+mod create_prefix;
+mod download_diff;
+mod launch;
+
 use anime_launcher_sdk::config::launcher::LauncherStyle;
 use anime_launcher_sdk::states::LauncherState;
-use anime_launcher_sdk::wincompatlib::prelude::*;
 use anime_launcher_sdk::components::loader::ComponentsLoader;
-use anime_launcher_sdk::components::wine;
-
-use std::path::Path;
 
 use crate::*;
 use crate::i18n::*;
@@ -58,6 +61,9 @@ pub enum AppMsg {
         /// Needed for chained executions (e.g. update one voice after another)
         perform_on_download_needed: bool,
 
+        /// Automatically start patch applying if possible and needed
+        apply_patch_if_needed: bool,
+
         /// Show status gathering progress page
         show_status_page: bool
     },
@@ -66,11 +72,13 @@ pub enum AppMsg {
     /// was retrieved from the API
     SetGameDiff(Option<VersionDiff>),
 
-    /// Supposed to be called automatically on app's run when the latest patch version
+    /// Supposed to be called automatically on app's run when the latest UnityPlayer patch version
     /// was retrieved from remote repos
     SetUnityPlayerPatch(Option<UnityPlayerPatch>),
 
-    // TODO: xlua patch status
+    /// Supposed to be called automatically on app's run when the latest xlua patch version
+    /// was retrieved from remote repos
+    SetXluaPatch(Option<XluaPatch>),
 
     /// Supposed to be called automatically on app's run when the launcher state was chosen
     SetLauncherState(Option<LauncherState>),
@@ -357,17 +365,18 @@ impl SimpleComponent for App {
                                     gtk::Button {
                                         #[watch]
                                         set_label: &match model.state {
-                                            Some(LauncherState::Launch)                      => tr("launch"),
-                                            Some(LauncherState::PredownloadAvailable { .. }) => tr("launch"),
-                                            Some(LauncherState::MainPatchAvailable(_))       => tr("apply-patch"),
-                                            Some(LauncherState::WineNotInstalled)            => tr("download-wine"),
-                                            Some(LauncherState::PrefixNotExists)             => tr("create-prefix"),
-                                            Some(LauncherState::VoiceUpdateAvailable(_))     => tr("update"),
-                                            Some(LauncherState::VoiceOutdated(_))            => tr("update"),
-                                            Some(LauncherState::VoiceNotInstalled(_))        => tr("download"),
-                                            Some(LauncherState::GameUpdateAvailable(_))      => tr("update"),
-                                            Some(LauncherState::GameOutdated(_))             => tr("update"),
-                                            Some(LauncherState::GameNotInstalled(_))         => tr("download"),
+                                            Some(LauncherState::Launch)                       => tr("launch"),
+                                            Some(LauncherState::PredownloadAvailable { .. })  => tr("launch"),
+                                            Some(LauncherState::UnityPlayerPatchAvailable(_)) => tr("apply-patch"),
+                                            Some(LauncherState::XluaPatchAvailable(_))        => tr("apply-patch"),
+                                            Some(LauncherState::WineNotInstalled)             => tr("download-wine"),
+                                            Some(LauncherState::PrefixNotExists)              => tr("create-prefix"),
+                                            Some(LauncherState::VoiceUpdateAvailable(_))      => tr("update"),
+                                            Some(LauncherState::VoiceOutdated(_))             => tr("update"),
+                                            Some(LauncherState::VoiceNotInstalled(_))         => tr("download"),
+                                            Some(LauncherState::GameUpdateAvailable(_))       => tr("update"),
+                                            Some(LauncherState::GameOutdated(_))              => tr("update"),
+                                            Some(LauncherState::GameNotInstalled(_))          => tr("download"),
 
                                             None => String::from("...")
                                         },
@@ -377,7 +386,8 @@ impl SimpleComponent for App {
                                             Some(LauncherState::GameOutdated { .. }) |
                                             Some(LauncherState::VoiceOutdated(_)) => false,
 
-                                            Some(LauncherState::MainPatchAvailable(UnityPlayerPatch { status, .. })) => match status {
+                                            Some(LauncherState::UnityPlayerPatchAvailable(UnityPlayerPatch { status, .. })) |
+                                            Some(LauncherState::XluaPatchAvailable(XluaPatch { status, .. })) => match status {
                                                 PatchStatus::NotAvailable |
                                                 PatchStatus::Outdated { .. } |
                                                 PatchStatus::Preparation { .. } => false,
@@ -396,7 +406,8 @@ impl SimpleComponent for App {
                                             Some(LauncherState::GameOutdated { .. }) |
                                             Some(LauncherState::VoiceOutdated(_)) => &["warning"],
 
-                                            Some(LauncherState::MainPatchAvailable(UnityPlayerPatch { status, .. })) => match status {
+                                            Some(LauncherState::UnityPlayerPatchAvailable(UnityPlayerPatch { status, .. })) |
+                                            Some(LauncherState::XluaPatchAvailable(XluaPatch { status, .. })) => match status {
                                                 PatchStatus::NotAvailable |
                                                 PatchStatus::Outdated { .. } |
                                                 PatchStatus::Preparation { .. } => &["error"],
@@ -415,7 +426,8 @@ impl SimpleComponent for App {
                                             Some(LauncherState::GameOutdated { .. }) |
                                             Some(LauncherState::VoiceOutdated(_)) => tr("main-window--version-outdated-tooltip"),
 
-                                            Some(LauncherState::MainPatchAvailable(UnityPlayerPatch { status, .. })) => match status {
+                                            Some(LauncherState::UnityPlayerPatchAvailable(UnityPlayerPatch { status, .. })) |
+                                            Some(LauncherState::XluaPatchAvailable(XluaPatch { status, .. })) => match status {
                                                 PatchStatus::NotAvailable => tr("main-window--patch-unavailable-tooltip"),
 
                                                 PatchStatus::Outdated { .. } |
@@ -713,8 +725,8 @@ impl SimpleComponent for App {
                 }
             }
 
-            // Get main patch status
-            let main_patch = match patch.unity_player_patch() {
+            // Get main UnityPlayer patch status
+            sender.input(AppMsg::SetUnityPlayerPatch(match patch.unity_player_patch() {
                 Ok(patch) => Some(patch),
 
                 Err(err) => {
@@ -727,15 +739,30 @@ impl SimpleComponent for App {
 
                     None
                 }
-            };
+            }));
 
-            sender.input(AppMsg::SetUnityPlayerPatch(main_patch));
+            // Get additional xlua patch status
+            sender.input(AppMsg::SetXluaPatch(match patch.xlua_patch() {
+                Ok(patch) => Some(patch),
+
+                Err(err) => {
+                    tracing::error!("Failed to fetch xlua patch info: {err}");
+
+                    sender.input(AppMsg::Toast {
+                        title: tr("patch-info-fetching-error"),
+                        description: Some(err.to_string())
+                    });
+
+                    None
+                }
+            }));
 
             tracing::info!("Updated patch status");
 
             // Update launcher state
             sender.input(AppMsg::UpdateLauncherState {
                 perform_on_download_needed: false,
+                apply_patch_if_needed: false,
                 show_status_page: true
             });
 
@@ -755,7 +782,7 @@ impl SimpleComponent for App {
 
         match msg {
             // TODO: make function from this message like with toast
-            AppMsg::UpdateLauncherState { perform_on_download_needed, show_status_page } => {
+            AppMsg::UpdateLauncherState { perform_on_download_needed, apply_patch_if_needed, show_status_page } => {
                 if show_status_page {
                     sender.input(AppMsg::SetLoadingStatus(Some(Some(tr("loading-launcher-state")))));
                 } else {
@@ -802,19 +829,22 @@ impl SimpleComponent for App {
                 } else {
                     self.disabled_buttons = false;
                 }
-
-                if perform_on_download_needed {
-                    if let Some(state) = state {
-                        match state {
-                            LauncherState::VoiceUpdateAvailable(_) |
-                            LauncherState::VoiceNotInstalled(_) |
-                            LauncherState::GameUpdateAvailable(_) |
-                            LauncherState::GameNotInstalled(_) => {
-                                sender.input(AppMsg::PerformAction);
-                            }
-
-                            _ => ()
+                
+                if let Some(state) = state {
+                    match state {
+                        LauncherState::VoiceUpdateAvailable(_) |
+                        LauncherState::VoiceNotInstalled(_) |
+                        LauncherState::GameUpdateAvailable(_) |
+                        LauncherState::GameNotInstalled(_) if perform_on_download_needed => {
+                            sender.input(AppMsg::PerformAction);
                         }
+
+                        LauncherState::UnityPlayerPatchAvailable(_) |
+                        LauncherState::XluaPatchAvailable(_) if apply_patch_if_needed => {
+                            sender.input(AppMsg::PerformAction);
+                        }
+
+                        _ => ()
                     }
                 }
             }
@@ -827,6 +857,11 @@ impl SimpleComponent for App {
             #[allow(unused_must_use)]
             AppMsg::SetUnityPlayerPatch(patch) => unsafe {
                 PREFERENCES_WINDOW.as_ref().unwrap_unchecked().sender().send(PreferencesAppMsg::SetUnityPlayerPatch(patch));
+            }
+
+            #[allow(unused_must_use)]
+            AppMsg::SetXluaPatch(patch) => unsafe {
+                PREFERENCES_WINDOW.as_ref().unwrap_unchecked().sender().send(PreferencesAppMsg::SetXluaPatch(patch));
             }
 
             AppMsg::SetLauncherState(state) => {
@@ -853,149 +888,7 @@ impl SimpleComponent for App {
                 PREFERENCES_WINDOW.as_ref().unwrap_unchecked().widget().present();
             }
 
-            #[allow(unused_must_use)]
-            AppMsg::RepairGame => {
-                let config = config::get().unwrap();
-
-                let progress_bar_input = self.progress_bar.sender().clone();
-
-                progress_bar_input.send(ProgressBarMsg::UpdateCaption(Some(tr("verifying-files"))));
-
-                self.downloading = true;
-
-                std::thread::spawn(move || {
-                    match repairer::try_get_integrity_files(None) {
-                        Ok(mut files) => {
-                            // Add voiceovers files
-                            let game = Game::new(&config.game.path);
-
-                            if let Ok(voiceovers) = game.get_voice_packages() {
-                                for package in voiceovers {
-                                    if let Ok(mut voiceover_files) = repairer::try_get_voice_integrity_files(package.locale(), None) {
-                                        files.append(&mut voiceover_files);
-                                    }
-                                }
-                            }
-
-                            progress_bar_input.send(ProgressBarMsg::UpdateProgress(0, 0));
-
-                            let mut total = 0;
-
-                            for file in &files {
-                                total += file.size;
-                            }
-
-                            let median_size = total / config.launcher.repairer.threads;
-                            let mut i = 0;
-
-                            let (verify_sender, verify_receiver) = std::sync::mpsc::channel();
-
-                            for _ in 0..config.launcher.repairer.threads {
-                                let mut thread_files = Vec::new();
-                                let mut thread_files_size = 0;
-
-                                while i < files.len() {
-                                    thread_files.push(files[i].clone());
-
-                                    thread_files_size += files[i].size;
-                                    i += 1;
-
-                                    if thread_files_size >= median_size {
-                                        break;
-                                    }
-                                }
-
-                                let game_path = config.game.path.clone();
-                                let thread_sender = verify_sender.clone();
-
-                                std::thread::spawn(move || {
-                                    for file in thread_files {
-                                        let status = if config.launcher.repairer.fast {
-                                            file.fast_verify(&game_path)
-                                        } else {
-                                            file.verify(&game_path)
-                                        };
-
-                                        thread_sender.send((file, status)).unwrap();
-                                    }
-                                });
-                            }
-
-                            // We have [config.launcher.repairer.threads] copies of this sender + the original one
-                            // receiver will return Err when all the senders will be dropped.
-                            // [config.launcher.repairer.threads] senders will be dropped when threads will finish verifying files
-                            // but this one will live as long as current thread exists so we should drop it manually
-                            drop(verify_sender);
-
-                            let mut broken = Vec::new();
-                            let mut processed = 0;
-
-                            while let Ok((file, status)) = verify_receiver.recv() {
-                                processed += file.size;
-
-                                if !status {
-                                    broken.push(file);
-                                }
-
-                                progress_bar_input.send(ProgressBarMsg::UpdateProgress(processed, total));
-                            }
-
-                            if !broken.is_empty() {
-                                progress_bar_input.send(ProgressBarMsg::UpdateCaption(Some(tr("repairing-files"))));
-                                progress_bar_input.send(ProgressBarMsg::UpdateProgress(0, 0));
-
-                                tracing::warn!("Found broken files:\n{}", broken.iter().fold(String::new(), |acc, file| acc + &format!("- {}\n", file.path.to_string_lossy())));
-
-                                let total = broken.len() as f64;
-
-                                // TODO: properly handle xlua patch
-                                let is_patch_applied = UnityPlayerPatch::from_folder(&config.patch.path).unwrap()
-                                    .is_applied(&config.game.path).unwrap();
-
-                                tracing::debug!("Patch status: {}", is_patch_applied);
-
-                                fn should_ignore(path: &Path) -> bool {
-                                    for part in ["UnityPlayer.dll", "xlua.dll", "crashreport.exe", "upload_crash.exe", "vulkan-1.dll"] {
-                                        if path.ends_with(part) {
-                                            return true;
-                                        }
-                                    }
-
-                                    false
-                                }
-
-                                for (i, file) in broken.into_iter().enumerate() {
-                                    if !is_patch_applied || !should_ignore(&file.path) {
-                                        tracing::debug!("Repairing: {}", file.path.to_string_lossy());
-
-                                        if let Err(err) = file.repair(&config.game.path) {
-                                            sender.input(AppMsg::Toast {
-                                                title: tr("game-file-repairing-error"),
-                                                description: Some(err.to_string())
-                                            });
-
-                                            tracing::error!("Failed to repair game file: {err}");
-                                        }
-                                    }
-
-                                    progress_bar_input.send(ProgressBarMsg::UpdateProgress(i as u64, total as u64));
-                                }
-                            }
-                        }
-
-                        Err(err) => {
-                            tracing::error!("Failed to get inregrity failes: {err}");
-
-                            sender.input(AppMsg::Toast {
-                                title: tr("integrity-files-getting-error"),
-                                description: Some(err.to_string())
-                            });
-                        }
-                    }
-
-                    sender.input(AppMsg::SetDownloading(false));
-                });
-            }
+            AppMsg::RepairGame => repair_game::repair_game(sender, self.progress_bar.sender().to_owned()),
 
             #[allow(unused_must_use)]
             AppMsg::PredownloadUpdate => {
@@ -1033,6 +926,7 @@ impl SimpleComponent for App {
                         sender.input(AppMsg::SetDownloading(false));
                         sender.input(AppMsg::UpdateLauncherState {
                             perform_on_download_needed: false,
+                            apply_patch_if_needed: false,
                             show_status_page: true
                         });
                     });
@@ -1041,260 +935,22 @@ impl SimpleComponent for App {
 
             AppMsg::PerformAction => unsafe {
                 match self.state.as_ref().unwrap_unchecked() {
-                    LauncherState::MainPatchAvailable(UnityPlayerPatch { status: PatchStatus::NotAvailable, .. }) |
+                    LauncherState::UnityPlayerPatchAvailable(UnityPlayerPatch { status: PatchStatus::NotAvailable, .. }) |
+                    LauncherState::XluaPatchAvailable(XluaPatch { status: PatchStatus::NotAvailable, .. }) |
                     LauncherState::PredownloadAvailable { .. } |
-                    LauncherState::Launch => {
-                        sender.input(AppMsg::HideWindow);
+                    LauncherState::Launch => launch::launch(sender),
 
-                        std::thread::spawn(move || {
-                            if let Err(err) = anime_launcher_sdk::game::run() {
-                                tracing::error!("Failed to launch game: {err}");
+                    LauncherState::UnityPlayerPatchAvailable(patch) => apply_patch::apply_patch(sender, patch.to_owned()),
+                    LauncherState::XluaPatchAvailable(patch) => apply_patch::apply_patch(sender, patch.to_owned()),
 
-                                sender.input(AppMsg::Toast {
-                                    title: tr("game-launching-failed"),
-                                    description: Some(err.to_string())
-                                });
-                            }
+                    LauncherState::WineNotInstalled => download_wine::download_wine(sender, self.progress_bar.sender().to_owned()),
 
-                            sender.input(AppMsg::ShowWindow);
-                        });
-                    }
-
-                    LauncherState::MainPatchAvailable(patch) => {
-                        let patch = patch.to_owned();
-
-                        match patch.status() {
-                            PatchStatus::NotAvailable |
-                            PatchStatus::Outdated { .. } |
-                            PatchStatus::Preparation { .. } => unreachable!(),
-
-                            PatchStatus::Testing { .. } |
-                            PatchStatus::Available { .. } => {
-                                self.disabled_buttons = true;
-
-                                let config = config::get().unwrap();
-
-                                std::thread::spawn(move || {
-                                    if let Err(err) = patch.apply(&config.game.path, config.patch.root) {
-                                        tracing::error!("Failed to patch the game");
-
-                                        sender.input(AppMsg::Toast {
-                                            title: tr("game-patching-error"),
-                                            description: Some(err.to_string())
-                                        });
-                                    }
-
-                                    sender.input(AppMsg::DisableButtons(false));
-                                    sender.input(AppMsg::UpdateLauncherState {
-                                        perform_on_download_needed: false,
-                                        show_status_page: true
-                                    });
-                                });
-                            }
-                        }
-                    }
-
-                    LauncherState::WineNotInstalled => {
-                        let mut config = config::get().unwrap();
-
-                        match wine::get_downloaded(&CONFIG.components.path, &config.game.wine.builds) {
-                            Ok(downloaded) => {
-                                // Select downloaded version
-                                if !downloaded.is_empty() {
-                                    config.game.wine.selected = Some(downloaded[0].versions[0].name.clone());
-
-                                    config::update(config);
-
-                                    sender.input(AppMsg::UpdateLauncherState {
-                                        perform_on_download_needed: false,
-                                        show_status_page: true
-                                    });
-                                }
-
-                                // Or download new one if none is available
-                                else {
-                                    let latest = wine::Version::latest(&CONFIG.components.path).expect("Failed to get latest wine version");
-
-                                    // Choose selected wine version or use latest available one
-                                    let wine = match &config.game.wine.selected {
-                                        Some(version) => match wine::Version::find_in(&config.components.path, version) {
-                                            Ok(Some(version)) => version,
-                                            _ => latest
-                                        }
-
-                                        None => latest
-                                    };
-
-                                    // Download wine version
-                                    match Installer::new(wine.uri) {
-                                        Ok(mut installer) => {
-                                            if let Some(temp_folder) = &config.launcher.temp {
-                                                installer.temp_folder = temp_folder.to_path_buf();
-                                            }
-
-                                            installer.downloader
-                                                .set_downloading_speed(config.launcher.speed_limit)
-                                                .expect("Failed to set downloading speed limit");
-
-                                            let progress_bar_input = self.progress_bar.sender().clone();
-
-                                            self.downloading = true;
-
-                                            std::thread::spawn(clone!(@strong sender => move || {
-                                                #[allow(unused_must_use)]
-                                                installer.install(&config.game.wine.builds, clone!(@strong sender => move |state| {
-                                                    match &state {
-                                                        InstallerUpdate::DownloadingError(err) => {
-                                                            tracing::error!("Downloading failed: {err}");
-
-                                                            sender.input(AppMsg::Toast {
-                                                                title: tr("downloading-failed"),
-                                                                description: Some(err.to_string())
-                                                            });
-                                                        }
-
-                                                        InstallerUpdate::UnpackingError(err) => {
-                                                            tracing::error!("Unpacking failed: {err}");
-
-                                                            sender.input(AppMsg::Toast {
-                                                                title: tr("unpacking-failed"),
-                                                                description: Some(err.clone())
-                                                            });
-                                                        }
-
-                                                        _ => ()
-                                                    }
-
-                                                    progress_bar_input.send(ProgressBarMsg::UpdateFromState(state));
-                                                }));
-
-                                                config.game.wine.selected = Some(wine.name.clone());
-
-                                                config::update(config);
-
-                                                sender.input(AppMsg::SetDownloading(false));
-                                                sender.input(AppMsg::UpdateLauncherState {
-                                                    perform_on_download_needed: false,
-                                                    show_status_page: true
-                                                });
-                                            }));
-                                        }
-
-                                        Err(err) => self.toast(tr("wine-install-failed"), Some(err.to_string()))
-                                    }
-                                }
-                            }
-
-                            Err(err) => self.toast(tr("downloaded-wine-list-failed"), Some(err.to_string()))
-                        }
-                    }
-
-                    LauncherState::PrefixNotExists => {
-                        let config = config::get().unwrap();
-
-                        match config.get_selected_wine() {
-                            Ok(Some(wine)) => {
-                                sender.input(AppMsg::DisableButtons(true));
-
-                                std::thread::spawn(move || {
-                                    let wine = wine
-                                        .to_wine(config.components.path, Some(config.game.wine.builds.join(&wine.name)))
-                                        .with_prefix(&config.game.wine.prefix)
-                                        .with_loader(WineLoader::Current)
-                                        .with_arch(WineArch::Win64);
-
-                                    if let Err(err) = wine.update_prefix::<&str>(None) {
-                                        tracing::error!("Failed to create wine prefix");
-
-                                        sender.input(AppMsg::Toast {
-                                            title: tr("wine-prefix-update-failed"),
-                                            description: Some(err.to_string())
-                                        });
-                                    }
-
-                                    sender.input(AppMsg::DisableButtons(false));
-                                    sender.input(AppMsg::UpdateLauncherState {
-                                        perform_on_download_needed: false,
-                                        show_status_page: true
-                                    });
-                                });
-                            }
-
-                            Ok(None) => {
-                                tracing::error!("Failed to get selected wine executable");
-
-                                sender.input(AppMsg::Toast {
-                                    title: tr("failed-get-selected-wine"),
-                                    description: None
-                                });
-                            }
-
-                            Err(err) => {
-                                tracing::error!("Failed to get selected wine executable: {err}");
-
-                                sender.input(AppMsg::Toast {
-                                    title: tr("failed-get-selected-wine"),
-                                    description: Some(err.to_string())
-                                });
-                            }
-                        }
-                    }
+                    LauncherState::PrefixNotExists => create_prefix::create_prefix(sender),
 
                     LauncherState::VoiceUpdateAvailable(diff) |
                     LauncherState::VoiceNotInstalled(diff) |
                     LauncherState::GameUpdateAvailable(diff) |
-                    LauncherState::GameNotInstalled(diff) => {
-                        self.downloading = true;
-
-                        let progress_bar_input = self.progress_bar.sender().clone();
-
-                        // TODO: add speed limit
-                        std::thread::spawn(clone!(@strong diff => move || {
-                            let config = config::get().unwrap();
-
-                            #[allow(unused_must_use)]
-                            let result = diff.install_to_by(config.game.path, config.launcher.temp, clone!(@strong sender => move |state| {
-                                match &state {
-                                    InstallerUpdate::DownloadingError(err) => {
-                                        tracing::error!("Downloading failed: {err}");
-
-                                        sender.input(AppMsg::Toast {
-                                            title: tr("downloading-failed"),
-                                            description: Some(err.to_string())
-                                        });
-                                    }
-
-                                    InstallerUpdate::UnpackingError(err) => {
-                                        tracing::error!("Unpacking failed: {err}");
-
-                                        sender.input(AppMsg::Toast {
-                                            title: tr("unpacking-failed"),
-                                            description: Some(err.clone())
-                                        });
-                                    }
-
-                                    _ => ()
-                                }
-
-                                progress_bar_input.send(ProgressBarMsg::UpdateFromState(state));
-                            }));
-
-                            if let Err(err) = result {
-                                tracing::error!("Downloading failed: {err}");
-
-                                sender.input(AppMsg::Toast {
-                                    title: tr("downloading-failed"),
-                                    description: Some(err.to_string())
-                                });
-                            }
-
-                            sender.input(AppMsg::SetDownloading(false));
-                            sender.input(AppMsg::UpdateLauncherState {
-                                perform_on_download_needed: true,
-                                show_status_page: false
-                            });
-                        }));
-                    }
+                    LauncherState::GameNotInstalled(diff) => download_diff::download_diff(sender, self.progress_bar.sender().to_owned(), diff.to_owned()),
 
                     LauncherState::VoiceOutdated(_) |
                     LauncherState::GameOutdated(_) => ()

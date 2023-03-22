@@ -28,9 +28,13 @@ pub enum PreferencesAppMsg {
     /// was retrieved from the API
     SetGameDiff(Option<VersionDiff>),
 
-    /// Supposed to be called automatically on app's run when the latest patch version
+    /// Supposed to be called automatically on app's run when the latest UnityPlayer patch version
     /// was retrieved from remote repos
     SetUnityPlayerPatch(Option<UnityPlayerPatch>),
+
+    /// Supposed to be called automatically on app's run when the latest xlua patch version
+    /// was retrieved from remote repos
+    SetXluaPatch(Option<XluaPatch>),
 
     SetLauncherStyle(LauncherStyle),
 
@@ -130,6 +134,11 @@ impl SimpleAsyncComponent for PreferencesApp {
             }
 
             #[allow(unused_must_use)]
+            PreferencesAppMsg::SetXluaPatch(patch) => {
+                self.general.sender().send(GeneralAppMsg::SetXluaPatch(patch));
+            }
+
+            #[allow(unused_must_use)]
             PreferencesAppMsg::SetLauncherStyle(style) => {
                 sender.output(Self::Output::SetLauncherStyle(style));
             }
@@ -138,6 +147,7 @@ impl SimpleAsyncComponent for PreferencesApp {
             PreferencesAppMsg::UpdateLauncherState => {
                 sender.output(Self::Output::UpdateLauncherState {
                     perform_on_download_needed: false,
+                    apply_patch_if_needed: false,
                     show_status_page: false
                 });
             }
