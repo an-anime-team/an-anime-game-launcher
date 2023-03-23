@@ -34,6 +34,7 @@ relm4::new_stateless_action!(LauncherFolder, WindowActionGroup, "launcher_folder
 relm4::new_stateless_action!(GameFolder, WindowActionGroup, "game_folder");
 relm4::new_stateless_action!(ConfigFile, WindowActionGroup, "config_file");
 relm4::new_stateless_action!(DebugFile, WindowActionGroup, "debug_file");
+relm4::new_stateless_action!(WishUrl, WindowActionGroup, "wish_url");
 
 relm4::new_stateless_action!(About, WindowActionGroup, "about");
 
@@ -117,6 +118,10 @@ impl SimpleComponent for App {
                 &tr("game-folder") => GameFolder,
                 &tr("config-file") => ConfigFile,
                 &tr("debug-file") => DebugFile,
+            },
+
+            section! {
+                &tr("wish-url") => WishUrl
             },
 
             section! {
@@ -583,6 +588,64 @@ impl SimpleComponent for App {
 
                 tracing::error!("Failed to open debug file: {err}");
             }
+        })));
+
+        group.add_action::<WishUrl>(&RelmAction::new_stateless(clone!(@strong sender => move |_| {
+            std::thread::spawn(clone!(@strong sender => move || {
+                let web_cache = CONFIG.game.path
+                    .join(unsafe { anime_launcher_sdk::anime_game_core::genshin::consts::DATA_FOLDER_NAME })
+                    .join("webCaches/Cache/Cache_Data/data_2");
+
+                if !web_cache.exists() {
+                    tracing::error!("Couldn't find wishes URL: cache file doesn't exist");
+
+                    sender.input(AppMsg::Toast {
+                        title: tr("wish-url-search-failed"),
+                        description: None
+                    });
+                }
+
+                else {
+                    match std::fs::read(&web_cache) {
+                        Ok(web_cache) => {
+                            let web_cache = String::from_utf8_lossy(&web_cache);
+
+                            // https://webstatic-sea.[ho-yo-ver-se].com/[ge-nsh-in]/event/e20190909gacha-v2/index.html?......
+                            if let Some(url) = web_cache.lines().rev().find(|line| line.contains("gacha-v2/index.html")) {
+                                let url_begin_pos = url.find("https://").unwrap();
+                                let url_end_pos = url_begin_pos + url[url_begin_pos..].find("\0\0\0\0").unwrap();
+
+                                if let Err(err) = open::that(format!("{}#/log", &url[url_begin_pos..url_end_pos])) {
+                                    tracing::error!("Failed to open wishes URL: {err}");
+    
+                                    sender.input(AppMsg::Toast {
+                                        title: tr("wish-url-opening-error"),
+                                        description: Some(err.to_string())
+                                    });
+                                }
+                            }
+
+                            else {
+                                tracing::error!("Couldn't find wishes URL: no url found");
+
+                                sender.input(AppMsg::Toast {
+                                    title: tr("wish-url-search-failed"),
+                                    description: None
+                                });
+                            }
+                        }
+
+                        Err(err) => {
+                            tracing::error!("Couldn't find wishes URL: failed to open cache file: {err}");
+
+                            sender.input(AppMsg::Toast {
+                                title: tr("wish-url-search-failed"),
+                                description: Some(err.to_string())
+                            });
+                        }
+                    }
+                }
+            }));
         })));
 
         group.add_action::<About>(&RelmAction::new_stateless(move |_| {

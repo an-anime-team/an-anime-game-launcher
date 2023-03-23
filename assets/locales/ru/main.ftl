@@ -12,6 +12,7 @@ launcher-folder = Папка лаунчера
 game-folder = Папка игры
 config-file = Файл настроек
 debug-file = Журнал отладки
+wish-url = Открыть историю молитв
 about = О программе
 
 

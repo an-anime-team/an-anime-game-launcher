@@ -3,6 +3,9 @@ game-folder-opening-error = Spieleordner konnte nicht geöffnet werden
 config-file-opening-error = Konfig-Datei konnte nicht geöffnet werden
 debug-file-opening-error = Debug-Datei konnte nicht geöffnet werden
 
+wish-url-search-failed = Kein Wünsche URL gefunden
+wish-url-opening-error = Wünsche URL konnte nicht geöffnet werden
+
 game-launching-failed = Spiel konnte nicht gestartet werden
 failed-get-selected-wine = Die ausgewählte Wine version konnte nicht abgerufen werden.
 downloading-failed = Herunterladen fehlgeschlagen

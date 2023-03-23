@@ -3,6 +3,9 @@ game-folder-opening-error = Oyun dosyasını açma başarısız oldu
 config-file-opening-error = Config dosyasını açma başarısız oldu
 debug-file-opening-error = Debug dosyasını açma başarısız oldu
 
+wish-url-search-failed = Dilekler urlsi bulunamadı
+wish-url-opening-error = Dilekler urlsi açılamadı
+
 game-launching-failed = Oyunu açma başarısız oldu
 failed-get-selected-wine = Seçilen Wine versiyonunu alma başarısız oldu
 downloading-failed = İndirme başarısız oldu

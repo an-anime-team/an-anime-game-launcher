@@ -12,6 +12,7 @@ launcher-folder = İstemci dosyası
 game-folder = Oyun dosyası
 config-file = Config dosyaso
 debug-file = Debug dosyası
+wish-url = Dilekleri aç
 about = Hakkında
 
 

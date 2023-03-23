@@ -3,6 +3,9 @@ game-folder-opening-error = 打开游戏文件夹失败
 config-file-opening-error = 打开配置文件失败
 debug-file-opening-error = 打开调试文件失败
 
+wish-url-search-failed = No wishes url found
+wish-url-opening-error = Could not open wishes url
+
 game-launching-failed = 启动游戏失败
 failed-get-selected-wine = 选择 Wine 版本失败
 downloading-failed = 下载失败
