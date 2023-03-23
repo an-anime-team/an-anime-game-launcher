@@ -1,9 +1,12 @@
-<img src="repository/logo.jpg">
+<picture>
+    <source media="(prefers-color-scheme: dark)" srcset="repository/logo-dark.png">
+    <img src="repository/logo-light.png">
+</picture>
 
 | Modern style | Classic style |
 | :-: | :-: |
-| <img src="repository/main-modern.png"> | <img src="repository/main-classic.png"> |
-| <img src="repository/settings-modern.png"> | <img src="repository/settings-classic.png"> |
+| <picture><source media="(prefers-color-scheme: dark)" srcset="repository/main-modern-dark.png"><img src="repository/main-modern.png"></picture> | <picture><source media="(prefers-color-scheme: dark)" srcset="repository/main-classic-dark.png"><img src="repository/main-classic.png"></picture> |
+| <picture><source media="(prefers-color-scheme: dark)" srcset="repository/settings-modern-dark.png"><img src="repository/settings-modern.png"></picture> | <picture><source media="(prefers-color-scheme: dark)" srcset="repository/settings-classic-dark.png"><img src="repository/settings-classic.png"></picture> |
 
 <p align="center">
     <a href="https://discord.gg/ck37X6UWBp">Discord</a> ·
