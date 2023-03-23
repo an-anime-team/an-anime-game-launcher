@@ -722,26 +722,6 @@ impl SimpleComponent for App {
                 }
             }
 
-            // Update initial game version status
-
-            sender.input(AppMsg::SetLoadingStatus(Some(Some(tr("loading-game-version")))));
-
-            sender.input(AppMsg::SetGameDiff(match GAME.try_get_diff() {
-                Ok(diff) => Some(diff),
-                Err(err) => {
-                    tracing::error!("Failed to find game diff: {err}");
-
-                    sender.input(AppMsg::Toast {
-                        title: tr("game-diff-finding-error"),
-                        description: Some(err.to_string())
-                    });
-
-                    None
-                }
-            }));
-
-            tracing::info!("Updated game version status");
-
             // Update initial patch status
 
             sender.input(AppMsg::SetLoadingStatus(Some(Some(tr("loading-patch-status")))));
@@ -821,6 +801,26 @@ impl SimpleComponent for App {
             }));
 
             tracing::info!("Updated patch status");
+
+            // Update initial game version status
+
+            sender.input(AppMsg::SetLoadingStatus(Some(Some(tr("loading-game-version")))));
+
+            sender.input(AppMsg::SetGameDiff(match GAME.try_get_diff() {
+                Ok(diff) => Some(diff),
+                Err(err) => {
+                    tracing::error!("Failed to find game diff: {err}");
+
+                    sender.input(AppMsg::Toast {
+                        title: tr("game-diff-finding-error"),
+                        description: Some(err.to_string())
+                    });
+
+                    None
+                }
+            }));
+
+            tracing::info!("Updated game version status");
 
             // Update launcher state
             sender.input(AppMsg::UpdateLauncherState {
