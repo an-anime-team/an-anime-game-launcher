@@ -239,7 +239,7 @@ impl SimpleAsyncComponent for DefaultPathsApp {
             patch: CONFIG.patch.path.clone(),
 
             #[allow(clippy::or_fun_call)]
-            temp: CONFIG.launcher.temp.clone().unwrap_or(PathBuf::from("/tmp"))
+            temp: CONFIG.launcher.temp.clone().unwrap_or(std::env::temp_dir())
         };
 
         let widgets = view_output!();

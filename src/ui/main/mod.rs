@@ -322,7 +322,7 @@ impl SimpleComponent for App {
                                         set_sensitive: match model.state.as_ref() {
                                             Some(LauncherState::PredownloadAvailable { game, voices }) => {
                                                 let config = config::get().unwrap();
-                                                let temp = config.launcher.temp.unwrap_or_else(|| PathBuf::from("/tmp"));
+                                                let temp = config.launcher.temp.unwrap_or_else(std::env::temp_dir);
 
                                                 let downloaded = temp.join(game.file_name().unwrap()).exists() &&
                                                     voices.iter().all(|voice| temp.join(voice.file_name().unwrap()).exists());
@@ -337,7 +337,7 @@ impl SimpleComponent for App {
                                         set_css_classes: match model.state.as_ref() {
                                             Some(LauncherState::PredownloadAvailable { game, voices }) => {
                                                 let config = config::get().unwrap();
-                                                let temp = config.launcher.temp.unwrap_or_else(|| PathBuf::from("/tmp"));
+                                                let temp = config.launcher.temp.unwrap_or_else(std::env::temp_dir);
 
                                                 let downloaded = temp.join(game.file_name().unwrap()).exists() &&
                                                     voices.iter().all(|voice| temp.join(voice.file_name().unwrap()).exists());
@@ -893,7 +893,7 @@ impl SimpleComponent for App {
             #[allow(unused_must_use)]
             AppMsg::PredownloadUpdate => {
                 if let Some(LauncherState::PredownloadAvailable { game, mut voices }) = self.state.clone() {
-                    let tmp = config::get().unwrap().launcher.temp.unwrap_or_else(|| PathBuf::from("/tmp"));
+                    let tmp = config::get().unwrap().launcher.temp.unwrap_or_else(std::env::temp_dir);
 
                     self.downloading = true;
 
