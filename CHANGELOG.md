@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Added option to use additional xlua patch
+- Added menu option to open wishes history url
 
 ### Fixed
 
