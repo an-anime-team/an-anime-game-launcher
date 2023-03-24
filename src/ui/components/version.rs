@@ -151,10 +151,6 @@ impl SimpleAsyncComponent for ComponentVersion {
                                 installer.set_temp_folder(temp);
                             }
 
-                            installer.downloader
-                                .set_downloading_speed(config.launcher.speed_limit)
-                                .expect("Failed to set downloading speed limit");
-
                             self.state = VersionState::Downloading;
 
                             let progress_bar_sender = self.progress_bar.sender().clone();

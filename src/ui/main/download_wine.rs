@@ -52,10 +52,6 @@ pub fn download_wine(sender: ComponentSender<App>, progress_bar_input: Sender<Pr
                             installer.temp_folder = temp_folder.to_path_buf();
                         }
 
-                        installer.downloader
-                            .set_downloading_speed(config.launcher.speed_limit)
-                            .expect("Failed to set downloading speed limit");
-
                         sender.input(AppMsg::SetDownloading(true));
 
                         std::thread::spawn(clone!(@strong sender => move || {

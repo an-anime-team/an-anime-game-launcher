@@ -923,15 +923,15 @@ impl SimpleAsyncComponent for GeneralApp {
 
                 self.selected_dxvk_version = if let Ok(Some(selected)) = CONFIG.get_selected_dxvk() {
                     let mut index = 0;
-        
+
                     for (i, version) in self.downloaded_dxvk_versions.iter().enumerate() {
                         if version.name == selected.name {
                             index = i;
-        
+
                             break;
                         }
                     }
-        
+
                     index as u32
                 }
 

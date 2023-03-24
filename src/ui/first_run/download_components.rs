@@ -16,10 +16,8 @@ use crate::ui::components::*;
 use crate::i18n::*;
 use crate::*;
 
-fn get_installer(uri: &str, temp: Option<&PathBuf>, speed_limit: u64) -> anyhow::Result<Installer> {
+fn get_installer(uri: &str, temp: Option<&PathBuf>) -> anyhow::Result<Installer> {
     let mut installer = Installer::new(uri)?;
-
-    installer.downloader.set_downloading_speed(speed_limit)?;
 
     if let Some(temp) = temp {
         installer.set_temp_folder(temp);
@@ -374,7 +372,7 @@ impl SimpleAsyncComponent for DownloadComponentsApp {
                         tracing::info!("Installing wine: {}", wine.name);
 
                         // Install wine
-                        match get_installer(&wine.uri, config.launcher.temp.as_ref(), config.launcher.speed_limit) {
+                        match get_installer(&wine.uri, config.launcher.temp.as_ref()) {
                             Ok(mut installer) => {
                                 // Create wine builds folder
                                 if config.game.wine.builds.exists() {
@@ -495,7 +493,7 @@ impl SimpleAsyncComponent for DownloadComponentsApp {
                         // Install DXVK
                         tracing::info!("Installing DXVK: {}", dxvk.name);
 
-                        match get_installer(&dxvk.uri, config.launcher.temp.as_ref(), config.launcher.speed_limit) {
+                        match get_installer(&dxvk.uri, config.launcher.temp.as_ref()) {
                             Ok(mut installer) => {
                                 let progress_bar_input = progress_bar_input.clone();
                                 let sender = sender.clone();

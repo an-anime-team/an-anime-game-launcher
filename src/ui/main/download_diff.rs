@@ -16,7 +16,6 @@ use super::{App, AppMsg};
 pub fn download_diff(sender: ComponentSender<App>, progress_bar_input: Sender<ProgressBarMsg>, diff: VersionDiff) {
     sender.input(AppMsg::SetDownloading(true));
 
-    // TODO: add speed limit
     std::thread::spawn(move || {
         let config = config::get().unwrap();
 
