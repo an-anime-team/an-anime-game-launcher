@@ -1,4 +1,3 @@
-use relm4::factory::AsyncFactoryVecDeque;
 use relm4::prelude::*;
 use relm4::component::*;
 use relm4::factory::*;

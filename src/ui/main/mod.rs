@@ -696,6 +696,8 @@ impl SimpleComponent for App {
                                     title: tr("components-index-updated"),
                                     description: None
                                 });
+
+                                break;
                             }
 
                             Ok(false) => continue,

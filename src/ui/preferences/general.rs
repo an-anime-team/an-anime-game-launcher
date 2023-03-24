@@ -138,7 +138,7 @@ pub enum GeneralAppMsg {
     /// was retrieved from remote repos
     SetXluaPatch(Option<XluaPatch>),
 
-    // If one ever wich to change it to accept VoiceLocale
+    // If one ever wish to change it to accept VoiceLocale
     // I'd recommend to use clone!(@strong self.locale as locale => move |_| { .. })
     // in the VoicePackage component
     AddVoicePackage(DynamicIndex),
