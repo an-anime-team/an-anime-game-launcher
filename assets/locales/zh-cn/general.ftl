@@ -24,7 +24,11 @@ game-predownload-available = 可以预下载游戏更新: {$old} -> {$new}
 game-update-available = 游戏版本更新: {$old} -> {$new}
 game-outdated = 游戏版本过旧，无法更新。最新版本: {$latest}
 
-patch-version = 补丁版本
+player-patch-version = Player patch version
+player-patch-version-description = Main patch that lets you play the game on Linux
+
+xlua-patch-version = Xlua patch version
+xlua-patch-version-description = Additional patch that fixes some issues and improves performance on low-end PCs
 
 patch-not-available = 不可用
 patch-not-available-tooltip = 无法连接补丁服务器
@@ -36,6 +40,12 @@ patch-preparation = 开发中
 patch-preparation-tooltip = 补丁还在开发中
 
 patch-testing-tooltip = 有测试版补丁可用
+patch-not-applied-tooltip = Patch is not applied
+
+apply-xlua-patch = Apply xlua patch
+
+ask-superuser-permissions = Ask superuser permissions
+ask-superuser-permissions-description = Launcher will use them to automatically update your hosts file. This is not needed in flatpak edition
 
 selected-version = 选择版本
 recommended-only = 仅显示推荐版本

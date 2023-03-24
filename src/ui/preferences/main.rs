@@ -28,9 +28,13 @@ pub enum PreferencesAppMsg {
     /// was retrieved from the API
     SetGameDiff(Option<VersionDiff>),
 
-    /// Supposed to be called automatically on app's run when the latest patch version
+    /// Supposed to be called automatically on app's run when the latest UnityPlayer patch version
     /// was retrieved from remote repos
-    SetPatch(Option<Patch>),
+    SetUnityPlayerPatch(Option<UnityPlayerPatch>),
+
+    /// Supposed to be called automatically on app's run when the latest xlua patch version
+    /// was retrieved from remote repos
+    SetXluaPatch(Option<XluaPatch>),
 
     SetLauncherStyle(LauncherStyle),
 
@@ -125,8 +129,13 @@ impl SimpleAsyncComponent for PreferencesApp {
             }
 
             #[allow(unused_must_use)]
-            PreferencesAppMsg::SetPatch(patch) => {
-                self.general.sender().send(GeneralAppMsg::SetPatch(patch));
+            PreferencesAppMsg::SetUnityPlayerPatch(patch) => {
+                self.general.sender().send(GeneralAppMsg::SetUnityPlayerPatch(patch));
+            }
+
+            #[allow(unused_must_use)]
+            PreferencesAppMsg::SetXluaPatch(patch) => {
+                self.general.sender().send(GeneralAppMsg::SetXluaPatch(patch));
             }
 
             #[allow(unused_must_use)]
@@ -138,6 +147,7 @@ impl SimpleAsyncComponent for PreferencesApp {
             PreferencesAppMsg::UpdateLauncherState => {
                 sender.output(Self::Output::UpdateLauncherState {
                     perform_on_download_needed: false,
+                    apply_patch_if_needed: false,
                     show_status_page: false
                 });
             }
@@ -152,7 +162,7 @@ impl SimpleAsyncComponent for PreferencesApp {
             PreferencesAppMsg::Toast { title, description } => unsafe {
                 let toast = adw::Toast::new(&title);
 
-                toast.set_timeout(5);
+                toast.set_timeout(4);
 
                 if let Some(description) = description {
                     toast.set_button_label(Some(&tr("details")));
@@ -171,11 +181,11 @@ impl SimpleAsyncComponent for PreferencesApp {
                     });
 
                     toast.connect_button_clicked(move |_| {
-                        dialog.show();
+                        dialog.present();
                     });
                 }
 
-                PREFERENCES_WINDOW.as_ref().unwrap_unchecked().add_toast(&toast);
+                PREFERENCES_WINDOW.as_ref().unwrap_unchecked().add_toast(toast);
             }
         }
     }

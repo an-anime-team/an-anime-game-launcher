@@ -3,6 +3,9 @@ game-folder-opening-error = Failed to open game folder
 config-file-opening-error = Failed to open config file
 debug-file-opening-error = Failed to open debug file
 
+wish-url-search-failed = No wishes url found
+wish-url-opening-error = Could not open wishes url
+
 game-launching-failed = Failed to launch game
 failed-get-selected-wine = Failed to get selected wine version
 downloading-failed = Downloading failed

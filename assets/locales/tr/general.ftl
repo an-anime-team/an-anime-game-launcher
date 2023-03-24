@@ -24,7 +24,11 @@ game-predownload-available = Güncelleme önceden indirilebilir: {$old} -> {$new
 game-update-available = Güncelleme mevcut: {$old} -> {$new}
 game-outdated = Oyun çok eski bu yüzden güncellenemez. En son sürüm: {$latest}
 
-patch-version = Yama versiyonu
+player-patch-version = Ana yama versiyonu
+player-patch-version-description = Oyunu linuxda oynamanıza izin veren ana yama
+
+xlua-patch-version = Xlua yama versiyonu
+xlua-patch-version-description = Eski bilgisayarlarda performansı arttıran ve bir kaç sorunu düzelten ekstra yama
 
 patch-not-available = Mevcut değil
 patch-not-available-tooltip = Yama sunucularına erişelemiyor
@@ -36,6 +40,12 @@ patch-preparation = Hazırlık
 patch-preparation-tooltip = Yama hala geliştiriliyor
 
 patch-testing-tooltip = Test yaması mevcut
+patch-not-applied-tooltip = Yama uygulanmamış
+
+apply-xlua-patch = Xlua yamasını uygula
+
+ask-superuser-permissions = Yönetici izinlerini sor
+ask-superuser-permissions-description = İstemci yöneticini iznini hostunuzun dosyalarını güncellemek için otomatik olarak kullanıcaktır. Buna flatpak versiyonunda gerek yoktur
 
 selected-version = Seçilmiş versiyon
 recommended-only = Sadece önerilenler

@@ -142,13 +142,14 @@ fn main() {
         }}
 
         window.classic-style progressbar {{
-            background-color: #00000040;
+            background-color: #00000020;
             border-radius: 16px;
             padding: 8px 16px;
         }}
 
         window.classic-style progressbar:hover {{
-            background-color: #00000090;
+            background-color: #00000060;
+            color: #ffffff;
             transition-duration: 0.5s;
             transition-timing-function: linear;
         }}
@@ -168,11 +169,12 @@ fn main() {
 
     tracing::info!("Set UI language to {}", i18n::get_lang());
 
-    // Create the app
-    let app = RelmApp::new(APP_ID);
-
     // Run FirstRun window if .first-run file persist
     if FIRST_RUN_FILE.exists() {
+        // Create the app
+        let app = RelmApp::new(APP_ID);
+
+        // Show first run window
         app.run::<FirstRunApp>(());
     }
 
@@ -190,7 +192,8 @@ fn main() {
                 }
 
                 LauncherState::PredownloadAvailable { .. } |
-                LauncherState::PatchAvailable(Patch::NotAvailable) => {
+                LauncherState::UnityPlayerPatchAvailable(UnityPlayerPatch { status: PatchStatus::NotAvailable, .. }) |
+                LauncherState::XluaPatchAvailable(XluaPatch { status: PatchStatus::NotAvailable, .. }) => {
                     if just_run_game {
                         anime_launcher_sdk::game::run().expect("Failed to run the game");
 
@@ -202,6 +205,10 @@ fn main() {
             }
         }
 
+        // Create the app
+        let app = RelmApp::new(APP_ID);
+
+        // Show main window
         app.run::<App>(());
     }
 }

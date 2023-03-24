@@ -12,6 +12,7 @@ launcher-folder = 启动器文件夹
 game-folder = 游戏文件夹
 config-file = 配置文件
 debug-file = 调试文件
+wish-url = Open wishes
 about = 关于
 
 

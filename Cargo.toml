@@ -16,9 +16,9 @@ opt-level = "s"
 glib-build-tools = "0.17"
 
 [dependencies]
-relm4 = { version = "0.5", features = ["macros", "libadwaita"] }
-gtk = { package = "gtk4", version = "0.5", features = ["v4_8"] }
-adw = { package = "libadwaita", version = "0.2", features = ["v1_2"] }
+relm4 = { version = "0.6.0-alpha.2", features = ["macros", "libadwaita"] }
+gtk = { package = "gtk4", version = "0.6", features = ["v4_8"] }
+adw = { package = "libadwaita", version = "0.3", features = ["v1_2"] }
 rfd = { version = "0.11", features = ["xdg-portal"], default-features = false }
 open = "4.0.0"
 

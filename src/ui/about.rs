@@ -15,6 +15,7 @@ lazy_static::lazy_static! {
     static ref CURL_INFO: curl_sys::Version = curl_sys::Version::get();
 }
 
+#[derive(Debug)]
 pub struct AboutDialog {
     visible: bool
 }

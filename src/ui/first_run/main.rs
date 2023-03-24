@@ -227,9 +227,9 @@ impl SimpleComponent for FirstRunApp {
                 #[allow(unused_must_use)]
                 std::thread::spawn(move || {
                     match components.is_sync(config.components.servers) {
-                        Ok(true) => (),
+                        Ok(Some(_)) => (),
 
-                        Ok(false) => {
+                        Ok(None) => {
                             for host in &CONFIG.components.servers {
                                 match components.sync(host) {
                                     Ok(true) => break,
@@ -280,7 +280,7 @@ impl SimpleComponent for FirstRunApp {
             FirstRunAppMsg::Toast { title, description } => unsafe {
                 let toast = adw::Toast::new(&title);
 
-                toast.set_timeout(5);
+                toast.set_timeout(4);
 
                 if let Some(description) = description {
                     toast.set_button_label(Some(&tr("details")));
@@ -299,11 +299,11 @@ impl SimpleComponent for FirstRunApp {
                     });
 
                     toast.connect_button_clicked(move |_| {
-                        dialog.show();
+                        dialog.present();
                     });
                 }
 
-                self.toast_overlay.add_toast(&toast);
+                self.toast_overlay.add_toast(toast);
             }
         }
     }

@@ -12,6 +12,7 @@ launcher-folder = Dossier du launcher
 game-folder = Dossier du jeu
 config-file = Fichier de configuration
 debug-file = Fichier débug
+wish-url = Open wishes
 about = À propos
 
 
