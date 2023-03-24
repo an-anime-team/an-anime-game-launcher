@@ -1039,7 +1039,7 @@ impl App {
     pub fn toast<T: AsRef<str>>(&mut self, title: T, description: Option<T>) {
         let toast = adw::Toast::new(title.as_ref());
 
-        toast.set_timeout(5);
+        toast.set_timeout(4);
 
         if let Some(description) = description {
             toast.set_button_label(Some(&tr("details")));

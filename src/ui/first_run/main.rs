@@ -280,7 +280,7 @@ impl SimpleComponent for FirstRunApp {
             FirstRunAppMsg::Toast { title, description } => unsafe {
                 let toast = adw::Toast::new(&title);
 
-                toast.set_timeout(5);
+                toast.set_timeout(4);
 
                 if let Some(description) = description {
                     toast.set_button_label(Some(&tr("details")));
