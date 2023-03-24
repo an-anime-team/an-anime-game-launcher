@@ -15,6 +15,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Fixed downloaded wine version selection on "download wine" button
+- Fixed game downloading (it wasn't working since some version????)
+
+### Removed
+
+- Removed `launcher.speed_limit` config
 
 ## [3.2.1] - 18.03.2023
 
