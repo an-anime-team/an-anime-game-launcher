@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fixed downloaded wine version selection on "download wine" button
 - Fixed game downloading (it wasn't working since some version????)
+- Fixed infinite retries to download some update or patch the game if it failed
 
 ### Removed
 

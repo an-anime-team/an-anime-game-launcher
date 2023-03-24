@@ -46,6 +46,8 @@ pub fn download_diff(sender: ComponentSender<App>, progress_bar_input: Sender<Pr
             progress_bar_input.send(ProgressBarMsg::UpdateFromState(state));
         }));
 
+        let mut perform_on_download_needed = true;
+
         if let Err(err) = result {
             tracing::error!("Downloading failed: {err}");
 
@@ -53,11 +55,15 @@ pub fn download_diff(sender: ComponentSender<App>, progress_bar_input: Sender<Pr
                 title: tr("downloading-failed"),
                 description: Some(err.to_string())
             });
+
+            // Don't try to download something after state updating
+            // because we just failed to do it
+            perform_on_download_needed = false;
         }
 
         sender.input(AppMsg::SetDownloading(false));
         sender.input(AppMsg::UpdateLauncherState {
-            perform_on_download_needed: true,
+            perform_on_download_needed,
             apply_patch_if_needed: false,
             show_status_page: false
         });

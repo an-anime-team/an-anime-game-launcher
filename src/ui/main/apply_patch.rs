@@ -19,6 +19,8 @@ pub fn apply_patch<T: PatchExt + Send + Sync + 'static>(sender: ComponentSender<
             let config = config::get().unwrap();
 
             std::thread::spawn(move || {
+                let mut apply_patch_if_needed = true;
+
                 if let Err(err) = patch.apply(&config.game.path, config.patch.root) {
                     tracing::error!("Failed to patch the game");
 
@@ -26,12 +28,16 @@ pub fn apply_patch<T: PatchExt + Send + Sync + 'static>(sender: ComponentSender<
                         title: tr("game-patching-error"),
                         description: Some(err.to_string())
                     });
+
+                    // Don't try to apply the patch after state updating
+                    // because we just failed to do it
+                    apply_patch_if_needed = false;
                 }
 
                 sender.input(AppMsg::DisableButtons(false));
                 sender.input(AppMsg::UpdateLauncherState {
                     perform_on_download_needed: false,
-                    apply_patch_if_needed: true,
+                    apply_patch_if_needed,
                     show_status_page: true
                 });
             });
