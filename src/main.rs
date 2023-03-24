@@ -142,13 +142,14 @@ fn main() {
         }}
 
         window.classic-style progressbar {{
-            background-color: #00000040;
+            background-color: #00000020;
             border-radius: 16px;
             padding: 8px 16px;
         }}
 
         window.classic-style progressbar:hover {{
-            background-color: #00000090;
+            background-color: #00000060;
+            color: #ffffff;
             transition-duration: 0.5s;
             transition-timing-function: linear;
         }}
