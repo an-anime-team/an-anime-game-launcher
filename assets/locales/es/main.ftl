@@ -12,7 +12,7 @@ launcher-folder = Carpeta del launcher
 game-folder = Carpeta del juego
 config-file = Archivo de configuración
 debug-file = Archivo de debug
-wish-url = Open wishes
+wish-url = Abrir historial de deseos
 about = Acerca de
 
 
