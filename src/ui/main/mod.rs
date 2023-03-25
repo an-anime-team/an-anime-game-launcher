@@ -387,7 +387,7 @@ impl SimpleComponent for App {
                                         },
 
                                         #[watch]
-                                        set_sensitive: match model.state.as_ref() {
+                                        set_sensitive: !model.disabled_buttons && match &model.state {
                                             Some(LauncherState::GameOutdated { .. }) |
                                             Some(LauncherState::VoiceOutdated(_)) => false,
 
@@ -407,7 +407,7 @@ impl SimpleComponent for App {
                                         },
 
                                         #[watch]
-                                        set_css_classes: match model.state.as_ref() {
+                                        set_css_classes: match &model.state {
                                             Some(LauncherState::GameOutdated { .. }) |
                                             Some(LauncherState::VoiceOutdated(_)) => &["warning"],
 
@@ -427,7 +427,7 @@ impl SimpleComponent for App {
                                         },
 
                                         #[watch]
-                                        set_tooltip_text: Some(&match model.state.as_ref() {
+                                        set_tooltip_text: Some(&match &model.state {
                                             Some(LauncherState::GameOutdated { .. }) |
                                             Some(LauncherState::VoiceOutdated(_)) => tr("main-window--version-outdated-tooltip"),
 
@@ -443,9 +443,6 @@ impl SimpleComponent for App {
 
                                             _ => String::new()
                                         }),
-
-                                        #[watch]
-                                        set_sensitive: !model.disabled_buttons,
 
                                         set_hexpand: false,
                                         set_width_request: 200,
@@ -668,7 +665,7 @@ impl SimpleComponent for App {
                 sender.input(AppMsg::SetLoadingStatus(Some(Some(tr("downloading-background-picture")))));
 
                 if let Err(err) = crate::background::download_background() {
-                    tracing::error!("Failed to download background picture");
+                    tracing::error!("Failed to download background picture: {err}");
 
                     sender.input(AppMsg::Toast {
                         title: tr("background-downloading-failed"),

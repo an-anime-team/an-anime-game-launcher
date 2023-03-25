@@ -346,7 +346,7 @@ impl SimpleAsyncComponent for GeneralApp {
                                 VersionDiff::NotInstalled { .. } => &[]
                             }
 
-                            None => &["success"]
+                            None => &[]
                         },
 
                         #[watch]
