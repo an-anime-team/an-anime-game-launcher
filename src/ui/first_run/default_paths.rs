@@ -264,11 +264,15 @@ impl SimpleAsyncComponent for DefaultPathsApp {
                             self.runners      = result.join("runners");
                             self.dxvks        = result.join("dxvks");
                             self.prefix       = result.join("prefix");
-                            self.game         = result.join("Genshin Impact"); // TODO: change it based on GameEdition
                             self.fps_unlocker = result.join("fps-unlocker");
                             self.components   = result.join("components");
                             self.patch        = result.join("patch");
                             self.temp         = result.clone();
+
+                            self.game = result.join(match CONFIG.launcher.edition.into() {
+                                GameEdition::Global => concat!("Ge", "nshi", "n Imp", "act"),
+                                GameEdition::China  => concat!("Yu", "anS", "hen")
+                            });
 
                             self.launcher = result;
                         }
