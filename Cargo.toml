@@ -19,6 +19,8 @@ glib-build-tools = "0.17"
 git = "https://github.com/an-anime-team/anime-launcher-sdk"
 tag = "0.5.7"
 
+# path = "../anime-launcher-sdk" # ! for dev purposes only
+
 [dependencies]
 relm4 = { version = "0.6.0-alpha.2", features = ["macros", "libadwaita"] }
 gtk = { package = "gtk4", version = "0.6", features = ["v4_8"] }

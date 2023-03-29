@@ -38,9 +38,9 @@ relm4::new_stateless_action!(WishUrl, WindowActionGroup, "wish_url");
 
 relm4::new_stateless_action!(About, WindowActionGroup, "about");
 
-static mut MAIN_WINDOW: Option<adw::ApplicationWindow> = None;
-static mut PREFERENCES_WINDOW: Option<AsyncController<PreferencesApp>> = None;
-static mut ABOUT_DIALOG: Option<Controller<AboutDialog>> = None;
+pub static mut MAIN_WINDOW: Option<adw::ApplicationWindow> = None;
+pub static mut PREFERENCES_WINDOW: Option<AsyncController<PreferencesApp>> = None;
+pub static mut ABOUT_DIALOG: Option<Controller<AboutDialog>> = None;
 
 pub struct App {
     progress_bar: AsyncController<ProgressBar>,

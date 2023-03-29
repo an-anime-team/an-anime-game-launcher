@@ -17,6 +17,7 @@ use anime_launcher_sdk::components::wine::WincompatlibWine;
 use anime_launcher_sdk::wincompatlib::prelude::*;
 
 use super::main::PreferencesAppMsg;
+use crate::ui::migrate_installation::MigrateInstallationApp;
 use crate::ui::components;
 use crate::ui::components::*;
 use crate::i18n::*;
@@ -102,6 +103,7 @@ impl AsyncFactoryComponent for VoicePackageComponent {
 pub struct GeneralApp {
     voice_packages: AsyncFactoryVecDeque<VoicePackageComponent>,
 
+    migrate_installation: Controller<MigrateInstallationApp>,
     wine_components: AsyncController<ComponentsList<GeneralAppMsg>>,
     dxvk_components: AsyncController<ComponentsList<GeneralAppMsg>>,
 
@@ -145,6 +147,7 @@ pub enum GeneralAppMsg {
     RemoveVoicePackage(DynamicIndex),
     SetVoicePackageSensitivity(DynamicIndex, bool),
 
+    OpenMigrateInstallation,
     RepairGame,
 
     UpdateLauncherStyle(LauncherStyle),
@@ -306,6 +309,13 @@ impl SimpleAsyncComponent for GeneralApp {
                     set_orientation: gtk::Orientation::Horizontal,
                     set_spacing: 8,
                     set_margin_top: 16,
+
+                    gtk::Button {
+                        set_label: "Migrate installation",
+                        set_tooltip_text: Some("Open special window where you can change your game installation folder"),
+
+                        connect_clicked => GeneralAppMsg::OpenMigrateInstallation
+                    },
 
                     gtk::Button {
                         set_label: &tr("repair-game"),
@@ -674,6 +684,10 @@ impl SimpleAsyncComponent for GeneralApp {
         let mut model = Self {
             voice_packages: AsyncFactoryVecDeque::new(adw::ExpanderRow::new(), sender.input_sender()),
 
+            migrate_installation: MigrateInstallationApp::builder()
+                .launch(())
+                .detach(),
+
             wine_components: ComponentsList::builder()
                 .launch(ComponentsListInit {
                     pattern: ComponentsListPattern {
@@ -837,6 +851,14 @@ impl SimpleAsyncComponent for GeneralApp {
                 if let Some(package) = self.voice_packages.guard().get_mut(index.current_index()) {
                     package.sensitive = sensitive;
                 }
+            }
+
+            GeneralAppMsg::OpenMigrateInstallation => unsafe {
+                if let Some(window) = crate::ui::main::PREFERENCES_WINDOW.as_ref() {
+                    self.migrate_installation.widget().set_transient_for(Some(window.widget()));
+                }
+
+                self.migrate_installation.widget().show();
             }
 
             #[allow(unused_must_use)]

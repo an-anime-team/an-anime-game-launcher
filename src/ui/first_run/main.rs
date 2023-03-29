@@ -17,7 +17,7 @@ use super::select_voiceovers::*;
 use super::download_components::*;
 use super::finish::*;
 
-pub static mut MAIN_WINDOW: Option<adw::Window> = None;
+pub static mut MAIN_WINDOW: Option<adw::ApplicationWindow> = None;
 
 // TODO: add special page for launcher style selection
 
@@ -61,7 +61,7 @@ impl SimpleComponent for FirstRunApp {
     type Output = ();
 
     view! {
-        window = adw::Window {
+        window = adw::ApplicationWindow {
             set_default_size: (780, 560),
 
             #[watch]
