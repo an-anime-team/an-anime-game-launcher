@@ -40,7 +40,7 @@ lazy_static::lazy_static! {
     pub static ref GAME: Game = Game::new(&CONFIG.game.path);
 
     /// Path to launcher folder. Standard is `$HOME/.local/share/anime-game-launcher`
-    pub static ref LAUNCHER_FOLDER: PathBuf = launcher_dir().unwrap_or_default();
+    pub static ref LAUNCHER_FOLDER: PathBuf = launcher_dir().expect("Failed to get launcher folder");
 
     /// Path to `debug.log` file. Standard is `$HOME/.local/share/anime-game-launcher/debug.log`
     pub static ref DEBUG_FILE: PathBuf = LAUNCHER_FOLDER.join("debug.log");
@@ -160,7 +160,7 @@ fn main() {
     ", BACKGROUND_FILE.to_string_lossy()));
 
     // Set game edition
-    genshin::set_game_edition(CONFIG.launcher.edition.into());
+    GameEdition::from(CONFIG.launcher.edition).select();
 
     // Set UI language
     let lang = CONFIG.launcher.language.parse().expect("Wrong language format used in config");

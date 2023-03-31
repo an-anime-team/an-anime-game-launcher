@@ -1,19 +1,10 @@
 use relm4::prelude::*;
-
 use gtk::prelude::*;
 
 use anime_launcher_sdk::VERSION as SDK_VERSION;
-
-use anime_launcher_sdk::anime_game_core::{
-    VERSION as CORE_VERSION,
-    curl_sys
-};
+use anime_launcher_sdk::anime_game_core::VERSION as CORE_VERSION;
 
 use crate::*;
-
-lazy_static::lazy_static! {
-    static ref CURL_INFO: curl_sys::Version = curl_sys::Version::get();
-}
 
 #[derive(Debug)]
 pub struct AboutDialog {
@@ -80,9 +71,6 @@ impl SimpleComponent for AboutDialog {
             set_debug_info: &[
                 format!("Anime Launcher SDK: {SDK_VERSION}"),
                 format!("Anime Game Core: {CORE_VERSION}"),
-                String::new(),
-                format!("curl: {}", CURL_INFO.version()),
-                format!("SSL: {}", CURL_INFO.ssl_version().unwrap_or("?")),
                 String::new(),
                 format!("GTK: {}.{}.{}", gtk::major_version(), gtk::minor_version(), gtk::micro_version()),
                 format!("libadwaita: {}.{}.{}", adw::major_version(), adw::minor_version(), adw::micro_version()),

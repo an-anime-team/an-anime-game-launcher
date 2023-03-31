@@ -20,6 +20,7 @@ mod launch;
 use anime_launcher_sdk::config::launcher::LauncherStyle;
 use anime_launcher_sdk::states::LauncherState;
 use anime_launcher_sdk::components::loader::ComponentsLoader;
+use anime_launcher_sdk::anime_game_core::genshin::consts::GameEdition;
 
 use crate::*;
 use crate::i18n::*;
@@ -564,7 +565,7 @@ impl SimpleComponent for App {
         })));
 
         group.add_action::<ConfigFile>(&RelmAction::new_stateless(clone!(@strong sender => move |_| {
-            if let Some(file) = anime_launcher_sdk::consts::config_file() {
+            if let Ok(file) = anime_launcher_sdk::consts::config_file() {
                 if let Err(err) = open::that(file) {
                     sender.input(AppMsg::Toast {
                         title: tr("config-file-opening-error"),
@@ -590,7 +591,7 @@ impl SimpleComponent for App {
         group.add_action::<WishUrl>(&RelmAction::new_stateless(clone!(@strong sender => move |_| {
             std::thread::spawn(clone!(@strong sender => move || {
                 let web_cache = CONFIG.game.path
-                    .join(unsafe { anime_launcher_sdk::anime_game_core::genshin::consts::DATA_FOLDER_NAME })
+                    .join(GameEdition::selected().data_folder())
                     .join("webCaches/Cache/Cache_Data/data_2");
 
                 if !web_cache.exists() {
