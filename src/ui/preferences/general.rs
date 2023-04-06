@@ -9,12 +9,13 @@ use relm4::factory::{
 use gtk::prelude::*;
 use adw::prelude::*;
 
+use anime_launcher_sdk::anime_game_core::prelude::*;
+use anime_launcher_sdk::wincompatlib::prelude::*;
 use anime_launcher_sdk::config;
 use anime_launcher_sdk::config::launcher::LauncherStyle;
-use anime_launcher_sdk::anime_game_core::prelude::*;
 use anime_launcher_sdk::components::*;
 use anime_launcher_sdk::components::wine::WincompatlibWine;
-use anime_launcher_sdk::wincompatlib::prelude::*;
+use anime_launcher_sdk::env_emulation::Environment;
 
 use super::main::PreferencesAppMsg;
 use crate::ui::migrate_installation::MigrateInstallationApp;
@@ -302,7 +303,40 @@ impl SimpleAsyncComponent for GeneralApp {
 
                 #[local_ref]
                 voice_packages -> adw::ExpanderRow {
-                    set_title: &tr("game-voiceovers")
+                    set_title: &tr("game-voiceovers"),
+                    set_subtitle: "List of downloaded game voiceovers. You can select them in the game settings"
+                },
+
+                adw::ComboRow {
+                    set_title: "Environment emulation",
+                    set_subtitle: "Experimental feature. Emulate game environment to get specific features like additional payment methods",
+
+                    set_model: Some(&gtk::StringList::new(&[
+                        "PC",
+                        "Android"
+                    ])),
+
+                    set_selected: match CONFIG.launcher.environment {
+                        Environment::PC => 0,
+                        Environment::Android => 1,
+
+                        _ => unreachable!()
+                    },
+
+                    connect_selected_notify => |row| {
+                        if is_ready() {
+                            if let Ok(mut config) = config::get() {
+                                config.launcher.environment = match row.selected() {
+                                    0 => Environment::PC,
+                                    1 => Environment::Android,
+
+                                    _ => unreachable!()
+                                };
+    
+                                config::update(config);
+                            }
+                        }
+                    }
                 },
 
                 gtk::Box {
