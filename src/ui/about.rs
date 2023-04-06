@@ -1,6 +1,7 @@
 use relm4::prelude::*;
 use gtk::prelude::*;
 
+use crate::APP_VERSION;
 use anime_launcher_sdk::VERSION as SDK_VERSION;
 use anime_launcher_sdk::anime_game_core::VERSION as CORE_VERSION;
 
@@ -35,12 +36,12 @@ impl SimpleComponent for AboutDialog {
 
             set_version: &{
                 // Debug build & build's version doesn't contain any suffix (-dev, -beta, etc)
-                if crate::APP_DEBUG && !crate::APP_VERSION.contains('-') {
-                    format!("{}-dev", crate::APP_VERSION)
+                if crate::APP_DEBUG && !APP_VERSION.contains('-') {
+                    format!("{APP_VERSION}-dev")
                 }
                 
                 else {
-                    crate::APP_VERSION.to_string()
+                    APP_VERSION.to_string()
                 }
             },
 
@@ -76,6 +77,16 @@ impl SimpleComponent for AboutDialog {
                 format!("libadwaita: {}.{}.{}", adw::major_version(), adw::minor_version(), adw::micro_version()),
                 format!("pango: {}", gtk::pango::version_string()),
                 format!("cairo: {}", gtk::cairo::version_string()),
+            ].join("\n"),
+
+            set_release_notes_version: APP_VERSION,
+            set_release_notes: &[
+                "<p>Changed</p>",
+                "<ul>",
+                    "<li>Made default game folder name depend on game edition</li>",
+                    "<li>Improved game repairing feature</li>",
+                    "<li>Replaced curl dependency by native code</li>",
+                "</ul>",
             ].join("\n"),
 
             set_modal: true,
