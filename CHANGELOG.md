@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added environment emulation feature
+
 ### Changed
 
 - Made default game folder name depend on game edition

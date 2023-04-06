@@ -81,7 +81,14 @@ impl SimpleComponent for AboutDialog {
 
             set_release_notes_version: APP_VERSION,
             set_release_notes: &[
+                "<p>Added</p>",
+
+                "<ul>",
+                    "<li>Added environment emulation feature</li>",
+                "</ul>",
+
                 "<p>Changed</p>",
+
                 "<ul>",
                     "<li>Made default game folder name depend on game edition</li>",
                     "<li>Improved game repairing feature</li>",
