@@ -56,10 +56,14 @@ impl From<wine::Version> for ComponentsListVersion {
     #[inline]
     fn from(version: wine::Version) -> Self {
         Self {
+            recommended: match version.version_features() {
+                Some(features) => features.recommended,
+                None => true
+            },
+
             name: version.name,
             title: version.title,
-            uri: version.uri,
-            recommended: true
+            uri: version.uri
         }
     }
 }
@@ -68,10 +72,14 @@ impl From<dxvk::Version> for ComponentsListVersion {
     #[inline]
     fn from(version: dxvk::Version) -> Self {
         Self {
+            recommended: match version.version_features() {
+                Some(features) => features.recommended,
+                None => true
+            },
+
             name: version.name,
             title: version.title,
-            uri: version.uri,
-            recommended: true
+            uri: version.uri
         }
     }
 }

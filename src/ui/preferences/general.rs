@@ -732,9 +732,14 @@ impl SimpleAsyncComponent for GeneralApp {
                                 group.versions = group.versions.into_iter().take(12).collect();
 
                                 let mut group: ComponentsListGroup = group.into();
+                                let mut recommended = 6;
 
-                                if group.versions.len() > 6 {
-                                    for i in 6..group.versions.len() {
+                                for i in 0..group.versions.len() {
+                                    if recommended > 0 && group.versions[i].recommended {
+                                        recommended -= 1;
+                                    }
+
+                                    else {
                                         group.versions[i].recommended = false;
                                     }
                                 }
@@ -758,9 +763,14 @@ impl SimpleAsyncComponent for GeneralApp {
                                 group.versions = group.versions.into_iter().take(12).collect();
 
                                 let mut group: ComponentsListGroup = group.into();
+                                let mut recommended = 6;
 
-                                if group.versions.len() > 6 {
-                                    for i in 6..group.versions.len() {
+                                for i in 0..group.versions.len() {
+                                    if recommended > 0 && group.versions[i].recommended {
+                                        recommended -= 1;
+                                    }
+
+                                    else {
                                         group.versions[i].recommended = false;
                                     }
                                 }
@@ -940,16 +950,13 @@ impl SimpleAsyncComponent for GeneralApp {
                 self.downloaded_wine_versions = wine::get_downloaded(&CONFIG.components.path, &CONFIG.game.wine.builds)
                     .unwrap_or_default()
                     .into_iter()
-                    .flat_map(|group| group.versions
-                        .into_iter()
-                        .map(move |version| (
-                            version.clone(),
-                            version.features.unwrap_or_else(
-                                || group.features.to_owned().unwrap_or_default()
-                            ))
-                        )
-                    )
-                    .collect();
+                    .flat_map(|group| group.versions.clone().into_iter()
+                        .map(move |version| {
+                            let features = version.features_in(&group).unwrap_or_default();
+
+                            (version, features)
+                        })
+                    ).collect();
 
                 self.selected_wine_version = if let Some(selected) = &CONFIG.game.wine.selected {
                     let mut index = 0;
