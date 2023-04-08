@@ -9,11 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Added environment emulation feature
+- Added installation migration feature
+- Added game environment switcher
+- Added game edition switcher
 
 ### Changed
 
-- Made default game folder name depend on game edition
 - Improved game repairing feature
 - Replaced `curl` dependency by native code
 

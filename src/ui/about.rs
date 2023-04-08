@@ -84,13 +84,14 @@ impl SimpleComponent for AboutDialog {
                 "<p>Added</p>",
 
                 "<ul>",
-                    "<li>Added environment emulation feature</li>",
+                    "<li>Added installation migration feature</li>",
+                    "<li>Added game environment switcher</li>",
+                    "<li>Added game edition switcher</li>",
                 "</ul>",
 
                 "<p>Changed</p>",
 
                 "<ul>",
-                    "<li>Made default game folder name depend on game edition</li>",
                     "<li>Improved game repairing feature</li>",
                     "<li>Replaced curl dependency by native code</li>",
                 "</ul>",
