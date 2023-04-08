@@ -17,6 +17,7 @@ use anime_launcher_sdk::components::*;
 use anime_launcher_sdk::components::wine::WincompatlibWine;
 use anime_launcher_sdk::env_emulation::Environment;
 use anime_launcher_sdk::config::launcher::GameEdition;
+use anime_launcher_sdk::anime_game_core::genshin::consts::GameEdition as CoreGameEdition;
 
 use super::main::PreferencesAppMsg;
 use crate::ui::migrate_installation::MigrateInstallationApp;
@@ -325,6 +326,9 @@ impl SimpleAsyncComponent for GeneralApp {
 
                                     _ => unreachable!()
                                 };
+
+                                // Select new game edition
+                                CoreGameEdition::from(config.launcher.edition).select();
 
                                 config::update(config);
 
