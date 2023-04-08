@@ -16,6 +16,7 @@ use anime_launcher_sdk::config::launcher::LauncherStyle;
 use anime_launcher_sdk::components::*;
 use anime_launcher_sdk::components::wine::WincompatlibWine;
 use anime_launcher_sdk::env_emulation::Environment;
+use anime_launcher_sdk::config::launcher::GameEdition;
 
 use super::main::PreferencesAppMsg;
 use crate::ui::migrate_installation::MigrateInstallationApp;
@@ -301,15 +302,41 @@ impl SimpleAsyncComponent for GeneralApp {
                     }
                 },
 
-                #[local_ref]
-                voice_packages -> adw::ExpanderRow {
-                    set_title: &tr("game-voiceovers"),
-                    set_subtitle: "List of downloaded game voiceovers. You can select them in the game settings"
+                adw::ComboRow {
+                    set_title: "Game edition",
+
+                    set_model: Some(&gtk::StringList::new(&[
+                        "Global",
+                        "China"
+                    ])),
+
+                    set_selected: match CONFIG.launcher.edition {
+                        GameEdition::Global => 0,
+                        GameEdition::China => 1
+                    },
+
+                    connect_selected_notify[sender] => move |row| {
+                        if is_ready() {
+                            #[allow(unused_must_use)]
+                            if let Ok(mut config) = config::get() {
+                                config.launcher.edition = match row.selected() {
+                                    0 => GameEdition::Global,
+                                    1 => GameEdition::China,
+
+                                    _ => unreachable!()
+                                };
+
+                                config::update(config);
+
+                                sender.output(PreferencesAppMsg::UpdateLauncherState);
+                            }
+                        }
+                    }
                 },
 
                 adw::ComboRow {
-                    set_title: "Environment emulation",
-                    set_subtitle: "Experimental feature. Emulate game environment to get specific features like additional payment methods",
+                    set_title: "Game environment",
+                    set_subtitle: "Get specific features like additional payment methods",
 
                     set_model: Some(&gtk::StringList::new(&[
                         "PC",
@@ -337,6 +364,12 @@ impl SimpleAsyncComponent for GeneralApp {
                             }
                         }
                     }
+                },
+
+                #[local_ref]
+                voice_packages -> adw::ExpanderRow {
+                    set_title: &tr("game-voiceovers"),
+                    set_subtitle: "List of downloaded game voiceovers. You can select them in the game settings"
                 },
 
                 gtk::Box {
@@ -442,7 +475,12 @@ impl SimpleAsyncComponent for GeneralApp {
                                 PatchStatus::Preparation { .. } |
                                 PatchStatus::Testing { .. } => &["warning"],
                                 PatchStatus::Available { .. } => unsafe {
-                                    if let Ok(true) = model.unity_player_patch.as_ref().unwrap_unchecked().is_applied(&CONFIG.game.path) {
+                                    let path = match config::get() {
+                                        Ok(config) => config.game.path.for_edition(config.launcher.edition).to_path_buf(),
+                                        Err(_) => CONFIG.game.path.for_edition(CONFIG.launcher.edition).to_path_buf(),
+                                    };
+
+                                    if let Ok(true) = model.unity_player_patch.as_ref().unwrap_unchecked().is_applied(path) {
                                         &["success"]
                                     } else {
                                         &["warning"]
@@ -464,7 +502,12 @@ impl SimpleAsyncComponent for GeneralApp {
                                 PatchStatus::Preparation { .. } => tr("patch-preparation-tooltip"),
                                 PatchStatus::Testing { .. } => tr("patch-testing-tooltip"),
                                 PatchStatus::Available { .. } => unsafe {
-                                    if let Ok(true) = model.unity_player_patch.as_ref().unwrap_unchecked().is_applied(&CONFIG.game.path) {
+                                    let path = match config::get() {
+                                        Ok(config) => config.game.path.for_edition(config.launcher.edition).to_path_buf(),
+                                        Err(_) => CONFIG.game.path.for_edition(CONFIG.launcher.edition).to_path_buf(),
+                                    };
+
+                                    if let Ok(true) = model.unity_player_patch.as_ref().unwrap_unchecked().is_applied(path) {
                                         String::new()
                                     } else {
                                         tr("patch-not-applied-tooltip")
@@ -503,7 +546,12 @@ impl SimpleAsyncComponent for GeneralApp {
                                 PatchStatus::Preparation { .. } |
                                 PatchStatus::Testing { .. } => &["warning"],
                                 PatchStatus::Available { .. } => unsafe {
-                                    if let Ok(true) = model.xlua_patch.as_ref().unwrap_unchecked().is_applied(&CONFIG.game.path) {
+                                    let path = match config::get() {
+                                        Ok(config) => config.game.path.for_edition(config.launcher.edition).to_path_buf(),
+                                        Err(_) => CONFIG.game.path.for_edition(CONFIG.launcher.edition).to_path_buf(),
+                                    };
+
+                                    if let Ok(true) = model.xlua_patch.as_ref().unwrap_unchecked().is_applied(path) {
                                         &["success"]
                                     } else {
                                         &["warning"]
@@ -525,7 +573,12 @@ impl SimpleAsyncComponent for GeneralApp {
                                 PatchStatus::Preparation { .. } => tr("patch-preparation-tooltip"),
                                 PatchStatus::Testing { .. } => tr("patch-testing-tooltip"),
                                 PatchStatus::Available { .. } => unsafe {
-                                    if let Ok(true) = model.xlua_patch.as_ref().unwrap_unchecked().is_applied(&CONFIG.game.path) {
+                                    let path = match config::get() {
+                                        Ok(config) => config.game.path.for_edition(config.launcher.edition).to_path_buf(),
+                                        Err(_) => CONFIG.game.path.for_edition(CONFIG.launcher.edition).to_path_buf(),
+                                    };
+
+                                    if let Ok(true) = model.xlua_patch.as_ref().unwrap_unchecked().is_applied(path) {
                                         String::new()
                                     } else {
                                         tr("patch-not-applied-tooltip")
@@ -867,10 +920,11 @@ impl SimpleAsyncComponent for GeneralApp {
                         config::update(config.clone());
 
                         let package = VoicePackage::with_locale(package.locale).unwrap();
+                        let game_path = config.game.path.for_edition(config.launcher.edition).to_path_buf();
 
-                        if package.is_installed_in(&config.game.path) {
+                        if package.is_installed_in(&game_path) {
                             std::thread::spawn(move || {
-                                if let Err(err) = package.delete_in(&config.game.path) {
+                                if let Err(err) = package.delete_in(game_path) {
                                     tracing::error!("Failed to delete voice package: {:?}", package.locale());
 
                                     sender.input(GeneralAppMsg::Toast {

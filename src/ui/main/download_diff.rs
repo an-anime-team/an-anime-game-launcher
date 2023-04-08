@@ -18,9 +18,10 @@ pub fn download_diff(sender: ComponentSender<App>, progress_bar_input: Sender<Pr
 
     std::thread::spawn(move || {
         let config = config::get().unwrap();
+        let game_path = config.game.path.for_edition(config.launcher.edition).to_path_buf();
 
         #[allow(unused_must_use)]
-        let result = diff.install_to_by(config.game.path, config.launcher.temp, clone!(@strong sender => move |state| {
+        let result = diff.install_to_by(game_path, config.launcher.temp, clone!(@strong sender => move |state| {
             match &state {
                 InstallerUpdate::DownloadingError(err) => {
                     tracing::error!("Downloading failed: {err}");

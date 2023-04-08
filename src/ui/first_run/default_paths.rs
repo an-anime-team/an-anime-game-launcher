@@ -18,7 +18,8 @@ pub struct DefaultPathsApp {
     runners: PathBuf,
     dxvks: PathBuf,
     prefix: PathBuf,
-    game: PathBuf,
+    game_global: PathBuf,
+    game_china: PathBuf,
     fps_unlocker: PathBuf,
     components: PathBuf,
     patch: PathBuf,
@@ -31,7 +32,8 @@ pub enum Folders {
     Runners,
     DXVK,
     Prefix,
-    Game,
+    GameGlobal,
+    GameChina,
     FpsUnlocker,
     Components,
     Patch,
@@ -144,9 +146,20 @@ impl SimpleAsyncComponent for DefaultPathsApp {
                     set_activatable: true,
 
                     #[watch]
-                    set_subtitle: model.game.to_str().unwrap(),
+                    set_subtitle: model.game_global.to_str().unwrap(),
 
-                    connect_activated => DefaultPathsAppMsg::ChoosePath(Folders::Game)
+                    connect_activated => DefaultPathsAppMsg::ChoosePath(Folders::GameGlobal)
+                },
+
+                adw::ActionRow {
+                    set_title: &tr("game-installation-folder"), // FIXME
+                    set_icon_name: Some("folder-symbolic"),
+                    set_activatable: true,
+
+                    #[watch]
+                    set_subtitle: model.game_china.to_str().unwrap(),
+
+                    connect_activated => DefaultPathsAppMsg::ChoosePath(Folders::GameChina)
                 },
 
                 adw::ActionRow {
@@ -233,7 +246,8 @@ impl SimpleAsyncComponent for DefaultPathsApp {
             runners: CONFIG.game.wine.builds.clone(),
             dxvks: CONFIG.game.dxvk.builds.clone(),
             prefix: CONFIG.game.wine.prefix.clone(),
-            game: CONFIG.game.path.clone(),
+            game_global: CONFIG.game.path.global.clone(),
+            game_china: CONFIG.game.path.china.clone(),
             fps_unlocker: CONFIG.game.enhancements.fps_unlocker.path.clone(),
             components: CONFIG.components.path.clone(),
             patch: CONFIG.patch.path.clone(),
@@ -264,15 +278,12 @@ impl SimpleAsyncComponent for DefaultPathsApp {
                             self.runners      = result.join("runners");
                             self.dxvks        = result.join("dxvks");
                             self.prefix       = result.join("prefix");
+                            self.game_global  = result.join(concat!("Ge", "nshi", "n Imp", "act"));
+                            self.game_china   = result.join(concat!("Yu", "anS", "hen"));
                             self.fps_unlocker = result.join("fps-unlocker");
                             self.components   = result.join("components");
                             self.patch        = result.join("patch");
                             self.temp         = result.clone();
-
-                            self.game = result.join(match CONFIG.launcher.edition.into() {
-                                GameEdition::Global => concat!("Ge", "nshi", "n Imp", "act"),
-                                GameEdition::China  => concat!("Yu", "anS", "hen")
-                            });
 
                             self.launcher = result;
                         }
@@ -280,7 +291,8 @@ impl SimpleAsyncComponent for DefaultPathsApp {
                         Folders::Runners     => self.runners      = result,
                         Folders::DXVK        => self.dxvks        = result,
                         Folders::Prefix      => self.prefix       = result,
-                        Folders::Game        => self.game         = result,
+                        Folders::GameGlobal  => self.game_global  = result,
+                        Folders::GameChina   => self.game_china   = result,
                         Folders::FpsUnlocker => self.fps_unlocker = result,
                         Folders::Components  => self.components   = result,
                         Folders::Patch       => self.patch        = result,
@@ -313,7 +325,8 @@ impl DefaultPathsApp {
         config.game.wine.builds = self.runners.clone();
         config.game.dxvk.builds = self.dxvks.clone();
         config.game.wine.prefix = self.prefix.clone();
-        config.game.path        = self.game.clone();
+        config.game.path.global = self.game_global.clone();
+        config.game.path.china  = self.game_china.clone();
         config.components.path  = self.components.clone();
         config.patch.path       = self.patch.clone();
         config.launcher.temp    = Some(self.temp.clone());

@@ -554,7 +554,12 @@ impl SimpleComponent for App {
         })));
 
         group.add_action::<GameFolder>(&RelmAction::new_stateless(clone!(@strong sender => move |_| {
-            if let Err(err) = open::that(&CONFIG.game.path) {
+            let path = match config::get() {
+                Ok(config) => config.game.path.for_edition(config.launcher.edition).to_path_buf(),
+                Err(_) => CONFIG.game.path.for_edition(CONFIG.launcher.edition).to_path_buf(),
+            };
+
+            if let Err(err) = open::that(path) {
                 sender.input(AppMsg::Toast {
                     title: tr("game-folder-opening-error"),
                     description: Some(err.to_string())
@@ -590,8 +595,10 @@ impl SimpleComponent for App {
 
         group.add_action::<WishUrl>(&RelmAction::new_stateless(clone!(@strong sender => move |_| {
             std::thread::spawn(clone!(@strong sender => move || {
-                let web_cache = CONFIG.game.path
-                    .join(GameEdition::selected().data_folder())
+                let config = config::get().unwrap_or_else(|_| CONFIG.clone());
+
+                let web_cache = config.game.path.for_edition(config.launcher.edition)
+                    .join(GameEdition::from(config.launcher.edition).data_folder())
                     .join("webCaches/Cache/Cache_Data/data_2");
 
                 if !web_cache.exists() {
