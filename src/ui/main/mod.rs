@@ -694,18 +694,23 @@ impl SimpleComponent for App {
                 Ok(None) => {
                     for host in &CONFIG.components.servers {
                         match components.sync(host) {
-                            Ok(true) => {
-                                // TODO: add changelog log here
-
+                            Ok(changes) => {
                                 sender.input(AppMsg::Toast {
                                     title: tr("components-index-updated"),
-                                    description: None
+                                    description: if changes.is_empty() {
+                                        None
+                                    } else {
+                                        let max_len = changes.iter().map(|line| line.len()).max().unwrap_or(80);
+
+                                        Some(changes.into_iter()
+                                            .map(|line| format!("- {line}{}", " ".repeat(max_len - line.len())))
+                                            .collect::<Vec<_>>()
+                                            .join("\n"))
+                                    }
                                 });
 
                                 break;
                             }
-
-                            Ok(false) => continue,
 
                             Err(err) => {
                                 tracing::error!("Failed to sync components index");
@@ -742,16 +747,7 @@ impl SimpleComponent for App {
                 Ok(None) => {
                     for server in &CONFIG.patch.servers {
                         match patch.sync(server) {
-                            Ok(true) => break,
-
-                            Ok(false) => {
-                                tracing::error!("Failed to sync patch folder with remote: {server}");
-
-                                sender.input(AppMsg::Toast {
-                                    title: tr("patch-sync-failed"),
-                                    description: None
-                                });
-                            }
+                            Ok(_) => break,
 
                             Err(err) => {
                                 tracing::error!("Failed to sync patch folder with remote: {server}: {err}");

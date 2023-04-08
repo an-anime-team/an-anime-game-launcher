@@ -232,8 +232,7 @@ impl SimpleComponent for FirstRunApp {
                         Ok(None) => {
                             for host in &CONFIG.components.servers {
                                 match components.sync(host) {
-                                    Ok(true) => break,
-                                    Ok(false) => continue,
+                                    Ok(_) => break,
 
                                     Err(err) => {
                                         tracing::error!("Failed to sync components index");
