@@ -660,18 +660,18 @@ impl SimpleAsyncComponent for GeneralApp {
                     #[watch]
                     set_activatable: !model.selecting_wine_version,
 
-                    #[watch]
-                    set_icon_name: if model.selecting_wine_version {
-                        Some("process-working-symbolic")
-                    } else {
-                        None
-                    },
-
                     connect_selected_notify[sender] => move |row| {
                         if is_ready() {
                             sender.input(GeneralAppMsg::SelectWine(row.selected() as usize));
                         }
-                    } @wine_selected_notify
+                    } @wine_selected_notify,
+
+                    add_suffix = &gtk::Spinner {
+                        set_spinning: true,
+
+                        #[watch]
+                        set_visible: model.selecting_wine_version
+                    }
                 },
 
                 adw::ActionRow {
@@ -775,18 +775,18 @@ impl SimpleAsyncComponent for GeneralApp {
                     #[watch]
                     set_activatable: !model.selecting_dxvk_version,
 
-                    #[watch]
-                    set_icon_name: if model.selecting_dxvk_version {
-                        Some("process-working-symbolic")
-                    } else {
-                        None
-                    },
-
                     connect_selected_notify[sender] => move |row| {
                         if is_ready() {
                             sender.input(GeneralAppMsg::SelectDxvk(row.selected() as usize));
                         }
-                    } @dxvk_selected_notify
+                    } @dxvk_selected_notify,
+
+                    add_suffix = &gtk::Spinner {
+                        set_spinning: true,
+
+                        #[watch]
+                        set_visible: model.selecting_dxvk_version
+                    }
                 },
 
                 adw::ActionRow {
@@ -1026,6 +1026,8 @@ impl SimpleAsyncComponent for GeneralApp {
                 if let Ok(Some(wine)) = config.get_selected_wine() {
                     let result = wine.to_wine(config.components.path, Some(config.game.wine.builds.join(&wine.name)))
                         .with_prefix(config.game.wine.prefix)
+                        .with_loader(WineLoader::Current)
+                        .with_arch(WineArch::Win64)
                         .run_args(executable);
 
                     if let Err(err) = result {
