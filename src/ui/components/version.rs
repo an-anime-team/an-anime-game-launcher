@@ -52,7 +52,7 @@ impl SimpleAsyncComponent for ComponentVersion {
             set_title: &model.title,
 
             #[watch]
-            set_visible: !model.show_recommended_only || model.recommended,
+            set_visible: !model.show_recommended_only || model.recommended || model.state != VersionState::NotDownloaded,
 
             add_suffix = &gtk::Button {
                 #[watch]
