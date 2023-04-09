@@ -88,6 +88,13 @@ impl SimpleComponent for AboutDialog {
                     "<li>Added game environment switcher</li>",
                     "<li>Added game edition switcher</li>",
                     "<li>Added changelog to updated components toast</li>",
+                    "<li>Added wine tools to settings</li>",
+                "</ul>",
+
+                "<p>Fixed</p>",
+
+                "<ul>",
+                    "<li>Added whitespaces removing from environment values</li>",
                 "</ul>",
 
                 "<p>Changed</p>",
@@ -95,6 +102,8 @@ impl SimpleComponent for AboutDialog {
                 "<ul>",
                     "<li>Improved game repairing feature</li>",
                     "<li>Replaced curl dependency by native code</li>",
+                    "<li>Replaced static image by spinner in wine / dxvk version selection</li>",
+                    "<li>Made wine / dxvk versions always visible if they're downloaded</li>",
                 "</ul>",
             ].join("\n"),
 
