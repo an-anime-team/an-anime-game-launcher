@@ -6,6 +6,8 @@ debug-file-opening-error = Fallo al abrir el archivo de debug
 wish-url-search-failed = No se encontró la URL del historial de deseos
 wish-url-opening-error = No se pudo abrir la URL del historial de deseos
 
+wine-run-error = Failed to run {$executable} executable using wine
+
 game-launching-failed = Fallo al iniciar el juego
 failed-get-selected-wine = Fallo al buscar la versión elegida de Wine
 downloading-failed = Descarga fallida

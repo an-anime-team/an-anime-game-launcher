@@ -6,6 +6,8 @@ debug-file-opening-error = 打开调试文件失败
 wish-url-search-failed = 找不到祈愿 URL
 wish-url-opening-error = 无法转到祈愿 URL
 
+wine-run-error = Failed to run {$executable} executable using wine
+
 game-launching-failed = 启动游戏失败
 failed-get-selected-wine = 选择 Wine 版本失败
 downloading-failed = 下载失败

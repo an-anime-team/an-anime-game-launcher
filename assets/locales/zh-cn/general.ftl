@@ -7,12 +7,22 @@ update-background-description = 下载官方启动器背景图片。你可以关
 launcher-language = 启动器语言
 launcher-language-description = 重启后生效
 
+game-edition = Game edition
+global = Global
+china = China
+
+game-environment = Game environment
+game-environment-description = Get specific features like additional payment methods
+
 game-voiceovers = 游戏语音
+game-voiceovers-description = List of downloaded game voiceovers. You can select them in the game settings
 english = 英语
 japanese = 日语
 korean = 韩语
 chinese = 汉语
 
+migrate-installation = Migrate installation
+migrate-installation-description = Open special window where you can change your game installation folder
 repair-game = 修复游戏
 
 status = 状态
@@ -52,6 +62,13 @@ recommended-only = 仅显示推荐版本
 
 wine-version = Wine 版本
 wine-recommended-description = 仅显示推荐的 Wine 版本
+
+wine-tools = Wine tools
+command-line = Command line
+registry-editor = Registry editor
+explorer = Explorer
+task-manager = Task manager
+configuration = Configuration
 
 dxvk-version = DXVK 版本
 dxvk-selection-disabled = 您的葡萄酒组首选项禁用 DXVK 选择

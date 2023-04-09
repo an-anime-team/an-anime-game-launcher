@@ -279,8 +279,6 @@ impl SimpleAsyncComponent for GeneralApp {
                     set_title: &tr("launcher-language"),
                     set_subtitle: &tr("launcher-language-description"),
 
-                    // TODO: maybe simplify it by some way? e.g. specify such stuff in i18n mod
-
                     set_model: Some(&gtk::StringList::new(&model.languages.iter().map(|lang| lang.as_str()).collect::<Vec<&str>>())),
 
                     set_selected: {
@@ -305,11 +303,11 @@ impl SimpleAsyncComponent for GeneralApp {
                 },
 
                 adw::ComboRow {
-                    set_title: "Game edition",
+                    set_title: &tr("game-edition"),
 
                     set_model: Some(&gtk::StringList::new(&[
-                        "Global",
-                        "China"
+                        &tr("global"),
+                        &tr("china")
                     ])),
 
                     set_selected: match CONFIG.launcher.edition {
@@ -340,8 +338,8 @@ impl SimpleAsyncComponent for GeneralApp {
                 },
 
                 adw::ComboRow {
-                    set_title: "Game environment",
-                    set_subtitle: "Get specific features like additional payment methods",
+                    set_title: &tr("game-environment"),
+                    set_subtitle: &tr("game-environment-description"),
 
                     set_model: Some(&gtk::StringList::new(&[
                         "PC",
@@ -374,7 +372,7 @@ impl SimpleAsyncComponent for GeneralApp {
                 #[local_ref]
                 voice_packages -> adw::ExpanderRow {
                     set_title: &tr("game-voiceovers"),
-                    set_subtitle: "List of downloaded game voiceovers. You can select them in the game settings"
+                    set_subtitle: &tr("game-voiceovers-description")
                 },
 
                 gtk::Box {
@@ -383,8 +381,8 @@ impl SimpleAsyncComponent for GeneralApp {
                     set_margin_top: 16,
 
                     gtk::Button {
-                        set_label: "Migrate installation",
-                        set_tooltip_text: Some("Open special window where you can change your game installation folder"),
+                        set_label: &tr("migrate-installation"),
+                        set_tooltip_text: Some(&tr("migrate-installation-description")),
 
                         connect_clicked => GeneralAppMsg::OpenMigrateInstallation
                     },
@@ -699,10 +697,10 @@ impl SimpleAsyncComponent for GeneralApp {
 
             add = &adw::PreferencesGroup {
                 adw::ExpanderRow {
-                    set_title: "Wine tools",
+                    set_title: &tr("wine-tools"),
 
                     add_row = &adw::ActionRow {
-                        set_title: "Command line",
+                        set_title: &tr("command-line"),
                         set_subtitle: "start cmd",
 
                         set_activatable: true,
@@ -711,7 +709,7 @@ impl SimpleAsyncComponent for GeneralApp {
                     },
 
                     add_row = &adw::ActionRow {
-                        set_title: "Registry editor",
+                        set_title: &tr("registry-editor"),
                         set_subtitle: "regedit",
 
                         set_activatable: true,
@@ -720,7 +718,7 @@ impl SimpleAsyncComponent for GeneralApp {
                     },
 
                     add_row = &adw::ActionRow {
-                        set_title: "Explorer",
+                        set_title: &tr("explorer"),
                         set_subtitle: "explorer",
 
                         set_activatable: true,
@@ -729,7 +727,7 @@ impl SimpleAsyncComponent for GeneralApp {
                     },
 
                     add_row = &adw::ActionRow {
-                        set_title: "Task manager",
+                        set_title: &tr("task-manager"),
                         set_subtitle: "taskmgr",
 
                         set_activatable: true,
@@ -738,7 +736,7 @@ impl SimpleAsyncComponent for GeneralApp {
                     },
 
                     add_row = &adw::ActionRow {
-                        set_title: "Configuration",
+                        set_title: &tr("configuration"),
                         set_subtitle: "winecfg",
 
                         set_activatable: true,
