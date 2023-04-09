@@ -86,6 +86,7 @@ impl SimpleComponent for AboutDialog {
                     "<li>Added game edition switcher</li>",
                     "<li>Added changelog to updated components toast</li>",
                     "<li>Added wine tools to settings</li>",
+                    "<li>Added preferences search</li>",
                 "</ul>",
 
                 "<p>Fixed</p>",

@@ -57,11 +57,10 @@ impl SimpleAsyncComponent for PreferencesApp {
         preferences_window = adw::PreferencesWindow {
             set_title: Some(&tr("preferences")),
             set_default_size: (700, 560),
+
             set_hide_on_close: true,
             set_modal: true,
-
-            // FIXME: doesn't work for any reason
-            set_search_enabled: false,
+            set_search_enabled: true,
 
             add = model.general.widget(),
             add = model.enhancements.widget(),
