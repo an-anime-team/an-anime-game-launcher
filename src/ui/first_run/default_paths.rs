@@ -153,7 +153,7 @@ impl SimpleAsyncComponent for DefaultPathsApp {
                 },
 
                 adw::ActionRow {
-                    set_title: &tr("game-installation-folder"),
+                    set_title: &tr("global-game-installation-folder"),
                     set_icon_name: Some("folder-symbolic"),
                     set_activatable: true,
 
@@ -164,7 +164,7 @@ impl SimpleAsyncComponent for DefaultPathsApp {
                 },
 
                 adw::ActionRow {
-                    set_title: &tr("game-installation-folder"), // FIXME
+                    set_title: &tr("chinese-game-installation-folder"),
                     set_icon_name: Some("folder-symbolic"),
                     set_activatable: true,
 
@@ -251,6 +251,9 @@ impl SimpleAsyncComponent for DefaultPathsApp {
                         },
 
                         add_css_class: "pill",
+
+                        #[watch]
+                        set_visible: !model.migrate_installation,
 
                         connect_clicked => DefaultPathsAppMsg::Exit
                     }

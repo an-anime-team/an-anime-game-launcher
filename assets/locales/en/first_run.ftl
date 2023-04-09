@@ -36,13 +36,15 @@ show-all-folders-subtitle = Show additional path selection settings. Do as I say
 runners-folder = Runners folder
 dxvks-folder = DXVKs folder
 wine-prefix-folder = Wine prefix folder
-game-installation-folder = Game installation folder
+global-game-installation-folder = Global game version installation folder
+chinese-game-installation-folder = Chinese game version installation folder
 fps-unlocker-folder = FPS Unlocker folder
 components-index = Components index
 patch-folder = Patch folder
 temp-folder = Temp folder
 
 migrate = Migrate
+
 
 select-voice-packages = Select voice packages
 

@@ -36,11 +36,14 @@ show-all-folders-subtitle = Afficher plus de paramètres de sélection d'emplace
 runners-folder = Emplacement des runners
 dxvks-folder = Emplacement des versions de DXVK
 wine-prefix-folder = Emplacement du préfix wine
-game-installation-folder = Emplacement d'installation du jeu
+global-game-installation-folder = Global game version installation folder
+chinese-game-installation-folder = Chinese game version installation folder
 fps-unlocker-folder = Emplacement des fichiers du débloqueur de FPS
 components-index = Indice des composants
 patch-folder = Emplacement du patch
 temp-folder = Dossier temporaire
+
+migrate = Migrate
 
 
 select-voice-packages = Sélectionnez les packs de voix
