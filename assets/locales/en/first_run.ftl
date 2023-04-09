@@ -42,6 +42,7 @@ components-index = Components index
 patch-folder = Patch folder
 temp-folder = Temp folder
 
+migrate = Migrate
 
 select-voice-packages = Select voice packages
 
