@@ -1,11 +1,18 @@
 use relm4::prelude::*;
 use gtk::prelude::*;
 
-use crate::APP_VERSION;
 use anime_launcher_sdk::VERSION as SDK_VERSION;
 use anime_launcher_sdk::anime_game_core::VERSION as CORE_VERSION;
 
 use crate::*;
+
+lazy_static::lazy_static! {
+    pub static ref APP_VERSION: String = if crate::APP_DEBUG && !crate::APP_VERSION.contains('-') {
+        format!("{}-dev", crate::APP_VERSION)
+    } else {
+        crate::APP_VERSION.to_string()
+    };
+}
 
 #[derive(Debug)]
 pub struct AboutDialog {
@@ -33,17 +40,7 @@ impl SimpleComponent for AboutDialog {
             set_issue_url: "https://github.com/an-anime-team/an-anime-game-launcher/issues",
 
             set_license_type: gtk::License::Gpl30,
-
-            set_version: &{
-                // Debug build & build's version doesn't contain any suffix (-dev, -beta, etc)
-                if crate::APP_DEBUG && !APP_VERSION.contains('-') {
-                    format!("{APP_VERSION}-dev")
-                }
-                
-                else {
-                    APP_VERSION.to_string()
-                }
-            },
+            set_version: &APP_VERSION,
 
             set_developers: &[
                 "Nikita Podvirnyy https://github.com/krypt0nn"
@@ -79,7 +76,7 @@ impl SimpleComponent for AboutDialog {
                 format!("cairo: {}", gtk::cairo::version_string()),
             ].join("\n"),
 
-            set_release_notes_version: APP_VERSION,
+            set_release_notes_version: &APP_VERSION,
             set_release_notes: &[
                 "<p>Added</p>",
 
