@@ -86,8 +86,8 @@ dependencies = [
 
 [[package]]
 name = "anime-launcher-sdk"
-version = "0.5.13"
-source = "git+https://github.com/an-anime-team/anime-launcher-sdk?tag=0.5.13#66a80e5f5906b1cfc1b9716a4448dd03cf854ae8"
+version = "0.5.14"
+source = "git+https://github.com/an-anime-team/anime-launcher-sdk?tag=0.5.14#98de4c7d707ed7428257953526625e8f168f7d84"
 dependencies = [
  "anime-game-core",
  "anyhow",
@@ -1718,9 +1718,9 @@ checksum = "624a8340c38c1b80fd549087862da4ba43e08858af025b236e509b6649fc13d5"
 
 [[package]]
 name = "open"
-version = "4.0.0"
+version = "4.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bd61e3bf9d78956c72ee864bba52431f7f43994b21a17e9e72596a81bd61075b"
+checksum = "075c5203b3a2b698bc72c6c10b1f6263182135751d5013ea66e8a4b3d0562a43"
 dependencies = [
  "pathdiff",
 ]

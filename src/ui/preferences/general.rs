@@ -152,6 +152,7 @@ pub enum GeneralAppMsg {
 
     OpenMigrateInstallation,
     RepairGame,
+    WineOpen(&'static [&'static str]),
 
     UpdateLauncherStyle(LauncherStyle),
 
@@ -697,6 +698,57 @@ impl SimpleAsyncComponent for GeneralApp {
             },
 
             add = &adw::PreferencesGroup {
+                adw::ExpanderRow {
+                    set_title: "Wine tools",
+
+                    add_row = &adw::ActionRow {
+                        set_title: "Command line",
+                        set_subtitle: "start cmd",
+
+                        set_activatable: true,
+
+                        connect_activated => GeneralAppMsg::WineOpen(&["start", "cmd"])
+                    },
+
+                    add_row = &adw::ActionRow {
+                        set_title: "Registry editor",
+                        set_subtitle: "regedit",
+
+                        set_activatable: true,
+
+                        connect_activated => GeneralAppMsg::WineOpen(&["regedit"])
+                    },
+
+                    add_row = &adw::ActionRow {
+                        set_title: "Explorer",
+                        set_subtitle: "explorer",
+
+                        set_activatable: true,
+
+                        connect_activated => GeneralAppMsg::WineOpen(&["explorer"])
+                    },
+
+                    add_row = &adw::ActionRow {
+                        set_title: "Task manager",
+                        set_subtitle: "taskmgr",
+
+                        set_activatable: true,
+
+                        connect_activated => GeneralAppMsg::WineOpen(&["taskmgr"])
+                    },
+
+                    add_row = &adw::ActionRow {
+                        set_title: "Configuration",
+                        set_subtitle: "winecfg",
+
+                        set_activatable: true,
+
+                        connect_activated => GeneralAppMsg::WineOpen(&["winecfg"])
+                    }
+                }
+            },
+
+            add = &adw::PreferencesGroup {
                 set_title: &tr("dxvk-version"),
 
                 #[watch]
@@ -968,12 +1020,33 @@ impl SimpleAsyncComponent for GeneralApp {
                 sender.output(Self::Output::RepairGame);
             }
 
+            GeneralAppMsg::WineOpen(executable) => {
+                let config = config::get().unwrap_or_else(|_| CONFIG.clone());
+
+                if let Ok(Some(wine)) = config.get_selected_wine() {
+                    let result = wine.to_wine(config.components.path, Some(config.game.wine.builds.join(&wine.name)))
+                        .with_prefix(config.game.wine.prefix)
+                        .run_args(executable);
+
+                    if let Err(err) = result {
+                        sender.input(GeneralAppMsg::Toast {
+                            title: tr_args("wine-run-error", [
+                                ("executable", executable.join(" ").into())
+                            ]),
+                            description: Some(err.to_string())
+                        });
+
+                        tracing::error!("Failed to run {:?} using wine: {err}", executable);
+                    }
+                }
+            }
+
             #[allow(unused_must_use)]
             GeneralAppMsg::UpdateLauncherStyle(style) => {
                 if style == LauncherStyle::Classic && !KEEP_BACKGROUND_FILE.exists() {
                     if let Err(err) = crate::background::download_background() {
                         tracing::error!("Failed to download background picture");
-    
+
                         sender.input(GeneralAppMsg::Toast {
                             title: tr("background-downloading-failed"),
                             description: Some(err.to_string())
