@@ -38,11 +38,14 @@ show-all-folders-subtitle = Отобразить дополнительные о
 runners-folder = Папка версий Wine
 dxvks-folder = Папка версий DXVK
 wine-prefix-folder = Папка префикса Wine
-game-installation-folder = Путь установки игры
+global-game-installation-folder = Путь установки глобальной версии игры
+chinese-game-installation-folder = Путь установки китайской версии игры
 fps-unlocker-folder = Папка FPS Unlocker
 components-index = Индекс компонентов
 patch-folder = Папка скачивания патча
 temp-folder = Временная папка
+
+migrate = Перенести
 
 
 select-voice-packages = Выбрать языковые пакеты

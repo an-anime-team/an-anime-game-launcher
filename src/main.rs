@@ -12,9 +12,10 @@ use tracing_subscriber::filter::*;
 
 use std::path::PathBuf;
 
+pub mod move_folder;
 pub mod i18n;
-pub mod ui;
 pub mod background;
+pub mod ui;
 
 use ui::main::*;
 use ui::first_run::main::*;
@@ -37,10 +38,10 @@ lazy_static::lazy_static! {
     /// This one is used to prepare some launcher UI components on start
     pub static ref CONFIG: config::Config = config::get().expect("Failed to load config");
 
-    pub static ref GAME: Game = Game::new(&CONFIG.game.path);
+    pub static ref GAME: Game = Game::new(CONFIG.game.path.for_edition(CONFIG.launcher.edition));
 
     /// Path to launcher folder. Standard is `$HOME/.local/share/anime-game-launcher`
-    pub static ref LAUNCHER_FOLDER: PathBuf = launcher_dir().unwrap_or_default();
+    pub static ref LAUNCHER_FOLDER: PathBuf = launcher_dir().expect("Failed to get launcher folder");
 
     /// Path to `debug.log` file. Standard is `$HOME/.local/share/anime-game-launcher/debug.log`
     pub static ref DEBUG_FILE: PathBuf = LAUNCHER_FOLDER.join("debug.log");
@@ -160,7 +161,7 @@ fn main() {
     ", BACKGROUND_FILE.to_string_lossy()));
 
     // Set game edition
-    genshin::set_game_edition(CONFIG.launcher.edition.into());
+    GameEdition::from(CONFIG.launcher.edition).select();
 
     // Set UI language
     let lang = CONFIG.launcher.language.parse().expect("Wrong language format used in config");

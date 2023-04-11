@@ -9,14 +9,18 @@ use relm4::factory::{
 use gtk::prelude::*;
 use adw::prelude::*;
 
+use anime_launcher_sdk::anime_game_core::prelude::*;
+use anime_launcher_sdk::wincompatlib::prelude::*;
 use anime_launcher_sdk::config;
 use anime_launcher_sdk::config::launcher::LauncherStyle;
-use anime_launcher_sdk::anime_game_core::prelude::*;
 use anime_launcher_sdk::components::*;
 use anime_launcher_sdk::components::wine::WincompatlibWine;
-use anime_launcher_sdk::wincompatlib::prelude::*;
+use anime_launcher_sdk::env_emulation::Environment;
+use anime_launcher_sdk::config::launcher::GameEdition;
+use anime_launcher_sdk::anime_game_core::genshin::consts::GameEdition as CoreGameEdition;
 
 use super::main::PreferencesAppMsg;
+use crate::ui::migrate_installation::MigrateInstallationApp;
 use crate::ui::components;
 use crate::ui::components::*;
 use crate::i18n::*;
@@ -102,6 +106,7 @@ impl AsyncFactoryComponent for VoicePackageComponent {
 pub struct GeneralApp {
     voice_packages: AsyncFactoryVecDeque<VoicePackageComponent>,
 
+    migrate_installation: Controller<MigrateInstallationApp>,
     wine_components: AsyncController<ComponentsList<GeneralAppMsg>>,
     dxvk_components: AsyncController<ComponentsList<GeneralAppMsg>>,
 
@@ -145,7 +150,9 @@ pub enum GeneralAppMsg {
     RemoveVoicePackage(DynamicIndex),
     SetVoicePackageSensitivity(DynamicIndex, bool),
 
+    OpenMigrateInstallation,
     RepairGame,
+    WineOpen(&'static [&'static str]),
 
     UpdateLauncherStyle(LauncherStyle),
 
@@ -272,8 +279,6 @@ impl SimpleAsyncComponent for GeneralApp {
                     set_title: &tr("launcher-language"),
                     set_subtitle: &tr("launcher-language-description"),
 
-                    // TODO: maybe simplify it by some way? e.g. specify such stuff in i18n mod
-
                     set_model: Some(&gtk::StringList::new(&model.languages.iter().map(|lang| lang.as_str()).collect::<Vec<&str>>())),
 
                     set_selected: {
@@ -297,15 +302,90 @@ impl SimpleAsyncComponent for GeneralApp {
                     }
                 },
 
+                adw::ComboRow {
+                    set_title: &tr("game-edition"),
+
+                    set_model: Some(&gtk::StringList::new(&[
+                        &tr("global"),
+                        &tr("china")
+                    ])),
+
+                    set_selected: match CONFIG.launcher.edition {
+                        GameEdition::Global => 0,
+                        GameEdition::China => 1
+                    },
+
+                    connect_selected_notify[sender] => move |row| {
+                        if is_ready() {
+                            #[allow(unused_must_use)]
+                            if let Ok(mut config) = config::get() {
+                                config.launcher.edition = match row.selected() {
+                                    0 => GameEdition::Global,
+                                    1 => GameEdition::China,
+
+                                    _ => unreachable!()
+                                };
+
+                                // Select new game edition
+                                CoreGameEdition::from(config.launcher.edition).select();
+
+                                config::update(config);
+
+                                sender.output(PreferencesAppMsg::UpdateLauncherState);
+                            }
+                        }
+                    }
+                },
+
+                adw::ComboRow {
+                    set_title: &tr("game-environment"),
+                    set_subtitle: &tr("game-environment-description"),
+
+                    set_model: Some(&gtk::StringList::new(&[
+                        "PC",
+                        "Android"
+                    ])),
+
+                    set_selected: match CONFIG.launcher.environment {
+                        Environment::PC => 0,
+                        Environment::Android => 1,
+
+                        _ => unreachable!()
+                    },
+
+                    connect_selected_notify => |row| {
+                        if is_ready() {
+                            if let Ok(mut config) = config::get() {
+                                config.launcher.environment = match row.selected() {
+                                    0 => Environment::PC,
+                                    1 => Environment::Android,
+
+                                    _ => unreachable!()
+                                };
+    
+                                config::update(config);
+                            }
+                        }
+                    }
+                },
+
                 #[local_ref]
                 voice_packages -> adw::ExpanderRow {
-                    set_title: &tr("game-voiceovers")
+                    set_title: &tr("game-voiceovers"),
+                    set_subtitle: &tr("game-voiceovers-description")
                 },
 
                 gtk::Box {
                     set_orientation: gtk::Orientation::Horizontal,
                     set_spacing: 8,
                     set_margin_top: 16,
+
+                    gtk::Button {
+                        set_label: &tr("migrate-installation"),
+                        set_tooltip_text: Some(&tr("migrate-installation-description")),
+
+                        connect_clicked => GeneralAppMsg::OpenMigrateInstallation
+                    },
 
                     gtk::Button {
                         set_label: &tr("repair-game"),
@@ -346,7 +426,7 @@ impl SimpleAsyncComponent for GeneralApp {
                                 VersionDiff::NotInstalled { .. } => &[]
                             }
 
-                            None => &["success"]
+                            None => &[]
                         },
 
                         #[watch]
@@ -398,7 +478,12 @@ impl SimpleAsyncComponent for GeneralApp {
                                 PatchStatus::Preparation { .. } |
                                 PatchStatus::Testing { .. } => &["warning"],
                                 PatchStatus::Available { .. } => unsafe {
-                                    if let Ok(true) = model.unity_player_patch.as_ref().unwrap_unchecked().is_applied(&CONFIG.game.path) {
+                                    let path = match config::get() {
+                                        Ok(config) => config.game.path.for_edition(config.launcher.edition).to_path_buf(),
+                                        Err(_) => CONFIG.game.path.for_edition(CONFIG.launcher.edition).to_path_buf(),
+                                    };
+
+                                    if let Ok(true) = model.unity_player_patch.as_ref().unwrap_unchecked().is_applied(path) {
                                         &["success"]
                                     } else {
                                         &["warning"]
@@ -420,7 +505,12 @@ impl SimpleAsyncComponent for GeneralApp {
                                 PatchStatus::Preparation { .. } => tr("patch-preparation-tooltip"),
                                 PatchStatus::Testing { .. } => tr("patch-testing-tooltip"),
                                 PatchStatus::Available { .. } => unsafe {
-                                    if let Ok(true) = model.unity_player_patch.as_ref().unwrap_unchecked().is_applied(&CONFIG.game.path) {
+                                    let path = match config::get() {
+                                        Ok(config) => config.game.path.for_edition(config.launcher.edition).to_path_buf(),
+                                        Err(_) => CONFIG.game.path.for_edition(CONFIG.launcher.edition).to_path_buf(),
+                                    };
+
+                                    if let Ok(true) = model.unity_player_patch.as_ref().unwrap_unchecked().is_applied(path) {
                                         String::new()
                                     } else {
                                         tr("patch-not-applied-tooltip")
@@ -459,7 +549,12 @@ impl SimpleAsyncComponent for GeneralApp {
                                 PatchStatus::Preparation { .. } |
                                 PatchStatus::Testing { .. } => &["warning"],
                                 PatchStatus::Available { .. } => unsafe {
-                                    if let Ok(true) = model.xlua_patch.as_ref().unwrap_unchecked().is_applied(&CONFIG.game.path) {
+                                    let path = match config::get() {
+                                        Ok(config) => config.game.path.for_edition(config.launcher.edition).to_path_buf(),
+                                        Err(_) => CONFIG.game.path.for_edition(CONFIG.launcher.edition).to_path_buf(),
+                                    };
+
+                                    if let Ok(true) = model.xlua_patch.as_ref().unwrap_unchecked().is_applied(path) {
                                         &["success"]
                                     } else {
                                         &["warning"]
@@ -481,7 +576,12 @@ impl SimpleAsyncComponent for GeneralApp {
                                 PatchStatus::Preparation { .. } => tr("patch-preparation-tooltip"),
                                 PatchStatus::Testing { .. } => tr("patch-testing-tooltip"),
                                 PatchStatus::Available { .. } => unsafe {
-                                    if let Ok(true) = model.xlua_patch.as_ref().unwrap_unchecked().is_applied(&CONFIG.game.path) {
+                                    let path = match config::get() {
+                                        Ok(config) => config.game.path.for_edition(config.launcher.edition).to_path_buf(),
+                                        Err(_) => CONFIG.game.path.for_edition(CONFIG.launcher.edition).to_path_buf(),
+                                    };
+
+                                    if let Ok(true) = model.xlua_patch.as_ref().unwrap_unchecked().is_applied(path) {
                                         String::new()
                                     } else {
                                         tr("patch-not-applied-tooltip")
@@ -558,18 +658,18 @@ impl SimpleAsyncComponent for GeneralApp {
                     #[watch]
                     set_activatable: !model.selecting_wine_version,
 
-                    #[watch]
-                    set_icon_name: if model.selecting_wine_version {
-                        Some("process-working-symbolic")
-                    } else {
-                        None
-                    },
-
                     connect_selected_notify[sender] => move |row| {
                         if is_ready() {
                             sender.input(GeneralAppMsg::SelectWine(row.selected() as usize));
                         }
-                    } @wine_selected_notify
+                    } @wine_selected_notify,
+
+                    add_suffix = &gtk::Spinner {
+                        set_spinning: true,
+
+                        #[watch]
+                        set_visible: model.selecting_wine_version
+                    }
                 },
 
                 adw::ActionRow {
@@ -593,6 +693,57 @@ impl SimpleAsyncComponent for GeneralApp {
 
             add = &adw::PreferencesGroup {
                 add = model.wine_components.widget(),
+            },
+
+            add = &adw::PreferencesGroup {
+                adw::ExpanderRow {
+                    set_title: &tr("wine-tools"),
+
+                    add_row = &adw::ActionRow {
+                        set_title: &tr("command-line"),
+                        set_subtitle: "start cmd",
+
+                        set_activatable: true,
+
+                        connect_activated => GeneralAppMsg::WineOpen(&["start", "cmd"])
+                    },
+
+                    add_row = &adw::ActionRow {
+                        set_title: &tr("registry-editor"),
+                        set_subtitle: "regedit",
+
+                        set_activatable: true,
+
+                        connect_activated => GeneralAppMsg::WineOpen(&["regedit"])
+                    },
+
+                    add_row = &adw::ActionRow {
+                        set_title: &tr("explorer"),
+                        set_subtitle: "explorer",
+
+                        set_activatable: true,
+
+                        connect_activated => GeneralAppMsg::WineOpen(&["explorer"])
+                    },
+
+                    add_row = &adw::ActionRow {
+                        set_title: &tr("task-manager"),
+                        set_subtitle: "taskmgr",
+
+                        set_activatable: true,
+
+                        connect_activated => GeneralAppMsg::WineOpen(&["taskmgr"])
+                    },
+
+                    add_row = &adw::ActionRow {
+                        set_title: &tr("configuration"),
+                        set_subtitle: "winecfg",
+
+                        set_activatable: true,
+
+                        connect_activated => GeneralAppMsg::WineOpen(&["winecfg"])
+                    }
+                }
             },
 
             add = &adw::PreferencesGroup {
@@ -622,18 +773,18 @@ impl SimpleAsyncComponent for GeneralApp {
                     #[watch]
                     set_activatable: !model.selecting_dxvk_version,
 
-                    #[watch]
-                    set_icon_name: if model.selecting_dxvk_version {
-                        Some("process-working-symbolic")
-                    } else {
-                        None
-                    },
-
                     connect_selected_notify[sender] => move |row| {
                         if is_ready() {
                             sender.input(GeneralAppMsg::SelectDxvk(row.selected() as usize));
                         }
-                    } @dxvk_selected_notify
+                    } @dxvk_selected_notify,
+
+                    add_suffix = &gtk::Spinner {
+                        set_spinning: true,
+
+                        #[watch]
+                        set_visible: model.selecting_dxvk_version
+                    }
                 },
 
                 adw::ActionRow {
@@ -674,6 +825,10 @@ impl SimpleAsyncComponent for GeneralApp {
         let mut model = Self {
             voice_packages: AsyncFactoryVecDeque::new(adw::ExpanderRow::new(), sender.input_sender()),
 
+            migrate_installation: MigrateInstallationApp::builder()
+                .launch(())
+                .detach(),
+
             wine_components: ComponentsList::builder()
                 .launch(ComponentsListInit {
                     pattern: ComponentsListPattern {
@@ -684,9 +839,14 @@ impl SimpleAsyncComponent for GeneralApp {
                                 group.versions = group.versions.into_iter().take(12).collect();
 
                                 let mut group: ComponentsListGroup = group.into();
+                                let mut recommended = 6;
 
-                                if group.versions.len() > 6 {
-                                    for i in 6..group.versions.len() {
+                                for i in 0..group.versions.len() {
+                                    if recommended > 0 && group.versions[i].recommended {
+                                        recommended -= 1;
+                                    }
+
+                                    else {
                                         group.versions[i].recommended = false;
                                     }
                                 }
@@ -710,9 +870,14 @@ impl SimpleAsyncComponent for GeneralApp {
                                 group.versions = group.versions.into_iter().take(12).collect();
 
                                 let mut group: ComponentsListGroup = group.into();
+                                let mut recommended = 6;
 
-                                if group.versions.len() > 6 {
-                                    for i in 6..group.versions.len() {
+                                for i in 0..group.versions.len() {
+                                    if recommended > 0 && group.versions[i].recommended {
+                                        recommended -= 1;
+                                    }
+
+                                    else {
                                         group.versions[i].recommended = false;
                                     }
                                 }
@@ -809,10 +974,11 @@ impl SimpleAsyncComponent for GeneralApp {
                         config::update(config.clone());
 
                         let package = VoicePackage::with_locale(package.locale).unwrap();
+                        let game_path = config.game.path.for_edition(config.launcher.edition).to_path_buf();
 
-                        if package.is_installed_in(&config.game.path) {
+                        if package.is_installed_in(&game_path) {
                             std::thread::spawn(move || {
-                                if let Err(err) = package.delete_in(&config.game.path) {
+                                if let Err(err) = package.delete_in(game_path) {
                                     tracing::error!("Failed to delete voice package: {:?}", package.locale());
 
                                     sender.input(GeneralAppMsg::Toast {
@@ -839,9 +1005,40 @@ impl SimpleAsyncComponent for GeneralApp {
                 }
             }
 
+            GeneralAppMsg::OpenMigrateInstallation => unsafe {
+                if let Some(window) = crate::ui::main::PREFERENCES_WINDOW.as_ref() {
+                    self.migrate_installation.widget().set_transient_for(Some(window.widget()));
+                }
+
+                self.migrate_installation.widget().show();
+            }
+
             #[allow(unused_must_use)]
             GeneralAppMsg::RepairGame => {
                 sender.output(Self::Output::RepairGame);
+            }
+
+            GeneralAppMsg::WineOpen(executable) => {
+                let config = config::get().unwrap_or_else(|_| CONFIG.clone());
+
+                if let Ok(Some(wine)) = config.get_selected_wine() {
+                    let result = wine.to_wine(config.components.path, Some(config.game.wine.builds.join(&wine.name)))
+                        .with_prefix(config.game.wine.prefix)
+                        .with_loader(WineLoader::Current)
+                        .with_arch(WineArch::Win64)
+                        .run_args(executable);
+
+                    if let Err(err) = result {
+                        sender.input(GeneralAppMsg::Toast {
+                            title: tr_args("wine-run-error", [
+                                ("executable", executable.join(" ").into())
+                            ]),
+                            description: Some(err.to_string())
+                        });
+
+                        tracing::error!("Failed to run {:?} using wine: {err}", executable);
+                    }
+                }
             }
 
             #[allow(unused_must_use)]
@@ -849,7 +1046,7 @@ impl SimpleAsyncComponent for GeneralApp {
                 if style == LauncherStyle::Classic && !KEEP_BACKGROUND_FILE.exists() {
                     if let Err(err) = crate::background::download_background() {
                         tracing::error!("Failed to download background picture");
-    
+
                         sender.input(GeneralAppMsg::Toast {
                             title: tr("background-downloading-failed"),
                             description: Some(err.to_string())
@@ -884,16 +1081,13 @@ impl SimpleAsyncComponent for GeneralApp {
                 self.downloaded_wine_versions = wine::get_downloaded(&CONFIG.components.path, &CONFIG.game.wine.builds)
                     .unwrap_or_default()
                     .into_iter()
-                    .flat_map(|group| group.versions
-                        .into_iter()
-                        .map(move |version| (
-                            version.clone(),
-                            version.features.unwrap_or_else(
-                                || group.features.to_owned().unwrap_or_default()
-                            ))
-                        )
-                    )
-                    .collect();
+                    .flat_map(|group| group.versions.clone().into_iter()
+                        .map(move |version| {
+                            let features = version.features_in(&group).unwrap_or_default();
+
+                            (version, features)
+                        })
+                    ).collect();
 
                 self.selected_wine_version = if let Some(selected) = &CONFIG.game.wine.selected {
                     let mut index = 0;

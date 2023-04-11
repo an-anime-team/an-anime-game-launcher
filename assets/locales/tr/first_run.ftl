@@ -36,11 +36,14 @@ show-all-folders-subtitle = Ek yol seçimi ayarlarını göster. Dediğimi yap..
 runners-folder = Başlatıcılar(Runnerlar) klasörü
 dxvks-folder = DXVKnın klasörü
 wine-prefix-folder = Wine prefixnin klasörü
-game-installation-folder = Oyunun indrildiği klasör
+global-game-installation-folder = Global game version installation folder
+chinese-game-installation-folder = Chinese game version installation folder
 fps-unlocker-folder = FPS Unlocker folder
 components-index = Bileşenlerin dizini
 patch-folder = Yama klasörü
 temp-folder = "Geçici" klasörü
+
+migrate = Migrate
 
 
 select-voice-packages = Ses paketlerini seç

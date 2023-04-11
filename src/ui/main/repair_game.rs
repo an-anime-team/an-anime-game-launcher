@@ -3,6 +3,8 @@ use relm4::{
     Sender
 };
 
+use gtk::glib::clone;
+
 use std::path::Path;
 
 use anime_launcher_sdk::config;
@@ -23,7 +25,8 @@ pub fn repair_game(sender: ComponentSender<App>, progress_bar_input: Sender<Prog
         match repairer::try_get_integrity_files(None) {
             Ok(mut files) => {
                 // Add voiceovers files
-                let game = Game::new(&config.game.path);
+                let game_path = config.game.path.for_edition(config.launcher.edition).to_path_buf();
+                let game = Game::new(&game_path);
 
                 if let Ok(voiceovers) = game.get_voice_packages() {
                     for package in voiceovers {
@@ -61,10 +64,9 @@ pub fn repair_game(sender: ComponentSender<App>, progress_bar_input: Sender<Prog
                         }
                     }
 
-                    let game_path = config.game.path.clone();
                     let thread_sender = verify_sender.clone();
 
-                    std::thread::spawn(move || {
+                    std::thread::spawn(clone!(@strong game_path => move || {
                         for file in thread_files {
                             let status = if config.launcher.repairer.fast {
                                 file.fast_verify(&game_path)
@@ -74,7 +76,7 @@ pub fn repair_game(sender: ComponentSender<App>, progress_bar_input: Sender<Prog
 
                             thread_sender.send((file, status)).unwrap();
                         }
-                    });
+                    }));
                 }
 
                 // We have [config.launcher.repairer.threads] copies of this sender + the original one
@@ -104,16 +106,37 @@ pub fn repair_game(sender: ComponentSender<App>, progress_bar_input: Sender<Prog
 
                     let total = broken.len() as f64;
 
-                    // TODO: properly handle xlua patch
-                    let is_patch_applied = UnityPlayerPatch::from_folder(&config.patch.path).unwrap()
-                        .is_applied(&config.game.path).unwrap();
+                    let player_patch = UnityPlayerPatch::from_folder(&config.patch.path).unwrap()
+                        .is_applied(&game_path).unwrap();
 
-                    tracing::debug!("Patch status: {}", is_patch_applied);
+                    let xlua_patch = XluaPatch::from_folder(&config.patch.path).unwrap()
+                        .is_applied(&game_path).unwrap();
 
-                    fn should_ignore(path: &Path) -> bool {
-                        for part in ["UnityPlayer.dll", "xlua.dll", "crashreport.exe", "upload_crash.exe", "vulkan-1.dll"] {
+                    tracing::debug!("Patches status: player({player_patch}), xlua({xlua_patch})");
+
+                    fn should_ignore(path: &Path, player_patch: bool, xlua_patch: bool) -> bool {
+                        // Files managed by launch.bat file
+                        for part in ["crashreport.exe", "upload_crash.exe"] {
                             if path.ends_with(part) {
                                 return true;
+                            }
+                        }
+
+                        // UnityPlayer patch related files
+                        if player_patch {
+                            for part in ["UnityPlayer.dll", "vulkan-1.dll"] {
+                                if path.ends_with(part) {
+                                    return true;
+                                }
+                            }
+                        }
+
+                        // Xlua patch related files
+                        if xlua_patch {
+                            for part in ["xlua.dll", "mhypbase.dll"] {
+                                if path.ends_with(part) {
+                                    return true;
+                                }
                             }
                         }
 
@@ -121,10 +144,10 @@ pub fn repair_game(sender: ComponentSender<App>, progress_bar_input: Sender<Prog
                     }
 
                     for (i, file) in broken.into_iter().enumerate() {
-                        if !is_patch_applied || !should_ignore(&file.path) {
-                            tracing::debug!("Repairing: {}", file.path.to_string_lossy());
+                        if !should_ignore(&file.path, player_patch, xlua_patch) {
+                            tracing::debug!("Repairing file: {}", file.path.to_string_lossy());
 
-                            if let Err(err) = file.repair(&config.game.path) {
+                            if let Err(err) = file.repair(&game_path) {
                                 sender.input(AppMsg::Toast {
                                     title: tr("game-file-repairing-error"),
                                     description: Some(err.to_string())
@@ -132,6 +155,10 @@ pub fn repair_game(sender: ComponentSender<App>, progress_bar_input: Sender<Prog
 
                                 tracing::error!("Failed to repair game file: {err}");
                             }
+                        }
+
+                        else {
+                            tracing::debug!("Skipped file: {}", file.path.to_string_lossy());
                         }
 
                         progress_bar_input.send(ProgressBarMsg::UpdateProgress(i as u64, total as u64));

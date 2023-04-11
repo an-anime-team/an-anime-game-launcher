@@ -55,7 +55,6 @@ This should be automatically enabled if you're using zh_cn (Chinese) as your sys
 
 | Folder | Description |
 | - | - |
-| anime-launcher-sdk | Unified core functionality for the launcher |
 | src | Rust source code |
 | assets | App assets folder |
 | assets/locales | App localizations |

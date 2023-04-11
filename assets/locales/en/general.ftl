@@ -7,12 +7,22 @@ update-background-description = Download official background picture for the lau
 launcher-language = Launcher language
 launcher-language-description = Applies after restart
 
+game-edition = Game edition
+global = Global
+china = China
+
+game-environment = Game environment
+game-environment-description = Get specific features like additional payment methods
+
 game-voiceovers = Game voiceovers
+game-voiceovers-description = List of downloaded game voiceovers. You can select them in the game settings
 english = English
 japanese = Japanese
 korean = Korean
 chinese = Chinese
 
+migrate-installation = Migrate installation
+migrate-installation-description = Open special window where you can change your game installation folder
 repair-game = Repair game
 
 status = Status
@@ -52,6 +62,13 @@ recommended-only = Recommended only
 
 wine-version = Wine version
 wine-recommended-description = Show only recommended wine versions
+
+wine-tools = Wine tools
+command-line = Command line
+registry-editor = Registry editor
+explorer = Explorer
+task-manager = Task manager
+configuration = Configuration
 
 dxvk-version = DXVK version
 dxvk-selection-disabled = DXVK selection is disabled by your wine group preferences

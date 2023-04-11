@@ -7,12 +7,22 @@ update-background-description = İstemci için resmi arka plan resmini indirin. 
 launcher-language = İstemci dili
 launcher-language-description = Restart attıktan sonra uygulanır
 
+game-edition = Game edition
+global = Global
+china = China
+
+game-environment = Game environment
+game-environment-description = Get specific features like additional payment methods
+
 game-voiceovers = Oyun içi sesler
+game-voiceovers-description = List of downloaded game voiceovers. You can select them in the game settings
 english = İngilizce
 japanese = Japonca
 korean = Korece
 chinese = Çince
 
+migrate-installation = Migrate installation
+migrate-installation-description = Open special window where you can change your game installation folder
 repair-game = Oyunu tamir et
 
 status = Durum
@@ -52,6 +62,13 @@ recommended-only = Sadece önerilenler
 
 wine-version = Wine versiyonu
 wine-recommended-description = Sadece önerilen wine versiyonlarını göster
+
+wine-tools = Wine tools
+command-line = Command line
+registry-editor = Registry editor
+explorer = Explorer
+task-manager = Task manager
+configuration = Configuration
 
 dxvk-version = DXVK versiyonu
 dxvk-selection-disabled = DXVK özelliği Wine grup tercihleriniz yüzünden devre dışı

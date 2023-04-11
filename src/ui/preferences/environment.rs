@@ -91,11 +91,11 @@ impl SimpleAsyncComponent for EnvironmentApp {
 
                 adw::EntryRow {
                     set_title: "%command%",
-                    set_text: CONFIG.game.command.as_ref().unwrap_or(&String::new()),
+                    set_text: CONFIG.game.command.as_ref().unwrap_or(&String::new()).trim(),
 
                     connect_changed => |entry| {
                         if let Ok(mut config) = config::get() {
-                            let command = entry.text().to_string();
+                            let command = entry.text().trim().to_string();
             
                             config.game.command = if command.is_empty() {
                                 None
@@ -158,7 +158,7 @@ impl SimpleAsyncComponent for EnvironmentApp {
         };
 
         for (name, value) in &CONFIG.game.environment {
-            model.variables.guard().push_back((name.clone(), value.clone()));
+            model.variables.guard().push_back((name.trim().to_string(), value.trim().to_string()));
         }
 
         let variables = model.variables.widget();
@@ -175,8 +175,8 @@ impl SimpleAsyncComponent for EnvironmentApp {
         match msg {
             EnvironmentMsg::Add => {
                 if let Ok(mut config) = config::get() {
-                    let name = self.name.text().to_string();
-                    let value = self.value.text().to_string();
+                    let name = self.name.text().trim().to_string();
+                    let value = self.value.text().trim().to_string();
 
                     config.game.environment.insert(name.clone(), value.clone());
 

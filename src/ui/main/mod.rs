@@ -15,11 +15,13 @@ mod apply_patch;
 mod download_wine;
 mod create_prefix;
 mod download_diff;
+mod migrate_folder;
 mod launch;
 
 use anime_launcher_sdk::config::launcher::LauncherStyle;
 use anime_launcher_sdk::states::LauncherState;
 use anime_launcher_sdk::components::loader::ComponentsLoader;
+use anime_launcher_sdk::anime_game_core::genshin::consts::GameEdition;
 
 use crate::*;
 use crate::i18n::*;
@@ -38,9 +40,9 @@ relm4::new_stateless_action!(WishUrl, WindowActionGroup, "wish_url");
 
 relm4::new_stateless_action!(About, WindowActionGroup, "about");
 
-static mut MAIN_WINDOW: Option<adw::ApplicationWindow> = None;
-static mut PREFERENCES_WINDOW: Option<AsyncController<PreferencesApp>> = None;
-static mut ABOUT_DIALOG: Option<Controller<AboutDialog>> = None;
+pub static mut MAIN_WINDOW: Option<adw::ApplicationWindow> = None;
+pub static mut PREFERENCES_WINDOW: Option<AsyncController<PreferencesApp>> = None;
+pub static mut ABOUT_DIALOG: Option<Controller<AboutDialog>> = None;
 
 pub struct App {
     progress_bar: AsyncController<ProgressBar>,
@@ -370,24 +372,25 @@ impl SimpleComponent for App {
                                     gtk::Button {
                                         #[watch]
                                         set_label: &match model.state {
-                                            Some(LauncherState::Launch)                       => tr("launch"),
-                                            Some(LauncherState::PredownloadAvailable { .. })  => tr("launch"),
-                                            Some(LauncherState::UnityPlayerPatchAvailable(_)) => tr("apply-patch"),
-                                            Some(LauncherState::XluaPatchAvailable(_))        => tr("apply-patch"),
-                                            Some(LauncherState::WineNotInstalled)             => tr("download-wine"),
-                                            Some(LauncherState::PrefixNotExists)              => tr("create-prefix"),
-                                            Some(LauncherState::VoiceUpdateAvailable(_))      => tr("update"),
-                                            Some(LauncherState::VoiceOutdated(_))             => tr("update"),
-                                            Some(LauncherState::VoiceNotInstalled(_))         => tr("download"),
-                                            Some(LauncherState::GameUpdateAvailable(_))       => tr("update"),
-                                            Some(LauncherState::GameOutdated(_))              => tr("update"),
-                                            Some(LauncherState::GameNotInstalled(_))          => tr("download"),
+                                            Some(LauncherState::Launch)                         => tr("launch"),
+                                            Some(LauncherState::PredownloadAvailable { .. })    => tr("launch"),
+                                            Some(LauncherState::FolderMigrationRequired { .. }) => tr("migrate-folders"),
+                                            Some(LauncherState::UnityPlayerPatchAvailable(_))   => tr("apply-patch"),
+                                            Some(LauncherState::XluaPatchAvailable(_))          => tr("apply-patch"),
+                                            Some(LauncherState::WineNotInstalled)               => tr("download-wine"),
+                                            Some(LauncherState::PrefixNotExists)                => tr("create-prefix"),
+                                            Some(LauncherState::VoiceUpdateAvailable(_))        => tr("update"),
+                                            Some(LauncherState::VoiceOutdated(_))               => tr("update"),
+                                            Some(LauncherState::VoiceNotInstalled(_))           => tr("download"),
+                                            Some(LauncherState::GameUpdateAvailable(_))         => tr("update"),
+                                            Some(LauncherState::GameOutdated(_))                => tr("update"),
+                                            Some(LauncherState::GameNotInstalled(_))            => tr("download"),
 
                                             None => String::from("...")
                                         },
 
                                         #[watch]
-                                        set_sensitive: match model.state.as_ref() {
+                                        set_sensitive: !model.disabled_buttons && match &model.state {
                                             Some(LauncherState::GameOutdated { .. }) |
                                             Some(LauncherState::VoiceOutdated(_)) => false,
 
@@ -407,7 +410,7 @@ impl SimpleComponent for App {
                                         },
 
                                         #[watch]
-                                        set_css_classes: match model.state.as_ref() {
+                                        set_css_classes: match &model.state {
                                             Some(LauncherState::GameOutdated { .. }) |
                                             Some(LauncherState::VoiceOutdated(_)) => &["warning"],
 
@@ -427,9 +430,11 @@ impl SimpleComponent for App {
                                         },
 
                                         #[watch]
-                                        set_tooltip_text: Some(&match model.state.as_ref() {
+                                        set_tooltip_text: Some(&match &model.state {
                                             Some(LauncherState::GameOutdated { .. }) |
                                             Some(LauncherState::VoiceOutdated(_)) => tr("main-window--version-outdated-tooltip"),
+
+                                            Some(LauncherState::FolderMigrationRequired { .. }) => tr("migrate-folders-tooltip"),
 
                                             Some(LauncherState::UnityPlayerPatchAvailable(UnityPlayerPatch { status, .. })) |
                                             Some(LauncherState::XluaPatchAvailable(XluaPatch { status, .. })) => match status {
@@ -443,9 +448,6 @@ impl SimpleComponent for App {
 
                                             _ => String::new()
                                         }),
-
-                                        #[watch]
-                                        set_sensitive: !model.disabled_buttons,
 
                                         set_hexpand: false,
                                         set_width_request: 200,
@@ -556,7 +558,12 @@ impl SimpleComponent for App {
         })));
 
         group.add_action::<GameFolder>(&RelmAction::new_stateless(clone!(@strong sender => move |_| {
-            if let Err(err) = open::that(&CONFIG.game.path) {
+            let path = match config::get() {
+                Ok(config) => config.game.path.for_edition(config.launcher.edition).to_path_buf(),
+                Err(_) => CONFIG.game.path.for_edition(CONFIG.launcher.edition).to_path_buf(),
+            };
+
+            if let Err(err) = open::that(path) {
                 sender.input(AppMsg::Toast {
                     title: tr("game-folder-opening-error"),
                     description: Some(err.to_string())
@@ -567,7 +574,7 @@ impl SimpleComponent for App {
         })));
 
         group.add_action::<ConfigFile>(&RelmAction::new_stateless(clone!(@strong sender => move |_| {
-            if let Some(file) = anime_launcher_sdk::consts::config_file() {
+            if let Ok(file) = anime_launcher_sdk::consts::config_file() {
                 if let Err(err) = open::that(file) {
                     sender.input(AppMsg::Toast {
                         title: tr("config-file-opening-error"),
@@ -592,8 +599,10 @@ impl SimpleComponent for App {
 
         group.add_action::<WishUrl>(&RelmAction::new_stateless(clone!(@strong sender => move |_| {
             std::thread::spawn(clone!(@strong sender => move || {
-                let web_cache = CONFIG.game.path
-                    .join(unsafe { anime_launcher_sdk::anime_game_core::genshin::consts::DATA_FOLDER_NAME })
+                let config = config::get().unwrap_or_else(|_| CONFIG.clone());
+
+                let web_cache = config.game.path.for_edition(config.launcher.edition)
+                    .join(GameEdition::from(config.launcher.edition).data_folder())
                     .join("webCaches/Cache/Cache_Data/data_2");
 
                 if !web_cache.exists() {
@@ -668,7 +677,7 @@ impl SimpleComponent for App {
                 sender.input(AppMsg::SetLoadingStatus(Some(Some(tr("downloading-background-picture")))));
 
                 if let Err(err) = crate::background::download_background() {
-                    tracing::error!("Failed to download background picture");
+                    tracing::error!("Failed to download background picture: {err}");
 
                     sender.input(AppMsg::Toast {
                         title: tr("background-downloading-failed"),
@@ -689,18 +698,23 @@ impl SimpleComponent for App {
                 Ok(None) => {
                     for host in &CONFIG.components.servers {
                         match components.sync(host) {
-                            Ok(true) => {
-                                // TODO: add changelog log here
-
+                            Ok(changes) => {
                                 sender.input(AppMsg::Toast {
                                     title: tr("components-index-updated"),
-                                    description: None
+                                    description: if changes.is_empty() {
+                                        None
+                                    } else {
+                                        let max_len = changes.iter().map(|line| line.len()).max().unwrap_or(80);
+
+                                        Some(changes.into_iter()
+                                            .map(|line| format!("- {line}{}", " ".repeat(max_len - line.len())))
+                                            .collect::<Vec<_>>()
+                                            .join("\n"))
+                                    }
                                 });
 
                                 break;
                             }
-
-                            Ok(false) => continue,
 
                             Err(err) => {
                                 tracing::error!("Failed to sync components index");
@@ -737,16 +751,7 @@ impl SimpleComponent for App {
                 Ok(None) => {
                     for server in &CONFIG.patch.servers {
                         match patch.sync(server) {
-                            Ok(true) => break,
-
-                            Ok(false) => {
-                                tracing::error!("Failed to sync patch folder with remote: {server}");
-
-                                sender.input(AppMsg::Toast {
-                                    title: tr("patch-sync-failed"),
-                                    description: None
-                                });
-                            }
+                            Ok(_) => break,
 
                             Err(err) => {
                                 tracing::error!("Failed to sync patch folder with remote: {server}: {err}");
@@ -1005,6 +1010,9 @@ impl SimpleComponent for App {
                     LauncherState::PredownloadAvailable { .. } |
                     LauncherState::Launch => launch::launch(sender),
 
+                    LauncherState::FolderMigrationRequired { from, to, cleanup_folder } =>
+                        migrate_folder::migrate_folder(sender, from.to_owned(), to.to_owned(), cleanup_folder.to_owned()),
+
                     LauncherState::UnityPlayerPatchAvailable(patch) => apply_patch::apply_patch(sender, patch.to_owned()),
                     LauncherState::XluaPatchAvailable(patch) => apply_patch::apply_patch(sender, patch.to_owned()),
 
@@ -1015,7 +1023,8 @@ impl SimpleComponent for App {
                     LauncherState::VoiceUpdateAvailable(diff) |
                     LauncherState::VoiceNotInstalled(diff) |
                     LauncherState::GameUpdateAvailable(diff) |
-                    LauncherState::GameNotInstalled(diff) => download_diff::download_diff(sender, self.progress_bar.sender().to_owned(), diff.to_owned()),
+                    LauncherState::GameNotInstalled(diff) =>
+                        download_diff::download_diff(sender, self.progress_bar.sender().to_owned(), diff.to_owned()),
 
                     LauncherState::VoiceOutdated(_) |
                     LauncherState::GameOutdated(_) => ()

@@ -9,6 +9,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Added installation migration feature
+- Added game environment switcher
+- Added game edition switcher
+- Added changelog to updated components toast
+- Added wine tools to settings
+- Added preferences search
+- Added new progress bar statuses for applyign hdiff patches and removing outdated files
+- Added automatic 3.5 -> 3.6 voiceover files migration related to changed files structure
+
+### Fixed
+
+- Added whitespaces removing from environment values
+
+### Changed
+
+- Improved game repairing feature
+- Replaced `curl` dependency by native code
+- Replaced static image by spinner in wine / dxvk version selection
+- Made wine / dxvk versions always visible if they're downloaded
+
+## [3.3.0] - 24.03.2023
+
+### Added
+
 - Added option to use additional xlua patch
 - Added menu option to open wishes history url
 

@@ -1,6 +1,6 @@
 [package]
 name = "anime-game-launcher"
-version = "3.3.0"
+version = "3.4.0"
 description = "Anime Game launcher"
 authors = ["Nikita Podvirnyy <suimin.tu.mu.ga.mi@gmail.com>"]
 license = "GPL-3.0"
@@ -15,14 +15,19 @@ opt-level = "s"
 [build-dependencies]
 glib-build-tools = "0.17"
 
+[dependencies.anime-launcher-sdk]
+git = "https://github.com/an-anime-team/anime-launcher-sdk"
+tag = "0.5.16"
+
+# path = "../anime-launcher-sdk" # ! for dev purposes only
+
 [dependencies]
 relm4 = { version = "0.6.0-alpha.2", features = ["macros", "libadwaita"] }
 gtk = { package = "gtk4", version = "0.6", features = ["v4_8"] }
 adw = { package = "libadwaita", version = "0.3", features = ["v1_2"] }
-rfd = { version = "0.11", features = ["xdg-portal"], default-features = false }
-open = "4.0.0"
 
-anime-launcher-sdk = { path = "anime-launcher-sdk" }
+rfd = { version = "0.11", features = ["xdg-portal"], default-features = false }
+open = "4.0"
 
 tracing = "0.1"
 tracing-subscriber = "0.3"

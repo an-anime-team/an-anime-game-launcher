@@ -3,9 +3,9 @@ use relm4::component::*;
 
 use adw::prelude::*;
 
+use anime_launcher_sdk::anime_game_core::prelude::*;
 use anime_launcher_sdk::components::*;
 use anime_launcher_sdk::components::wine::WincompatlibWine;
-use anime_launcher_sdk::anime_game_core::installer::prelude::*;
 use anime_launcher_sdk::config;
 use anime_launcher_sdk::wincompatlib::prelude::*;
 
@@ -421,7 +421,7 @@ impl SimpleAsyncComponent for DownloadComponentsApp {
                                         _ => ()
                                     }
 
-                                    progress_bar_input.send(ProgressBarMsg::UpdateFromState(update));
+                                    progress_bar_input.send(ProgressBarMsg::UpdateFromState(DiffUpdate::InstallerUpdate(update)));
                                 });
                             }
 
@@ -532,7 +532,7 @@ impl SimpleAsyncComponent for DownloadComponentsApp {
                                         _ => ()
                                     }
 
-                                    progress_bar_input.send(ProgressBarMsg::UpdateFromState(update));
+                                    progress_bar_input.send(ProgressBarMsg::UpdateFromState(DiffUpdate::InstallerUpdate(update)));
                                 });
                             }
 

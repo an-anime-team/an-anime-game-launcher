@@ -55,7 +55,6 @@ pub fn download_wine(sender: ComponentSender<App>, progress_bar_input: Sender<Pr
                         sender.input(AppMsg::SetDownloading(true));
 
                         std::thread::spawn(clone!(@strong sender => move || {
-                            #[allow(unused_must_use)]
                             installer.install(&config.game.wine.builds, clone!(@strong sender => move |state| {
                                 match &state {
                                     InstallerUpdate::DownloadingError(err) => {
@@ -79,7 +78,9 @@ pub fn download_wine(sender: ComponentSender<App>, progress_bar_input: Sender<Pr
                                     _ => ()
                                 }
 
-                                progress_bar_input.send(ProgressBarMsg::UpdateFromState(state));
+                                #[allow(unused_must_use)] {
+                                    progress_bar_input.send(ProgressBarMsg::UpdateFromState(DiffUpdate::InstallerUpdate(state)));
+                                }
                             }));
 
                             config.game.wine.selected = Some(wine.name.clone());

@@ -1,18 +1,17 @@
 use relm4::prelude::*;
-
 use gtk::prelude::*;
 
 use anime_launcher_sdk::VERSION as SDK_VERSION;
-
-use anime_launcher_sdk::anime_game_core::{
-    VERSION as CORE_VERSION,
-    curl_sys
-};
+use anime_launcher_sdk::anime_game_core::VERSION as CORE_VERSION;
 
 use crate::*;
 
 lazy_static::lazy_static! {
-    static ref CURL_INFO: curl_sys::Version = curl_sys::Version::get();
+    pub static ref APP_VERSION: String = if crate::APP_DEBUG && !crate::APP_VERSION.contains('-') {
+        format!("{}-dev", crate::APP_VERSION)
+    } else {
+        crate::APP_VERSION.to_string()
+    };
 }
 
 #[derive(Debug)]
@@ -41,17 +40,7 @@ impl SimpleComponent for AboutDialog {
             set_issue_url: "https://github.com/an-anime-team/an-anime-game-launcher/issues",
 
             set_license_type: gtk::License::Gpl30,
-
-            set_version: &{
-                // Debug build & build's version doesn't contain any suffix (-dev, -beta, etc)
-                if crate::APP_DEBUG && !crate::APP_VERSION.contains('-') {
-                    format!("{}-dev", crate::APP_VERSION)
-                }
-                
-                else {
-                    crate::APP_VERSION.to_string()
-                }
-            },
+            set_version: &APP_VERSION,
 
             set_developers: &[
                 "Nikita Podvirnyy https://github.com/krypt0nn"
@@ -81,13 +70,41 @@ impl SimpleComponent for AboutDialog {
                 format!("Anime Launcher SDK: {SDK_VERSION}"),
                 format!("Anime Game Core: {CORE_VERSION}"),
                 String::new(),
-                format!("curl: {}", CURL_INFO.version()),
-                format!("SSL: {}", CURL_INFO.ssl_version().unwrap_or("?")),
-                String::new(),
                 format!("GTK: {}.{}.{}", gtk::major_version(), gtk::minor_version(), gtk::micro_version()),
                 format!("libadwaita: {}.{}.{}", adw::major_version(), adw::minor_version(), adw::micro_version()),
                 format!("pango: {}", gtk::pango::version_string()),
                 format!("cairo: {}", gtk::cairo::version_string()),
+            ].join("\n"),
+
+            set_release_notes_version: &APP_VERSION,
+            set_release_notes: &[
+                "<p>Added</p>",
+
+                "<ul>",
+                    "<li>Added installation migration feature</li>",
+                    "<li>Added game environment switcher</li>",
+                    "<li>Added game edition switcher</li>",
+                    "<li>Added changelog to updated components toast</li>",
+                    "<li>Added wine tools to settings</li>",
+                    "<li>Added preferences search</li>",
+                    "<li>Added new progress bar statuses for applyign hdiff patches and removing outdated files</li>",
+                    "<li>Added automatic 3.5 -> 3.6 voiceover files migration related to changed files structure</li>",
+                "</ul>",
+
+                "<p>Fixed</p>",
+
+                "<ul>",
+                    "<li>Added whitespaces removing from environment values</li>",
+                "</ul>",
+
+                "<p>Changed</p>",
+
+                "<ul>",
+                    "<li>Improved game repairing feature</li>",
+                    "<li>Replaced curl dependency by native code</li>",
+                    "<li>Replaced static image by spinner in wine / dxvk version selection</li>",
+                    "<li>Made wine / dxvk versions always visible if they're downloaded</li>",
+                "</ul>",
             ].join("\n"),
 
             set_modal: true,

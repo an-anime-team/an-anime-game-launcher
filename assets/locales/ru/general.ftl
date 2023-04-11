@@ -7,12 +7,22 @@ update-background-description = Скачивать фоновое изображ
 launcher-language = Язык лаунчера
 launcher-language-description = Применяется после перезапуска
 
+game-edition = Редакция игры
+global = Глобальная
+china = Китайская
+
+game-environment = Окружение игры
+game-environment-description = Получить особые функции такие как дополнительные методы оплаты
+
 game-voiceovers = Язык озвучки
+game-voiceovers-description = Список установленных озвучек игры. Вы можете выбрать их в настройках игры
 english = Английский
 japanese = Японский
 korean = Корейский
 chinese = Китайский
 
+migrate-installation = Перенести лаунчер
+migrate-installation-description = Открыть специальное окно в котором вы сможете перенести установленную игру
 repair-game = Починить игру
 
 status = Статус
@@ -45,13 +55,20 @@ patch-not-applied-tooltip = Патч не применен
 apply-xlua-patch = Применить патч xlua
 
 ask-superuser-permissions = Запрашивать права суперпользователя
-ask-superuser-permissions-description = Лаунчер будет использовать их чтобы автоматически обновлять ваш hosts файл. Это не требуется при использовании Flatpak
+ask-superuser-permissions-description = Лаунчер будет использовать их чтобы автоматически обновлять ваш hosts файл. Это не требуется при использовании flatpak
 
 selected-version = Выбранная версия
 recommended-only = Только рекомендуемое
 
 wine-version = Версия Wine
 wine-recommended-description = Показывать только рекомендуемые версии Wine
+
+wine-tools = Инструменты Wine
+command-line = Коммандная строка
+registry-editor = Редактор реестра
+explorer = Проводник
+task-manager = Диспетчер задач
+configuration = Настройки
 
 dxvk-version = Версия DXVK
 dxvk-selection-disabled = Выбор версии DXVK отключен настройками выбранного вами Wine

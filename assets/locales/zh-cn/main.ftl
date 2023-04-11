@@ -12,7 +12,7 @@ launcher-folder = 启动器文件夹
 game-folder = 游戏文件夹
 config-file = 配置文件
 debug-file = 调试文件
-wish-url = Open wishes
+wish-url = 转到祈愿 URL
 about = 关于
 
 
@@ -40,12 +40,17 @@ downloading = 正在下载
 unpacking = 正在解压缩
 verifying-files = 正在检验文件
 repairing-files = 正在修复文件
+migrating-folders = Migrating folders
+applying-hdiff = Applying hdiff patches
+removing-outdated = Removing outdated files
 
 
-components-index-updated = Components index was updated
+components-index-updated = 组件索引已更新
 
 
 launch = 启动
+migrate-folders = Migrate folders
+migrate-folders-tooltip = Update game folders structure
 apply-patch = 安装补丁
 download-wine = 下载 Wine
 create-prefix = 创建 Wine prefix

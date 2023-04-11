@@ -46,12 +46,17 @@ downloading = Загрузка
 unpacking = Распаковка
 verifying-files = Проверка файлов
 repairing-files = Починка файлов
+migrating-folders = Перемещение папок
+applying-hdiff = Применение патчей hdiff
+removing-outdated = Удаление устаревших файлов
 
 
 components-index-updated = Индекс компонентов был обновлен
 
 
 launch = Запустить
+migrate-folders = Переместить папки
+migrate-folders-tooltip = Обновить структуру файлов игры
 apply-patch = Применить патч
 download-wine = Установить Wine
 create-prefix = Создать префикс
