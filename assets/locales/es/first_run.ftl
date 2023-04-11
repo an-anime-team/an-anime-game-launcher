@@ -36,14 +36,14 @@ show-all-folders-subtitle = Muestra opciones de selección de rutas adicionales.
 runners-folder = Carpeta de runners
 dxvks-folder = Carpeta de DXVKs
 wine-prefix-folder = Carpeta de prefijo de Wine
-global-game-installation-folder = Global game version installation folder
-chinese-game-installation-folder = Chinese game version installation folder
+global-game-installation-folder = Carpeta de instalación de la edición Global
+chinese-game-installation-folder = Carpeta de instalación de la edición China
 fps-unlocker-folder = Carpeta del liberador de FPS
 components-index = Índice de componentes
 patch-folder = Carpeta del parche
 temp-folder = Carpeta temporal
 
-migrate = Migrate
+migrate = Migrar
 
 
 select-voice-packages = Elegir paquetes de voz
