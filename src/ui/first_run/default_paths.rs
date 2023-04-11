@@ -5,7 +5,7 @@ use adw::prelude::*;
 
 use anime_launcher_sdk::config;
 
-use std::path::{Path, PathBuf};
+use std::path::PathBuf;
 
 use crate::*;
 use crate::i18n::*;
@@ -381,30 +381,6 @@ impl SimpleAsyncComponent for DefaultPathsApp {
                                 (old_config.game.enhancements.fps_unlocker.path, &self.fps_unlocker)
                             ];
 
-                            fn move_folder(from: &Path, to: &Path) -> std::io::Result<()> {
-                                if !to.exists() {
-                                    std::fs::create_dir_all(to);
-                                }
-
-                                for entry in from.read_dir()?.flatten() {
-                                    let to_path = to.join(entry.file_name());
-
-                                    if entry.metadata()?.is_dir() {
-                                        move_folder(&entry.path(), &to_path)?;
-                                    }
-
-                                    else if entry.metadata()?.is_file() {
-                                        std::fs::copy(entry.path(), &to_path);
-                                    }
-
-                                    // TODO: symlinks?
-                                }
-
-                                std::fs::remove_dir_all(from)?;
-
-                                Ok(())
-                            }
-
                             #[allow(clippy::expect_fun_call)]
                             for (i, (from, to)) in folders.iter().enumerate() {
                                 self.progress_bar.sender().send(ProgressBarMsg::UpdateCaption(Some(
@@ -412,7 +388,7 @@ impl SimpleAsyncComponent for DefaultPathsApp {
                                 )));
 
                                 if &from != to && from.exists() {
-                                    move_folder(from, to).expect(&format!("Failed to move folder: {:?} -> {:?}", from, to));
+                                    move_folder::move_folder(from, to).expect(&format!("Failed to move folder: {:?} -> {:?}", from, to));
                                 }
 
                                 self.progress_bar.sender().send(ProgressBarMsg::UpdateProgress(i as u64 + 1, folders.len() as u64));

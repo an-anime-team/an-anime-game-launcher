@@ -40,12 +40,17 @@ downloading = Lade Herunter
 unpacking = Entpacken
 verifying-files = Verifiziere Dateien
 repairing-files = Repariere Dateien
+migrating-folders = Migrating folders
+applying-hdiff = Applying hdiff patches
+removing-outdated = Removing outdated files
 
 
 components-index-updated = Kompontentenverzeichnis würde aktualisiert
 
 
 launch = Starten
+migrate-folders = Migrate folders
+migrate-folders-tooltip = Update game folders structure
 apply-patch = Patch anwenden
 download-wine = Wine Herunterladen
 create-prefix = Prefix erstellen

@@ -15,6 +15,7 @@ mod apply_patch;
 mod download_wine;
 mod create_prefix;
 mod download_diff;
+mod migrate_folder;
 mod launch;
 
 use anime_launcher_sdk::config::launcher::LauncherStyle;
@@ -371,18 +372,19 @@ impl SimpleComponent for App {
                                     gtk::Button {
                                         #[watch]
                                         set_label: &match model.state {
-                                            Some(LauncherState::Launch)                       => tr("launch"),
-                                            Some(LauncherState::PredownloadAvailable { .. })  => tr("launch"),
-                                            Some(LauncherState::UnityPlayerPatchAvailable(_)) => tr("apply-patch"),
-                                            Some(LauncherState::XluaPatchAvailable(_))        => tr("apply-patch"),
-                                            Some(LauncherState::WineNotInstalled)             => tr("download-wine"),
-                                            Some(LauncherState::PrefixNotExists)              => tr("create-prefix"),
-                                            Some(LauncherState::VoiceUpdateAvailable(_))      => tr("update"),
-                                            Some(LauncherState::VoiceOutdated(_))             => tr("update"),
-                                            Some(LauncherState::VoiceNotInstalled(_))         => tr("download"),
-                                            Some(LauncherState::GameUpdateAvailable(_))       => tr("update"),
-                                            Some(LauncherState::GameOutdated(_))              => tr("update"),
-                                            Some(LauncherState::GameNotInstalled(_))          => tr("download"),
+                                            Some(LauncherState::Launch)                         => tr("launch"),
+                                            Some(LauncherState::PredownloadAvailable { .. })    => tr("launch"),
+                                            Some(LauncherState::FolderMigrationRequired { .. }) => tr("migrate-folders"),
+                                            Some(LauncherState::UnityPlayerPatchAvailable(_))   => tr("apply-patch"),
+                                            Some(LauncherState::XluaPatchAvailable(_))          => tr("apply-patch"),
+                                            Some(LauncherState::WineNotInstalled)               => tr("download-wine"),
+                                            Some(LauncherState::PrefixNotExists)                => tr("create-prefix"),
+                                            Some(LauncherState::VoiceUpdateAvailable(_))        => tr("update"),
+                                            Some(LauncherState::VoiceOutdated(_))               => tr("update"),
+                                            Some(LauncherState::VoiceNotInstalled(_))           => tr("download"),
+                                            Some(LauncherState::GameUpdateAvailable(_))         => tr("update"),
+                                            Some(LauncherState::GameOutdated(_))                => tr("update"),
+                                            Some(LauncherState::GameNotInstalled(_))            => tr("download"),
 
                                             None => String::from("...")
                                         },
@@ -431,6 +433,8 @@ impl SimpleComponent for App {
                                         set_tooltip_text: Some(&match &model.state {
                                             Some(LauncherState::GameOutdated { .. }) |
                                             Some(LauncherState::VoiceOutdated(_)) => tr("main-window--version-outdated-tooltip"),
+
+                                            Some(LauncherState::FolderMigrationRequired { .. }) => tr("migrate-folders-tooltip"),
 
                                             Some(LauncherState::UnityPlayerPatchAvailable(UnityPlayerPatch { status, .. })) |
                                             Some(LauncherState::XluaPatchAvailable(XluaPatch { status, .. })) => match status {
@@ -1006,6 +1010,9 @@ impl SimpleComponent for App {
                     LauncherState::PredownloadAvailable { .. } |
                     LauncherState::Launch => launch::launch(sender),
 
+                    LauncherState::FolderMigrationRequired { from, to, cleanup_folder } =>
+                        migrate_folder::migrate_folder(sender, from.to_owned(), to.to_owned(), cleanup_folder.to_owned()),
+
                     LauncherState::UnityPlayerPatchAvailable(patch) => apply_patch::apply_patch(sender, patch.to_owned()),
                     LauncherState::XluaPatchAvailable(patch) => apply_patch::apply_patch(sender, patch.to_owned()),
 
@@ -1016,7 +1023,8 @@ impl SimpleComponent for App {
                     LauncherState::VoiceUpdateAvailable(diff) |
                     LauncherState::VoiceNotInstalled(diff) |
                     LauncherState::GameUpdateAvailable(diff) |
-                    LauncherState::GameNotInstalled(diff) => download_diff::download_diff(sender, self.progress_bar.sender().to_owned(), diff.to_owned()),
+                    LauncherState::GameNotInstalled(diff) =>
+                        download_diff::download_diff(sender, self.progress_bar.sender().to_owned(), diff.to_owned()),
 
                     LauncherState::VoiceOutdated(_) |
                     LauncherState::GameOutdated(_) => ()

@@ -20,10 +20,9 @@ pub fn download_diff(sender: ComponentSender<App>, progress_bar_input: Sender<Pr
         let config = config::get().unwrap();
         let game_path = config.game.path.for_edition(config.launcher.edition).to_path_buf();
 
-        #[allow(unused_must_use)]
         let result = diff.install_to_by(game_path, config.launcher.temp, clone!(@strong sender => move |state| {
             match &state {
-                InstallerUpdate::DownloadingError(err) => {
+                DiffUpdate::InstallerUpdate(InstallerUpdate::DownloadingError(err)) => {
                     tracing::error!("Downloading failed: {err}");
 
                     sender.input(AppMsg::Toast {
@@ -32,7 +31,7 @@ pub fn download_diff(sender: ComponentSender<App>, progress_bar_input: Sender<Pr
                     });
                 }
 
-                InstallerUpdate::UnpackingError(err) => {
+                DiffUpdate::InstallerUpdate(InstallerUpdate::UnpackingError(err)) => {
                     tracing::error!("Unpacking failed: {err}");
 
                     sender.input(AppMsg::Toast {
@@ -44,7 +43,9 @@ pub fn download_diff(sender: ComponentSender<App>, progress_bar_input: Sender<Pr
                 _ => ()
             }
 
-            progress_bar_input.send(ProgressBarMsg::UpdateFromState(state));
+            #[allow(unused_must_use)] {
+                progress_bar_input.send(ProgressBarMsg::UpdateFromState(state));
+            }
         }));
 
         let mut perform_on_download_needed = true;

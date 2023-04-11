@@ -40,12 +40,17 @@ downloading = 正在下载
 unpacking = 正在解压缩
 verifying-files = 正在检验文件
 repairing-files = 正在修复文件
+migrating-folders = Migrating folders
+applying-hdiff = Applying hdiff patches
+removing-outdated = Removing outdated files
 
 
 components-index-updated = 组件索引已更新
 
 
 launch = 启动
+migrate-folders = Migrate folders
+migrate-folders-tooltip = Update game folders structure
 apply-patch = 安装补丁
 download-wine = 下载 Wine
 create-prefix = 创建 Wine prefix

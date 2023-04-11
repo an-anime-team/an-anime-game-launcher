@@ -12,9 +12,10 @@ use tracing_subscriber::filter::*;
 
 use std::path::PathBuf;
 
+pub mod move_folder;
 pub mod i18n;
-pub mod ui;
 pub mod background;
+pub mod ui;
 
 use ui::main::*;
 use ui::first_run::main::*;

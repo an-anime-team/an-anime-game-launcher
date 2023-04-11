@@ -40,12 +40,17 @@ downloading = İndiriliyor
 unpacking = Paketten çıkartılıyor
 verifying-files = Dosyalar Doğrulanıyor
 repairing-files = Dosyalar tamir ediliyor
+migrating-folders = Migrating folders
+applying-hdiff = Applying hdiff patches
+removing-outdated = Removing outdated files
 
 
 components-index-updated = Components index was updated
 
 
 launch = Çalıştır
+migrate-folders = Migrate folders
+migrate-folders-tooltip = Update game folders structure
 apply-patch = Yamayı uygula
 download-wine = Wine indir
 create-prefix = Prefix oluştur

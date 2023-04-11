@@ -9,7 +9,7 @@ use gtk::glib::clone;
 use super::progress_bar::ProgressBarMsg;
 
 use anime_launcher_sdk::config;
-use anime_launcher_sdk::anime_game_core::installer::installer::*;
+use anime_launcher_sdk::anime_game_core::prelude::*;
 
 use std::path::PathBuf;
 
@@ -162,12 +162,12 @@ impl SimpleAsyncComponent for ComponentVersion {
 
                                 installer.install(download_folder, move |state| {
                                     match &state {
-                                        Update::UnpackingFinished |
-                                        Update::DownloadingError(_) |
-                                        Update::UnpackingError(_) => {
+                                        InstallerUpdate::UnpackingFinished |
+                                        InstallerUpdate::DownloadingError(_) |
+                                        InstallerUpdate::UnpackingError(_) => {
                                             progress_bar_sender.send(ProgressBarMsg::SetVisible(false));
 
-                                            if let Update::UnpackingFinished = &state {
+                                            if let InstallerUpdate::UnpackingFinished = &state {
                                                 sender.input(AppMsg::SetState(VersionState::Downloaded));
                                                 sender.output(super::group::AppMsg::CallOnDownloaded);
                                             }
@@ -180,7 +180,7 @@ impl SimpleAsyncComponent for ComponentVersion {
                                         _ => ()
                                     }
 
-                                    progress_bar_sender.send(ProgressBarMsg::UpdateFromState(state));
+                                    progress_bar_sender.send(ProgressBarMsg::UpdateFromState(DiffUpdate::InstallerUpdate(state)));
                                 });
                             }));
                         }
