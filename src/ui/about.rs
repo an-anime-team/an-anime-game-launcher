@@ -87,6 +87,8 @@ impl SimpleComponent for AboutDialog {
                     "<li>Added changelog to updated components toast</li>",
                     "<li>Added wine tools to settings</li>",
                     "<li>Added preferences search</li>",
+                    "<li>Added new progress bar statuses for applyign hdiff patches and removing outdated files</li>",
+                    "<li>Added automatic 3.5 -> 3.6 voiceover files migration related to changed files structure</li>",
                 "</ul>",
 
                 "<p>Fixed</p>",

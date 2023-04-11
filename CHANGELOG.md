@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added changelog to updated components toast
 - Added wine tools to settings
 - Added preferences search
+- Added new progress bar statuses for applyign hdiff patches and removing outdated files
+- Added automatic 3.5 -> 3.6 voiceover files migration related to changed files structure
 
 ### Fixed
 
