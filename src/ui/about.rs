@@ -78,32 +78,17 @@ impl SimpleComponent for AboutDialog {
 
             set_release_notes_version: &APP_VERSION,
             set_release_notes: &[
-                "<p>Added</p>",
-
-                "<ul>",
-                    "<li>Added installation migration feature</li>",
-                    "<li>Added game environment switcher</li>",
-                    "<li>Added game edition switcher</li>",
-                    "<li>Added changelog to updated components toast</li>",
-                    "<li>Added wine tools to settings</li>",
-                    "<li>Added preferences search</li>",
-                    "<li>Added new progress bar statuses for applyign hdiff patches and removing outdated files</li>",
-                    "<li>Added automatic 3.5 -> 3.6 voiceover files migration related to changed files structure</li>",
-                "</ul>",
-
                 "<p>Fixed</p>",
 
                 "<ul>",
-                    "<li>Added whitespaces removing from environment values</li>",
+                    "<li>Fixed base game's hdiff patches applying errors caused by 3.6's voiceovers files migration</li>",
+                    "<li>Fixed xlua patch applying</li>",
                 "</ul>",
 
                 "<p>Changed</p>",
 
                 "<ul>",
-                    "<li>Improved game repairing feature</li>",
-                    "<li>Replaced curl dependency by native code</li>",
-                    "<li>Replaced static image by spinner in wine / dxvk version selection</li>",
-                    "<li>Made wine / dxvk versions always visible if they're downloaded</li>",
+                    "<li>Removed fractions displaying in repairer's progress bar</li>",
                 "</ul>",
             ].join("\n"),
 
