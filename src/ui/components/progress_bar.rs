@@ -39,6 +39,8 @@ pub struct ProgressBar {
 pub enum ProgressBarMsg {
     Reset,
     UpdateCaption(Option<String>),
+    DisplayProgress(bool),
+    DisplayFraction(bool),
 
     /// (current bytes, total bytes) 
     UpdateProgress(u64, u64),
@@ -115,6 +117,8 @@ impl SimpleAsyncComponent for ProgressBar {
             }
 
             ProgressBarMsg::UpdateCaption(caption) => self.caption = caption,
+            ProgressBarMsg::DisplayProgress(value) => self.display_progress = value,
+            ProgressBarMsg::DisplayFraction(value) => self.display_fraction = value,
 
             ProgressBarMsg::UpdateProgress(curr, total) => {
                 self.fraction = curr as f64 / total as f64;

@@ -100,6 +100,7 @@ pub fn repair_game(sender: ComponentSender<App>, progress_bar_input: Sender<Prog
 
                 if !broken.is_empty() {
                     progress_bar_input.send(ProgressBarMsg::UpdateCaption(Some(tr("repairing-files"))));
+                    progress_bar_input.send(ProgressBarMsg::DisplayFraction(false));
                     progress_bar_input.send(ProgressBarMsg::UpdateProgress(0, 0));
 
                     tracing::warn!("Found broken files:\n{}", broken.iter().fold(String::new(), |acc, file| acc + &format!("- {}\n", file.path.to_string_lossy())));

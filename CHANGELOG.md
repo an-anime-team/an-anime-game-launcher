@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.4.1] - 12.04.2023
+
+### Fixed
+
+- Fixed base game's hdiff patches applying errors caused by 3.6's voiceovers files migration
+- Fixed xlua patch applying
+
+### Changed
+
+- Removed fractions displaying in repairer's progress bar
+
 ## [3.4.0] - 11.04.2023
 
 ### Added
@@ -162,7 +173,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <br>
 
-[unreleased]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.4.0...next
+[unreleased]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.4.1...next
+[3.4.1]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.4.0...3.4.1
 [3.4.0]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.3.0...3.4.0
 [3.3.0]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.2.1...3.3.0
 [3.2.1]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.2.0...3.2.1
