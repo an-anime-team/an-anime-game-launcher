@@ -132,30 +132,20 @@ impl SimpleAsyncComponent for ProgressBar {
             ProgressBarMsg::UpdateFromState(state) => {
                 match state {
                     DiffUpdate::InstallerUpdate(InstallerUpdate::CheckingFreeSpace(_))  => self.caption = Some(tr("checking-free-space")),
-
-                    DiffUpdate::InstallerUpdate(InstallerUpdate::DownloadingStarted(_)) => {
-                        self.caption = Some(tr("downloading"));
-
-                        self.display_fraction = true;
-                    }
-
-                    DiffUpdate::InstallerUpdate(InstallerUpdate::UnpackingStarted(_)) => {
-                        self.caption = Some(tr("unpacking"));
-
-                        self.display_fraction = true;
-                    }
+                    DiffUpdate::InstallerUpdate(InstallerUpdate::DownloadingStarted(_)) => self.caption = Some(tr("downloading")),
+                    DiffUpdate::InstallerUpdate(InstallerUpdate::UnpackingStarted(_))   => self.caption = Some(tr("unpacking")),
 
                     DiffUpdate::ApplyingHdiffStarted => {
                         self.caption = Some(tr("applying-hdiff"));
 
                         self.display_fraction = false;
-                    }
+                    },
 
                     DiffUpdate::RemovingOutdatedStarted => {
                         self.caption = Some(tr("removing-outdated"));
 
                         self.display_fraction = false;
-                    }
+                    },
 
                     DiffUpdate::InstallerUpdate(InstallerUpdate::DownloadingProgress(curr, total)) |
                     DiffUpdate::InstallerUpdate(InstallerUpdate::UnpackingProgress(curr, total)) |
