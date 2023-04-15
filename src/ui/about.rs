@@ -46,6 +46,10 @@ impl SimpleComponent for AboutDialog {
                 "Nikita Podvirnyy https://github.com/krypt0nn"
             ],
 
+            add_credit_section: (Some("Patch developer"), &[
+                "@Krock https://notabug.org/Krock/dawn"
+            ]),
+
             add_credit_section: (Some("An Anime Team"), &[
                 "@Marie https://github.com/Mar0xy",
                 "@lane https://github.com/laurinneff",
