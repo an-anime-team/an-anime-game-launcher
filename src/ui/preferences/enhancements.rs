@@ -366,7 +366,7 @@ impl SimpleAsyncComponent for EnhancementsApp {
                         &tr("custom")
                     ]),
 
-                    set_selected: match Fps::from_num(CONFIG.game.enhancements.fps_unlocker.config.fps.to_num()) {
+                    set_selected: match Fps::from_num(CONFIG.game.enhancements.fps_unlocker.config.fps) {
                         Fps::Ninety            => 0,
                         Fps::HundredTwenty     => 1,
                         Fps::HundredFourtyFour => 2,
@@ -381,7 +381,7 @@ impl SimpleAsyncComponent for EnhancementsApp {
                     connect_selected_notify => |row| {
                         if is_ready() && row.selected() < Fps::list().len() as u32 - 1 {
                             if let Ok(mut config) = Config::get() {
-                                config.game.enhancements.fps_unlocker.config.fps = Fps::list()[row.selected() as usize];
+                                config.game.enhancements.fps_unlocker.config.fps = Fps::list()[row.selected() as usize].to_num();
 
                                 Config::update(config);
                             }
