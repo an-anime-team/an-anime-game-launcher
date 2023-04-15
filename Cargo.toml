@@ -16,10 +16,11 @@ opt-level = "s"
 glib-build-tools = "0.17"
 
 [dependencies.anime-launcher-sdk]
-git = "https://github.com/an-anime-team/anime-launcher-sdk"
-tag = "0.5.17"
+# git = "https://github.com/an-anime-team/anime-launcher-sdk"
+# tag = "0.5.17"
+features = ["all", "genshin"]
 
-# path = "../anime-launcher-sdk" # ! for dev purposes only
+path = "../anime-launcher-sdk" # ! for dev purposes only
 
 [dependencies]
 relm4 = { version = "0.6.0-alpha.2", features = ["macros", "libadwaita"] }

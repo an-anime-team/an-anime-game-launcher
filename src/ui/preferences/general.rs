@@ -10,14 +10,18 @@ use gtk::prelude::*;
 use adw::prelude::*;
 
 use anime_launcher_sdk::anime_game_core::prelude::*;
+use anime_launcher_sdk::anime_game_core::genshin::consts::GameEdition;
+
 use anime_launcher_sdk::wincompatlib::prelude::*;
-use anime_launcher_sdk::config;
-use anime_launcher_sdk::config::launcher::LauncherStyle;
+
 use anime_launcher_sdk::components::*;
 use anime_launcher_sdk::components::wine::WincompatlibWine;
-use anime_launcher_sdk::env_emulation::Environment;
-use anime_launcher_sdk::config::launcher::GameEdition;
-use anime_launcher_sdk::anime_game_core::genshin::consts::GameEdition as CoreGameEdition;
+
+use anime_launcher_sdk::config::ConfigExt;
+use anime_launcher_sdk::genshin::config::Config;
+
+use anime_launcher_sdk::genshin::config::schema::launcher::LauncherStyle;
+use anime_launcher_sdk::genshin::env_emulation::Environment;
 
 use super::main::PreferencesAppMsg;
 use crate::ui::migrate_installation::MigrateInstallationApp;
@@ -291,12 +295,12 @@ impl SimpleAsyncComponent for GeneralApp {
 
                     connect_selected_notify => |row| {
                         if is_ready() {
-                            if let Ok(mut config) = config::get() {
+                            if let Ok(mut config) = Config::get() {
                                 config.launcher.language = crate::i18n::format_lang(SUPPORTED_LANGUAGES
                                     .get(row.selected() as usize)
                                     .unwrap_or(&SUPPORTED_LANGUAGES[0]));
     
-                                config::update(config);
+                                Config::update(config);
                             }
                         }
                     }
@@ -318,7 +322,7 @@ impl SimpleAsyncComponent for GeneralApp {
                     connect_selected_notify[sender] => move |row| {
                         if is_ready() {
                             #[allow(unused_must_use)]
-                            if let Ok(mut config) = config::get() {
+                            if let Ok(mut config) = Config::get() {
                                 config.launcher.edition = match row.selected() {
                                     0 => GameEdition::Global,
                                     1 => GameEdition::China,
@@ -327,9 +331,9 @@ impl SimpleAsyncComponent for GeneralApp {
                                 };
 
                                 // Select new game edition
-                                CoreGameEdition::from(config.launcher.edition).select();
+                                config.launcher.edition.select();
 
-                                config::update(config);
+                                Config::update(config);
 
                                 sender.output(PreferencesAppMsg::UpdateLauncherState);
                             }
@@ -355,7 +359,7 @@ impl SimpleAsyncComponent for GeneralApp {
 
                     connect_selected_notify => |row| {
                         if is_ready() {
-                            if let Ok(mut config) = config::get() {
+                            if let Ok(mut config) = Config::get() {
                                 config.launcher.environment = match row.selected() {
                                     0 => Environment::PC,
                                     1 => Environment::Android,
@@ -363,7 +367,7 @@ impl SimpleAsyncComponent for GeneralApp {
                                     _ => unreachable!()
                                 };
     
-                                config::update(config);
+                                Config::update(config);
                             }
                         }
                     }
@@ -478,7 +482,7 @@ impl SimpleAsyncComponent for GeneralApp {
                                 PatchStatus::Preparation { .. } |
                                 PatchStatus::Testing { .. } => &["warning"],
                                 PatchStatus::Available { .. } => unsafe {
-                                    let path = match config::get() {
+                                    let path = match Config::get() {
                                         Ok(config) => config.game.path.for_edition(config.launcher.edition).to_path_buf(),
                                         Err(_) => CONFIG.game.path.for_edition(CONFIG.launcher.edition).to_path_buf(),
                                     };
@@ -505,7 +509,7 @@ impl SimpleAsyncComponent for GeneralApp {
                                 PatchStatus::Preparation { .. } => tr("patch-preparation-tooltip"),
                                 PatchStatus::Testing { .. } => tr("patch-testing-tooltip"),
                                 PatchStatus::Available { .. } => unsafe {
-                                    let path = match config::get() {
+                                    let path = match Config::get() {
                                         Ok(config) => config.game.path.for_edition(config.launcher.edition).to_path_buf(),
                                         Err(_) => CONFIG.game.path.for_edition(CONFIG.launcher.edition).to_path_buf(),
                                     };
@@ -549,7 +553,7 @@ impl SimpleAsyncComponent for GeneralApp {
                                 PatchStatus::Preparation { .. } |
                                 PatchStatus::Testing { .. } => &["warning"],
                                 PatchStatus::Available { .. } => unsafe {
-                                    let path = match config::get() {
+                                    let path = match Config::get() {
                                         Ok(config) => config.game.path.for_edition(config.launcher.edition).to_path_buf(),
                                         Err(_) => CONFIG.game.path.for_edition(CONFIG.launcher.edition).to_path_buf(),
                                     };
@@ -576,7 +580,7 @@ impl SimpleAsyncComponent for GeneralApp {
                                 PatchStatus::Preparation { .. } => tr("patch-preparation-tooltip"),
                                 PatchStatus::Testing { .. } => tr("patch-testing-tooltip"),
                                 PatchStatus::Available { .. } => unsafe {
-                                    let path = match config::get() {
+                                    let path = match Config::get() {
                                         Ok(config) => config.game.path.for_edition(config.launcher.edition).to_path_buf(),
                                         Err(_) => CONFIG.game.path.for_edition(CONFIG.launcher.edition).to_path_buf(),
                                     };
@@ -607,10 +611,10 @@ impl SimpleAsyncComponent for GeneralApp {
                         connect_state_notify[sender] => move |switch| {
                             if is_ready() {
                                 #[allow(unused_must_use)]
-                                if let Ok(mut config) = config::get() {
+                                if let Ok(mut config) = Config::get() {
                                     config.patch.apply_xlua = switch.state();
 
-                                    config::update(config);
+                                    Config::update(config);
 
                                     sender.output(PreferencesAppMsg::UpdateLauncherState);
                                 }
@@ -630,10 +634,10 @@ impl SimpleAsyncComponent for GeneralApp {
 
                         connect_state_notify => |switch| {
                             if is_ready() {
-                                if let Ok(mut config) = config::get() {
+                                if let Ok(mut config) = Config::get() {
                                     config.patch.root = switch.state();
 
-                                    config::update(config);
+                                    Config::update(config);
                                 }
                             }
                         }
@@ -951,11 +955,11 @@ impl SimpleAsyncComponent for GeneralApp {
             #[allow(unused_must_use)]
             GeneralAppMsg::AddVoicePackage(index) => {
                 if let Some(package) = self.voice_packages.get(index.current_index()) {
-                    if let Ok(mut config) = config::get() {
+                    if let Ok(mut config) = Config::get() {
                         if !config.game.voices.iter().any(|voice| VoiceLocale::from_str(voice) == Some(package.locale)) {
                             config.game.voices.push(package.locale.to_code().to_string());
 
-                            config::update(config);
+                            Config::update(config);
     
                             sender.output(PreferencesAppMsg::UpdateLauncherState);
                         }
@@ -966,12 +970,12 @@ impl SimpleAsyncComponent for GeneralApp {
             #[allow(unused_must_use)]
             GeneralAppMsg::RemoveVoicePackage(index) => {
                 if let Some(package) = self.voice_packages.guard().get_mut(index.current_index()) {
-                    if let Ok(mut config) = config::get() {
+                    if let Ok(mut config) = Config::get() {
                         package.sensitive = false;
 
                         config.game.voices.retain(|voice| VoiceLocale::from_str(voice) != Some(package.locale));
 
-                        config::update(config.clone());
+                        Config::update(config.clone());
 
                         let package = VoicePackage::with_locale(package.locale).unwrap();
                         let game_path = config.game.path.for_edition(config.launcher.edition).to_path_buf();
@@ -1019,7 +1023,7 @@ impl SimpleAsyncComponent for GeneralApp {
             }
 
             GeneralAppMsg::WineOpen(executable) => {
-                let config = config::get().unwrap_or_else(|_| CONFIG.clone());
+                let config = Config::get().unwrap_or_else(|_| CONFIG.clone());
 
                 if let Ok(Some(wine)) = config.get_selected_wine() {
                     let result = wine.to_wine(config.components.path, Some(config.game.wine.builds.join(&wine.name)))
@@ -1056,10 +1060,10 @@ impl SimpleAsyncComponent for GeneralApp {
                     }
                 }
 
-                if let Ok(mut config) = config::get() {
+                if let Ok(mut config) = Config::get() {
                     config.launcher.style = style;
 
-                    config::update(config);
+                    Config::update(config);
                 }
 
                 self.style = style;
@@ -1135,7 +1139,7 @@ impl SimpleAsyncComponent for GeneralApp {
             }
 
             GeneralAppMsg::SelectWine(index) => {
-                if let Ok(mut config) = config::get() {
+                if let Ok(mut config) = Config::get() {
                     if let Some((version, features)) = self.downloaded_wine_versions.get(index) {
                         if config.game.wine.selected.as_ref() != Some(&version.title) {
                             self.selecting_wine_version = true;
@@ -1154,7 +1158,7 @@ impl SimpleAsyncComponent for GeneralApp {
                                     Ok(_) => {
                                         config.game.wine.selected = Some(wine_name); 
 
-                                        config::update(config);
+                                        Config::update(config);
                                     }
 
                                     Err(err) => {
@@ -1178,7 +1182,7 @@ impl SimpleAsyncComponent for GeneralApp {
             }
 
             GeneralAppMsg::SelectDxvk(index) => {
-                if let Ok(config) = config::get() {
+                if let Ok(config) = Config::get() {
                     if let Some(version) = self.downloaded_dxvk_versions.get(index) {
                         if let Ok(selected) = config.get_selected_dxvk() {
                             if selected.is_none() || selected.unwrap().name != version.name {

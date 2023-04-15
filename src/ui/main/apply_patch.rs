@@ -1,7 +1,5 @@
 use relm4::prelude::*;
 
-use anime_launcher_sdk::config;
-
 use crate::*;
 use crate::i18n::*;
 use super::{App, AppMsg};
@@ -16,7 +14,7 @@ pub fn apply_patch<T: PatchExt + Send + Sync + 'static>(sender: ComponentSender<
         PatchStatus::Available { .. } => {
             sender.input(AppMsg::DisableButtons(true));
 
-            let config = config::get().unwrap();
+            let config = Config::get().unwrap();
 
             std::thread::spawn(move || {
                 let mut apply_patch_if_needed = true;

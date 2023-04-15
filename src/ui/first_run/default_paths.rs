@@ -3,8 +3,6 @@ use relm4::component::*;
 
 use adw::prelude::*;
 
-use anime_launcher_sdk::config;
-
 use std::path::PathBuf;
 
 use crate::*;
@@ -360,7 +358,7 @@ impl SimpleAsyncComponent for DefaultPathsApp {
 
             #[allow(unused_must_use)]
             DefaultPathsAppMsg::Continue => {
-                let old_config = config::get().unwrap_or_else(|_| CONFIG.clone());
+                let old_config = Config::get().unwrap_or_else(|_| CONFIG.clone());
 
                 match self.update_config() {
                     Ok(_) => {
@@ -431,7 +429,7 @@ impl SimpleAsyncComponent for DefaultPathsApp {
 
 impl DefaultPathsApp {
     pub fn update_config(&self) -> anyhow::Result<()> {
-        let mut config = config::get()?;
+        let mut config = Config::get()?;
 
         config.game.wine.builds = self.runners.clone();
         config.game.dxvk.builds = self.dxvks.clone();
@@ -444,6 +442,6 @@ impl DefaultPathsApp {
 
         config.game.enhancements.fps_unlocker.path = self.fps_unlocker.clone();
 
-        config::update_raw(config)
+        Config::update_raw(config)
     }
 }

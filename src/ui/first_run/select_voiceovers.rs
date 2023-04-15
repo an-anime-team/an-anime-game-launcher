@@ -3,7 +3,8 @@ use relm4::component::*;
 
 use adw::prelude::*;
 
-use anime_launcher_sdk::config;
+use anime_launcher_sdk::config::ConfigExt;
+use anime_launcher_sdk::genshin::config::Config;
 
 use crate::i18n::*;
 use super::main::*;
@@ -153,7 +154,7 @@ impl SimpleAsyncComponent for SelectVoiceoversApp {
 
 impl SelectVoiceoversApp {
     pub fn update_config(&self) -> anyhow::Result<()> {
-        let mut config = config::get()?;
+        let mut config = Config::get()?;
 
         config.game.voices = Vec::new();
 
@@ -173,6 +174,6 @@ impl SelectVoiceoversApp {
             config.game.voices.push(String::from("zh-cn"));
         }
 
-        config::update_raw(config)
+        Config::update_raw(config)
     }
 }

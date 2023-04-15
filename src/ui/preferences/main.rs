@@ -6,7 +6,10 @@ use adw::prelude::*;
 
 use anime_launcher_sdk::anime_game_core::prelude::*;
 use anime_launcher_sdk::anime_game_core::genshin::prelude::*;
-use anime_launcher_sdk::config::launcher::LauncherStyle;
+
+use anime_launcher_sdk::config::ConfigExt;
+use anime_launcher_sdk::genshin::config::Config;
+use anime_launcher_sdk::genshin::config::schema::launcher::LauncherStyle;
 
 use crate::i18n::tr;
 
@@ -67,7 +70,7 @@ impl SimpleAsyncComponent for PreferencesApp {
             add = model.environment.widget(),
 
             connect_close_request[sender] => move |_| {
-                if let Err(err) = anime_launcher_sdk::config::flush() {
+                if let Err(err) = Config::flush() {
                     sender.input(PreferencesAppMsg::Toast {
                         title: tr("config-update-error"),
                         description: Some(err.to_string())

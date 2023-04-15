@@ -4,8 +4,6 @@ use relm4::factory::*;
 
 use adw::prelude::*;
 
-use anime_launcher_sdk::config;
-
 use crate::i18n::tr;
 use crate::*;
 
@@ -94,7 +92,7 @@ impl SimpleAsyncComponent for EnvironmentApp {
                     set_text: CONFIG.game.command.as_ref().unwrap_or(&String::new()).trim(),
 
                     connect_changed => |entry| {
-                        if let Ok(mut config) = config::get() {
+                        if let Ok(mut config) = Config::get() {
                             let command = entry.text().trim().to_string();
             
                             config.game.command = if command.is_empty() {
@@ -103,7 +101,7 @@ impl SimpleAsyncComponent for EnvironmentApp {
                                 Some(command)
                             };
             
-                            config::update(config);
+                            Config::update(config);
                         }
                     }
                 }
@@ -174,24 +172,24 @@ impl SimpleAsyncComponent for EnvironmentApp {
     async fn update(&mut self, msg: Self::Input, _sender: AsyncComponentSender<Self>) {
         match msg {
             EnvironmentMsg::Add => {
-                if let Ok(mut config) = config::get() {
+                if let Ok(mut config) = Config::get() {
                     let name = self.name.text().trim().to_string();
                     let value = self.value.text().trim().to_string();
 
                     config.game.environment.insert(name.clone(), value.clone());
 
-                    config::update(config);
+                    Config::update(config);
 
                     self.variables.guard().push_back((name, value));
                 }
             }
 
             EnvironmentMsg::Remove(index) => {
-                if let Ok(mut config) = config::get() {
+                if let Ok(mut config) = Config::get() {
                     if let Some(var) = self.variables.guard().get(index.current_index()) {
                         config.game.environment.remove(&var.key);
 
-                        config::update(config);
+                        Config::update(config);
                     }
 
                     self.variables.guard().remove(index.current_index());

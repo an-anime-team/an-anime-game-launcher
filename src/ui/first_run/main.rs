@@ -219,7 +219,7 @@ impl SimpleComponent for FirstRunApp {
                 // Update components index
                 sender.input(FirstRunAppMsg::SetLoadingStatus(Some(Some(tr("updating-components-index")))));
 
-                let config = config::get().unwrap_or_else(|_| CONFIG.clone());
+                let config = Config::get().unwrap_or_else(|_| CONFIG.clone());
 
                 let components_sender = self.download_components.sender().clone();
                 let components = ComponentsLoader::new(config.components.path);

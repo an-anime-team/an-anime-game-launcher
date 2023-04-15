@@ -18,10 +18,15 @@ mod download_diff;
 mod migrate_folder;
 mod launch;
 
-use anime_launcher_sdk::config::launcher::LauncherStyle;
-use anime_launcher_sdk::states::LauncherState;
 use anime_launcher_sdk::components::loader::ComponentsLoader;
-use anime_launcher_sdk::anime_game_core::genshin::consts::GameEdition;
+
+use anime_launcher_sdk::config::ConfigExt;
+use anime_launcher_sdk::genshin::config::Config;
+
+use anime_launcher_sdk::genshin::config::schema::launcher::LauncherStyle;
+
+use anime_launcher_sdk::genshin::states::*;
+use anime_launcher_sdk::genshin::consts::*;
 
 use crate::*;
 use crate::i18n::*;
@@ -328,7 +333,7 @@ impl SimpleComponent for App {
                                         #[watch]
                                         set_sensitive: match model.state.as_ref() {
                                             Some(LauncherState::PredownloadAvailable { game, voices }) => {
-                                                let config = config::get().unwrap();
+                                                let config = Config::get().unwrap();
                                                 let temp = config.launcher.temp.unwrap_or_else(std::env::temp_dir);
 
                                                 let downloaded = temp.join(game.file_name().unwrap()).exists() &&
@@ -343,7 +348,7 @@ impl SimpleComponent for App {
                                         #[watch]
                                         set_css_classes: match model.state.as_ref() {
                                             Some(LauncherState::PredownloadAvailable { game, voices }) => {
-                                                let config = config::get().unwrap();
+                                                let config = Config::get().unwrap();
                                                 let temp = config.launcher.temp.unwrap_or_else(std::env::temp_dir);
 
                                                 let downloaded = temp.join(game.file_name().unwrap()).exists() &&
@@ -481,7 +486,7 @@ impl SimpleComponent for App {
             },
 
             connect_close_request[sender] => move |_| {
-                if let Err(err) = config::flush() {
+                if let Err(err) = Config::flush() {
                     sender.input(AppMsg::Toast {
                         title: tr("config-update-error"),
                         description: Some(err.to_string())
@@ -558,7 +563,7 @@ impl SimpleComponent for App {
         })));
 
         group.add_action::<GameFolder>(&RelmAction::new_stateless(clone!(@strong sender => move |_| {
-            let path = match config::get() {
+            let path = match Config::get() {
                 Ok(config) => config.game.path.for_edition(config.launcher.edition).to_path_buf(),
                 Err(_) => CONFIG.game.path.for_edition(CONFIG.launcher.edition).to_path_buf(),
             };
@@ -574,7 +579,7 @@ impl SimpleComponent for App {
         })));
 
         group.add_action::<ConfigFile>(&RelmAction::new_stateless(clone!(@strong sender => move |_| {
-            if let Ok(file) = anime_launcher_sdk::consts::config_file() {
+            if let Ok(file) = config_file() {
                 if let Err(err) = open::that(file) {
                     sender.input(AppMsg::Toast {
                         title: tr("config-file-opening-error"),
@@ -599,10 +604,10 @@ impl SimpleComponent for App {
 
         group.add_action::<WishUrl>(&RelmAction::new_stateless(clone!(@strong sender => move |_| {
             std::thread::spawn(clone!(@strong sender => move || {
-                let config = config::get().unwrap_or_else(|_| CONFIG.clone());
+                let config = Config::get().unwrap_or_else(|_| CONFIG.clone());
 
                 let web_cache = config.game.path.for_edition(config.launcher.edition)
-                    .join(GameEdition::from(config.launcher.edition).data_folder())
+                    .join(config.launcher.edition.data_folder())
                     .join("webCaches/Cache/Cache_Data/data_2");
 
                 if !web_cache.exists() {
@@ -860,8 +865,6 @@ impl SimpleComponent for App {
                 }
 
                 let updater = clone!(@strong sender => move |state| {
-                    use anime_launcher_sdk::states::StateUpdating;
-
                     if show_status_page {
                         match state {
                             StateUpdating::Game => {
@@ -963,7 +966,7 @@ impl SimpleComponent for App {
             #[allow(unused_must_use)]
             AppMsg::PredownloadUpdate => {
                 if let Some(LauncherState::PredownloadAvailable { game, mut voices }) = self.state.clone() {
-                    let tmp = config::get().unwrap().launcher.temp.unwrap_or_else(std::env::temp_dir);
+                    let tmp = Config::get().unwrap().launcher.temp.unwrap_or_else(std::env::temp_dir);
 
                     self.downloading = true;
 
