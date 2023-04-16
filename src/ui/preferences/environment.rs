@@ -177,6 +177,10 @@ impl SimpleAsyncComponent for EnvironmentApp {
                         Config::update(config);
 
                         self.variables.guard().push_back((name, value));
+                        
+                        // Clear input fields
+                        self.name_entry.set_text("");
+                        self.value_entry.set_text("");
                     }
                 }
             }
