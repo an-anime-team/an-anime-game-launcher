@@ -86,6 +86,7 @@ impl SimpleComponent for AboutDialog {
 
                 "<ul>",
                     "<li>Added game sandboxing feature</li>",
+                    "<li>Added debugger to wine tools</li>",
                 "</ul>",
 
                 "<p>Changed</p>",

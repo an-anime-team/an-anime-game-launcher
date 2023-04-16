@@ -705,11 +705,11 @@ impl SimpleAsyncComponent for GeneralApp {
 
                     add_row = &adw::ActionRow {
                         set_title: &tr("command-line"),
-                        set_subtitle: "start cmd",
+                        set_subtitle: "wineconsole",
 
                         set_activatable: true,
 
-                        connect_activated => GeneralAppMsg::WineOpen(&["start", "cmd"])
+                        connect_activated => GeneralAppMsg::WineOpen(&["wineconsole"])
                     },
 
                     add_row = &adw::ActionRow {
@@ -746,6 +746,15 @@ impl SimpleAsyncComponent for GeneralApp {
                         set_activatable: true,
 
                         connect_activated => GeneralAppMsg::WineOpen(&["winecfg"])
+                    },
+
+                    add_row = &adw::ActionRow {
+                        set_title: &tr("debugger"),
+                        set_subtitle: "start winedbg",
+
+                        set_activatable: true,
+
+                        connect_activated => GeneralAppMsg::WineOpen(&["start", "winedbg"])
                     }
                 }
             },
