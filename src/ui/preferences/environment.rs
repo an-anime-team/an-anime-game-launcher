@@ -94,13 +94,13 @@ impl SimpleAsyncComponent for EnvironmentApp {
                     connect_changed => |entry| {
                         if let Ok(mut config) = Config::get() {
                             let command = entry.text().trim().to_string();
-            
+
                             config.game.command = if command.is_empty() {
                                 None
                             } else {
                                 Some(command)
                             };
-            
+
                             Config::update(config);
                         }
                     }

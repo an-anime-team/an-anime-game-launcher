@@ -191,6 +191,21 @@ impl SimpleAsyncComponent for SandboxApp {
 
                 adw::EntryRow {
                     set_title: &tr("hostname"),
+                    set_text: CONFIG.sandbox.hostname.as_ref().unwrap_or(&String::new()).trim(),
+
+                    connect_changed => |entry| {
+                        if let Ok(mut config) = Config::get() {
+                            let command = entry.text().trim().to_string();
+
+                            config.sandbox.hostname = if command.is_empty() {
+                                None
+                            } else {
+                                Some(command)
+                            };
+
+                            Config::update(config);
+                        }
+                    }
                 }
             },
 
