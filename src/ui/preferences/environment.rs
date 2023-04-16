@@ -128,6 +128,7 @@ impl SimpleAsyncComponent for EnvironmentApp {
 
                 gtk::Button {
                     set_label: &tr("add"),
+                    add_css_class: "pill",
 
                     set_margin_top: 8,
                     set_halign: gtk::Align::Start,
@@ -176,11 +177,13 @@ impl SimpleAsyncComponent for EnvironmentApp {
                     let name = self.name.text().trim().to_string();
                     let value = self.value.text().trim().to_string();
 
-                    config.game.environment.insert(name.clone(), value.clone());
+                    if !name.is_empty() && !value.is_empty() {
+                        config.game.environment.insert(name.clone(), value.clone());
 
-                    Config::update(config);
+                        Config::update(config);
 
-                    self.variables.guard().push_back((name, value));
+                        self.variables.guard().push_back((name, value));
+                    }
                 }
             }
 
