@@ -69,6 +69,7 @@ registry-editor = Registry editor
 explorer = Explorer
 task-manager = Task manager
 configuration = Configuration
+debugger = 调试器 
 
 dxvk-version = DXVK 版本
 dxvk-selection-disabled = 您的葡萄酒组首选项禁用 DXVK 选择
