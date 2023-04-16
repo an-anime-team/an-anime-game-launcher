@@ -16,11 +16,11 @@ opt-level = "s"
 glib-build-tools = "0.17"
 
 [dependencies.anime-launcher-sdk]
-# git = "https://github.com/an-anime-team/anime-launcher-sdk"
-# tag = "0.5.17"
+git = "https://github.com/an-anime-team/anime-launcher-sdk"
+tag = "1.0.0"
 features = ["all", "genshin"]
 
-path = "../anime-launcher-sdk" # ! for dev purposes only
+# path = "../anime-launcher-sdk" # ! for dev purposes only
 
 [dependencies]
 relm4 = { version = "0.6.0-alpha.2", features = ["macros", "libadwaita"] }
@@ -30,14 +30,14 @@ adw = { package = "libadwaita", version = "0.3", features = ["v1_2"] }
 rfd = { version = "0.11", features = ["xdg-portal"], default-features = false }
 open = "4.0"
 
+serde_json = "1"
+anyhow = "1.0"
+lazy_static = "1.4.0"
+cached = { version = "0.43", features = ["proc_macro"] }
+md-5 = { version = "0.10", features = ["asm"] }
+
 tracing = "0.1"
 tracing-subscriber = "0.3"
 
 fluent-templates = "0.8"
 unic-langid = "0.9"
-
-lazy_static = "1.4.0"
-anyhow = "1.0"
-cached = { version = "0.42", features = ["proc_macro"] }
-serde_json = "1"
-md-5 = { version = "0.10", features = ["asm"] }
