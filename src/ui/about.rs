@@ -82,17 +82,17 @@ impl SimpleComponent for AboutDialog {
 
             set_release_notes_version: &APP_VERSION,
             set_release_notes: &[
-                "<p>Fixed</p>",
+                "<p>Added</p>",
 
                 "<ul>",
-                    "<li>Fixed base game's hdiff patches applying errors caused by 3.6's voiceovers files migration</li>",
-                    "<li>Fixed xlua patch applying</li>",
+                    "<li>Added game sandboxing feature</li>",
                 "</ul>",
 
                 "<p>Changed</p>",
 
                 "<ul>",
-                    "<li>Removed fractions displaying in repairer's progress bar</li>",
+                    "<li>Removed fractions displaying in components downloading progress bar</li>",
+                    "<li>Moved to upgraded launcher SDK</li>",
                 "</ul>",
             ].join("\n"),
 
