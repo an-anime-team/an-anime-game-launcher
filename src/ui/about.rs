@@ -82,18 +82,10 @@ impl SimpleComponent for AboutDialog {
 
             set_release_notes_version: &APP_VERSION,
             set_release_notes: &[
-                "<p>Added</p>",
+                "<p>Fixed</p>",
 
                 "<ul>",
-                    "<li>Added game sandboxing feature</li>",
-                    "<li>Added debugger to wine tools</li>",
-                "</ul>",
-
-                "<p>Changed</p>",
-
-                "<ul>",
-                    "<li>Removed fractions displaying in components downloading progress bar</li>",
-                    "<li>Moved to upgraded launcher SDK</li>",
+                    "<li>Fixed telemetry checking</li>",
                 "</ul>",
             ].join("\n"),
 
