@@ -5,7 +5,6 @@ use relm4::{
 
 use gtk::glib::clone;
 
-use anime_launcher_sdk::config;
 use anime_launcher_sdk::anime_game_core::installer::diff::VersionDiff;
 
 use crate::*;
@@ -17,7 +16,7 @@ pub fn download_diff(sender: ComponentSender<App>, progress_bar_input: Sender<Pr
     sender.input(AppMsg::SetDownloading(true));
 
     std::thread::spawn(move || {
-        let config = config::get().unwrap();
+        let config = Config::get().unwrap();
         let game_path = config.game.path.for_edition(config.launcher.edition).to_path_buf();
 
         let result = diff.install_to_by(game_path, config.launcher.temp, clone!(@strong sender => move |state| {

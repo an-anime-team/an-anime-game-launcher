@@ -46,6 +46,10 @@ impl SimpleComponent for AboutDialog {
                 "Nikita Podvirnyy https://github.com/krypt0nn"
             ],
 
+            add_credit_section: (Some("Patch developer"), &[
+                "@Krock https://notabug.org/Krock/dawn"
+            ]),
+
             add_credit_section: (Some("An Anime Team"), &[
                 "@Marie https://github.com/Mar0xy",
                 "@lane https://github.com/laurinneff",
@@ -78,17 +82,18 @@ impl SimpleComponent for AboutDialog {
 
             set_release_notes_version: &APP_VERSION,
             set_release_notes: &[
-                "<p>Fixed</p>",
+                "<p>Added</p>",
 
                 "<ul>",
-                    "<li>Fixed base game's hdiff patches applying errors caused by 3.6's voiceovers files migration</li>",
-                    "<li>Fixed xlua patch applying</li>",
+                    "<li>Added game sandboxing feature</li>",
+                    "<li>Added debugger to wine tools</li>",
                 "</ul>",
 
                 "<p>Changed</p>",
 
                 "<ul>",
-                    "<li>Removed fractions displaying in repairer's progress bar</li>",
+                    "<li>Removed fractions displaying in components downloading progress bar</li>",
+                    "<li>Moved to upgraded launcher SDK</li>",
                 "</ul>",
             ].join("\n"),
 

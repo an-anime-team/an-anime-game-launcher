@@ -1,8 +1,10 @@
 use relm4::prelude::*;
 
-use anime_launcher_sdk::config;
-use anime_launcher_sdk::states::LauncherState;
-use anime_launcher_sdk::consts::launcher_dir;
+use anime_launcher_sdk::config::ConfigExt;
+use anime_launcher_sdk::genshin::config::{Config, Schema};
+
+use anime_launcher_sdk::genshin::states::LauncherState;
+use anime_launcher_sdk::genshin::consts::launcher_dir;
 
 use anime_launcher_sdk::anime_game_core::prelude::*;
 use anime_launcher_sdk::anime_game_core::genshin::prelude::*;
@@ -34,9 +36,9 @@ pub fn is_ready() -> bool {
 }
 
 lazy_static::lazy_static! {
-    /// Config loaded on the app's start. Use `config::get()` to get up to date config instead.
+    /// Config loaded on the app's start. Use `Config::get()` to get up to date config instead.
     /// This one is used to prepare some launcher UI components on start
-    pub static ref CONFIG: config::Config = config::get().expect("Failed to load config");
+    pub static ref CONFIG: Schema = Config::get().expect("Failed to load config");
 
     pub static ref GAME: Game = Game::new(CONFIG.game.path.for_edition(CONFIG.launcher.edition));
 
@@ -69,11 +71,11 @@ fn main() {
         std::fs::write(FIRST_RUN_FILE.as_path(), "").expect("Failed to create .first-run file");
 
         // Set initial launcher language based on system language
-        let mut config = config::get().expect("Failed to get config");
+        let mut config = Config::get().expect("Failed to get config");
 
         config.launcher.language = i18n::format_lang(&i18n::get_default_lang());
 
-        config::update_raw(config).expect("Failed to update config");
+        Config::update_raw(config).expect("Failed to update config");
     }
 
     // Force debug output
@@ -161,7 +163,7 @@ fn main() {
     ", BACKGROUND_FILE.to_string_lossy()));
 
     // Set game edition
-    GameEdition::from(CONFIG.launcher.edition).select();
+    CONFIG.launcher.edition.select();
 
     // Set UI language
     let lang = CONFIG.launcher.language.parse().expect("Wrong language format used in config");
@@ -187,7 +189,7 @@ fn main() {
 
             match state {
                 LauncherState::Launch => {
-                    anime_launcher_sdk::game::run().expect("Failed to run the game");
+                    anime_launcher_sdk::genshin::game::run().expect("Failed to run the game");
 
                     return;
                 }
@@ -196,7 +198,7 @@ fn main() {
                 LauncherState::UnityPlayerPatchAvailable(UnityPlayerPatch { status: PatchStatus::NotAvailable, .. }) |
                 LauncherState::XluaPatchAvailable(XluaPatch { status: PatchStatus::NotAvailable, .. }) => {
                     if just_run_game {
-                        anime_launcher_sdk::game::run().expect("Failed to run the game");
+                        anime_launcher_sdk::genshin::game::run().expect("Failed to run the game");
 
                         return;
                     }

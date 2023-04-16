@@ -6,12 +6,16 @@ use adw::prelude::*;
 
 use anime_launcher_sdk::anime_game_core::prelude::*;
 use anime_launcher_sdk::anime_game_core::genshin::prelude::*;
-use anime_launcher_sdk::config::launcher::LauncherStyle;
+
+use anime_launcher_sdk::config::ConfigExt;
+use anime_launcher_sdk::genshin::config::Config;
+use anime_launcher_sdk::genshin::config::schema::launcher::LauncherStyle;
 
 use crate::i18n::tr;
 
 use super::general::*;
 use super::enhancements::*;
+use super::sandbox::*;
 use super::environment::*;
 
 pub static mut PREFERENCES_WINDOW: Option<adw::PreferencesWindow> = None;
@@ -19,6 +23,7 @@ pub static mut PREFERENCES_WINDOW: Option<adw::PreferencesWindow> = None;
 pub struct PreferencesApp {
     general: AsyncController<GeneralApp>,
     enhancements: AsyncController<EnhancementsApp>,
+    sandbox: AsyncController<SandboxApp>,
     environment: AsyncController<EnvironmentApp>
 }
 
@@ -64,10 +69,11 @@ impl SimpleAsyncComponent for PreferencesApp {
 
             add = model.general.widget(),
             add = model.enhancements.widget(),
+            add = model.sandbox.widget(),
             add = model.environment.widget(),
 
             connect_close_request[sender] => move |_| {
-                if let Err(err) = anime_launcher_sdk::config::flush() {
+                if let Err(err) = Config::flush() {
                     sender.input(PreferencesAppMsg::Toast {
                         title: tr("config-update-error"),
                         description: Some(err.to_string())
@@ -92,6 +98,10 @@ impl SimpleAsyncComponent for PreferencesApp {
                 .forward(sender.input_sender(), std::convert::identity),
 
             enhancements: EnhancementsApp::builder()
+                .launch(())
+                .detach(),
+
+            sandbox: SandboxApp::builder()
                 .launch(())
                 .detach(),
 

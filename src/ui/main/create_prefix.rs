@@ -1,13 +1,15 @@
 use relm4::prelude::*;
 
-use anime_launcher_sdk::config;
 use anime_launcher_sdk::wincompatlib::prelude::*;
+
+use anime_launcher_sdk::config::ConfigExt;
+use anime_launcher_sdk::genshin::config::Config;
 
 use crate::i18n::*;
 use super::{App, AppMsg};
 
 pub fn create_prefix(sender: ComponentSender<App>) {
-    let config = config::get().unwrap();
+    let config = Config::get().unwrap();
 
     match config.get_selected_wine() {
         Ok(Some(wine)) => {

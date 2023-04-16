@@ -69,6 +69,7 @@ registry-editor = Редактор реестра
 explorer = Проводник
 task-manager = Диспетчер задач
 configuration = Настройки
+debugger = Отладчик
 
 dxvk-version = Версия DXVK
 dxvk-selection-disabled = Выбор версии DXVK отключен настройками выбранного вами Wine

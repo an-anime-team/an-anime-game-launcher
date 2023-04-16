@@ -5,7 +5,6 @@ use relm4::{
 
 use gtk::glib::clone;
 
-use anime_launcher_sdk::config;
 use anime_launcher_sdk::components::wine;
 
 use crate::*;
@@ -14,7 +13,7 @@ use crate::ui::components::*;
 use super::{App, AppMsg};
 
 pub fn download_wine(sender: ComponentSender<App>, progress_bar_input: Sender<ProgressBarMsg>) {
-    let mut config = config::get().unwrap();
+    let mut config = Config::get().unwrap();
 
     match wine::get_downloaded(&CONFIG.components.path, &config.game.wine.builds) {
         Ok(downloaded) => {
@@ -22,7 +21,7 @@ pub fn download_wine(sender: ComponentSender<App>, progress_bar_input: Sender<Pr
             if !downloaded.is_empty() {
                 config.game.wine.selected = Some(downloaded[0].versions[0].name.clone());
 
-                config::update(config);
+                Config::update(config);
 
                 sender.input(AppMsg::UpdateLauncherState {
                     perform_on_download_needed: false,
@@ -85,7 +84,7 @@ pub fn download_wine(sender: ComponentSender<App>, progress_bar_input: Sender<Pr
 
                             config.game.wine.selected = Some(wine.name.clone());
 
-                            config::update(config);
+                            Config::update(config);
 
                             sender.input(AppMsg::SetDownloading(false));
                             sender.input(AppMsg::UpdateLauncherState {

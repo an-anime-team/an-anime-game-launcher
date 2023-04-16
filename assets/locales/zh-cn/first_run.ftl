@@ -36,14 +36,14 @@ show-all-folders-subtitle = 显示额外的路径选项。按我说的做...
 runners-folder = 运行程序文件夹
 dxvks-folder = DXVK 文件夹
 wine-prefix-folder = Wine prefix 文件夹
-global-game-installation-folder = Global game version installation folder
-chinese-game-installation-folder = Chinese game version installation folder
+global-game-installation-folder = 国际服安装目录
+chinese-game-installation-folder = 国服安装目录
 fps-unlocker-folder = FPS Unlocker 文件夹
 components-index = 成分指数
 patch-folder = 补丁文件夹
 temp-folder = 临时文件夹
 
-migrate = Migrate
+migrate = 迁移
 
 
 select-voice-packages = 选择语音包

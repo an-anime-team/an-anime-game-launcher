@@ -7,8 +7,6 @@ use gtk::glib::clone;
 
 use std::path::Path;
 
-use anime_launcher_sdk::config;
-
 use crate::*;
 use crate::i18n::*;
 use crate::ui::components::*;
@@ -16,7 +14,7 @@ use super::{App, AppMsg};
 
 #[allow(unused_must_use)]
 pub fn repair_game(sender: ComponentSender<App>, progress_bar_input: Sender<ProgressBarMsg>) {
-    let config = config::get().unwrap();
+    let config = Config::get().unwrap();
 
     progress_bar_input.send(ProgressBarMsg::UpdateCaption(Some(tr("verifying-files"))));
     sender.input(AppMsg::SetDownloading(true));

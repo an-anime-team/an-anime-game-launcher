@@ -4,8 +4,6 @@ use relm4::factory::*;
 
 use adw::prelude::*;
 
-use anime_launcher_sdk::config;
-
 use crate::i18n::tr;
 use crate::*;
 
@@ -64,8 +62,8 @@ impl AsyncFactoryComponent for Variable {
 pub struct EnvironmentApp {
     variables: AsyncFactoryVecDeque<Variable>,
 
-    name: gtk::Entry,
-    value: gtk::Entry
+    name_entry: adw::EntryRow,
+    value_entry: adw::EntryRow
 }
 
 #[derive(Debug, Clone)]
@@ -94,16 +92,16 @@ impl SimpleAsyncComponent for EnvironmentApp {
                     set_text: CONFIG.game.command.as_ref().unwrap_or(&String::new()).trim(),
 
                     connect_changed => |entry| {
-                        if let Ok(mut config) = config::get() {
+                        if let Ok(mut config) = Config::get() {
                             let command = entry.text().trim().to_string();
-            
+
                             config.game.command = if command.is_empty() {
                                 None
                             } else {
                                 Some(command)
                             };
-            
-                            config::update(config);
+
+                            Config::update(config);
                         }
                     }
                 }
@@ -112,24 +110,19 @@ impl SimpleAsyncComponent for EnvironmentApp {
             add = &adw::PreferencesGroup {
                 set_title: &tr("new-variable"),
 
-                gtk::Box {
-                    set_orientation: gtk::Orientation::Horizontal,
-                    set_spacing: 8,
+                #[local_ref]
+                name_entry -> adw::EntryRow {
+                    set_title: &tr("name")
+                },
 
-                    #[local_ref]
-                    name -> gtk::Entry {
-                        set_placeholder_text: Some(&tr("name"))
-                    },
-    
-                    #[local_ref]
-                    value -> gtk::Entry {
-                        set_placeholder_text: Some(&tr("value")),
-                        set_hexpand: true
-                    }
+                #[local_ref]
+                value_entry -> adw::EntryRow {
+                    set_title: &tr("value")
                 },
 
                 gtk::Button {
                     set_label: &tr("add"),
+                    add_css_class: "pill",
 
                     set_margin_top: 8,
                     set_halign: gtk::Align::Start,
@@ -153,8 +146,8 @@ impl SimpleAsyncComponent for EnvironmentApp {
         let mut model = Self {
             variables: AsyncFactoryVecDeque::new(adw::PreferencesGroup::new(), sender.input_sender()),
 
-            name: gtk::Entry::new(),
-            value: gtk::Entry::new()
+            name_entry: adw::EntryRow::new(),
+            value_entry: adw::EntryRow::new()
         };
 
         for (name, value) in &CONFIG.game.environment {
@@ -163,8 +156,8 @@ impl SimpleAsyncComponent for EnvironmentApp {
 
         let variables = model.variables.widget();
 
-        let name = &model.name;
-        let value = &model.value;
+        let name_entry = &model.name_entry;
+        let value_entry = &model.value_entry;
 
         let widgets = view_output!();
 
@@ -174,24 +167,26 @@ impl SimpleAsyncComponent for EnvironmentApp {
     async fn update(&mut self, msg: Self::Input, _sender: AsyncComponentSender<Self>) {
         match msg {
             EnvironmentMsg::Add => {
-                if let Ok(mut config) = config::get() {
-                    let name = self.name.text().trim().to_string();
-                    let value = self.value.text().trim().to_string();
+                if let Ok(mut config) = Config::get() {
+                    let name = self.name_entry.text().trim().to_string();
+                    let value = self.value_entry.text().trim().to_string();
 
-                    config.game.environment.insert(name.clone(), value.clone());
+                    if !name.is_empty() && !value.is_empty() {
+                        config.game.environment.insert(name.clone(), value.clone());
 
-                    config::update(config);
+                        Config::update(config);
 
-                    self.variables.guard().push_back((name, value));
+                        self.variables.guard().push_back((name, value));
+                    }
                 }
             }
 
             EnvironmentMsg::Remove(index) => {
-                if let Ok(mut config) = config::get() {
+                if let Ok(mut config) = Config::get() {
                     if let Some(var) = self.variables.guard().get(index.current_index()) {
                         config.game.environment.remove(&var.key);
 
-                        config::update(config);
+                        Config::update(config);
                     }
 
                     self.variables.guard().remove(index.current_index());
