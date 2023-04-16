@@ -69,6 +69,7 @@ registry-editor = Registry editor
 explorer = Explorer
 task-manager = Task manager
 configuration = Configuration
+debugger = Debugger
 
 dxvk-version = Version de DXVK
 dxvk-selection-disabled = La sélection de versions DXVK est désactivé par vos préférences de groupe wine
