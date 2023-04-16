@@ -44,7 +44,8 @@ version = "1.6.2"
 dependencies = [
  "anyhow",
  "bzip2",
- "cached",
+ "cached 0.43.0",
+ "dns-lookup",
  "flate2",
  "fs_extra",
  "kinda-virtual-fs",
@@ -67,7 +68,7 @@ version = "3.4.1"
 dependencies = [
  "anime-launcher-sdk",
  "anyhow",
- "cached",
+ "cached 0.42.0",
  "fluent-templates",
  "glib-build-tools",
  "gtk4",
@@ -89,7 +90,7 @@ version = "0.5.17"
 dependencies = [
  "anime-game-core",
  "anyhow",
- "cached",
+ "cached 0.43.0",
  "discord-rich-presence",
  "enum-ordinalize",
  "lazy_static",
@@ -330,6 +331,25 @@ name = "cached"
 version = "0.42.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5e5877db5d1af7fae60d06b5db9430b68056a69b3582a0be8e3691e87654aeb6"
+dependencies = [
+ "async-trait",
+ "async_once",
+ "cached_proc_macro",
+ "cached_proc_macro_types",
+ "futures",
+ "hashbrown 0.13.2",
+ "instant",
+ "lazy_static",
+ "once_cell",
+ "thiserror",
+ "tokio",
+]
+
+[[package]]
+name = "cached"
+version = "0.43.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "bc2fafddf188d13788e7099295a59b99e99b2148ab2195cae454e754cc099925"
 dependencies = [
  "async-trait",
  "async_once",
@@ -627,6 +647,18 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn 1.0.109",
+]
+
+[[package]]
+name = "dns-lookup"
+version = "1.0.8"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "53ecafc952c4528d9b51a458d1a8904b81783feff9fde08ab6ed2545ff396872"
+dependencies = [
+ "cfg-if",
+ "libc",
+ "socket2",
+ "winapi",
 ]
 
 [[package]]
