@@ -138,18 +138,18 @@ impl SimpleAsyncComponent for SandboxApp {
 
     view! {
         adw::PreferencesPage {
-            set_title: "Sandbox",
+            set_title: &tr("sandbox"),
             set_icon_name: Some("folder-symbolic"),
 
             set_sensitive: is_available("bwrap"),
 
             add = &adw::PreferencesGroup {
-                set_title: "Sandbox",
-                set_description: Some("Run the game in isolated environment, preventing it from accessing your personal data"),
+                set_title: &tr("sandbox"),
+                set_description: Some(&tr("sandbox-description")),
 
                 adw::ActionRow {
-                    set_title: "Enable sandboxing",
-                    set_subtitle: "Run the game in read-only copy of your root filesystem",
+                    set_title: &tr("enable-sandboxing"),
+                    set_subtitle: &tr("enable-sandboxing-description"),
 
                     add_suffix = &gtk::Switch {
                         set_valign: gtk::Align::Center,
@@ -169,8 +169,8 @@ impl SimpleAsyncComponent for SandboxApp {
                 },
 
                 adw::ActionRow {
-                    set_title: "Hide home directory",
-                    set_subtitle: "Isolate your /home, /var/home/{username}, and $HOME folders from the game",
+                    set_title: &tr("hide-home-directory"),
+                    set_subtitle: &tr("hide-home-directory-description"),
 
                     add_suffix = &gtk::Switch {
                         set_valign: gtk::Align::Center,
@@ -190,17 +190,17 @@ impl SimpleAsyncComponent for SandboxApp {
                 },
 
                 adw::EntryRow {
-                    set_title: "Hostname"
+                    set_title: &tr("hostname"),
                 }
             },
 
             add = &adw::PreferencesGroup {
-                set_title: "Private directories",
-                set_description: Some("These folders will be replaced by an empty virtual filesystem (tmpfs), and their original content will not be available to sandboxed game"),
+                set_title: &tr("private-directories"),
+                set_description: Some(&tr("private-directories-description")),
 
                 #[local_ref]
                 private_path_entry -> adw::EntryRow {
-                    set_title: "Path"
+                    set_title: &tr("path")
                 },
 
                 gtk::Button {
@@ -218,22 +218,22 @@ impl SimpleAsyncComponent for SandboxApp {
             add = private_paths -> adw::PreferencesGroup {},
 
             add = &adw::PreferencesGroup {
-                set_title: "Shared directories",
-                set_description: Some("These directories will be symlinked to directories in your host system"),
+                set_title: &tr("shared-directories"),
+                set_description: Some(&tr("shared-directories-description")),
 
                 #[local_ref]
                 shared_path_from_entry -> adw::EntryRow {
-                    set_title: "Original path"
+                    set_title: &tr("original-path")
                 },
 
                 #[local_ref]
                 shared_path_to_entry -> adw::EntryRow {
-                    set_title: "New path"
+                    set_title: &tr("new-path")
                 },
 
                 adw::ActionRow {
-                    set_title: "Read-only",
-                    set_subtitle: "Forbid game to write any data to this directory",
+                    set_title: &tr("read-only"),
+                    set_subtitle: &tr("read-only-description"),
 
                     #[local_ref]
                     add_suffix = read_only_switch -> gtk::Switch {
