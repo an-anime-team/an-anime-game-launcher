@@ -41,3 +41,7 @@ downloaded-wine-list-failed = Fallo al listar versiones descargadas de Wine
 patch-sync-failed = Fallo al sincronizar carpeta del parche
 patch-state-check-failed = Fallo al comprobar estado de carpeta del parche
 game-patching-error = Fallo al parchear el juego
+
+# Sandbox
+
+documentation-url-open-failed = Failed to open documentation URL

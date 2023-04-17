@@ -8,6 +8,7 @@ hide-home-directory = Скрыть домашнюю директорию
 hide-home-directory-description = Изолировать ваши директории /home, /var/home/$USER, и $HOME от игры
 
 hostname = Имя хоста
+additional-arguments = Дополнительные аргументы
 
 private-directories = Приватные директории
 private-directories-description = Эти папки будут заменены пустой виртуальной файловой системой (tmpfs) и их изначальное содержимое не будет доступно игре
@@ -22,3 +23,6 @@ new-path = Путь в песочнице
 
 read-only = Только для чтения
 read-only-description = Запретить игре изменять содержимое этой директории
+
+symlinks = Ссылки
+symlinks-description = Добавить ссылку на оригинальный файл или папку в вашу песочницу

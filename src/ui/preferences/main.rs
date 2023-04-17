@@ -103,7 +103,7 @@ impl SimpleAsyncComponent for PreferencesApp {
 
             sandbox: SandboxApp::builder()
                 .launch(())
-                .detach(),
+                .forward(sender.input_sender(), std::convert::identity),
 
             environment: EnvironmentApp::builder()
                 .launch(())

@@ -37,6 +37,11 @@ dxvk-unpack-error = Entpacken von DXVK fehlgeschlagen
 dxvk-apply-error = DXVK konnte nicht angewendet werden
 
 downloaded-wine-list-failed = Auflistung der heruntergeladenen Wine versionen fehlgeschlagen
+
 patch-sync-failed = Synchronisierung des Patch-Ordners fehlgeschlagen
 patch-state-check-failed = Status des Patchordners konnte nicht überprüft werden
 game-patching-error = Spiel konnte nicht gepatcht werden
+
+# Sandbox
+
+documentation-url-open-failed = Failed to open documentation URL

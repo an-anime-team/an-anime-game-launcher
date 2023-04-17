@@ -87,8 +87,8 @@ dependencies = [
 
 [[package]]
 name = "anime-launcher-sdk"
-version = "1.0.5"
-source = "git+https://github.com/an-anime-team/anime-launcher-sdk?tag=1.0.5#3505a2ef55fc89fb09d7a75849b6ce38c713973a"
+version = "1.0.6"
+source = "git+https://github.com/an-anime-team/anime-launcher-sdk?tag=1.0.6#2a8272c1afdd006925c150ac480a82be645f4b52"
 dependencies = [
  "anime-game-core",
  "anyhow",

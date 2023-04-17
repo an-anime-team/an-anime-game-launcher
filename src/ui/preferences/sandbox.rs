@@ -6,6 +6,7 @@ use adw::prelude::*;
 
 use anime_launcher_sdk::is_available;
 
+use super::main::PreferencesAppMsg;
 use crate::i18n::tr;
 use crate::*;
 
@@ -103,7 +104,7 @@ pub enum SandboxAppMsg {
 impl SimpleAsyncComponent for SandboxApp {
     type Init = ();
     type Input = SandboxAppMsg;
-    type Output = ();
+    type Output = PreferencesAppMsg;
 
     view! {
         adw::PreferencesPage {
@@ -178,7 +179,7 @@ impl SimpleAsyncComponent for SandboxApp {
                 },
 
                 adw::EntryRow {
-                    set_title: "Additional arguments",
+                    set_title: &tr("additional-arguments"),
                     set_text: CONFIG.sandbox.args.as_ref().unwrap_or(&String::new()).trim(),
 
                     connect_changed => |entry| {
@@ -192,6 +193,20 @@ impl SimpleAsyncComponent for SandboxApp {
                             };
 
                             Config::update(config);
+                        }
+                    },
+
+                    add_suffix = &gtk::Button {
+                        set_valign: gtk::Align::Center,
+                        set_icon_name: "dialog-information-symbolic",
+
+                        connect_clicked[sender] => move |_| {
+                            if let Err(err) = open::that("https://man.archlinux.org/man/bwrap.1") {
+                                sender.output(PreferencesAppMsg::Toast {
+                                    title: tr("documentation-url-open-failed"),
+                                    description: Some(err.to_string())
+                                }).unwrap();
+                            }
                         }
                     }
                 }
@@ -259,8 +274,8 @@ impl SimpleAsyncComponent for SandboxApp {
             add = shared_paths -> adw::PreferencesGroup {},
 
             add = &adw::PreferencesGroup {
-                set_title: "Symlinks",
-                set_description: Some("Symlink original path inside of your sandbox"),
+                set_title: &tr("symlinks"),
+                set_description: Some(&tr("symlinks-description")),
 
                 #[local_ref]
                 symlink_path_from_entry -> adw::EntryRow {
@@ -293,7 +308,7 @@ impl SimpleAsyncComponent for SandboxApp {
         root: Self::Root,
         sender: AsyncComponentSender<Self>,
     ) -> AsyncComponentParts<Self> {
-        tracing::info!("Initializing environment settings");
+        tracing::info!("Initializing sandbox settings");
 
         let mut model = Self {
             private_paths: AsyncFactoryVecDeque::new(adw::PreferencesGroup::new(), sender.input_sender()),
