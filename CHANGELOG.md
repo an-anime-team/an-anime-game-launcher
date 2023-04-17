@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.5.2] - 17.04.2023
+
 ### Added
 
 - Added arguments and symlinks editor to sandbox settings
