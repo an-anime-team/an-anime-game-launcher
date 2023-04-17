@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- Added arguments and symlinks editor to sandbox settings
+
+### Fixed
+
+- Fixed game running issue if you have spaces in paths
+
 ## [3.5.1] (hotfix) - 16.04.2023
 
 ### Fixed
