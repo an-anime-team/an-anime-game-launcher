@@ -69,7 +69,7 @@ registry-editor = Editor del Registro
 explorer = Explorador
 task-manager = Administrador de Tareas
 configuration = Configuración
-debugger = Debugger
+debugger = Depurador
 
 dxvk-version = Versión de DXVK
 dxvk-selection-disabled = La selección de DXVK está deshabilitada por las preferencias de su grupo de vinos

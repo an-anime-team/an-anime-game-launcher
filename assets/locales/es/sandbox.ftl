@@ -1,24 +1,24 @@
-sandbox = Sandbox
-sandbox-description = Run the game in isolated environment, preventing it from accessing your personal data
+sandbox = Aislamiento
+sandbox-description = Ejecutar el juego en un entorno aislado, previniendo el acceso a datos personales
 
-enable-sandboxing = Enable sandboxing
-enable-sandboxing-description = Run the game in read-only copy of your root filesystem
+enable-sandboxing = Activar aislamiento
+enable-sandboxing-description = Ejecutar el juego en una copia de sólo lectura de tu sistema de archivos
 
-hide-home-directory = Hide home directory
-hide-home-directory-description = Isolate your /home, /var/home/$USER, and $HOME folders from the game
+hide-home-directory = Esconder el directorio home
+hide-home-directory-description = Aisla las carpetas /home, /var/home/$USER, y $HOME del juego
 
-hostname = Hostname
+hostname = Nombre del host
 
-private-directories = Private directories
-private-directories-description = These folders will be replaced by an empty virtual filesystem (tmpfs), and their original content will not be available to sandboxed game
+private-directories = Directorios privados
+private-directories-description = Estas carpetas serán reemplazadas por un sistema de archivos virtual (tmpfs) vacío, y su contenido real no será accesible al juego aislado
 
-path = Path
+path = Ruta
 
-shared-directories = Shared directories
-shared-directories-description = These directories will be symlinked to directories in your host system
+shared-directories = Directorios compartidos
+shared-directories-description = Estos directorios serán enlazados a directorios de tu sistema anfitrión
 
-original-path = Original path
-new-path = New path
+original-path = Ruta original
+new-path = Nueva ruta
 
-read-only = Read-only
-read-only-description = Forbid game to write any data to this directory
+read-only = Sólo lectura
+read-only-description = Le prohibe al juego escribir datos en este directorio
