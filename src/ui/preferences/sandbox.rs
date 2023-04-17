@@ -329,6 +329,8 @@ impl SimpleAsyncComponent for SandboxApp {
                     let path = self.private_path_entry.text().trim().to_string();
 
                     if !path.is_empty() {
+                        self.private_path_entry.set_text("");
+
                         config.sandbox.private.push(path.clone());
 
                         Config::update(config);
@@ -358,6 +360,9 @@ impl SimpleAsyncComponent for SandboxApp {
                     let read_only = self.read_only_switch.state();
 
                     if !from.is_empty() && !to.is_empty() {
+                        self.shared_path_from_entry.set_text("");
+                        self.shared_path_to_entry.set_text("");
+
                         if read_only {
                             config.sandbox.mounts.read_only.insert(from.clone(), to.clone());
                         } else {

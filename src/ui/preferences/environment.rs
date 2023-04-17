@@ -172,6 +172,9 @@ impl SimpleAsyncComponent for EnvironmentApp {
                     let value = self.value_entry.text().trim().to_string();
 
                     if !name.is_empty() && !value.is_empty() {
+                        self.name_entry.set_text("");
+                        self.value_entry.set_text("");
+
                         config.game.environment.insert(name.clone(), value.clone());
 
                         Config::update(config);
