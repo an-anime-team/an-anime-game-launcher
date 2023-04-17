@@ -41,3 +41,7 @@ downloaded-wine-list-failed = Не удалось получить список 
 patch-sync-failed = Ошибка синхронизации папки патча
 patch-state-check-failed = Ошибка проверки статуса папки патча
 game-patching-error = Не удалось установить патч игры
+
+# Sandbox
+
+documentation-url-open-failed = Не удалось открыть ссылку с документацией

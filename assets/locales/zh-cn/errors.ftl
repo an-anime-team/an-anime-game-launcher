@@ -41,3 +41,7 @@ downloaded-wine-list-failed = 列举 Wine 版本失败
 patch-sync-failed = 同步补丁文件夹失败
 patch-state-check-failed = 检查补丁文件夹失败
 game-patching-error = 应用游戏补丁失败
+
+# Sandbox
+
+documentation-url-open-failed = Failed to open documentation URL

@@ -41,3 +41,7 @@ downloaded-wine-list-failed = İndirilmiş Wine versiyonlarını listeleme başa
 patch-sync-failed = Yama dosyalarını senkronize etme başarısız oldu
 patch-state-check-failed = Yama dosyalarının durumunu kontrol etme başarısız oldu
 game-patching-error = Yamayı uygulamada sorun çıktı
+
+# Sandbox
+
+documentation-url-open-failed = Failed to open documentation URL

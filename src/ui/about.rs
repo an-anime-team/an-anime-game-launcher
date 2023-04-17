@@ -82,10 +82,16 @@ impl SimpleComponent for AboutDialog {
 
             set_release_notes_version: &APP_VERSION,
             set_release_notes: &[
+                "<p>Added</p>",
+
+                "<ul>",
+                    "<li>Added arguments and symlinks editor to sandbox settings</li>",
+                "</ul>",
+
                 "<p>Fixed</p>",
 
                 "<ul>",
-                    "<li>Fixed telemetry checking</li>",
+                    "<li>Fixed game running issue if you have spaces in paths</li>",
                 "</ul>",
             ].join("\n"),
 

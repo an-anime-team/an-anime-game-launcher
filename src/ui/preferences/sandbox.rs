@@ -6,119 +6,86 @@ use adw::prelude::*;
 
 use anime_launcher_sdk::is_available;
 
+use super::main::PreferencesAppMsg;
 use crate::i18n::tr;
 use crate::*;
 
-#[derive(Debug)]
-struct PrivateDirectory {
-    path: String
-}
+macro_rules! impl_directory {
+    ($name:ident, $msg:expr) => {
+        #[derive(Debug)]
+        struct $name {
+            from: String,
+            to: Option<String>
+        }
 
-#[relm4::factory(async)]
-impl AsyncFactoryComponent for PrivateDirectory {
-    type Init = String;
-    type Input = SandboxAppMsg;
-    type Output = SandboxAppMsg;
-    type CommandOutput = ();
-    type ParentInput = SandboxAppMsg;
-    type ParentWidget = adw::PreferencesGroup;
+        #[relm4::factory(async)]
+        impl AsyncFactoryComponent for $name {
+            type Init = (String, Option<String>);
+            type Input = SandboxAppMsg;
+            type Output = SandboxAppMsg;
+            type CommandOutput = ();
+            type ParentInput = SandboxAppMsg;
+            type ParentWidget = adw::PreferencesGroup;
 
-    view! {
-        root = adw::ActionRow {
-            set_title: &self.path,
+            view! {
+                root = adw::ActionRow {
+                    set_title: &self.from,
+                    set_subtitle: match self.to.as_ref() {
+                        Some(to) => to,
+                        None => ""
+                    },
 
-            add_suffix = &gtk::Button {
-                set_icon_name: "user-trash-symbolic",
-                add_css_class: "flat",
-                set_valign: gtk::Align::Center,
+                    add_suffix = &gtk::Button {
+                        set_icon_name: "user-trash-symbolic",
+                        add_css_class: "flat",
+                        set_valign: gtk::Align::Center,
 
-                connect_clicked[sender, index] => move |_| {
-                    sender.input(SandboxAppMsg::RemovePrivate(index.clone()));
+                        connect_clicked[sender, index] => move |_| {
+                            sender.input($msg(index.clone()));
+                        }
+                    }
                 }
+            }
+
+            fn output_to_parent_input(output: Self::Output) -> Option<Self::ParentInput> {
+                Some(output)
+            }
+
+            async fn init_model(
+                init: Self::Init,
+                _index: &DynamicIndex,
+                _sender: AsyncFactorySender<Self>,
+            ) -> Self {
+                Self {
+                    from: init.0,
+                    to: init.1
+                }
+            }
+
+            async fn update(&mut self, msg: Self::Input, sender: AsyncFactorySender<Self>) {
+                sender.output(msg);
             }
         }
     }
-
-    fn output_to_parent_input(output: Self::Output) -> Option<Self::ParentInput> {
-        Some(output)
-    }
-
-    async fn init_model(
-        init: Self::Init,
-        _index: &DynamicIndex,
-        _sender: AsyncFactorySender<Self>,
-    ) -> Self {
-        Self {
-            path: init
-        }
-    }
-
-    async fn update(&mut self, msg: Self::Input, sender: AsyncFactorySender<Self>) {
-        sender.output(msg);
-    }
 }
 
-#[derive(Debug)]
-struct SharedDirectory {
-    mount_from: String,
-    mount_to: String
-}
-
-#[relm4::factory(async)]
-impl AsyncFactoryComponent for SharedDirectory {
-    type Init = (String, String);
-    type Input = SandboxAppMsg;
-    type Output = SandboxAppMsg;
-    type CommandOutput = ();
-    type ParentInput = SandboxAppMsg;
-    type ParentWidget = adw::PreferencesGroup;
-
-    view! {
-        root = adw::ActionRow {
-            set_title: &self.mount_to,
-            set_subtitle: &self.mount_from,
-
-            add_suffix = &gtk::Button {
-                set_icon_name: "user-trash-symbolic",
-                add_css_class: "flat",
-                set_valign: gtk::Align::Center,
-
-                connect_clicked[sender, index] => move |_| {
-                    sender.input(SandboxAppMsg::RemoveShared(index.clone()));
-                }
-            }
-        }
-    }
-
-    fn output_to_parent_input(output: Self::Output) -> Option<Self::ParentInput> {
-        Some(output)
-    }
-
-    async fn init_model(
-        init: Self::Init,
-        _index: &DynamicIndex,
-        _sender: AsyncFactorySender<Self>,
-    ) -> Self {
-        Self {
-            mount_from: init.0,
-            mount_to: init.1
-        }
-    }
-
-    async fn update(&mut self, msg: Self::Input, sender: AsyncFactorySender<Self>) {
-        sender.output(msg);
-    }
-}
+impl_directory!(PrivateDirectory, SandboxAppMsg::RemovePrivate);
+impl_directory!(SharedDirectory, SandboxAppMsg::RemoveShared);
+impl_directory!(SymlinkPath, SandboxAppMsg::RemoveSymlink);
 
 pub struct SandboxApp {
     private_paths: AsyncFactoryVecDeque<PrivateDirectory>,
     shared_paths: AsyncFactoryVecDeque<SharedDirectory>,
+    symlink_paths: AsyncFactoryVecDeque<SymlinkPath>,
 
     private_path_entry: adw::EntryRow,
 
     shared_path_from_entry: adw::EntryRow,
     shared_path_to_entry: adw::EntryRow,
-    read_only_switch: gtk::Switch
+    read_only_switch: gtk::Switch,
+
+    symlink_path_from_entry: adw::EntryRow,
+    symlink_path_to_entry: adw::EntryRow
 }
 
 #[derive(Debug, Clone)]
@@ -127,14 +94,17 @@ pub enum SandboxAppMsg {
     RemovePrivate(DynamicIndex),
 
     AddShared,
-    RemoveShared(DynamicIndex)
+    RemoveShared(DynamicIndex),
+
+    AddSymlink,
+    RemoveSymlink(DynamicIndex)
 }
 
 #[relm4::component(async, pub)]
 impl SimpleAsyncComponent for SandboxApp {
     type Init = ();
     type Input = SandboxAppMsg;
-    type Output = ();
+    type Output = PreferencesAppMsg;
 
     view! {
         adw::PreferencesPage {
@@ -206,6 +176,39 @@ impl SimpleAsyncComponent for SandboxApp {
                             Config::update(config);
                         }
                     }
+                },
+
+                adw::EntryRow {
+                    set_title: &tr("additional-arguments"),
+                    set_text: CONFIG.sandbox.args.as_ref().unwrap_or(&String::new()).trim(),
+
+                    connect_changed => |entry| {
+                        if let Ok(mut config) = Config::get() {
+                            let command = entry.text().trim().to_string();
+
+                            config.sandbox.args = if command.is_empty() {
+                                None
+                            } else {
+                                Some(command)
+                            };
+
+                            Config::update(config);
+                        }
+                    },
+
+                    add_suffix = &gtk::Button {
+                        set_valign: gtk::Align::Center,
+                        set_icon_name: "dialog-information-symbolic",
+
+                        connect_clicked[sender] => move |_| {
+                            if let Err(err) = open::that("https://man.archlinux.org/man/bwrap.1") {
+                                sender.output(PreferencesAppMsg::Toast {
+                                    title: tr("documentation-url-open-failed"),
+                                    description: Some(err.to_string())
+                                }).unwrap();
+                            }
+                        }
+                    }
                 }
             },
 
@@ -268,7 +271,35 @@ impl SimpleAsyncComponent for SandboxApp {
             },
 
             #[local_ref]
-            add = shared_paths -> adw::PreferencesGroup {}
+            add = shared_paths -> adw::PreferencesGroup {},
+
+            add = &adw::PreferencesGroup {
+                set_title: &tr("symlinks"),
+                set_description: Some(&tr("symlinks-description")),
+
+                #[local_ref]
+                symlink_path_from_entry -> adw::EntryRow {
+                    set_title: &tr("original-path")
+                },
+
+                #[local_ref]
+                symlink_path_to_entry -> adw::EntryRow {
+                    set_title: &tr("new-path")
+                },
+
+                gtk::Button {
+                    set_label: &tr("add"),
+                    add_css_class: "pill",
+
+                    set_margin_top: 8,
+                    set_halign: gtk::Align::Start,
+
+                    connect_clicked => SandboxAppMsg::AddSymlink
+                }
+            },
+
+            #[local_ref]
+            add = symlink_paths -> adw::PreferencesGroup {}
         }
     }
 
@@ -277,45 +308,60 @@ impl SimpleAsyncComponent for SandboxApp {
         root: Self::Root,
         sender: AsyncComponentSender<Self>,
     ) -> AsyncComponentParts<Self> {
-        tracing::info!("Initializing environment settings");
+        tracing::info!("Initializing sandbox settings");
 
         let mut model = Self {
             private_paths: AsyncFactoryVecDeque::new(adw::PreferencesGroup::new(), sender.input_sender()),
             shared_paths: AsyncFactoryVecDeque::new(adw::PreferencesGroup::new(), sender.input_sender()),
+            symlink_paths: AsyncFactoryVecDeque::new(adw::PreferencesGroup::new(), sender.input_sender()),
 
             private_path_entry: adw::EntryRow::new(),
 
             shared_path_from_entry: adw::EntryRow::new(),
             shared_path_to_entry: adw::EntryRow::new(),
-            read_only_switch: gtk::Switch::new()
+            read_only_switch: gtk::Switch::new(),
+
+            symlink_path_from_entry: adw::EntryRow::new(),
+            symlink_path_to_entry: adw::EntryRow::new()
         };
 
         for path in &CONFIG.sandbox.private {
-            model.private_paths.guard().push_back(path.trim().to_string());
+            model.private_paths.guard().push_back((path.trim().to_string(), None));
         }
 
         for (from, to) in &CONFIG.sandbox.mounts.read_only {
             model.shared_paths.guard().push_back((
                 from.trim().to_string(),
-                format!("[read-only] {}", to.trim())
+                Some(format!("[read-only] {}", to.trim()))
             ));
         }
 
         for (from, to) in &CONFIG.sandbox.mounts.bind {
             model.shared_paths.guard().push_back((
                 from.trim().to_string(),
-                to.trim().to_string()
+                Some(to.trim().to_string())
+            ));
+        }
+
+        for (from, to) in &CONFIG.sandbox.mounts.symlinks {
+            model.symlink_paths.guard().push_back((
+                from.trim().to_string(),
+                Some(to.trim().to_string())
             ));
         }
 
         let private_paths = model.private_paths.widget();
         let shared_paths = model.shared_paths.widget();
+        let symlink_paths = model.symlink_paths.widget();
 
         let private_path_entry = &model.private_path_entry;
 
         let shared_path_from_entry = &model.shared_path_from_entry;
         let shared_path_to_entry = &model.shared_path_to_entry;
         let read_only_switch = &model.read_only_switch;
+
+        let symlink_path_from_entry = &model.symlink_path_from_entry;
+        let symlink_path_to_entry = &model.symlink_path_to_entry;
 
         let widgets = view_output!();
 
@@ -329,11 +375,13 @@ impl SimpleAsyncComponent for SandboxApp {
                     let path = self.private_path_entry.text().trim().to_string();
 
                     if !path.is_empty() {
+                        self.private_path_entry.set_text("");
+
                         config.sandbox.private.push(path.clone());
 
                         Config::update(config);
 
-                        self.private_paths.guard().push_back(path);
+                        self.private_paths.guard().push_back((path, None));
                     }
                 }
             }
@@ -341,7 +389,7 @@ impl SimpleAsyncComponent for SandboxApp {
             SandboxAppMsg::RemovePrivate(index) => {
                 if let Ok(mut config) = Config::get() {
                     if let Some(var) = self.private_paths.guard().get(index.current_index()) {
-                        config.sandbox.private.retain(|item| item != &var.path);
+                        config.sandbox.private.retain(|item| item != &var.from);
 
                         Config::update(config);
                     }
@@ -358,6 +406,9 @@ impl SimpleAsyncComponent for SandboxApp {
                     let read_only = self.read_only_switch.state();
 
                     if !from.is_empty() && !to.is_empty() {
+                        self.shared_path_from_entry.set_text("");
+                        self.shared_path_to_entry.set_text("");
+
                         if read_only {
                             config.sandbox.mounts.read_only.insert(from.clone(), to.clone());
                         } else {
@@ -368,11 +419,11 @@ impl SimpleAsyncComponent for SandboxApp {
 
                         self.shared_paths.guard().push_back((
                             from,
-                            if read_only {
+                            Some(if read_only {
                                 format!("[read-only] {}", to)
                             } else {
                                 to
-                            }
+                            })
                         ));
                     }
                 }
@@ -381,13 +432,43 @@ impl SimpleAsyncComponent for SandboxApp {
             SandboxAppMsg::RemoveShared(index) => {
                 if let Ok(mut config) = Config::get() {
                     if let Some(var) = self.shared_paths.guard().get(index.current_index()) {
-                        config.sandbox.mounts.read_only.remove(&var.mount_from);
-                        config.sandbox.mounts.bind.remove(&var.mount_from);
+                        config.sandbox.mounts.read_only.remove(&var.from);
+                        config.sandbox.mounts.bind.remove(&var.from);
 
                         Config::update(config);
                     }
 
                     self.shared_paths.guard().remove(index.current_index());
+                }
+            },
+
+            SandboxAppMsg::AddSymlink => {
+                if let Ok(mut config) = Config::get() {
+                    let from = self.symlink_path_from_entry.text().trim().to_string();
+                    let to = self.symlink_path_to_entry.text().trim().to_string();
+
+                    if !from.is_empty() && !to.is_empty() {
+                        self.symlink_path_from_entry.set_text("");
+                        self.symlink_path_to_entry.set_text("");
+
+                        config.sandbox.mounts.symlinks.insert(from.clone(), to.clone());
+
+                        Config::update(config);
+
+                        self.symlink_paths.guard().push_back((from, Some(to)));
+                    }
+                }
+            }
+
+            SandboxAppMsg::RemoveSymlink(index) => {
+                if let Ok(mut config) = Config::get() {
+                    if let Some(var) = self.symlink_paths.guard().get(index.current_index()) {
+                        config.sandbox.mounts.symlinks.remove(&var.from);
+
+                        Config::update(config);
+                    }
+
+                    self.symlink_paths.guard().remove(index.current_index());
                 }
             }
         }

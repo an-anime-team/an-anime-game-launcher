@@ -8,6 +8,7 @@ hide-home-directory = 隐藏家目录
 hide-home-directory-description = 将 /home、 /var/home/$USER 和 $HOME 目录与游戏隔离
 
 hostname = 主机名
+additional-arguments = Additional arguments
 
 private-directories = 隐私目录
 private-directories-description = 这些目录将会被空的虚拟文件系统（tmpfs）替代，其中的原始内容不可被沙盒中的游戏访问
@@ -22,3 +23,6 @@ new-path = 新路径
 
 read-only = 只读
 read-only-description = 禁止游戏向此目录写入任何数据
+
+symlinks = Symlinks
+symlinks-description = Symlink original path to the new one inside of your sandbox
