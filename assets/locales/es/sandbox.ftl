@@ -8,7 +8,7 @@ hide-home-directory = Esconder el directorio home
 hide-home-directory-description = Aisla las carpetas /home, /var/home/$USER, y $HOME del juego
 
 hostname = Nombre del host
-additional-arguments = Additional arguments
+additional-arguments = Argumentos adicionales
 
 private-directories = Directorios privados
 private-directories-description = Estas carpetas serán reemplazadas por un sistema de archivos virtual (tmpfs) vacío, y su contenido real no será accesible al juego aislado
@@ -24,5 +24,5 @@ new-path = Nueva ruta
 read-only = Sólo lectura
 read-only-description = Le prohibe al juego escribir datos en este directorio
 
-symlinks = Symlinks
-symlinks-description = Symlink original path to the new one inside of your sandbox
+symlinks = Enlaces simbólicos
+symlinks-description = Enlaza la ruta original a la nueva dentro de tu entorno aislado
