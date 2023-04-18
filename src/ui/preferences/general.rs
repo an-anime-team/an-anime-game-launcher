@@ -1035,7 +1035,8 @@ impl SimpleAsyncComponent for GeneralApp {
                 let config = Config::get().unwrap_or_else(|_| CONFIG.clone());
 
                 if let Ok(Some(wine)) = config.get_selected_wine() {
-                    let result = wine.to_wine(config.components.path, Some(config.game.wine.builds.join(&wine.name)))
+                    let result = wine
+                        .to_wine(config.components.path, Some(config.game.wine.builds.join(&wine.name)))
                         .with_prefix(config.game.wine.prefix)
                         .with_loader(WineLoader::Current)
                         .with_arch(WineArch::Win64)
