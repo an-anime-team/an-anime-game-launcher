@@ -19,6 +19,13 @@ if sys.argv[2] not in valid_args:
     sys.exit()
 
 path = "assets/locales/" + sys.argv[1] + "/"
+try:
+    x=open(path+"/main.ftl","r")
+    x.close()
+except:
+    print(f"{path} does not exist")
+    sys.exit()
+
 all_entries={}
 
 def dict_compare(d1, d2):
@@ -78,18 +85,22 @@ for filename in os.listdir("assets/locales/en"):
                                 used.append(j)
                     elif sys.argv[2] == "missing":
                         for j in text.split():
+                            # TODO: ignore comments
                             if 'tr("' in j:
                                 index=j.find('tr("')
                                 var_name=re.sub('[^\\w-]+', '',
                                             j[index:].replace('tr("','')
                                             .replace("Some",""))
-                                # TODO: search multiple lines
+                                # TODO: index multiple matches
                                 vars[var_name] = [script.name, get_line_num(text,var_name)]
 
             if sys.argv[2] == "unused":
                 for i in expected:
                     if i not in used:
-                        print(f"{i} is not used ({locale_file.name})")
+                        print(f"[{locale_file.name}]\n"
+                              "  [Unused]\n"
+                              f"    {i}")
+
 
             continue
 
@@ -122,4 +133,6 @@ if sys.argv[2] == "missing":
     if not added:
         print("nothing is missing")
     for i in added:
-        print(f"missing entry: {i} ({vars[i][0]}), line {vars[i][1]}")
+        print(f"[{vars[i][0]}, line {vars[i][1]}]\n"
+              "  [Missing]\n"
+              f"    {i}")
