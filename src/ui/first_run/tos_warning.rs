@@ -8,6 +8,8 @@ use anime_launcher_sdk::is_available;
 use crate::i18n::*;
 use super::main::FirstRunAppMsg;
 
+use super::main::MAIN_WINDOW;
+
 pub struct TosWarningApp;
 
 #[derive(Debug, Clone)]
@@ -86,11 +88,34 @@ impl SimpleAsyncComponent for TosWarningApp {
         match msg {
             #[allow(unused_must_use)]
             TosWarningAppMsg::Continue => {
-                if is_available("git") && is_available("xdelta3") {
-                    sender.output(Self::Output::ScrollToDefaultPaths);
-                } else {
-                    sender.output(Self::Output::ScrollToDependencies);
-                }
+                let dialog = adw::MessageDialog::new(
+                    unsafe { MAIN_WINDOW.as_ref() },
+                    Some(&tr("tos-dialog-title")),
+                    Some(&tr("tos-dialog-message"))
+                );
+
+                dialog.add_responses(&[
+                    ("exit", &tr("exit")),
+                    ("continue", &tr("agree"))
+                ]);
+
+                dialog.connect_response(None, move |_, response| {
+                    match response {
+                        "exit" => relm4::main_application().quit(),
+
+                        "continue" => {
+                            if is_available("git") && is_available("xdelta3") {
+                                sender.output(Self::Output::ScrollToDefaultPaths);
+                            } else {
+                                sender.output(Self::Output::ScrollToDependencies);
+                            }
+                        }
+
+                        _ => unreachable!()
+                    }
+                });
+
+                dialog.show();
             }
 
             TosWarningAppMsg::Exit => relm4::main_application().quit()
