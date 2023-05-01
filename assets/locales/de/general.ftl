@@ -7,22 +7,22 @@ update-background-description = Lädt das offizielle Hintergrundbild herunter f�
 launcher-language = Launcher Sprache
 launcher-language-description = Gilt nach Neustart
 
-game-edition = Game edition
+game-edition = Spiel-Edition
 global = Global
 china = China
 
-game-environment = Game environment
-game-environment-description = Get specific features like additional payment methods
+game-environment = Spielumgebung
+game-environment-description = Spezielle Funktionen wie zusätzliche Zahlungsmöglichkeiten
 
 game-voiceovers = Spiel Sprachen
-game-voiceovers-description = List of downloaded game voiceovers. You can select them in the game settings
+game-voiceovers-description = Liste der heruntergeladenen Sprachausgabe für das Spiel. Sie können diese in den Spieleinstellungen auswählen
 english = Englisch
 japanese = Japanisch
 korean = Koreanisch
 chinese = Chinesisch
 
-migrate-installation = Migrate installation
-migrate-installation-description = Open special window where you can change your game installation folder
+migrate-installation = Installation migrieren
+migrate-installation-description = Öffnet ein spezielles Fenster, in dem Sie den Installationsordner Ihres Spiels ändern können
 repair-game = Spiel Reparieren
 
 status = Status
@@ -64,11 +64,11 @@ wine-version = Wine version
 wine-recommended-description = Nur empfohlene wine versionen anzeigen
 
 wine-tools = Wine tools
-command-line = Command line
-registry-editor = Registry editor
+command-line = Befehlszeile
+registry-editor = Registrierungs-Editor
 explorer = Explorer
 task-manager = Task manager
-configuration = Configuration
+configuration = Konfiguration
 debugger = Debugger
 
 dxvk-version = DXVK version

@@ -36,14 +36,14 @@ show-all-folders-subtitle = Zusätzliche Pfadauswahl-Einstellungen anzeigen. Tu 
 runners-folder = Runners-Ordner
 dxvks-folder = DXVKs-Ordner
 wine-prefix-folder = Wine prefix-Ordner
-global-game-installation-folder = Global game version installation folder
-chinese-game-installation-folder = Chinese game version installation folder
+global-game-installation-folder = Installationsordner der globalen Spielversion
+chinese-game-installation-folder = Installationsordner der chinesischen Spielversion
 fps-unlocker-folder = FPS Unlocker Ordner
 components-index = Komponentenverzeichnis
 patch-folder = Patch-Ordner
 temp-folder = Temp-Ordner
 
-migrate = Migrate
+migrate = Migrieren
 
 
 select-voice-packages = Sprachpakete auswählen
