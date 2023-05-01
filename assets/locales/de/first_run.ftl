@@ -23,6 +23,11 @@ tos-violation-warning-message =
 
     Wenn Sie sich des Risikos bewusst sind, das mit dem Versuch, das Spiel inoffiziell zu spielen, verbunden ist, drücken Sie auf OK und lassen Sie uns die Welt von Teyvat erforschen!
 
+tos-dialog-title = Sind Sie sicher, dass Sie verstehen, was wir sagen?
+tos-dialog-message =
+    1. Veröffentlichen Sie keine Informationen über dieses Projekt
+    2. Missbrauchen Sie es nicht durch die Verwendung von Mods
+    3. Stellen Sie Fragen nur in unserem Discord oder auf dem Matrix-Server
 
 dependencies = Abhängigkeiten
 missing-dependencies-title = Sie vermissen einige Abhängigkeiten!
