@@ -223,10 +223,10 @@ impl SimpleComponent for App {
                             #[watch]
                             set_visible: model.style == LauncherStyle::Modern,
 
-                            gtk::Image {
+                            gtk::Picture {
                                 set_resource: Some("/org/app/images/icon.png"),
                                 set_vexpand: true,
-                                set_margin_top: 48
+                                set_content_fit: gtk::ContentFit::ScaleDown
                             },
 
                             gtk::Label {
@@ -253,6 +253,8 @@ impl SimpleComponent for App {
                             set_visible: model.downloading,
 
                             set_vexpand: true,
+                            set_margin_top: 48,
+                            set_margin_bottom: 48,
 
                             add = model.progress_bar.widget(),
                         },
@@ -272,6 +274,12 @@ impl SimpleComponent for App {
 
                             #[watch]
                             set_visible: !model.downloading,
+
+                            #[watch]
+                            set_margin_bottom: match model.style {
+                                LauncherStyle::Modern => 48,
+                                LauncherStyle::Classic => 0
+                            },
 
                             set_vexpand: true,
 
