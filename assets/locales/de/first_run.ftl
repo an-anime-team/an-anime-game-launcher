@@ -21,7 +21,7 @@ tos-violation-warning-message =
 
     Sollte dies der Fall sein, würde Ihr Konto gegen die TOS verstoßen, {company-name}/{company-alter-name} sind frei zu tun, was sie wollen. Inklusive Ban.
 
-    Wenn Sie sich des Risikos bewusst sind, das mit dem Versuch, das Spiel inoffiziell zu spielen, verbunden ist, drücken Sie auf OK und lassen Sie uns die Welt von Teyvat erforschen!
+    Wenn Sie sich über das Risiko bewusst sind das mit dem versuchen des Spiels spielen in inoffizieller Weise verbunden ist dann drücken Sie OK um fortzufahren.
 
 tos-dialog-title = Sind Sie sicher, dass Sie verstehen, was wir sagen?
 tos-dialog-message =
