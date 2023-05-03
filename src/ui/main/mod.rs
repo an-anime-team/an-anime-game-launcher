@@ -717,10 +717,8 @@ impl SimpleComponent for App {
                                     description: if changes.is_empty() {
                                         None
                                     } else {
-                                        let max_len = changes.iter().map(|line| line.len()).max().unwrap_or(80);
-
                                         Some(changes.into_iter()
-                                            .map(|line| format!("- {line}{}", " ".repeat(max_len - line.len())))
+                                            .map(|line| format!("- {line}"))
                                             .collect::<Vec<_>>()
                                             .join("\n"))
                                     }

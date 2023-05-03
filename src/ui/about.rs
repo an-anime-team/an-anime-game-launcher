@@ -51,10 +51,12 @@ impl SimpleComponent for AboutDialog {
             ]),
 
             add_credit_section: (Some("An Anime Team"), &[
+                "Nikita Podvirnyy https://github.com/krypt0nn",
                 "@Marie https://github.com/Mar0xy",
                 "@lane https://github.com/laurinneff",
                 "@jiro-too https://github.com/jiro-too",
-                "@cybik https://github.com/cybik"
+                "@cybik https://github.com/cybik",
+                "@mkrsym1 https://github.com/mkrsym1"
             ]),
 
             set_artists: &[

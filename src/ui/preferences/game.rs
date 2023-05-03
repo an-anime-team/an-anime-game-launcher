@@ -8,24 +8,29 @@ use crate::i18n::tr;
 use crate::*;
 
 #[derive(Debug)]
-struct Variable {
-    key: String,
-    value: String
+struct GameSession {
+    title: String,
+    description: Option<String>,
+    id: usize
 }
 
 #[relm4::factory(async)]
-impl AsyncFactoryComponent for Variable {
-    type Init = (String, String);
-    type Input = EnvironmentAppMsg;
-    type Output = EnvironmentAppMsg;
+impl AsyncFactoryComponent for GameSession {
+    type Init = GameSession;
+    type Input = GameAppMsg;
+    type Output = GameAppMsg;
     type CommandOutput = ();
-    type ParentInput = EnvironmentAppMsg;
+    type ParentInput = GameAppMsg;
     type ParentWidget = adw::PreferencesGroup;
 
     view! {
         root = adw::ActionRow {
-            set_title: &self.key,
-            set_subtitle: &self.value,
+            set_title: &self.title,
+
+            set_subtitle: match &self.description {
+                Some(description) => description.as_str(),
+                None => ""
+            },
 
             add_suffix = &gtk::Button {
                 set_icon_name: "user-trash-symbolic",
@@ -33,7 +38,7 @@ impl AsyncFactoryComponent for Variable {
                 set_valign: gtk::Align::Center,
 
                 connect_clicked[sender, index] => move |_| {
-                    sender.input(EnvironmentAppMsg::Remove(index.clone()));
+                    sender.input(GameAppMsg::Remove(index.clone()));
                 }
             }
         }
@@ -48,10 +53,7 @@ impl AsyncFactoryComponent for Variable {
         _index: &DynamicIndex,
         _sender: AsyncFactorySender<Self>,
     ) -> Self {
-        Self {
-            key: init.0,
-            value: init.1
-        }
+        init
     }
 
     async fn update(&mut self, msg: Self::Input, sender: AsyncFactorySender<Self>) {
@@ -59,23 +61,23 @@ impl AsyncFactoryComponent for Variable {
     }
 }
 
-pub struct EnvironmentApp {
-    variables: AsyncFactoryVecDeque<Variable>,
+pub struct GameApp {
+    variables: AsyncFactoryVecDeque<GameSession>,
 
     name_entry: adw::EntryRow,
     value_entry: adw::EntryRow
 }
 
 #[derive(Debug, Clone)]
-pub enum EnvironmentAppMsg {
+pub enum GameAppMsg {
     Add,
     Remove(DynamicIndex)
 }
 
 #[relm4::component(async, pub)]
-impl SimpleAsyncComponent for EnvironmentApp {
+impl SimpleAsyncComponent for GameApp {
     type Init = ();
-    type Input = EnvironmentAppMsg;
+    type Input = GameAppMsg;
     type Output = ();
 
     view! {
@@ -127,7 +129,7 @@ impl SimpleAsyncComponent for EnvironmentApp {
                     set_margin_top: 8,
                     set_halign: gtk::Align::Start,
 
-                    connect_clicked => EnvironmentAppMsg::Add
+                    connect_clicked => GameAppMsg::Add
                 }
             },
 
@@ -150,9 +152,9 @@ impl SimpleAsyncComponent for EnvironmentApp {
             value_entry: adw::EntryRow::new()
         };
 
-        for (name, value) in &CONFIG.game.environment {
-            model.variables.guard().push_back((name.trim().to_string(), value.trim().to_string()));
-        }
+        /*for (name, value) in &CONFIG.game.environment {
+            model.variables.guard().push_back();
+        }*/
 
         let variables = model.variables.widget();
 
@@ -166,7 +168,7 @@ impl SimpleAsyncComponent for EnvironmentApp {
 
     async fn update(&mut self, msg: Self::Input, _sender: AsyncComponentSender<Self>) {
         match msg {
-            EnvironmentAppMsg::Add => {
+            GameAppMsg::Add => {
                 if let Ok(mut config) = Config::get() {
                     let name = self.name_entry.text().trim().to_string();
                     let value = self.value_entry.text().trim().to_string();
@@ -179,15 +181,15 @@ impl SimpleAsyncComponent for EnvironmentApp {
 
                         Config::update(config);
 
-                        self.variables.guard().push_back((name, value));
+                        // self.variables.guard().push_back((name, value));
                     }
                 }
             }
 
-            EnvironmentAppMsg::Remove(index) => {
+            GameAppMsg::Remove(index) => {
                 if let Ok(mut config) = Config::get() {
                     if let Some(var) = self.variables.guard().get(index.current_index()) {
-                        config.game.environment.remove(&var.key);
+                        // config.game.environment.remove(&var.key);
 
                         Config::update(config);
                     }
