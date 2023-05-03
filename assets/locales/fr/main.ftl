@@ -22,6 +22,7 @@ continue = Continuer
 exit = Quitter
 check = Vérifier
 restart = Redémarer
+agree = Agree
 
 
 loading-data = Chargement des données

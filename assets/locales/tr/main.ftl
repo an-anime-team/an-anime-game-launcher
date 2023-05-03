@@ -21,7 +21,8 @@ save = Kaydet
 continue = Devam et
 exit = Çıkış yap
 check = Kontrol et
-restart = Tekrardan başlat 
+restart = Tekrardan başlat
+agree = Agree
 
 
 loading-data = Bilgiler yükleniyor

@@ -22,6 +22,7 @@ continue = 继续
 exit = 退出
 check = 检查
 restart = 重启
+agree = Agree
 
 
 loading-data = 正在加载数据

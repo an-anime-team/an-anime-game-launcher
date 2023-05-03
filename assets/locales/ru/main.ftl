@@ -22,6 +22,7 @@ continue = Продолжить
 exit = Выйти
 check = Проверить
 restart = Перезапустить
+agree = Подтвердить
 
 
 loading-data = Загрузка данных

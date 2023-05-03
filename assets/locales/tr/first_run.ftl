@@ -23,6 +23,11 @@ tos-violation-warning-message =
 
      Oyunu gayri resmi bir sıfatla oynamaya çalışmanın riskini anlıyorsanız, Tamam'a basın ve Haydi Teyvat dünyasını araştırmaya başlayalım!
 
+tos-dialog-title = Are you sure you understand what we want to say?
+tos-dialog-message =
+    1. Don't publish any information about this project
+    2. Don't abuse it by using some modded clients and so
+    3. Ask questions exceptionally in our discord or matrix server
 
 dependencies = Bağlılıklar
 missing-dependencies-title = Bazı bağlılıklar bulunamadı!
