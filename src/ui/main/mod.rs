@@ -220,6 +220,8 @@ impl SimpleComponent for App {
                         set_visible: model.loading.is_none(),
 
                         add = &adw::PreferencesGroup {
+                            set_margin_top: 32,
+
                             #[watch]
                             set_visible: model.style == LauncherStyle::Modern,
 
