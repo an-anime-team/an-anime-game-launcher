@@ -9,25 +9,25 @@ welcome-page-message =
 tos-violation-warning = Kullanım şartlarının ihlali uyarısı
 
 tos-violation-warning-message =
-   Bu başlatıcı, resmi olmayan bir araçtır ve hiçbir şekilde {company-name} veya {company-alter-name} ile ilgili değildir.
+    Bu başlatıcı, resmi olmayan bir araçtır ve hiçbir şekilde {company-name} veya {company-alter-name} ile ilgili değildir.
 
-     Bu araç, Linux'ta {game-name} oynamayı kolaylaştırmak için tasarlanmıştır ve yalnızca oyunu daha az güçlükle yüklemek ve çalıştırmak amacıyla oluşturulmuştur.
+    Bu araç, Linux'ta {game-name} oynamayı kolaylaştırmak için tasarlanmıştır ve yalnızca oyunu daha az güçlükle yüklemek ve çalıştırmak amacıyla oluşturulmuştur.
 
-     Bunu, mevcut bileşenleri kullanarak ve deneyimi kullanıcı için basit hale getirerek yapar.
+    Bunu, mevcut bileşenleri kullanarak ve deneyimi kullanıcı için basit hale getirerek yapar.
 
-     Ancak burada kullanılan bazı bileşenler, {game-name} için {company-name} Hizmet Şartlarını ihlal ediyor olabilir.
+    Ancak burada kullanılan bazı bileşenler, {game-name} için {company-name} Hizmet Şartlarını ihlal ediyor olabilir.
 
-     Bu başlatıcıyı kullanıyorsanız, {game-name} hesabınız {company-name}/{company-alter-name} tarafından TOS uyumlu değil olarak tanımlanacaktır.
+    Bu başlatıcıyı kullanıyorsanız, {game-name} hesabınız {company-name}/{company-alter-name} tarafından TOS uyumlu değil olarak tanımlanacaktır.
 
-     Böyle bir durumda, hesabınız Hizmet Koşullarına uymayacağından, {company-name}/{company-alter-name} istediğini yapmakta özgürdür. Banlamak dahil.
+    Böyle bir durumda, hesabınız Hizmet Koşullarına uymayacağından, {company-name}/{company-alter-name} istediğini yapmakta özgürdür. Banlamak dahil.
 
-     Oyunu gayri resmi bir sıfatla oynamaya çalışmanın riskini anlıyorsanız, Tamam'a basın ve Haydi Teyvat dünyasını araştırmaya başlayalım!
+    Eğer oyunu illegal yollarla oynamanın riskini anlıyorsanız, Tamam'a tıklayın
 
-tos-dialog-title = Are you sure you understand what we want to say?
+tos-dialog-title = Ne demek istediğimizi anlayabildiniz mi?
 tos-dialog-message =
-    1. Don't publish any information about this project
-    2. Don't abuse it by using some modded clients and so
-    3. Ask questions exceptionally in our discord or matrix server
+    1. Bu proje hakkında herhangi bir bilgi paylaşmayın.
+    2. Modlanmış istemciler vb. ile suistimal etmeyin.
+    3. Sorularınızı sadece Discord veya Matrix sunucumuzda sorun.
 
 dependencies = Bağlılıklar
 missing-dependencies-title = Bazı bağlılıklar bulunamadı!

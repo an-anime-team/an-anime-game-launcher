@@ -22,7 +22,7 @@ continue = Devam et
 exit = Çıkış yap
 check = Kontrol et
 restart = Tekrardan başlat
-agree = Agree
+agree = Onayla
 
 
 loading-data = Bilgiler yükleniyor
