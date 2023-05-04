@@ -1,28 +1,28 @@
-sandbox = Sandbox
-sandbox-description = Run the game in isolated environment, preventing it from accessing your personal data
+sandbox = Sanallaştırma
+sandbox-description = Oyunu kişisel verilerinize erişemeyeceği, izole bir ortamda çalıştır
 
-enable-sandboxing = Enable sandboxing
-enable-sandboxing-description = Run the game in read-only copy of your root filesystem
+enable-sandboxing = Sanallaştırmayı aktifleştir
+enable-sandboxing-description = Oyunu root dosya sisteminizin salt-okunur kopyasında çalıştır
 
-hide-home-directory = Hide home directory
-hide-home-directory-description = Isolate your /home, /var/home/$USER, and $HOME folders from the game
+hide-home-directory = Home dizinini gizle
+hide-home-directory-description = /home, /var/home/$USER, ve $HOME klasörlerini oyundan gizle
 
-hostname = Hostname
+hostname = Host adı
 additional-arguments = Ek argümanlar
 
-private-directories = Private directories
-private-directories-description = These folders will be replaced by an empty virtual filesystem (tmpfs), and their original content will not be available to sandboxed game
+private-directories = Özel dizinler
+private-directories-description = Bu klasörler boş bir sanal dosya sistemiyle değiştirilecektir (tmpfs), ve orijinal içeriklerine sanallaştırılmış oyun erişemeyecektir
 
-path = Path
+path = Yol
 
-shared-directories = Shared directories
-shared-directories-description = These directories will be symlinked to directories in your host system
+shared-directories = Paylaşılmış dizinler
+shared-directories-description = Bu dizinlerden host sisteminizin dizinlerine kısayol oluşturulacaktır
 
-original-path = Original path
-new-path = New path
+original-path = Orijinal yol
+new-path = Yeni yol
 
-read-only = Read-only
-read-only-description = Forbid game to write any data to this directory
+read-only = Salt-okunur
+read-only-description = Oyunun bu dizinde veri oluşturmasını yasakla
 
 symlinks = Kısayollar
 symlinks-description = Orijinal yoldan sanal ortamın içindeki yenisine kısayol oluştur

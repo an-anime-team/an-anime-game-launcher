@@ -1,9 +1,9 @@
 welcome = Merhaba
 
 welcome-page-message =
-    Merhaba bir anime oyunu istemcisine hoş geldiniz
+    Merhaba, bir anime oyunu istemcisine hoş geldiniz
 
-    Oyunu çalıştırmadan önce bazı şeyler hazırlamamız ve varsayılan bileşenleri indirmemiz gerekiyor.
+    Oyunu çalıştırmadan önce bazı şeyleri hazırlamamız ve varsayılan bileşenleri indirmemiz gerekiyor.
 
 
 tos-violation-warning = Kullanım şartlarının ihlali uyarısı
@@ -29,8 +29,8 @@ tos-dialog-message =
     2. Modlanmış istemciler vb. ile suistimal etmeyin.
     3. Sorularınızı sadece Discord veya Matrix sunucumuzda sorun.
 
-dependencies = Bağlılıklar
-missing-dependencies-title = Bazı bağlılıklar bulunamadı!
+dependencies = Bağımlılıklar
+missing-dependencies-title = Bazı bağımlılıklar bulunamadı!
 missing-dependencies-message = Kurulum işlemine devam etmeden önce bazı paketleri sisteminize kurmalısınız.
 
 
@@ -39,24 +39,24 @@ choose-default-paths = Varsayılan yolları seç
 show-all-folders = Ne yaptığımı biliyorum
 show-all-folders-subtitle = Ek yol seçimi ayarlarını göster. Dediğimi yap...
 runners-folder = Başlatıcılar(Runnerlar) klasörü
-dxvks-folder = DXVKnın klasörü
-wine-prefix-folder = Wine prefixnin klasörü
-global-game-installation-folder = Global game version installation folder
-chinese-game-installation-folder = Chinese game version installation folder
-fps-unlocker-folder = FPS Unlocker folder
+dxvks-folder = DXVK'nin klasörü
+wine-prefix-folder = Wine prefix'inin klasörü
+global-game-installation-folder = Evrensel oyun sürümünü yükleme klasörü
+chinese-game-installation-folder = Oyun'un Çin sürümünü yükleme klasörü 
+fps-unlocker-folder = FPS Unlocker klasörü
 components-index = Bileşenlerin dizini
 patch-folder = Yama klasörü
 temp-folder = "Geçici" klasörü
 
-migrate = Migrate
+migrate = Aktarma
 
 
 select-voice-packages = Ses paketlerini seç
 
 
 download-components = Bileşenleri indir
-download-dxvk = DXVKyı İndir
-apply-dxvk = DXVKyı uygula
+download-dxvk = DXVK'yi İndir
+apply-dxvk = DXVK'yi uygula
 
 
 finish = Bitir
