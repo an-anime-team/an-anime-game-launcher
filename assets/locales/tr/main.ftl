@@ -4,13 +4,13 @@ default = Varsayılan
 details = Detaylar
 
 width = Genişlik
-height = Uzunlul
+height = Uzunluk
 
 # Menu items
 
 launcher-folder = İstemci dosyası
 game-folder = Oyun dosyası
-config-file = Config dosyaso
+config-file = Config dosyası
 debug-file = Debug dosyası
 wish-url = Dilekleri aç
 about = Hakkında
@@ -26,13 +26,13 @@ agree = Onayla
 
 
 loading-data = Bilgiler yükleniyor
-downloading-background-picture = Arkaplan dosyasi indiriliyor
+downloading-background-picture = Arkaplan dosyası indiriliyor
 updating-components-index = Bileşenlerin dizini güncelleniyor
 loading-game-version = Oyun sürümü yükleniyor
 loading-patch-status = Yama durumu yükleniyor
 loading-launcher-state = İstemci durumu yükleniyor
 loading-launcher-state--game = Loading launcher state: oyun versiyonu doğrulanıyor
-loading-launcher-state--voice = Loading launcher state: {$locale} dublaj doğrulanıyor
+loading-launcher-state--voice = Loading launcher state: {$locale} seslendirme doğrulanıyor
 loading-launcher-state--patch = Loading launcher state: indirilmiş yamanın durumu yükleniyor
 
 
@@ -41,17 +41,17 @@ downloading = İndiriliyor
 unpacking = Paketten çıkartılıyor
 verifying-files = Dosyalar Doğrulanıyor
 repairing-files = Dosyalar tamir ediliyor
-migrating-folders = Migrating folders
-applying-hdiff = Applying hdiff patches
-removing-outdated = Removing outdated files
+migrating-folders = Dosyalar aktarılıyor
+applying-hdiff = Hdiff yamaları uygulanıyor
+removing-outdated = Eskimiş dosyalar kaldırılıyor
 
 
-components-index-updated = Components index was updated
+components-index-updated = Bileşenlerin dizini güncellendi
 
 
 launch = Çalıştır
-migrate-folders = Migrate folders
-migrate-folders-tooltip = Update game folders structure
+migrate-folders = Dosyaları aktar
+migrate-folders-tooltip = Oyun dosyaları yapısını güncelle
 apply-patch = Yamayı uygula
 download-wine = Wine indir
 create-prefix = Prefix oluştur
