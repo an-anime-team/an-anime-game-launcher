@@ -48,8 +48,8 @@ documentation-url-open-failed = Dokumentations-URL kann nicht geöffnet werden
 
 # Game
 
-game-session-add-failed = Failed to add game session
-game-session-update-failed = Failed to update game session
-game-session-remove-failed = Failed to remove game session
-game-session-set-current-failed = Failed to set current game session
-game-session-apply-failed = Failed to apply game session
+game-session-add-failed = Spielsitzung konnte nicht hinzugefügt werden
+game-session-update-failed = Spielsitzung konnte nicht aktualisiert werden
+game-session-remove-failed = Spielsitzung konnte nicht entfernt werden
+game-session-set-current-failed = Aktuelle Spielsitzung konnte nicht eingestellt werden
+game-session-apply-failed = Spielsitzung konnte nicht angewendet werden
