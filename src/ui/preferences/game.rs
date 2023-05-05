@@ -38,7 +38,7 @@ impl AsyncFactoryComponent for GameSession {
                 set_valign: gtk::Align::Center,
 
                 connect_clicked[sender, index] => move |_| {
-                    sender.input(GameAppMsg::Remove(index.clone()));
+                    sender.input(GameAppMsg::RemoveSession(index.clone()));
                 }
             }
         }
@@ -62,16 +62,15 @@ impl AsyncFactoryComponent for GameSession {
 }
 
 pub struct GameApp {
-    variables: AsyncFactoryVecDeque<GameSession>,
+    sessions: AsyncFactoryVecDeque<GameSession>,
 
-    name_entry: adw::EntryRow,
-    value_entry: adw::EntryRow
+    session_name_entry: adw::EntryRow
 }
 
 #[derive(Debug, Clone)]
 pub enum GameAppMsg {
-    Add,
-    Remove(DynamicIndex)
+    AddSession,
+    RemoveSession(DynamicIndex)
 }
 
 #[relm4::component(async, pub)]
@@ -82,44 +81,15 @@ impl SimpleAsyncComponent for GameApp {
 
     view! {
         adw::PreferencesPage {
-            set_title: &tr("environment"),
+            set_title: "Game",
             set_icon_name: Some("document-properties-symbolic"),
 
             add = &adw::PreferencesGroup {
-                set_title: &tr("game-command"),
-                set_description: Some(&tr("game-command-description")),
-
-                adw::EntryRow {
-                    set_title: "%command%",
-                    set_text: CONFIG.game.command.as_ref().unwrap_or(&String::new()).trim(),
-
-                    connect_changed => |entry| {
-                        if let Ok(mut config) = Config::get() {
-                            let command = entry.text().trim().to_string();
-
-                            config.game.command = if command.is_empty() {
-                                None
-                            } else {
-                                Some(command)
-                            };
-
-                            Config::update(config);
-                        }
-                    }
-                }
-            },
-
-            add = &adw::PreferencesGroup {
-                set_title: &tr("new-variable"),
+                set_title: "Saved sessions",
 
                 #[local_ref]
-                name_entry -> adw::EntryRow {
+                session_name_entry -> adw::EntryRow {
                     set_title: &tr("name")
-                },
-
-                #[local_ref]
-                value_entry -> adw::EntryRow {
-                    set_title: &tr("value")
                 },
 
                 gtk::Button {
@@ -129,12 +99,12 @@ impl SimpleAsyncComponent for GameApp {
                     set_margin_top: 8,
                     set_halign: gtk::Align::Start,
 
-                    connect_clicked => GameAppMsg::Add
+                    connect_clicked => GameAppMsg::AddSession
                 }
             },
 
             #[local_ref]
-            add = variables -> adw::PreferencesGroup {}
+            add = sessions -> adw::PreferencesGroup {},
         }
     }
 
@@ -146,20 +116,18 @@ impl SimpleAsyncComponent for GameApp {
         tracing::info!("Initializing environment settings");
 
         let mut model = Self {
-            variables: AsyncFactoryVecDeque::new(adw::PreferencesGroup::new(), sender.input_sender()),
+            sessions: AsyncFactoryVecDeque::new(adw::PreferencesGroup::new(), sender.input_sender()),
 
-            name_entry: adw::EntryRow::new(),
-            value_entry: adw::EntryRow::new()
+            session_name_entry: adw::EntryRow::new()
         };
 
         /*for (name, value) in &CONFIG.game.environment {
             model.variables.guard().push_back();
         }*/
 
-        let variables = model.variables.widget();
+        let sessions = model.sessions.widget();
 
-        let name_entry = &model.name_entry;
-        let value_entry = &model.value_entry;
+        let session_name_entry = &model.session_name_entry;
 
         let widgets = view_output!();
 
@@ -168,34 +136,26 @@ impl SimpleAsyncComponent for GameApp {
 
     async fn update(&mut self, msg: Self::Input, _sender: AsyncComponentSender<Self>) {
         match msg {
-            GameAppMsg::Add => {
-                if let Ok(mut config) = Config::get() {
-                    let name = self.name_entry.text().trim().to_string();
-                    let value = self.value_entry.text().trim().to_string();
+            GameAppMsg::AddSession => {
+                let name = self.session_name_entry.text().trim().to_string();
 
-                    if !name.is_empty() && !value.is_empty() {
-                        self.name_entry.set_text("");
-                        self.value_entry.set_text("");
+                if !name.is_empty() {
+                    self.session_name_entry.set_text("");
 
-                        config.game.environment.insert(name.clone(), value.clone());
-
-                        Config::update(config);
-
-                        // self.variables.guard().push_back((name, value));
-                    }
+                    self.sessions.guard().push_back(GameSession {
+                        title: name,
+                        description: None,
+                        id: 0
+                    });
                 }
             }
 
-            GameAppMsg::Remove(index) => {
-                if let Ok(mut config) = Config::get() {
-                    if let Some(var) = self.variables.guard().get(index.current_index()) {
-                        // config.game.environment.remove(&var.key);
-
-                        Config::update(config);
-                    }
-
-                    self.variables.guard().remove(index.current_index());
+            GameAppMsg::RemoveSession(index) => {
+                if let Some(var) = self.sessions.guard().get(index.current_index()) {
+                    // ..
                 }
+
+                self.sessions.guard().remove(index.current_index());
             }
         }
     }
