@@ -1,8 +1,8 @@
 sandbox = Sanallaştırma
-sandbox-description = Oyunu kişisel verilerinize erişemeyeceği, izole bir ortamda çalıştır
+sandbox-description = Oyunu kişisel verilerinize erişemeyeceği, izole bir ortamda çalıştırın
 
 enable-sandboxing = Sanallaştırmayı aktifleştir
-enable-sandboxing-description = Oyunu root dosya sisteminizin salt-okunur kopyasında çalıştır
+enable-sandboxing-description = Oyunu root dosya sisteminizin salt-okunur kopyasında çalıştırın
 
 hide-home-directory = Home dizinini gizle
 hide-home-directory-description = /home, /var/home/$USER, ve $HOME klasörlerini oyundan gizle
