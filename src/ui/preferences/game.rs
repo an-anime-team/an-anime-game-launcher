@@ -40,7 +40,7 @@ impl AsyncFactoryComponent for GameSession {
                 set_icon_name: "view-refresh-symbolic-symbolic",
                 add_css_class: "flat",
 
-                set_tooltip_text: Some("Update session using current wine prefix registry values"),
+                set_tooltip_text: Some(&tr("update-session")),
 
                 set_valign: gtk::Align::Center,
 
@@ -53,7 +53,7 @@ impl AsyncFactoryComponent for GameSession {
                 set_icon_name: "user-trash-symbolic",
                 add_css_class: "flat",
 
-                set_tooltip_text: Some("Delete session"),
+                set_tooltip_text: Some(&tr("delete-session")),
 
                 set_valign: gtk::Align::Center,
 
@@ -103,16 +103,16 @@ impl SimpleAsyncComponent for GameApp {
 
     view! {
         adw::PreferencesPage {
-            set_title: "Game",
+            set_title: &tr("game"),
             set_icon_name: Some("applications-games-symbolic"),
 
             add = &adw::PreferencesGroup {
-                set_title: "Game sessions",
+                set_title: &tr("game-sessions"),
 
                 #[local_ref]
                 sessions_combo -> adw::ComboRow {
-                    set_title: "Active session",
-                    set_subtitle: "Currently selected game session. Updates after each game launch",
+                    set_title: &tr("active-sessions"),
+                    set_subtitle: &tr("active-session-description"),
 
                     connect_selected_notify[sender] => move |row| sender.input(GameAppMsg::SetCurrent(row.selected()))
                 }
@@ -196,7 +196,7 @@ impl SimpleAsyncComponent for GameApp {
                             #[allow(unused_must_use)]
                             Err(err) => {
                                 sender.output(PreferencesAppMsg::Toast {
-                                    title: String::from("Failed to update game session"),
+                                    title: tr("game-session-add-failed"),
                                     description: Some(err.to_string())
                                 });
                             }
@@ -211,7 +211,7 @@ impl SimpleAsyncComponent for GameApp {
                         #[allow(unused_must_use)]
                         if let Err(err) = Sessions::update(session.name.clone(), config.get_wine_prefix_path()) {
                             sender.output(PreferencesAppMsg::Toast {
-                                title: String::from("Failed to update game session"),
+                                title: tr("game-session-update-failed"),
                                 description: Some(err.to_string())
                             });
                         }
@@ -227,7 +227,7 @@ impl SimpleAsyncComponent for GameApp {
                         #[allow(unused_must_use)]
                         Err(err) => {
                             sender.output(PreferencesAppMsg::Toast {
-                                title: String::from("Failed to update game session"),
+                                title: tr("game-session-remove-failed"),
                                 description: Some(err.to_string())
                             });
 
@@ -245,7 +245,7 @@ impl SimpleAsyncComponent for GameApp {
                         #[allow(unused_must_use)]
                         if let Err(err) = Sessions::set_current(name.to_owned()) {
                             sender.output(PreferencesAppMsg::Toast {
-                                title: String::from("Failed to update game session"),
+                                title: tr("game-session-set-current-failed"),
                                 description: Some(err.to_string())
                             });
 
@@ -256,7 +256,7 @@ impl SimpleAsyncComponent for GameApp {
                         #[allow(unused_must_use)]
                         if let Err(err) = Sessions::apply(name.to_owned(), config.get_wine_prefix_path()) {
                             sender.output(PreferencesAppMsg::Toast {
-                                title: String::from("Failed to update game session"),
+                                title: tr("game-session-apply-failed"),
                                 description: Some(err.to_string())
                             });
                         }

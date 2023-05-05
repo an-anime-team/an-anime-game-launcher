@@ -45,3 +45,11 @@ game-patching-error = Yamayı uygulamada sorun çıktı
 # Sandbox
 
 documentation-url-open-failed = Belgelemenin URL'si açılamadı
+
+# Game
+
+game-session-add-failed = Failed to add game session
+game-session-update-failed = Failed to update game session
+game-session-remove-failed = Failed to remove game session
+game-session-set-current-failed = Failed to set current game session
+game-session-apply-failed = Failed to apply game session

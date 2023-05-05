@@ -45,3 +45,11 @@ game-patching-error = Не удалось установить патч игры
 # Sandbox
 
 documentation-url-open-failed = Не удалось открыть ссылку с документацией
+
+# Game
+
+game-session-add-failed = Не удалось добавить игровую сессию
+game-session-update-failed = Не удалось обновить игровую сессию
+game-session-remove-failed = Не удалось удалить игровую сессию
+game-session-set-current-failed = Не удалось выбрать игровую сессию
+game-session-apply-failed = Не удалось применить игровую сессию
