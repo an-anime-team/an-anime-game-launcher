@@ -15,7 +15,7 @@ game = Oyun
 hud = HUD
 
 fsr = FSR
-fsr-description = Oyunu mönitör boyutunuza büyütür. Daha düşük bir çözünürlük seçmek için oyun içinde alt + enter tuşlarına basın
+fsr-description = Oyunu monitör boyutunuza büyütür. Daha düşük bir çözünürlük seçmek için oyun içinde alt + enter tuşlarına basın
 ultra-quality = Ultra kalite
 quality = Kalite
 balanced = Dengeli

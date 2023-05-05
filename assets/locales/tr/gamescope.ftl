@@ -10,4 +10,4 @@ nis-description = DLSS teknolojisine düşük maliyetli bir alternatif olarak Nv
 
 other-settings = Diğer ayarlar
 framerate-limit = Kare hızı limiti
-unfocused-framerate-limit = Odakta değilken ki Kare hızı limiti
+unfocused-framerate-limit = Odakta değilken kare hızı limiti
