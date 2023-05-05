@@ -557,11 +557,11 @@ impl SimpleComponent for App {
                 .detach());
         }
 
-        let group = RelmActionGroup::<WindowActionGroup>::new();
+        let mut group = RelmActionGroup::<WindowActionGroup>::new();
 
         // TODO: reduce code somehow
 
-        group.add_action::<LauncherFolder>(&RelmAction::new_stateless(clone!(@strong sender => move |_| {
+        group.add_action::<LauncherFolder>(RelmAction::new_stateless(clone!(@strong sender => move |_| {
             if let Err(err) = open::that(LAUNCHER_FOLDER.as_path()) {
                 sender.input(AppMsg::Toast {
                     title: tr("launcher-folder-opening-error"),
@@ -572,7 +572,7 @@ impl SimpleComponent for App {
             }
         })));
 
-        group.add_action::<GameFolder>(&RelmAction::new_stateless(clone!(@strong sender => move |_| {
+        group.add_action::<GameFolder>(RelmAction::new_stateless(clone!(@strong sender => move |_| {
             let path = match Config::get() {
                 Ok(config) => config.game.path.for_edition(config.launcher.edition).to_path_buf(),
                 Err(_) => CONFIG.game.path.for_edition(CONFIG.launcher.edition).to_path_buf(),
@@ -588,7 +588,7 @@ impl SimpleComponent for App {
             }
         })));
 
-        group.add_action::<ConfigFile>(&RelmAction::new_stateless(clone!(@strong sender => move |_| {
+        group.add_action::<ConfigFile>(RelmAction::new_stateless(clone!(@strong sender => move |_| {
             if let Ok(file) = config_file() {
                 if let Err(err) = open::that(file) {
                     sender.input(AppMsg::Toast {
@@ -601,7 +601,7 @@ impl SimpleComponent for App {
             }
         })));
 
-        group.add_action::<DebugFile>(&RelmAction::new_stateless(clone!(@strong sender => move |_| {
+        group.add_action::<DebugFile>(RelmAction::new_stateless(clone!(@strong sender => move |_| {
             if let Err(err) = open::that(crate::DEBUG_FILE.as_os_str()) {
                 sender.input(AppMsg::Toast {
                     title: tr("debug-file-opening-error"),
@@ -612,7 +612,7 @@ impl SimpleComponent for App {
             }
         })));
 
-        group.add_action::<WishUrl>(&RelmAction::new_stateless(clone!(@strong sender => move |_| {
+        group.add_action::<WishUrl>(RelmAction::new_stateless(clone!(@strong sender => move |_| {
             std::thread::spawn(clone!(@strong sender => move || {
                 let config = Config::get().unwrap_or_else(|_| CONFIG.clone());
 
@@ -672,7 +672,7 @@ impl SimpleComponent for App {
             }));
         })));
 
-        group.add_action::<About>(&RelmAction::new_stateless(move |_| {
+        group.add_action::<About>(RelmAction::new_stateless(move |_| {
             about_dialog_broker.send(AboutDialogMsg::Show);
         }));
 

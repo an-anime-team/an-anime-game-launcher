@@ -84,10 +84,6 @@ impl AsyncFactoryComponent for VoicePackageComponent {
         }
     }
 
-    fn output_to_parent_input(output: Self::Output) -> Option<Self::ParentInput> {
-        Some(output)
-    }
-
     async fn init_model(
         init: Self::Init,
         _index: &DynamicIndex,
@@ -104,6 +100,10 @@ impl AsyncFactoryComponent for VoicePackageComponent {
         self.installed = !self.installed;
 
         sender.output(msg);
+    }
+
+    fn forward_to_parent(output: Self::Output) -> Option<Self::ParentInput> {
+        Some(output)
     }
 }
 

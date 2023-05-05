@@ -23,7 +23,7 @@ features = ["all", "genshin"]
 # path = "../anime-launcher-sdk" # ! for dev purposes only
 
 [dependencies]
-relm4 = { version = "0.6.0-alpha.2", features = ["macros", "libadwaita"] }
+relm4 = { version = "0.6.0-beta.1", features = ["macros", "libadwaita"] }
 gtk = { package = "gtk4", version = "0.6", features = ["v4_8"] }
 adw = { package = "libadwaita", version = "0.3", features = ["v1_2"] }
 

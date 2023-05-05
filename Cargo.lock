@@ -2065,9 +2065,9 @@ checksum = "456c603be3e8d448b072f410900c09faf164fbce2d480456f50eea6e25f9c848"
 
 [[package]]
 name = "relm4"
-version = "0.6.0-alpha.2"
+version = "0.6.0-beta.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7acc5e3ddd682eeb0ca33da36b821fc907017c6d7758b09ce280247b0b0ea8cd"
+checksum = "f169f698ce2e487eed2306898fcf262224a287d0e81480db4190e74cfec412cf"
 dependencies = [
  "async-trait",
  "flume",
@@ -2083,9 +2083,9 @@ dependencies = [
 
 [[package]]
 name = "relm4-macros"
-version = "0.6.0-alpha.2"
+version = "0.6.0-beta.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c8525ce12dcd7d2a9e9070d84b8b885600eccd0a143df6712ce34a87d001a8b7"
+checksum = "7fa06febb3685960e7c1c44e21e44a3829325940b31d1e91391a43c32020c201"
 dependencies = [
  "proc-macro2",
  "quote",

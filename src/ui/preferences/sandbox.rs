@@ -41,14 +41,10 @@ macro_rules! impl_directory {
                         set_valign: gtk::Align::Center,
 
                         connect_clicked[sender, index] => move |_| {
-                            sender.input($msg(index.clone()));
+                            sender.output($msg(index.clone()));
                         }
                     }
                 }
-            }
-
-            fn output_to_parent_input(output: Self::Output) -> Option<Self::ParentInput> {
-                Some(output)
             }
 
             async fn init_model(
@@ -62,8 +58,8 @@ macro_rules! impl_directory {
                 }
             }
 
-            async fn update(&mut self, msg: Self::Input, sender: AsyncFactorySender<Self>) {
-                sender.output(msg);
+            fn forward_to_parent(output: Self::Output) -> Option<Self::ParentInput> {
+                Some(output)
             }
         }
     }

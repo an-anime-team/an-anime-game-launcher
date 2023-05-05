@@ -38,14 +38,10 @@ impl AsyncFactoryComponent for GameSession {
                 set_valign: gtk::Align::Center,
 
                 connect_clicked[sender, index] => move |_| {
-                    sender.input(GameAppMsg::RemoveSession(index.clone()));
+                    sender.output(GameAppMsg::RemoveSession(index.clone()));
                 }
             }
         }
-    }
-
-    fn output_to_parent_input(output: Self::Output) -> Option<Self::ParentInput> {
-        Some(output)
     }
 
     async fn init_model(
@@ -56,8 +52,8 @@ impl AsyncFactoryComponent for GameSession {
         init
     }
 
-    async fn update(&mut self, msg: Self::Input, sender: AsyncFactorySender<Self>) {
-        sender.output(msg);
+    fn forward_to_parent(output: Self::Output) -> Option<Self::ParentInput> {
+        Some(output)
     }
 }
 
