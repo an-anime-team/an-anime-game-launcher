@@ -44,4 +44,4 @@ game-patching-error = Yamayı uygulamada sorun çıktı
 
 # Sandbox
 
-documentation-url-open-failed = Belgelerin URL'si açılamadı
+documentation-url-open-failed = Belgelemenin URL'si açılamadı
