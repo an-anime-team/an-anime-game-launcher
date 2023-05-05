@@ -110,6 +110,20 @@ impl SimpleAsyncComponent for EnvironmentApp {
             add = &adw::PreferencesGroup {
                 set_title: &tr("new-variable"),
 
+                #[wrap(Some)]
+                set_header_suffix = &gtk::Button {
+                    add_css_class: "flat",
+
+                    set_valign: gtk::Align::Center,
+
+                    adw::ButtonContent {
+                        set_icon_name: "list-add-symbolic",
+                        set_label: &tr("add")
+                    },
+
+                    connect_clicked => EnvironmentAppMsg::Add
+                },
+
                 #[local_ref]
                 name_entry -> adw::EntryRow {
                     set_title: &tr("name")
@@ -118,16 +132,6 @@ impl SimpleAsyncComponent for EnvironmentApp {
                 #[local_ref]
                 value_entry -> adw::EntryRow {
                     set_title: &tr("value")
-                },
-
-                gtk::Button {
-                    set_label: &tr("add"),
-                    add_css_class: "pill",
-
-                    set_margin_top: 8,
-                    set_halign: gtk::Align::Start,
-
-                    connect_clicked => EnvironmentAppMsg::Add
                 }
             },
 

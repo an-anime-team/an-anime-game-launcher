@@ -64,6 +64,7 @@ impl AsyncFactoryComponent for GameSession {
 pub struct GameApp {
     sessions: AsyncFactoryVecDeque<GameSession>,
 
+    active_sessions: gtk::StringList,
     session_name_entry: adw::EntryRow
 }
 
@@ -82,24 +83,32 @@ impl SimpleAsyncComponent for GameApp {
     view! {
         adw::PreferencesPage {
             set_title: "Game",
-            set_icon_name: Some("document-properties-symbolic"),
+            set_icon_name: Some("applications-games-symbolic"),
 
             add = &adw::PreferencesGroup {
-                set_title: "Saved sessions",
+                set_title: "Game sessions",
 
+                adw::ComboRow {
+                    set_title: "Active session",
+                    set_subtitle: "Currently selected game session",
+
+                    set_model = Some(&model.active_sessions),
+                }
+            },
+
+            add = &adw::PreferencesGroup {
                 #[local_ref]
                 session_name_entry -> adw::EntryRow {
-                    set_title: &tr("name")
-                },
+                    set_title: &tr("name"),
 
-                gtk::Button {
-                    set_label: &tr("add"),
-                    add_css_class: "pill",
+                    add_suffix = &gtk::Button {
+                        set_icon_name: "list-add-symbolic",
+                        add_css_class: "flat",
 
-                    set_margin_top: 8,
-                    set_halign: gtk::Align::Start,
-
-                    connect_clicked => GameAppMsg::AddSession
+                        set_valign: gtk::Align::Center,
+    
+                        connect_clicked => GameAppMsg::AddSession
+                    }
                 }
             },
 
@@ -113,11 +122,12 @@ impl SimpleAsyncComponent for GameApp {
         root: Self::Root,
         sender: AsyncComponentSender<Self>,
     ) -> AsyncComponentParts<Self> {
-        tracing::info!("Initializing environment settings");
+        tracing::info!("Initializing game settings");
 
         let mut model = Self {
             sessions: AsyncFactoryVecDeque::new(adw::PreferencesGroup::new(), sender.input_sender()),
 
+            active_sessions: gtk::StringList::new(&[]),
             session_name_entry: adw::EntryRow::new()
         };
 
@@ -142,6 +152,8 @@ impl SimpleAsyncComponent for GameApp {
                 if !name.is_empty() {
                     self.session_name_entry.set_text("");
 
+                    self.active_sessions.append(&name);
+
                     self.sessions.guard().push_back(GameSession {
                         title: name,
                         description: None,
@@ -151,10 +163,7 @@ impl SimpleAsyncComponent for GameApp {
             }
 
             GameAppMsg::RemoveSession(index) => {
-                if let Some(var) = self.sessions.guard().get(index.current_index()) {
-                    // ..
-                }
-
+                self.active_sessions.remove(index.current_index() as u32);
                 self.sessions.guard().remove(index.current_index());
             }
         }
