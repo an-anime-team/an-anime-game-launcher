@@ -68,7 +68,8 @@ impl SimpleComponent for AboutDialog {
                 "Deutsch — @Marie https://github.com/Mar0xy",
                 "Español — Lautaro Garavano https://github.com/Rattlehead15",
                 "Français — @zeGolem https://github.com/zeGolem",
-                "Türk — @Kaozix https://github.com/Kaozix1776",
+                "Türkçe — @Kaozix https://github.com/Kaozix1776",
+                "Türkçe — Kayra Nachfolger https://github.com/kayranachfolger",
                 "简体中文 — Caibin Chen https://github.com/tigersoldier"
             ].join("\n"),
 
