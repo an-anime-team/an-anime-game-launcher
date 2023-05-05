@@ -167,11 +167,11 @@ impl SimpleAsyncComponent for EnvironmentApp {
     async fn update(&mut self, msg: Self::Input, _sender: AsyncComponentSender<Self>) {
         match msg {
             EnvironmentAppMsg::Add => {
-                if let Ok(mut config) = Config::get() {
-                    let name = self.name_entry.text().trim().to_string();
-                    let value = self.value_entry.text().trim().to_string();
+                let name = self.name_entry.text().trim().to_string();
+                let value = self.value_entry.text().trim().to_string();
 
-                    if !name.is_empty() && !value.is_empty() {
+                if !name.is_empty() && !value.is_empty() {
+                    if let Ok(mut config) = Config::get() {
                         self.name_entry.set_text("");
                         self.value_entry.set_text("");
 

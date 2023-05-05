@@ -4,14 +4,18 @@ use relm4::factory::*;
 
 use adw::prelude::*;
 
+use anime_launcher_sdk::sessions::SessionsExt;
+use anime_launcher_sdk::genshin::sessions::Sessions;
+
+use super::main::PreferencesAppMsg;
+
 use crate::i18n::tr;
 use crate::*;
 
 #[derive(Debug)]
 struct GameSession {
-    title: String,
-    description: Option<String>,
-    id: usize
+    name: String,
+    description: Option<String>
 }
 
 #[relm4::factory(async)]
@@ -25,7 +29,7 @@ impl AsyncFactoryComponent for GameSession {
 
     view! {
         root = adw::ActionRow {
-            set_title: &self.title,
+            set_title: &self.name,
 
             set_subtitle: match &self.description {
                 Some(description) => description.as_str(),
@@ -33,8 +37,24 @@ impl AsyncFactoryComponent for GameSession {
             },
 
             add_suffix = &gtk::Button {
+                set_icon_name: "view-refresh-symbolic-symbolic",
+                add_css_class: "flat",
+
+                set_tooltip_text: Some("Update session using current wine prefix registry values"),
+
+                set_valign: gtk::Align::Center,
+
+                connect_clicked[sender, index] => move |_| {
+                    sender.output(GameAppMsg::UpdateSession(index.clone()));
+                }
+            },
+
+            add_suffix = &gtk::Button {
                 set_icon_name: "user-trash-symbolic",
                 add_css_class: "flat",
+
+                set_tooltip_text: Some("Delete session"),
+
                 set_valign: gtk::Align::Center,
 
                 connect_clicked[sender, index] => move |_| {
@@ -60,21 +80,26 @@ impl AsyncFactoryComponent for GameSession {
 pub struct GameApp {
     sessions: AsyncFactoryVecDeque<GameSession>,
 
-    active_sessions: gtk::StringList,
+    sessions_names: Vec<String>,
+
+    sessions_combo: adw::ComboRow,
     session_name_entry: adw::EntryRow
 }
 
 #[derive(Debug, Clone)]
 pub enum GameAppMsg {
     AddSession,
-    RemoveSession(DynamicIndex)
+    UpdateSession(DynamicIndex),
+    RemoveSession(DynamicIndex),
+    SetCurrent(u32),
+    UpdateCombo
 }
 
 #[relm4::component(async, pub)]
 impl SimpleAsyncComponent for GameApp {
     type Init = ();
     type Input = GameAppMsg;
-    type Output = ();
+    type Output = PreferencesAppMsg;
 
     view! {
         adw::PreferencesPage {
@@ -84,11 +109,12 @@ impl SimpleAsyncComponent for GameApp {
             add = &adw::PreferencesGroup {
                 set_title: "Game sessions",
 
-                adw::ComboRow {
+                #[local_ref]
+                sessions_combo -> adw::ComboRow {
                     set_title: "Active session",
-                    set_subtitle: "Currently selected game session",
+                    set_subtitle: "Currently selected game session. Updates after each game launch",
 
-                    set_model = Some(&model.active_sessions),
+                    connect_selected_notify[sender] => move |row| sender.input(GameAppMsg::SetCurrent(row.selected()))
                 }
             },
 
@@ -123,44 +149,136 @@ impl SimpleAsyncComponent for GameApp {
         let mut model = Self {
             sessions: AsyncFactoryVecDeque::new(adw::PreferencesGroup::new(), sender.input_sender()),
 
-            active_sessions: gtk::StringList::new(&[]),
+            sessions_names: Vec::new(),
+
+            sessions_combo: adw::ComboRow::new(),
             session_name_entry: adw::EntryRow::new()
         };
 
-        /*for (name, value) in &CONFIG.game.environment {
-            model.variables.guard().push_back();
-        }*/
+        for (name, _) in Sessions::list().unwrap_or_default() {
+            model.sessions.guard().push_back(GameSession {
+                name: name.clone(),
+                description: None
+            });
+        }
 
         let sessions = model.sessions.widget();
 
+        let sessions_combo = &model.sessions_combo;
         let session_name_entry = &model.session_name_entry;
 
         let widgets = view_output!();
 
+        sender.input(GameAppMsg::UpdateCombo);
+
         AsyncComponentParts { model, widgets }
     }
 
-    async fn update(&mut self, msg: Self::Input, _sender: AsyncComponentSender<Self>) {
+    async fn update(&mut self, msg: Self::Input, sender: AsyncComponentSender<Self>) {
         match msg {
             GameAppMsg::AddSession => {
                 let name = self.session_name_entry.text().trim().to_string();
 
                 if !name.is_empty() {
-                    self.session_name_entry.set_text("");
+                    if let Ok(config) = Config::get() {
+                        self.session_name_entry.set_text("");
 
-                    self.active_sessions.append(&name);
+                        match Sessions::update(name.clone(), config.get_wine_prefix_path()) {
+                            Ok(()) => {
+                                self.sessions.guard().push_back(GameSession {
+                                    name,
+                                    description: None
+                                });
 
-                    self.sessions.guard().push_back(GameSession {
-                        title: name,
-                        description: None,
-                        id: 0
-                    });
+                                sender.input(GameAppMsg::UpdateCombo);
+                            }
+
+                            #[allow(unused_must_use)]
+                            Err(err) => {
+                                sender.output(PreferencesAppMsg::Toast {
+                                    title: String::from("Failed to update game session"),
+                                    description: Some(err.to_string())
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+
+            GameAppMsg::UpdateSession(index) => {
+                if let Some(session) = self.sessions.guard().get(index.current_index()) {
+                    if let Ok(config) = Config::get() {
+                        #[allow(unused_must_use)]
+                        if let Err(err) = Sessions::update(session.name.clone(), config.get_wine_prefix_path()) {
+                            sender.output(PreferencesAppMsg::Toast {
+                                title: String::from("Failed to update game session"),
+                                description: Some(err.to_string())
+                            });
+                        }
+                    }
                 }
             }
 
             GameAppMsg::RemoveSession(index) => {
-                self.active_sessions.remove(index.current_index() as u32);
+                if let Some(session) = self.sessions.guard().get(index.current_index()) {
+                    match Sessions::remove(&session.name) {
+                        Ok(()) => sender.input(GameAppMsg::UpdateCombo),
+
+                        #[allow(unused_must_use)]
+                        Err(err) => {
+                            sender.output(PreferencesAppMsg::Toast {
+                                title: String::from("Failed to update game session"),
+                                description: Some(err.to_string())
+                            });
+
+                            return;
+                        }
+                    }
+                }
+
                 self.sessions.guard().remove(index.current_index());
+            }
+
+            GameAppMsg::SetCurrent(id) => {
+                if let Some(name) = self.sessions_names.get(id as usize) {
+                    if let Ok(config) = Config::get() {
+                        #[allow(unused_must_use)]
+                        if let Err(err) = Sessions::set_current(name.to_owned()) {
+                            sender.output(PreferencesAppMsg::Toast {
+                                title: String::from("Failed to update game session"),
+                                description: Some(err.to_string())
+                            });
+
+                            // Prevent session applying
+                            return;
+                        }
+
+                        #[allow(unused_must_use)]
+                        if let Err(err) = Sessions::apply(name.to_owned(), config.get_wine_prefix_path()) {
+                            sender.output(PreferencesAppMsg::Toast {
+                                title: String::from("Failed to update game session"),
+                                description: Some(err.to_string())
+                            });
+                        }
+                    }
+                }
+            }
+
+            GameAppMsg::UpdateCombo => {
+                let sessions = Sessions::get_sessions().unwrap_or_default();
+
+                self.sessions_names = sessions.sessions.into_keys().collect::<Vec<String>>();
+
+                let mut selected = 0;
+
+                for (i, name) in self.sessions_names.iter().enumerate() {
+                    if sessions.current.as_ref() == Some(name) {
+                        selected = i as u32;
+                    }
+                }
+
+                self.sessions_combo.set_model(Some(&gtk::StringList::new(&self.sessions_names.iter().map(|name: &String| name.as_str()).collect::<Vec<&str>>())));
+                self.sessions_combo.set_selected(selected);
             }
         }
     }
