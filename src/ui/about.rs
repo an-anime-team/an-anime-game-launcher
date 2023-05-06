@@ -88,13 +88,25 @@ impl SimpleComponent for AboutDialog {
                 "<p>Added</p>",
 
                 "<ul>",
-                    "<li>Added arguments and symlinks editor to sandbox settings</li>",
+                    "<li>Added rules approving dialog to the first run window</li>",
+                    "<li>Added game settings section</li>",
+                    "<li>Added game sessions manager</li>",
+                    "<li>Added `LAUNCHER_FOLDER` variable support</li>",
+                    "<li>Added patch repository mirror</li>",
+                "</ul>",
+
+                "<p>Changed</p>",
+
+                "<ul>",
+                    "<li>Improved launcher logo rendering quality</li>",
+                    "<li>Reworked entry rows in the settings</li>",
                 "</ul>",
 
                 "<p>Fixed</p>",
 
                 "<ul>",
-                    "<li>Fixed game running issue if you have spaces in paths</li>",
+                    "<li>Fixed wine tools running using proton builds</li>",
+                    "<li>Fixed sandboxed game running (sounds are broken for now)</li>",
                 "</ul>",
             ].join("\n"),
 

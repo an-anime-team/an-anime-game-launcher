@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added rules approving dialog to the first run window
+- Added game settings section
+- Added game sessions manager
+- Added `LAUNCHER_FOLDER` variable support.
+  Using this you can specify root path where the launcher stores `config.json` and other files
+- Added patch repository mirror
+
+### Changed
+
+- Improved launcher logo rendering quality
+- Reworked entry rows in the settings
+
+### Fixed
+
+- Fixed wine tools running using proton builds
+- Fixed sandboxed game running (sounds are broken for now)
+
 ## [3.5.2] - 17.04.2023
 
 ### Added
@@ -203,7 +222,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <br>
 
-[unreleased]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.5.1...next
+[unreleased]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.5.2...next
+[3.5.2]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.5.1...3.5.2
 [3.5.1]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.5.0...3.5.1
 [3.5.0]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.4.1...3.5.0
 [3.4.1]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.4.0...3.4.1
