@@ -48,8 +48,8 @@ documentation-url-open-failed = Belgelemenin URL'si açılamadı
 
 # Game
 
-game-session-add-failed = Failed to add game session
-game-session-update-failed = Failed to update game session
-game-session-remove-failed = Failed to remove game session
-game-session-set-current-failed = Failed to set current game session
-game-session-apply-failed = Failed to apply game session
+game-session-add-failed = Oyun oturumu eklenemedi
+game-session-update-failed = Oyun oturumu güncellenemedi
+game-session-remove-failed = Oyun oturumu kaldırılamadı
+game-session-set-current-failed = Oyun oturumu seçilemedi
+game-session-apply-failed = Oyun oturumu uygulanamadı
