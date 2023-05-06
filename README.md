@@ -54,6 +54,7 @@ instead of the actual name of the game, to avoid search engine parsing.
 | Ubuntu | pacstall | - | [an-anime-game-launcher-bin](https://pacstall.dev/packages/an-anime-game-launcher-bin) |
 | Gentoo | ebuild | [link](https://github.com/an-anime-team/an-anime-game-launcher/wiki/Installation#-gentoo-linux-ebuild) | [aagl-ebuilds](https://github.com/an-anime-team/aagl-ebuilds) |
 | NixOS | nixpkg | [link](https://github.com/an-anime-team/an-anime-game-launcher/wiki/Installation#-nixos-nixpkg) | [aagl-gtk-on-nix](https://github.com/ezKEa/aagl-gtk-on-nix) |
+| Fedora, Gentoo, OpenSUSE, Arch | Lutris | [link](https://github.com/an-anime-team/an-anime-game-launcher/wiki/Installation#-lutris) | - |
 
 To see the installation guides, please visit the wiki page [here](https://github.com/an-anime-team/an-anime-game-launcher/wiki/Installation)
 
