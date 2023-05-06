@@ -48,8 +48,8 @@ documentation-url-open-failed = Failed to open documentation URL
 
 # Game
 
-game-session-add-failed = Failed to add game session
-game-session-update-failed = Failed to update game session
-game-session-remove-failed = Failed to remove game session
-game-session-set-current-failed = Failed to set current game session
-game-session-apply-failed = Failed to apply game session
+game-session-add-failed = Imposible d'ajouter la session de jeu
+game-session-update-failed = Imposible de mettre à jour la session de jeu
+game-session-remove-failed = Imposible de supprimer la session de jeu
+game-session-set-current-failed = Imposible de sélectionner la session de jeu par défaut
+game-session-apply-failed = Imposible d'appliquer la session de jeu
