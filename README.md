@@ -57,6 +57,8 @@ instead of the actual name of the game, to avoid search engine parsing.
 
 To see the installation guides, please visit the wiki page [here](https://github.com/an-anime-team/an-anime-game-launcher/wiki/Installation)
 
+Lutris integration described [here](https://github.com/an-anime-team/an-anime-game-launcher/wiki/Installation#-lutris)
+
 ## Chinese version support
 
 This should be automatically enabled if you're using zh_cn (Chinese) as your system language. If you're not using it - you can change the game edition in the launcher settings

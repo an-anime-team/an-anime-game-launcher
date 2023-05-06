@@ -6,7 +6,7 @@ debug-file-opening-error = Debug-Datei konnte nicht geöffnet werden
 wish-url-search-failed = Kein Wünsche URL gefunden
 wish-url-opening-error = Wünsche URL konnte nicht geöffnet werden
 
-wine-run-error = Failed to run {$executable} executable using wine
+wine-run-error = Ausführung von {$executable} mit wine fehlgeschlagen
 
 game-launching-failed = Spiel konnte nicht gestartet werden
 failed-get-selected-wine = Die ausgewählte Wine version konnte nicht abgerufen werden.
@@ -44,4 +44,12 @@ game-patching-error = Spiel konnte nicht gepatcht werden
 
 # Sandbox
 
-documentation-url-open-failed = Failed to open documentation URL
+documentation-url-open-failed = Dokumentations-URL kann nicht geöffnet werden
+
+# Game
+
+game-session-add-failed = Spielsitzung konnte nicht hinzugefügt werden
+game-session-update-failed = Spielsitzung konnte nicht aktualisiert werden
+game-session-remove-failed = Spielsitzung konnte nicht entfernt werden
+game-session-set-current-failed = Aktuelle Spielsitzung konnte nicht eingestellt werden
+game-session-apply-failed = Spielsitzung konnte nicht angewendet werden

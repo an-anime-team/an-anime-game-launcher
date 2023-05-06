@@ -45,3 +45,11 @@ game-patching-error = Fallo al parchear el juego
 # Sandbox
 
 documentation-url-open-failed = Failed to open documentation URL
+
+# Game
+
+game-session-add-failed = Fallo al añadir sesión de juego
+game-session-update-failed = Fallo al actualizar sesión de juego
+game-session-remove-failed = Fallo al eliminar sesión de juego
+game-session-set-current-failed = Fallo al establecer sesión de juego actual
+game-session-apply-failed = Fallo al aplicar sesión de juego

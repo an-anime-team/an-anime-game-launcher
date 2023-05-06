@@ -22,6 +22,7 @@ continue = Weiter
 exit = Beenden
 check = Überprüfen
 restart = Neustarten
+agree = Einverstanden
 
 
 loading-data = Laden Daten
@@ -49,8 +50,8 @@ components-index-updated = Kompontentenverzeichnis würde aktualisiert
 
 
 launch = Starten
-migrate-folders = Migrate folders
-migrate-folders-tooltip = Update game folders structure
+migrate-folders = Ordner migrieren
+migrate-folders-tooltip = Spielordnerstruktur aktualisieren
 apply-patch = Patch anwenden
 download-wine = Wine Herunterladen
 create-prefix = Prefix erstellen

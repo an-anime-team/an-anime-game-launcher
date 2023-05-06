@@ -84,10 +84,6 @@ impl AsyncFactoryComponent for VoicePackageComponent {
         }
     }
 
-    fn output_to_parent_input(output: Self::Output) -> Option<Self::ParentInput> {
-        Some(output)
-    }
-
     async fn init_model(
         init: Self::Init,
         _index: &DynamicIndex,
@@ -104,6 +100,10 @@ impl AsyncFactoryComponent for VoicePackageComponent {
         self.installed = !self.installed;
 
         sender.output(msg);
+    }
+
+    fn forward_to_parent(output: Self::Output) -> Option<Self::ParentInput> {
+        Some(output)
     }
 }
 
@@ -1035,7 +1035,8 @@ impl SimpleAsyncComponent for GeneralApp {
                 let config = Config::get().unwrap_or_else(|_| CONFIG.clone());
 
                 if let Ok(Some(wine)) = config.get_selected_wine() {
-                    let result = wine.to_wine(config.components.path, Some(config.game.wine.builds.join(&wine.name)))
+                    let result = wine
+                        .to_wine(config.components.path, Some(config.game.wine.builds.join(&wine.name)))
                         .with_prefix(config.game.wine.prefix)
                         .with_loader(WineLoader::Current)
                         .with_arch(WineArch::Win64)

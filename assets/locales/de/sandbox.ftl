@@ -1,28 +1,28 @@
 sandbox = Sandbox
-sandbox-description = Run the game in isolated environment, preventing it from accessing your personal data
+sandbox-description = Führen Sie das Spiel in einer isolierten Umgebung aus, damit es nicht auf Ihre persönlichen Daten zugreifen kann.
 
-enable-sandboxing = Enable sandboxing
-enable-sandboxing-description = Run the game in read-only copy of your root filesystem
+enable-sandboxing = Sandboxing aktivieren
+enable-sandboxing-description = Starten Sie das Spiel in einer schreibgeschützten Kopie Ihres Root-Dateisystems
 
-hide-home-directory = Hide home directory
-hide-home-directory-description = Isolate your /home, /var/home/$USER, and $HOME folders from the game
+hide-home-directory = Home-Verzeichnis ausblenden
+hide-home-directory-description = Isolieren Sie Ihre Ordner /home, /var/home/$USER und $HOME vom Spiel
 
 hostname = Hostname
-additional-arguments = Additional arguments
+additional-arguments = Zusätzliche Argumente
 
-private-directories = Private directories
-private-directories-description = These folders will be replaced by an empty virtual filesystem (tmpfs), and their original content will not be available to sandboxed game
+private-directories = Private Verzeichnisse
+private-directories-description = Diese Ordner werden durch ein leeres virtuelles Dateisystem (tmpfs) ersetzt, und ihr ursprünglicher Inhalt ist für das Spiel in der Sandbox nicht verfügbar.
 
-path = Path
+path = Pfad
 
-shared-directories = Shared directories
-shared-directories-description = These directories will be symlinked to directories in your host system
+shared-directories = Geteilte Verzeichnisse
+shared-directories-description = Diese Verzeichnisse werden mit Verzeichnissen in Ihrem Host-System verlinkt
 
-original-path = Original path
-new-path = New path
+original-path = Ursprünglicher Pfad
+new-path = Neuer Pfad
 
-read-only = Read-only
-read-only-description = Forbid game to write any data to this directory
+read-only = Schreibgeschützt
+read-only-description = Dem Spiel verbieten, Daten in dieses Verzeichnis zu schreiben
 
 symlinks = Symlinks
-symlinks-description = Symlink original path to the new one inside of your sandbox
+symlinks-description = Verknüpfen Sie den ursprünglichen Pfad mit dem neuen Pfad innerhalb Ihrer Sandbox

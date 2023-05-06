@@ -21,8 +21,13 @@ tos-violation-warning-message =
 
     Sollte dies der Fall sein, würde Ihr Konto gegen die TOS verstoßen, {company-name}/{company-alter-name} sind frei zu tun, was sie wollen. Inklusive Ban.
 
-    Wenn Sie sich des Risikos bewusst sind, das mit dem Versuch, das Spiel inoffiziell zu spielen, verbunden ist, drücken Sie auf OK und lassen Sie uns die Welt von Teyvat erforschen!
+    Wenn Sie sich über das Risiko bewusst sind das mit dem versuchen des Spiels spielen in inoffizieller Weise verbunden ist dann drücken Sie OK um fortzufahren.
 
+tos-dialog-title = Sind Sie sicher, dass Sie verstehen, was wir sagen?
+tos-dialog-message =
+    1. Veröffentlichen Sie keine Informationen über dieses Projekt
+    2. Missbrauchen Sie es nicht durch die Verwendung von Mods
+    3. Stellen Sie Fragen nur in unserem Discord oder auf dem Matrix-Server
 
 dependencies = Abhängigkeiten
 missing-dependencies-title = Sie vermissen einige Abhängigkeiten!
@@ -36,14 +41,14 @@ show-all-folders-subtitle = Zusätzliche Pfadauswahl-Einstellungen anzeigen. Tu 
 runners-folder = Runners-Ordner
 dxvks-folder = DXVKs-Ordner
 wine-prefix-folder = Wine prefix-Ordner
-global-game-installation-folder = Global game version installation folder
-chinese-game-installation-folder = Chinese game version installation folder
+global-game-installation-folder = Installationsordner der globalen Spielversion
+chinese-game-installation-folder = Installationsordner der chinesischen Spielversion
 fps-unlocker-folder = FPS Unlocker Ordner
 components-index = Komponentenverzeichnis
 patch-folder = Patch-Ordner
 temp-folder = Temp-Ordner
 
-migrate = Migrate
+migrate = Migrieren
 
 
 select-voice-packages = Sprachpakete auswählen

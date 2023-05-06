@@ -21,7 +21,13 @@ tos-violation-warning-message =
 
     If this happens, as your account would be disobeying TOS, {company-name}/{company-alter-name} are free to do what they want. Including banning.
 
-    If you understand the risk of trying to play the game in an unofficial capacity, press OK and let's go researching the world of Teyvat!
+    If you understand the risk of trying to play the game in an unofficial capacity, press OK to continue
+
+tos-dialog-title = Are you sure you understand what we want to say?
+tos-dialog-message =
+    1. Don't publish any information about this project
+    2. Don't abuse it by using some modded clients and so
+    3. Ask questions exceptionally in our discord or matrix server
 
 
 dependencies = Dependencies

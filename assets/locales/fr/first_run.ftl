@@ -23,6 +23,11 @@ tos-violation-warning-message =
 
     Si vous comprenez ces risques, appuyez sur "Continuer" pour venir explorer le monde de Teyvat !
 
+tos-dialog-title = Are you sure you understand what we want to say?
+tos-dialog-message =
+    1. Don't publish any information about this project
+    2. Don't abuse it by using some modded clients and so
+    3. Ask questions exceptionally in our discord or matrix server
 
 dependencies = Dépendances
 missing-dependencies-title = Il vous manque des dépendances !

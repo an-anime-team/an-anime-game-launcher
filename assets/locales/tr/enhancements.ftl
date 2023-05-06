@@ -1,13 +1,13 @@
 wine = Wine
 
 synchronization = Senkronizasyon
-wine-sync-description = içerde dönen Wine eventleri senkronize etmek için kullanılan teknoloji
+wine-sync-description = Arkaplanda gerçekleşen Wine olaylarını senkronize etmek için kullanılan teknoloji
 
-language = dil
-wine-lang-description = Wine için kullanılan dil klavye sorunlarını çözmek için kullanılabilir
+language = Dil
+wine-lang-description = Wine için kullanılan dil, klavye sorunlarını çözmek için kullanılabilir
 system = Sistem
 
-borderless-window = Köşesiz pencere
+borderless-window = Köşesiz Pencere
 virtual-desktop = Sanal Masaüstü
 
 game = Oyun
@@ -15,30 +15,30 @@ game = Oyun
 hud = HUD
 
 fsr = FSR
-fsr-description = Oyunu mönitör boyutunuza büyütür daha düşük bir çözünürlük seçmek için oyun içinde alt + enter tuşlarına basın
+fsr-description = Oyunu monitör boyutunuza büyütür. Daha düşük bir çözünürlük seçmek için oyun içinde alt + enter tuşlarına basın
 ultra-quality = Ultra kalite
 quality = Kalite
 balanced = Dengeli
 performance = Performans
 
-gamemode = Oyunmodu
-gamemode-description = Oyunu diğer işlemlerden daha öne koyarak performansı arttırır
+gamemode = Oyun modu
+gamemode-description = Oyunun işlem önceliğini arttırarak performansı arttırır
 
 gamescope = Gamescope
-gamescope-description = Gamescope Valve tarafından geliştirilmiş bir araçtır oyunları izole edilmiş bir Xwayland içinde açmanıza yarar
+gamescope-description = Gamescope, oyunları izole edilmiş bir Xwayland içinde açmanıza yarayan Valve tarafından geliştirilmiş araçtır.
 
 discord-rpc = Discord RPC
-discord-rpc-description = Discord RPC Discorda şuanda oyun oynadığınızın bilgisini vermenize yarar bu sayede arkadaşlarınıza şuanda oyun oynadığınızı gösterebilirsiniz
+discord-rpc-description = Discord RPC, Discord'a şu anda oyun oynadığınızı bildirmenizi sağlar. Bu sayede arkadaşlarınıza şu anda oyun oynadığınızı gösterebilirsiniz
 title = Başlık
 description = Açıklama
 
 fps-unlocker = FPS kilidi açıcı
 
 enabled = Açık
-fps-unlocker-description = kare renderlama limitasyonunu kaldırır fakat oyunun anti hile sistemi tarafından tespit edilebilir
+fps-unlocker-description = Kare işleme sınırlamasını kaldırır, fakat oyunun anti-hile sistemi tarafından tespit edilebilir
 
 power-saving = Güç tasarrufu
-power-saving-description = Alt tab attığınızda oyunun fps limitini 10 a çeker ve oyuna verilen işlem önceliğini azaltır
+power-saving-description = Pencere değiştirdiğinizde oyunun kare sınırını 10'a indirir ve oyuna verilen işlem önceliğini azaltır
 
 monitor = Monitör
 monitor-description = Oyunu çalıştırmak istediğiniz monitör sayısı

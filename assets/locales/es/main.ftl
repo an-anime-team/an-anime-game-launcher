@@ -22,6 +22,7 @@ continue = Continuar
 exit = Salir
 check = Comprobar
 restart = Reiniciar
+agree = Aceptar
 
 
 loading-data = Cargando datos

@@ -16,10 +16,10 @@ struct Variable {
 #[relm4::factory(async)]
 impl AsyncFactoryComponent for Variable {
     type Init = (String, String);
-    type Input = EnvironmentMsg;
-    type Output = EnvironmentMsg;
+    type Input = EnvironmentAppMsg;
+    type Output = EnvironmentAppMsg;
     type CommandOutput = ();
-    type ParentInput = EnvironmentMsg;
+    type ParentInput = EnvironmentAppMsg;
     type ParentWidget = adw::PreferencesGroup;
 
     view! {
@@ -33,14 +33,10 @@ impl AsyncFactoryComponent for Variable {
                 set_valign: gtk::Align::Center,
 
                 connect_clicked[sender, index] => move |_| {
-                    sender.input(EnvironmentMsg::Remove(index.clone()));
+                    sender.output(EnvironmentAppMsg::Remove(index.clone()));
                 }
             }
         }
-    }
-
-    fn output_to_parent_input(output: Self::Output) -> Option<Self::ParentInput> {
-        Some(output)
     }
 
     async fn init_model(
@@ -54,8 +50,8 @@ impl AsyncFactoryComponent for Variable {
         }
     }
 
-    async fn update(&mut self, msg: Self::Input, sender: AsyncFactorySender<Self>) {
-        sender.output(msg);
+    fn forward_to_parent(output: Self::Output) -> Option<Self::ParentInput> {
+        Some(output)
     }
 }
 
@@ -67,7 +63,7 @@ pub struct EnvironmentApp {
 }
 
 #[derive(Debug, Clone)]
-pub enum EnvironmentMsg {
+pub enum EnvironmentAppMsg {
     Add,
     Remove(DynamicIndex)
 }
@@ -75,7 +71,7 @@ pub enum EnvironmentMsg {
 #[relm4::component(async, pub)]
 impl SimpleAsyncComponent for EnvironmentApp {
     type Init = ();
-    type Input = EnvironmentMsg;
+    type Input = EnvironmentAppMsg;
     type Output = ();
 
     view! {
@@ -110,6 +106,20 @@ impl SimpleAsyncComponent for EnvironmentApp {
             add = &adw::PreferencesGroup {
                 set_title: &tr("new-variable"),
 
+                #[wrap(Some)]
+                set_header_suffix = &gtk::Button {
+                    add_css_class: "flat",
+
+                    set_valign: gtk::Align::Center,
+
+                    adw::ButtonContent {
+                        set_icon_name: "list-add-symbolic",
+                        set_label: &tr("add")
+                    },
+
+                    connect_clicked => EnvironmentAppMsg::Add
+                },
+
                 #[local_ref]
                 name_entry -> adw::EntryRow {
                     set_title: &tr("name")
@@ -118,16 +128,6 @@ impl SimpleAsyncComponent for EnvironmentApp {
                 #[local_ref]
                 value_entry -> adw::EntryRow {
                     set_title: &tr("value")
-                },
-
-                gtk::Button {
-                    set_label: &tr("add"),
-                    add_css_class: "pill",
-
-                    set_margin_top: 8,
-                    set_halign: gtk::Align::Start,
-
-                    connect_clicked => EnvironmentMsg::Add
                 }
             },
 
@@ -166,12 +166,12 @@ impl SimpleAsyncComponent for EnvironmentApp {
 
     async fn update(&mut self, msg: Self::Input, _sender: AsyncComponentSender<Self>) {
         match msg {
-            EnvironmentMsg::Add => {
-                if let Ok(mut config) = Config::get() {
-                    let name = self.name_entry.text().trim().to_string();
-                    let value = self.value_entry.text().trim().to_string();
+            EnvironmentAppMsg::Add => {
+                let name = self.name_entry.text().trim().to_string();
+                let value = self.value_entry.text().trim().to_string();
 
-                    if !name.is_empty() && !value.is_empty() {
+                if !name.is_empty() && !value.is_empty() {
+                    if let Ok(mut config) = Config::get() {
                         self.name_entry.set_text("");
                         self.value_entry.set_text("");
 
@@ -184,7 +184,7 @@ impl SimpleAsyncComponent for EnvironmentApp {
                 }
             }
 
-            EnvironmentMsg::Remove(index) => {
+            EnvironmentAppMsg::Remove(index) => {
                 if let Ok(mut config) = Config::get() {
                     if let Some(var) = self.variables.guard().get(index.current_index()) {
                         config.game.environment.remove(&var.key);

@@ -5,43 +5,43 @@ update-background = Arkaplan imajını güncelle
 update-background-description = İstemci için resmi arka plan resmini indirin. Bunun yerine özel resminizi kullanmak için devre dışı bırakabilirsiniz.
 
 launcher-language = İstemci dili
-launcher-language-description = Restart attıktan sonra uygulanır
+launcher-language-description = Yeniden başlattıktan sonra uygulanır
 
-game-edition = Game edition
-global = Global
-china = China
+game-edition = Oyun Sürümü
+global = Evrensel
+china = Çin
 
-game-environment = Game environment
-game-environment-description = Get specific features like additional payment methods
+game-environment = Oyun ortamı
+game-environment-description = Ek ödeme yöntemleri gibi özelliklere erişin
 
 game-voiceovers = Oyun içi sesler
-game-voiceovers-description = List of downloaded game voiceovers. You can select them in the game settings
+game-voiceovers-description = İndirilmiş oyun seslendirmeleri listesi. Oyun içi ayarlardan seçebilirsiniz
 english = İngilizce
 japanese = Japonca
 korean = Korece
 chinese = Çince
 
-migrate-installation = Migrate installation
-migrate-installation-description = Open special window where you can change your game installation folder
+migrate-installation = Yüklemeyi aktar
+migrate-installation-description = Oyun yükleme yerini değiştirebileceğiniz özel pencereyi açın
 repair-game = Oyunu tamir et
 
 status = Durum
 
 game-version = Oyun versiyonu
-game-not-installed = inik değil
+game-not-installed = Yüklü değil
 
 game-predownload-available = Güncelleme önceden indirilebilir: {$old} -> {$new}
 game-update-available = Güncelleme mevcut: {$old} -> {$new}
-game-outdated = Oyun çok eski bu yüzden güncellenemez. En son sürüm: {$latest}
+game-outdated = Oyun çok eski, bu yüzden güncellenemez. En son sürüm: {$latest}
 
 player-patch-version = Ana yama versiyonu
-player-patch-version-description = Oyunu linuxda oynamanıza izin veren ana yama
+player-patch-version-description = Oyunu Linux'ta oynamanıza izin veren ana yama
 
 xlua-patch-version = Xlua yama versiyonu
-xlua-patch-version-description = Eski bilgisayarlarda performansı arttıran ve bir kaç sorunu düzelten ekstra yama
+xlua-patch-version-description = Eski bilgisayarlarda performansı arttıran ve birkaç sorunu düzelten ekstra yama
 
 patch-not-available = Mevcut değil
-patch-not-available-tooltip = Yama sunucularına erişelemiyor
+patch-not-available-tooltip = Yama sunucularına erişilemiyor
 
 patch-outdated = zamanı geçmiş ({$current})
 patch-outdated-tooltip = Yamanın zamanı geçmiş: {$current} -> {$latest}
@@ -55,7 +55,7 @@ patch-not-applied-tooltip = Yama uygulanmamış
 apply-xlua-patch = Xlua yamasını uygula
 
 ask-superuser-permissions = Yönetici izinlerini sor
-ask-superuser-permissions-description = İstemci yöneticini iznini hostunuzun dosyalarını güncellemek için otomatik olarak kullanıcaktır. Buna flatpak versiyonunda gerek yoktur
+ask-superuser-permissions-description = İstemci yönetici iznini hostunuzun dosyalarını güncellemek için otomatik olarak kullanacaktır. Buna flatpak versiyonunda gerek yoktur
 
 selected-version = Seçilmiş versiyon
 recommended-only = Sadece önerilenler
@@ -63,14 +63,14 @@ recommended-only = Sadece önerilenler
 wine-version = Wine versiyonu
 wine-recommended-description = Sadece önerilen wine versiyonlarını göster
 
-wine-tools = Wine tools
-command-line = Command line
-registry-editor = Registry editor
-explorer = Explorer
-task-manager = Task manager
-configuration = Configuration
-debugger = Debugger
+wine-tools = Wine araçları
+command-line = Komut istemi
+registry-editor = Girdi düzenleyicisi
+explorer = Dosya gezgini
+task-manager = Görev yöneticisi
+configuration = Konfigürasyon
+debugger = Debug aracı
 
 dxvk-version = DXVK versiyonu
-dxvk-selection-disabled = DXVK özelliği Wine grup tercihleriniz yüzünden devre dışı
+dxvk-selection-disabled = DXVK özelliği Wine grup tercihlerinizden dolayı devre dışı
 dxvk-recommended-description = Sadece önerilen dxvk versiyonlarını göster

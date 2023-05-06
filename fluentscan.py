@@ -5,51 +5,118 @@
 
 import os
 import sys
+import glob
+import re
 
-path = "assets/locales/" + sys.argv[1] + "/"
+valid_commands = ["diff", "unused", "missing"]
+
+if len(sys.argv) < 3:
+    print(f"Command format: ./fluentscan.py [command] [locale]\nAvailable commands: {valid_commands}")
+
+    sys.exit()
+
+if sys.argv[1] not in valid_commands:
+    print(f"Invalid command \"{sys.argv[1]}\". Available commands: {valid_commands}")
+
+    sys.exit()
+
+path = "assets/locales/" + sys.argv[2] + "/"
+
+try:
+    open(path + "/main.ftl", "r").close()
+
+except:
+    print(f"{path} does not exist")
+
+    sys.exit()
+
+all_entries = {}
+
+def dict_compare(d1, d2):
+    d1_keys = set(d1.keys())
+    d2_keys = set(d2.keys())
+
+    shared_keys = d1_keys.intersection(d2_keys)
+
+    added = d1_keys - d2_keys
+    removed = d2_keys - d1_keys
+
+    same = set(o for o in shared_keys if d1[o] == d2[o])
+
+    return added, removed, same
+
+def to_dict(text):
+    result={}
+
+    for i in text:
+        if " =" in i:
+            try:
+                result[i.split()[0]] = ' '.join(i.split()[2:])
+
+            except:
+                pass
+
+        elif i:
+            result[list(result.keys())[-1]] += i
+
+    return result
+
+def get_line_num(text,pattern):
+    line = 1
+
+    for i in text.split("\n"):
+        if pattern in i:
+            return line
+
+        line += 1
 
 for filename in os.listdir("assets/locales/en"):
     with open(os.path.join("assets/locales/en", filename), 'r') as locale_file:
         created_locale = open(path + filename)
 
-        def to_dict(text):
-            result={}
+        expected = to_dict(locale_file)
+        expected2 = to_dict(created_locale)
 
-            for i in text:
-                if " = " in i:
-                    try:
-                        result[i.split()[0]] = ' '.join(i.split()[2:])
+        all_entries.update(expected)
 
-                    except:
-                        pass
+        added, removed, same = dict_compare(expected, expected2)
 
-                elif i:
-                    result[list(result.keys())[-1]] += i
+        if sys.argv[1] == "unused" or sys.argv[1] == "missing":
+            files = glob.glob("src/**/*.rs", recursive=True)
 
-            return result
+            used = []
+            vars = {}
 
-        def dict_compare(d1, d2):
-            d1_keys = set(d1.keys())
-            d2_keys = set(d2.keys())
+            for i in files:
+                with open(i, "r") as script:
+                    text = script.read()
 
-            shared_keys = d1_keys.intersection(d2_keys)
+                    if sys.argv[1] == "unused":
+                        for j in expected:
+                            if f"\"{j}\"" in text:
+                                used.append(j)
 
-            added = d1_keys - d2_keys
-            removed = d2_keys - d1_keys
+                    elif sys.argv[1] == "missing":
+                        for j in text.split():
+                            # TODO: ignore comments
+                            if 'tr("' in j:
+                                index = j.find('tr("')
 
-            modified = {o : (d1[o], d2[o]) for o in shared_keys if d1[o] != d2[o]}
+                                var_name = re.sub('[^\\w-]+', '', j[index:].replace('tr("', '').replace("Some", ""))
 
-            same = set(o for o in shared_keys if d1[o] == d2[o])
+                                # TODO: index multiple matches
+                                vars[var_name] = [script.name, get_line_num(text,var_name)]
 
-            return added, removed, modified, same
+            if sys.argv[1] == "unused":
+                for i in expected:
+                    if i not in used:
+                        print(f"[{locale_file.name}]\n"
+                               "  [Unused]\n"
+                              f"    {i}")
 
-        expected=to_dict(locale_file)
-        expected2=to_dict(created_locale)
+            continue
 
-        # TODO: why modified is not used?
-        added, removed, modified, same = dict_compare(expected, expected2)
-
-        if added or removed or same:
+        if (added or removed or same) and sys.argv[1] == "diff":
             print(f"[{created_locale.name[15:]}]")
 
             if added:
@@ -72,3 +139,14 @@ for filename in os.listdir("assets/locales/en"):
                     print(f"    {i} = {expected[i]}")
 
             print("")
+
+if sys.argv[1] == "missing":
+    added, removed, same = dict_compare(vars, all_entries)
+
+    if not added:
+        print("Nothing is missing")
+
+    for i in added:
+        print(f"[{vars[i][0]}, line {vars[i][1]}]\n"
+              "  [Missing]\n"
+              f"    {i}")

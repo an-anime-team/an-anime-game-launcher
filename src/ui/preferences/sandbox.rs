@@ -7,6 +7,7 @@ use adw::prelude::*;
 use anime_launcher_sdk::is_available;
 
 use super::main::PreferencesAppMsg;
+
 use crate::i18n::tr;
 use crate::*;
 
@@ -41,14 +42,10 @@ macro_rules! impl_directory {
                         set_valign: gtk::Align::Center,
 
                         connect_clicked[sender, index] => move |_| {
-                            sender.input($msg(index.clone()));
+                            sender.output($msg(index.clone()));
                         }
                     }
                 }
-            }
-
-            fn output_to_parent_input(output: Self::Output) -> Option<Self::ParentInput> {
-                Some(output)
             }
 
             async fn init_model(
@@ -62,8 +59,8 @@ macro_rules! impl_directory {
                 }
             }
 
-            async fn update(&mut self, msg: Self::Input, sender: AsyncFactorySender<Self>) {
-                sender.output(msg);
+            fn forward_to_parent(output: Self::Output) -> Option<Self::ParentInput> {
+                Some(output)
             }
         }
     }
@@ -197,8 +194,10 @@ impl SimpleAsyncComponent for SandboxApp {
                     },
 
                     add_suffix = &gtk::Button {
-                        set_valign: gtk::Align::Center,
                         set_icon_name: "dialog-information-symbolic",
+                        add_css_class: "flat",
+
+                        set_valign: gtk::Align::Center,
 
                         connect_clicked[sender] => move |_| {
                             if let Err(err) = open::that("https://man.archlinux.org/man/bwrap.1") {
@@ -218,17 +217,16 @@ impl SimpleAsyncComponent for SandboxApp {
 
                 #[local_ref]
                 private_path_entry -> adw::EntryRow {
-                    set_title: &tr("path")
-                },
+                    set_title: &tr("path"),
 
-                gtk::Button {
-                    set_label: &tr("add"),
-                    add_css_class: "pill",
+                    add_suffix = &gtk::Button {
+                        set_icon_name: "list-add-symbolic",
+                        add_css_class: "flat",
 
-                    set_margin_top: 8,
-                    set_halign: gtk::Align::Start,
-
-                    connect_clicked => SandboxAppMsg::AddPrivate
+                        set_valign: gtk::Align::Center,
+    
+                        connect_clicked => SandboxAppMsg::AddPrivate
+                    }
                 }
             },
 
@@ -238,6 +236,20 @@ impl SimpleAsyncComponent for SandboxApp {
             add = &adw::PreferencesGroup {
                 set_title: &tr("shared-directories"),
                 set_description: Some(&tr("shared-directories-description")),
+
+                #[wrap(Some)]
+                set_header_suffix = &gtk::Button {
+                    add_css_class: "flat",
+
+                    set_valign: gtk::Align::Center,
+
+                    adw::ButtonContent {
+                        set_icon_name: "list-add-symbolic",
+                        set_label: &tr("add")
+                    },
+
+                    connect_clicked => SandboxAppMsg::AddShared
+                },
 
                 #[local_ref]
                 shared_path_from_entry -> adw::EntryRow {
@@ -257,16 +269,6 @@ impl SimpleAsyncComponent for SandboxApp {
                     add_suffix = read_only_switch -> gtk::Switch {
                         set_valign: gtk::Align::Center
                     }
-                },
-
-                gtk::Button {
-                    set_label: &tr("add"),
-                    add_css_class: "pill",
-
-                    set_margin_top: 8,
-                    set_halign: gtk::Align::Start,
-
-                    connect_clicked => SandboxAppMsg::AddShared
                 }
             },
 
@@ -277,6 +279,20 @@ impl SimpleAsyncComponent for SandboxApp {
                 set_title: &tr("symlinks"),
                 set_description: Some(&tr("symlinks-description")),
 
+                #[wrap(Some)]
+                set_header_suffix = &gtk::Button {
+                    add_css_class: "flat",
+
+                    set_valign: gtk::Align::Center,
+
+                    adw::ButtonContent {
+                        set_icon_name: "list-add-symbolic",
+                        set_label: &tr("add")
+                    },
+
+                    connect_clicked => SandboxAppMsg::AddSymlink
+                },
+
                 #[local_ref]
                 symlink_path_from_entry -> adw::EntryRow {
                     set_title: &tr("original-path")
@@ -285,16 +301,6 @@ impl SimpleAsyncComponent for SandboxApp {
                 #[local_ref]
                 symlink_path_to_entry -> adw::EntryRow {
                     set_title: &tr("new-path")
-                },
-
-                gtk::Button {
-                    set_label: &tr("add"),
-                    add_css_class: "pill",
-
-                    set_margin_top: 8,
-                    set_halign: gtk::Align::Start,
-
-                    connect_clicked => SandboxAppMsg::AddSymlink
                 }
             },
 
