@@ -1,7 +1,7 @@
-game-sessions = Game sessions
+game-sessions = Sesiones de juego
 
-active-sessions = Active session
-active-session-description = Currently selected game session. Updates after each game launch
+active-sessions = Sesión activa
+active-session-description = La sesión de juego actualmente seleccionada. Se actualiza cada vez que se lanza el juego.
 
-update-session = Update session using current wine prefix registry values
-delete-session = Delete session
+update-session = Actualizar la sesión con los valores actuales del registro del prefijo de Wine
+delete-session = Eliminar sesión
