@@ -31,6 +31,7 @@ pub static mut READY: bool = false;
 
 // TODO: get rid of using this function in all the components' events
 //       e.g. by converting preferences pages into Relm4 Components
+/// Check if the app is ready
 pub fn is_ready() -> bool {
     unsafe { READY }
 }

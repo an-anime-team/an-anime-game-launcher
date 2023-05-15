@@ -114,7 +114,11 @@ impl SimpleAsyncComponent for GameApp {
                     set_title: &tr("active-sessions"),
                     set_subtitle: &tr("active-session-description"),
 
-                    connect_selected_notify[sender] => move |row| sender.input(GameAppMsg::SetCurrent(row.selected()))
+                    connect_selected_notify[sender] => move |row| {
+                        if is_ready() {
+                            sender.input(GameAppMsg::SetCurrent(row.selected()));
+                        }
+                    }
                 }
             },
 
