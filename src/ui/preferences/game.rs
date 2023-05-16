@@ -37,7 +37,7 @@ impl AsyncFactoryComponent for GameSession {
             },
 
             add_suffix = &gtk::Button {
-                set_icon_name: "view-refresh-symbolic-symbolic",
+                set_icon_name: "view-refresh-symbolic",
                 add_css_class: "flat",
 
                 set_tooltip_text: Some(&tr("update-session")),
