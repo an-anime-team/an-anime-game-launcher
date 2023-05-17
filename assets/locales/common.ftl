@@ -21,3 +21,4 @@ es-es = Español
 fr-fr = Français
 tr-tr = Türkçe
 zh-cn = 简体中文
+it-it = Italiano
