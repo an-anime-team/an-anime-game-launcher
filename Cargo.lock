@@ -48,8 +48,8 @@ dependencies = [
 
 [[package]]
 name = "anime-game-core"
-version = "1.8.1"
-source = "git+https://github.com/an-anime-team/anime-game-core?tag=1.8.1#774409afb9453fac78038d783c6d36c1181a3945"
+version = "1.8.2"
+source = "git+https://github.com/an-anime-team/anime-game-core?tag=1.8.2#03235447d7df4aa16679fa3fad2a454f1b7cfc74"
 dependencies = [
  "anyhow",
  "bzip2",
@@ -91,12 +91,13 @@ dependencies = [
  "tracing",
  "tracing-subscriber",
  "unic-langid",
+ "whatadistro",
 ]
 
 [[package]]
 name = "anime-launcher-sdk"
-version = "1.2.4"
-source = "git+https://github.com/an-anime-team/anime-launcher-sdk?tag=1.2.4#44080a0735c12bd0854d7514c6733879bc11be6b"
+version = "1.2.5"
+source = "git+https://github.com/an-anime-team/anime-launcher-sdk?tag=1.2.5#c26fe8a3d52afbb4219820c4812305c0a6d76508"
 dependencies = [
  "anime-game-core",
  "anyhow",
@@ -2999,6 +3000,12 @@ checksum = "b6c71e40d7d2c34a5106301fb632274ca37242cd0c9d3e64dbece371a40a2d87"
 dependencies = [
  "webpki",
 ]
+
+[[package]]
+name = "whatadistro"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1c97ebad4f59809511083f2161587445631bff21bb78d9e046b9ca5b2d05d913"
 
 [[package]]
 name = "winapi"
