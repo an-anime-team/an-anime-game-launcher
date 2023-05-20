@@ -482,7 +482,7 @@ impl SimpleComponent for App {
                                         #[watch]
                                         set_sensitive: !model.disabled_buttons,
 
-                                        set_width_request: 48,
+                                        set_width_request: 44,
 
                                         add_css_class: "circular",
                                         set_icon_name: "emblem-system-symbolic",

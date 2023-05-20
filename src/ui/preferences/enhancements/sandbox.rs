@@ -6,7 +6,7 @@ use adw::prelude::*;
 
 use anime_launcher_sdk::is_available;
 
-use super::main::PreferencesAppMsg;
+use super::EnhancementsAppMsg;
 
 use crate::i18n::tr;
 use crate::*;
@@ -22,10 +22,10 @@ macro_rules! impl_directory {
         #[relm4::factory(async)]
         impl AsyncFactoryComponent for $name {
             type Init = (String, Option<String>);
-            type Input = SandboxAppMsg;
-            type Output = SandboxAppMsg;
+            type Input = SandboxPageMsg;
+            type Output = SandboxPageMsg;
             type CommandOutput = ();
-            type ParentInput = SandboxAppMsg;
+            type ParentInput = SandboxPageMsg;
             type ParentWidget = adw::PreferencesGroup;
 
             view! {
@@ -66,11 +66,11 @@ macro_rules! impl_directory {
     }
 }
 
-impl_directory!(PrivateDirectory, SandboxAppMsg::RemovePrivate);
-impl_directory!(SharedDirectory, SandboxAppMsg::RemoveShared);
-impl_directory!(SymlinkPath, SandboxAppMsg::RemoveSymlink);
+impl_directory!(PrivateDirectory, SandboxPageMsg::RemovePrivate);
+impl_directory!(SharedDirectory, SandboxPageMsg::RemoveShared);
+impl_directory!(SymlinkPath, SandboxPageMsg::RemoveSymlink);
 
-pub struct SandboxApp {
+pub struct SandboxPage {
     private_paths: AsyncFactoryVecDeque<PrivateDirectory>,
     shared_paths: AsyncFactoryVecDeque<SharedDirectory>,
     symlink_paths: AsyncFactoryVecDeque<SymlinkPath>,
@@ -86,7 +86,7 @@ pub struct SandboxApp {
 }
 
 #[derive(Debug, Clone)]
-pub enum SandboxAppMsg {
+pub enum SandboxPageMsg {
     AddPrivate,
     RemovePrivate(DynamicIndex),
 
@@ -98,214 +98,233 @@ pub enum SandboxAppMsg {
 }
 
 #[relm4::component(async, pub)]
-impl SimpleAsyncComponent for SandboxApp {
+impl SimpleAsyncComponent for SandboxPage {
     type Init = ();
-    type Input = SandboxAppMsg;
-    type Output = PreferencesAppMsg;
+    type Input = SandboxPageMsg;
+    type Output = EnhancementsAppMsg;
 
     view! {
-        adw::PreferencesPage {
-            set_title: &tr("sandbox"),
-            set_icon_name: Some("folder-symbolic"),
+        gtk::Box {
+            set_orientation: gtk::Orientation::Vertical,
 
-            set_sensitive: is_available("bwrap"),
-
-            add = &adw::PreferencesGroup {
-                set_title: &tr("sandbox"),
-                set_description: Some(&tr("sandbox-description")),
-
-                adw::ActionRow {
-                    set_title: &tr("enable-sandboxing"),
-                    set_subtitle: &tr("enable-sandboxing-description"),
-
-                    add_suffix = &gtk::Switch {
-                        set_valign: gtk::Align::Center,
-
-                        set_state: CONFIG.sandbox.enabled,
-
-                        connect_state_notify => |switch| {
-                            if is_ready() {
-                                if let Ok(mut config) = Config::get() {
-                                    config.sandbox.enabled = switch.state();
-
-                                    Config::update(config);
-                                }
-                            }
-                        }
-                    }
-                },
-
-                adw::ActionRow {
-                    set_title: &tr("hide-home-directory"),
-                    set_subtitle: &tr("hide-home-directory-description"),
-
-                    add_suffix = &gtk::Switch {
-                        set_valign: gtk::Align::Center,
-
-                        set_state: CONFIG.sandbox.isolate_home,
-
-                        connect_state_notify => |switch| {
-                            if is_ready() {
-                                if let Ok(mut config) = Config::get() {
-                                    config.sandbox.isolate_home = switch.state();
-
-                                    Config::update(config);
-                                }
-                            }
-                        }
-                    }
-                },
-
-                adw::EntryRow {
-                    set_title: &tr("hostname"),
-                    set_text: CONFIG.sandbox.hostname.as_ref().unwrap_or(&String::new()).trim(),
-
-                    connect_changed => |entry| {
-                        if let Ok(mut config) = Config::get() {
-                            let command = entry.text().trim().to_string();
-
-                            config.sandbox.hostname = if command.is_empty() {
-                                None
-                            } else {
-                                Some(command)
-                            };
-
-                            Config::update(config);
-                        }
-                    }
-                },
-
-                adw::EntryRow {
-                    set_title: &tr("additional-arguments"),
-                    set_text: CONFIG.sandbox.args.as_ref().unwrap_or(&String::new()).trim(),
-
-                    connect_changed => |entry| {
-                        if let Ok(mut config) = Config::get() {
-                            let command = entry.text().trim().to_string();
-
-                            config.sandbox.args = if command.is_empty() {
-                                None
-                            } else {
-                                Some(command)
-                            };
-
-                            Config::update(config);
-                        }
-                    },
-
-                    add_suffix = &gtk::Button {
-                        set_icon_name: "dialog-information-symbolic",
-                        add_css_class: "flat",
-
-                        set_valign: gtk::Align::Center,
-
-                        connect_clicked[sender] => move |_| {
-                            if let Err(err) = open::that("https://man.archlinux.org/man/bwrap.1") {
-                                sender.output(PreferencesAppMsg::Toast {
-                                    title: tr("documentation-url-open-failed"),
-                                    description: Some(err.to_string())
-                                }).unwrap();
-                            }
-                        }
-                    }
-                }
-            },
-
-            add = &adw::PreferencesGroup {
-                set_title: &tr("private-directories"),
-                set_description: Some(&tr("private-directories-description")),
-
-                #[local_ref]
-                private_path_entry -> adw::EntryRow {
-                    set_title: &tr("path"),
-
-                    add_suffix = &gtk::Button {
-                        set_icon_name: "list-add-symbolic",
-                        add_css_class: "flat",
-
-                        set_valign: gtk::Align::Center,
-    
-                        connect_clicked => SandboxAppMsg::AddPrivate
-                    }
-                }
-            },
-
-            #[local_ref]
-            add = private_paths -> adw::PreferencesGroup {},
-
-            add = &adw::PreferencesGroup {
-                set_title: &tr("shared-directories"),
-                set_description: Some(&tr("shared-directories-description")),
-
+            adw::HeaderBar {
                 #[wrap(Some)]
-                set_header_suffix = &gtk::Button {
-                    add_css_class: "flat",
+                set_title_widget = &adw::WindowTitle {
+                    set_title: &tr("sandbox")
+                },
 
-                    set_valign: gtk::Align::Center,
+                pack_start = &gtk::Button {
+                    set_icon_name: "go-previous-symbolic",
 
-                    adw::ButtonContent {
-                        set_icon_name: "list-add-symbolic",
-                        set_label: &tr("add")
+                    connect_clicked[sender] => move |_| {
+                        sender.output(EnhancementsAppMsg::OpenMainPage).unwrap();
+                    }
+                }
+            },
+
+            adw::PreferencesPage {
+                set_title: &tr("sandbox"),
+                set_icon_name: Some("folder-symbolic"),
+
+                set_sensitive: is_available("bwrap"),
+
+                add = &adw::PreferencesGroup {
+                    set_title: &tr("sandbox"),
+                    set_description: Some(&tr("sandbox-description")),
+
+                    adw::ActionRow {
+                        set_title: &tr("enable-sandboxing"),
+                        set_subtitle: &tr("enable-sandboxing-description"),
+
+                        add_suffix = &gtk::Switch {
+                            set_valign: gtk::Align::Center,
+
+                            set_state: CONFIG.sandbox.enabled,
+
+                            connect_state_notify => |switch| {
+                                if is_ready() {
+                                    if let Ok(mut config) = Config::get() {
+                                        config.sandbox.enabled = switch.state();
+
+                                        Config::update(config);
+                                    }
+                                }
+                            }
+                        }
                     },
 
-                    connect_clicked => SandboxAppMsg::AddShared
+                    adw::ActionRow {
+                        set_title: &tr("hide-home-directory"),
+                        set_subtitle: &tr("hide-home-directory-description"),
+
+                        add_suffix = &gtk::Switch {
+                            set_valign: gtk::Align::Center,
+
+                            set_state: CONFIG.sandbox.isolate_home,
+
+                            connect_state_notify => |switch| {
+                                if is_ready() {
+                                    if let Ok(mut config) = Config::get() {
+                                        config.sandbox.isolate_home = switch.state();
+
+                                        Config::update(config);
+                                    }
+                                }
+                            }
+                        }
+                    },
+
+                    adw::EntryRow {
+                        set_title: &tr("hostname"),
+                        set_text: CONFIG.sandbox.hostname.as_ref().unwrap_or(&String::new()).trim(),
+
+                        connect_changed => |entry| {
+                            if let Ok(mut config) = Config::get() {
+                                let command = entry.text().trim().to_string();
+
+                                config.sandbox.hostname = if command.is_empty() {
+                                    None
+                                } else {
+                                    Some(command)
+                                };
+
+                                Config::update(config);
+                            }
+                        }
+                    },
+
+                    adw::EntryRow {
+                        set_title: &tr("additional-arguments"),
+                        set_text: CONFIG.sandbox.args.as_ref().unwrap_or(&String::new()).trim(),
+
+                        connect_changed => |entry| {
+                            if let Ok(mut config) = Config::get() {
+                                let command = entry.text().trim().to_string();
+
+                                config.sandbox.args = if command.is_empty() {
+                                    None
+                                } else {
+                                    Some(command)
+                                };
+
+                                Config::update(config);
+                            }
+                        },
+
+                        add_suffix = &gtk::Button {
+                            set_icon_name: "dialog-information-symbolic",
+                            add_css_class: "flat",
+
+                            set_valign: gtk::Align::Center,
+
+                            connect_clicked[sender] => move |_| {
+                                if let Err(err) = open::that("https://man.archlinux.org/man/bwrap.1") {
+                                    sender.output(EnhancementsAppMsg::Toast {
+                                        title: tr("documentation-url-open-failed"),
+                                        description: Some(err.to_string())
+                                    }).unwrap();
+                                }
+                            }
+                        }
+                    }
                 },
 
-                #[local_ref]
-                shared_path_from_entry -> adw::EntryRow {
-                    set_title: &tr("original-path")
-                },
-
-                #[local_ref]
-                shared_path_to_entry -> adw::EntryRow {
-                    set_title: &tr("new-path")
-                },
-
-                adw::ActionRow {
-                    set_title: &tr("read-only"),
-                    set_subtitle: &tr("read-only-description"),
+                add = &adw::PreferencesGroup {
+                    set_title: &tr("private-directories"),
+                    set_description: Some(&tr("private-directories-description")),
 
                     #[local_ref]
-                    add_suffix = read_only_switch -> gtk::Switch {
-                        set_valign: gtk::Align::Center
+                    private_path_entry -> adw::EntryRow {
+                        set_title: &tr("path"),
+
+                        add_suffix = &gtk::Button {
+                            set_icon_name: "list-add-symbolic",
+                            add_css_class: "flat",
+
+                            set_valign: gtk::Align::Center,
+        
+                            connect_clicked => SandboxPageMsg::AddPrivate
+                        }
                     }
-                }
-            },
+                },
 
-            #[local_ref]
-            add = shared_paths -> adw::PreferencesGroup {},
+                #[local_ref]
+                add = private_paths -> adw::PreferencesGroup {},
 
-            add = &adw::PreferencesGroup {
-                set_title: &tr("symlinks"),
-                set_description: Some(&tr("symlinks-description")),
+                add = &adw::PreferencesGroup {
+                    set_title: &tr("shared-directories"),
+                    set_description: Some(&tr("shared-directories-description")),
 
-                #[wrap(Some)]
-                set_header_suffix = &gtk::Button {
-                    add_css_class: "flat",
+                    #[wrap(Some)]
+                    set_header_suffix = &gtk::Button {
+                        add_css_class: "flat",
 
-                    set_valign: gtk::Align::Center,
+                        set_valign: gtk::Align::Center,
 
-                    adw::ButtonContent {
-                        set_icon_name: "list-add-symbolic",
-                        set_label: &tr("add")
+                        adw::ButtonContent {
+                            set_icon_name: "list-add-symbolic",
+                            set_label: &tr("add")
+                        },
+
+                        connect_clicked => SandboxPageMsg::AddShared
                     },
 
-                    connect_clicked => SandboxAppMsg::AddSymlink
+                    #[local_ref]
+                    shared_path_from_entry -> adw::EntryRow {
+                        set_title: &tr("original-path")
+                    },
+
+                    #[local_ref]
+                    shared_path_to_entry -> adw::EntryRow {
+                        set_title: &tr("new-path")
+                    },
+
+                    adw::ActionRow {
+                        set_title: &tr("read-only"),
+                        set_subtitle: &tr("read-only-description"),
+
+                        #[local_ref]
+                        add_suffix = read_only_switch -> gtk::Switch {
+                            set_valign: gtk::Align::Center
+                        }
+                    }
                 },
 
                 #[local_ref]
-                symlink_path_from_entry -> adw::EntryRow {
-                    set_title: &tr("original-path")
+                add = shared_paths -> adw::PreferencesGroup {},
+
+                add = &adw::PreferencesGroup {
+                    set_title: &tr("symlinks"),
+                    set_description: Some(&tr("symlinks-description")),
+
+                    #[wrap(Some)]
+                    set_header_suffix = &gtk::Button {
+                        add_css_class: "flat",
+
+                        set_valign: gtk::Align::Center,
+
+                        adw::ButtonContent {
+                            set_icon_name: "list-add-symbolic",
+                            set_label: &tr("add")
+                        },
+
+                        connect_clicked => SandboxPageMsg::AddSymlink
+                    },
+
+                    #[local_ref]
+                    symlink_path_from_entry -> adw::EntryRow {
+                        set_title: &tr("original-path")
+                    },
+
+                    #[local_ref]
+                    symlink_path_to_entry -> adw::EntryRow {
+                        set_title: &tr("new-path")
+                    }
                 },
 
                 #[local_ref]
-                symlink_path_to_entry -> adw::EntryRow {
-                    set_title: &tr("new-path")
-                }
-            },
-
-            #[local_ref]
-            add = symlink_paths -> adw::PreferencesGroup {}
+                add = symlink_paths -> adw::PreferencesGroup {}
+            }
         }
     }
 
@@ -376,7 +395,7 @@ impl SimpleAsyncComponent for SandboxApp {
 
     async fn update(&mut self, msg: Self::Input, _sender: AsyncComponentSender<Self>) {
         match msg {
-            SandboxAppMsg::AddPrivate => {
+            SandboxPageMsg::AddPrivate => {
                 if let Ok(mut config) = Config::get() {
                     let path = self.private_path_entry.text().trim().to_string();
 
@@ -392,7 +411,7 @@ impl SimpleAsyncComponent for SandboxApp {
                 }
             }
 
-            SandboxAppMsg::RemovePrivate(index) => {
+            SandboxPageMsg::RemovePrivate(index) => {
                 if let Ok(mut config) = Config::get() {
                     if let Some(var) = self.private_paths.guard().get(index.current_index()) {
                         config.sandbox.private.retain(|item| item != &var.from);
@@ -404,7 +423,7 @@ impl SimpleAsyncComponent for SandboxApp {
                 }
             },
 
-            SandboxAppMsg::AddShared => {
+            SandboxPageMsg::AddShared => {
                 if let Ok(mut config) = Config::get() {
                     let from = self.shared_path_from_entry.text().trim().to_string();
                     let to = self.shared_path_to_entry.text().trim().to_string();
@@ -435,7 +454,7 @@ impl SimpleAsyncComponent for SandboxApp {
                 }
             }
 
-            SandboxAppMsg::RemoveShared(index) => {
+            SandboxPageMsg::RemoveShared(index) => {
                 if let Ok(mut config) = Config::get() {
                     if let Some(var) = self.shared_paths.guard().get(index.current_index()) {
                         config.sandbox.mounts.read_only.remove(&var.from);
@@ -448,7 +467,7 @@ impl SimpleAsyncComponent for SandboxApp {
                 }
             },
 
-            SandboxAppMsg::AddSymlink => {
+            SandboxPageMsg::AddSymlink => {
                 if let Ok(mut config) = Config::get() {
                     let from = self.symlink_path_from_entry.text().trim().to_string();
                     let to = self.symlink_path_to_entry.text().trim().to_string();
@@ -466,7 +485,7 @@ impl SimpleAsyncComponent for SandboxApp {
                 }
             }
 
-            SandboxAppMsg::RemoveSymlink(index) => {
+            SandboxPageMsg::RemoveSymlink(index) => {
                 if let Ok(mut config) = Config::get() {
                     if let Some(var) = self.symlink_paths.guard().get(index.current_index()) {
                         config.sandbox.mounts.symlinks.remove(&var.from);

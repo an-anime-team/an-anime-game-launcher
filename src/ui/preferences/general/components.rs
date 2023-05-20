@@ -9,10 +9,10 @@ use anime_launcher_sdk::wincompatlib::prelude::*;
 use anime_launcher_sdk::components::*;
 use anime_launcher_sdk::components::wine::WincompatlibWine;
 
+use super::GeneralAppMsg;
+
 use crate::ui::components;
 use crate::ui::components::*;
-
-use super::GeneralAppMsg;
 
 use crate::i18n::*;
 use crate::*;
@@ -58,6 +58,11 @@ impl SimpleAsyncComponent for ComponentsPage {
             set_orientation: gtk::Orientation::Vertical,
 
             adw::HeaderBar {
+                #[wrap(Some)]
+                set_title_widget = &adw::WindowTitle {
+                    set_title: "Components"
+                },
+
                 pack_start = &gtk::Button {
                     set_icon_name: "go-previous-symbolic",
 

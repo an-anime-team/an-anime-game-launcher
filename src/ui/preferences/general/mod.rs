@@ -168,7 +168,7 @@ impl SimpleAsyncComponent for GeneralApp {
 
     view! {
         #[root]
-        main_page = adw::PreferencesPage {
+        adw::PreferencesPage {
             set_title: &tr("general"),
             set_icon_name: Some("applications-system-symbolic"),
 

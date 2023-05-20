@@ -5,36 +5,101 @@ use adw::prelude::*;
 
 use anime_launcher_sdk::config::ConfigExt;
 use anime_launcher_sdk::genshin::config::Config;
-
 use anime_launcher_sdk::config::schema_blanks::prelude::*;
 
 use anime_launcher_sdk::is_available;
+
+pub mod game;
+pub mod sandbox;
+pub mod environment;
+
+use game::*;
+use sandbox::*;
+use environment::*;
 
 use crate::i18n::tr;
 use crate::*;
 
 use super::gamescope::*;
+use super::main::PreferencesAppMsg;
 
 pub struct EnhancementsApp {
-    gamescope: AsyncController<GamescopeApp>
+    gamescope: AsyncController<GamescopeApp>,
+    game_page: AsyncController<GamePage>,
+    sandbox_page: AsyncController<SandboxPage>,
+    environment_page: AsyncController<EnvironmentPage>
 }
 
 #[derive(Debug)]
 pub enum EnhancementsAppMsg {
     SetGamescopeParent(adw::PreferencesWindow),
-    OpenGamescope
+
+    OpenGamescope,
+    OpenMainPage,
+    OpenGameSettingsPage,
+    OpenSandboxSettingsPage,
+    OpenEnvironmentSettingsPage,
+
+    Toast {
+        title: String,
+        description: Option<String>
+    }
 }
 
 #[relm4::component(async, pub)]
 impl SimpleAsyncComponent for EnhancementsApp {
     type Init = ();
     type Input = EnhancementsAppMsg;
-    type Output = ();
+    type Output = PreferencesAppMsg;
 
     view! {
+        #[root]
         adw::PreferencesPage {
             set_title: &tr("enhancements"),
             set_icon_name: Some("applications-graphics-symbolic"),
+
+            add = &adw::PreferencesGroup {
+                set_title: "Options",
+
+                adw::ActionRow {
+                    set_title: "Game settings",
+                    set_subtitle: "Manage in-game settings and account session",
+
+                    add_suffix = &gtk::Image {
+                        set_icon_name: Some("go-next-symbolic")
+                    },
+
+                    set_activatable: true,
+
+                    connect_activated => EnhancementsAppMsg::OpenGameSettingsPage
+                },
+
+                adw::ActionRow {
+                    set_title: "Sandbox settings",
+                    set_subtitle: "Run the game in a bubblewrap sandbox, similar to what Flatpak does",
+
+                    add_suffix = &gtk::Image {
+                        set_icon_name: Some("go-next-symbolic")
+                    },
+
+                    set_activatable: true,
+
+                    connect_activated => EnhancementsAppMsg::OpenSandboxSettingsPage
+                },
+
+                adw::ActionRow {
+                    set_title: "Environment settings",
+                    set_subtitle: "Specify environment variables and game launching command",
+
+                    add_suffix = &gtk::Image {
+                        set_icon_name: Some("go-next-symbolic")
+                    },
+
+                    set_activatable: true,
+
+                    connect_activated => EnhancementsAppMsg::OpenEnvironmentSettingsPage
+                }
+            },
 
             add = &adw::PreferencesGroup {
                 set_title: &tr("wine"),
@@ -498,7 +563,16 @@ impl SimpleAsyncComponent for EnhancementsApp {
                     }
                 },
             }
-        }
+        },
+
+        #[local_ref]
+        game_page -> gtk::Box {},
+
+        #[local_ref]
+        sandbox_page -> gtk::Box {},
+
+        #[local_ref]
+        environment_page -> gtk::Box {}
     }
 
     async fn init(
@@ -511,15 +585,31 @@ impl SimpleAsyncComponent for EnhancementsApp {
         let model = Self {
             gamescope: GamescopeApp::builder()
                 .launch(())
-                .detach()
+                .detach(),
+
+            game_page: GamePage::builder()
+                .launch(())
+                .forward(sender.input_sender(), std::convert::identity),
+
+            sandbox_page: SandboxPage::builder()
+                .launch(())
+                .forward(sender.input_sender(), std::convert::identity),
+
+            environment_page: EnvironmentPage::builder()
+                .launch(())
+                .forward(sender.input_sender(), std::convert::identity)
         };
+
+        let game_page = model.game_page.widget();
+        let sandbox_page = model.sandbox_page.widget();
+        let environment_page = model.environment_page.widget();
 
         let widgets = view_output!();
 
         AsyncComponentParts { model, widgets }
     }
 
-    async fn update(&mut self, msg: Self::Input, _sender: AsyncComponentSender<Self>) {
+    async fn update(&mut self, msg: Self::Input, sender: AsyncComponentSender<Self>) {
         match msg {
             EnhancementsAppMsg::SetGamescopeParent(parent) => {
                 self.gamescope.widget().set_transient_for(Some(&parent));
@@ -527,6 +617,41 @@ impl SimpleAsyncComponent for EnhancementsApp {
 
             EnhancementsAppMsg::OpenGamescope => {
                 self.gamescope.widget().present();
+            }
+
+            EnhancementsAppMsg::OpenMainPage => unsafe {
+                PREFERENCES_WINDOW.as_ref()
+                    .unwrap_unchecked()
+                    .widget()
+                    .close_subpage();
+            }
+
+            EnhancementsAppMsg::OpenGameSettingsPage => unsafe {
+                PREFERENCES_WINDOW.as_ref()
+                    .unwrap_unchecked()
+                    .widget()
+                    .present_subpage(self.game_page.widget());
+            }
+
+            EnhancementsAppMsg::OpenSandboxSettingsPage => unsafe {
+                PREFERENCES_WINDOW.as_ref()
+                    .unwrap_unchecked()
+                    .widget()
+                    .present_subpage(self.sandbox_page.widget());
+            }
+
+            EnhancementsAppMsg::OpenEnvironmentSettingsPage => unsafe {
+                PREFERENCES_WINDOW.as_ref()
+                    .unwrap_unchecked()
+                    .widget()
+                    .present_subpage(self.environment_page.widget());
+            }
+
+            EnhancementsAppMsg::Toast { title, description } => {
+                sender.output(PreferencesAppMsg::Toast {
+                    title,
+                    description
+                }).unwrap();
             }
         }
     }
