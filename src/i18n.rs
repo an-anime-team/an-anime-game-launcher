@@ -14,11 +14,12 @@ pub const SUPPORTED_LANGUAGES: &[LanguageIdentifier] = &[
     langid!("en-us"),
     langid!("ru-ru"),
     langid!("de-de"),
-    langid!("es-es"),
     langid!("fr-fr"),
+    langid!("es-es"),
     langid!("tr-tr"),
-    langid!("zh-cn"),
     langid!("it-it"),
+    langid!("id-id"),
+    langid!("zh-cn"),
 ];
 
 static mut LANG: LanguageIdentifier = langid!("en-us");
