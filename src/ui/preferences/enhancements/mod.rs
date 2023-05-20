@@ -62,7 +62,7 @@ impl SimpleAsyncComponent for EnhancementsApp {
                 set_title: "Options",
 
                 adw::ActionRow {
-                    set_title: "Game settings",
+                    set_title: &tr("game"),
                     set_subtitle: "Manage in-game settings and account session",
 
                     add_suffix = &gtk::Image {
@@ -75,7 +75,7 @@ impl SimpleAsyncComponent for EnhancementsApp {
                 },
 
                 adw::ActionRow {
-                    set_title: "Sandbox settings",
+                    set_title: &tr("sandbox"),
                     set_subtitle: "Run the game in a bubblewrap sandbox, similar to what Flatpak does",
 
                     add_suffix = &gtk::Image {
@@ -88,7 +88,7 @@ impl SimpleAsyncComponent for EnhancementsApp {
                 },
 
                 adw::ActionRow {
-                    set_title: "Environment settings",
+                    set_title: &tr("environment"),
                     set_subtitle: "Specify environment variables and game launching command",
 
                     add_suffix = &gtk::Image {
