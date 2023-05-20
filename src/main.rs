@@ -159,7 +159,7 @@ fn main() {
         }}
 
         .round-bin {{
-            border-radius: 8px;
+            border-radius: 24px;
         }}
     ", BACKGROUND_FILE.to_string_lossy()));
 
