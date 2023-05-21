@@ -416,20 +416,41 @@ impl SimpleComponent for App {
                                             },
 
                                             #[watch]
-                                            set_label: &match model.state {
-                                                Some(LauncherState::Launch)                         => tr("launch"),
-                                                Some(LauncherState::PredownloadAvailable { .. })    => tr("launch"),
+                                            set_label: &match &model.state {
+                                                Some(LauncherState::Launch) |
+                                                Some(LauncherState::PredownloadAvailable { .. }) => tr("launch"),
+
                                                 Some(LauncherState::FolderMigrationRequired { .. }) => tr("migrate-folders"),
-                                                Some(LauncherState::UnityPlayerPatchAvailable(_))   => tr("apply-patch"),
-                                                Some(LauncherState::XluaPatchAvailable(_))          => tr("apply-patch"),
-                                                Some(LauncherState::WineNotInstalled)               => tr("download-wine"),
-                                                Some(LauncherState::PrefixNotExists)                => tr("create-prefix"),
-                                                Some(LauncherState::VoiceUpdateAvailable(_))        => tr("update"),
-                                                Some(LauncherState::VoiceOutdated(_))               => tr("update"),
-                                                Some(LauncherState::VoiceNotInstalled(_))           => tr("download"),
-                                                Some(LauncherState::GameUpdateAvailable(_))         => tr("update"),
-                                                Some(LauncherState::GameOutdated(_))                => tr("update"),
-                                                Some(LauncherState::GameNotInstalled(_))            => tr("download"),
+
+                                                Some(LauncherState::UnityPlayerPatchAvailable(_)) |
+                                                Some(LauncherState::XluaPatchAvailable(_)) => tr("apply-patch"),
+
+                                                Some(LauncherState::WineNotInstalled) => tr("download-wine"),
+                                                Some(LauncherState::PrefixNotExists)  => tr("create-prefix"),
+
+                                                Some(LauncherState::GameUpdateAvailable(diff)) |
+                                                Some(LauncherState::GameOutdated(diff)) |
+                                                Some(LauncherState::VoiceUpdateAvailable(diff)) |
+                                                Some(LauncherState::VoiceOutdated(diff)) => {
+                                                    match (Config::get(), diff.file_name()) {
+                                                        (Ok(config), Some(filename)) => {
+                                                            let temp = config.launcher.temp.unwrap_or_else(std::env::temp_dir);
+
+                                                            if temp.join(filename).exists() {
+                                                                tr("continue")
+                                                            }
+
+                                                            else {
+                                                                tr("update")
+                                                            }
+                                                        }
+
+                                                        _ => tr("update")
+                                                    }
+                                                },
+
+                                                Some(LauncherState::GameNotInstalled(_)) |
+                                                Some(LauncherState::VoiceNotInstalled(_)) => tr("download"),
 
                                                 None => String::from("...")
                                             }
