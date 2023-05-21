@@ -19,6 +19,7 @@ about = Hakkında
 close = Kapat
 save = Kaydet
 continue = Devam et
+resume = Resume
 exit = Çıkış yap
 check = Kontrol et
 restart = Tekrardan başlat

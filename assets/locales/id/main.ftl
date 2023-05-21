@@ -19,6 +19,7 @@ about = Tentang
 close = Tutup 
 save = Simpan
 continue = Lanjutkan
+resume = Resume
 exit = Keluar 
 check = Cek
 restart = Muat ulang 

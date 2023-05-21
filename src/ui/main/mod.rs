@@ -437,7 +437,7 @@ impl SimpleComponent for App {
                                                             let temp = config.launcher.temp.unwrap_or_else(std::env::temp_dir);
 
                                                             if temp.join(filename).exists() {
-                                                                tr("continue")
+                                                                tr("resume")
                                                             }
 
                                                             else {

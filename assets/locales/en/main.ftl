@@ -19,6 +19,7 @@ about = About
 close = Close
 save = Save
 continue = Continue
+resume = Resume
 exit = Exit
 check = Check
 restart = Restart

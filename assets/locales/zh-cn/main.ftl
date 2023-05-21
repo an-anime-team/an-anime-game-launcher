@@ -19,6 +19,7 @@ about = 关于
 close = 关闭
 save = 保存
 continue = 继续
+resume = Resume
 exit = 退出
 check = 检查
 restart = 重启

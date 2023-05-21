@@ -19,6 +19,7 @@ about = Informazioni
 close = Chiudi
 save = Salva
 continue = Continua
+resume = Resume
 exit = Esci
 check = Controlla
 restart = Riavvia

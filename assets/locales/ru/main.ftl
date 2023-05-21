@@ -19,6 +19,7 @@ about = О программе
 close = Закрыть
 save = Сохранить
 continue = Продолжить
+resume = Возобновить
 exit = Выйти
 check = Проверить
 restart = Перезапустить
