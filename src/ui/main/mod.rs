@@ -386,7 +386,34 @@ impl SimpleComponent for App {
 
                                     gtk::Button {
                                         adw::ButtonContent {
-                                            set_icon_name: "media-playback-start-symbolic",
+                                            #[watch]
+                                            set_icon_name: match &model.state {
+                                                Some(LauncherState::Launch) |
+                                                Some(LauncherState::PredownloadAvailable { .. }) => "media-playback-start-symbolic",
+
+                                                Some(LauncherState::FolderMigrationRequired { .. }) |
+                                                Some(LauncherState::WineNotInstalled) |
+                                                Some(LauncherState::PrefixNotExists) => "document-save-symbolic",
+
+                                                Some(LauncherState::GameUpdateAvailable(_)) |
+                                                Some(LauncherState::GameNotInstalled(_)) |
+                                                Some(LauncherState::VoiceUpdateAvailable(_)) |
+                                                Some(LauncherState::VoiceNotInstalled(_)) => "document-save-symbolic",
+
+                                                Some(LauncherState::UnityPlayerPatchAvailable(UnityPlayerPatch { status, .. })) |
+                                                Some(LauncherState::XluaPatchAvailable(XluaPatch { status, .. })) => match status {
+                                                    PatchStatus::NotAvailable |
+                                                    PatchStatus::Outdated { .. } |
+                                                    PatchStatus::Preparation { .. } => "window-close-symbolic",
+
+                                                    PatchStatus::Testing { .. } |
+                                                    PatchStatus::Available { .. } => "document-save-symbolic"
+                                                }
+
+                                                Some(LauncherState::VoiceOutdated(_)) |
+                                                Some(LauncherState::GameOutdated(_)) |
+                                                None => "window-close-symbolic"
+                                            },
 
                                             #[watch]
                                             set_label: &match model.state {
