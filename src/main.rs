@@ -41,7 +41,7 @@ lazy_static::lazy_static! {
     /// This one is used to prepare some launcher UI components on start
     pub static ref CONFIG: Schema = Config::get().expect("Failed to load config");
 
-    pub static ref GAME: Game = Game::new(CONFIG.game.path.for_edition(CONFIG.launcher.edition));
+    pub static ref GAME: Game = Game::new(CONFIG.game.path.for_edition(CONFIG.launcher.edition), CONFIG.launcher.edition);
 
     /// Path to launcher folder. Standard is `$HOME/.local/share/anime-game-launcher`
     pub static ref LAUNCHER_FOLDER: PathBuf = launcher_dir().expect("Failed to get launcher folder");
@@ -162,9 +162,6 @@ fn main() {
             border-radius: 24px;
         }}
     ", BACKGROUND_FILE.to_string_lossy()));
-
-    // Set game edition
-    CONFIG.launcher.edition.select();
 
     // Set UI language
     let lang = CONFIG.launcher.language.parse().expect("Wrong language format used in config");

@@ -7,6 +7,7 @@ use adw::prelude::*;
 use gtk::glib::clone;
 
 use anime_launcher_sdk::anime_game_core::prelude::*;
+use anime_launcher_sdk::anime_game_core::genshin::prelude::*;
 
 use anime_launcher_sdk::config::ConfigExt;
 use anime_launcher_sdk::genshin::config::Config;
@@ -147,11 +148,8 @@ impl SimpleAsyncComponent for ComponentVersion {
                         if let Ok(config) = Config::get() {
                             // todo
                             let mut installer = Installer::new(&self.download_uri)
-                                .expect("Failed to create installer instance for this version");
-
-                            if let Some(temp) = config.launcher.temp {
-                                installer.set_temp_folder(temp);
-                            }
+                                .expect("Failed to create installer instance for this version")
+                                .with_temp_folder(config.launcher.temp.unwrap_or_else(std::env::temp_dir));
 
                             self.state = VersionState::Downloading;
 

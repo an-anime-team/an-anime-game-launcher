@@ -324,10 +324,10 @@ impl SimpleComponent for App {
 
                                             ("size", match model.state.as_ref() {
                                                 Some(LauncherState::PredownloadAvailable { game, voices }) => {
-                                                    let mut size = game.size().unwrap_or((0, 0)).0;
+                                                    let mut size = game.downloaded_size().unwrap_or(0);
 
                                                     for voice in voices {
-                                                        size += voice.size().unwrap_or((0, 0)).0;
+                                                        size += voice.downloaded_size().unwrap_or(0);
                                                     }
 
                                                     prettify_bytes(size)
@@ -757,7 +757,7 @@ impl SimpleComponent for App {
             sender.input(AppMsg::SetLoadingStatus(Some(Some(tr("loading-patch-status")))));
 
             // Sync local patch repo
-            let patch = Patch::new(&CONFIG.patch.path);
+            let patch = Patch::new(&CONFIG.patch.path, CONFIG.launcher.edition);
 
             match patch.is_sync(&CONFIG.patch.servers) {
                 Ok(Some(_)) => (),
@@ -989,7 +989,7 @@ impl SimpleComponent for App {
 
                     std::thread::spawn(move || {
                         for mut diff in diffs {
-                            let result = diff.download_in(&tmp, clone!(@strong progress_bar_input => move |curr, total| {
+                            let result = diff.download_to(&tmp, clone!(@strong progress_bar_input => move |curr, total| {
                                 progress_bar_input.send(ProgressBarMsg::UpdateProgress(curr, total));
                             }));
 

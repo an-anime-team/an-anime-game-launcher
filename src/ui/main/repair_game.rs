@@ -20,15 +20,15 @@ pub fn repair_game(sender: ComponentSender<App>, progress_bar_input: Sender<Prog
     sender.input(AppMsg::SetDownloading(true));
 
     std::thread::spawn(move || {
-        match repairer::try_get_integrity_files(None) {
+        match repairer::try_get_integrity_files(config.launcher.edition, None) {
             Ok(mut files) => {
                 // Add voiceovers files
                 let game_path = config.game.path.for_edition(config.launcher.edition).to_path_buf();
-                let game = Game::new(&game_path);
+                let game = Game::new(&game_path, config.launcher.edition);
 
                 if let Ok(voiceovers) = game.get_voice_packages() {
                     for package in voiceovers {
-                        if let Ok(mut voiceover_files) = repairer::try_get_voice_integrity_files(package.locale(), None) {
+                        if let Ok(mut voiceover_files) = repairer::try_get_voice_integrity_files(config.launcher.edition, package.locale(), None) {
                             files.append(&mut voiceover_files);
                         }
                     }
@@ -105,10 +105,10 @@ pub fn repair_game(sender: ComponentSender<App>, progress_bar_input: Sender<Prog
 
                     let total = broken.len() as f64;
 
-                    let player_patch = UnityPlayerPatch::from_folder(&config.patch.path).unwrap()
+                    let player_patch = UnityPlayerPatch::from_folder(&config.patch.path, config.launcher.edition).unwrap()
                         .is_applied(&game_path).unwrap();
 
-                    let xlua_patch = XluaPatch::from_folder(&config.patch.path).unwrap()
+                    let xlua_patch = XluaPatch::from_folder(&config.patch.path, config.launcher.edition).unwrap()
                         .is_applied(&game_path).unwrap();
 
                     tracing::debug!("Patches status: player({player_patch}), xlua({xlua_patch})");

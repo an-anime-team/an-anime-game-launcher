@@ -11,13 +11,11 @@ use adw::prelude::*;
 
 use anime_launcher_sdk::wincompatlib::prelude::*;
 
-use anime_launcher_sdk::anime_game_core::prelude::*;
-use anime_launcher_sdk::anime_game_core::genshin::consts::GameEdition;
-
 use anime_launcher_sdk::config::ConfigExt;
 use anime_launcher_sdk::genshin::config::Config;
-
 use anime_launcher_sdk::genshin::config::schema::launcher::LauncherStyle;
+
+use anime_launcher_sdk::anime_game_core::genshin::consts::GameEdition;
 use anime_launcher_sdk::genshin::env_emulation::Environment;
 
 pub mod components;
@@ -313,9 +311,6 @@ impl SimpleAsyncComponent for GeneralApp {
                                     _ => unreachable!()
                                 };
 
-                                // Select new game edition
-                                config.launcher.edition.select();
-
                                 Config::update(config);
 
                                 sender.output(PreferencesAppMsg::UpdateLauncherState);
@@ -392,7 +387,7 @@ impl SimpleAsyncComponent for GeneralApp {
                         #[watch]
                         set_text: &match model.game_diff.as_ref() {
                             Some(diff) => match diff {
-                                VersionDiff::Latest(current) |
+                                VersionDiff::Latest { version: current, .. } |
                                 VersionDiff::Predownload { current, .. } |
                                 VersionDiff::Diff { current, .. } |
                                 VersionDiff::Outdated { current, .. } => current.to_string(),
@@ -406,7 +401,7 @@ impl SimpleAsyncComponent for GeneralApp {
                         #[watch]
                         set_css_classes: match model.game_diff.as_ref() {
                             Some(diff) => match diff {
-                                VersionDiff::Latest(_) => &["success"],
+                                VersionDiff::Latest { .. } => &["success"],
                                 VersionDiff::Predownload { .. } => &["accent"],
                                 VersionDiff::Diff { .. } => &["warning"],
                                 VersionDiff::Outdated { .. } => &["error"],
@@ -419,7 +414,7 @@ impl SimpleAsyncComponent for GeneralApp {
                         #[watch]
                         set_tooltip_text: Some(&match model.game_diff.as_ref() {
                             Some(diff) => match diff {
-                                VersionDiff::Latest(_) => String::new(),
+                                VersionDiff::Latest { .. } => String::new(),
                                 VersionDiff::Predownload { current, latest, .. } => tr_args("game-predownload-available", [
                                     ("old", current.to_string().into()),
                                     ("new", latest.to_string().into())
@@ -791,7 +786,7 @@ impl SimpleAsyncComponent for GeneralApp {
 
                         Config::update(config.clone());
 
-                        let package = VoicePackage::with_locale(package.locale).unwrap();
+                        let package = VoicePackage::with_locale(package.locale, config.launcher.edition).unwrap();
                         let game_path = config.game.path.for_edition(config.launcher.edition).to_path_buf();
 
                         if package.is_installed_in(&game_path) {
