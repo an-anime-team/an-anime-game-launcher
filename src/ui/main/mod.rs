@@ -301,19 +301,11 @@ impl SimpleComponent for App {
                                 set_margin_top: 64,
                                 set_spacing: 8,
 
-                                // TODO: add tooltips
-
                                 adw::Bin {
                                     set_css_classes: &["background", "round-bin"],
 
                                     gtk::Button {
-                                        #[watch]
-                                        set_width_request: match model.style {
-                                            LauncherStyle::Modern => -1,
-                                            LauncherStyle::Classic => 40
-                                        },
-
-                                        // TODO: update tooltip for predownloaded update
+                                        set_width_request: 44,
 
                                         #[watch]
                                         set_tooltip_text: Some(&tr_args("predownload-update", [
@@ -365,13 +357,13 @@ impl SimpleComponent for App {
                                                     voices.iter().all(|voice| temp.join(voice.file_name().unwrap()).exists());
 
                                                 if downloaded {
-                                                    &["success"]
+                                                    &["success", "circular"]
                                                 } else {
-                                                    &["warning"]
+                                                    &["warning", "circular"]
                                                 }
                                             }
 
-                                            _ => &["warning"]
+                                            _ => &["warning", "circular"]
                                         },
 
                                         set_icon_name: "document-save-symbolic",
