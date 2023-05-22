@@ -264,20 +264,12 @@ impl SimpleAsyncComponent for EnhancementsApp {
                         &tr("performance")
                     ]),
 
-                    // FSR strength selection
-                    // 
-                    // Ultra Quality = 5
-                    // Quality       = 4
-                    // Balanced      = 3
-                    // Performance   = 2
-                    // 
-                    // Source: Bottles (https://github.com/bottlesdevs/Bottles/blob/22fa3573a13f4e9b9c429e4cdfe4ca29787a2832/src/ui/details-preferences.ui#L88)
-                    set_selected: 5 - CONFIG.game.enhancements.fsr.strength as u32,
+                    set_selected: CONFIG.game.enhancements.fsr.quality.ordinal() as u32,
 
-                    connect_selected_notify => |row| {
+                    connect_selected_notify => |row| unsafe {
                         if is_ready() {
                             if let Ok(mut config) = Config::get() {
-                                config.game.enhancements.fsr.strength = 5 - row.selected() as u64;
+                                config.game.enhancements.fsr.quality = FsrQuality::from_ordinal_unsafe(row.selected() as i8);
 
                                 Config::update(config);
                             }
