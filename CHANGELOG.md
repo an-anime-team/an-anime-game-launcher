@@ -7,6 +7,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added Italian
+- Added Indonesian
+- Added dynamic main button icon switching
+- Set button label as "Resume" when the diff is part downloaded
+- Added options to use wine / gstreamer shared libraries from selected wine build.
+  These options will configure `LD_LIBRARY_PATH` and `GST_PLUGIN_PATH` environment variables
+
+### Fixed
+
+- Fixed session applying on each launcher start
+- Fixed predownload button ui
+
+### Changed
+
+- Apply selected session before launching the game.
+  This will properly save your game session when you switch between wine prefixes
+- Redesigned main button
+- Used `whatadistro` to identify recommended package manager in the first run window
+- Moved a lot of settings to separate page
+- Set fsr quality mode in enhancements settings instead of strength
+
+### Removed
+
+- Removed Futex2 wine sync option 
+
 ## [3.6.0] - 06.05.2023
 
 ### Added
