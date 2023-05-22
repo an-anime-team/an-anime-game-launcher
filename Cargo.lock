@@ -48,8 +48,8 @@ dependencies = [
 
 [[package]]
 name = "anime-game-core"
-version = "1.10.0"
-source = "git+https://github.com/an-anime-team/anime-game-core?tag=1.10.0#d30663c31e505f304f392d0058d659ffa9cb36f0"
+version = "1.10.1"
+source = "git+https://github.com/an-anime-team/anime-game-core?tag=1.10.1#3300f3edcfcdd4477818b25e1ac85af21476211e"
 dependencies = [
  "anyhow",
  "bzip2",
@@ -96,8 +96,8 @@ dependencies = [
 
 [[package]]
 name = "anime-launcher-sdk"
-version = "1.4.0"
-source = "git+https://github.com/an-anime-team/anime-launcher-sdk?tag=1.4.0#1ecc5ec822cd163042b9b50459067c924fcb5828"
+version = "1.4.1"
+source = "git+https://github.com/an-anime-team/anime-launcher-sdk?tag=1.4.1#7a63cb4d07048fc7c3126c44148472778b371915"
 dependencies = [
  "anime-game-core",
  "anyhow",
@@ -331,9 +331,9 @@ checksum = "3441f0f7b02788e948e47f457ca01f1d7e6d92c693bc132c22b087d3141c03ff"
 
 [[package]]
 name = "base64"
-version = "0.21.0"
+version = "0.21.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a4a4ddaa51a5bc52a6948f74c06d20aaaddb71924eab79b8c97a8c556e942d6a"
+checksum = "3f1e31e207a6b8fb791a38ea3105e6cb541f55e4d029902d3039a4ad07cc4105"
 
 [[package]]
 name = "base64ct"
@@ -379,9 +379,9 @@ dependencies = [
 
 [[package]]
 name = "bstr"
-version = "1.4.0"
+version = "1.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c3d4260bcc2e8fc9df1eac4919a720effeb63a3f0952f5bf4944adfa18897f09"
+checksum = "a246e68bb43f6cd9db24bea052a53e40405417c5fb372e3d1a8a7f770a564ef5"
 dependencies = [
  "memchr",
  "serde",
@@ -2335,7 +2335,7 @@ version = "1.0.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d194b56d58803a43635bdc398cd17e383d6f71f9182b9a192c127ca42494a59b"
 dependencies = [
- "base64 0.21.0",
+ "base64 0.21.1",
 ]
 
 [[package]]
