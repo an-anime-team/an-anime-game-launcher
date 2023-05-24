@@ -97,6 +97,7 @@ impl SimpleComponent for AboutDialog {
                     "<li>Added options to use wine / gstreamer shared libraries from selected wine build. These options will configure `LD_LIBRARY_PATH` and `GST_PLUGIN_PATH` environment variables</li>",
                     "<li>Added setting of `LC_ALL` in wine lang setting</li>",
                     "<li>Added `LAUNCHER_REQUESTS_TIMEOUT` environment variable</li>",
+                    "<li>Added option to disable main patch applying</li>",
                 "</ul>",
 
                 "<p>Fixed</p>",
@@ -121,6 +122,7 @@ impl SimpleComponent for AboutDialog {
                     "<li>Made temporary workaround to the game API changes</li>",
                     "<li>Increased default requests timeout to 8 seconds</li>",
                     "<li>Updated minreq to support `http_proxy`-like variables</li>",
+                    "<li>Disabled xlua patch applying by default</li>",
                 "</ul>",
 
                 "<p>Removed</p>",
