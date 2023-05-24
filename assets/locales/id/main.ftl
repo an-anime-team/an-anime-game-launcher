@@ -2,6 +2,7 @@ custom = Kustom
 none = Kosong
 default = Standar
 details = Detail
+options = Options
 
 width = Lebar
 height = Tinggi 

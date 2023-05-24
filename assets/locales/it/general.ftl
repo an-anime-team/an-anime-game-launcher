@@ -57,12 +57,6 @@ apply-xlua-patch = Applica la patch xlua
 ask-superuser-permissions = Chiedi permessi di amministratore
 ask-superuser-permissions-description = Il launcher li userà per aggiornare automaticamente il tuo file hosts. Questo non è necessario nell'edizione flatpak
 
-selected-version = Versione selezionata
-recommended-only = Solo consigliate
-
-wine-version = Versione di Wine
-wine-recommended-description = Mostra solo versioni di wine consigliate
-
 wine-tools = Strumenti di Wine
 command-line = Linea di comando
 registry-editor = Editor del Registro
@@ -70,7 +64,3 @@ explorer = Esplora file
 task-manager = Gestore delle attività
 configuration = Configurazione
 debugger = Debugger
-
-dxvk-version = Verisone di DXVK
-dxvk-selection-disabled = La selezinoe di DXVK è disabilitata dalle tue preferenze del gruppo wine
-dxvk-recommended-description = Mostra solo versioni di dxvk consigliate

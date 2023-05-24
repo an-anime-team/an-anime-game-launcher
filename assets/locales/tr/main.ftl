@@ -2,6 +2,7 @@ custom = Özel
 none = Boş
 default = Varsayılan
 details = Detaylar
+options = Options
 
 width = Genişlik
 height = Uzunluk

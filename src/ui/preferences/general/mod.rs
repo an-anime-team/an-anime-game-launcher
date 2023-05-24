@@ -624,11 +624,11 @@ impl SimpleAsyncComponent for GeneralApp {
             },
 
             add = &adw::PreferencesGroup {
-                set_title: "Options",
+                set_title: &tr("options"),
 
                 adw::ActionRow {
-                    set_title: "Components",
-                    set_subtitle: "Manage your Wine and DXVK versions",
+                    set_title: &tr("components"),
+                    set_subtitle: &tr("components-description"),
 
                     add_suffix = &gtk::Image {
                         set_icon_name: Some("go-next-symbolic")

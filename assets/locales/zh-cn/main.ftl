@@ -2,6 +2,7 @@ custom = 自定义
 none = 无
 default = 默认
 details = 详细
+options = Options
 
 width = 宽
 height = 高

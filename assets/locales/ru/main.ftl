@@ -2,6 +2,7 @@ custom = Свое значение
 none = Нет
 default = По умолчанию
 details = Подробнее
+options = Опции
 
 width = Ширина
 height = Высота

@@ -2,6 +2,7 @@ custom = Personalisé
 none = Auccun
 default = Par défaut
 details = Détails
+options = Options
 
 width = Largeur
 height = Hauteur

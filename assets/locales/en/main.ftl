@@ -2,6 +2,7 @@ custom = Custom
 none = None
 default = Default
 details = Details
+options = Options
 
 width = Width
 height = Height

@@ -57,12 +57,6 @@ apply-xlua-patch = Terapkan patch xlua
 ask-superuser-permissions = Minta izin dari admin
 ask-superuser-permissions-description = Launcher akan otomatis memperbarui file hosts Anda. Opsi ini tidak diperlukan jika Anda memakai edisi flatpak 
 
-selected-version = Versi yang dipilih
-recommended-only = Hanya yang direkomendasikan
-
-wine-version = Versi wine
-wine-recommended-description = Hanya tampilkan versi wine yang direkomendasikan
-
 wine-tools = Peralatan wine
 command-line = Command line
 registry-editor = Editor registry
@@ -70,7 +64,3 @@ explorer = Eksplorer
 task-manager = Task manager
 configuration = Konfigurasi
 debugger = Debugger
-
-dxvk-version = Versi DXVK 
-dxvk-selection-disabled = Pemilihan DXVK dinonaktfikan pada preferensi grup wine Anda
-dxvk-recommended-description = Hanya tampilkan versi dxvk yang direkomendasikan
