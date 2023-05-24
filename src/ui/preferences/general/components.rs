@@ -128,11 +128,11 @@ impl SimpleAsyncComponent for ComponentsPage {
                 },
 
                 add = &adw::PreferencesGroup {
-                    set_title: "Wine options",
+                    set_title: &tr("wine-options"),
 
                     adw::ActionRow {
-                        set_title: "Use wine shared libraries",
-                        set_subtitle: "Set LD_LIBRARY_PATH variable to load system libraries from selected wine build",
+                        set_title: &tr("wine-use-shared-libraries"),
+                        set_subtitle: &tr("wine-use-shared-libraries-description"),
 
                         add_suffix = &gtk::Switch {
                             set_valign: gtk::Align::Center,
@@ -153,8 +153,8 @@ impl SimpleAsyncComponent for ComponentsPage {
                     },
 
                     adw::ActionRow {
-                        set_title: "Use gstreamer shared libraries",
-                        set_subtitle: "Set GST_PLUGIN_PATH variable to load gstreamer libraries from selected wine build",
+                        set_title: &tr("gstreamer-use-shared-libraries"),
+                        set_subtitle: &tr("gstreamer-use-shared-libraries-description"),
 
                         add_suffix = &gtk::Switch {
                             set_valign: gtk::Align::Center,
