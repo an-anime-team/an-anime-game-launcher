@@ -60,7 +60,7 @@ impl SimpleAsyncComponent for ComponentsPage {
             adw::HeaderBar {
                 #[wrap(Some)]
                 set_title_widget = &adw::WindowTitle {
-                    set_title: "Components"
+                    set_title: &tr("components")
                 },
 
                 pack_start = &gtk::Button {
