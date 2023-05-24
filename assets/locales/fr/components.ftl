@@ -1,5 +1,5 @@
-components = Components
-components-description = Manage your Wine and DXVK versions
+components = Composants
+components-description = Sélection des versions de Wine et de DXVK
 
 selected-version = Version sélectionnée
 recommended-only = Versions recommandées uniquement

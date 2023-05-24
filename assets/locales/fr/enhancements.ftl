@@ -1,6 +1,6 @@
-game-settings-description = Manage in-game settings and account session
-sandbox-settings-description = Run the game in a bubblewrap sandbox, similar to what Flatpak does
-environment-settings-description = Specify environment variables and game launching command
+game-settings-description = Gère les paramètres en jeu et les sessions
+sandbox-settings-description = Lance le jeu dans une sandbox bubblewrap, qui fonctionne comme Flatpak
+environment-settings-description = Spécifie les variables d'environnement et la commande qui lance le jeu
 
 wine = Wine
 
