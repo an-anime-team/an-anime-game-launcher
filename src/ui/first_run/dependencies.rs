@@ -5,8 +5,6 @@ use adw::prelude::*;
 
 use anime_launcher_sdk::is_available;
 
-use std::process::{Command, Stdio};
-
 use crate::i18n::*;
 use super::main::FirstRunAppMsg;
 
@@ -143,30 +141,24 @@ impl SimpleAsyncComponent for DependenciesApp {
         root: Self::Root,
         _sender: AsyncComponentSender<Self>,
     ) -> AsyncComponentParts<Self> {
-        let mut model = Self {
-            show_arch: false,
-            show_debian: false,
-            show_fedora: false
-        };
+        let distro = whatadistro::identify();
 
-        // Decide which packaging format used in system
-        match Command::new("pacman").stdout(Stdio::null()).stderr(Stdio::null()).spawn() {
-            Ok(_) => model.show_arch = true,
+        let model = Self {
+            show_arch: match &distro {
+                Some(distro) => distro.is_similar("arch"),
+                None => false
+            },
 
-            Err(_) => match Command::new("apt").stdout(Stdio::null()).stderr(Stdio::null()).spawn() {
-                Ok(_) => model.show_debian = true,
+            show_debian: match &distro {
+                Some(distro) => distro.is_similar("debian"),
+                None => false
+            },
 
-                Err(_) => match Command::new("dnf").stdout(Stdio::null()).stderr(Stdio::null()).spawn() {
-                    Ok(_) => model.show_fedora = true,
-
-                    Err(_) => {
-                        model.show_arch = true;
-                        model.show_debian = true;
-                        model.show_fedora = true;
-                    }
-                }
+            show_fedora: match &distro {
+                Some(distro) => distro.is_similar("fedora"),
+                None => false
             }
-        }
+        };
 
         let widgets = view_output!();
 

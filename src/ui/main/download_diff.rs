@@ -5,21 +5,24 @@ use relm4::{
 
 use gtk::glib::clone;
 
-use anime_launcher_sdk::anime_game_core::installer::diff::VersionDiff;
-
 use crate::*;
 use crate::i18n::*;
 use crate::ui::components::*;
+
 use super::{App, AppMsg};
 
-pub fn download_diff(sender: ComponentSender<App>, progress_bar_input: Sender<ProgressBarMsg>, diff: VersionDiff) {
+pub fn download_diff(sender: ComponentSender<App>, progress_bar_input: Sender<ProgressBarMsg>, mut diff: VersionDiff) {
     sender.input(AppMsg::SetDownloading(true));
 
     std::thread::spawn(move || {
         let config = Config::get().unwrap();
         let game_path = config.game.path.for_edition(config.launcher.edition).to_path_buf();
 
-        let result = diff.install_to_by(game_path, config.launcher.temp, clone!(@strong sender => move |state| {
+        if let Some(temp) = config.launcher.temp {
+            diff = diff.with_temp_folder(temp);
+        }
+
+        let result = diff.install_to(&game_path, clone!(@strong sender => move |state| {
             match &state {
                 DiffUpdate::InstallerUpdate(InstallerUpdate::DownloadingError(err)) => {
                     tracing::error!("Downloading failed: {err}");
@@ -60,6 +63,13 @@ pub fn download_diff(sender: ComponentSender<App>, progress_bar_input: Sender<Pr
             // Don't try to download something after state updating
             // because we just failed to do it
             perform_on_download_needed = false;
+        }
+
+        // Temporary workaround for 3.7.0 game update
+        let telemetry_file = game_path.join(config.launcher.edition.data_folder()).join("Plugins/Telemetry.dll");
+
+        if telemetry_file.exists() {
+            std::fs::remove_file(telemetry_file).unwrap();
         }
 
         sender.input(AppMsg::SetDownloading(false));

@@ -1,3 +1,7 @@
+game-settings-description = Verwalte Spieleinstellungen und Spielsitzungen
+sandbox-settings-description = Starte das Spiel in einer bubblewrap-Sandbox, ähnlich wie Flatpak es macht
+environment-settings-description = Definiere Umgebungsvariablen und ändere den Spielbefehl
+
 wine = Wine
 
 synchronization = Synchronisation

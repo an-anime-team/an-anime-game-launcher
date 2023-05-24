@@ -14,9 +14,11 @@ pub const SUPPORTED_LANGUAGES: &[LanguageIdentifier] = &[
     langid!("en-us"),
     langid!("ru-ru"),
     langid!("de-de"),
-    langid!("es-es"),
     langid!("fr-fr"),
+    langid!("es-es"),
     langid!("tr-tr"),
+    langid!("it-it"),
+    langid!("id-id"),
     langid!("zh-cn"),
 ];
 

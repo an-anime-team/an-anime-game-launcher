@@ -4,7 +4,6 @@ use relm4::component::*;
 use gtk::prelude::*;
 use adw::prelude::*;
 
-use anime_launcher_sdk::anime_game_core::prelude::*;
 use anime_launcher_sdk::anime_game_core::genshin::prelude::*;
 
 use anime_launcher_sdk::config::ConfigExt;
@@ -15,18 +14,12 @@ use crate::i18n::tr;
 
 use super::general::*;
 use super::enhancements::*;
-use super::game::*;
-use super::sandbox::*;
-use super::environment::*;
 
 pub static mut PREFERENCES_WINDOW: Option<adw::PreferencesWindow> = None;
 
 pub struct PreferencesApp {
     general: AsyncController<GeneralApp>,
-    enhancements: AsyncController<EnhancementsApp>,
-    game: AsyncController<GameApp>,
-    sandbox: AsyncController<SandboxApp>,
-    environment: AsyncController<EnvironmentApp>
+    enhancements: AsyncController<EnhancementsApp>
 }
 
 #[derive(Debug, Clone)]
@@ -71,9 +64,6 @@ impl SimpleAsyncComponent for PreferencesApp {
 
             add = model.general.widget(),
             add = model.enhancements.widget(),
-            add = model.game.widget(),
-            add = model.sandbox.widget(),
-            add = model.environment.widget(),
 
             connect_close_request[sender] => move |_| {
                 if let Err(err) = Config::flush() {
@@ -102,19 +92,7 @@ impl SimpleAsyncComponent for PreferencesApp {
 
             enhancements: EnhancementsApp::builder()
                 .launch(())
-                .detach(),
-
-            game: GameApp::builder()
-                .launch(())
-                .detach(),
-
-            sandbox: SandboxApp::builder()
-                .launch(())
-                .forward(sender.input_sender(), std::convert::identity),
-
-            environment: EnvironmentApp::builder()
-                .launch(())
-                .detach()
+                .forward(sender.input_sender(), std::convert::identity)
         };
 
         let widgets = view_output!();

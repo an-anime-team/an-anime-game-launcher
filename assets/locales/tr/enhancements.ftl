@@ -1,3 +1,7 @@
+game-settings-description = Oyun içi ayarları ve hesap oturumunu düzenleyin
+sandbox-settings-description = Oyunu flatpak gibi bir yöntemle sanallaştırarak çalıştır
+environment-settings-description = Çevre değişkenlerini ve oyun başlatma komutlarını belirtin
+
 wine = Wine
 
 synchronization = Senkronizasyon

@@ -9,24 +9,21 @@ use relm4::factory::{
 use gtk::prelude::*;
 use adw::prelude::*;
 
-use anime_launcher_sdk::anime_game_core::prelude::*;
-use anime_launcher_sdk::anime_game_core::genshin::consts::GameEdition;
-
 use anime_launcher_sdk::wincompatlib::prelude::*;
-
-use anime_launcher_sdk::components::*;
-use anime_launcher_sdk::components::wine::WincompatlibWine;
 
 use anime_launcher_sdk::config::ConfigExt;
 use anime_launcher_sdk::genshin::config::Config;
-
 use anime_launcher_sdk::genshin::config::schema::launcher::LauncherStyle;
+
+use anime_launcher_sdk::anime_game_core::genshin::consts::GameEdition;
 use anime_launcher_sdk::genshin::env_emulation::Environment;
 
+pub mod components;
+
+use components::*;
 use super::main::PreferencesAppMsg;
+
 use crate::ui::migrate_installation::MigrateInstallationApp;
-use crate::ui::components;
-use crate::ui::components::*;
 use crate::i18n::*;
 use crate::*;
 
@@ -109,10 +106,8 @@ impl AsyncFactoryComponent for VoicePackageComponent {
 
 pub struct GeneralApp {
     voice_packages: AsyncFactoryVecDeque<VoicePackageComponent>,
-
     migrate_installation: Controller<MigrateInstallationApp>,
-    wine_components: AsyncController<ComponentsList<GeneralAppMsg>>,
-    dxvk_components: AsyncController<ComponentsList<GeneralAppMsg>>,
+    components_page: AsyncController<ComponentsPage>,
 
     game_diff: Option<VersionDiff>,
     unity_player_patch: Option<UnityPlayerPatch>,
@@ -120,17 +115,7 @@ pub struct GeneralApp {
 
     style: LauncherStyle,
 
-    languages: Vec<String>,
-
-    downloaded_wine_versions: Vec<(wine::Version, wine::Features)>,
-    downloaded_dxvk_versions: Vec<dxvk::Version>,
-    allow_dxvk_selection: bool,
-
-    selected_wine_version: u32,
-    selected_dxvk_version: u32,
-
-    selecting_wine_version: bool,
-    selecting_dxvk_version: bool
+    languages: Vec<String>
 }
 
 #[derive(Debug, Clone)]
@@ -154,23 +139,18 @@ pub enum GeneralAppMsg {
     RemoveVoicePackage(DynamicIndex),
     SetVoicePackageSensitivity(DynamicIndex, bool),
 
-    OpenMigrateInstallation,
-    RepairGame,
-    WineOpen(&'static [&'static str]),
-
-    UpdateLauncherStyle(LauncherStyle),
-
-    WineRecommendedOnly(bool),
-    DxvkRecommendedOnly(bool),
-
     UpdateDownloadedWine,
     UpdateDownloadedDxvk,
 
-    SelectWine(usize),
-    SelectDxvk(usize),
+    OpenMigrateInstallation,
+    RepairGame,
 
-    ResetWineSelection(usize),
-    ResetDxvkSelection(usize),
+    OpenMainPage,
+    OpenComponentsPage,
+
+    UpdateLauncherStyle(LauncherStyle),
+
+    WineOpen(&'static [&'static str]),
 
     Toast {
         title: String,
@@ -185,6 +165,7 @@ impl SimpleAsyncComponent for GeneralApp {
     type Output = PreferencesAppMsg;
 
     view! {
+        #[root]
         adw::PreferencesPage {
             set_title: &tr("general"),
             set_icon_name: Some("applications-system-symbolic"),
@@ -330,9 +311,6 @@ impl SimpleAsyncComponent for GeneralApp {
                                     _ => unreachable!()
                                 };
 
-                                // Select new game edition
-                                config.launcher.edition.select();
-
                                 Config::update(config);
 
                                 sender.output(PreferencesAppMsg::UpdateLauncherState);
@@ -409,7 +387,7 @@ impl SimpleAsyncComponent for GeneralApp {
                         #[watch]
                         set_text: &match model.game_diff.as_ref() {
                             Some(diff) => match diff {
-                                VersionDiff::Latest(current) |
+                                VersionDiff::Latest { version: current, .. } |
                                 VersionDiff::Predownload { current, .. } |
                                 VersionDiff::Diff { current, .. } |
                                 VersionDiff::Outdated { current, .. } => current.to_string(),
@@ -423,7 +401,7 @@ impl SimpleAsyncComponent for GeneralApp {
                         #[watch]
                         set_css_classes: match model.game_diff.as_ref() {
                             Some(diff) => match diff {
-                                VersionDiff::Latest(_) => &["success"],
+                                VersionDiff::Latest { .. } => &["success"],
                                 VersionDiff::Predownload { .. } => &["accent"],
                                 VersionDiff::Diff { .. } => &["warning"],
                                 VersionDiff::Outdated { .. } => &["error"],
@@ -436,7 +414,7 @@ impl SimpleAsyncComponent for GeneralApp {
                         #[watch]
                         set_tooltip_text: Some(&match model.game_diff.as_ref() {
                             Some(diff) => match diff {
-                                VersionDiff::Latest(_) => String::new(),
+                                VersionDiff::Latest { .. } => String::new(),
                                 VersionDiff::Predownload { current, latest, .. } => tr_args("game-predownload-available", [
                                     ("old", current.to_string().into()),
                                     ("new", latest.to_string().into())
@@ -601,6 +579,30 @@ impl SimpleAsyncComponent for GeneralApp {
 
             add = &adw::PreferencesGroup {
                 adw::ActionRow {
+                    set_title: &tr("apply-main-patch"),
+                    set_subtitle: &tr("apply-main-patch-description"),
+
+                    add_suffix = &gtk::Switch {
+                        set_valign: gtk::Align::Center,
+
+                        set_state: CONFIG.patch.apply_main,
+
+                        connect_state_notify[sender] => move |switch| {
+                            if is_ready() {
+                                #[allow(unused_must_use)]
+                                if let Ok(mut config) = Config::get() {
+                                    config.patch.apply_main = switch.state();
+
+                                    Config::update(config);
+
+                                    sender.output(PreferencesAppMsg::UpdateLauncherState);
+                                }
+                            }
+                        }
+                    }
+                },
+
+                adw::ActionRow {
                     set_title: &tr("apply-xlua-patch"),
 
                     add_suffix = &gtk::Switch {
@@ -646,60 +648,21 @@ impl SimpleAsyncComponent for GeneralApp {
             },
 
             add = &adw::PreferencesGroup {
-                set_title: &tr("wine-version"),
-
-                adw::ComboRow {
-                    set_title: &tr("selected-version"),
-
-                    #[watch]
-                    #[block_signal(wine_selected_notify)]
-                    set_model: Some(&gtk::StringList::new(&model.downloaded_wine_versions.iter().map(|(version, _)| version.title.as_str()).collect::<Vec<&str>>())),
-
-                    #[watch]
-                    #[block_signal(wine_selected_notify)]
-                    set_selected: model.selected_wine_version,
-
-                    #[watch]
-                    set_activatable: !model.selecting_wine_version,
-
-                    connect_selected_notify[sender] => move |row| {
-                        if is_ready() {
-                            sender.input(GeneralAppMsg::SelectWine(row.selected() as usize));
-                        }
-                    } @wine_selected_notify,
-
-                    add_suffix = &gtk::Spinner {
-                        set_spinning: true,
-
-                        #[watch]
-                        set_visible: model.selecting_wine_version
-                    }
-                },
+                set_title: &tr("options"),
 
                 adw::ActionRow {
-                    set_title: &tr("recommended-only"),
-                    set_subtitle: &tr("wine-recommended-description"),
+                    set_title: &tr("components"),
+                    set_subtitle: &tr("components-description"),
 
-                    add_suffix = &gtk::Switch {
-                        set_valign: gtk::Align::Center,
+                    add_suffix = &gtk::Image {
+                        set_icon_name: Some("go-next-symbolic")
+                    },
 
-                        #[block_signal(wine_recommended_notify)]
-                        set_state: true,
+                    set_activatable: true,
 
-                        connect_state_notify[sender] => move |switch| {
-                            if is_ready() {
-                                sender.input(GeneralAppMsg::WineRecommendedOnly(switch.state()));
-                            }
-                        } @wine_recommended_notify
-                    }
-                }
-            },
+                    connect_activated => GeneralAppMsg::OpenComponentsPage
+                },
 
-            add = &adw::PreferencesGroup {
-                add = model.wine_components.widget(),
-            },
-
-            add = &adw::PreferencesGroup {
                 adw::ExpanderRow {
                     set_title: &tr("wine-tools"),
 
@@ -757,75 +720,11 @@ impl SimpleAsyncComponent for GeneralApp {
                         connect_activated => GeneralAppMsg::WineOpen(&["start", "winedbg"])
                     }
                 }
-            },
+            }
+        },
 
-            add = &adw::PreferencesGroup {
-                set_title: &tr("dxvk-version"),
-
-                #[watch]
-                set_description: Some(&if !model.allow_dxvk_selection {
-                    tr("dxvk-selection-disabled")
-                } else {
-                    String::new()
-                }),
-
-                #[watch]
-                set_sensitive: model.allow_dxvk_selection,
-
-                adw::ComboRow {
-                    set_title: &tr("selected-version"),
-
-                    #[watch]
-                    #[block_signal(dxvk_selected_notify)]
-                    set_model: Some(&gtk::StringList::new(&model.downloaded_dxvk_versions.iter().map(|version| version.name.as_str()).collect::<Vec<&str>>())),
-
-                    #[watch]
-                    #[block_signal(dxvk_selected_notify)]
-                    set_selected: model.selected_dxvk_version,
-
-                    #[watch]
-                    set_activatable: !model.selecting_dxvk_version,
-
-                    connect_selected_notify[sender] => move |row| {
-                        if is_ready() {
-                            sender.input(GeneralAppMsg::SelectDxvk(row.selected() as usize));
-                        }
-                    } @dxvk_selected_notify,
-
-                    add_suffix = &gtk::Spinner {
-                        set_spinning: true,
-
-                        #[watch]
-                        set_visible: model.selecting_dxvk_version
-                    }
-                },
-
-                adw::ActionRow {
-                    set_title: &tr("recommended-only"),
-                    set_subtitle: &tr("dxvk-recommended-description"),
-
-                    add_suffix = &gtk::Switch {
-                        set_valign: gtk::Align::Center,
-
-                        #[block_signal(dxvk_recommended_notify)]
-                        set_state: true,
-
-                        connect_state_notify[sender] => move |switch| {
-                            if is_ready() {
-                                sender.input(GeneralAppMsg::DxvkRecommendedOnly(switch.state()));
-                            }
-                        } @dxvk_recommended_notify
-                    }
-                }
-            },
-
-            add = &adw::PreferencesGroup {
-                #[watch]
-                set_sensitive: model.allow_dxvk_selection,
-
-                add = model.dxvk_components.widget(),
-            },
-        }
+        #[local_ref]
+        components_page -> gtk::Box {}
     }
 
     async fn init(
@@ -842,66 +741,8 @@ impl SimpleAsyncComponent for GeneralApp {
                 .launch(())
                 .detach(),
 
-            wine_components: ComponentsList::builder()
-                .launch(ComponentsListInit {
-                    pattern: ComponentsListPattern {
-                        download_folder: CONFIG.game.wine.builds.clone(),
-                        groups: wine::get_groups(&CONFIG.components.path).unwrap_or_default()
-                            .into_iter()
-                            .map(|mut group| {
-                                group.versions = group.versions.into_iter().take(12).collect();
-
-                                let mut group: ComponentsListGroup = group.into();
-                                let mut recommended = 6;
-
-                                for i in 0..group.versions.len() {
-                                    if recommended > 0 && group.versions[i].recommended {
-                                        recommended -= 1;
-                                    }
-
-                                    else {
-                                        group.versions[i].recommended = false;
-                                    }
-                                }
-
-                                group
-                            })
-                            .collect()
-                    },
-                    on_downloaded: Some(GeneralAppMsg::UpdateDownloadedWine),
-                    on_deleted: Some(GeneralAppMsg::UpdateDownloadedWine)
-                })
-                .forward(sender.input_sender(), std::convert::identity),
-
-            dxvk_components: ComponentsList::builder()
-                .launch(ComponentsListInit {
-                    pattern: ComponentsListPattern {
-                        download_folder: CONFIG.game.dxvk.builds.clone(),
-                        groups: dxvk::get_groups(&CONFIG.components.path).unwrap_or_default()
-                            .into_iter()
-                            .map(|mut group| {
-                                group.versions = group.versions.into_iter().take(12).collect();
-
-                                let mut group: ComponentsListGroup = group.into();
-                                let mut recommended = 6;
-
-                                for i in 0..group.versions.len() {
-                                    if recommended > 0 && group.versions[i].recommended {
-                                        recommended -= 1;
-                                    }
-
-                                    else {
-                                        group.versions[i].recommended = false;
-                                    }
-                                }
-
-                                group
-                            })
-                            .collect()
-                    },
-                    on_downloaded: Some(GeneralAppMsg::UpdateDownloadedDxvk),
-                    on_deleted: Some(GeneralAppMsg::UpdateDownloadedDxvk)
-                })
+            components_page: ComponentsPage::builder()
+                .launch(())
                 .forward(sender.input_sender(), std::convert::identity),
 
             game_diff: None,
@@ -910,25 +751,7 @@ impl SimpleAsyncComponent for GeneralApp {
 
             style: CONFIG.launcher.style,
 
-            languages: SUPPORTED_LANGUAGES.iter().map(|lang| tr(format_lang(lang).as_str())).collect(),
-
-            downloaded_wine_versions: vec![],
-            downloaded_dxvk_versions: vec![],
-
-            allow_dxvk_selection: match &CONFIG.game.wine.selected {
-                Some(version) => match wine::Group::find_in(&CONFIG.components.path, version) {
-                    Ok(Some(group)) => group.features.unwrap_or_default().need_dxvk,
-                    _ => true
-                }
-
-                None => true
-            },
-
-            selected_wine_version: 0,
-            selected_dxvk_version: 0,
-
-            selecting_wine_version: false,
-            selecting_dxvk_version: false
+            languages: SUPPORTED_LANGUAGES.iter().map(|lang| tr(format_lang(lang).as_str())).collect()
         };
 
         for package in VoiceLocale::list() {
@@ -939,6 +762,7 @@ impl SimpleAsyncComponent for GeneralApp {
         }
 
         let voice_packages = model.voice_packages.widget();
+        let components_page = model.components_page.widget();
 
         let widgets = view_output!();
 
@@ -986,7 +810,7 @@ impl SimpleAsyncComponent for GeneralApp {
 
                         Config::update(config.clone());
 
-                        let package = VoicePackage::with_locale(package.locale).unwrap();
+                        let package = VoicePackage::with_locale(package.locale, config.launcher.edition).unwrap();
                         let game_path = config.game.path.for_edition(config.launcher.edition).to_path_buf();
 
                         if package.is_installed_in(&game_path) {
@@ -1018,6 +842,18 @@ impl SimpleAsyncComponent for GeneralApp {
                 }
             }
 
+            GeneralAppMsg::UpdateDownloadedWine => {
+                self.components_page.sender()
+                    .send(ComponentsPageMsg::UpdateDownloadedWine)
+                    .unwrap();
+            }
+
+            GeneralAppMsg::UpdateDownloadedDxvk => {
+                self.components_page.sender()
+                    .send(ComponentsPageMsg::UpdateDownloadedDxvk)
+                    .unwrap();
+            }
+
             GeneralAppMsg::OpenMigrateInstallation => unsafe {
                 if let Some(window) = crate::ui::main::PREFERENCES_WINDOW.as_ref() {
                     self.migrate_installation.widget().set_transient_for(Some(window.widget()));
@@ -1026,33 +862,22 @@ impl SimpleAsyncComponent for GeneralApp {
                 self.migrate_installation.widget().show();
             }
 
-            #[allow(unused_must_use)]
             GeneralAppMsg::RepairGame => {
-                sender.output(Self::Output::RepairGame);
+                sender.output(Self::Output::RepairGame).unwrap();
             }
 
-            GeneralAppMsg::WineOpen(executable) => {
-                let config = Config::get().unwrap_or_else(|_| CONFIG.clone());
+            GeneralAppMsg::OpenMainPage => unsafe {
+                PREFERENCES_WINDOW.as_ref()
+                    .unwrap_unchecked()
+                    .widget()
+                    .close_subpage();
+            }
 
-                if let Ok(Some(wine)) = config.get_selected_wine() {
-                    let result = wine
-                        .to_wine(config.components.path, Some(config.game.wine.builds.join(&wine.name)))
-                        .with_prefix(config.game.wine.prefix)
-                        .with_loader(WineLoader::Current)
-                        .with_arch(WineArch::Win64)
-                        .run_args(executable);
-
-                    if let Err(err) = result {
-                        sender.input(GeneralAppMsg::Toast {
-                            title: tr_args("wine-run-error", [
-                                ("executable", executable.join(" ").into())
-                            ]),
-                            description: Some(err.to_string())
-                        });
-
-                        tracing::error!("Failed to run {:?} using wine: {err}", executable);
-                    }
-                }
+            GeneralAppMsg::OpenComponentsPage => unsafe {
+                PREFERENCES_WINDOW.as_ref()
+                    .unwrap_unchecked()
+                    .widget()
+                    .present_subpage(self.components_page.widget());
             }
 
             #[allow(unused_must_use)]
@@ -1081,157 +906,28 @@ impl SimpleAsyncComponent for GeneralApp {
                 sender.output(Self::Output::SetLauncherStyle(style));
             }
 
-            GeneralAppMsg::WineRecommendedOnly(state) => {
-                // todo
-                self.wine_components.sender().send(components::list::AppMsg::ShowRecommendedOnly(state)).unwrap();
-            }
+            GeneralAppMsg::WineOpen(executable) => {
+                let config = Config::get().unwrap_or_else(|_| CONFIG.clone());
 
-            GeneralAppMsg::DxvkRecommendedOnly(state) => {
-                // todo
-                self.dxvk_components.sender().send(components::list::AppMsg::ShowRecommendedOnly(state)).unwrap();
-            }
+                if let Ok(Some(wine)) = config.get_selected_wine() {
+                    let result = wine
+                        .to_wine(config.components.path, Some(config.game.wine.builds.join(&wine.name)))
+                        .with_prefix(config.game.wine.prefix)
+                        .with_loader(WineLoader::Current)
+                        .with_arch(WineArch::Win64)
+                        .run_args(executable);
 
-            GeneralAppMsg::UpdateDownloadedWine => {
-                self.downloaded_wine_versions = wine::get_downloaded(&CONFIG.components.path, &CONFIG.game.wine.builds)
-                    .unwrap_or_default()
-                    .into_iter()
-                    .flat_map(|group| group.versions.clone().into_iter()
-                        .map(move |version| {
-                            let features = version.features_in(&group).unwrap_or_default();
+                    if let Err(err) = result {
+                        sender.input(GeneralAppMsg::Toast {
+                            title: tr_args("wine-run-error", [
+                                ("executable", executable.join(" ").into())
+                            ]),
+                            description: Some(err.to_string())
+                        });
 
-                            (version, features)
-                        })
-                    ).collect();
-
-                self.selected_wine_version = if let Some(selected) = &CONFIG.game.wine.selected {
-                    let mut index = 0;
-
-                    for (i, (version, _)) in self.downloaded_wine_versions.iter().enumerate() {
-                        if &version.name == selected {
-                            index = i;
-
-                            break;
-                        }
-                    }
-
-                    index as u32
-                }
-
-                else {
-                    0
-                };
-            }
-
-            GeneralAppMsg::UpdateDownloadedDxvk => {
-                self.downloaded_dxvk_versions = dxvk::get_downloaded(&CONFIG.components.path, &CONFIG.game.dxvk.builds)
-                    .unwrap_or_default()
-                    .into_iter()
-                    .flat_map(|group| group.versions)
-                    .collect();
-
-                self.selected_dxvk_version = if let Ok(Some(selected)) = CONFIG.get_selected_dxvk() {
-                    let mut index = 0;
-
-                    for (i, version) in self.downloaded_dxvk_versions.iter().enumerate() {
-                        if version.name == selected.name {
-                            index = i;
-
-                            break;
-                        }
-                    }
-
-                    index as u32
-                }
-
-                else {
-                    0
-                };
-            }
-
-            GeneralAppMsg::SelectWine(index) => {
-                if let Ok(mut config) = Config::get() {
-                    if let Some((version, features)) = self.downloaded_wine_versions.get(index) {
-                        if config.game.wine.selected.as_ref() != Some(&version.title) {
-                            self.selecting_wine_version = true;
-                            self.allow_dxvk_selection = features.need_dxvk;
-
-                            let wine = version
-                                .to_wine(&config.components.path, Some(&config.game.wine.builds.join(&version.name)))
-                                .with_prefix(&config.game.wine.prefix)
-                                .with_loader(WineLoader::Current)
-                                .with_arch(WineArch::Win64);
-
-                            let wine_name = version.name.to_string();
-
-                            std::thread::spawn(move || {
-                                match wine.update_prefix::<&str>(None) {
-                                    Ok(_) => {
-                                        config.game.wine.selected = Some(wine_name); 
-
-                                        Config::update(config);
-                                    }
-
-                                    Err(err) => {
-                                        sender.input(GeneralAppMsg::Toast {
-                                            title: tr("wine-prefix-update-failed"),
-                                            description: Some(err.to_string())
-                                        });
-                                    }
-                                }
-
-                                sender.input(GeneralAppMsg::ResetWineSelection(index));
-                            });
-                        }
+                        tracing::error!("Failed to run {:?} using wine: {err}", executable);
                     }
                 }
-            }
-
-            GeneralAppMsg::ResetWineSelection(index) => {
-                self.selecting_wine_version = false;
-                self.selected_wine_version = index as u32;
-            }
-
-            GeneralAppMsg::SelectDxvk(index) => {
-                if let Ok(config) = Config::get() {
-                    if let Some(version) = self.downloaded_dxvk_versions.get(index) {
-                        if let Ok(selected) = config.get_selected_dxvk() {
-                            if selected.is_none() || selected.unwrap().name != version.name {
-                                self.selecting_dxvk_version = true;
-
-                                let mut wine = match config.get_selected_wine() {
-                                    Ok(Some(version)) => {
-                                        match version.to_wine(config.components.path, Some(config.game.wine.builds.join(&version.name))) {
-                                            WincompatlibWine::Default(wine) => wine,
-                                            WincompatlibWine::Proton(_) => return
-                                        }
-                                    }
-
-                                    _ => Wine::default()
-                                };
-
-                                wine = wine.with_prefix(config.game.wine.prefix);
-
-                                let dxvk_folder = config.game.dxvk.builds.join(&version.name);
-
-                                std::thread::spawn(move || {
-                                    if let Err(err) = Dxvk::install(&wine, dxvk_folder, InstallParams::default()) {
-                                        sender.input(GeneralAppMsg::Toast {
-                                            title: tr("dxvk-install-failed"),
-                                            description: Some(err.to_string())
-                                        });
-                                    }
-
-                                    sender.input(GeneralAppMsg::ResetDxvkSelection(index));
-                                });
-                            }
-                        }
-                    }
-                }
-            }
-
-            GeneralAppMsg::ResetDxvkSelection(index) => {
-                self.selecting_dxvk_version = false;
-                self.selected_dxvk_version = index as u32;
             }
 
             #[allow(unused_must_use)]

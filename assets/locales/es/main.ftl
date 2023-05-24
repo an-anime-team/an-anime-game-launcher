@@ -2,6 +2,7 @@ custom = Personalizado
 none = Ninguno
 default = Predeterminado
 details = Detalles
+options = Opciones
 
 width = Ancho
 height = Alto
@@ -19,6 +20,7 @@ about = Acerca de
 close = Cerrar
 save = Guardar
 continue = Continuar
+resume = Reanudar
 exit = Salir
 check = Comprobar
 restart = Reiniciar

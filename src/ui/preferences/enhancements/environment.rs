@@ -4,6 +4,8 @@ use relm4::factory::*;
 
 use adw::prelude::*;
 
+use super::EnhancementsAppMsg;
+
 use crate::i18n::tr;
 use crate::*;
 
@@ -16,10 +18,10 @@ struct Variable {
 #[relm4::factory(async)]
 impl AsyncFactoryComponent for Variable {
     type Init = (String, String);
-    type Input = EnvironmentAppMsg;
-    type Output = EnvironmentAppMsg;
+    type Input = EnvironmentPageMsg;
+    type Output = EnvironmentPageMsg;
     type CommandOutput = ();
-    type ParentInput = EnvironmentAppMsg;
+    type ParentInput = EnvironmentPageMsg;
     type ParentWidget = adw::PreferencesGroup;
 
     view! {
@@ -33,7 +35,7 @@ impl AsyncFactoryComponent for Variable {
                 set_valign: gtk::Align::Center,
 
                 connect_clicked[sender, index] => move |_| {
-                    sender.output(EnvironmentAppMsg::Remove(index.clone()));
+                    sender.output(EnvironmentPageMsg::Remove(index.clone()));
                 }
             }
         }
@@ -55,7 +57,7 @@ impl AsyncFactoryComponent for Variable {
     }
 }
 
-pub struct EnvironmentApp {
+pub struct EnvironmentPage {
     variables: AsyncFactoryVecDeque<Variable>,
 
     name_entry: adw::EntryRow,
@@ -63,76 +65,95 @@ pub struct EnvironmentApp {
 }
 
 #[derive(Debug, Clone)]
-pub enum EnvironmentAppMsg {
+pub enum EnvironmentPageMsg {
     Add,
     Remove(DynamicIndex)
 }
 
 #[relm4::component(async, pub)]
-impl SimpleAsyncComponent for EnvironmentApp {
+impl SimpleAsyncComponent for EnvironmentPage {
     type Init = ();
-    type Input = EnvironmentAppMsg;
-    type Output = ();
+    type Input = EnvironmentPageMsg;
+    type Output = EnhancementsAppMsg;
 
     view! {
-        adw::PreferencesPage {
-            set_title: &tr("environment"),
-            set_icon_name: Some("document-properties-symbolic"),
+        gtk::Box {
+            set_orientation: gtk::Orientation::Vertical,
 
-            add = &adw::PreferencesGroup {
-                set_title: &tr("game-command"),
-                set_description: Some(&tr("game-command-description")),
+            adw::HeaderBar {
+                #[wrap(Some)]
+                set_title_widget = &adw::WindowTitle {
+                    set_title: &tr("environment")
+                },
 
-                adw::EntryRow {
-                    set_title: "%command%",
-                    set_text: CONFIG.game.command.as_ref().unwrap_or(&String::new()).trim(),
+                pack_start = &gtk::Button {
+                    set_icon_name: "go-previous-symbolic",
 
-                    connect_changed => |entry| {
-                        if let Ok(mut config) = Config::get() {
-                            let command = entry.text().trim().to_string();
-
-                            config.game.command = if command.is_empty() {
-                                None
-                            } else {
-                                Some(command)
-                            };
-
-                            Config::update(config);
-                        }
+                    connect_clicked[sender] => move |_| {
+                        sender.output(EnhancementsAppMsg::OpenMainPage).unwrap();
                     }
                 }
             },
 
-            add = &adw::PreferencesGroup {
-                set_title: &tr("new-variable"),
+            adw::PreferencesPage {
+                set_title: &tr("environment"),
+                set_icon_name: Some("document-properties-symbolic"),
 
-                #[wrap(Some)]
-                set_header_suffix = &gtk::Button {
-                    add_css_class: "flat",
+                add = &adw::PreferencesGroup {
+                    set_title: &tr("game-command"),
+                    set_description: Some(&tr("game-command-description")),
 
-                    set_valign: gtk::Align::Center,
+                    adw::EntryRow {
+                        set_title: "%command%",
+                        set_text: CONFIG.game.command.as_ref().unwrap_or(&String::new()).trim(),
 
-                    adw::ButtonContent {
-                        set_icon_name: "list-add-symbolic",
-                        set_label: &tr("add")
+                        connect_changed => |entry| {
+                            if let Ok(mut config) = Config::get() {
+                                let command = entry.text().trim().to_string();
+
+                                config.game.command = if command.is_empty() {
+                                    None
+                                } else {
+                                    Some(command)
+                                };
+
+                                Config::update(config);
+                            }
+                        }
+                    }
+                },
+
+                add = &adw::PreferencesGroup {
+                    set_title: &tr("new-variable"),
+
+                    #[wrap(Some)]
+                    set_header_suffix = &gtk::Button {
+                        add_css_class: "flat",
+
+                        set_valign: gtk::Align::Center,
+
+                        adw::ButtonContent {
+                            set_icon_name: "list-add-symbolic",
+                            set_label: &tr("add")
+                        },
+
+                        connect_clicked => EnvironmentPageMsg::Add
                     },
 
-                    connect_clicked => EnvironmentAppMsg::Add
+                    #[local_ref]
+                    name_entry -> adw::EntryRow {
+                        set_title: &tr("name")
+                    },
+
+                    #[local_ref]
+                    value_entry -> adw::EntryRow {
+                        set_title: &tr("value")
+                    }
                 },
 
                 #[local_ref]
-                name_entry -> adw::EntryRow {
-                    set_title: &tr("name")
-                },
-
-                #[local_ref]
-                value_entry -> adw::EntryRow {
-                    set_title: &tr("value")
-                }
-            },
-
-            #[local_ref]
-            add = variables -> adw::PreferencesGroup {}
+                add = variables -> adw::PreferencesGroup {}
+            }
         }
     }
 
@@ -166,7 +187,7 @@ impl SimpleAsyncComponent for EnvironmentApp {
 
     async fn update(&mut self, msg: Self::Input, _sender: AsyncComponentSender<Self>) {
         match msg {
-            EnvironmentAppMsg::Add => {
+            EnvironmentPageMsg::Add => {
                 let name = self.name_entry.text().trim().to_string();
                 let value = self.value_entry.text().trim().to_string();
 
@@ -184,7 +205,7 @@ impl SimpleAsyncComponent for EnvironmentApp {
                 }
             }
 
-            EnvironmentAppMsg::Remove(index) => {
+            EnvironmentPageMsg::Remove(index) => {
                 if let Ok(mut config) = Config::get() {
                     if let Some(var) = self.variables.guard().get(index.current_index()) {
                         config.game.environment.remove(&var.key);

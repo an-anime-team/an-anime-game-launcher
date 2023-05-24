@@ -2,6 +2,7 @@ custom = 自定义
 none = 无
 default = 默认
 details = 详细
+options = Options
 
 width = 宽
 height = 高
@@ -19,6 +20,7 @@ about = 关于
 close = 关闭
 save = 保存
 continue = 继续
+resume = Resume
 exit = 退出
 check = 检查
 restart = 重启

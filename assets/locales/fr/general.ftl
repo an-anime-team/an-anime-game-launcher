@@ -52,16 +52,15 @@ patch-preparation-tooltip = Le patch est en développement
 patch-testing-tooltip = Patch de test disponible
 patch-not-applied-tooltip = Patch is not applied
 
+apply-main-patch = Apply main patch
+apply-main-patch-description =
+    Experimental. Disabling this allows you to run the game without applying the patch.
+    This may not work, or require manual files modifications. Use if you know what you're doing
+
 apply-xlua-patch = Apply xlua patch
 
 ask-superuser-permissions = Ask superuser permissions
 ask-superuser-permissions-description = Launcher will use them to automatically update your hosts file. This is not needed in flatpak edition
-
-selected-version = Version sélectionnée
-recommended-only = Versions recommandées uniquement
-
-wine-version = Version de wine
-wine-recommended-description = N'afficher que les versions recommandées de wine
 
 wine-tools = Wine tools
 command-line = Command line
@@ -70,7 +69,3 @@ explorer = Explorer
 task-manager = Task manager
 configuration = Configuration
 debugger = Debugger
-
-dxvk-version = Version de DXVK
-dxvk-selection-disabled = La sélection de versions DXVK est désactivé par vos préférences de groupe wine
-dxvk-recommended-description = N'afficher que les versions recommandées de DXVK

@@ -52,16 +52,15 @@ patch-preparation-tooltip = Патч в разработке
 patch-testing-tooltip = Доступна тестовая версия патча
 patch-not-applied-tooltip = Патч не применен
 
-apply-xlua-patch = Применить патч xlua
+apply-main-patch = Применять основной патч
+apply-main-patch-description =
+    Экспериментально. Отключение опции позволяет запускать игру без применения патча.
+    Это может не работать или требовать ручного изменения файлов. Используйте если знаете что делаете
+
+apply-xlua-patch = Применять патч xlua
 
 ask-superuser-permissions = Запрашивать права суперпользователя
 ask-superuser-permissions-description = Лаунчер будет использовать их чтобы автоматически обновлять ваш hosts файл. Это не требуется при использовании flatpak
-
-selected-version = Выбранная версия
-recommended-only = Только рекомендуемое
-
-wine-version = Версия Wine
-wine-recommended-description = Показывать только рекомендуемые версии Wine
 
 wine-tools = Инструменты Wine
 command-line = Коммандная строка
@@ -70,7 +69,3 @@ explorer = Проводник
 task-manager = Диспетчер задач
 configuration = Настройки
 debugger = Отладчик
-
-dxvk-version = Версия DXVK
-dxvk-selection-disabled = Выбор версии DXVK отключен настройками выбранного вами Wine
-dxvk-recommended-description = Показывать только рекомендуемые версии DXVK

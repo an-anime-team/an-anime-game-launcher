@@ -7,7 +7,7 @@ use adw::prelude::*;
 use anime_launcher_sdk::sessions::SessionsExt;
 use anime_launcher_sdk::genshin::sessions::Sessions;
 
-use super::main::PreferencesAppMsg;
+use super::EnhancementsAppMsg;
 
 use crate::i18n::tr;
 use crate::*;
@@ -21,10 +21,10 @@ struct GameSession {
 #[relm4::factory(async)]
 impl AsyncFactoryComponent for GameSession {
     type Init = GameSession;
-    type Input = GameAppMsg;
-    type Output = GameAppMsg;
+    type Input = GamePageMsg;
+    type Output = GamePageMsg;
     type CommandOutput = ();
-    type ParentInput = GameAppMsg;
+    type ParentInput = GamePageMsg;
     type ParentWidget = adw::PreferencesGroup;
 
     view! {
@@ -37,7 +37,7 @@ impl AsyncFactoryComponent for GameSession {
             },
 
             add_suffix = &gtk::Button {
-                set_icon_name: "view-refresh-symbolic-symbolic",
+                set_icon_name: "view-refresh-symbolic",
                 add_css_class: "flat",
 
                 set_tooltip_text: Some(&tr("update-session")),
@@ -45,7 +45,7 @@ impl AsyncFactoryComponent for GameSession {
                 set_valign: gtk::Align::Center,
 
                 connect_clicked[sender, index] => move |_| {
-                    sender.output(GameAppMsg::UpdateSession(index.clone()));
+                    sender.output(GamePageMsg::UpdateSession(index.clone()));
                 }
             },
 
@@ -58,7 +58,7 @@ impl AsyncFactoryComponent for GameSession {
                 set_valign: gtk::Align::Center,
 
                 connect_clicked[sender, index] => move |_| {
-                    sender.output(GameAppMsg::RemoveSession(index.clone()));
+                    sender.output(GamePageMsg::RemoveSession(index.clone()));
                 }
             }
         }
@@ -77,7 +77,7 @@ impl AsyncFactoryComponent for GameSession {
     }
 }
 
-pub struct GameApp {
+pub struct GamePage {
     sessions: AsyncFactoryVecDeque<GameSession>,
 
     sessions_names: Vec<String>,
@@ -87,7 +87,7 @@ pub struct GameApp {
 }
 
 #[derive(Debug, Clone)]
-pub enum GameAppMsg {
+pub enum GamePageMsg {
     AddSession,
     UpdateSession(DynamicIndex),
     RemoveSession(DynamicIndex),
@@ -96,46 +96,69 @@ pub enum GameAppMsg {
 }
 
 #[relm4::component(async, pub)]
-impl SimpleAsyncComponent for GameApp {
+impl SimpleAsyncComponent for GamePage {
     type Init = ();
-    type Input = GameAppMsg;
-    type Output = PreferencesAppMsg;
+    type Input = GamePageMsg;
+    type Output = EnhancementsAppMsg;
 
     view! {
-        adw::PreferencesPage {
-            set_title: &tr("game"),
-            set_icon_name: Some("applications-games-symbolic"),
+        gtk::Box {
+            set_orientation: gtk::Orientation::Vertical,
 
-            add = &adw::PreferencesGroup {
-                set_title: &tr("game-sessions"),
+            adw::HeaderBar {
+                #[wrap(Some)]
+                set_title_widget = &adw::WindowTitle {
+                    set_title: &tr("game")
+                },
 
-                #[local_ref]
-                sessions_combo -> adw::ComboRow {
-                    set_title: &tr("active-sessions"),
-                    set_subtitle: &tr("active-session-description"),
+                pack_start = &gtk::Button {
+                    set_icon_name: "go-previous-symbolic",
 
-                    connect_selected_notify[sender] => move |row| sender.input(GameAppMsg::SetCurrent(row.selected()))
-                }
-            },
-
-            add = &adw::PreferencesGroup {
-                #[local_ref]
-                session_name_entry -> adw::EntryRow {
-                    set_title: &tr("name"),
-
-                    add_suffix = &gtk::Button {
-                        set_icon_name: "list-add-symbolic",
-                        add_css_class: "flat",
-
-                        set_valign: gtk::Align::Center,
-    
-                        connect_clicked => GameAppMsg::AddSession
+                    connect_clicked[sender] => move |_| {
+                        sender.output(EnhancementsAppMsg::OpenMainPage).unwrap();
                     }
                 }
             },
 
-            #[local_ref]
-            add = sessions -> adw::PreferencesGroup {},
+            adw::PreferencesPage {
+                set_title: &tr("game"),
+                set_icon_name: Some("applications-games-symbolic"),
+    
+                add = &adw::PreferencesGroup {
+                    set_title: &tr("game-sessions"),
+    
+                    #[local_ref]
+                    sessions_combo -> adw::ComboRow {
+                        set_title: &tr("active-sessions"),
+                        set_subtitle: &tr("active-session-description"),
+    
+                        connect_selected_notify[sender] => move |row| {
+                            if is_ready() {
+                                sender.input(GamePageMsg::SetCurrent(row.selected()));
+                            }
+                        }
+                    }
+                },
+    
+                add = &adw::PreferencesGroup {
+                    #[local_ref]
+                    session_name_entry -> adw::EntryRow {
+                        set_title: &tr("name"),
+    
+                        add_suffix = &gtk::Button {
+                            set_icon_name: "list-add-symbolic",
+                            add_css_class: "flat",
+    
+                            set_valign: gtk::Align::Center,
+        
+                            connect_clicked => GamePageMsg::AddSession
+                        }
+                    }
+                },
+    
+                #[local_ref]
+                add = sessions -> adw::PreferencesGroup {},
+            }
         }
     }
 
@@ -169,14 +192,14 @@ impl SimpleAsyncComponent for GameApp {
 
         let widgets = view_output!();
 
-        sender.input(GameAppMsg::UpdateCombo);
+        sender.input(GamePageMsg::UpdateCombo);
 
         AsyncComponentParts { model, widgets }
     }
 
     async fn update(&mut self, msg: Self::Input, sender: AsyncComponentSender<Self>) {
         match msg {
-            GameAppMsg::AddSession => {
+            GamePageMsg::AddSession => {
                 let name = self.session_name_entry.text().trim().to_string();
 
                 if !name.is_empty() {
@@ -190,46 +213,43 @@ impl SimpleAsyncComponent for GameApp {
                                     description: None
                                 });
 
-                                sender.input(GameAppMsg::UpdateCombo);
+                                sender.input(GamePageMsg::UpdateCombo);
                             }
 
-                            #[allow(unused_must_use)]
                             Err(err) => {
-                                sender.output(PreferencesAppMsg::Toast {
+                                sender.output(EnhancementsAppMsg::Toast {
                                     title: tr("game-session-add-failed"),
                                     description: Some(err.to_string())
-                                });
+                                }).unwrap();
                             }
                         }
                     }
                 }
             }
 
-            GameAppMsg::UpdateSession(index) => {
+            GamePageMsg::UpdateSession(index) => {
                 if let Some(session) = self.sessions.guard().get(index.current_index()) {
                     if let Ok(config) = Config::get() {
-                        #[allow(unused_must_use)]
                         if let Err(err) = Sessions::update(session.name.clone(), config.get_wine_prefix_path()) {
-                            sender.output(PreferencesAppMsg::Toast {
+                            sender.output(EnhancementsAppMsg::Toast {
                                 title: tr("game-session-update-failed"),
                                 description: Some(err.to_string())
-                            });
+                            }).unwrap();
                         }
                     }
                 }
             }
 
-            GameAppMsg::RemoveSession(index) => {
+            GamePageMsg::RemoveSession(index) => {
                 if let Some(session) = self.sessions.guard().get(index.current_index()) {
                     match Sessions::remove(&session.name) {
-                        Ok(()) => sender.input(GameAppMsg::UpdateCombo),
+                        Ok(()) => sender.input(GamePageMsg::UpdateCombo),
 
-                        #[allow(unused_must_use)]
                         Err(err) => {
-                            sender.output(PreferencesAppMsg::Toast {
+                            sender.output(EnhancementsAppMsg::Toast {
                                 title: tr("game-session-remove-failed"),
                                 description: Some(err.to_string())
-                            });
+                            }).unwrap();
 
                             return;
                         }
@@ -239,32 +259,30 @@ impl SimpleAsyncComponent for GameApp {
                 self.sessions.guard().remove(index.current_index());
             }
 
-            GameAppMsg::SetCurrent(id) => {
+            GamePageMsg::SetCurrent(id) => {
                 if let Some(name) = self.sessions_names.get(id as usize) {
                     if let Ok(config) = Config::get() {
-                        #[allow(unused_must_use)]
                         if let Err(err) = Sessions::set_current(name.to_owned()) {
-                            sender.output(PreferencesAppMsg::Toast {
+                            sender.output(EnhancementsAppMsg::Toast {
                                 title: tr("game-session-set-current-failed"),
                                 description: Some(err.to_string())
-                            });
+                            }).unwrap();
 
                             // Prevent session applying
                             return;
                         }
 
-                        #[allow(unused_must_use)]
                         if let Err(err) = Sessions::apply(name.to_owned(), config.get_wine_prefix_path()) {
-                            sender.output(PreferencesAppMsg::Toast {
+                            sender.output(EnhancementsAppMsg::Toast {
                                 title: tr("game-session-apply-failed"),
                                 description: Some(err.to_string())
-                            });
+                            }).unwrap();
                         }
                     }
                 }
             }
 
-            GameAppMsg::UpdateCombo => {
+            GamePageMsg::UpdateCombo => {
                 let sessions = Sessions::get_sessions().unwrap_or_default();
 
                 self.sessions_names = sessions.sessions.into_keys().collect::<Vec<String>>();

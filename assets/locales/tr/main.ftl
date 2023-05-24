@@ -2,6 +2,7 @@ custom = Özel
 none = Boş
 default = Varsayılan
 details = Detaylar
+options = Seçenekler
 
 width = Genişlik
 height = Uzunluk
@@ -19,6 +20,7 @@ about = Hakkında
 close = Kapat
 save = Kaydet
 continue = Devam et
+resume = Sürdürmek
 exit = Çıkış yap
 check = Kontrol et
 restart = Tekrardan başlat

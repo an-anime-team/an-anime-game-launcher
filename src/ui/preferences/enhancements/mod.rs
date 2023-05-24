@@ -5,36 +5,101 @@ use adw::prelude::*;
 
 use anime_launcher_sdk::config::ConfigExt;
 use anime_launcher_sdk::genshin::config::Config;
-
 use anime_launcher_sdk::config::schema_blanks::prelude::*;
 
 use anime_launcher_sdk::is_available;
+
+pub mod game;
+pub mod sandbox;
+pub mod environment;
+
+use game::*;
+use sandbox::*;
+use environment::*;
 
 use crate::i18n::tr;
 use crate::*;
 
 use super::gamescope::*;
+use super::main::PreferencesAppMsg;
 
 pub struct EnhancementsApp {
-    gamescope: AsyncController<GamescopeApp>
+    gamescope: AsyncController<GamescopeApp>,
+    game_page: AsyncController<GamePage>,
+    sandbox_page: AsyncController<SandboxPage>,
+    environment_page: AsyncController<EnvironmentPage>
 }
 
 #[derive(Debug)]
 pub enum EnhancementsAppMsg {
     SetGamescopeParent(adw::PreferencesWindow),
-    OpenGamescope
+
+    OpenGamescope,
+    OpenMainPage,
+    OpenGameSettingsPage,
+    OpenSandboxSettingsPage,
+    OpenEnvironmentSettingsPage,
+
+    Toast {
+        title: String,
+        description: Option<String>
+    }
 }
 
 #[relm4::component(async, pub)]
 impl SimpleAsyncComponent for EnhancementsApp {
     type Init = ();
     type Input = EnhancementsAppMsg;
-    type Output = ();
+    type Output = PreferencesAppMsg;
 
     view! {
+        #[root]
         adw::PreferencesPage {
             set_title: &tr("enhancements"),
             set_icon_name: Some("applications-graphics-symbolic"),
+
+            add = &adw::PreferencesGroup {
+                set_title: &tr("options"),
+
+                adw::ActionRow {
+                    set_title: &tr("game"),
+                    set_subtitle: &tr("game-settings-description"),
+
+                    add_suffix = &gtk::Image {
+                        set_icon_name: Some("go-next-symbolic")
+                    },
+
+                    set_activatable: true,
+
+                    connect_activated => EnhancementsAppMsg::OpenGameSettingsPage
+                },
+
+                adw::ActionRow {
+                    set_title: &tr("sandbox"),
+                    set_subtitle: &tr("sandbox-settings-description"),
+
+                    add_suffix = &gtk::Image {
+                        set_icon_name: Some("go-next-symbolic")
+                    },
+
+                    set_activatable: true,
+
+                    connect_activated => EnhancementsAppMsg::OpenSandboxSettingsPage
+                },
+
+                adw::ActionRow {
+                    set_title: &tr("environment"),
+                    set_subtitle: &tr("environment-settings-description"),
+
+                    add_suffix = &gtk::Image {
+                        set_icon_name: Some("go-next-symbolic")
+                    },
+
+                    set_activatable: true,
+
+                    connect_activated => EnhancementsAppMsg::OpenEnvironmentSettingsPage
+                }
+            },
 
             add = &adw::PreferencesGroup {
                 set_title: &tr("wine"),
@@ -47,8 +112,7 @@ impl SimpleAsyncComponent for EnhancementsApp {
                     set_model = &gtk::StringList::new(&[
                         &tr("none"),
                         "ESync",
-                        "FSync",
-                        "Futex2"
+                        "FSync"
                     ]),
 
                     set_selected: CONFIG.game.wine.sync.ordinal() as u32,
@@ -200,20 +264,12 @@ impl SimpleAsyncComponent for EnhancementsApp {
                         &tr("performance")
                     ]),
 
-                    // FSR strength selection
-                    // 
-                    // Ultra Quality = 5
-                    // Quality       = 4
-                    // Balanced      = 3
-                    // Performance   = 2
-                    // 
-                    // Source: Bottles (https://github.com/bottlesdevs/Bottles/blob/22fa3573a13f4e9b9c429e4cdfe4ca29787a2832/src/ui/details-preferences.ui#L88)
-                    set_selected: 5 - CONFIG.game.enhancements.fsr.strength as u32,
+                    set_selected: CONFIG.game.enhancements.fsr.quality.ordinal() as u32,
 
-                    connect_selected_notify => |row| {
+                    connect_selected_notify => |row| unsafe {
                         if is_ready() {
                             if let Ok(mut config) = Config::get() {
-                                config.game.enhancements.fsr.strength = 5 - row.selected() as u64;
+                                config.game.enhancements.fsr.quality = FsrQuality::from_ordinal_unsafe(row.selected() as i8);
 
                                 Config::update(config);
                             }
@@ -498,7 +554,16 @@ impl SimpleAsyncComponent for EnhancementsApp {
                     }
                 },
             }
-        }
+        },
+
+        #[local_ref]
+        game_page -> gtk::Box {},
+
+        #[local_ref]
+        sandbox_page -> gtk::Box {},
+
+        #[local_ref]
+        environment_page -> gtk::Box {}
     }
 
     async fn init(
@@ -511,15 +576,31 @@ impl SimpleAsyncComponent for EnhancementsApp {
         let model = Self {
             gamescope: GamescopeApp::builder()
                 .launch(())
-                .detach()
+                .detach(),
+
+            game_page: GamePage::builder()
+                .launch(())
+                .forward(sender.input_sender(), std::convert::identity),
+
+            sandbox_page: SandboxPage::builder()
+                .launch(())
+                .forward(sender.input_sender(), std::convert::identity),
+
+            environment_page: EnvironmentPage::builder()
+                .launch(())
+                .forward(sender.input_sender(), std::convert::identity)
         };
+
+        let game_page = model.game_page.widget();
+        let sandbox_page = model.sandbox_page.widget();
+        let environment_page = model.environment_page.widget();
 
         let widgets = view_output!();
 
         AsyncComponentParts { model, widgets }
     }
 
-    async fn update(&mut self, msg: Self::Input, _sender: AsyncComponentSender<Self>) {
+    async fn update(&mut self, msg: Self::Input, sender: AsyncComponentSender<Self>) {
         match msg {
             EnhancementsAppMsg::SetGamescopeParent(parent) => {
                 self.gamescope.widget().set_transient_for(Some(&parent));
@@ -527,6 +608,41 @@ impl SimpleAsyncComponent for EnhancementsApp {
 
             EnhancementsAppMsg::OpenGamescope => {
                 self.gamescope.widget().present();
+            }
+
+            EnhancementsAppMsg::OpenMainPage => unsafe {
+                PREFERENCES_WINDOW.as_ref()
+                    .unwrap_unchecked()
+                    .widget()
+                    .close_subpage();
+            }
+
+            EnhancementsAppMsg::OpenGameSettingsPage => unsafe {
+                PREFERENCES_WINDOW.as_ref()
+                    .unwrap_unchecked()
+                    .widget()
+                    .present_subpage(self.game_page.widget());
+            }
+
+            EnhancementsAppMsg::OpenSandboxSettingsPage => unsafe {
+                PREFERENCES_WINDOW.as_ref()
+                    .unwrap_unchecked()
+                    .widget()
+                    .present_subpage(self.sandbox_page.widget());
+            }
+
+            EnhancementsAppMsg::OpenEnvironmentSettingsPage => unsafe {
+                PREFERENCES_WINDOW.as_ref()
+                    .unwrap_unchecked()
+                    .widget()
+                    .present_subpage(self.environment_page.widget());
+            }
+
+            EnhancementsAppMsg::Toast { title, description } => {
+                sender.output(PreferencesAppMsg::Toast {
+                    title,
+                    description
+                }).unwrap();
             }
         }
     }

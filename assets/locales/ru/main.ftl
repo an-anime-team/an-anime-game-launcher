@@ -2,6 +2,7 @@ custom = Свое значение
 none = Нет
 default = По умолчанию
 details = Подробнее
+options = Опции
 
 width = Ширина
 height = Высота
@@ -19,6 +20,7 @@ about = О программе
 close = Закрыть
 save = Сохранить
 continue = Продолжить
+resume = Возобновить
 exit = Выйти
 check = Проверить
 restart = Перезапустить
