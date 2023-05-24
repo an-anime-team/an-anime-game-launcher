@@ -52,6 +52,16 @@ patch-preparation-tooltip = Yama hala geliştiriliyor
 patch-testing-tooltip = Test yaması mevcut
 patch-not-applied-tooltip = Yama uygulanmamış
 
+apply-main-patch = Apply main patch
+apply-main-patch-description =
+    Experimental. Disabling this allows you to run the game without applying the patch.
+    This may not work, or require manual files modifications. Use if you know what you're doing
+
+apply-main-patch = Apply main patch
+apply-main-patch-description =
+    Experimental. Disabling this allows you to run the game without applying the patch.
+    This may not work, or require manual files modifications. Use if you know what you're doing
+
 apply-xlua-patch = Xlua yamasını uygula
 
 ask-superuser-permissions = Yönetici izinlerini sor

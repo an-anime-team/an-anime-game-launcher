@@ -52,7 +52,12 @@ patch-preparation-tooltip = Патч в разработке
 patch-testing-tooltip = Доступна тестовая версия патча
 patch-not-applied-tooltip = Патч не применен
 
-apply-xlua-patch = Применить патч xlua
+apply-main-patch = Применять основной патч
+apply-main-patch-description =
+    Экспериментально. Отключение опции позволяет запускать игру без применения патча.
+    Это может не работать или требовать ручного изменения файлов. Используйте если знаете что делаете
+
+apply-xlua-patch = Применять патч xlua
 
 ask-superuser-permissions = Запрашивать права суперпользователя
 ask-superuser-permissions-description = Лаунчер будет использовать их чтобы автоматически обновлять ваш hosts файл. Это не требуется при использовании flatpak

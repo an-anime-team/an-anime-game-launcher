@@ -579,6 +579,30 @@ impl SimpleAsyncComponent for GeneralApp {
 
             add = &adw::PreferencesGroup {
                 adw::ActionRow {
+                    set_title: &tr("apply-main-patch"),
+                    set_subtitle: &tr("apply-main-patch-description"),
+
+                    add_suffix = &gtk::Switch {
+                        set_valign: gtk::Align::Center,
+
+                        set_state: CONFIG.patch.apply_main,
+
+                        connect_state_notify[sender] => move |switch| {
+                            if is_ready() {
+                                #[allow(unused_must_use)]
+                                if let Ok(mut config) = Config::get() {
+                                    config.patch.apply_main = switch.state();
+
+                                    Config::update(config);
+
+                                    sender.output(PreferencesAppMsg::UpdateLauncherState);
+                                }
+                            }
+                        }
+                    }
+                },
+
+                adw::ActionRow {
                     set_title: &tr("apply-xlua-patch"),
 
                     add_suffix = &gtk::Switch {

@@ -52,6 +52,11 @@ patch-preparation-tooltip = 补丁还在开发中
 patch-testing-tooltip = 有测试版补丁可用
 patch-not-applied-tooltip = 补丁未应用
 
+apply-main-patch = Apply main patch
+apply-main-patch-description =
+    Experimental. Disabling this allows you to run the game without applying the patch.
+    This may not work, or require manual files modifications. Use if you know what you're doing
+
 apply-xlua-patch = 应用 xLua 补丁
 
 ask-superuser-permissions = 请求超级用户权限
