@@ -1,5 +1,5 @@
-components = Components
-components-description = Manage your Wine and DXVK versions
+components = Bileşenler
+components-description = Wine ve DXVK sürümlerinizi yönetin
 
 selected-version = Seçilmiş versiyon
 recommended-only = Sadece önerilenler
