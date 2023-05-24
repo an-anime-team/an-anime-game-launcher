@@ -43,7 +43,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
-- Removed Futex2 wine sync option 
+- Removed Futex2 wine sync option
 
 ## [3.6.0] - 06.05.2023
 
