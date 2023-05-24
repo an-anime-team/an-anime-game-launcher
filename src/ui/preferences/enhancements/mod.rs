@@ -59,11 +59,11 @@ impl SimpleAsyncComponent for EnhancementsApp {
             set_icon_name: Some("applications-graphics-symbolic"),
 
             add = &adw::PreferencesGroup {
-                set_title: "Options",
+                set_title: &tr("options"),
 
                 adw::ActionRow {
                     set_title: &tr("game"),
-                    set_subtitle: "Manage in-game settings and account session",
+                    set_subtitle: &tr("game-settings-description"),
 
                     add_suffix = &gtk::Image {
                         set_icon_name: Some("go-next-symbolic")
@@ -76,7 +76,7 @@ impl SimpleAsyncComponent for EnhancementsApp {
 
                 adw::ActionRow {
                     set_title: &tr("sandbox"),
-                    set_subtitle: "Run the game in a bubblewrap sandbox, similar to what Flatpak does",
+                    set_subtitle: &tr("sandbox-settings-description"),
 
                     add_suffix = &gtk::Image {
                         set_icon_name: Some("go-next-symbolic")
@@ -89,7 +89,7 @@ impl SimpleAsyncComponent for EnhancementsApp {
 
                 adw::ActionRow {
                     set_title: &tr("environment"),
-                    set_subtitle: "Specify environment variables and game launching command",
+                    set_subtitle: &tr("environment-settings-description"),
 
                     add_suffix = &gtk::Image {
                         set_icon_name: Some("go-next-symbolic")
