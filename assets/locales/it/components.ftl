@@ -7,13 +7,13 @@ recommended-only = Solo consigliate
 wine-version = Versione di Wine
 wine-recommended-description = Mostra solo versioni di wine consigliate
 
-wine-options = Wine options
+wine-options = Opzioni di Wine
 
-wine-use-shared-libraries = Use wine shared libraries
-wine-use-shared-libraries-description = Set LD_LIBRARY_PATH variable to load system libraries from selected wine build
+wine-use-shared-libraries = Usa le librerie condivise di wine
+wine-use-shared-libraries-description = Imposta la variabile LD_LIBRARY_PATH per caricare le librerie di sistema dalla build di wine selezionata
 
-gstreamer-use-shared-libraries = Use gstreamer shared libraries
-gstreamer-use-shared-libraries-description = Set GST_PLUGIN_PATH variable to load gstreamer libraries from selected wine build
+gstreamer-use-shared-libraries = Usa le librerie condivise di gstreamer
+gstreamer-use-shared-libraries-description = Imposta la variabile GST_PLUGIN_PATH per caricare le librerie di gstreamer dalla build di wine selezionata
 
 dxvk-version = Verisone di DXVK
 dxvk-selection-disabled = La selezinoe di DXVK è disabilitata dalle tue preferenze del gruppo wine
