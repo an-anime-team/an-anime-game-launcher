@@ -15,11 +15,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Set button label as "Resume" when the diff is part downloaded
 - Added options to use wine / gstreamer shared libraries from selected wine build.
   These options will configure `LD_LIBRARY_PATH` and `GST_PLUGIN_PATH` environment variables
+- Added setting of `LC_ALL` in wine lang setting
+- Added `LAUNCHER_REQUESTS_TIMEOUT` environment variable
 
 ### Fixed
 
 - Fixed session applying on each launcher start
 - Fixed predownload button ui
+- Fixed proton builds integration with sandbox
+- Fixed compatibility between sessions manager and sandbox
+- Fixed sandboxing of inexisting folders
 
 ### Changed
 
@@ -29,6 +34,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Used `whatadistro` to identify recommended package manager in the first run window
 - Moved a lot of settings to separate page
 - Set fsr quality mode in enhancements settings instead of strength
+- Updated fps unlocker data
+- Made temporary workaround to the game API changes
+- Increased default requests timeout to 8 seconds
+- Updated minreq to support `http_proxy`-like variables
 
 ### Removed
 
