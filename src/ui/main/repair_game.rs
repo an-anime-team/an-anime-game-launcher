@@ -162,6 +162,8 @@ pub fn repair_game(sender: ComponentSender<App>, progress_bar_input: Sender<Prog
 
                         progress_bar_input.send(ProgressBarMsg::UpdateProgress(i as u64, total as u64));
                     }
+
+                    progress_bar_input.send(ProgressBarMsg::DisplayFraction(true));
                 }
             }
 
