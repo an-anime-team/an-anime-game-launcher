@@ -1,9 +1,12 @@
+use std::path::PathBuf;
+
 use relm4::prelude::*;
 use relm4::component::*;
 
 use adw::prelude::*;
 
-use std::path::PathBuf;
+use super::ComponentsListMsg;
+use super::ComponentVersionMsg;
 
 pub struct ComponentGroup {
     pub title: String,
@@ -13,7 +16,7 @@ pub struct ComponentGroup {
 }
 
 #[derive(Debug)]
-pub enum AppMsg {
+pub enum ComponentGroupMsg {
     ShowRecommendedOnly(bool),
     CallOnDownloaded,
     CallOnDeleted
@@ -22,8 +25,8 @@ pub enum AppMsg {
 #[relm4::component(async, pub)]
 impl SimpleAsyncComponent for ComponentGroup {
     type Init = (super::ComponentsListGroup, PathBuf);
-    type Input = AppMsg;
-    type Output = super::list::AppMsg;
+    type Input = ComponentGroupMsg;
+    type Output = super::list::ComponentsListMsg;
 
     view! {
         group = adw::ExpanderRow {
@@ -61,23 +64,23 @@ impl SimpleAsyncComponent for ComponentGroup {
 
     async fn update(&mut self, msg: Self::Input, sender: AsyncComponentSender<Self>) {
         match msg {
-            AppMsg::ShowRecommendedOnly(state) => {
+            ComponentGroupMsg::ShowRecommendedOnly(state) => {
                 self.show_recommended_only = state;
 
                 // todo
                 for version in &self.versions {
-                    version.sender().send(super::version::AppMsg::ShowRecommendedOnly(state)).unwrap();
+                    version.sender().send(ComponentVersionMsg::ShowRecommendedOnly(state)).unwrap();
                 }
             }
 
             #[allow(unused_must_use)]
-            AppMsg::CallOnDownloaded => {
-                sender.output(super::list::AppMsg::CallOnDownloaded);
+            ComponentGroupMsg::CallOnDownloaded => {
+                sender.output(ComponentsListMsg::CallOnDownloaded);
             }
 
             #[allow(unused_must_use)]
-            AppMsg::CallOnDeleted => {
-                sender.output(super::list::AppMsg::CallOnDeleted);
+            ComponentGroupMsg::CallOnDeleted => {
+                sender.output(ComponentsListMsg::CallOnDeleted);
             }
         }
     }

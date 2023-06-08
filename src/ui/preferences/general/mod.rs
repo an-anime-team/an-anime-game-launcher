@@ -21,6 +21,7 @@ use anime_launcher_sdk::genshin::env_emulation::Environment;
 pub mod components;
 
 use components::*;
+
 use super::main::PreferencesAppMsg;
 
 use crate::ui::migrate_installation::MigrateInstallationApp;

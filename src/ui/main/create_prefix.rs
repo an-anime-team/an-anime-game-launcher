@@ -22,7 +22,7 @@ pub fn create_prefix(sender: ComponentSender<App>) {
                     .with_loader(WineLoader::Current)
                     .with_arch(WineArch::Win64);
 
-                if let Err(err) = wine.update_prefix::<&str>(None) {
+                if let Err(err) = wine.init_prefix(None::<&str>) {
                     tracing::error!("Failed to create wine prefix");
 
                     sender.input(AppMsg::Toast {

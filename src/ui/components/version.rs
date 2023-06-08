@@ -1,3 +1,5 @@
+use std::path::PathBuf;
+
 use relm4::prelude::*;
 use relm4::component::*;
 
@@ -12,8 +14,7 @@ use anime_launcher_sdk::anime_game_core::genshin::prelude::*;
 use anime_launcher_sdk::config::ConfigExt;
 use anime_launcher_sdk::genshin::config::Config;
 
-use std::path::PathBuf;
-
+use super::ComponentGroupMsg;
 use super::progress_bar::ProgressBarMsg;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -38,7 +39,7 @@ pub struct ComponentVersion {
 }
 
 #[derive(Debug)]
-pub enum AppMsg {
+pub enum ComponentVersionMsg {
     ShowRecommendedOnly(bool),
     PerformAction,
     SetState(VersionState)
@@ -47,8 +48,8 @@ pub enum AppMsg {
 #[relm4::component(async, pub)]
 impl SimpleAsyncComponent for ComponentVersion {
     type Init = (super::ComponentsListVersion, PathBuf);
-    type Input = AppMsg;
-    type Output = super::group::AppMsg;
+    type Input = ComponentVersionMsg;
+    type Output = ComponentGroupMsg;
 
     view! {
         row = adw::ActionRow {
@@ -72,7 +73,7 @@ impl SimpleAsyncComponent for ComponentVersion {
                 #[watch]
                 set_visible: model.state != VersionState::Downloading,
 
-                connect_clicked => AppMsg::PerformAction
+                connect_clicked => ComponentVersionMsg::PerformAction
             }
         }
     }
@@ -122,9 +123,9 @@ impl SimpleAsyncComponent for ComponentVersion {
 
     async fn update(&mut self, msg: Self::Input, sender: AsyncComponentSender<Self>) {
         match msg {
-            AppMsg::ShowRecommendedOnly(state) => self.show_recommended_only = state,
+            ComponentVersionMsg::ShowRecommendedOnly(state) => self.show_recommended_only = state,
 
-            AppMsg::PerformAction => {
+            ComponentVersionMsg::PerformAction => {
                 match self.state {
                     VersionState::Downloaded => {
                         let path = self.download_folder.join(&self.name);
@@ -140,7 +141,7 @@ impl SimpleAsyncComponent for ComponentVersion {
                         self.state = VersionState::NotDownloaded;
 
                         #[allow(unused_must_use)] {
-                            sender.output(super::group::AppMsg::CallOnDeleted);
+                            sender.output(ComponentGroupMsg::CallOnDeleted);
                         }
                     }
 
@@ -168,12 +169,12 @@ impl SimpleAsyncComponent for ComponentVersion {
                                             progress_bar_sender.send(ProgressBarMsg::SetVisible(false));
 
                                             if let InstallerUpdate::UnpackingFinished = &state {
-                                                sender.input(AppMsg::SetState(VersionState::Downloaded));
-                                                sender.output(super::group::AppMsg::CallOnDownloaded);
+                                                sender.input(ComponentVersionMsg::SetState(VersionState::Downloaded));
+                                                sender.output(ComponentGroupMsg::CallOnDownloaded);
                                             }
 
                                             else {
-                                                sender.input(AppMsg::SetState(VersionState::NotDownloaded));
+                                                sender.input(ComponentVersionMsg::SetState(VersionState::NotDownloaded));
                                             }
                                         },
 
@@ -190,7 +191,7 @@ impl SimpleAsyncComponent for ComponentVersion {
                 }
             }
 
-            AppMsg::SetState(state) => self.state = state
+            ComponentVersionMsg::SetState(state) => self.state = state
         }
     }
 }
