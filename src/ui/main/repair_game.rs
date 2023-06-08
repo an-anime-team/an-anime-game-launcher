@@ -1,16 +1,13 @@
-use relm4::{
-    prelude::*,
-    Sender
-};
+use relm4::{prelude::*, Sender};
 
 use gtk::glib::clone;
 
 use std::path::Path;
 
-use crate::*;
+use super::{App, AppMsg};
 use crate::i18n::*;
 use crate::ui::components::*;
-use super::{App, AppMsg};
+use crate::*;
 
 #[allow(unused_must_use)]
 pub fn repair_game(sender: ComponentSender<App>, progress_bar_input: Sender<ProgressBarMsg>) {
@@ -23,12 +20,20 @@ pub fn repair_game(sender: ComponentSender<App>, progress_bar_input: Sender<Prog
         match repairer::try_get_integrity_files(config.launcher.edition, None) {
             Ok(mut files) => {
                 // Add voiceovers files
-                let game_path = config.game.path.for_edition(config.launcher.edition).to_path_buf();
+                let game_path = config
+                    .game
+                    .path
+                    .for_edition(config.launcher.edition)
+                    .to_path_buf();
                 let game = Game::new(&game_path, config.launcher.edition);
 
                 if let Ok(voiceovers) = game.get_voice_packages() {
                     for package in voiceovers {
-                        if let Ok(mut voiceover_files) = repairer::try_get_voice_integrity_files(config.launcher.edition, package.locale(), None) {
+                        if let Ok(mut voiceover_files) = repairer::try_get_voice_integrity_files(
+                            config.launcher.edition,
+                            package.locale(),
+                            None,
+                        ) {
                             files.append(&mut voiceover_files);
                         }
                     }
@@ -97,11 +102,16 @@ pub fn repair_game(sender: ComponentSender<App>, progress_bar_input: Sender<Prog
                 }
 
                 if !broken.is_empty() {
-                    progress_bar_input.send(ProgressBarMsg::UpdateCaption(Some(tr("repairing-files"))));
+                    progress_bar_input
+                        .send(ProgressBarMsg::UpdateCaption(Some(tr("repairing-files"))));
                     progress_bar_input.send(ProgressBarMsg::DisplayFraction(false));
                     progress_bar_input.send(ProgressBarMsg::UpdateProgress(0, 0));
 
-                    tracing::warn!("Found broken files:\n{}", broken.iter().fold(String::new(), |acc, file| acc + &format!("- {}\n", file.path.to_string_lossy())));
+                    tracing::warn!(
+                        "Found broken files:\n{}",
+                        broken.iter().fold(String::new(), |acc, file| acc
+                            + &format!("- {}\n", file.path.to_string_lossy()))
+                    );
 
                     let total = broken.len() as f64;
 
@@ -166,18 +176,17 @@ pub fn repair_game(sender: ComponentSender<App>, progress_bar_input: Sender<Prog
                             if let Err(err) = file.repair(&game_path) {
                                 sender.input(AppMsg::Toast {
                                     title: tr("game-file-repairing-error"),
-                                    description: Some(err.to_string())
+                                    description: Some(err.to_string()),
                                 });
 
                                 tracing::error!("Failed to repair game file: {err}");
                             }
-                        }
-
-                        else {
+                        } else {
                             tracing::debug!("Skipped file: {}", file.path.to_string_lossy());
                         }
 
-                        progress_bar_input.send(ProgressBarMsg::UpdateProgress(i as u64, total as u64));
+                        progress_bar_input
+                            .send(ProgressBarMsg::UpdateProgress(i as u64, total as u64));
                     }
                 }
             }
@@ -187,7 +196,7 @@ pub fn repair_game(sender: ComponentSender<App>, progress_bar_input: Sender<Prog
 
                 sender.input(AppMsg::Toast {
                     title: tr("integrity-files-getting-error"),
-                    description: Some(err.to_string())
+                    description: Some(err.to_string()),
                 });
             }
         }

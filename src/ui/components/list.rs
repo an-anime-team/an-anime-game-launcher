@@ -1,5 +1,5 @@
-use relm4::prelude::*;
 use relm4::component::*;
+use relm4::prelude::*;
 
 use adw::prelude::*;
 
@@ -7,27 +7,27 @@ use adw::prelude::*;
 pub struct ComponentsListInit<T> {
     pub pattern: super::ComponentsListPattern,
     pub on_downloaded: Option<T>,
-    pub on_deleted: Option<T>
+    pub on_deleted: Option<T>,
 }
 
 pub struct ComponentsList<T> {
     pub show_recommended_only: bool,
     pub init: ComponentsListInit<T>,
 
-    pub groups: Vec<AsyncController<super::ComponentGroup>>
+    pub groups: Vec<AsyncController<super::ComponentGroup>>,
 }
 
 #[derive(Debug)]
-pub enum AppMsg {
+pub enum AppListMsg {
     ShowRecommendedOnly(bool),
     CallOnDownloaded,
-    CallOnDeleted
+    CallOnDeleted,
 }
 
 #[relm4::component(async, pub)]
 impl<T: std::fmt::Debug + Clone + 'static> SimpleAsyncComponent for ComponentsList<T> {
     type Init = ComponentsListInit<T>;
-    type Input = AppMsg;
+    type Input = AppListMsg;
     type Output = T;
 
     view! {
@@ -45,14 +45,16 @@ impl<T: std::fmt::Debug + Clone + 'static> SimpleAsyncComponent for ComponentsLi
             show_recommended_only: true,
             init: init_copy,
 
-            groups: init.pattern.groups
+            groups: init
+                .pattern
+                .groups
                 .into_iter()
                 .map(|group| {
                     super::ComponentGroup::builder()
                         .launch((group, init.pattern.download_folder.clone()))
                         .forward(sender.input_sender(), std::convert::identity)
                 })
-                .collect()
+                .collect(),
         };
 
         let widgets = view_output!();
@@ -66,23 +68,30 @@ impl<T: std::fmt::Debug + Clone + 'static> SimpleAsyncComponent for ComponentsLi
 
     async fn update(&mut self, msg: Self::Input, sender: AsyncComponentSender<Self>) {
         match msg {
-            AppMsg::ShowRecommendedOnly(state) => {
+            AppListMsg::ShowRecommendedOnly(state) => {
                 self.show_recommended_only = state;
 
                 // todo
                 for group in &self.groups {
-                    group.sender().send(super::group::AppMsg::ShowRecommendedOnly(state)).unwrap();
+                    group
+                        .sender()
+                        .send(super::group::AppMsg::ShowRecommendedOnly(state))
+                        .unwrap();
                 }
             }
 
             #[allow(unused_must_use)]
-            AppMsg::CallOnDownloaded => if let Some(on_downloaded) = &self.init.on_downloaded {
-                sender.output(on_downloaded.to_owned());
+            AppListMsg::CallOnDownloaded => {
+                if let Some(on_downloaded) = &self.init.on_downloaded {
+                    sender.output(on_downloaded.to_owned());
+                }
             }
 
             #[allow(unused_must_use)]
-            AppMsg::CallOnDeleted => if let Some(on_deleted) = &self.init.on_deleted {
-                sender.output(on_deleted.to_owned());
+            AppListMsg::CallOnDeleted => {
+                if let Some(on_deleted) = &self.init.on_deleted {
+                    sender.output(on_deleted.to_owned());
+                }
             }
         }
     }

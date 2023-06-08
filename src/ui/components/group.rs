@@ -1,5 +1,5 @@
-use relm4::prelude::*;
 use relm4::component::*;
+use relm4::prelude::*;
 
 use adw::prelude::*;
 
@@ -9,21 +9,21 @@ pub struct ComponentGroup {
     pub title: String,
     pub show_recommended_only: bool,
 
-    pub versions: Vec<AsyncController<super::ComponentVersion>>
+    pub versions: Vec<AsyncController<super::ComponentVersion>>,
 }
 
 #[derive(Debug)]
 pub enum AppMsg {
     ShowRecommendedOnly(bool),
     CallOnDownloaded,
-    CallOnDeleted
+    CallOnDeleted,
 }
 
 #[relm4::component(async, pub)]
 impl SimpleAsyncComponent for ComponentGroup {
     type Init = (super::ComponentsListGroup, PathBuf);
     type Input = AppMsg;
-    type Output = super::list::AppMsg;
+    type Output = super::list::AppListMsg;
 
     view! {
         group = adw::ExpanderRow {
@@ -40,14 +40,16 @@ impl SimpleAsyncComponent for ComponentGroup {
             title: init.0.title,
             show_recommended_only: true,
 
-            versions: init.0.versions
+            versions: init
+                .0
+                .versions
                 .into_iter()
                 .map(|version| {
                     super::ComponentVersion::builder()
                         .launch((version, init.1.clone()))
                         .forward(sender.input_sender(), std::convert::identity)
                 })
-                .collect()
+                .collect(),
         };
 
         let widgets = view_output!();
@@ -66,18 +68,21 @@ impl SimpleAsyncComponent for ComponentGroup {
 
                 // todo
                 for version in &self.versions {
-                    version.sender().send(super::version::AppMsg::ShowRecommendedOnly(state)).unwrap();
+                    version
+                        .sender()
+                        .send(super::version::AppVersionMsg::ShowRecommendedOnly(state))
+                        .unwrap();
                 }
             }
 
             #[allow(unused_must_use)]
             AppMsg::CallOnDownloaded => {
-                sender.output(super::list::AppMsg::CallOnDownloaded);
+                sender.output(super::list::AppListMsg::CallOnDownloaded);
             }
 
             #[allow(unused_must_use)]
             AppMsg::CallOnDeleted => {
-                sender.output(super::list::AppMsg::CallOnDeleted);
+                sender.output(super::list::AppListMsg::CallOnDeleted);
             }
         }
     }

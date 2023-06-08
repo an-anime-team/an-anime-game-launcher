@@ -1,12 +1,12 @@
-pub mod list;
 pub mod group;
-pub mod version;
+pub mod list;
 pub mod progress_bar;
+pub mod version;
 
-pub use list::*;
 pub use group::*;
-pub use version::*;
+pub use list::*;
 pub use progress_bar::*;
+pub use version::*;
 
 use anime_launcher_sdk::components::*;
 
@@ -15,13 +15,13 @@ use std::path::PathBuf;
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ComponentsListPattern {
     pub download_folder: PathBuf,
-    pub groups: Vec<ComponentsListGroup>
+    pub groups: Vec<ComponentsListGroup>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ComponentsListGroup {
     pub title: String,
-    pub versions: Vec<ComponentsListVersion>
+    pub versions: Vec<ComponentsListVersion>,
 }
 
 impl From<wine::Group> for ComponentsListGroup {
@@ -29,7 +29,11 @@ impl From<wine::Group> for ComponentsListGroup {
     fn from(group: wine::Group) -> Self {
         Self {
             title: group.title,
-            versions: group.versions.into_iter().map(|version| version.into()).collect()
+            versions: group
+                .versions
+                .into_iter()
+                .map(|version| version.into())
+                .collect(),
         }
     }
 }
@@ -39,7 +43,11 @@ impl From<dxvk::Group> for ComponentsListGroup {
     fn from(group: dxvk::Group) -> Self {
         Self {
             title: group.title,
-            versions: group.versions.into_iter().map(|version| version.into()).collect()
+            versions: group
+                .versions
+                .into_iter()
+                .map(|version| version.into())
+                .collect(),
         }
     }
 }
@@ -49,7 +57,7 @@ pub struct ComponentsListVersion {
     pub name: String,
     pub title: String,
     pub uri: String,
-    pub recommended: bool
+    pub recommended: bool,
 }
 
 impl From<wine::Version> for ComponentsListVersion {
@@ -58,12 +66,12 @@ impl From<wine::Version> for ComponentsListVersion {
         Self {
             recommended: match version.version_features() {
                 Some(features) => features.recommended,
-                None => true
+                None => true,
             },
 
             name: version.name,
             title: version.title,
-            uri: version.uri
+            uri: version.uri,
         }
     }
 }
@@ -74,12 +82,12 @@ impl From<dxvk::Version> for ComponentsListVersion {
         Self {
             recommended: match version.version_features() {
                 Some(features) => features.recommended,
-                None => true
+                None => true,
             },
 
             name: version.name,
             title: version.title,
-            uri: version.uri
+            uri: version.uri,
         }
     }
 }
