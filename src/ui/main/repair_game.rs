@@ -105,11 +105,28 @@ pub fn repair_game(sender: ComponentSender<App>, progress_bar_input: Sender<Prog
 
                     let total = broken.len() as f64;
 
-                    let player_patch = UnityPlayerPatch::from_folder(&config.patch.path, config.launcher.edition).unwrap()
-                        .is_applied(&game_path).unwrap();
+                    let player_patch = match UnityPlayerPatch::from_folder(
+                        &config.patch.path,
+                        config.launcher.edition,
+                    ) {
+                        Ok(player_patch) => player_patch.is_applied(&game_path).unwrap_or(false),
+                        Err(error) => {
+                            tracing::warn!(
+                                "Unable to determine Unity Player Patch status: {}",
+                                error
+                            );
+                            false
+                        }
+                    };
 
-                    let xlua_patch = XluaPatch::from_folder(&config.patch.path, config.launcher.edition).unwrap()
-                        .is_applied(&game_path).unwrap();
+                    let xlua_patch =
+                        match XluaPatch::from_folder(&config.patch.path, config.launcher.edition) {
+                            Ok(xlua_patch) => xlua_patch.is_applied(&game_path).unwrap_or(false),
+                            Err(error) => {
+                                tracing::warn!("Unable to determine XLua Patch status: {}", error);
+                                false
+                            }
+                        };
 
                     tracing::debug!("Patches status: player({player_patch}), xlua({xlua_patch})");
 
