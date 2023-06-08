@@ -52,10 +52,11 @@ patch-preparation-tooltip = Le patch est en développement
 patch-testing-tooltip = Patch de test disponible
 patch-not-applied-tooltip = Patch is not applied
 
-apply-main-patch = Apply main patch
+apply-main-patch = Appliquer le patch principal
 apply-main-patch-description =
-    Experimental. Disabling this allows you to run the game without applying the patch.
-    This may not work, or require manual files modifications. Use if you know what you're doing
+    Expériment. Désactiver cette option permet de lancer le jeu sans le patch.
+    Il n'est pas garanti que cette option marche, et des modifications manuelles seront potentiellement nécessaires.
+    À n'utiliser que si vous savez ce que vous faites
 
 apply-xlua-patch = Apply xlua patch
 
