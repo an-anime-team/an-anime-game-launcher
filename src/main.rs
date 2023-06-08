@@ -72,6 +72,7 @@ fn main() {
         std::fs::write(FIRST_RUN_FILE.as_path(), "").expect("Failed to create .first-run file");
 
         // Set initial launcher language based on system language
+        // CONFIG is initialized lazily so it will contain following changes as well
         let mut config = Config::get().expect("Failed to get config");
 
         config.launcher.language = i18n::format_lang(&i18n::get_default_lang());
