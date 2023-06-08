@@ -108,42 +108,22 @@ pub fn repair_game(sender: ComponentSender<App>, progress_bar_input: Sender<Prog
                     // Get main patch status
 
                     let player_patch = UnityPlayerPatch::from_folder(&config.patch.path, config.launcher.edition)
-                        .and_then(|patch| patch.is_applied(&game_path));
-
-                    let player_patch = match player_patch {
-                        Ok(patch) => patch,
-                        Err(err) => {
-                            // TODO: do we really need this toast message here? Perhaps it's not an error but a warning?
-                            sender.input(AppMsg::Toast {
-                                title: tr("patch-info-fetching-error"),
-                                description: Some(err.to_string())
-                            });
-
-                            tracing::error!("Failed to get player patch status: {err}. Used config value instead: {}", config.patch.apply_main);
+                        .and_then(|patch| patch.is_applied(&game_path))
+                        .unwrap_or_else(|err| {
+                            tracing::warn!("Failed to get player patch status: {err}. Used config value instead: {}", config.patch.apply_main);
 
                             config.patch.apply_main
-                        }
-                    };
+                        });
 
                     // Get xlua patch status
 
                     let xlua_patch = XluaPatch::from_folder(&config.patch.path, config.launcher.edition)
-                        .and_then(|patch| patch.is_applied(&game_path));
-
-                    let xlua_patch = match xlua_patch {
-                        Ok(patch) => patch,
-                        Err(err) => {
-                            // TODO: do we really need this toast message here? Perhaps it's not an error but a warning?
-                            sender.input(AppMsg::Toast {
-                                title: tr("patch-info-fetching-error"),
-                                description: Some(err.to_string())
-                            });
-
-                            tracing::error!("Failed to get xlua patch status: {err}. Used config value instead: {}", config.patch.apply_xlua);
+                        .and_then(|patch| patch.is_applied(&game_path))
+                        .unwrap_or_else(|err| {
+                            tracing::warn!("Failed to get xlua patch status: {err}. Used config value instead: {}", config.patch.apply_xlua);
 
                             config.patch.apply_xlua
-                        }
-                    };
+                        });
 
                     tracing::debug!("Patches status: player({player_patch}), xlua({xlua_patch})");
 
