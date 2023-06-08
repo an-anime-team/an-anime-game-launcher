@@ -15,7 +15,8 @@ use crate::*;
 #[derive(Debug)]
 struct GameSession {
     name: String,
-    description: Option<String>
+    description: Option<String>,
+    check_button: gtk::CheckButton
 }
 
 #[relm4::factory(async)]
@@ -35,6 +36,9 @@ impl AsyncFactoryComponent for GameSession {
                 Some(description) => description.as_str(),
                 None => ""
             },
+
+            // Looks weird but yes
+            add_prefix = &self.check_button.clone(),
 
             add_suffix = &gtk::Button {
                 set_icon_name: "view-refresh-symbolic",
@@ -60,6 +64,12 @@ impl AsyncFactoryComponent for GameSession {
                 connect_clicked[sender, index] => move |_| {
                     sender.output(GamePageMsg::RemoveSession(index.clone()));
                 }
+            },
+
+            set_activatable: true,
+
+            connect_activated[sender, index] => move |_| {
+                sender.output(GamePageMsg::SetCurrent(index.clone()));
             }
         }
     }
@@ -80,9 +90,7 @@ impl AsyncFactoryComponent for GameSession {
 pub struct GamePage {
     sessions: AsyncFactoryVecDeque<GameSession>,
 
-    sessions_names: Vec<String>,
-
-    sessions_combo: adw::ComboRow,
+    sessions_root_widget: gtk::CheckButton,
     session_name_entry: adw::EntryRow
 }
 
@@ -91,8 +99,7 @@ pub enum GamePageMsg {
     AddSession,
     UpdateSession(DynamicIndex),
     RemoveSession(DynamicIndex),
-    SetCurrent(u32),
-    UpdateCombo
+    SetCurrent(DynamicIndex)
 }
 
 #[relm4::component(async, pub)]
@@ -123,39 +130,25 @@ impl SimpleAsyncComponent for GamePage {
             adw::PreferencesPage {
                 set_title: &tr("game"),
                 set_icon_name: Some("applications-games-symbolic"),
-    
+
                 add = &adw::PreferencesGroup {
                     set_title: &tr("game-sessions"),
-    
-                    #[local_ref]
-                    sessions_combo -> adw::ComboRow {
-                        set_title: &tr("active-sessions"),
-                        set_subtitle: &tr("active-session-description"),
-    
-                        connect_selected_notify[sender] => move |row| {
-                            if is_ready() {
-                                sender.input(GamePageMsg::SetCurrent(row.selected()));
-                            }
-                        }
-                    }
-                },
-    
-                add = &adw::PreferencesGroup {
+
                     #[local_ref]
                     session_name_entry -> adw::EntryRow {
                         set_title: &tr("name"),
-    
+
                         add_suffix = &gtk::Button {
                             set_icon_name: "list-add-symbolic",
                             add_css_class: "flat",
-    
+
                             set_valign: gtk::Align::Center,
-        
+
                             connect_clicked => GamePageMsg::AddSession
                         }
                     }
                 },
-    
+
                 #[local_ref]
                 add = sessions -> adw::PreferencesGroup {},
             }
@@ -172,27 +165,33 @@ impl SimpleAsyncComponent for GamePage {
         let mut model = Self {
             sessions: AsyncFactoryVecDeque::new(adw::PreferencesGroup::new(), sender.input_sender()),
 
-            sessions_names: Vec::new(),
-
-            sessions_combo: adw::ComboRow::new(),
+            sessions_root_widget: gtk::CheckButton::new(),
             session_name_entry: adw::EntryRow::new()
         };
 
+        let current = Sessions::get_current().unwrap_or_default();
+
         for (name, _) in Sessions::list().unwrap_or_default() {
+            let check_button = gtk::CheckButton::new();
+
+            check_button.set_group(Some(&model.sessions_root_widget));
+
+            if Some(&name) == current.as_ref() {
+                check_button.set_active(true);
+            }
+
             model.sessions.guard().push_back(GameSession {
-                name: name.clone(),
-                description: None
+                name,
+                description: None,
+                check_button
             });
         }
 
         let sessions = model.sessions.widget();
 
-        let sessions_combo = &model.sessions_combo;
         let session_name_entry = &model.session_name_entry;
 
         let widgets = view_output!();
-
-        sender.input(GamePageMsg::UpdateCombo);
 
         AsyncComponentParts { model, widgets }
     }
@@ -210,10 +209,9 @@ impl SimpleAsyncComponent for GamePage {
                             Ok(()) => {
                                 self.sessions.guard().push_back(GameSession {
                                     name,
-                                    description: None
+                                    description: None,
+                                    check_button: gtk::CheckButton::new()
                                 });
-
-                                sender.input(GamePageMsg::UpdateCombo);
                             }
 
                             Err(err) => {
@@ -242,27 +240,23 @@ impl SimpleAsyncComponent for GamePage {
 
             GamePageMsg::RemoveSession(index) => {
                 if let Some(session) = self.sessions.guard().get(index.current_index()) {
-                    match Sessions::remove(&session.name) {
-                        Ok(()) => sender.input(GamePageMsg::UpdateCombo),
+                    if let Err(err) = Sessions::remove(&session.name) {
+                        sender.output(EnhancementsAppMsg::Toast {
+                            title: tr("game-session-remove-failed"),
+                            description: Some(err.to_string())
+                        }).unwrap();
 
-                        Err(err) => {
-                            sender.output(EnhancementsAppMsg::Toast {
-                                title: tr("game-session-remove-failed"),
-                                description: Some(err.to_string())
-                            }).unwrap();
-
-                            return;
-                        }
+                        return;
                     }
                 }
 
                 self.sessions.guard().remove(index.current_index());
             }
 
-            GamePageMsg::SetCurrent(id) => {
-                if let Some(name) = self.sessions_names.get(id as usize) {
+            GamePageMsg::SetCurrent(index) => {
+                if let Some(session) = self.sessions.guard().get(index.current_index()) {
                     if let Ok(config) = Config::get() {
-                        if let Err(err) = Sessions::set_current(name.to_owned()) {
+                        if let Err(err) = Sessions::set_current(session.name.clone()) {
                             sender.output(EnhancementsAppMsg::Toast {
                                 title: tr("game-session-set-current-failed"),
                                 description: Some(err.to_string())
@@ -272,31 +266,19 @@ impl SimpleAsyncComponent for GamePage {
                             return;
                         }
 
-                        if let Err(err) = Sessions::apply(name.to_owned(), config.get_wine_prefix_path()) {
+                        if let Err(err) = Sessions::apply(session.name.clone(), config.get_wine_prefix_path()) {
                             sender.output(EnhancementsAppMsg::Toast {
                                 title: tr("game-session-apply-failed"),
                                 description: Some(err.to_string())
                             }).unwrap();
+
+                            // Prevent session activation
+                            return;
                         }
+
+                        session.check_button.set_active(true);
                     }
                 }
-            }
-
-            GamePageMsg::UpdateCombo => {
-                let sessions = Sessions::get_sessions().unwrap_or_default();
-
-                self.sessions_names = sessions.sessions.into_keys().collect::<Vec<String>>();
-
-                let mut selected = 0;
-
-                for (i, name) in self.sessions_names.iter().enumerate() {
-                    if sessions.current.as_ref() == Some(name) {
-                        selected = i as u32;
-                    }
-                }
-
-                self.sessions_combo.set_model(Some(&gtk::StringList::new(&self.sessions_names.iter().map(|name: &String| name.as_str()).collect::<Vec<&str>>())));
-                self.sessions_combo.set_selected(selected);
             }
         }
     }
