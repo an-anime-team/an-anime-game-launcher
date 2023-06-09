@@ -22,7 +22,7 @@ pub fn download_diff(sender: ComponentSender<App>, progress_bar_input: Sender<Pr
             diff = diff.with_temp_folder(temp);
         }
 
-        let result = diff.install_to(&game_path, clone!(@strong sender => move |state| {
+        let result = diff.install_to(game_path, clone!(@strong sender => move |state| {
             match &state {
                 DiffUpdate::InstallerUpdate(InstallerUpdate::DownloadingError(err)) => {
                     tracing::error!("Downloading failed: {err}");
@@ -63,13 +63,6 @@ pub fn download_diff(sender: ComponentSender<App>, progress_bar_input: Sender<Pr
             // Don't try to download something after state updating
             // because we just failed to do it
             perform_on_download_needed = false;
-        }
-
-        // Temporary workaround for 3.7.0 game update
-        let telemetry_file = game_path.join(config.launcher.edition.data_folder()).join("Plugins/Telemetry.dll");
-
-        if telemetry_file.exists() {
-            std::fs::remove_file(telemetry_file).unwrap();
         }
 
         sender.input(AppMsg::SetDownloading(false));
