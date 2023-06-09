@@ -23,3 +23,4 @@ tr-tr = Türkçe
 it-it = Italiano
 id-id = Indonesia
 zh-cn = 简体中文
+ja-jp = 日本語
