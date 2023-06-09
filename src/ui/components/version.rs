@@ -31,6 +31,7 @@ pub struct ComponentVersion {
 
     pub download_uri: String,
     pub download_folder: PathBuf,
+    pub download_filename: Option<String>,
 
     pub show_recommended_only: bool,
     pub state: VersionState,
@@ -84,12 +85,13 @@ impl SimpleAsyncComponent for ComponentVersion {
         _sender: AsyncComponentSender<Self>,
     ) -> AsyncComponentParts<Self> {
         let mut model = ComponentVersion {
-            name: init.0.name,
+            name: init.0.name.clone(),
             title: init.0.title,
             recommended: init.0.recommended,
 
             download_uri: init.0.uri,
             download_folder: init.1,
+            download_filename: init.0.format.map(|format| format!("{}.{format}", init.0.name)),
 
             show_recommended_only: true,
             state: VersionState::NotDownloaded,
@@ -151,6 +153,10 @@ impl SimpleAsyncComponent for ComponentVersion {
                             let mut installer = Installer::new(&self.download_uri)
                                 .expect("Failed to create installer instance for this version")
                                 .with_temp_folder(config.launcher.temp.unwrap_or_else(std::env::temp_dir));
+
+                            if let Some(filename) = &self.download_filename {
+                                installer = installer.with_filename(filename.to_owned());
+                            }
 
                             self.state = VersionState::Downloading;
 
