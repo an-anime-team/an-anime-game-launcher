@@ -46,16 +46,29 @@ impl SimpleComponent for AboutDialog {
                 "Nikita Podvirnyy https://github.com/krypt0nn"
             ],
 
-            add_credit_section: (Some("Patch developer"), &[
-                "@Krock https://notabug.org/Krock/dawn"
+            add_credit_section: (Some("Patch credits"), &[
+                "@Krock https://notabug.org/Krock",
+                "@y0soro https://notabug.org/y0soro",
+                "@3Shain https://notabug.org/3Shain",
+                "@timbuntu https://www.playonlinux.com/de/profil-95714.html",
+                "@geearf2",
+                "@SeppNel https://www.playonlinux.com/en/profil-95643.html",
+                "@0x90 https://www.playonlinux.com/en/profil-96196.html",
+                "@Th1nkCh3ck https://notabug.org/Th1nkCh3ck",
+                "@humanik12",
+                "@Makksim https://notabug.org/Makksim",
+                "@Kowalski https://notabug.org/Kowalski",
+                "@WerWolv",
+                "@Various"
             ]),
 
             add_credit_section: (Some("An Anime Team"), &[
                 "Nikita Podvirnyy https://github.com/krypt0nn",
-                "@Marie https://github.com/Mar0xy",
-                "@lane https://github.com/laurinneff",
-                "@jiro-too https://github.com/jiro-too",
-                "@cybik https://github.com/cybik",
+                "Marie Piontek https://github.com/Mar0xy",
+                "Luna Neff  https://github.com/lunaneff",
+                "Renaud Lepage https://github.com/cybik",
+                "Soham Nandy https://github.com/natimerry",
+                "Amelia Yukii https://github.com/Insert5StarName",
                 "@mkrsym1 https://github.com/mkrsym1"
             ]),
 
@@ -65,13 +78,13 @@ impl SimpleComponent for AboutDialog {
 
             set_translator_credits: &[
                 "Русский, English — Nikita Podvirnyy https://github.com/krypt0nn",
-                "Deutsch — @Marie https://github.com/Mar0xy",
+                "Deutsch — Marie Piontek https://github.com/Mar0xy",
                 "Français — @zeGolem https://github.com/zeGolem",
                 "Español — Lautaro Garavano https://github.com/Rattlehead15",
                 "Türkçe — @Kaozix https://github.com/Kaozix1776",
                 "Türkçe — Kayra Nachfolger https://github.com/kayranachfolger",
-                "Italiano - @QuazarOmega https://github.com/quazar-omega",
-                "Indonesia - @yumekarisu https://github.com/yumekarisu",
+                "Italiano — @QuazarOmega https://github.com/quazar-omega",
+                "Indonesia — @yumekarisu https://github.com/yumekarisu",
                 "简体中文 — Caibin Chen https://github.com/tigersoldier"
             ].join("\n"),
 
