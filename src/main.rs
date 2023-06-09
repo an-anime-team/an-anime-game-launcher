@@ -4,7 +4,7 @@ use anime_launcher_sdk::config::ConfigExt;
 use anime_launcher_sdk::genshin::config::{Config, Schema};
 
 use anime_launcher_sdk::genshin::states::LauncherState;
-use anime_launcher_sdk::genshin::consts::launcher_dir;
+use anime_launcher_sdk::genshin::consts::*;
 
 use anime_launcher_sdk::anime_game_core::prelude::*;
 use anime_launcher_sdk::anime_game_core::genshin::prelude::*;
@@ -46,11 +46,14 @@ lazy_static::lazy_static! {
     /// Path to launcher folder. Standard is `$HOME/.local/share/anime-game-launcher`
     pub static ref LAUNCHER_FOLDER: PathBuf = launcher_dir().expect("Failed to get launcher folder");
 
+    /// Path to launcher's cache folder. Standard is `$HOME/.cache/anime-game-launcher`
+    pub static ref CACHE_FOLDER: PathBuf = cache_dir().expect("Failed to get launcher's cache folder");
+
     /// Path to `debug.log` file. Standard is `$HOME/.local/share/anime-game-launcher/debug.log`
     pub static ref DEBUG_FILE: PathBuf = LAUNCHER_FOLDER.join("debug.log");
 
-    /// Path to `background` file. Standard is `$HOME/.local/share/anime-game-launcher/background`
-    pub static ref BACKGROUND_FILE: PathBuf = LAUNCHER_FOLDER.join("background");
+    /// Path to `background` file. Standard is `$HOME/.cache/anime-game-launcher/background`
+    pub static ref BACKGROUND_FILE: PathBuf = CACHE_FOLDER.join("background");
 
     /// Path to `.keep-background` file. Used to mark launcher that it shouldn't update background picture
     /// 
