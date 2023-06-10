@@ -88,7 +88,8 @@ impl SimpleComponent for AboutDialog {
                 "Italiano — @QuazarOmega https://github.com/quazar-omega",
                 "Indonesia — @yumekarisu https://github.com/yumekarisu",
                 "简体中文 — Caibin Chen https://github.com/tigersoldier",
-                "日本語 — @zozonteq https://github.com/zozonteq"
+                "日本語 — @zozonteq https://github.com/zozonteq",
+                // Hungarian?
             ].join("\n"),
 
             set_debug_info: &[
@@ -108,6 +109,7 @@ impl SimpleComponent for AboutDialog {
                 "<ul>",
                     "<li>Added Discord RPC icon selection</li>",
                     "<li>Added Japanese</li>",
+                    "<li>Added Hungarian</li>",
                 "</ul>",
 
                 "<p>Fixed</p>",
