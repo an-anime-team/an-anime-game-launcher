@@ -53,9 +53,7 @@ patch-testing-tooltip = Test-Patch ist verfügbar
 patch-not-applied-tooltip = Patch ist nicht angewendet
 
 apply-main-patch = Hauptpatch Anwenden
-apply-main-patch-description =
-    Experimentell. Wenn Sie diese Option deaktivieren, können Sie das Spiel ausführen, ohne den Patch anzuwenden.
-    Dies könnte möglicherweise nicht funktionieren oder erfordert manuelle Änderungen an den Dateien. Verwenden Sie dies nur wenn Sie wissen was Sie tun.
+apply-main-patch-description = Experimentell. Wenn Sie diese Option deaktivieren, können Sie das Spiel ausführen, ohne den Patch anzuwenden. Dies könnte möglicherweise nicht funktionieren oder erfordert manuelle Änderungen an den Dateien. Verwenden Sie dies nur wenn Sie wissen was Sie tun.
 
 apply-xlua-patch = Zusätzlichen Patch anwenden
 

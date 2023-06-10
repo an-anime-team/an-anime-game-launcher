@@ -53,9 +53,7 @@ patch-testing-tooltip = Test yaması mevcut
 patch-not-applied-tooltip = Yama uygulanmamış
 
 apply-main-patch = Ana yamayı uygula
-apply-main-patch-description =
-    Deneysel. Bunu devre dışı bırakmak yamayı uygulamadan oyunu çalıştırmanızı sağlar.
-    Bu çalışmayabilir, ya da elle dosyaları değiştirmeyi gerektirebilir. Ne yaptığınızı biliyorsanız kullanın.
+apply-main-patch-description = Deneysel. Bunu devre dışı bırakmak yamayı uygulamadan oyunu çalıştırmanızı sağlar. Bu çalışmayabilir, ya da elle dosyaları değiştirmeyi gerektirebilir. Ne yaptığınızı biliyorsanız kullanın.
 
 apply-xlua-patch = Xlua yamasını uygula
 

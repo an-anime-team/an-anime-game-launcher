@@ -53,9 +53,7 @@ patch-testing-tooltip = Teszt patch elérhető
 patch-not-applied-tooltip = A patch nincs alkalmazva
 
 apply-main-patch = Fő patch alkalmazása
-apply-main-patch-description =
-    Kísérleti opció, a kikapcsolásával futtathatod a játékot patch nélkül.
-    Lehet hogy nem fog működni, vagy a fájlokat manuálisan kell szerkesztened, akkor kapcsold ki ha tudod mit csinálsz.
+apply-main-patch-description = Kísérleti opció, a kikapcsolásával futtathatod a játékot patch nélkül. Lehet hogy nem fog működni, vagy a fájlokat manuálisan kell szerkesztened, akkor kapcsold ki ha tudod mit csinálsz.
 
 apply-xlua-patch = Xlua patch alkalmazása
 

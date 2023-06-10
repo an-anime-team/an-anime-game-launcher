@@ -53,9 +53,7 @@ patch-testing-tooltip = Patch tes tersedia
 patch-not-applied-tooltip = Patch tidak diterapkan
 
 apply-main-patch = Terapkan patch utama
-apply-main-patch-description =
-    Eksperimental. Menonaktifkan opsi ini akan menginzinkan Anda menjalankan game tanpa menerapkan patch.
-    Hal ini mungkin tidak bekerja, atau membutuhkan modifikasi file secara manual. Gunakan jika Anda tahu apa yang Anda lakukan
+apply-main-patch-description = Eksperimental. Menonaktifkan opsi ini akan menginzinkan Anda menjalankan game tanpa menerapkan patch. Hal ini mungkin tidak bekerja, atau membutuhkan modifikasi file secara manual. Gunakan jika Anda tahu apa yang Anda lakukan
 
 apply-xlua-patch = Terapkan patch xlua 
 
