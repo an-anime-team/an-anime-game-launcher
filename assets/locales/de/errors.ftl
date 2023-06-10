@@ -53,3 +53,8 @@ game-session-update-failed = Spielsitzung konnte nicht aktualisiert werden
 game-session-remove-failed = Spielsitzung konnte nicht entfernt werden
 game-session-set-current-failed = Aktuelle Spielsitzung konnte nicht eingestellt werden
 game-session-apply-failed = Spielsitzung konnte nicht angewendet werden
+
+# Enhancements
+
+discord-rpc-icons-fetch-failed = Failed to fetch Discord RPC icons
+discord-rpc-icon-download-failed = Failed to download Discord RPC icon

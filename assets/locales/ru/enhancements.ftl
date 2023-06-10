@@ -33,6 +33,7 @@ gamescope-description = Программа от Valve, позволяющая з
 
 discord-rpc = Discord RPC
 discord-rpc-description = Discord RPC позволяет вам предоставлять Discord информацию об игре, в которую вы сейчас играете
+icon = Иконка
 title = Заголовок
 description = Описание
 

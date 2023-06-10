@@ -442,8 +442,7 @@ impl SimpleAsyncComponent for EnhancementsApp {
 
                 #[local_ref]
                 discord_rpc_icons -> adw::ExpanderRow {
-                    // TODO: add localization
-                    set_title: "Icon"
+                    set_title: &tr("icon")
                 },
 
                 adw::EntryRow {
@@ -685,7 +684,7 @@ impl SimpleAsyncComponent for EnhancementsApp {
 
                             /*if let Err(err) = result {
                                 sender.input(EnhancementsAppMsg::Toast {
-                                    title: String::from("Failed to download Discord RPC icon"), // TODO: add localizations
+                                    title: tr("discord-rpc-icon-download-failed"),
                                     description: Some(err.to_string())
                                 });
                             }*/
@@ -712,7 +711,7 @@ impl SimpleAsyncComponent for EnhancementsApp {
             }
 
             Err(err) => sender.input(EnhancementsAppMsg::Toast {
-                title: String::from("Failed to fetch Discord RPC icons"), // TODO: add localizations
+                title: tr("discord-rpc-icons-fetch-failed"),
                 description: Some(err.to_string())
             })
         }
