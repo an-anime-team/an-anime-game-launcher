@@ -53,3 +53,8 @@ game-session-update-failed = Не удалось обновить игровую
 game-session-remove-failed = Не удалось удалить игровую сессию
 game-session-set-current-failed = Не удалось выбрать игровую сессию
 game-session-apply-failed = Не удалось применить игровую сессию
+
+# Enhancements
+
+discord-rpc-icons-fetch-failed = Не удалось получить список иконок Discord RPC
+discord-rpc-icon-download-failed = Не удалось скачать иконку Discord RPC

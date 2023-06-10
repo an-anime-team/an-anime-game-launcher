@@ -53,3 +53,8 @@ game-session-update-failed = ゲームセッションの更新に失敗しまし
 game-session-remove-failed = ゲームセッションの消去に失敗しました。
 game-session-set-current-failed = 現在のゲームセッションに設定するのに失敗しました。
 game-session-apply-failed = ゲームセッションの適用に失敗しました。
+
+# Enhancements
+
+discord-rpc-icons-fetch-failed = Failed to fetch Discord RPC icons
+discord-rpc-icon-download-failed = Failed to download Discord RPC icon
