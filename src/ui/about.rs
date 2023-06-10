@@ -46,6 +46,9 @@ impl SimpleComponent for AboutDialog {
                 "Nikita Podvirnyy https://github.com/krypt0nn"
             ],
 
+            // Took patch credits from the CREDITS.md;
+            // If you want to change your name, link, or have any other questions - contact me
+
             add_credit_section: (Some("Patch credits"), &[
                 "@Krock https://notabug.org/Krock",
                 "@y0soro https://notabug.org/y0soro",
