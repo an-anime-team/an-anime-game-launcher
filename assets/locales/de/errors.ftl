@@ -56,5 +56,5 @@ game-session-apply-failed = Spielsitzung konnte nicht angewendet werden
 
 # Enhancements
 
-discord-rpc-icons-fetch-failed = Failed to fetch Discord RPC icons
-discord-rpc-icon-download-failed = Failed to download Discord RPC icon
+discord-rpc-icons-fetch-failed = Discord-RPC-Symbole konnten nicht abgerufen werden
+discord-rpc-icon-download-failed = Discord RPC-Symbol konnte nicht heruntergeladen werden
