@@ -32,7 +32,7 @@ gamescope-description = これは、Xwaylandセッションでインスタンス
 
 discord-rpc = Discord RPC
 discord-rpc-description = これを有効にすると、現在あなたがゲームをプレイしているということをディスコードのフレンドに知らせることができます。
-icon = Icon
+icon = Discord RPC用のアイコン
 title = タイトル
 description = 説明
 
