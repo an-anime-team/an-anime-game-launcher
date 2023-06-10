@@ -71,7 +71,6 @@ impl SimpleComponent for AboutDialog {
                 "Luna Neff  https://github.com/lunaneff",
                 "Renaud Lepage https://github.com/cybik",
                 "Soham Nandy https://github.com/natimerry",
-                "Amelia Yukii https://github.com/Insert5StarName",
                 "@mkrsym1 https://github.com/mkrsym1"
             ]),
 
