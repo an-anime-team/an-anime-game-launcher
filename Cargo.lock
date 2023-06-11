@@ -48,8 +48,8 @@ dependencies = [
 
 [[package]]
 name = "anime-game-core"
-version = "1.11.7"
-source = "git+https://github.com/an-anime-team/anime-game-core?tag=1.11.7#1810212e70497359f4ae881d307ab9e5012eff97"
+version = "1.12.1"
+source = "git+https://github.com/an-anime-team/anime-game-core?tag=1.12.1#af3b58e1657a19d0c8069956f3c2ac610704fc46"
 dependencies = [
  "anyhow",
  "bzip2",
@@ -96,8 +96,8 @@ dependencies = [
 
 [[package]]
 name = "anime-launcher-sdk"
-version = "1.6.5"
-source = "git+https://github.com/an-anime-team/anime-launcher-sdk?tag=1.6.5#4cc34287242d6145c0118085610090160776cfc9"
+version = "1.7.2"
+source = "git+https://github.com/an-anime-team/anime-launcher-sdk?tag=1.7.2#14882b44e6f70cff763c5f3750e079fccd73670b"
 dependencies = [
  "anime-game-core",
  "anyhow",
@@ -1579,9 +1579,9 @@ checksum = "e2abad23fbc42b3700f2f279844dc832adb2b2eb069b2df918f455c4e18cc646"
 
 [[package]]
 name = "libadwaita"
-version = "0.4.3"
+version = "0.4.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0244f4b13d8c3a8a0f0b86bbc234e2fbba7cfe70b7d14f822e363e5599bb7056"
+checksum = "1ab9c0843f9f23ff25634df2743690c3a1faffe0a190e60c490878517eb81abf"
 dependencies = [
  "bitflags",
  "gdk-pixbuf",
