@@ -56,5 +56,5 @@ game-session-apply-failed = Gagal menerapkan sesi game
 
 # Enhancements
 
-discord-rpc-icons-fetch-failed = Failed to fetch Discord RPC icons
-discord-rpc-icon-download-failed = Failed to download Discord RPC icon
+discord-rpc-icons-fetch-failed = Gagal mendapatkan icon untuk Discord RPC
+discord-rpc-icon-download-failed = Gagal mengunduh icon untuk Discord RPC

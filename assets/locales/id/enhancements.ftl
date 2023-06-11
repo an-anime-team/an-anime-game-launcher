@@ -33,7 +33,7 @@ gamescope-description = Gamescope adalah alat dari Valve yang memungkinkan game 
 
 discord-rpc = Discord RPC
 discord-rpc-description = Discord RPC memungkinkan Anda untuk memberitahu discord informasi bahwa Anda sedang bermain game agar teman-teman Anda tahu
-icon = Icon
+icon = Icon untuk Discord RPC
 title = Judul
 description = Deskripsi
 
