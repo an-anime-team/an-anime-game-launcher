@@ -53,3 +53,8 @@ game-session-update-failed = Oyun oturumu güncellenemedi
 game-session-remove-failed = Oyun oturumu kaldırılamadı
 game-session-set-current-failed = Oyun oturumu seçilemedi
 game-session-apply-failed = Oyun oturumu uygulanamadı
+
+# Enhancements
+
+discord-rpc-icons-fetch-failed = Discord RPC ikonları alınamadı
+discord-rpc-icon-download-failed = Discord RPC ikonları indirilemedi

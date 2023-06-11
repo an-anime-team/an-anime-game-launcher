@@ -727,161 +727,168 @@ impl SimpleComponent for App {
         std::thread::spawn(move || {
             tracing::info!("Initializing heavy tasks");
 
+            let mut tasks = Vec::new();
+
             // Download background picture if needed
 
             if download_picture {
-                sender.input(AppMsg::SetLoadingStatus(Some(Some(tr("downloading-background-picture")))));
+                tasks.push(std::thread::spawn(clone!(@strong sender => move || {
+                    if let Err(err) = crate::background::download_background() {
+                        tracing::error!("Failed to download background picture: {err}");
 
-                if let Err(err) = crate::background::download_background() {
-                    tracing::error!("Failed to download background picture: {err}");
-
-                    sender.input(AppMsg::Toast {
-                        title: tr("background-downloading-failed"),
-                        description: Some(err.to_string())
-                    });
-                }
+                        sender.input(AppMsg::Toast {
+                            title: tr("background-downloading-failed"),
+                            description: Some(err.to_string())
+                        });
+                    }
+                })));
             }
 
             // Update components index
 
-            sender.input(AppMsg::SetLoadingStatus(Some(Some(tr("updating-components-index")))));
+            tasks.push(std::thread::spawn(clone!(@strong sender => move || {
+                let components = ComponentsLoader::new(&CONFIG.components.path);
 
-            let components = ComponentsLoader::new(&CONFIG.components.path);
+                match components.is_sync(&CONFIG.components.servers) {
+                    Ok(Some(_)) => (),
 
-            match components.is_sync(&CONFIG.components.servers) {
-                Ok(Some(_)) => (),
+                    Ok(None) => {
+                        for host in &CONFIG.components.servers {
+                            match components.sync(host) {
+                                Ok(changes) => {
+                                    sender.input(AppMsg::Toast {
+                                        title: tr("components-index-updated"),
+                                        description: if changes.is_empty() {
+                                            None
+                                        } else {
+                                            Some(changes.into_iter()
+                                                .map(|line| format!("- {line}"))
+                                                .collect::<Vec<_>>()
+                                                .join("\n"))
+                                        }
+                                    });
 
-                Ok(None) => {
-                    for host in &CONFIG.components.servers {
-                        match components.sync(host) {
-                            Ok(changes) => {
-                                sender.input(AppMsg::Toast {
-                                    title: tr("components-index-updated"),
-                                    description: if changes.is_empty() {
-                                        None
-                                    } else {
-                                        Some(changes.into_iter()
-                                            .map(|line| format!("- {line}"))
-                                            .collect::<Vec<_>>()
-                                            .join("\n"))
-                                    }
-                                });
+                                    break;
+                                }
 
-                                break;
-                            }
+                                Err(err) => {
+                                    tracing::error!("Failed to sync components index");
 
-                            Err(err) => {
-                                tracing::error!("Failed to sync components index");
-
-                                sender.input(AppMsg::Toast {
-                                    title: tr("components-index-sync-failed"),
-                                    description: Some(err.to_string())
-                                });
+                                    sender.input(AppMsg::Toast {
+                                        title: tr("components-index-sync-failed"),
+                                        description: Some(err.to_string())
+                                    });
+                                }
                             }
                         }
                     }
-                }
 
-                Err(err) => {
-                    tracing::error!("Failed to verify that components index synced");
+                    Err(err) => {
+                        tracing::error!("Failed to verify that components index synced");
 
-                    sender.input(AppMsg::Toast {
-                        title: tr("components-index-verify-failed"),
-                        description: Some(err.to_string())
-                    });
+                        sender.input(AppMsg::Toast {
+                            title: tr("components-index-verify-failed"),
+                            description: Some(err.to_string())
+                        });
+                    }
                 }
-            }
+            })));
 
             // Update initial patch status
 
-            sender.input(AppMsg::SetLoadingStatus(Some(Some(tr("loading-patch-status")))));
+            tasks.push(std::thread::spawn(clone!(@strong sender => move || {
+                // Sync local patch repo
+                let patch = Patch::new(&CONFIG.patch.path, CONFIG.launcher.edition);
 
-            // Sync local patch repo
-            let patch = Patch::new(&CONFIG.patch.path, CONFIG.launcher.edition);
+                match patch.is_sync(&CONFIG.patch.servers) {
+                    Ok(Some(_)) => (),
 
-            match patch.is_sync(&CONFIG.patch.servers) {
-                Ok(Some(_)) => (),
+                    Ok(None) => {
+                        for server in &CONFIG.patch.servers {
+                            match patch.sync(server) {
+                                Ok(_) => break,
 
-                Ok(None) => {
-                    for server in &CONFIG.patch.servers {
-                        match patch.sync(server) {
-                            Ok(_) => break,
+                                Err(err) => {
+                                    tracing::error!("Failed to sync patch folder with remote: {server}: {err}");
 
-                            Err(err) => {
-                                tracing::error!("Failed to sync patch folder with remote: {server}: {err}");
-
-                                sender.input(AppMsg::Toast {
-                                    title: tr("patch-sync-failed"),
-                                    description: Some(err.to_string())
-                                });
+                                    sender.input(AppMsg::Toast {
+                                        title: tr("patch-sync-failed"),
+                                        description: Some(err.to_string())
+                                    });
+                                }
                             }
                         }
                     }
+
+                    Err(err) => {
+                        tracing::error!("Failed to compare local patch folder with remote: {err}");
+
+                        sender.input(AppMsg::Toast {
+                            title: tr("patch-state-check-failed"),
+                            description: Some(err.to_string())
+                        });
+                    }
                 }
 
-                Err(err) => {
-                    tracing::error!("Failed to compare local patch folder with remote: {err}");
+                // Get main UnityPlayer patch status
+                sender.input(AppMsg::SetUnityPlayerPatch(match patch.unity_player_patch() {
+                    Ok(patch) => Some(patch),
 
-                    sender.input(AppMsg::Toast {
-                        title: tr("patch-state-check-failed"),
-                        description: Some(err.to_string())
-                    });
-                }
-            }
+                    Err(err) => {
+                        tracing::error!("Failed to fetch unity player patch info: {err}");
 
-            // Get main UnityPlayer patch status
-            sender.input(AppMsg::SetUnityPlayerPatch(match patch.unity_player_patch() {
-                Ok(patch) => Some(patch),
+                        sender.input(AppMsg::Toast {
+                            title: tr("patch-info-fetching-error"),
+                            description: Some(err.to_string())
+                        });
 
-                Err(err) => {
-                    tracing::error!("Failed to fetch unity player patch info: {err}");
+                        None
+                    }
+                }));
 
-                    sender.input(AppMsg::Toast {
-                        title: tr("patch-info-fetching-error"),
-                        description: Some(err.to_string())
-                    });
+                // Get additional xlua patch status
+                sender.input(AppMsg::SetXluaPatch(match patch.xlua_patch() {
+                    Ok(patch) => Some(patch),
 
-                    None
-                }
-            }));
+                    Err(err) => {
+                        tracing::error!("Failed to fetch xlua patch info: {err}");
 
-            // Get additional xlua patch status
-            sender.input(AppMsg::SetXluaPatch(match patch.xlua_patch() {
-                Ok(patch) => Some(patch),
+                        sender.input(AppMsg::Toast {
+                            title: tr("patch-info-fetching-error"),
+                            description: Some(err.to_string())
+                        });
 
-                Err(err) => {
-                    tracing::error!("Failed to fetch xlua patch info: {err}");
+                        None
+                    }
+                }));
 
-                    sender.input(AppMsg::Toast {
-                        title: tr("patch-info-fetching-error"),
-                        description: Some(err.to_string())
-                    });
-
-                    None
-                }
-            }));
-
-            tracing::info!("Updated patch status");
+                tracing::info!("Updated patch status");
+            })));
 
             // Update initial game version status
 
-            sender.input(AppMsg::SetLoadingStatus(Some(Some(tr("loading-game-version")))));
+            tasks.push(std::thread::spawn(clone!(@strong sender => move || {
+                sender.input(AppMsg::SetGameDiff(match GAME.try_get_diff() {
+                    Ok(diff) => Some(diff),
+                    Err(err) => {
+                        tracing::error!("Failed to find game diff: {err}");
 
-            sender.input(AppMsg::SetGameDiff(match GAME.try_get_diff() {
-                Ok(diff) => Some(diff),
-                Err(err) => {
-                    tracing::error!("Failed to find game diff: {err}");
+                        sender.input(AppMsg::Toast {
+                            title: tr("game-diff-finding-error"),
+                            description: Some(err.to_string())
+                        });
 
-                    sender.input(AppMsg::Toast {
-                        title: tr("game-diff-finding-error"),
-                        description: Some(err.to_string())
-                    });
+                        None
+                    }
+                }));
 
-                    None
-                }
-            }));
+                tracing::info!("Updated game version status");
+            })));
 
-            tracing::info!("Updated game version status");
+            // Await for tasks to finish execution
+            for task in tasks {
+                task.join().expect("Failed to join task");
+            }
 
             // Update launcher state
             sender.input(AppMsg::UpdateLauncherState {

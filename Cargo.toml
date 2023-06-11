@@ -17,15 +17,15 @@ glib-build-tools = "0.17"
 
 [dependencies.anime-launcher-sdk]
 git = "https://github.com/an-anime-team/anime-launcher-sdk"
-tag = "1.4.5"
-features = ["all", "genshin"]
+tag = "1.7.2"
+features = ["all", "genshin", "genshin-patch"]
 
 # path = "../anime-launcher-sdk" # ! for dev purposes only
 
 [dependencies]
-relm4 = { version = "0.6.0-beta.1", features = ["macros", "libadwaita"] }
+relm4 = { version = "0.6.0", features = ["macros", "libadwaita"] }
 gtk = { package = "gtk4", version = "0.6", features = ["v4_8"] }
-adw = { package = "libadwaita", version = "0.3", features = ["v1_2"] }
+adw = { package = "libadwaita", version = "0.4", features = ["v1_2"] }
 
 rfd = { version = "0.11", features = ["xdg-portal"], default-features = false }
 open = "4.0"
@@ -34,7 +34,7 @@ whatadistro = "0.1.0"
 serde_json = "1.0"
 anyhow = "1.0"
 lazy_static = "1.4.0"
-cached = { version = "0.43", features = ["proc_macro"] }
+cached = { version = "0.44", features = ["proc_macro"] }
 md-5 = { version = "0.10", features = ["asm"] }
 
 tracing = "0.1"

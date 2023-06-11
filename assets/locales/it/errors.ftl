@@ -53,3 +53,8 @@ game-session-update-failed = Aggiornamento della sessione di gioco non riuscito
 game-session-remove-failed = Rimozione della sessione di gioco non riuscita
 game-session-set-current-failed = Impostazione della sessione di gioco attuale non riuscita
 game-session-apply-failed = Applicazione della sessione di gioco non riuscita
+
+# Enhancements
+
+discord-rpc-icons-fetch-failed = Acquisizione della lista delle icone RPC di Discord non riuscita
+discord-rpc-icon-download-failed = Scaricamento dell'icona RPC di Discord non riuscito

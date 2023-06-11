@@ -3,6 +3,8 @@ use relm4::component::*;
 
 use adw::prelude::*;
 
+use super::ComponentGroupMsg;
+
 #[derive(Debug, Clone)]
 pub struct ComponentsListInit<T> {
     pub pattern: super::ComponentsListPattern,
@@ -18,7 +20,7 @@ pub struct ComponentsList<T> {
 }
 
 #[derive(Debug)]
-pub enum AppMsg {
+pub enum ComponentsListMsg {
     ShowRecommendedOnly(bool),
     CallOnDownloaded,
     CallOnDeleted
@@ -27,7 +29,7 @@ pub enum AppMsg {
 #[relm4::component(async, pub)]
 impl<T: std::fmt::Debug + Clone + 'static> SimpleAsyncComponent for ComponentsList<T> {
     type Init = ComponentsListInit<T>;
-    type Input = AppMsg;
+    type Input = ComponentsListMsg;
     type Output = T;
 
     view! {
@@ -66,22 +68,22 @@ impl<T: std::fmt::Debug + Clone + 'static> SimpleAsyncComponent for ComponentsLi
 
     async fn update(&mut self, msg: Self::Input, sender: AsyncComponentSender<Self>) {
         match msg {
-            AppMsg::ShowRecommendedOnly(state) => {
+            ComponentsListMsg::ShowRecommendedOnly(state) => {
                 self.show_recommended_only = state;
 
                 // todo
                 for group in &self.groups {
-                    group.sender().send(super::group::AppMsg::ShowRecommendedOnly(state)).unwrap();
+                    group.sender().send(ComponentGroupMsg::ShowRecommendedOnly(state)).unwrap();
                 }
             }
 
             #[allow(unused_must_use)]
-            AppMsg::CallOnDownloaded => if let Some(on_downloaded) = &self.init.on_downloaded {
+            ComponentsListMsg::CallOnDownloaded => if let Some(on_downloaded) = &self.init.on_downloaded {
                 sender.output(on_downloaded.to_owned());
             }
 
             #[allow(unused_must_use)]
-            AppMsg::CallOnDeleted => if let Some(on_deleted) = &self.init.on_deleted {
+            ComponentsListMsg::CallOnDeleted => if let Some(on_deleted) = &self.init.on_deleted {
                 sender.output(on_deleted.to_owned());
             }
         }

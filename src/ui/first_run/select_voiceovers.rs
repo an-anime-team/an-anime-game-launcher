@@ -7,6 +7,7 @@ use anime_launcher_sdk::config::ConfigExt;
 use anime_launcher_sdk::genshin::config::Config;
 
 use crate::i18n::*;
+
 use super::main::*;
 
 pub struct SelectVoiceoversApp {

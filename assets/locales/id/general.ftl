@@ -52,10 +52,8 @@ patch-preparation-tooltip = Patch masih dalam pengembangan
 patch-testing-tooltip = Patch tes tersedia
 patch-not-applied-tooltip = Patch tidak diterapkan
 
-apply-main-patch = Apply main patch
-apply-main-patch-description =
-    Experimental. Disabling this allows you to run the game without applying the patch.
-    This may not work, or require manual files modifications. Use if you know what you're doing
+apply-main-patch = Terapkan patch utama
+apply-main-patch-description = Eksperimental. Menonaktifkan opsi ini akan menginzinkan Anda menjalankan game tanpa menerapkan patch. Hal ini mungkin tidak bekerja, atau membutuhkan modifikasi file secara manual. Gunakan jika Anda tahu apa yang Anda lakukan
 
 apply-xlua-patch = Terapkan patch xlua 
 

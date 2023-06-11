@@ -11,6 +11,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Added Discord RPC icon selection
+- Added Japanese
+- Added Hungarian
+
+### Fixed
+
+- Fixed progress bar style after running game repairer
+- Fixed repair button functionality (#186)
+- Fixed default launcher language selection at the first start
+- Fixed some installer updates reporting (including "checking free space")
+
+### Changed
+
+- Reworked game sessions selection
+- Updated Indonesian
+- Updated French
+- Made initial tasks async which has decreased startup time
+- Updated fps unlocker to 2.1.1
+
+### Removed
+
+- Removed 3.7.0 workaround
+- Removed patch mirror migration
+
+## [3.7.0] - 24.05.2023
+
+### Added
+
 - Added Italian
 - Added Indonesian
 - Added dynamic main button icon switching

@@ -20,6 +20,8 @@ pub const SUPPORTED_LANGUAGES: &[LanguageIdentifier] = &[
     langid!("it-it"),
     langid!("id-id"),
     langid!("zh-cn"),
+    langid!("ja-jp"),
+    langid!("hu-hu")
 ];
 
 static mut LANG: LanguageIdentifier = langid!("en-us");
@@ -51,12 +53,19 @@ pub fn get_lang() -> LanguageIdentifier {
 /// - `LC_MESSAGES`
 /// - `LANG`
 pub fn get_default_lang() -> LanguageIdentifier {
-    let lang = std::env::var("LC_ALL")
+    let current = std::env::var("LC_ALL")
         .unwrap_or_else(|_| std::env::var("LC_MESSAGES")
         .unwrap_or_else(|_| std::env::var("LANG")
-        .unwrap_or_else(|_| String::from("en_US.UTF-8"))));
+        .unwrap_or_else(|_| String::from("en_us"))))
+        .to_ascii_lowercase();
 
-    lang.parse().unwrap_or_else(|_| langid!("en-us"))
+    for lang in SUPPORTED_LANGUAGES {
+        if current.starts_with(lang.language.as_str()) {
+            return lang.clone();
+        }
+    }
+
+    get_lang()
 }
 
 pub fn format_lang(lang: &LanguageIdentifier) -> String {

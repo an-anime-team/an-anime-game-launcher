@@ -1,8 +1,9 @@
-use relm4::prelude::*;
-
 use std::path::PathBuf;
 
+use relm4::prelude::*;
+
 use crate::*;
+
 use super::{App, AppMsg};
 
 pub fn migrate_folder(sender: ComponentSender<App>, from: PathBuf, to: PathBuf, cleanup_folder: Option<PathBuf>) {

@@ -4,6 +4,7 @@ use relm4::component::*;
 use gtk::prelude::*;
 use adw::prelude::*;
 
+use anime_launcher_sdk::anime_game_core::prelude::*;
 use anime_launcher_sdk::anime_game_core::genshin::prelude::*;
 
 use anime_launcher_sdk::config::ConfigExt;
