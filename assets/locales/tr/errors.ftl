@@ -56,5 +56,5 @@ game-session-apply-failed = Oyun oturumu uygulanamadı
 
 # Enhancements
 
-discord-rpc-icons-fetch-failed = Failed to fetch Discord RPC icons
-discord-rpc-icon-download-failed = Failed to download Discord RPC icon
+discord-rpc-icons-fetch-failed = Discord RPC ikonları alınamadı
+discord-rpc-icon-download-failed = Discord RPC ikonları indirilemedi
