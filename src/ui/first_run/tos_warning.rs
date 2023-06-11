@@ -6,6 +6,7 @@ use adw::prelude::*;
 use anime_launcher_sdk::is_available;
 
 use crate::i18n::*;
+
 use super::main::FirstRunAppMsg;
 
 use super::main::MAIN_WINDOW;

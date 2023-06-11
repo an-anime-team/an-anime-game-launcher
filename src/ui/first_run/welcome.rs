@@ -4,6 +4,7 @@ use relm4::component::*;
 use adw::prelude::*;
 
 use crate::i18n::*;
+
 use super::main::FirstRunAppMsg;
 
 pub struct WelcomeApp;

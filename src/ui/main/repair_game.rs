@@ -1,3 +1,5 @@
+use std::path::Path;
+
 use relm4::{
     prelude::*,
     Sender
@@ -5,11 +7,10 @@ use relm4::{
 
 use gtk::glib::clone;
 
-use std::path::Path;
-
 use crate::*;
 use crate::i18n::*;
 use crate::ui::components::*;
+
 use super::{App, AppMsg};
 
 #[allow(unused_must_use)]

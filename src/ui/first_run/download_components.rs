@@ -15,6 +15,7 @@ use anime_launcher_sdk::config::ConfigExt;
 use anime_launcher_sdk::genshin::config::Config;
 
 use super::main::FirstRunAppMsg;
+
 use crate::ui::components::*;
 use crate::i18n::*;
 use crate::*;

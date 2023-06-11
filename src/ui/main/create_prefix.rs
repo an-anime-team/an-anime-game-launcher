@@ -6,6 +6,7 @@ use anime_launcher_sdk::config::ConfigExt;
 use anime_launcher_sdk::genshin::config::Config;
 
 use crate::i18n::*;
+
 use super::{App, AppMsg};
 
 pub fn create_prefix(sender: ComponentSender<App>) {
