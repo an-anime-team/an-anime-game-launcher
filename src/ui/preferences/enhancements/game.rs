@@ -207,10 +207,14 @@ impl SimpleAsyncComponent for GamePage {
 
                         match Sessions::update(name.clone(), config.get_wine_prefix_path()) {
                             Ok(()) => {
+                                let check_button = gtk::CheckButton::new();
+
+                                check_button.set_group(Some(&self.sessions_root_widget));
+
                                 self.sessions.guard().push_back(GameSession {
                                     name,
                                     description: None,
-                                    check_button: gtk::CheckButton::new()
+                                    check_button
                                 });
                             }
 
@@ -248,6 +252,8 @@ impl SimpleAsyncComponent for GamePage {
 
                         return;
                     }
+
+                    // TODO: select another available session?
                 }
 
                 self.sessions.guard().remove(index.current_index());
