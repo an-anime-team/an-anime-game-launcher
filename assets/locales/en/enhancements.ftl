@@ -33,6 +33,7 @@ gamescope-description = Gamescope is a tool from Valve that allows for games to 
 
 discord-rpc = Discord RPC
 discord-rpc-description = Discord RPC allows you to provide Discord the info that you are currently playing the game to let your friends know
+icon = Icon
 title = Title
 description = Description
 

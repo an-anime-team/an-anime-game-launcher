@@ -1,6 +1,7 @@
 use relm4::prelude::*;
 
 use crate::i18n::*;
+
 use super::{App, AppMsg};
 
 pub fn launch(sender: ComponentSender<App>) {

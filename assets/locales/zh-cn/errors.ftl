@@ -53,3 +53,8 @@ game-session-update-failed = Failed to update game session
 game-session-remove-failed = Failed to remove game session
 game-session-set-current-failed = Failed to set current game session
 game-session-apply-failed = Failed to apply game session
+
+# Enhancements
+
+discord-rpc-icons-fetch-failed = Failed to fetch Discord RPC icons
+discord-rpc-icon-download-failed = Failed to download Discord RPC icon

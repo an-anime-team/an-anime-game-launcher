@@ -46,16 +46,31 @@ impl SimpleComponent for AboutDialog {
                 "Nikita Podvirnyy https://github.com/krypt0nn"
             ],
 
-            add_credit_section: (Some("Patch developer"), &[
-                "@Krock https://notabug.org/Krock/dawn"
+            // Took patch credits from the CREDITS.md;
+            // If you want to change your name, link, or have any other questions - contact me
+
+            add_credit_section: (Some("Patch credits"), &[
+                "@Krock https://notabug.org/Krock",
+                "@y0soro https://notabug.org/y0soro",
+                "@3Shain https://notabug.org/3Shain",
+                "@timbuntu https://www.playonlinux.com/de/profil-95714.html",
+                "@geearf2",
+                "@SeppNel https://www.playonlinux.com/en/profil-95643.html",
+                "@0x90 https://www.playonlinux.com/en/profil-96196.html",
+                "@Th1nkCh3ck https://notabug.org/Th1nkCh3ck",
+                "@humanik12",
+                "@Makksim https://notabug.org/Makksim",
+                "@Kowalski https://notabug.org/Kowalski",
+                "@WerWolv",
+                "@Various"
             ]),
 
             add_credit_section: (Some("An Anime Team"), &[
                 "Nikita Podvirnyy https://github.com/krypt0nn",
-                "@Marie https://github.com/Mar0xy",
-                "@lane https://github.com/laurinneff",
-                "@jiro-too https://github.com/jiro-too",
-                "@cybik https://github.com/cybik",
+                "Marie Piontek https://github.com/Mar0xy",
+                "Luna Neff  https://github.com/lunaneff",
+                "Renaud Lepage https://github.com/cybik",
+                "Soham Nandy https://github.com/natimerry",
                 "@mkrsym1 https://github.com/mkrsym1"
             ]),
 
@@ -65,14 +80,16 @@ impl SimpleComponent for AboutDialog {
 
             set_translator_credits: &[
                 "Русский, English — Nikita Podvirnyy https://github.com/krypt0nn",
-                "Deutsch — @Marie https://github.com/Mar0xy",
-                "Español — Lautaro Garavano https://github.com/Rattlehead15",
+                "Deutsch — Marie Piontek https://github.com/Mar0xy",
                 "Français — @zeGolem https://github.com/zeGolem",
+                "Español — Lautaro Garavano https://github.com/Rattlehead15",
                 "Türkçe — @Kaozix https://github.com/Kaozix1776",
                 "Türkçe — Kayra Nachfolger https://github.com/kayranachfolger",
-                "Italiano - @QuazarOmega https://github.com/quazar-omega",
-                "Indonesia - @yumekarisu https://github.com/yumekarisu",
-                "简体中文 — Caibin Chen https://github.com/tigersoldier"
+                "Italiano — @QuazarOmega https://github.com/quazar-omega",
+                "Indonesia — @yumekarisu https://github.com/yumekarisu",
+                "简体中文 — Caibin Chen https://github.com/tigersoldier",
+                "日本語 — @zozonteq https://github.com/zozonteq",
+                // Hungarian?
             ].join("\n"),
 
             set_debug_info: &[
@@ -90,45 +107,35 @@ impl SimpleComponent for AboutDialog {
                 "<p>Added</p>",
 
                 "<ul>",
-                    "<li>Added Italian</li>",
-                    "<li>Added Indonesian</li>",
-                    "<li>Added dynamic main button icon switching</li>",
-                    "<li>Set button label as \"Resume\" when the diff is part downloaded</li>",
-                    "<li>Added options to use wine / gstreamer shared libraries from selected wine build. These options will configure `LD_LIBRARY_PATH` and `GST_PLUGIN_PATH` environment variables</li>",
-                    "<li>Added setting of `LC_ALL` in wine lang setting</li>",
-                    "<li>Added `LAUNCHER_REQUESTS_TIMEOUT` environment variable</li>",
-                    "<li>Added option to disable main patch applying</li>",
+                    "<li>Added Discord RPC icon selection</li>",
+                    "<li>Added Japanese</li>",
+                    "<li>Added Hungarian</li>",
                 "</ul>",
 
                 "<p>Fixed</p>",
 
                 "<ul>",
-                    "<li>Fixed session applying on each launcher start</li>",
-                    "<li>Fixed predownload button ui</li>",
-                    "<li>Fixed proton builds integration with sandbox</li>",
-                    "<li>Fixed compatibility between sessions manager and sandbox</li>",
-                    "<li>Fixed sandboxing of inexisting folders</li>",
+                    "<li>Fixed progress bar style after running game repairer</li>",
+                    "<li>Fixed repair button functionality</li>",
+                    "<li>Fixed default launcher language selection at the first start</li>",
+                    "<li>Fixed some installer updates reporting (including \"checking free space\")</li>",
                 "</ul>",
 
                 "<p>Changed</p>",
 
                 "<ul>",
-                    "<li>Apply selected session before launching the game. This will properly save your game session when you switch between wine prefixes</li>",
-                    "<li>Redesigned main button</li>",
-                    "<li>Used `whatadistro` to identify recommended package manager in the first run window</li>",
-                    "<li>Moved a lot of settings to separate page</li>",
-                    "<li>Set fsr quality mode in enhancements settings instead of strength</li>",
-                    "<li>Updated fps unlocker data</li>",
-                    "<li>Made temporary workaround to the game API changes</li>",
-                    "<li>Increased default requests timeout to 8 seconds</li>",
-                    "<li>Updated minreq to support `http_proxy`-like variables</li>",
-                    "<li>Disabled xlua patch applying by default</li>",
+                    "<li>Reworked game sessions selection</li>",
+                    "<li>Updated Indonesian</li>",
+                    "<li>Updated French</li>",
+                    "<li>Made initial tasks async which has decreased startup time</li>",
+                    "<li>Updated fps unlocker to 2.1.1</li>",
                 "</ul>",
 
                 "<p>Removed</p>",
 
                 "<ul>",
-                    "<li>Removed Futex2 wine sync option</li>",
+                    "<li>Removed 3.7.0 workaround</li>",
+                    "<li>Removed patch mirror migration</li>",
                 "</ul>",
             ].join("\n"),
 

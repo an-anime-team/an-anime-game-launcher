@@ -1,3 +1,5 @@
+use std::path::PathBuf;
+
 pub mod list;
 pub mod group;
 pub mod version;
@@ -9,8 +11,6 @@ pub use version::*;
 pub use progress_bar::*;
 
 use anime_launcher_sdk::components::*;
-
-use std::path::PathBuf;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ComponentsListPattern {
@@ -49,6 +49,7 @@ pub struct ComponentsListVersion {
     pub name: String,
     pub title: String,
     pub uri: String,
+    pub format: Option<String>,
     pub recommended: bool
 }
 
@@ -63,7 +64,8 @@ impl From<wine::Version> for ComponentsListVersion {
 
             name: version.name,
             title: version.title,
-            uri: version.uri
+            uri: version.uri,
+            format: version.format
         }
     }
 }
@@ -79,7 +81,8 @@ impl From<dxvk::Version> for ComponentsListVersion {
 
             name: version.name,
             title: version.title,
-            uri: version.uri
+            uri: version.uri,
+            format: version.format
         }
     }
 }

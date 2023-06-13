@@ -1,3 +1,5 @@
+use std::path::Path;
+
 use relm4::{
     prelude::*,
     Sender
@@ -5,11 +7,10 @@ use relm4::{
 
 use gtk::glib::clone;
 
-use std::path::Path;
-
 use crate::*;
 use crate::i18n::*;
 use crate::ui::components::*;
+
 use super::{App, AppMsg};
 
 #[allow(unused_must_use)]
@@ -105,11 +106,25 @@ pub fn repair_game(sender: ComponentSender<App>, progress_bar_input: Sender<Prog
 
                     let total = broken.len() as f64;
 
-                    let player_patch = UnityPlayerPatch::from_folder(&config.patch.path, config.launcher.edition).unwrap()
-                        .is_applied(&game_path).unwrap();
+                    // Get main patch status
 
-                    let xlua_patch = XluaPatch::from_folder(&config.patch.path, config.launcher.edition).unwrap()
-                        .is_applied(&game_path).unwrap();
+                    let player_patch = UnityPlayerPatch::from_folder(&config.patch.path, config.launcher.edition)
+                        .and_then(|patch| patch.is_applied(&game_path))
+                        .unwrap_or_else(|err| {
+                            tracing::warn!("Failed to get player patch status: {err}. Used config value instead: {}", config.patch.apply_main);
+
+                            config.patch.apply_main
+                        });
+
+                    // Get xlua patch status
+
+                    let xlua_patch = XluaPatch::from_folder(&config.patch.path, config.launcher.edition)
+                        .and_then(|patch| patch.is_applied(&game_path))
+                        .unwrap_or_else(|err| {
+                            tracing::warn!("Failed to get xlua patch status: {err}. Used config value instead: {}", config.patch.apply_xlua);
+
+                            config.patch.apply_xlua
+                        });
 
                     tracing::debug!("Patches status: player({player_patch}), xlua({xlua_patch})");
 
@@ -162,6 +177,8 @@ pub fn repair_game(sender: ComponentSender<App>, progress_bar_input: Sender<Prog
 
                         progress_bar_input.send(ProgressBarMsg::UpdateProgress(i as u64, total as u64));
                     }
+
+                    progress_bar_input.send(ProgressBarMsg::DisplayFraction(true));
                 }
             }
 

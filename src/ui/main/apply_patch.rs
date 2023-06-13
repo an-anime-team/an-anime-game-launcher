@@ -2,6 +2,7 @@ use relm4::prelude::*;
 
 use crate::*;
 use crate::i18n::*;
+
 use super::{App, AppMsg};
 
 pub fn apply_patch<T: PatchExt + Send + Sync + 'static>(sender: ComponentSender<App>, patch: T) {

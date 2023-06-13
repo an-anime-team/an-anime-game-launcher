@@ -5,10 +5,10 @@ environment-settings-description = Definiere Umgebungsvariablen und ändere den 
 wine = Wine
 
 synchronization = Synchronisation
-wine-sync-description = Technologie zur Synchronisierung von Wine events
+wine-sync-description = Technologie zur Synchronisierung von Wine-Events
 
 language = Sprache
-wine-lang-description = Sprache, die in der Wine umgebung verwendet wird. Kann Probleme mit dem Tastaturlayout beheben
+wine-lang-description = Sprache, die in der Wine-Umgebung verwendet wird. Kann Probleme mit dem Tastaturlayout beheben
 system = System
 
 borderless-window = Randloses Fenster
@@ -29,10 +29,11 @@ gamemode = Gamemode
 gamemode-description = Dem Spiel den Vorrang vor den übrigen Prozessen geben
 
 gamescope = Gamescope
-gamescope-description = Gamescope ist ein Tool von Valve das es ermöglicht, Spiele in einer isolierten Xwayland-Instanz laufen zu lassen und unterstützt AMD-, Intel- und Nvidia-GPUs
+gamescope-description = Gamescope ist ein Tool von Valve, das es ermöglicht, Spiele in einer isolierten Xwayland-Instanz laufen zu lassen und unterstützt AMD-, Intel- und Nvidia-GPUs
 
 discord-rpc = Discord RPC
-discord-rpc-description = Discord RPC ermöglicht es dir Discord die Information zu geben dass du gerade spielst, damit deine Freunde Bescheid wissen
+discord-rpc-description =Discord RPC ermöglicht es Ihnen Discord die Information zu geben, dass Sie gerade spielen, damit Ihre Freunde Bescheid wissen
+icon = Icon
 title = Titel
 description = Beschreibung
 

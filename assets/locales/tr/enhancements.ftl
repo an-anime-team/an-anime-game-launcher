@@ -33,6 +33,7 @@ gamescope-description = Gamescope, oyunları izole edilmiş bir Xwayland içinde
 
 discord-rpc = Discord RPC
 discord-rpc-description = Discord RPC, Discord'a şu anda oyun oynadığınızı bildirmenizi sağlar. Bu sayede arkadaşlarınıza şu anda oyun oynadığınızı gösterebilirsiniz
+icon = İkon
 title = Başlık
 description = Açıklama
 

@@ -1,6 +1,6 @@
-game-settings-description = Manage in-game settings and account session
-sandbox-settings-description = Run the game in a bubblewrap sandbox, similar to what Flatpak does
-environment-settings-description = Specify environment variables and game launching command
+game-settings-description = Atur pengaturan dalam game dan sesi akun
+sandbox-settings-description = Jalankan game dalam sandbox bubblewrap seperti yang dilakukan oleh Flatpak
+environment-settings-description = Tentukan variable environment dan perintah peluncuran game
 
 wine = Wine
 
@@ -33,6 +33,7 @@ gamescope-description = Gamescope adalah alat dari Valve yang memungkinkan game 
 
 discord-rpc = Discord RPC
 discord-rpc-description = Discord RPC memungkinkan Anda untuk memberitahu discord informasi bahwa Anda sedang bermain game agar teman-teman Anda tahu
+icon = Icon untuk Discord RPC
 title = Judul
 description = Deskripsi
 
