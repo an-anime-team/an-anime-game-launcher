@@ -33,7 +33,7 @@ gamescope-description = A Gamescope-al egy külön Xwayland folyamatban fut a j�
 
 discord-rpc = Discord RPC
 discord-rpc-description = Kiírja a Discord profilod alá hogy játszol a játékkal
-icon = Icon
+icon = Ikon
 title = Title
 description = Description
 

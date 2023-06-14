@@ -9,7 +9,7 @@ welcome-page-message =
 tos-violation-warning = ToS megszegési figyelmeztetés
 
 tos-violation-warning-message =
-    Ez a launcher egy nem hivatalos eszköz, semmi köze {company-name} és {comapny-alter-name}-hez.
+    Ez a launcher egy nem hivatalos eszköz, semmi köze {company-name} és {company-alter-name}-hez.
    
     Ez az eszköz arra készült, hogy lehetővé tegye {game-name} használatát Linux-on, és hogy megegyszerűsítse a telepítését és futtatását.
 

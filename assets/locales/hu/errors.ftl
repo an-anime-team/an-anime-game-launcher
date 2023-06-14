@@ -56,5 +56,5 @@ game-session-apply-failed = Játékmenet alkalmazása sikertelen
 
 # Enhancements
 
-discord-rpc-icons-fetch-failed = Failed to fetch Discord RPC icons
-discord-rpc-icon-download-failed = Failed to download Discord RPC icon
+discord-rpc-icons-fetch-failed = Discord RPC ikonok beszerzése sikertelen
+discord-rpc-icon-download-failed = Discord RPC ikon letöltése sikertelen
