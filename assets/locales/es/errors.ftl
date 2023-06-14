@@ -56,5 +56,5 @@ game-session-apply-failed = Fallo al aplicar sesión de juego
 
 # Enhancements
 
-discord-rpc-icons-fetch-failed = Failed to fetch Discord RPC icons
-discord-rpc-icon-download-failed = Failed to download Discord RPC icon
+discord-rpc-icons-fetch-failed = Fallo al traer íconos para RPC de Discord
+discord-rpc-icon-download-failed = Fallo al descargar ícono para RPC de Discord

@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed check button style for newly made sessions
+- Fixed repairer's NaN progress
+- Fixed game session selection when current one is removed
+
+### Changed
+
+- Updated Spanish
+- Updated Hungarian (fixed #194)
+
 ## [3.7.1] - 11.06.2023
 
 ### Added
