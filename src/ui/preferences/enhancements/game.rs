@@ -49,7 +49,7 @@ impl AsyncFactoryComponent for GameSession {
                 set_valign: gtk::Align::Center,
 
                 connect_clicked[sender, index] => move |_| {
-                    sender.output(GamePageMsg::UpdateSession(index.clone()));
+                    sender.output(GamePageMsg::UpdateSession(index.current_index()));
                 }
             },
 
@@ -62,14 +62,14 @@ impl AsyncFactoryComponent for GameSession {
                 set_valign: gtk::Align::Center,
 
                 connect_clicked[sender, index] => move |_| {
-                    sender.output(GamePageMsg::RemoveSession(index.clone()));
+                    sender.output(GamePageMsg::RemoveSession(index.current_index()));
                 }
             },
 
             set_activatable: true,
 
             connect_activated[sender, index] => move |_| {
-                sender.output(GamePageMsg::SetCurrent(index.clone()));
+                sender.output(GamePageMsg::SetCurrent(index.current_index()));
             }
         }
     }
@@ -97,9 +97,9 @@ pub struct GamePage {
 #[derive(Debug, Clone)]
 pub enum GamePageMsg {
     AddSession,
-    UpdateSession(DynamicIndex),
-    RemoveSession(DynamicIndex),
-    SetCurrent(DynamicIndex)
+    UpdateSession(usize),
+    RemoveSession(usize),
+    SetCurrent(usize)
 }
 
 #[relm4::component(async, pub)]
@@ -230,7 +230,7 @@ impl SimpleAsyncComponent for GamePage {
             }
 
             GamePageMsg::UpdateSession(index) => {
-                if let Some(session) = self.sessions.guard().get(index.current_index()) {
+                if let Some(session) = self.sessions.guard().get(index) {
                     if let Ok(config) = Config::get() {
                         if let Err(err) = Sessions::update(session.name.clone(), config.get_wine_prefix_path()) {
                             sender.output(EnhancementsAppMsg::Toast {
@@ -243,7 +243,7 @@ impl SimpleAsyncComponent for GamePage {
             }
 
             GamePageMsg::RemoveSession(index) => {
-                if let Some(session) = self.sessions.guard().get(index.current_index()) {
+                if let Some(session) = self.sessions.guard().get(index) {
                     if let Err(err) = Sessions::remove(&session.name) {
                         sender.output(EnhancementsAppMsg::Toast {
                             title: tr("game-session-remove-failed"),
@@ -252,15 +252,17 @@ impl SimpleAsyncComponent for GamePage {
 
                         return;
                     }
-
-                    // TODO: select another available session?
                 }
 
-                self.sessions.guard().remove(index.current_index());
+                self.sessions.guard().remove(index);
+
+                if !self.sessions.is_empty() {
+                    sender.input(GamePageMsg::SetCurrent(0));
+                }
             }
 
             GamePageMsg::SetCurrent(index) => {
-                if let Some(session) = self.sessions.guard().get(index.current_index()) {
+                if let Some(session) = self.sessions.guard().get(index) {
                     if let Ok(config) = Config::get() {
                         if let Err(err) = Sessions::set_current(session.name.clone()) {
                             sender.output(EnhancementsAppMsg::Toast {
