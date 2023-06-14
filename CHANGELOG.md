@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.7.2] - 14.06.2023
+
 ### Fixed
 
 - Fixed check button style for newly made sessions
@@ -303,7 +305,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <br>
 
-[unreleased]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.7.1...next
+[unreleased]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.7.2...next
+[3.7.2]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.7.1...3.7.2
 [3.7.1]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.7.0...3.7.1
 [3.7.0]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.6.0...3.7.0
 [3.6.0]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.5.2...3.6.0
