@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Replaced xlua patch by "disable mhypbase" option
+
 ## [3.7.2] - 14.06.2023
 
 ### Fixed

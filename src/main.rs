@@ -197,8 +197,7 @@ fn main() {
                 }
 
                 LauncherState::PredownloadAvailable { .. } |
-                LauncherState::UnityPlayerPatchAvailable(UnityPlayerPatch { status: PatchStatus::NotAvailable, .. }) |
-                LauncherState::XluaPatchAvailable(XluaPatch { status: PatchStatus::NotAvailable, .. }) => {
+                LauncherState::PlayerPatchAvailable { patch: PlayerPatch { status: PatchStatus::NotAvailable, .. }, .. } => {
                     if just_run_game {
                         anime_launcher_sdk::genshin::game::run().expect("Failed to run the game");
 
