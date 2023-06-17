@@ -1,0 +1,23 @@
+name: Prevent PRs against `main`
+
+on:
+  pull_request_target:
+    # Please read https://securitylab.github.com/research/github-actions-preventing-pwn-requests/ before using
+    types: [opened, edited]
+
+jobs:
+  check-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: Vankka/pr-target-branch-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          target: main
+          exclude: next  # Don't prevent going from next -> main
+          change-to: next
+          comment: |
+              Your PR was set to target `main`, PRs should be target `next`.
+
+              The base branch of this PR has been automatically changed to `next`.
+              Please verify that there are no merge conflicts.
