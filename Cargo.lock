@@ -48,8 +48,8 @@ dependencies = [
 
 [[package]]
 name = "anime-game-core"
-version = "1.12.1"
-source = "git+https://github.com/an-anime-team/anime-game-core?tag=1.12.1#af3b58e1657a19d0c8069956f3c2ac610704fc46"
+version = "1.12.6"
+source = "git+https://github.com/an-anime-team/anime-game-core?tag=1.12.6#704c7fb4741fa1c90596d5862f963653cd0ddbbd"
 dependencies = [
  "anyhow",
  "bzip2",
@@ -96,8 +96,8 @@ dependencies = [
 
 [[package]]
 name = "anime-launcher-sdk"
-version = "1.7.2"
-source = "git+https://github.com/an-anime-team/anime-launcher-sdk?tag=1.7.2#14882b44e6f70cff763c5f3750e079fccd73670b"
+version = "1.7.8"
+source = "git+https://github.com/an-anime-team/anime-launcher-sdk?tag=1.7.8#e46f42674d9c9d7923759cbd01f41c86ea61ce91"
 dependencies = [
  "anime-game-core",
  "anyhow",
@@ -3157,9 +3157,9 @@ checksum = "712e227841d057c1ee1cd2fb22fa7e5a5461ae8e48fa2ca79ec42cfc1931183f"
 
 [[package]]
 name = "wincompatlib"
-version = "0.7.2"
+version = "0.7.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d5f1df70b617ad08dc336d13f1c7998a95781313fd6a0bffa1f45857c8254581"
+checksum = "89cd8dd63a2925273bdc4efd837ac5b847b06b23f141ce73664e274d54bbfa83"
 dependencies = [
  "anyhow",
  "minreq",
