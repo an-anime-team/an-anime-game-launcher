@@ -529,7 +529,7 @@ impl SimpleAsyncComponent for GeneralApp {
 
                 adw::ActionRow {
                     set_title: "Disable mhypbase", // TODO: add localization
-                    set_subtitle: "Experimental. If enabled, launcher will disable mhypbase.dll during the main patch applying, which is currently an equivalent to the xlua patch. Improves performance on low-end PCs",
+                    set_subtitle: "Experimental. If enabled, launcher will disable mhypbase.dll during the main patch applying, which is currently an equivalent to the xlua patch. Improves performance and reduces CPU usage",
 
                     add_suffix = &gtk::Switch {
                         set_valign: gtk::Align::Center,
