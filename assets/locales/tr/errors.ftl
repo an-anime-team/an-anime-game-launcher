@@ -42,6 +42,10 @@ patch-sync-failed = Yama dosyalarını senkronize etme başarısız oldu
 patch-state-check-failed = Yama dosyalarının durumunu kontrol etme başarısız oldu
 game-patching-error = Yamayı uygulamada sorun çıktı
 
+# Disable telemetry
+
+telemetry-servers-disabling-error = Failed to disable telemetry servers
+
 # Sandbox
 
 documentation-url-open-failed = Belgelemenin URL'si açılamadı

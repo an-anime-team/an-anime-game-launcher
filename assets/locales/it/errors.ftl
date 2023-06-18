@@ -42,6 +42,10 @@ patch-sync-failed = Sincronizzazione della cartella della patch non riuscita
 patch-state-check-failed = Controllo dello stato della cartella della patch non riuscito
 game-patching-error = Patching del gioco non riuscito
 
+# Disable telemetry
+
+telemetry-servers-disabling-error = Failed to disable telemetry servers
+
 # Sandbox
 
 documentation-url-open-failed = Apertura dell'URL della documentazione non riuscita

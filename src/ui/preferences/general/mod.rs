@@ -111,8 +111,7 @@ pub struct GeneralApp {
     components_page: AsyncController<ComponentsPage>,
 
     game_diff: Option<VersionDiff>,
-    unity_player_patch: Option<UnityPlayerPatch>,
-    xlua_patch: Option<XluaPatch>,
+    player_patch: Option<PlayerPatch>,
 
     style: LauncherStyle,
 
@@ -127,11 +126,7 @@ pub enum GeneralAppMsg {
 
     /// Supposed to be called automatically on app's run when the latest UnityPlayer patch version
     /// was retrieved from remote repos
-    SetUnityPlayerPatch(Option<UnityPlayerPatch>),
-
-    /// Supposed to be called automatically on app's run when the latest xlua patch version
-    /// was retrieved from remote repos
-    SetXluaPatch(Option<XluaPatch>),
+    SetPlayerPatch(Option<PlayerPatch>),
 
     // If one ever wish to change it to accept VoiceLocale
     // I'd recommend to use clone!(@strong self.locale as locale => move |_| { .. })
@@ -441,7 +436,7 @@ impl SimpleAsyncComponent for GeneralApp {
 
                     add_suffix = &gtk::Label {
                         #[watch]
-                        set_text: &match model.unity_player_patch.as_ref() {
+                        set_text: &match model.player_patch.as_ref() {
                             Some(patch) => match patch.status() {
                                 PatchStatus::NotAvailable => tr("patch-not-available"),
                                 PatchStatus::Outdated { current, .. } => tr_args("patch-outdated", [("current", current.to_string().into())]),
@@ -454,7 +449,7 @@ impl SimpleAsyncComponent for GeneralApp {
                         },
 
                         #[watch]
-                        set_css_classes: match model.unity_player_patch.as_ref() {
+                        set_css_classes: match model.player_patch.as_ref() {
                             Some(patch) => match patch.status() {
                                 PatchStatus::NotAvailable => &["error"],
                                 PatchStatus::Outdated { .. } |
@@ -466,7 +461,7 @@ impl SimpleAsyncComponent for GeneralApp {
                                         Err(_) => CONFIG.game.path.for_edition(CONFIG.launcher.edition).to_path_buf(),
                                     };
 
-                                    if let Ok(true) = model.unity_player_patch.as_ref().unwrap_unchecked().is_applied(path) {
+                                    if let Ok(true) = model.player_patch.as_ref().unwrap_unchecked().is_applied(path) {
                                         &["success"]
                                     } else {
                                         &["warning"]
@@ -478,7 +473,7 @@ impl SimpleAsyncComponent for GeneralApp {
                         },
 
                         #[watch]
-                        set_tooltip_text: Some(&match model.unity_player_patch.as_ref() {
+                        set_tooltip_text: Some(&match model.player_patch.as_ref() {
                             Some(patch) => match patch.status() {
                                 PatchStatus::NotAvailable => tr("patch-not-available-tooltip"),
                                 PatchStatus::Outdated { current, latest, .. } => tr_args("patch-outdated-tooltip", [
@@ -493,78 +488,7 @@ impl SimpleAsyncComponent for GeneralApp {
                                         Err(_) => CONFIG.game.path.for_edition(CONFIG.launcher.edition).to_path_buf(),
                                     };
 
-                                    if let Ok(true) = model.unity_player_patch.as_ref().unwrap_unchecked().is_applied(path) {
-                                        String::new()
-                                    } else {
-                                        tr("patch-not-applied-tooltip")
-                                    }
-                                }
-                            }
-
-                            None => String::new()
-                        })
-                    }
-                },
-
-                adw::ActionRow {
-                    set_title: &tr("xlua-patch-version"),
-                    set_subtitle: &tr("xlua-patch-version-description"),
-
-                    add_suffix = &gtk::Label {
-                        #[watch]
-                        set_text: &match model.xlua_patch.as_ref() {
-                            Some(patch) => match patch.status() {
-                                PatchStatus::NotAvailable => tr("patch-not-available"),
-                                PatchStatus::Outdated { current, .. } => tr_args("patch-outdated", [("current", current.to_string().into())]),
-                                PatchStatus::Preparation { .. } => tr("patch-preparation"),
-                                PatchStatus::Testing { version, .. } |
-                                PatchStatus::Available { version, .. } => version.to_string()
-                            }
-
-                            None => String::from("?")
-                        },
-
-                        #[watch]
-                        set_css_classes: match model.xlua_patch.as_ref() {
-                            Some(patch) => match patch.status() {
-                                PatchStatus::NotAvailable => &["error"],
-                                PatchStatus::Outdated { .. } |
-                                PatchStatus::Preparation { .. } |
-                                PatchStatus::Testing { .. } => &["warning"],
-                                PatchStatus::Available { .. } => unsafe {
-                                    let path = match Config::get() {
-                                        Ok(config) => config.game.path.for_edition(config.launcher.edition).to_path_buf(),
-                                        Err(_) => CONFIG.game.path.for_edition(CONFIG.launcher.edition).to_path_buf(),
-                                    };
-
-                                    if let Ok(true) = model.xlua_patch.as_ref().unwrap_unchecked().is_applied(path) {
-                                        &["success"]
-                                    } else {
-                                        &["warning"]
-                                    }
-                                }
-                            }
-
-                            None => &[]
-                        },
-
-                        #[watch]
-                        set_tooltip_text: Some(&match model.xlua_patch.as_ref() {
-                            Some(patch) => match patch.status() {
-                                PatchStatus::NotAvailable => tr("patch-not-available-tooltip"),
-                                PatchStatus::Outdated { current, latest, .. } => tr_args("patch-outdated-tooltip", [
-                                    ("current", current.to_string().into()),
-                                    ("latest", latest.to_string().into())
-                                ]),
-                                PatchStatus::Preparation { .. } => tr("patch-preparation-tooltip"),
-                                PatchStatus::Testing { .. } => tr("patch-testing-tooltip"),
-                                PatchStatus::Available { .. } => unsafe {
-                                    let path = match Config::get() {
-                                        Ok(config) => config.game.path.for_edition(config.launcher.edition).to_path_buf(),
-                                        Err(_) => CONFIG.game.path.for_edition(CONFIG.launcher.edition).to_path_buf(),
-                                    };
-
-                                    if let Ok(true) = model.xlua_patch.as_ref().unwrap_unchecked().is_applied(path) {
+                                    if let Ok(true) = model.player_patch.as_ref().unwrap_unchecked().is_applied(path) {
                                         String::new()
                                     } else {
                                         tr("patch-not-applied-tooltip")
@@ -586,13 +510,13 @@ impl SimpleAsyncComponent for GeneralApp {
                     add_suffix = &gtk::Switch {
                         set_valign: gtk::Align::Center,
 
-                        set_state: CONFIG.patch.apply_main,
+                        set_state: CONFIG.patch.apply,
 
                         connect_state_notify[sender] => move |switch| {
                             if is_ready() {
                                 #[allow(unused_must_use)]
                                 if let Ok(mut config) = Config::get() {
-                                    config.patch.apply_main = switch.state();
+                                    config.patch.apply = switch.state();
 
                                     Config::update(config);
 
@@ -604,18 +528,19 @@ impl SimpleAsyncComponent for GeneralApp {
                 },
 
                 adw::ActionRow {
-                    set_title: &tr("apply-xlua-patch"),
+                    set_title: &tr("disable-mhypbase"),
+                    set_subtitle: &tr("disable-mhypbase-description"),
 
                     add_suffix = &gtk::Switch {
                         set_valign: gtk::Align::Center,
 
-                        set_state: CONFIG.patch.apply_xlua,
+                        set_state: CONFIG.patch.disable_mhypbase,
 
                         connect_state_notify[sender] => move |switch| {
                             if is_ready() {
                                 #[allow(unused_must_use)]
                                 if let Ok(mut config) = Config::get() {
-                                    config.patch.apply_xlua = switch.state();
+                                    config.patch.disable_mhypbase = switch.state();
 
                                     Config::update(config);
 
@@ -747,8 +672,7 @@ impl SimpleAsyncComponent for GeneralApp {
                 .forward(sender.input_sender(), std::convert::identity),
 
             game_diff: None,
-            unity_player_patch: None,
-            xlua_patch: None,
+            player_patch: None,
 
             style: CONFIG.launcher.style,
 
@@ -778,12 +702,8 @@ impl SimpleAsyncComponent for GeneralApp {
                 self.game_diff = diff;
             }
 
-            GeneralAppMsg::SetUnityPlayerPatch(patch) => {
-                self.unity_player_patch = patch;
-            }
-
-            GeneralAppMsg::SetXluaPatch(patch) => {
-                self.xlua_patch = patch;
+            GeneralAppMsg::SetPlayerPatch(patch) => {
+                self.player_patch = patch;
             }
 
             #[allow(unused_must_use)]

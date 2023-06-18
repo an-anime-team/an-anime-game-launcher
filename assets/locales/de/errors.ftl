@@ -42,6 +42,10 @@ patch-sync-failed = Synchronisierung des Patch-Ordners fehlgeschlagen
 patch-state-check-failed = Status des Patchordners konnte nicht überprüft werden
 game-patching-error = Spiel konnte nicht gepatcht werden
 
+# Disable telemetry
+
+telemetry-servers-disabling-error = Telemetrie server konnten nicht geblockt werden
+
 # Sandbox
 
 documentation-url-open-failed = Dokumentations-URL kann nicht geöffnet werden

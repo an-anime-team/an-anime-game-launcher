@@ -16,6 +16,7 @@ mod download_wine;
 mod create_prefix;
 mod download_diff;
 mod migrate_folder;
+mod disable_telemetry;
 mod launch;
 
 use anime_launcher_sdk::components::loader::ComponentsLoader;
@@ -69,9 +70,6 @@ pub enum AppMsg {
         /// Needed for chained executions (e.g. update one voice after another)
         perform_on_download_needed: bool,
 
-        /// Automatically start patch applying if possible and needed
-        apply_patch_if_needed: bool,
-
         /// Show status gathering progress page
         show_status_page: bool
     },
@@ -82,11 +80,7 @@ pub enum AppMsg {
 
     /// Supposed to be called automatically on app's run when the latest UnityPlayer patch version
     /// was retrieved from remote repos
-    SetUnityPlayerPatch(Option<UnityPlayerPatch>),
-
-    /// Supposed to be called automatically on app's run when the latest xlua patch version
-    /// was retrieved from remote repos
-    SetXluaPatch(Option<XluaPatch>),
+    SetPlayerPatch(Option<PlayerPatch>),
 
     /// Supposed to be called automatically on app's run when the launcher state was chosen
     SetLauncherState(Option<LauncherState>),
@@ -392,8 +386,7 @@ impl SimpleComponent for App {
                                                 Some(LauncherState::VoiceUpdateAvailable(_)) |
                                                 Some(LauncherState::VoiceNotInstalled(_)) => "document-save-symbolic",
 
-                                                Some(LauncherState::UnityPlayerPatchAvailable(UnityPlayerPatch { status, .. })) |
-                                                Some(LauncherState::XluaPatchAvailable(XluaPatch { status, .. })) => match status {
+                                                Some(LauncherState::PlayerPatchAvailable { patch: PlayerPatch { status, .. }, .. }) => match status {
                                                     PatchStatus::NotAvailable |
                                                     PatchStatus::Outdated { .. } |
                                                     PatchStatus::Preparation { .. } => "window-close-symbolic",
@@ -401,6 +394,8 @@ impl SimpleComponent for App {
                                                     PatchStatus::Testing { .. } |
                                                     PatchStatus::Available { .. } => "document-save-symbolic"
                                                 }
+
+                                                Some(LauncherState::TelemetryNotDisabled) => "security-high-symbolic",
 
                                                 Some(LauncherState::VoiceOutdated(_)) |
                                                 Some(LauncherState::GameOutdated(_)) |
@@ -413,9 +408,9 @@ impl SimpleComponent for App {
                                                 Some(LauncherState::PredownloadAvailable { .. }) => tr("launch"),
 
                                                 Some(LauncherState::FolderMigrationRequired { .. }) => tr("migrate-folders"),
+                                                Some(LauncherState::PlayerPatchAvailable { .. }) => tr("apply-patch"),
 
-                                                Some(LauncherState::UnityPlayerPatchAvailable(_)) |
-                                                Some(LauncherState::XluaPatchAvailable(_)) => tr("apply-patch"),
+                                                Some(LauncherState::TelemetryNotDisabled) => tr("disable-telemetry"),
 
                                                 Some(LauncherState::WineNotInstalled) => tr("download-wine"),
                                                 Some(LauncherState::PrefixNotExists)  => tr("create-prefix"),
@@ -453,8 +448,7 @@ impl SimpleComponent for App {
                                             Some(LauncherState::GameOutdated { .. }) |
                                             Some(LauncherState::VoiceOutdated(_)) => false,
 
-                                            Some(LauncherState::UnityPlayerPatchAvailable(UnityPlayerPatch { status, .. })) |
-                                            Some(LauncherState::XluaPatchAvailable(XluaPatch { status, .. })) => match status {
+                                            Some(LauncherState::PlayerPatchAvailable { patch: PlayerPatch { status, .. }, .. }) => match status {
                                                 PatchStatus::NotAvailable |
                                                 PatchStatus::Outdated { .. } |
                                                 PatchStatus::Preparation { .. } => false,
@@ -473,8 +467,7 @@ impl SimpleComponent for App {
                                             Some(LauncherState::GameOutdated { .. }) |
                                             Some(LauncherState::VoiceOutdated(_)) => &["warning", "pill"],
 
-                                            Some(LauncherState::UnityPlayerPatchAvailable(UnityPlayerPatch { status, .. })) |
-                                            Some(LauncherState::XluaPatchAvailable(XluaPatch { status, .. })) => match status {
+                                            Some(LauncherState::PlayerPatchAvailable { patch: PlayerPatch { status, .. }, .. }) => match status {
                                                 PatchStatus::NotAvailable |
                                                 PatchStatus::Outdated { .. } |
                                                 PatchStatus::Preparation { .. } => &["error", "pill"],
@@ -495,8 +488,7 @@ impl SimpleComponent for App {
 
                                             Some(LauncherState::FolderMigrationRequired { .. }) => tr("migrate-folders-tooltip"),
 
-                                            Some(LauncherState::UnityPlayerPatchAvailable(UnityPlayerPatch { status, .. })) |
-                                            Some(LauncherState::XluaPatchAvailable(XluaPatch { status, .. })) => match status {
+                                            Some(LauncherState::PlayerPatchAvailable { patch: PlayerPatch { status, .. }, .. }) => match status {
                                                 PatchStatus::NotAvailable => tr("main-window--patch-unavailable-tooltip"),
 
                                                 PatchStatus::Outdated { .. } |
@@ -831,27 +823,11 @@ impl SimpleComponent for App {
                 }
 
                 // Get main UnityPlayer patch status
-                sender.input(AppMsg::SetUnityPlayerPatch(match patch.unity_player_patch() {
+                sender.input(AppMsg::SetPlayerPatch(match patch.player_patch() {
                     Ok(patch) => Some(patch),
 
                     Err(err) => {
-                        tracing::error!("Failed to fetch unity player patch info: {err}");
-
-                        sender.input(AppMsg::Toast {
-                            title: tr("patch-info-fetching-error"),
-                            description: Some(err.to_string())
-                        });
-
-                        None
-                    }
-                }));
-
-                // Get additional xlua patch status
-                sender.input(AppMsg::SetXluaPatch(match patch.xlua_patch() {
-                    Ok(patch) => Some(patch),
-
-                    Err(err) => {
-                        tracing::error!("Failed to fetch xlua patch info: {err}");
+                        tracing::error!("Failed to fetch player patch info: {err}");
 
                         sender.input(AppMsg::Toast {
                             title: tr("patch-info-fetching-error"),
@@ -893,7 +869,6 @@ impl SimpleComponent for App {
             // Update launcher state
             sender.input(AppMsg::UpdateLauncherState {
                 perform_on_download_needed: false,
-                apply_patch_if_needed: false,
                 show_status_page: true
             });
 
@@ -913,7 +888,7 @@ impl SimpleComponent for App {
 
         match msg {
             // TODO: make function from this message like with toast
-            AppMsg::UpdateLauncherState { perform_on_download_needed, apply_patch_if_needed, show_status_page } => {
+            AppMsg::UpdateLauncherState { perform_on_download_needed, show_status_page } => {
                 if show_status_page {
                     sender.input(AppMsg::SetLoadingStatus(Some(Some(tr("loading-launcher-state")))));
                 } else {
@@ -968,11 +943,6 @@ impl SimpleComponent for App {
                             sender.input(AppMsg::PerformAction);
                         }
 
-                        LauncherState::UnityPlayerPatchAvailable(_) |
-                        LauncherState::XluaPatchAvailable(_) if apply_patch_if_needed => {
-                            sender.input(AppMsg::PerformAction);
-                        }
-
                         _ => ()
                     }
                 }
@@ -984,13 +954,8 @@ impl SimpleComponent for App {
             }
 
             #[allow(unused_must_use)]
-            AppMsg::SetUnityPlayerPatch(patch) => unsafe {
-                PREFERENCES_WINDOW.as_ref().unwrap_unchecked().sender().send(PreferencesAppMsg::SetUnityPlayerPatch(patch));
-            }
-
-            #[allow(unused_must_use)]
-            AppMsg::SetXluaPatch(patch) => unsafe {
-                PREFERENCES_WINDOW.as_ref().unwrap_unchecked().sender().send(PreferencesAppMsg::SetXluaPatch(patch));
+            AppMsg::SetPlayerPatch(patch) => unsafe {
+                PREFERENCES_WINDOW.as_ref().unwrap_unchecked().sender().send(PreferencesAppMsg::SetPlayerPatch(patch));
             }
 
             AppMsg::SetLauncherState(state) => {
@@ -1055,7 +1020,6 @@ impl SimpleComponent for App {
                         sender.input(AppMsg::SetDownloading(false));
                         sender.input(AppMsg::UpdateLauncherState {
                             perform_on_download_needed: false,
-                            apply_patch_if_needed: false,
                             show_status_page: true
                         });
                     });
@@ -1064,20 +1028,20 @@ impl SimpleComponent for App {
 
             AppMsg::PerformAction => unsafe {
                 match self.state.as_ref().unwrap_unchecked() {
-                    LauncherState::UnityPlayerPatchAvailable(UnityPlayerPatch { status: PatchStatus::NotAvailable, .. }) |
-                    LauncherState::XluaPatchAvailable(XluaPatch { status: PatchStatus::NotAvailable, .. }) |
+                    LauncherState::PlayerPatchAvailable { patch: PlayerPatch { status: PatchStatus::NotAvailable, .. }, .. } |
                     LauncherState::PredownloadAvailable { .. } |
                     LauncherState::Launch => launch::launch(sender),
 
                     LauncherState::FolderMigrationRequired { from, to, cleanup_folder } =>
                         migrate_folder::migrate_folder(sender, from.to_owned(), to.to_owned(), cleanup_folder.to_owned()),
 
-                    LauncherState::UnityPlayerPatchAvailable(patch) => apply_patch::apply_patch(sender, patch.to_owned()),
-                    LauncherState::XluaPatchAvailable(patch) => apply_patch::apply_patch(sender, patch.to_owned()),
+                    LauncherState::PlayerPatchAvailable { patch, disable_mhypbase } =>
+                        apply_patch::apply_patch(sender, patch.to_owned(), *disable_mhypbase),
+
+                    LauncherState::TelemetryNotDisabled => disable_telemetry::disable_telemetry(sender),
 
                     LauncherState::WineNotInstalled => download_wine::download_wine(sender, self.progress_bar.sender().to_owned()),
-
-                    LauncherState::PrefixNotExists => create_prefix::create_prefix(sender),
+                    LauncherState::PrefixNotExists  => create_prefix::create_prefix(sender),
 
                     LauncherState::VoiceUpdateAvailable(diff) |
                     LauncherState::VoiceNotInstalled(diff) |

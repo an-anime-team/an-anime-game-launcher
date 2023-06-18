@@ -104,19 +104,18 @@ impl SimpleComponent for AboutDialog {
 
             set_release_notes_version: &APP_VERSION,
             set_release_notes: &[
-                "<p>Fixed</p>",
+                "<p>Added</p>",
 
                 "<ul>",
-                    "<li>Fixed check button style for newly made sessions</li>",
-                    "<li>Fixed repairer's NaN progress</li>",
-                    "<li>Fixed game session selection when current one is removed</li>",
+                    "<li>Added telemetry disabling state support</li>",
+                    "<li>Added Discord RPC icons updating</li>",
                 "</ul>",
 
                 "<p>Changed</p>",
 
                 "<ul>",
-                    "<li>Updated Spanish</li>",
-                    "<li>Updated Hungarian</li>",
+                    "<li>Replaced xlua patch by \"disable mhypbase\" option</li>",
+                    "<li>Returned back old background file path</li>",
                 "</ul>",
             ].join("\n"),
 

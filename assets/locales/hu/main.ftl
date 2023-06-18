@@ -55,6 +55,7 @@ launch = Indítás
 migrate-folders = Mappák migrálása
 migrate-folders-tooltip = Játékmappa struktúra frissítése
 apply-patch = Patch alkalmazása
+disable-telemetry = Disable telemetry
 download-wine = Wine letöltése
 create-prefix = Prefix létrehozása
 update = Frissítés

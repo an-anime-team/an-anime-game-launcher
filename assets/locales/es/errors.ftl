@@ -42,6 +42,10 @@ patch-sync-failed = Fallo al sincronizar carpeta del parche
 patch-state-check-failed = Fallo al comprobar estado de carpeta del parche
 game-patching-error = Fallo al parchear el juego
 
+# Disable telemetry
+
+telemetry-servers-disabling-error = Failed to disable telemetry servers
+
 # Sandbox
 
 documentation-url-open-failed = Failed to open documentation URL

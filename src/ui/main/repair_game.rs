@@ -108,27 +108,17 @@ pub fn repair_game(sender: ComponentSender<App>, progress_bar_input: Sender<Prog
 
                     // Get main patch status
 
-                    let player_patch = UnityPlayerPatch::from_folder(&config.patch.path, config.launcher.edition)
+                    let player_patch = PlayerPatch::from_folder(&config.patch.path, config.launcher.edition)
                         .and_then(|patch| patch.is_applied(&game_path))
                         .unwrap_or_else(|err| {
-                            tracing::warn!("Failed to get player patch status: {err}. Used config value instead: {}", config.patch.apply_main);
+                            tracing::warn!("Failed to get player patch status: {err}. Used config value instead: {}", config.patch.apply);
 
-                            config.patch.apply_main
+                            config.patch.apply
                         });
 
-                    // Get xlua patch status
+                    tracing::debug!("Patch status: {player_patch}. Disable mhypbase: {}", config.patch.disable_mhypbase);
 
-                    let xlua_patch = XluaPatch::from_folder(&config.patch.path, config.launcher.edition)
-                        .and_then(|patch| patch.is_applied(&game_path))
-                        .unwrap_or_else(|err| {
-                            tracing::warn!("Failed to get xlua patch status: {err}. Used config value instead: {}", config.patch.apply_xlua);
-
-                            config.patch.apply_xlua
-                        });
-
-                    tracing::debug!("Patches status: player({player_patch}), xlua({xlua_patch})");
-
-                    fn should_ignore(path: &Path, player_patch: bool, xlua_patch: bool) -> bool {
+                    fn should_ignore(path: &Path, player_patch: bool, disable_mhypbase: bool) -> bool {
                         // Files managed by launch.bat file
                         for part in ["crashreport.exe", "upload_crash.exe"] {
                             if path.ends_with(part) {
@@ -145,20 +135,16 @@ pub fn repair_game(sender: ComponentSender<App>, progress_bar_input: Sender<Prog
                             }
                         }
 
-                        // Xlua patch related files
-                        if xlua_patch {
-                            for part in ["xlua.dll", "mhypbase.dll"] {
-                                if path.ends_with(part) {
-                                    return true;
-                                }
-                            }
+                        // If mhypbase should be disabled
+                        if disable_mhypbase && path.ends_with("mhypbase.dll") {
+                            return true;
                         }
 
                         false
                     }
 
                     for (i, file) in broken.into_iter().enumerate() {
-                        if !should_ignore(&file.path, player_patch, xlua_patch) {
+                        if !should_ignore(&file.path, player_patch, config.patch.disable_mhypbase) {
                             tracing::debug!("Repairing file: {}", file.path.to_string_lossy());
 
                             if let Err(err) = file.repair(&game_path) {

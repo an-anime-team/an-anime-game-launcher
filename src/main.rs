@@ -53,7 +53,7 @@ lazy_static::lazy_static! {
     pub static ref DEBUG_FILE: PathBuf = LAUNCHER_FOLDER.join("debug.log");
 
     /// Path to `background` file. Standard is `$HOME/.cache/anime-game-launcher/background`
-    pub static ref BACKGROUND_FILE: PathBuf = CACHE_FOLDER.join("background");
+    pub static ref BACKGROUND_FILE: PathBuf = LAUNCHER_FOLDER.join("background");
 
     /// Path to `.keep-background` file. Used to mark launcher that it shouldn't update background picture
     /// 
@@ -197,8 +197,7 @@ fn main() {
                 }
 
                 LauncherState::PredownloadAvailable { .. } |
-                LauncherState::UnityPlayerPatchAvailable(UnityPlayerPatch { status: PatchStatus::NotAvailable, .. }) |
-                LauncherState::XluaPatchAvailable(XluaPatch { status: PatchStatus::NotAvailable, .. }) => {
+                LauncherState::PlayerPatchAvailable { patch: PlayerPatch { status: PatchStatus::NotAvailable, .. }, .. } => {
                     if just_run_game {
                         anime_launcher_sdk::genshin::game::run().expect("Failed to run the game");
 

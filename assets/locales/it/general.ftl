@@ -37,9 +37,6 @@ game-outdated = La versione del gioco è troppo vecchia e non può essere aggior
 player-patch-version = Versione della patch player
 player-patch-version-description = Patch principale che ti permette di giocare al gioco su Linux
 
-xlua-patch-version = Versione dell patch Xlua
-xlua-patch-version-description = Ulteriore patch che sistema alcuni problemi e migliora le prestazioni su PC di fascia bassa
-
 patch-not-available = non disponibile
 patch-not-available-tooltip = I server delle patch sono irraggiungibili
 
@@ -55,7 +52,8 @@ patch-not-applied-tooltip = La patch non è applicata
 apply-main-patch = Applica la patch principale
 apply-main-patch-description = Sperimentale. Disabilitandola ti permette di eseguite il gioco senza applicare la patch. Ciò potrebbe non funzionare o richiedere modifiche manuali ai file. Usala se sai cosa stai facendo
 
-apply-xlua-patch = Applica la patch xlua
+disable-mhypbase = Disable mhypbase
+disable-mhypbase-description = Experimental. If enabled, launcher will disable mhypbase.dll during the main patch applying, which is currently an equivalent to the xlua patch. Improves performance and reduces CPU usage
 
 ask-superuser-permissions = Chiedi permessi di amministratore
 ask-superuser-permissions-description = Il launcher li userà per aggiornare automaticamente il tuo file hosts. Questo non è necessario nell'edizione flatpak

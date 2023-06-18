@@ -37,9 +37,6 @@ game-outdated = A játékverzió túl régi és nem frissíthető. Legfrissebb: 
 player-patch-version = Játékos patch verzió
 player-patch-version-description = A fő patch amivel játszhatsz Linuxon
 
-xlua-patch-version = Xlua patch verzió
-xlua-patch-version-description =  Extra patch ami javít pár problémán és jobb teljesítményt nyújt gyenge gépeken
-
 patch-not-available = nem elérhető
 patch-not-available-tooltip = A patch szerverek nem elérhetőek
 
@@ -55,7 +52,8 @@ patch-not-applied-tooltip = A patch nincs alkalmazva
 apply-main-patch = Fő patch alkalmazása
 apply-main-patch-description = Kísérleti opció, a kikapcsolásával futtathatod a játékot patch nélkül. Lehet hogy nem fog működni, vagy a fájlokat manuálisan kell szerkesztened, akkor kapcsold ki ha tudod mit csinálsz.
 
-apply-xlua-patch = Xlua patch alkalmazása
+disable-mhypbase = Disable mhypbase
+disable-mhypbase-description = Experimental. If enabled, launcher will disable mhypbase.dll during the main patch applying, which is currently an equivalent to the xlua patch. Improves performance and reduces CPU usage
 
 ask-superuser-permissions = Superuser engedély kérése
 ask-superuser-permissions-description =  A Launcher autómatikusan használni fogja hogy frissítse a hosts fájlodat. A Flatpak verzióhoz nem kell
