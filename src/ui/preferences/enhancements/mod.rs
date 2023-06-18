@@ -670,8 +670,23 @@ impl SimpleAsyncComponent for EnhancementsApp {
         match DiscordRpc::get_assets(CONFIG.launcher.discord_rpc.app_id) {
             Ok(icons) => {
                 for icon in icons {
-                    let cache_file = CACHE_FOLDER.join("discord-rpc").join(&icon.name);
+                    let cache_file = CACHE_FOLDER
+                        .join("discord-rpc")
+                        .join(&icon.name)
+                        .join(&icon.id);
+
                     // let sender = sender.clone();
+
+                    // Workaround for old folder structure (pre 3.7.3)
+                    let old_path = CACHE_FOLDER.join("discord-rpc").join(&icon.name);
+
+                    if old_path.exists() {
+                        if let Ok(metadata) = old_path.metadata() {
+                            if metadata.is_file() {
+                                std::fs::remove_file(old_path).expect("Failed to delete old discord rpc icon");
+                            }
+                        }
+                    }
 
                     if !cache_file.exists() {
                         std::thread::spawn(move || {
