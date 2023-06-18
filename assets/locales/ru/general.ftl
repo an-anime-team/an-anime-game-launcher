@@ -52,11 +52,11 @@ patch-not-applied-tooltip = Патч не применен
 apply-main-patch = Применять основной патч
 apply-main-patch-description = Экспериментально. Отключение опции позволяет запускать игру без применения патча. Это может не работать или требовать ручного изменения файлов. Используйте если знаете что делаете
 
-disable-mhypbase = Disable mhypbase
-disable-mhypbase-description = Experimental. If enabled, launcher will disable mhypbase.dll during the main patch applying, which is currently an equivalent to the xlua patch. Improves performance and reduces CPU usage
+disable-mhypbase = Отключать mhypbase
+disable-mhypbase-description = Экспериментально. Когда включено, лаунчер будет отключать mhypbase.dll во время применения основного патча, что сейчас является эквивалентом патча xlua. Улучшает производительность и снижает нагрузку на процессор
 
 ask-superuser-permissions = Запрашивать права суперпользователя
-ask-superuser-permissions-description = Лаунчер будет использовать их чтобы автоматически обновлять ваш hosts файл. Это не требуется при использовании flatpak
+ask-superuser-permissions-description = Лаунчер будет использовать их чтобы автоматически обновлять ваш hosts файл для отключения телеметрии игры. Не требуется при использовании flatpak
 
 wine-tools = Инструменты Wine
 command-line = Коммандная строка
