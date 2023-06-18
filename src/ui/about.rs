@@ -108,12 +108,14 @@ impl SimpleComponent for AboutDialog {
 
                 "<ul>",
                     "<li>Added telemetry disabling state support</li>",
+                    "<li>Added Discord RPC icons updating</li>",
                 "</ul>",
 
                 "<p>Changed</p>",
 
                 "<ul>",
                     "<li>Replaced xlua patch by \"disable mhypbase\" option</li>",
+                    "<li>Returned back old background file path</li>",
                 "</ul>",
             ].join("\n"),
 

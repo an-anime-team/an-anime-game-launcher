@@ -10,10 +10,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Added telemetry disabling state support
+- Added Discord RPC icons updating
 
 ### Changed
 
 - Replaced xlua patch by "disable mhypbase" option
+- Returned back old `background` file path
 
 ## [3.7.2] - 14.06.2023
 
