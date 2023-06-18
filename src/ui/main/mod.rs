@@ -395,7 +395,7 @@ impl SimpleComponent for App {
                                                     PatchStatus::Available { .. } => "document-save-symbolic"
                                                 }
 
-                                                Some(LauncherState::TelemetryNotDisabled) => "network-wired-symbolic",
+                                                Some(LauncherState::TelemetryNotDisabled) => "security-high-symbolic",
 
                                                 Some(LauncherState::VoiceOutdated(_)) |
                                                 Some(LauncherState::GameOutdated(_)) |

@@ -45,7 +45,7 @@ pub fn disable_telemetry(sender: ComponentSender<App>) {
 
                 sender.input(AppMsg::Toast {
                     title: tr("telemetry-servers-disabling-error"),
-                    description: Some(String::from_utf8(output.stderr).unwrap())
+                    description: None // stdout/err is empty
                 });
             }
 
