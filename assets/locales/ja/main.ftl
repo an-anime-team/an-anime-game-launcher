@@ -55,6 +55,7 @@ launch = 起動
 migrate-folders = 移行ファイル
 migrate-folders-tooltip = ゲームフォルダ構成を更新
 apply-patch = パッチを適用する
+disable-telemetry = Disable telemetry
 download-wine = ワインをダウンロード
 create-prefix = プレフィックスを作成
 update = 更新

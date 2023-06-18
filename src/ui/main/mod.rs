@@ -410,8 +410,7 @@ impl SimpleComponent for App {
                                                 Some(LauncherState::FolderMigrationRequired { .. }) => tr("migrate-folders"),
                                                 Some(LauncherState::PlayerPatchAvailable { .. }) => tr("apply-patch"),
 
-                                                // TODO: add localization
-                                                Some(LauncherState::TelemetryNotDisabled) => String::from("Disable telemetry"),
+                                                Some(LauncherState::TelemetryNotDisabled) => tr("disable-telemetry"),
 
                                                 Some(LauncherState::WineNotInstalled) => tr("download-wine"),
                                                 Some(LauncherState::PrefixNotExists)  => tr("create-prefix"),

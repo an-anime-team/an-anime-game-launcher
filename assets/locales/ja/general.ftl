@@ -37,9 +37,6 @@ game-outdated = ゲームが非常に古いためアップデートできませ�
 player-patch-version = プレイヤーのパッチバージョン
 player-patch-version-description = Linuxでプレイするためのメインのパッチです。
 
-xlua-patch-version = Xlua のパッチバージョン
-xlua-patch-version-description = これは追加のパッチで、低スペックなPCのパフォーマンスの改善や、いくつかの細かい問題点を修正できます。
-
 patch-not-available = ありません。
 patch-not-available-tooltip = パッチサーバーに接続できませんでした。
 
@@ -55,7 +52,8 @@ patch-not-applied-tooltip = パッチが適用されませんでした。
 apply-main-patch = メインパッチを適用
 apply-main-patch-description = 実験的です。これを無効にするとパッチ無しでゲームを起動することができます。これが機能しない場合、手動でパッチを適用する必要があります。これが何を意味するのかを理解できない人は無効にするべきではないでしょう。
 
-apply-xlua-patch = xluaパッチを適用する
+disable-mhypbase = Disable mhypbase
+disable-mhypbase-description = Experimental. If enabled, launcher will disable mhypbase.dll during the main patch applying, which is currently an equivalent to the xlua patch. Improves performance and reduces CPU usage
 
 ask-superuser-permissions = スーパーユーザーを尋ねる。
 ask-superuser-permissions-description = あなたのホストのファイルを自動更新するために、 これらを利用します。flatpak版では必要ありません。

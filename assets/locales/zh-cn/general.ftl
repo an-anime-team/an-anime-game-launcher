@@ -37,9 +37,6 @@ game-outdated = 游戏版本过旧，无法更新。最新版本: {$latest}
 player-patch-version = 主补丁版本
 player-patch-version-description = UnitPlayer.dll 的补丁，在 Linux 上运行游戏必备
 
-xlua-patch-version = xLua 补丁版本
-xlua-patch-version-description = 额外的补丁，用于修复某些问题以及改善低端 PC 的游戏性能
-
 patch-not-available = 不可用
 patch-not-available-tooltip = 无法连接补丁服务器
 
@@ -55,7 +52,8 @@ patch-not-applied-tooltip = 补丁未应用
 apply-main-patch = Apply main patch
 apply-main-patch-description = Experimental. Disabling this allows you to run the game without applying the patch. This may not work, or require manual files modifications. Use if you know what you're doing
 
-apply-xlua-patch = 应用 xLua 补丁
+disable-mhypbase = Disable mhypbase
+disable-mhypbase-description = Experimental. If enabled, launcher will disable mhypbase.dll during the main patch applying, which is currently an equivalent to the xlua patch. Improves performance and reduces CPU usage
 
 ask-superuser-permissions = 请求超级用户权限
 ask-superuser-permissions-description = 启动器需要超级用户权限来修改 hosts 文件。flatpak 版无需此权限
