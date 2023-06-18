@@ -44,7 +44,7 @@ game-patching-error = Не удалось установить патч игры
 
 # Disable telemetry
 
-telemetry-servers-disabling-error = Failed to disable telemetry servers
+telemetry-servers-disabling-error = Не удалось отключить серверы телеметрии
 
 # Sandbox
 
