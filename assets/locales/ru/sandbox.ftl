@@ -4,7 +4,7 @@ sandbox-description = Запускать игру в изолированном 
 enable-sandboxing = Использовать песочницу
 enable-sandboxing-description = Запускать игру в копии корневой файловой системы компьютера без прав на изменение файлов
 
-hide-home-directory = Скрыть домашнюю директорию
+hide-home-directory = Скрывать домашнюю директорию
 hide-home-directory-description = Изолировать ваши директории /home, /var/home/$USER, и $HOME от игры
 
 hostname = Имя хоста
