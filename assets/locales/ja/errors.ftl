@@ -42,6 +42,10 @@ patch-sync-failed = パッチフォルダの同期に失敗しました
 patch-state-check-failed = パッチフォルダの状態を確認するのに失敗しました
 game-patching-error = ゲームのパッチに失敗しました。
 
+# Disable telemetry
+
+telemetry-servers-disabling-error = Failed to disable telemetry servers
+
 # Sandbox
 
 documentation-url-open-failed = ドキュメントページを開けませんでした。

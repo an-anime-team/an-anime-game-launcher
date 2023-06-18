@@ -16,6 +16,7 @@ mod download_wine;
 mod create_prefix;
 mod download_diff;
 mod migrate_folder;
+mod disable_telemetry;
 mod launch;
 
 use anime_launcher_sdk::components::loader::ComponentsLoader;
@@ -394,6 +395,8 @@ impl SimpleComponent for App {
                                                     PatchStatus::Available { .. } => "document-save-symbolic"
                                                 }
 
+                                                Some(LauncherState::TelemetryNotDisabled) => "network-wired-symbolic",
+
                                                 Some(LauncherState::VoiceOutdated(_)) |
                                                 Some(LauncherState::GameOutdated(_)) |
                                                 None => "window-close-symbolic"
@@ -406,6 +409,9 @@ impl SimpleComponent for App {
 
                                                 Some(LauncherState::FolderMigrationRequired { .. }) => tr("migrate-folders"),
                                                 Some(LauncherState::PlayerPatchAvailable { .. }) => tr("apply-patch"),
+
+                                                // TODO: add localization
+                                                Some(LauncherState::TelemetryNotDisabled) => String::from("Disable telemetry"),
 
                                                 Some(LauncherState::WineNotInstalled) => tr("download-wine"),
                                                 Some(LauncherState::PrefixNotExists)  => tr("create-prefix"),
@@ -1032,6 +1038,8 @@ impl SimpleComponent for App {
 
                     LauncherState::PlayerPatchAvailable { patch, disable_mhypbase } =>
                         apply_patch::apply_patch(sender, patch.to_owned(), *disable_mhypbase),
+
+                    LauncherState::TelemetryNotDisabled => disable_telemetry::disable_telemetry(sender),
 
                     LauncherState::WineNotInstalled => download_wine::download_wine(sender, self.progress_bar.sender().to_owned()),
                     LauncherState::PrefixNotExists  => create_prefix::create_prefix(sender),
