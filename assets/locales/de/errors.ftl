@@ -44,7 +44,7 @@ game-patching-error = Spiel konnte nicht gepatcht werden
 
 # Disable telemetry
 
-telemetry-servers-disabling-error = Failed to disable telemetry servers
+telemetry-servers-disabling-error = Telemetrie server konnten nicht geblockt werden
 
 # Sandbox
 
