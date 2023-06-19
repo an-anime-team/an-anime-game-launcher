@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.7.4] (hotfix) - 19.06.2023
+
+### Fixed
+
+- Fixed main patch applying
+
 ## [3.7.3] - 18.06.2023
 
 ### Added
@@ -317,7 +323,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <br>
 
-[unreleased]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.7.3...next
+[unreleased]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.7.4...next
+[3.7.4]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.7.3...3.7.4
 [3.7.3]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.7.2...3.7.3
 [3.7.2]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.7.1...3.7.2
 [3.7.1]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.7.0...3.7.1
