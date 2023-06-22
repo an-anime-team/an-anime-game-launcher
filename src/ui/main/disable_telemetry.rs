@@ -22,20 +22,16 @@ pub fn disable_telemetry(sender: ComponentSender<App>) {
 
         let output = if config.patch.root {
             Command::new("pkexec")
-                .arg("echo")
-                .arg("-e")
-                .arg(format!("\\n{telemetry}\\n"))
-                .arg(">>")
-                .arg("/etc/hosts")
+                .arg("sh")
+                .arg("-c")
+                .arg(format!("echo \"\\n{telemetry}\\n\" >> /etc/hosts"))
                 .spawn()
         }
 
         else {
-            Command::new("echo")
-                .arg("-e")
-                .arg(format!("\\n{telemetry}\\n"))
-                .arg(">>")
-                .arg("/etc/hosts")
+            Command::new("sh")
+                .arg("-c")
+                .arg(format!("echo \"\\n{telemetry}\\n\" >> /etc/hosts"))
                 .spawn()
         };
 
