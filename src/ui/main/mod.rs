@@ -873,9 +873,7 @@ impl SimpleComponent for App {
             });
 
             // Mark app as loaded
-            unsafe {
-                crate::READY = true;
-            }
+            crate::READY.store(true, Ordering::Relaxed);
 
             tracing::info!("App is ready");
         });
