@@ -52,8 +52,8 @@ patch-not-applied-tooltip = パッチが適用されませんでした。
 apply-main-patch = メインパッチを適用
 apply-main-patch-description = 実験的です。これを無効にするとパッチ無しでゲームを起動することができます。これが機能しない場合、手動でパッチを適用する必要があります。これが何を意味するのかを理解できない人は無効にするべきではないでしょう。
 
-disable-mhypbase = Disable mhypbase
-disable-mhypbase-description = Experimental. If enabled, launcher will disable mhypbase.dll during the main patch applying, which is currently an equivalent to the xlua patch. Improves performance and reduces CPU usage
+disable-mhypbase = mhypbase を無効にする
+disable-mhypbase-description = 試験的です。有効にすると、ランチャーはメインパッチの適用中にmhypbase.dllを無効にします。これは現在xluaパッチと同様です。パフォーマンスを向上させ、CPUへの負担を軽減します。
 
 ask-superuser-permissions = スーパーユーザーを尋ねる。
 ask-superuser-permissions-description = あなたのホストのファイルを自動更新するために、 これらを利用します。flatpak版では必要ありません。
