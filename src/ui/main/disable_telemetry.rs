@@ -24,14 +24,14 @@ pub fn disable_telemetry(sender: ComponentSender<App>) {
             Command::new("pkexec")
                 .arg("sh")
                 .arg("-c")
-                .arg(format!("echo \"\\n{telemetry}\\n\" >> /etc/hosts"))
+                .arg(format!("echo -e \"\\n{telemetry}\\n\" >> /etc/hosts"))
                 .spawn()
         }
 
         else {
             Command::new("sh")
                 .arg("-c")
-                .arg(format!("echo \"\\n{telemetry}\\n\" >> /etc/hosts"))
+                .arg(format!("echo -e \"\\n{telemetry}\\n\" >> /etc/hosts"))
                 .spawn()
         };
 
