@@ -44,7 +44,7 @@ game-patching-error = Yamayı uygulamada sorun çıktı
 
 # Disable telemetry
 
-telemetry-servers-disabling-error = Failed to disable telemetry servers
+telemetry-servers-disabling-error = Bilgi toplama devre dışı bırakılamadı
 
 # Sandbox
 
