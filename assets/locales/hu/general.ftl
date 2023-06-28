@@ -52,8 +52,8 @@ patch-not-applied-tooltip = A patch nincs alkalmazva
 apply-main-patch = Fő patch alkalmazása
 apply-main-patch-description = Kísérleti opció, a kikapcsolásával futtathatod a játékot patch nélkül. Lehet hogy nem fog működni, vagy a fájlokat manuálisan kell szerkesztened, akkor kapcsold ki ha tudod mit csinálsz.
 
-disable-mhypbase = Disable mhypbase
-disable-mhypbase-description = Experimental. If enabled, launcher will disable mhypbase.dll during the main patch applying, which is currently an equivalent to the xlua patch. Improves performance and reduces CPU usage
+disable-mhypbase = mhypbase kikapcsolása
+disable-mhypbase-description = Tesztelés alatt. Ha bekapcsolod, kikapcsolja a mhypbase.dll-t a patch telepítésénél, ami az xlua patch-el ér fel. Jobb teljesítmény és kisebb CPU használat
 
 ask-superuser-permissions = Superuser engedély kérése
 ask-superuser-permissions-description =  A Launcher autómatikusan használni fogja hogy frissítse a hosts fájlodat. A Flatpak verzióhoz nem kell
