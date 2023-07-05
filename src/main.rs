@@ -27,13 +27,13 @@ pub const APP_VERSION: &str = env!("CARGO_PKG_VERSION");
 pub const APP_DEBUG: bool = cfg!(debug_assertions);
 
 /// Sets to `true` when the `App` component is ready (fully initialized)
-pub static mut READY: bool = false;
+pub static READY: AtomicBool = AtomicBool::new(false);
 
 // TODO: get rid of using this function in all the components' events
 //       e.g. by converting preferences pages into Relm4 Components
 /// Check if the app is ready
 pub fn is_ready() -> bool {
-    unsafe { READY }
+    READY.load(Ordering::Relaxed)
 }
 
 lazy_static::lazy_static! {
