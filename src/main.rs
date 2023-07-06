@@ -13,6 +13,7 @@ use tracing_subscriber::prelude::*;
 use tracing_subscriber::filter::*;
 
 use std::path::PathBuf;
+use std::sync::atomic::{AtomicBool, Ordering};
 
 pub mod move_folder;
 pub mod i18n;
