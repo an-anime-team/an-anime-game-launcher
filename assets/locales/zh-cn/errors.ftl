@@ -44,21 +44,21 @@ game-patching-error = 应用游戏补丁失败
 
 # Disable telemetry
 
-telemetry-servers-disabling-error = Failed to disable telemetry servers
+telemetry-servers-disabling-error = 禁用监测服务器
 
 # Sandbox
 
-documentation-url-open-failed = Failed to open documentation URL
+documentation-url-open-failed = 打开文档 URL 失败
 
 # Game
 
-game-session-add-failed = Failed to add game session
-game-session-update-failed = Failed to update game session
-game-session-remove-failed = Failed to remove game session
-game-session-set-current-failed = Failed to set current game session
-game-session-apply-failed = Failed to apply game session
+game-session-add-failed = 添加游戏会话失败
+game-session-update-failed = 更新游戏会话失败
+game-session-remove-failed = 删除游戏会话失败
+game-session-set-current-failed = 设置当前游戏会话失败
+game-session-apply-failed = 应用游戏会话失败
 
 # Enhancements
 
-discord-rpc-icons-fetch-failed = Failed to fetch Discord RPC icons
-discord-rpc-icon-download-failed = Failed to download Discord RPC icon
+discord-rpc-icons-fetch-failed = 获取 Discord RPC 图标失败
+discord-rpc-icon-download-failed = 下载 Discord RPC 图标失败
