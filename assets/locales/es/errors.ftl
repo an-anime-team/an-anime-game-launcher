@@ -44,7 +44,7 @@ game-patching-error = Fallo al parchear el juego
 
 # Disable telemetry
 
-telemetry-servers-disabling-error = Failed to disable telemetry servers
+telemetry-servers-disabling-error = Fallo al desactivar servidores de telemetría
 
 # Sandbox
 

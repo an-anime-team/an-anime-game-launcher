@@ -44,7 +44,7 @@ game-patching-error = ゲームのパッチに失敗しました。
 
 # Disable telemetry
 
-telemetry-servers-disabling-error = Failed to disable telemetry servers
+telemetry-servers-disabling-error = テレメトリサーバーの無効化に失敗しました。
 
 # Sandbox
 

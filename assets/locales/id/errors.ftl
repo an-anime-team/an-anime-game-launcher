@@ -44,7 +44,7 @@ game-patching-error = Gagal melakukan patch pada game
 
 # Disable telemetry
 
-telemetry-servers-disabling-error = Failed to disable telemetry servers
+telemetry-servers-disabling-error = Gagal menonaktifkan server telemetri
 
 # Sandbox
 

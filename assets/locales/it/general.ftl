@@ -52,8 +52,8 @@ patch-not-applied-tooltip = La patch non è applicata
 apply-main-patch = Applica la patch principale
 apply-main-patch-description = Sperimentale. Disabilitandola ti permette di eseguite il gioco senza applicare la patch. Ciò potrebbe non funzionare o richiedere modifiche manuali ai file. Usala se sai cosa stai facendo
 
-disable-mhypbase = Disable mhypbase
-disable-mhypbase-description = Experimental. If enabled, launcher will disable mhypbase.dll during the main patch applying, which is currently an equivalent to the xlua patch. Improves performance and reduces CPU usage
+disable-mhypbase = Disabilita mhypbase
+disable-mhypbase-description = Sperimentale. Se abiliata, il launcher disabiliterà mhypbase.dll durante l'applicazione della patch principale, che attualmente equivalente ad applicare la patch xlua. Migliora le prestazioni e riduce l'utilizzo della CPU
 
 ask-superuser-permissions = Chiedi permessi di amministratore
 ask-superuser-permissions-description = Il launcher li userà per aggiornare automaticamente il tuo file hosts. Questo non è necessario nell'edizione flatpak

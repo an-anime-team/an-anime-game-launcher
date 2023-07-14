@@ -52,8 +52,8 @@ patch-not-applied-tooltip = Patch tidak diterapkan
 apply-main-patch = Terapkan patch utama
 apply-main-patch-description = Eksperimental. Menonaktifkan opsi ini akan menginzinkan Anda menjalankan game tanpa menerapkan patch. Hal ini mungkin tidak bekerja, atau membutuhkan modifikasi file secara manual. Gunakan jika Anda tahu apa yang Anda lakukan
 
-disable-mhypbase = Disable mhypbase
-disable-mhypbase-description = Experimental. If enabled, launcher will disable mhypbase.dll during the main patch applying, which is currently an equivalent to the xlua patch. Improves performance and reduces CPU usage
+disable-mhypbase = Nonaktifkan mhypbase
+disable-mhypbase-description = Masih dalam pengujicobaan. Jika diaktifkan, launcher akan menonaktifkan mhypbase.dll ketika menerapkan patch utama, yang saat ini sama dengan patch xlua. Menaikkan performa dan mengurangi penggunaan CPU
 
 ask-superuser-permissions = Minta izin dari admin
 ask-superuser-permissions-description = Launcher akan otomatis memperbarui file hosts Anda. Opsi ini tidak diperlukan jika Anda memakai edisi flatpak 

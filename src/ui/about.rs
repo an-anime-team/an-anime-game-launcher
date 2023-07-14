@@ -104,10 +104,29 @@ impl SimpleComponent for AboutDialog {
 
             set_release_notes_version: &APP_VERSION,
             set_release_notes: &[
+                "<p>Added</p>",
+
+                "<ul>",
+                    "<li>Added support to the new wishes url cache location</li>",
+                "</ul>",
+
                 "<p>Fixed</p>",
 
                 "<ul>",
-                    "<li>Fixed main patch applying</li>",
+                    "<li>Fixed telemetry disabling</li>",
+                "</ul>",
+
+                "<p>Changed</p>",
+
+                "<ul>",
+                    "<li>Updated Italian</li>",
+                    "<li>Updated Hungarian</li>",
+                    "<li>Updated Japanese</li>",
+                    "<li>Updated Indonesian</li>",
+                    "<li>Updated Spanish</li>",
+                    "<li>Updated Turkish</li>",
+                    "<li>Updated Chinese</li>",
+                    "<li>Disabled patch applying for new installations</li>",
                 "</ul>",
             ].join("\n"),
 
