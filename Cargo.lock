@@ -64,7 +64,7 @@ dependencies = [
 
 [[package]]
 name = "anime-game-launcher"
-version = "3.7.4"
+version = "3.7.5"
 dependencies = [
  "anime-launcher-sdk",
  "anyhow",
