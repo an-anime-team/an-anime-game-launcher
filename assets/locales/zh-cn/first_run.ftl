@@ -23,11 +23,11 @@ tos-violation-warning-message =
 
     如果你了解并接受通过非官方许可方式玩这款游戏所带来的风险，请单击“确定”。让我们一直抢过提瓦特大陆吧！
 
-tos-dialog-title = Are you sure you understand what we want to say?
+tos-dialog-title = 你确定了解我们所说的意思吗？
 tos-dialog-message =
-    1. Don't publish any information about this project
-    2. Don't abuse it by using some modded clients and so
-    3. Ask questions exceptionally in our discord or matrix server
+    1. 不要公开这个项目的任何信息
+    2. 不要滥用它的功能，包含且不仅限于运行修改过的客户端
+    3. 有问题就到我们的 Discord 或者 Matrix 服务器上提
 
 dependencies = 依赖
 missing-dependencies-title = 你缺少某些依赖组件

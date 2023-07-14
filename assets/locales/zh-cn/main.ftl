@@ -2,7 +2,7 @@ custom = 自定义
 none = 无
 default = 默认
 details = 详细
-options = Options
+options = 选项
 
 width = 宽
 height = 高
@@ -20,11 +20,11 @@ about = 关于
 close = 关闭
 save = 保存
 continue = 继续
-resume = Resume
+resume = 恢复
 exit = 退出
 check = 检查
 restart = 重启
-agree = Agree
+agree = 同意
 
 
 loading-data = 正在加载数据
@@ -55,7 +55,7 @@ launch = 启动
 migrate-folders = 迁移目录
 migrate-folders-tooltip = 更新游戏目录结构
 apply-patch = 安装补丁
-disable-telemetry = Disable telemetry
+disable-telemetry = 禁用监测
 download-wine = 下载 Wine
 create-prefix = 创建 Wine prefix
 update = 更新
