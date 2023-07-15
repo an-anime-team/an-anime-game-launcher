@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed game launching on installs without `launcher.bat` file
+
 ## [3.7.5] - 14.07.2023
 
 ### Added
