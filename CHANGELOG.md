@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.7.6] - 15.07.2023
+
 ### Fixed
 
 - Fixed game launching on installs without `launcher.bat` file
@@ -348,7 +350,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <br>
 
-[unreleased]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.7.5...next
+[unreleased]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.7.6...next
+[3.7.5]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.7.5...3.7.6
 [3.7.5]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.7.4...3.7.5
 [3.7.4]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.7.3...3.7.4
 [3.7.3]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.7.2...3.7.3
