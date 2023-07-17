@@ -348,7 +348,7 @@ impl SimpleComponent for App {
                                                     }
                                                 }
 
-                                                downloaded
+                                                !downloaded
                                             }
 
                                             _ => false
