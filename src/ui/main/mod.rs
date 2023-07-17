@@ -332,10 +332,23 @@ impl SimpleComponent for App {
                                                 let config = Config::get().unwrap();
                                                 let temp = config.launcher.temp.unwrap_or_else(std::env::temp_dir);
 
-                                                let downloaded = temp.join(game.file_name().unwrap()).exists() &&
-                                                    voices.iter().all(|voice| temp.join(voice.file_name().unwrap()).exists());
+                                                let mut downloaded = temp.join(game.file_name().unwrap()).metadata()
+                                                    .map(|metadata| Some(metadata.len()) == game.downloaded_size())
+                                                    .unwrap_or(false);
 
-                                                !downloaded
+                                                if downloaded {
+                                                    for voice in voices {
+                                                        downloaded = !temp.join(voice.file_name().unwrap()).metadata()
+                                                            .map(|metadata| Some(metadata.len()) == voice.downloaded_size())
+                                                            .unwrap_or(false);
+
+                                                        if downloaded {
+                                                            break;
+                                                        }
+                                                    }
+                                                }
+
+                                                downloaded
                                             }
 
                                             _ => false
@@ -347,8 +360,21 @@ impl SimpleComponent for App {
                                                 let config = Config::get().unwrap();
                                                 let temp = config.launcher.temp.unwrap_or_else(std::env::temp_dir);
 
-                                                let downloaded = temp.join(game.file_name().unwrap()).exists() &&
-                                                    voices.iter().all(|voice| temp.join(voice.file_name().unwrap()).exists());
+                                                let mut downloaded = temp.join(game.file_name().unwrap()).metadata()
+                                                    .map(|metadata| Some(metadata.len()) == game.downloaded_size())
+                                                    .unwrap_or(false);
+
+                                                if downloaded {
+                                                    for voice in voices {
+                                                        downloaded = !temp.join(voice.file_name().unwrap()).metadata()
+                                                            .map(|metadata| Some(metadata.len()) == voice.downloaded_size())
+                                                            .unwrap_or(false);
+
+                                                        if downloaded {
+                                                            break;
+                                                        }
+                                                    }
+                                                }
 
                                                 if downloaded {
                                                     &["success", "circular"]
