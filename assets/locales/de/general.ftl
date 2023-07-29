@@ -58,6 +58,9 @@ disable-mhypbase-description = Experimentell. Wenn sie diese option aktivieren, 
 ask-superuser-permissions = Superuser-Berechtigungen anfordern
 ask-superuser-permissions-description = Launcher benötigt Superuser-Zugriff, um Ihre Hosts-Datei automatisch zu aktualisieren. Dies ist in der Flatpak-Edition nicht erforderlich
 
+auto-close-launcher = Auto-close launcher
+auto-close-launcher-description = Close the launcher after the game is closed
+
 wine-tools = Wine-Tools
 command-line = Befehlszeile
 registry-editor = Registrierungs-Editor

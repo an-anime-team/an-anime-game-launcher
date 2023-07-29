@@ -58,6 +58,9 @@ disable-mhypbase-description = Deneysel. Etkinleştirilirse, istemci ana yamayı
 ask-superuser-permissions = Yönetici izinlerini sor
 ask-superuser-permissions-description = İstemci yönetici iznini hostunuzun dosyalarını güncellemek için otomatik olarak kullanacaktır. Buna flatpak versiyonunda gerek yoktur
 
+auto-close-launcher = Auto-close launcher
+auto-close-launcher-description = Close the launcher after the game is closed
+
 wine-tools = Wine araçları
 command-line = Komut istemi
 registry-editor = Girdi düzenleyicisi

@@ -577,6 +577,29 @@ impl SimpleAsyncComponent for GeneralApp {
                 set_title: &tr("options"),
 
                 adw::ActionRow {
+                    set_title: &tr("auto-close-launcher"),
+                    set_subtitle: &tr("auto-close-launcher-description"),
+
+                    add_suffix = &gtk::Switch {
+                        set_valign: gtk::Align::Center,
+
+                        set_state: CONFIG.launcher.auto_close,
+
+                        connect_state_notify => |switch| {
+                            if is_ready() {
+                                if let Ok(mut config) = Config::get() {
+                                    config.launcher.auto_close = switch.state();
+
+                                    Config::update(config);
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+
+            add = &adw::PreferencesGroup {
+                adw::ActionRow {
                     set_title: &tr("components"),
                     set_subtitle: &tr("components-description"),
 

@@ -58,6 +58,9 @@ disable-mhypbase-description = Tesztelés alatt. Ha bekapcsolod, kikapcsolja a m
 ask-superuser-permissions = Superuser engedély kérése
 ask-superuser-permissions-description =  A Launcher autómatikusan használni fogja hogy frissítse a hosts fájlodat. A Flatpak verzióhoz nem kell
 
+auto-close-launcher = Auto-close launcher
+auto-close-launcher-description = Close the launcher after the game is closed
+
 wine-tools = Wine eszközök
 command-line = Parancssor
 registry-editor = Registry szerksztő

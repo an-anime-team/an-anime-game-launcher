@@ -58,6 +58,9 @@ disable-mhypbase-description = Masih dalam pengujicobaan. Jika diaktifkan, launc
 ask-superuser-permissions = Minta izin dari admin
 ask-superuser-permissions-description = Launcher akan otomatis memperbarui file hosts Anda. Opsi ini tidak diperlukan jika Anda memakai edisi flatpak 
 
+auto-close-launcher = Auto-close launcher
+auto-close-launcher-description = Close the launcher after the game is closed
+
 wine-tools = Peralatan wine
 command-line = Command line
 registry-editor = Editor registry
