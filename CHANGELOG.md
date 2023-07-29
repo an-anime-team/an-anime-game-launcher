@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added new gamescope version compatibility
+
+### Fixed
+
+- Fixed predownload button sensitivity
+
+### Changed
+
+- Improved pre-downloads state checking
+
 ## [3.7.6] - 15.07.2023
 
 ### Fixed

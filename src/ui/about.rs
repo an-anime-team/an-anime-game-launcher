@@ -104,10 +104,22 @@ impl SimpleComponent for AboutDialog {
 
             set_release_notes_version: &APP_VERSION,
             set_release_notes: &[
+                "<p>Added</p>",
+
+                "<ul>",
+                    "<li>Added new gamescope version compatibility</li>",
+                "</ul>",
+
                 "<p>Fixed</p>",
 
                 "<ul>",
-                    "<li>Fixed game launching on installs without `launcher.bat` file</li>",
+                    "<li>Fixed predownload button sensitivity</li>",
+                "</ul>",
+
+                "<p>Changed</p>",
+
+                "<ul>",
+                    "<li>Improved pre-downloads state checking</li>",
                 "</ul>",
             ].join("\n"),
 
