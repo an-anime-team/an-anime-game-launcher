@@ -13,6 +13,8 @@ failed-get-selected-wine = Ottenimento della versione selezionata di wine non ri
 downloading-failed = Scaricamento non riuscito
 unpacking-failed = Unpacking non riuscito
 
+kill-game-process-failed = Failed to kill the game's process
+
 game-file-repairing-error = Riparazione del file di gioco non riuscita
 integrity-files-getting-error = Ottenimento dei file di integrità non riuscito
 

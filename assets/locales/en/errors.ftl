@@ -13,6 +13,8 @@ failed-get-selected-wine = Failed to get selected wine version
 downloading-failed = Downloading failed
 unpacking-failed = Unpacking failed
 
+kill-game-process-failed = Failed to kill the game's process
+
 game-file-repairing-error = Failed to repair game file
 integrity-files-getting-error = Failed to get integrity files
 

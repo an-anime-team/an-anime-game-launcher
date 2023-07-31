@@ -13,6 +13,8 @@ failed-get-selected-wine = Impossible de récupérer la version de wine sélecti
 downloading-failed = Le téléchargement a échoué
 unpacking-failed = L'extraction a échoué
 
+kill-game-process-failed = Failed to kill the game's process
+
 game-file-repairing-error = Impossible de réparer les fichiers du jeu
 integrity-files-getting-error = Impossible de récupérer les fichiers d'intégrité du jeu
 

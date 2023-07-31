@@ -64,6 +64,8 @@ update = Update
 download = Download
 predownload-update = Pre-download {$version} update ({$size})
 
+kill-game-process = Kill game process
+
 main-window--patch-unavailable-tooltip = Patch servers are unavailable and launcher can't verify the game's patching status. You're allowed to run the game on your own risk
 main-window--patch-outdated-tooltip = Patch is outdated or in preparation state, so unavailable for usage. Return back later to see its status
 main-window--version-outdated-tooltip = Version is too outdated and can't be updated

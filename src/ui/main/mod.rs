@@ -551,7 +551,7 @@ impl SimpleComponent for App {
                                     gtk::Button {
                                         adw::ButtonContent {
                                             set_icon_name: "violence-symbolic", // window-close-symbolic
-                                            set_label: "Kill game process"
+                                            set_label: &tr!("kill-game-process")
                                         },
 
                                         #[watch]
@@ -580,7 +580,7 @@ impl SimpleComponent for App {
 
                                             if let Err(err) = result {
                                                 sender.input(AppMsg::Toast {
-                                                    title: String::from("Failed to kill the game's process"),
+                                                    title: tr!("kill-game-process-failed"),
                                                     description: Some(err.to_string())
                                                 });
                                             }

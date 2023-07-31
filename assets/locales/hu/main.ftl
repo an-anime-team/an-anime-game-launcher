@@ -64,6 +64,8 @@ update = Frissítés
 download = Letöltés
 predownload-update = {$version} verzió előtöltése ({$size})
 
+kill-game-process = Kill game process
+
 main-window--patch-unavailable-tooltip = A patch szerverek nem elérhetőek és a launcher nem tudja ellenőrizni a játék patch státuszát. Saját felelősségre futtathatod a játékot
 main-window--patch-outdated-tooltip = A patch jelenleg nem elérhető mert túl elavult, vagy előkészítés alatt áll. Nézz vissza később
 main-window--version-outdated-tooltip = Ez a verzió túl elavult és nem lehet frissíteni

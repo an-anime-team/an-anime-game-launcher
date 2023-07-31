@@ -64,6 +64,8 @@ update = Updaten
 download = Herunterladen
 predownload-update = Vorab-Update von Version {$version} herunterladen ({$size})
 
+kill-game-process = Kill game process
+
 main-window--patch-unavailable-tooltip = Die Patch-Server sind nicht verfügbar und der Launcher kann den Patch-Status des Spiels nicht überprüfen. Sie können das Spiel auf eigene Gefahr spielen.
 main-window--patch-outdated-tooltip = Der Patch ist veraltet oder befindet sich in Vorbereitung und kann daher nicht verwendet werden. Kehren Sie später zurück, um den Status zu sehen.
 main-window--version-outdated-tooltip = Die Version ist zu veraltet und kann nicht aktualisiert werden

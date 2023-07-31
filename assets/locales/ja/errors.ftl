@@ -13,6 +13,8 @@ failed-get-selected-wine = 選択されたwineバージョンを入手できま�
 downloading-failed = ダウンロードに失敗。
 unpacking-failed = 展開失敗
 
+kill-game-process-failed = Failed to kill the game's process
+
 game-file-repairing-error = ゲームファイルの修正に失敗しました。
 integrity-files-getting-error = 整合性ファイルの取得に失敗しました
 
