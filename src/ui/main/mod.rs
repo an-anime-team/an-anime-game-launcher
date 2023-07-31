@@ -59,7 +59,9 @@ pub struct App {
     state: Option<LauncherState>,
 
     downloading: bool,
-    disabled_buttons: bool
+    disabled_buttons: bool,
+    kill_game_button: bool,
+    disabled_kill_game_button: bool
 }
 
 #[derive(Debug)]
@@ -89,6 +91,8 @@ pub enum AppMsg {
 
     SetDownloading(bool),
     DisableButtons(bool),
+    SetKillGameButton(bool),
+    DisableKillGameButton(bool),
 
     OpenPreferences,
     RepairGame,
@@ -219,7 +223,7 @@ impl SimpleComponent for App {
                             set_visible: model.style == LauncherStyle::Modern,
 
                             gtk::Picture {
-                                set_resource: Some("/org/app/images/icon.png"),
+                                set_resource: Some(&format!("{APP_RESOURCE_PATH}/icons/hicolor/scalable/apps/{APP_ID}.png")),
                                 set_vexpand: true,
                                 set_content_fit: gtk::ContentFit::ScaleDown
                             },
@@ -395,6 +399,9 @@ impl SimpleComponent for App {
                                 adw::Bin {
                                     set_css_classes: &["background", "round-bin"],
 
+                                    #[watch]
+                                    set_visible: !model.kill_game_button,
+
                                     gtk::Button {
                                         adw::ButtonContent {
                                             #[watch]
@@ -535,6 +542,48 @@ impl SimpleComponent for App {
                                 adw::Bin {
                                     set_css_classes: &["background", "round-bin"],
 
+                                    #[watch]
+                                    set_visible: model.kill_game_button,
+
+                                    gtk::Button {
+                                        adw::ButtonContent {
+                                            set_icon_name: "violence-symbolic", // window-close-symbolic
+                                            set_label: "Kill game process"
+                                        },
+
+                                        #[watch]
+                                        set_visible: model.kill_game_button,
+
+                                        #[watch]
+                                        set_sensitive: !model.disabled_kill_game_button,
+
+                                        set_css_classes: &["error", "pill"],
+
+                                        set_hexpand: false,
+                                        set_width_request: 200,
+
+                                        connect_clicked[sender] => move |_| {
+                                            sender.input(AppMsg::DisableKillGameButton(true));
+
+                                            std::thread::spawn(clone!(@strong sender => move || {
+                                                std::thread::sleep(std::time::Duration::from_secs(3));
+
+                                                sender.input(AppMsg::DisableKillGameButton(false));
+                                            }));
+
+                                            if let Err(err) = std::process::Command::new("pkill").arg("GenshinImpact.e").spawn() {
+                                                sender.input(AppMsg::Toast {
+                                                    title: String::from("Failed to kill the game's process"),
+                                                    description: Some(err.to_string())
+                                                });
+                                            }
+                                        }
+                                    }
+                                },
+
+                                adw::Bin {
+                                    set_css_classes: &["background", "round-bin"],
+
                                     gtk::Button {
                                         #[watch]
                                         set_sensitive: !model.disabled_buttons,
@@ -590,7 +639,9 @@ impl SimpleComponent for App {
             state: None,
 
             downloading: false,
-            disabled_buttons: false
+            disabled_buttons: false,
+            kill_game_button: false,
+            disabled_kill_game_button: false
         };
 
         model.progress_bar.widget().set_halign(gtk::Align::Center);
@@ -1017,6 +1068,14 @@ impl SimpleComponent for App {
 
             AppMsg::DisableButtons(state) => {
                 self.disabled_buttons = state;
+            }
+
+            AppMsg::SetKillGameButton(state) => {
+                self.kill_game_button = state;
+            }
+
+            AppMsg::DisableKillGameButton(state) => {
+                self.disabled_kill_game_button = state;
             }
 
             AppMsg::OpenPreferences => unsafe {

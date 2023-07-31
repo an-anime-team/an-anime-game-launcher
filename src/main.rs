@@ -24,6 +24,8 @@ use ui::main::*;
 use ui::first_run::main::*;
 
 pub const APP_ID: &str = "moe.launcher.an-anime-game-launcher";
+pub const APP_RESOURCE_PATH: &str = "/moe/launcher/an-anime-game-launcher";
+
 pub const APP_VERSION: &str = env!("CARGO_PKG_VERSION");
 pub const APP_DEBUG: bool = cfg!(debug_assertions);
 
@@ -133,6 +135,10 @@ fn main() {
     // Register and include resources
     gtk::gio::resources_register_include!("resources.gresource")
         .expect("Failed to register resources");
+
+    // Set icons search path
+    gtk::IconTheme::for_display(&gtk::gdk::Display::default().unwrap())
+        .add_resource_path(&format!("{APP_RESOURCE_PATH}/icons"));
 
     // Set application's title
     gtk::glib::set_application_name("An Anime Game Launcher");

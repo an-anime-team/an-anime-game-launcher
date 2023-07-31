@@ -11,8 +11,11 @@ pub fn launch(sender: ComponentSender<App>) {
     let config = Config::get().unwrap();
 
     match config.launcher.behavior {
-        // Disable launch button if behavior set to "Nothing" to prevent sussy actions
-        LauncherBehavior::Nothing => sender.input(AppMsg::DisableButtons(true)),
+        // Disable launch button and show kill game button if behavior set to "Nothing" to prevent sussy actions
+        LauncherBehavior::Nothing => {
+            sender.input(AppMsg::DisableButtons(true));
+            sender.input(AppMsg::SetKillGameButton(true));
+        }
 
         // Hide launcher window if behavior set to "Hide" or "Close"
         LauncherBehavior::Hide | LauncherBehavior::Close => sender.input(AppMsg::HideWindow)
@@ -29,8 +32,11 @@ pub fn launch(sender: ComponentSender<App>) {
         }
 
         match config.launcher.behavior {
-            // Enable launch button if behavior set to "Nothing" after the game has closed
-            LauncherBehavior::Nothing => sender.input(AppMsg::DisableButtons(false)),
+            // Enable launch button and hide kill game button if behavior set to "Nothing" after the game has closed
+            LauncherBehavior::Nothing => {
+                sender.input(AppMsg::DisableButtons(false));
+                sender.input(AppMsg::SetKillGameButton(false));
+            }
 
             // Show back launcher window if behavior set to "Hide" and the game has closed
             LauncherBehavior::Hide => sender.input(AppMsg::ShowWindow),

@@ -29,7 +29,7 @@ impl SimpleAsyncComponent for WelcomeApp {
                 set_vexpand: true,
 
                 gtk::Image {
-                    set_resource: Some("/org/app/images/icon.png"),
+                    set_icon_name: Some(APP_ID),
                     set_height_request: 128
                 },
 
