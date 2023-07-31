@@ -18,6 +18,8 @@ about = Részletek
 
 
 close = Bezárás
+hide = Hide
+nothing = Nothing
 save = Mentés
 continue = Folytatás
 resume = Resume

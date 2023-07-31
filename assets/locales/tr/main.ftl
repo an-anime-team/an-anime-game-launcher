@@ -18,6 +18,8 @@ about = Hakkında
 
 
 close = Kapat
+hide = Hide
+nothing = Nothing
 save = Kaydet
 continue = Devam et
 resume = Sürdürmek

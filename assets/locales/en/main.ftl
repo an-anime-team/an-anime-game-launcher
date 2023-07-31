@@ -18,6 +18,8 @@ about = About
 
 
 close = Close
+hide = Hide
+nothing = Nothing
 save = Save
 continue = Continue
 resume = Resume

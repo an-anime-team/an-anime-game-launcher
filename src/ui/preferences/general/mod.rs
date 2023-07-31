@@ -13,7 +13,7 @@ use anime_launcher_sdk::wincompatlib::prelude::*;
 
 use anime_launcher_sdk::config::ConfigExt;
 use anime_launcher_sdk::genshin::config::Config;
-use anime_launcher_sdk::genshin::config::schema::launcher::LauncherStyle;
+use anime_launcher_sdk::genshin::config::schema::prelude::*;
 
 use anime_launcher_sdk::anime_game_core::genshin::consts::GameEdition;
 use anime_launcher_sdk::genshin::env_emulation::Environment;
@@ -576,22 +576,32 @@ impl SimpleAsyncComponent for GeneralApp {
             add = &adw::PreferencesGroup {
                 set_title: &tr("options"),
 
-                adw::ActionRow {
-                    set_title: &tr("auto-close-launcher"),
-                    set_subtitle: &tr("auto-close-launcher-description"),
+                adw::ComboRow {
+                    set_title: &tr("launcher-behavior"),
+                    set_subtitle: &tr("launcher-behavior-description"),
 
-                    add_suffix = &gtk::Switch {
-                        set_valign: gtk::Align::Center,
+                    set_model: Some(&gtk::StringList::new(&[
+                        &tr("nothing"),
+                        &tr_args("hide", [("form", "verb".into())]),
+                        &tr_args("close", [("form", "verb".into())]),
+                    ])),
 
-                        set_state: CONFIG.launcher.auto_close,
+                    set_selected: match CONFIG.launcher.behavior {
+                        LauncherBehavior::Nothing => 0,
+                        LauncherBehavior::Hide    => 1,
+                        LauncherBehavior::Close   => 2
+                    },
 
-                        connect_state_notify => |switch| {
-                            if is_ready() {
-                                if let Ok(mut config) = Config::get() {
-                                    config.launcher.auto_close = switch.state();
+                    connect_selected_notify => |row| {
+                        if is_ready() {
+                            if let Ok(mut config) = Config::get() {
+                                config.launcher.behavior = [
+                                    LauncherBehavior::Nothing,
+                                    LauncherBehavior::Hide,
+                                    LauncherBehavior::Close
+                                ][row.selected() as usize];
 
-                                    Config::update(config);
-                                }
+                                Config::update(config);
                             }
                         }
                     }

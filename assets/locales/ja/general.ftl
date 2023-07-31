@@ -58,8 +58,8 @@ disable-mhypbase-description = 試験的です。有効にすると、ランチ�
 ask-superuser-permissions = スーパーユーザーを尋ねる。
 ask-superuser-permissions-description = あなたのホストのファイルを自動更新するために、 これらを利用します。flatpak版では必要ありません。
 
-auto-close-launcher = ランチャーを自動で閉じる
-auto-close-launcher-description = ゲーム終了後にランチャーも閉じるようにする
+launcher-behavior = Launcher behavior
+launcher-behavior-description = What should launcher window do when it starts the game
 
 wine-tools = ワインツール
 command-line = コマンドライン

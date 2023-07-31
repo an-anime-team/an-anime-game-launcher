@@ -58,8 +58,8 @@ disable-mhypbase-description = Экспериментально. Когда вк
 ask-superuser-permissions = Запрашивать права суперпользователя
 ask-superuser-permissions-description = Лаунчер будет использовать их чтобы автоматически обновлять ваш hosts файл для отключения телеметрии игры. Не требуется при использовании flatpak
 
-auto-close-launcher = Автоматически закрывать лаунчер
-auto-close-launcher-description = Закрывать лаунчер после выхода из игры
+launcher-behavior = Поведение лаунчера
+launcher-behavior-description = Что должно делать окно лаунчера когда оно запускает игру
 
 wine-tools = Инструменты Wine
 command-line = Коммандная строка

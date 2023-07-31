@@ -17,7 +17,17 @@ wish-url = История молитв
 about = О программе
 
 
-close = Закрыть
+close = { $form ->
+    [verb] Закрываться
+    *[noun] Закрыть
+}
+
+hide = { $form ->
+    [verb] Скрываться
+    *[noun] Скрыть
+}
+
+nothing = Ничего
 save = Сохранить
 continue = Продолжить
 resume = Возобновить

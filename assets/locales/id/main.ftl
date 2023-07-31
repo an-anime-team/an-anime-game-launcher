@@ -17,7 +17,9 @@ wish-url = Buka wishes
 about = Tentang 
 
 
-close = Tutup 
+close = Tutup
+hide = Hide
+nothing = Nothing
 save = Simpan
 continue = Lanjutkan
 resume = Lanjutkan

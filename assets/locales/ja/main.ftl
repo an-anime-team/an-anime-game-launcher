@@ -18,6 +18,8 @@ about = "An anime Game launcher"について
 
 
 close = 閉じる
+hide = Hide
+nothing = Nothing
 save = 保存
 continue = 続行
 resume = 一時停止

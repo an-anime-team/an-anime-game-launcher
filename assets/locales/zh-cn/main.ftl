@@ -18,6 +18,8 @@ about = 关于
 
 
 close = 关闭
+hide = Hide
+nothing = Nothing
 save = 保存
 continue = 继续
 resume = 恢复

@@ -18,6 +18,8 @@ about = Über
 
 
 close = Schließen
+hide = Hide
+nothing = Nothing
 save = Speichern
 continue = Weiter
 resume = Fortsetzen
