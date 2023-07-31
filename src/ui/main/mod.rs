@@ -1,3 +1,6 @@
+use std::process::Command;
+use std::time::Duration;
+
 use relm4::{
     prelude::*,
     component::*,
@@ -566,12 +569,16 @@ impl SimpleComponent for App {
                                             sender.input(AppMsg::DisableKillGameButton(true));
 
                                             std::thread::spawn(clone!(@strong sender => move || {
-                                                std::thread::sleep(std::time::Duration::from_secs(3));
+                                                std::thread::sleep(Duration::from_secs(3));
 
                                                 sender.input(AppMsg::DisableKillGameButton(false));
                                             }));
 
-                                            if let Err(err) = std::process::Command::new("pkill").arg("GenshinImpact.e").spawn() {
+                                            let result = Command::new("pkill")
+                                                .arg("GenshinImpact|YuanShen")
+                                                .spawn();
+
+                                            if let Err(err) = result {
                                                 sender.input(AppMsg::Toast {
                                                     title: String::from("Failed to kill the game's process"),
                                                     description: Some(err.to_string())
