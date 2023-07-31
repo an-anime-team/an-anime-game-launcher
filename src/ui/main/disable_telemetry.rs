@@ -3,7 +3,6 @@ use std::process::Command;
 use relm4::prelude::*;
 
 use crate::*;
-use crate::i18n::*;
 
 use super::{App, AppMsg};
 
@@ -40,7 +39,7 @@ pub fn disable_telemetry(sender: ComponentSender<App>) {
                 tracing::error!("Failed to update /etc/hosts file");
 
                 sender.input(AppMsg::Toast {
-                    title: tr("telemetry-servers-disabling-error"),
+                    title: tr!("telemetry-servers-disabling-error"),
                     description: None // stdout/err is empty
                 });
             }
@@ -49,7 +48,7 @@ pub fn disable_telemetry(sender: ComponentSender<App>) {
                 tracing::error!("Failed to update /etc/hosts file");
 
                 sender.input(AppMsg::Toast {
-                    title: tr("telemetry-servers-disabling-error"),
+                    title: tr!("telemetry-servers-disabling-error"),
                     description: Some(err.to_string())
                 });
             }

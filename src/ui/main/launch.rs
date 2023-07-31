@@ -4,7 +4,6 @@ use gtk::prelude::*;
 use anime_launcher_sdk::genshin::config::schema::prelude::LauncherBehavior;
 
 use crate::*;
-use crate::i18n::*;
 
 use super::{App, AppMsg};
 
@@ -24,7 +23,7 @@ pub fn launch(sender: ComponentSender<App>) {
             tracing::error!("Failed to launch game: {err}");
 
             sender.input(AppMsg::Toast {
-                title: tr("game-launching-failed"),
+                title: tr!("game-launching-failed"),
                 description: Some(err.to_string())
             });
         }

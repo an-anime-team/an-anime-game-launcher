@@ -1,8 +1,7 @@
-use fluent_templates::Loader;
 use unic_langid::{langid, LanguageIdentifier};
 
 fluent_templates::static_loader! {
-    static LOCALES = {
+    pub static LOCALES = {
         locales: "./assets/locales",
         core_locales: "./assets/locales/common.ftl",
         fallback_language: "en"
@@ -24,7 +23,7 @@ pub const SUPPORTED_LANGUAGES: &[LanguageIdentifier] = &[
     langid!("hu-hu")
 ];
 
-static mut LANG: LanguageIdentifier = langid!("en-us");
+pub static mut LANG: LanguageIdentifier = langid!("en-us");
 
 /// Set launcher language
 pub fn set_lang(lang: LanguageIdentifier) -> anyhow::Result<()> {
@@ -75,36 +74,51 @@ pub fn format_lang(lang: &LanguageIdentifier) -> String {
     })
 }
 
-/// Get translated message by key
+#[macro_export]
+/// Get translated message by key, with optional translation parameters
+/// 
+/// # Examples:
+/// 
+/// Without parameters:
 /// 
 /// ```no_run
-/// println!("Translated message: {}", tr("launch"));
-/// ``` 
-#[allow(clippy::expect_fun_call)]
-pub fn tr(id: &str) -> String {
-    unsafe {
-        LOCALES
-            .lookup(&LANG, id)
-            .expect(&format!("Failed to find message with given id: {id}"))
-    }
-}
-
-/// Get translated message by key with filled arguments
+/// println!("Translated message: {}", tr!("launch"));
+/// ```
+/// 
+/// With parameters:
 /// 
 /// ```no_run
-/// println!("Translated message: {}", tr_args("game-outdated", [
-///     ("latest", "3.3.0".into())
+/// println!("Translated message: {}", tr!("game-outdated", [
+///     ("latest", "3.3.0")
 /// ]));
 /// ``` 
-#[allow(clippy::expect_fun_call)]
-pub fn tr_args<I, T>(id: &str, args: I) -> String
-where
-    I: IntoIterator<Item = (T, fluent_templates::fluent_bundle::FluentValue<'static>)>,
-    T: AsRef<str> + std::hash::Hash + Eq
-{
-    unsafe {
-        LOCALES
-            .lookup_with_args(&LANG, id, &std::collections::HashMap::from_iter(args.into_iter()))
-            .expect(&format!("Failed to find message with given id: {id}"))
-    }
+macro_rules! tr {
+    ($id:expr) => {
+        {
+            use fluent_templates::Loader;
+
+            #[allow(unused_unsafe)]
+            $crate::i18n::LOCALES
+                .lookup(unsafe { &$crate::i18n::LANG }, $id)
+                .expect(&format!("Failed to find a message with given id: {}", stringify!($id)))
+        }
+    };
+
+    ($id:expr, $args:expr) => {
+        {
+            use fluent_templates::Loader;
+            use fluent_templates::fluent_bundle::FluentValue;
+
+            let mut args = std::collections::HashMap::new();
+
+            for (key, value) in $args {
+                args.insert(key, FluentValue::from(value));
+            }
+
+            #[allow(unused_unsafe)]
+            $crate::i18n::LOCALES
+                .lookup_with_args(unsafe { &$crate::i18n::LANG }, $id, &args)
+                .expect(&format!("Failed to find a message with given id: {}", stringify!($id)))
+        }
+    };
 }

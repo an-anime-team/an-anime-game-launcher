@@ -3,7 +3,8 @@ use relm4::component::*;
 
 use gtk::prelude::*;
 
-use crate::i18n::*;
+use crate::tr;
+
 use super::first_run::default_paths::DefaultPathsApp;
 
 pub struct MigrateInstallationApp {
@@ -23,7 +24,7 @@ impl SimpleComponent for MigrateInstallationApp {
             set_hide_on_close: true,
 
             #[watch]
-            set_title: Some(&tr("migrate-installation")),
+            set_title: Some(&tr!("migrate-installation")),
 
             gtk::Box {
                 set_orientation: gtk::Orientation::Vertical,

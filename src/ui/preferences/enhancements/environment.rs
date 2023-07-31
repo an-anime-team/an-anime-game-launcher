@@ -4,10 +4,9 @@ use relm4::factory::*;
 
 use adw::prelude::*;
 
-use super::EnhancementsAppMsg;
-
-use crate::i18n::tr;
 use crate::*;
+
+use super::EnhancementsAppMsg;
 
 #[derive(Debug)]
 struct Variable {
@@ -83,7 +82,7 @@ impl SimpleAsyncComponent for EnvironmentPage {
             adw::HeaderBar {
                 #[wrap(Some)]
                 set_title_widget = &adw::WindowTitle {
-                    set_title: &tr("environment")
+                    set_title: &tr!("environment")
                 },
 
                 pack_start = &gtk::Button {
@@ -96,12 +95,12 @@ impl SimpleAsyncComponent for EnvironmentPage {
             },
 
             adw::PreferencesPage {
-                set_title: &tr("environment"),
+                set_title: &tr!("environment"),
                 set_icon_name: Some("document-properties-symbolic"),
 
                 add = &adw::PreferencesGroup {
-                    set_title: &tr("game-command"),
-                    set_description: Some(&tr("game-command-description")),
+                    set_title: &tr!("game-command"),
+                    set_description: Some(&tr!("game-command-description")),
 
                     adw::EntryRow {
                         set_title: "%command%",
@@ -124,7 +123,7 @@ impl SimpleAsyncComponent for EnvironmentPage {
                 },
 
                 add = &adw::PreferencesGroup {
-                    set_title: &tr("new-variable"),
+                    set_title: &tr!("new-variable"),
 
                     #[wrap(Some)]
                     set_header_suffix = &gtk::Button {
@@ -134,7 +133,7 @@ impl SimpleAsyncComponent for EnvironmentPage {
 
                         adw::ButtonContent {
                             set_icon_name: "list-add-symbolic",
-                            set_label: &tr("add")
+                            set_label: &tr!("add")
                         },
 
                         connect_clicked => EnvironmentPageMsg::Add
@@ -142,12 +141,12 @@ impl SimpleAsyncComponent for EnvironmentPage {
 
                     #[local_ref]
                     name_entry -> adw::EntryRow {
-                        set_title: &tr("name")
+                        set_title: &tr!("name")
                     },
 
                     #[local_ref]
                     value_entry -> adw::EntryRow {
-                        set_title: &tr("value")
+                        set_title: &tr!("value")
                     }
                 },
 

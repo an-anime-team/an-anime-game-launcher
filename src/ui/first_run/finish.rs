@@ -3,7 +3,7 @@ use relm4::component::*;
 
 use adw::prelude::*;
 
-use crate::i18n::*;
+use crate::*;
 
 use super::main::*;
 
@@ -30,12 +30,12 @@ impl SimpleAsyncComponent for FinishApp {
                 set_vexpand: true,
 
                 gtk::Label {
-                    set_label: &tr("finish-title"),
+                    set_label: &tr!("finish-title"),
                     add_css_class: "title-1"
                 },
 
                 gtk::Label {
-                    set_label: &tr("finish-message"),
+                    set_label: &tr!("finish-message"),
     
                     set_justify: gtk::Justification::Center,
                     set_wrap: true,
@@ -53,14 +53,14 @@ impl SimpleAsyncComponent for FinishApp {
                     set_spacing: 8,
     
                     gtk::Button {
-                        set_label: &tr("restart"),
+                        set_label: &tr!("restart"),
                         set_css_classes: &["suggested-action", "pill"],
 
                         connect_clicked => FinishAppMsg::Restart
                     },
 
                     gtk::Button {
-                        set_label: &tr("exit"),
+                        set_label: &tr!("exit"),
                         add_css_class: "pill",
 
                         connect_clicked => FinishAppMsg::Exit

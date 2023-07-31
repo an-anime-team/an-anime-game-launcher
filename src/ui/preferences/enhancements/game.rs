@@ -7,10 +7,9 @@ use adw::prelude::*;
 use anime_launcher_sdk::sessions::SessionsExt;
 use anime_launcher_sdk::genshin::sessions::Sessions;
 
-use super::EnhancementsAppMsg;
-
-use crate::i18n::tr;
 use crate::*;
+
+use super::EnhancementsAppMsg;
 
 #[derive(Debug)]
 struct GameSession {
@@ -44,7 +43,7 @@ impl AsyncFactoryComponent for GameSession {
                 set_icon_name: "view-refresh-symbolic",
                 add_css_class: "flat",
 
-                set_tooltip_text: Some(&tr("update-session")),
+                set_tooltip_text: Some(&tr!("update-session")),
 
                 set_valign: gtk::Align::Center,
 
@@ -57,7 +56,7 @@ impl AsyncFactoryComponent for GameSession {
                 set_icon_name: "user-trash-symbolic",
                 add_css_class: "flat",
 
-                set_tooltip_text: Some(&tr("delete-session")),
+                set_tooltip_text: Some(&tr!("delete-session")),
 
                 set_valign: gtk::Align::Center,
 
@@ -115,7 +114,7 @@ impl SimpleAsyncComponent for GamePage {
             adw::HeaderBar {
                 #[wrap(Some)]
                 set_title_widget = &adw::WindowTitle {
-                    set_title: &tr("game")
+                    set_title: &tr!("game")
                 },
 
                 pack_start = &gtk::Button {
@@ -128,15 +127,15 @@ impl SimpleAsyncComponent for GamePage {
             },
 
             adw::PreferencesPage {
-                set_title: &tr("game"),
+                set_title: &tr!("game"),
                 set_icon_name: Some("applications-games-symbolic"),
 
                 add = &adw::PreferencesGroup {
-                    set_title: &tr("game-sessions"),
+                    set_title: &tr!("game-sessions"),
 
                     #[local_ref]
                     session_name_entry -> adw::EntryRow {
-                        set_title: &tr("name"),
+                        set_title: &tr!("name"),
 
                         add_suffix = &gtk::Button {
                             set_icon_name: "list-add-symbolic",
@@ -220,7 +219,7 @@ impl SimpleAsyncComponent for GamePage {
 
                             Err(err) => {
                                 sender.output(EnhancementsAppMsg::Toast {
-                                    title: tr("game-session-add-failed"),
+                                    title: tr!("game-session-add-failed"),
                                     description: Some(err.to_string())
                                 }).unwrap();
                             }
@@ -234,7 +233,7 @@ impl SimpleAsyncComponent for GamePage {
                     if let Ok(config) = Config::get() {
                         if let Err(err) = Sessions::update(session.name.clone(), config.get_wine_prefix_path()) {
                             sender.output(EnhancementsAppMsg::Toast {
-                                title: tr("game-session-update-failed"),
+                                title: tr!("game-session-update-failed"),
                                 description: Some(err.to_string())
                             }).unwrap();
                         }
@@ -246,7 +245,7 @@ impl SimpleAsyncComponent for GamePage {
                 if let Some(session) = self.sessions.guard().get(index) {
                     if let Err(err) = Sessions::remove(&session.name) {
                         sender.output(EnhancementsAppMsg::Toast {
-                            title: tr("game-session-remove-failed"),
+                            title: tr!("game-session-remove-failed"),
                             description: Some(err.to_string())
                         }).unwrap();
 
@@ -266,7 +265,7 @@ impl SimpleAsyncComponent for GamePage {
                     if let Ok(config) = Config::get() {
                         if let Err(err) = Sessions::set_current(session.name.clone()) {
                             sender.output(EnhancementsAppMsg::Toast {
-                                title: tr("game-session-set-current-failed"),
+                                title: tr!("game-session-set-current-failed"),
                                 description: Some(err.to_string())
                             }).unwrap();
 
@@ -276,7 +275,7 @@ impl SimpleAsyncComponent for GamePage {
 
                         if let Err(err) = Sessions::apply(session.name.clone(), config.get_wine_prefix_path()) {
                             sender.output(EnhancementsAppMsg::Toast {
-                                title: tr("game-session-apply-failed"),
+                                title: tr!("game-session-apply-failed"),
                                 description: Some(err.to_string())
                             }).unwrap();
 

@@ -3,7 +3,7 @@ use relm4::component::*;
 
 use adw::prelude::*;
 
-use crate::i18n::*;
+use crate::*;
 
 use super::main::FirstRunAppMsg;
 
@@ -40,7 +40,7 @@ impl SimpleAsyncComponent for WelcomeApp {
                 },
 
                 gtk::Label {
-                    set_label: &tr("welcome-page-message"),
+                    set_label: &tr!("welcome-page-message"),
     
                     set_justify: gtk::Justification::Center,
                     set_wrap: true,
@@ -58,7 +58,7 @@ impl SimpleAsyncComponent for WelcomeApp {
                     set_spacing: 8,
     
                     gtk::Button {
-                        set_label: &tr("continue"),
+                        set_label: &tr!("continue"),
                         set_css_classes: &["suggested-action", "pill"],
 
                         connect_clicked => WelcomeAppMsg::Continue

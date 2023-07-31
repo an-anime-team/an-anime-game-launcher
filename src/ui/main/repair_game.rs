@@ -8,7 +8,6 @@ use relm4::{
 use gtk::glib::clone;
 
 use crate::*;
-use crate::i18n::*;
 use crate::ui::components::*;
 
 use super::{App, AppMsg};
@@ -17,7 +16,7 @@ use super::{App, AppMsg};
 pub fn repair_game(sender: ComponentSender<App>, progress_bar_input: Sender<ProgressBarMsg>) {
     let config = Config::get().unwrap();
 
-    progress_bar_input.send(ProgressBarMsg::UpdateCaption(Some(tr("verifying-files"))));
+    progress_bar_input.send(ProgressBarMsg::UpdateCaption(Some(tr!("verifying-files"))));
     sender.input(AppMsg::SetDownloading(true));
 
     std::thread::spawn(move || {
@@ -100,7 +99,7 @@ pub fn repair_game(sender: ComponentSender<App>, progress_bar_input: Sender<Prog
                 if !broken.is_empty() {
                     let total = broken.len() as u64;
 
-                    progress_bar_input.send(ProgressBarMsg::UpdateCaption(Some(tr("repairing-files"))));
+                    progress_bar_input.send(ProgressBarMsg::UpdateCaption(Some(tr!("repairing-files"))));
                     progress_bar_input.send(ProgressBarMsg::DisplayFraction(false));
                     progress_bar_input.send(ProgressBarMsg::UpdateProgress(0, total));
 
@@ -149,7 +148,7 @@ pub fn repair_game(sender: ComponentSender<App>, progress_bar_input: Sender<Prog
 
                             if let Err(err) = file.repair(&game_path) {
                                 sender.input(AppMsg::Toast {
-                                    title: tr("game-file-repairing-error"),
+                                    title: tr!("game-file-repairing-error"),
                                     description: Some(err.to_string())
                                 });
 
@@ -172,7 +171,7 @@ pub fn repair_game(sender: ComponentSender<App>, progress_bar_input: Sender<Prog
                 tracing::error!("Failed to get inregrity failes: {err}");
 
                 sender.input(AppMsg::Toast {
-                    title: tr("integrity-files-getting-error"),
+                    title: tr!("integrity-files-getting-error"),
                     description: Some(err.to_string())
                 });
             }

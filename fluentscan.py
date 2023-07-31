@@ -148,9 +148,9 @@ for filename in os.listdir("assets/locales/en"):
                 # FIXME: it only indexes the first match
                 for line in script.read().split("\n"):
                     if ("tr(\"" in line) and ("#" not in line):
-                        index = line.find('tr("')
+                        index = line.find('tr!("')
                         indexLast = line.find('")',index)
-                        var_name = re.sub('[^\\w-]+', '', line[index:indexLast].replace('tr("', '').replace("Some", ""))
+                        var_name = re.sub('[^\\w-]+', '', line[index:indexLast].replace('tr!("', '').replace("Some", ""))
 
                         script_entries[var_name] = [script.name, get_line_num(script, var_name)]
 

@@ -6,7 +6,6 @@ use relm4::{
 use gtk::glib::clone;
 
 use crate::*;
-use crate::i18n::*;
 use crate::ui::components::*;
 
 use super::{App, AppMsg};
@@ -28,7 +27,7 @@ pub fn download_diff(sender: ComponentSender<App>, progress_bar_input: Sender<Pr
                     tracing::error!("Downloading failed: {err}");
 
                     sender.input(AppMsg::Toast {
-                        title: tr("downloading-failed"),
+                        title: tr!("downloading-failed"),
                         description: Some(err.to_string())
                     });
                 }
@@ -37,7 +36,7 @@ pub fn download_diff(sender: ComponentSender<App>, progress_bar_input: Sender<Pr
                     tracing::error!("Unpacking failed: {err}");
 
                     sender.input(AppMsg::Toast {
-                        title: tr("unpacking-failed"),
+                        title: tr!("unpacking-failed"),
                         description: Some(err.clone())
                     });
                 }
@@ -56,7 +55,7 @@ pub fn download_diff(sender: ComponentSender<App>, progress_bar_input: Sender<Pr
             tracing::error!("Downloading failed: {err}");
 
             sender.input(AppMsg::Toast {
-                title: tr("downloading-failed"),
+                title: tr!("downloading-failed"),
                 description: Some(err.to_string())
             });
 

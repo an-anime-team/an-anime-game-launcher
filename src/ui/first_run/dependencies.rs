@@ -5,7 +5,7 @@ use adw::prelude::*;
 
 use anime_launcher_sdk::is_available;
 
-use crate::i18n::*;
+use crate::*;
 
 use super::main::FirstRunAppMsg;
 
@@ -36,12 +36,12 @@ impl SimpleAsyncComponent for DependenciesApp {
                 set_vexpand: true,
 
                 gtk::Label {
-                    set_label: &tr("missing-dependencies-title"),
+                    set_label: &tr!("missing-dependencies-title"),
                     add_css_class: "title-1"
                 },
 
                 gtk::Label {
-                    set_label: &tr("missing-dependencies-message"),
+                    set_label: &tr!("missing-dependencies-message"),
     
                     set_justify: gtk::Justification::Center,
                     set_wrap: true,
@@ -120,14 +120,14 @@ impl SimpleAsyncComponent for DependenciesApp {
                     set_spacing: 8,
 
                     gtk::Button {
-                        set_label: &tr("check"),
+                        set_label: &tr!("check"),
                         set_css_classes: &["suggested-action", "pill"],
 
                         connect_clicked => DependenciesAppMsg::Continue
                     },
 
                     gtk::Button {
-                        set_label: &tr("exit"),
+                        set_label: &tr!("exit"),
                         add_css_class: "pill",
 
                         connect_clicked => DependenciesAppMsg::Exit
@@ -175,7 +175,7 @@ impl SimpleAsyncComponent for DependenciesApp {
                 for package in packages {
                     if !is_available(package) {
                         sender.output(Self::Output::Toast {
-                            title: tr_args("package-not-available", [("package", package.into())]),
+                            title: tr!("package-not-available", [("package", package)]),
                             description: None
                         });
 

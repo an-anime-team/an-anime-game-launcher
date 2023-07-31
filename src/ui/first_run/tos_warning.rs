@@ -5,7 +5,7 @@ use adw::prelude::*;
 
 use anime_launcher_sdk::is_available;
 
-use crate::i18n::*;
+use crate::*;
 
 use super::main::FirstRunAppMsg;
 
@@ -34,14 +34,14 @@ impl SimpleAsyncComponent for TosWarningApp {
                 set_vexpand: true,
 
                 gtk::Label {
-                    set_label: &tr("tos-violation-warning"),
+                    set_label: &tr!("tos-violation-warning"),
                     add_css_class: "title-1"
                 }
             },
 
             add = &adw::PreferencesGroup {
                 gtk::Label {
-                    set_label: &tr("tos-violation-warning-message"),
+                    set_label: &tr!("tos-violation-warning-message"),
                     set_wrap: true,
                     set_selectable: true
                 }
@@ -57,14 +57,14 @@ impl SimpleAsyncComponent for TosWarningApp {
                     set_spacing: 8,
     
                     gtk::Button {
-                        set_label: &tr("continue"),
+                        set_label: &tr!("continue"),
                         set_css_classes: &["suggested-action", "pill"],
 
                         connect_clicked => TosWarningAppMsg::Continue
                     },
 
                     gtk::Button {
-                        set_label: &tr("exit"),
+                        set_label: &tr!("exit"),
                         add_css_class: "pill",
 
                         connect_clicked => TosWarningAppMsg::Exit
@@ -91,13 +91,13 @@ impl SimpleAsyncComponent for TosWarningApp {
             TosWarningAppMsg::Continue => {
                 let dialog = adw::MessageDialog::new(
                     unsafe { MAIN_WINDOW.as_ref() },
-                    Some(&tr("tos-dialog-title")),
-                    Some(&tr("tos-dialog-message"))
+                    Some(&tr!("tos-dialog-title")),
+                    Some(&tr!("tos-dialog-message"))
                 );
 
                 dialog.add_responses(&[
-                    ("exit", &tr("exit")),
-                    ("continue", &tr("agree"))
+                    ("exit", &tr!("exit")),
+                    ("continue", &tr!("agree"))
                 ]);
 
                 dialog.connect_response(None, move |_, response| {
