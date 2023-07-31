@@ -109,15 +109,14 @@ macro_rules! tr {
             use fluent_templates::Loader;
             use fluent_templates::fluent_bundle::FluentValue;
 
-            let mut args = std::collections::HashMap::new();
-
-            for (key, value) in $args {
-                args.insert(key, FluentValue::from(value));
-            }
-
             #[allow(unused_unsafe)]
             $crate::i18n::LOCALES
-                .lookup_with_args(unsafe { &$crate::i18n::LANG }, $id, &args)
+                .lookup_with_args(
+                    unsafe { &$crate::i18n::LANG },
+                    $id,
+                    &std::collections::HashMap::from_iter($args.into_iter()
+                        .map(|(key, value)| (key, FluentValue::from(value))))
+                )
                 .expect(&format!("Failed to find a message with given id: {}", stringify!($id)))
         }
     };
