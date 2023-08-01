@@ -575,7 +575,7 @@ impl SimpleComponent for App {
                                             }));
 
                                             let result = Command::new("pkill")
-                                                .arg("GenshinImpact|YuanShen")
+                                                .arg("GenshinImpact|YuanShen|unlocker\\.exe")
                                                 .spawn();
 
                                             if let Err(err) = result {
