@@ -1,3 +1,6 @@
+use std::path::PathBuf;
+use std::sync::atomic::{AtomicBool, Ordering};
+
 use relm4::prelude::*;
 
 use anime_launcher_sdk::config::ConfigExt;
@@ -11,9 +14,6 @@ use anime_launcher_sdk::anime_game_core::genshin::prelude::*;
 
 use tracing_subscriber::prelude::*;
 use tracing_subscriber::filter::*;
-
-use std::path::PathBuf;
-use std::sync::atomic::{AtomicBool, Ordering};
 
 pub mod move_folder;
 pub mod i18n;
@@ -70,6 +70,9 @@ lazy_static::lazy_static! {
 }
 
 fn main() {
+    // Setup custom panic handler
+    human_panic::setup_panic!(human_panic::metadata!());
+
     // Create launcher folder if it isn't
     if !LAUNCHER_FOLDER.exists() {
         std::fs::create_dir_all(LAUNCHER_FOLDER.as_path()).expect("Failed to create launcher folder");

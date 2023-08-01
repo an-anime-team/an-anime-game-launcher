@@ -3,6 +3,8 @@ name = "anime-game-launcher"
 version = "3.7.6"
 description = "Anime Game launcher"
 authors = ["Nikita Podvirnyy <suimin.tu.mu.ga.mi@gmail.com>"]
+homepage = "https://github.com/an-anime-team/an-anime-game-launcher"
+repository = "https://github.com/an-anime-team/an-anime-game-launcher"
 license = "GPL-3.0"
 edition = "2021"
 build = "build.rs"
@@ -42,3 +44,5 @@ tracing-subscriber = "0.3"
 
 fluent-templates = "0.8"
 unic-langid = "0.9"
+
+human-panic = "1.1.5"
