@@ -8,7 +8,6 @@ use anime_launcher_sdk::is_available;
 
 use super::EnhancementsAppMsg;
 
-use crate::i18n::tr;
 use crate::*;
 
 macro_rules! impl_directory {
@@ -110,7 +109,7 @@ impl SimpleAsyncComponent for SandboxPage {
             adw::HeaderBar {
                 #[wrap(Some)]
                 set_title_widget = &adw::WindowTitle {
-                    set_title: &tr("sandbox")
+                    set_title: &tr!("sandbox")
                 },
 
                 pack_start = &gtk::Button {
@@ -123,18 +122,18 @@ impl SimpleAsyncComponent for SandboxPage {
             },
 
             adw::PreferencesPage {
-                set_title: &tr("sandbox"),
+                set_title: &tr!("sandbox"),
                 set_icon_name: Some("folder-symbolic"),
 
                 set_sensitive: is_available("bwrap"),
 
                 add = &adw::PreferencesGroup {
-                    set_title: &tr("sandbox"),
-                    set_description: Some(&tr("sandbox-description")),
+                    set_title: &tr!("sandbox"),
+                    set_description: Some(&tr!("sandbox-description")),
 
                     adw::ActionRow {
-                        set_title: &tr("enable-sandboxing"),
-                        set_subtitle: &tr("enable-sandboxing-description"),
+                        set_title: &tr!("enable-sandboxing"),
+                        set_subtitle: &tr!("enable-sandboxing-description"),
 
                         add_suffix = &gtk::Switch {
                             set_valign: gtk::Align::Center,
@@ -154,8 +153,8 @@ impl SimpleAsyncComponent for SandboxPage {
                     },
 
                     adw::ActionRow {
-                        set_title: &tr("hide-home-directory"),
-                        set_subtitle: &tr("hide-home-directory-description"),
+                        set_title: &tr!("hide-home-directory"),
+                        set_subtitle: &tr!("hide-home-directory-description"),
 
                         add_suffix = &gtk::Switch {
                             set_valign: gtk::Align::Center,
@@ -175,7 +174,7 @@ impl SimpleAsyncComponent for SandboxPage {
                     },
 
                     adw::EntryRow {
-                        set_title: &tr("hostname"),
+                        set_title: &tr!("hostname"),
                         set_text: CONFIG.sandbox.hostname.as_ref().unwrap_or(&String::new()).trim(),
 
                         connect_changed => |entry| {
@@ -194,7 +193,7 @@ impl SimpleAsyncComponent for SandboxPage {
                     },
 
                     adw::EntryRow {
-                        set_title: &tr("additional-arguments"),
+                        set_title: &tr!("additional-arguments"),
                         set_text: CONFIG.sandbox.args.as_ref().unwrap_or(&String::new()).trim(),
 
                         connect_changed => |entry| {
@@ -220,7 +219,7 @@ impl SimpleAsyncComponent for SandboxPage {
                             connect_clicked[sender] => move |_| {
                                 if let Err(err) = open::that("https://man.archlinux.org/man/bwrap.1") {
                                     sender.output(EnhancementsAppMsg::Toast {
-                                        title: tr("documentation-url-open-failed"),
+                                        title: tr!("documentation-url-open-failed"),
                                         description: Some(err.to_string())
                                     }).unwrap();
                                 }
@@ -230,12 +229,12 @@ impl SimpleAsyncComponent for SandboxPage {
                 },
 
                 add = &adw::PreferencesGroup {
-                    set_title: &tr("private-directories"),
-                    set_description: Some(&tr("private-directories-description")),
+                    set_title: &tr!("private-directories"),
+                    set_description: Some(&tr!("private-directories-description")),
 
                     #[local_ref]
                     private_path_entry -> adw::EntryRow {
-                        set_title: &tr("path"),
+                        set_title: &tr!("path"),
 
                         add_suffix = &gtk::Button {
                             set_icon_name: "list-add-symbolic",
@@ -252,8 +251,8 @@ impl SimpleAsyncComponent for SandboxPage {
                 add = private_paths -> adw::PreferencesGroup {},
 
                 add = &adw::PreferencesGroup {
-                    set_title: &tr("shared-directories"),
-                    set_description: Some(&tr("shared-directories-description")),
+                    set_title: &tr!("shared-directories"),
+                    set_description: Some(&tr!("shared-directories-description")),
 
                     #[wrap(Some)]
                     set_header_suffix = &gtk::Button {
@@ -263,7 +262,7 @@ impl SimpleAsyncComponent for SandboxPage {
 
                         adw::ButtonContent {
                             set_icon_name: "list-add-symbolic",
-                            set_label: &tr("add")
+                            set_label: &tr!("add")
                         },
 
                         connect_clicked => SandboxPageMsg::AddShared
@@ -271,17 +270,17 @@ impl SimpleAsyncComponent for SandboxPage {
 
                     #[local_ref]
                     shared_path_from_entry -> adw::EntryRow {
-                        set_title: &tr("original-path")
+                        set_title: &tr!("original-path")
                     },
 
                     #[local_ref]
                     shared_path_to_entry -> adw::EntryRow {
-                        set_title: &tr("new-path")
+                        set_title: &tr!("new-path")
                     },
 
                     adw::ActionRow {
-                        set_title: &tr("read-only"),
-                        set_subtitle: &tr("read-only-description"),
+                        set_title: &tr!("read-only"),
+                        set_subtitle: &tr!("read-only-description"),
 
                         #[local_ref]
                         add_suffix = read_only_switch -> gtk::Switch {
@@ -294,8 +293,8 @@ impl SimpleAsyncComponent for SandboxPage {
                 add = shared_paths -> adw::PreferencesGroup {},
 
                 add = &adw::PreferencesGroup {
-                    set_title: &tr("symlinks"),
-                    set_description: Some(&tr("symlinks-description")),
+                    set_title: &tr!("symlinks"),
+                    set_description: Some(&tr!("symlinks-description")),
 
                     #[wrap(Some)]
                     set_header_suffix = &gtk::Button {
@@ -305,7 +304,7 @@ impl SimpleAsyncComponent for SandboxPage {
 
                         adw::ButtonContent {
                             set_icon_name: "list-add-symbolic",
-                            set_label: &tr("add")
+                            set_label: &tr!("add")
                         },
 
                         connect_clicked => SandboxPageMsg::AddSymlink
@@ -313,12 +312,12 @@ impl SimpleAsyncComponent for SandboxPage {
 
                     #[local_ref]
                     symlink_path_from_entry -> adw::EntryRow {
-                        set_title: &tr("original-path")
+                        set_title: &tr!("original-path")
                     },
 
                     #[local_ref]
                     symlink_path_to_entry -> adw::EntryRow {
-                        set_title: &tr("new-path")
+                        set_title: &tr!("new-path")
                     }
                 },
 

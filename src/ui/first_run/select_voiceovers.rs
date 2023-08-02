@@ -6,7 +6,7 @@ use adw::prelude::*;
 use anime_launcher_sdk::config::ConfigExt;
 use anime_launcher_sdk::genshin::config::Config;
 
-use crate::i18n::*;
+use crate::*;
 
 use super::main::*;
 
@@ -38,7 +38,7 @@ impl SimpleAsyncComponent for SelectVoiceoversApp {
                 set_vexpand: true,
 
                 gtk::Label {
-                    set_label: &tr("select-voice-packages"),
+                    set_label: &tr!("select-voice-packages"),
                     add_css_class: "title-1"
                 }
             },
@@ -48,7 +48,7 @@ impl SimpleAsyncComponent for SelectVoiceoversApp {
                 set_vexpand: true,
 
                 adw::ActionRow {
-                    set_title: &tr("english"),
+                    set_title: &tr!("english"),
 
                     #[local_ref]
                     add_suffix = english -> gtk::Switch {
@@ -58,7 +58,7 @@ impl SimpleAsyncComponent for SelectVoiceoversApp {
                 },
 
                 adw::ActionRow {
-                    set_title: &tr("japanese"),
+                    set_title: &tr!("japanese"),
 
                     #[local_ref]
                     add_suffix = japanese -> gtk::Switch {
@@ -67,7 +67,7 @@ impl SimpleAsyncComponent for SelectVoiceoversApp {
                 },
 
                 adw::ActionRow {
-                    set_title: &tr("korean"),
+                    set_title: &tr!("korean"),
 
                     #[local_ref]
                     add_suffix = korean -> gtk::Switch {
@@ -76,7 +76,7 @@ impl SimpleAsyncComponent for SelectVoiceoversApp {
                 },
 
                 adw::ActionRow {
-                    set_title: &tr("chinese"),
+                    set_title: &tr!("chinese"),
 
                     #[local_ref]
                     add_suffix = chinese -> gtk::Switch {
@@ -95,14 +95,14 @@ impl SimpleAsyncComponent for SelectVoiceoversApp {
                     set_spacing: 8,
     
                     gtk::Button {
-                        set_label: &tr("continue"),
+                        set_label: &tr!("continue"),
                         set_css_classes: &["suggested-action", "pill"],
 
                         connect_clicked => SelectVoiceoversAppMsg::Continue
                     },
 
                     gtk::Button {
-                        set_label: &tr("exit"),
+                        set_label: &tr!("exit"),
                         add_css_class: "pill",
 
                         connect_clicked => SelectVoiceoversAppMsg::Exit
@@ -142,7 +142,7 @@ impl SimpleAsyncComponent for SelectVoiceoversApp {
                     Ok(_) => sender.output(Self::Output::ScrollToDownloadComponents),
     
                     Err(err) => sender.output(Self::Output::Toast {
-                        title: tr("config-update-error"),
+                        title: tr!("config-update-error"),
                         description: Some(err.to_string())
                     })
                 };

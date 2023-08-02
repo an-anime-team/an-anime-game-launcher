@@ -12,7 +12,6 @@ use anime_launcher_sdk::components::wine::UnifiedWine;
 use super::GeneralAppMsg;
 
 use crate::ui::components::*;
-use crate::i18n::*;
 use crate::*;
 
 pub struct ComponentsPage {
@@ -58,7 +57,7 @@ impl SimpleAsyncComponent for ComponentsPage {
             adw::HeaderBar {
                 #[wrap(Some)]
                 set_title_widget = &adw::WindowTitle {
-                    set_title: &tr("components")
+                    set_title: &tr!("components")
                 },
 
                 pack_start = &gtk::Button {
@@ -72,10 +71,10 @@ impl SimpleAsyncComponent for ComponentsPage {
 
             adw::PreferencesPage {
                 add = &adw::PreferencesGroup {
-                    set_title: &tr("wine-version"),
+                    set_title: &tr!("wine-version"),
 
                     adw::ComboRow {
-                        set_title: &tr("selected-version"),
+                        set_title: &tr!("selected-version"),
 
                         #[watch]
                         #[block_signal(wine_selected_notify)]
@@ -103,8 +102,8 @@ impl SimpleAsyncComponent for ComponentsPage {
                     },
 
                     adw::ActionRow {
-                        set_title: &tr("recommended-only"),
-                        set_subtitle: &tr("wine-recommended-description"),
+                        set_title: &tr!("recommended-only"),
+                        set_subtitle: &tr!("wine-recommended-description"),
 
                         add_suffix = &gtk::Switch {
                             set_valign: gtk::Align::Center,
@@ -126,11 +125,11 @@ impl SimpleAsyncComponent for ComponentsPage {
                 },
 
                 add = &adw::PreferencesGroup {
-                    set_title: &tr("wine-options"),
+                    set_title: &tr!("wine-options"),
 
                     adw::ActionRow {
-                        set_title: &tr("wine-use-shared-libraries"),
-                        set_subtitle: &tr("wine-use-shared-libraries-description"),
+                        set_title: &tr!("wine-use-shared-libraries"),
+                        set_subtitle: &tr!("wine-use-shared-libraries-description"),
 
                         add_suffix = &gtk::Switch {
                             set_valign: gtk::Align::Center,
@@ -151,8 +150,8 @@ impl SimpleAsyncComponent for ComponentsPage {
                     },
 
                     adw::ActionRow {
-                        set_title: &tr("gstreamer-use-shared-libraries"),
-                        set_subtitle: &tr("gstreamer-use-shared-libraries-description"),
+                        set_title: &tr!("gstreamer-use-shared-libraries"),
+                        set_subtitle: &tr!("gstreamer-use-shared-libraries-description"),
 
                         add_suffix = &gtk::Switch {
                             set_valign: gtk::Align::Center,
@@ -174,11 +173,11 @@ impl SimpleAsyncComponent for ComponentsPage {
                 },
 
                 add = &adw::PreferencesGroup {
-                    set_title: &tr("dxvk-version"),
+                    set_title: &tr!("dxvk-version"),
 
                     #[watch]
                     set_description: Some(&if !model.allow_dxvk_selection {
-                        tr("dxvk-selection-disabled")
+                        tr!("dxvk-selection-disabled")
                     } else {
                         String::new()
                     }),
@@ -187,7 +186,7 @@ impl SimpleAsyncComponent for ComponentsPage {
                     set_sensitive: model.allow_dxvk_selection,
 
                     adw::ComboRow {
-                        set_title: &tr("selected-version"),
+                        set_title: &tr!("selected-version"),
     
                         #[watch]
                         #[block_signal(dxvk_selected_notify)]
@@ -215,8 +214,8 @@ impl SimpleAsyncComponent for ComponentsPage {
                     },
 
                     adw::ActionRow {
-                        set_title: &tr("recommended-only"),
-                        set_subtitle: &tr("dxvk-recommended-description"),
+                        set_title: &tr!("recommended-only"),
+                        set_subtitle: &tr!("dxvk-recommended-description"),
 
                         add_suffix = &gtk::Switch {
                             set_valign: gtk::Align::Center,
@@ -433,7 +432,7 @@ impl SimpleAsyncComponent for ComponentsPage {
 
                                     Err(err) => {
                                         sender.output(GeneralAppMsg::Toast {
-                                            title: tr("wine-prefix-update-failed"),
+                                            title: tr!("wine-prefix-update-failed"),
                                             description: Some(err.to_string())
                                         }).unwrap();
                                     }
@@ -476,7 +475,7 @@ impl SimpleAsyncComponent for ComponentsPage {
                                 std::thread::spawn(move || {
                                     if let Err(err) = Dxvk::install(&wine, dxvk_folder, InstallParams::default()) {
                                         sender.output(GeneralAppMsg::Toast {
-                                            title: tr("dxvk-install-failed"),
+                                            title: tr!("dxvk-install-failed"),
                                             description: Some(err.to_string())
                                         }).unwrap();
                                     }

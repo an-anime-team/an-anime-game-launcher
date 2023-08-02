@@ -58,6 +58,9 @@ disable-mhypbase-description = 試験的です。有効にすると、ランチ�
 ask-superuser-permissions = スーパーユーザーを尋ねる。
 ask-superuser-permissions-description = あなたのホストのファイルを自動更新するために、 これらを利用します。flatpak版では必要ありません。
 
+launcher-behavior = Launcher behavior
+launcher-behavior-description = What should launcher window do when it starts the game
+
 wine-tools = ワインツール
 command-line = コマンドライン
 registry-editor = レジストリエディタ

@@ -13,6 +13,8 @@ failed-get-selected-wine = Kiválasztott wine verzió beszerzése sikertelen
 downloading-failed = Sikertelen letöltés
 unpacking-failed = Sikertelen kicsomagolás
 
+kill-game-process-failed = Failed to kill the game's process
+
 game-file-repairing-error = Nem sikerült a játékfájlok javítása
 integrity-files-getting-error = Integritásfájlok beszerzése sikertelen
 

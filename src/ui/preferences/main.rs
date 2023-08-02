@@ -11,7 +11,7 @@ use anime_launcher_sdk::config::ConfigExt;
 use anime_launcher_sdk::genshin::config::Config;
 use anime_launcher_sdk::genshin::config::schema::launcher::LauncherStyle;
 
-use crate::i18n::tr;
+use crate::tr;
 
 use super::general::*;
 use super::enhancements::*;
@@ -52,7 +52,7 @@ impl SimpleAsyncComponent for PreferencesApp {
 
     view! {
         preferences_window = adw::PreferencesWindow {
-            set_title: Some(&tr("preferences")),
+            set_title: Some(&tr!("preferences")),
             set_default_size: (700, 560),
 
             set_hide_on_close: true,
@@ -65,7 +65,7 @@ impl SimpleAsyncComponent for PreferencesApp {
             connect_close_request[sender] => move |_| {
                 if let Err(err) = Config::flush() {
                     sender.input(PreferencesAppMsg::Toast {
-                        title: tr("config-update-error"),
+                        title: tr!("config-update-error"),
                         description: Some(err.to_string())
                     });
                 }
@@ -150,12 +150,12 @@ impl SimpleAsyncComponent for PreferencesApp {
                 toast.set_timeout(4);
 
                 if let Some(description) = description {
-                    toast.set_button_label(Some(&tr("details")));
+                    toast.set_button_label(Some(&tr!("details")));
 
                     let dialog = adw::MessageDialog::new(PREFERENCES_WINDOW.as_ref(), Some(&title), Some(&description));
 
-                    dialog.add_response("close", &tr("close"));
-                    dialog.add_response("save", &tr("save"));
+                    dialog.add_response("close", &tr!("close", { "form" = "noun" }));
+                    dialog.add_response("save", &tr!("save"));
 
                     dialog.set_response_appearance("save", adw::ResponseAppearance::Suggested);
 

@@ -1,7 +1,6 @@
 use relm4::prelude::*;
 
 use crate::*;
-use crate::i18n::*;
 
 use super::{App, AppMsg};
 
@@ -22,7 +21,7 @@ pub fn apply_patch(sender: ComponentSender<App>, patch: PlayerPatch, rename_mhyp
                     tracing::error!("Failed to patch the game");
 
                     sender.input(AppMsg::Toast {
-                        title: tr("game-patching-error"),
+                        title: tr!("game-patching-error"),
                         description: Some(err.to_string())
                     });
                 }
@@ -38,7 +37,7 @@ pub fn apply_patch(sender: ComponentSender<App>, patch: PlayerPatch, rename_mhyp
                             tracing::error!("Failed to rename mhypbase file");
 
                             sender.input(AppMsg::Toast {
-                                title: tr("game-patching-error"),
+                                title: tr!("game-patching-error"),
                                 description: Some(err.to_string())
                             });
                         }

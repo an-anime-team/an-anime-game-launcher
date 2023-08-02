@@ -8,7 +8,6 @@ use anime_launcher_sdk::genshin::config::Config;
 
 use anime_launcher_sdk::config::schema_blanks::prelude::*;
 
-use crate::i18n::tr;
 use crate::*;
 
 pub struct GamescopeApp;
@@ -21,7 +20,7 @@ impl SimpleAsyncComponent for GamescopeApp {
 
     view! {
         adw::PreferencesWindow {
-            set_title: Some(&tr("gamescope")),
+            set_title: Some(&tr!("gamescope")),
 
             set_modal: true,
             set_hide_on_close: true,
@@ -31,10 +30,10 @@ impl SimpleAsyncComponent for GamescopeApp {
 
             add = &adw::PreferencesPage {
                 add = &adw::PreferencesGroup {
-                    set_title: &tr("game-resolution"),
+                    set_title: &tr!("game-resolution"),
 
                     adw::EntryRow {
-                        set_title: &tr("width"),
+                        set_title: &tr!("width"),
                         set_input_purpose: gtk::InputPurpose::Digits,
 
                         set_text: &if CONFIG.game.enhancements.gamescope.game.width > 0 {
@@ -55,7 +54,7 @@ impl SimpleAsyncComponent for GamescopeApp {
                     },
 
                     adw::EntryRow {
-                        set_title: &tr("height"),
+                        set_title: &tr!("height"),
                         set_input_purpose: gtk::InputPurpose::Digits,
 
                         set_text: &if CONFIG.game.enhancements.gamescope.game.height > 0 {
@@ -77,10 +76,10 @@ impl SimpleAsyncComponent for GamescopeApp {
                 },
 
                 add = &adw::PreferencesGroup {
-                    set_title: &tr("gamescope-resolution"),
+                    set_title: &tr!("gamescope-resolution"),
 
                     adw::EntryRow {
-                        set_title: &tr("width"),
+                        set_title: &tr!("width"),
                         set_input_purpose: gtk::InputPurpose::Digits,
 
                         set_text: &if CONFIG.game.enhancements.gamescope.gamescope.width > 0 {
@@ -101,7 +100,7 @@ impl SimpleAsyncComponent for GamescopeApp {
                     },
 
                     adw::EntryRow {
-                        set_title: &tr("height"),
+                        set_title: &tr!("height"),
                         set_input_purpose: gtk::InputPurpose::Digits,
 
                         set_text: &if CONFIG.game.enhancements.gamescope.gamescope.height > 0 {
@@ -123,11 +122,11 @@ impl SimpleAsyncComponent for GamescopeApp {
                 },
 
                 add = &adw::PreferencesGroup {
-                    set_title: &tr("upscaling"),
+                    set_title: &tr!("upscaling"),
 
                     adw::ActionRow {
-                        set_title: &tr("integer-scaling"),
-                        set_subtitle: &tr("integer-scaling-description"),
+                        set_title: &tr!("integer-scaling"),
+                        set_subtitle: &tr!("integer-scaling-description"),
 
                         add_suffix = &gtk::Switch {
                             set_valign: gtk::Align::Center,
@@ -147,7 +146,7 @@ impl SimpleAsyncComponent for GamescopeApp {
 
                     adw::ActionRow {
                         set_title: "FSR",
-                        set_subtitle: &tr("gamescope-fsr-description"),
+                        set_subtitle: &tr!("gamescope-fsr-description"),
 
                         add_suffix = &gtk::Switch {
                             set_valign: gtk::Align::Center,
@@ -167,7 +166,7 @@ impl SimpleAsyncComponent for GamescopeApp {
 
                     adw::ActionRow {
                         set_title: "Nvidia Image Scaling",
-                        set_subtitle: &tr("nis-description"),
+                        set_subtitle: &tr!("nis-description"),
 
                         add_suffix = &gtk::Switch {
                             set_valign: gtk::Align::Center,
@@ -187,12 +186,12 @@ impl SimpleAsyncComponent for GamescopeApp {
                 },
 
                 add = &adw::PreferencesGroup {
-                    set_title: &tr("other-settings"),
+                    set_title: &tr!("other-settings"),
 
                     // TODO: maybe use Fps enum like in fps unlocker settings
 
                     adw::EntryRow {
-                        set_title: &tr("framerate-limit"),
+                        set_title: &tr!("framerate-limit"),
                         set_input_purpose: gtk::InputPurpose::Digits,
 
                         set_text: &if CONFIG.game.enhancements.gamescope.framerate.focused > 0 {
@@ -213,7 +212,7 @@ impl SimpleAsyncComponent for GamescopeApp {
                     },
 
                     adw::EntryRow {
-                        set_title: &tr("unfocused-framerate-limit"),
+                        set_title: &tr!("unfocused-framerate-limit"),
                         set_input_purpose: gtk::InputPurpose::Digits,
 
                         set_text: &if CONFIG.game.enhancements.gamescope.framerate.unfocused > 0 {
@@ -234,12 +233,12 @@ impl SimpleAsyncComponent for GamescopeApp {
                     },
 
                     adw::ComboRow {
-                        set_title: &tr("window-mode"),
+                        set_title: &tr!("window-mode"),
 
                         #[wrap(Some)]
                         set_model = &gtk::StringList::new(&[
-                            &tr("borderless"),
-                            &tr("fullscreen")
+                            &tr!("borderless"),
+                            &tr!("fullscreen")
                         ]),
 
                         set_selected: CONFIG.game.enhancements.gamescope.window_type.ordinal() as u32,

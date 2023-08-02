@@ -1,12 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
-  <gresource prefix="/org/app">
-    <file compressed="true">images/icon.png</file>
+  <gresource prefix="/moe/launcher/an-anime-game-launcher">
+    <file preprocess="xml-stripblanks">images/modern.svg</file>
+    <file preprocess="xml-stripblanks">images/classic.svg</file>
   </gresource>
-  <gresource prefix="/org/app">
-    <file compressed="true">images/modern.svg</file>
+
+  <gresource prefix="/moe/launcher/an-anime-game-launcher/icons/hicolor/scalable/apps">
+    <file alias="moe.launcher.an-anime-game-launcher.png">images/icon.png</file>
   </gresource>
-  <gresource prefix="/org/app">
-    <file compressed="true">images/classic.svg</file>
+
+  <gresource prefix="/moe/launcher/an-anime-game-launcher/icons/scalable/actions">
+    <!-- Standard icons -->
+
+    <file preprocess="xml-stripblanks" alias="document-save-symbolic.svg">images/icons/document-save-symbolic.svg</file>
+    <file preprocess="xml-stripblanks" alias="folder-symbolic.svg">images/icons/folder-symbolic.svg</file>
+    <file preprocess="xml-stripblanks" alias="emblem-ok-symbolic.svg">images/icons/emblem-ok-symbolic.svg</file>
+    <file preprocess="xml-stripblanks" alias="open-menu-symbolic.svg">images/icons/open-menu-symbolic.svg</file>
+    <file preprocess="xml-stripblanks" alias="media-playback-start-symbolic.svg">images/icons/media-playback-start-symbolic.svg</file>
+    <file preprocess="xml-stripblanks" alias="window-close-symbolic.svg">images/icons/window-close-symbolic.svg</file>
+    <file preprocess="xml-stripblanks" alias="security-high-symbolic.svg">images/icons/security-high-symbolic.svg</file>
+    <file preprocess="xml-stripblanks" alias="emblem-system-symbolic.svg">images/icons/emblem-system-symbolic.svg</file>
+    <file preprocess="xml-stripblanks" alias="user-trash-symbolic.svg">images/icons/user-trash-symbolic.svg</file>
+    <file preprocess="xml-stripblanks" alias="go-previous-symbolic.svg">images/icons/go-previous-symbolic.svg</file>
+    <file preprocess="xml-stripblanks" alias="document-properties-symbolic.svg">images/icons/document-properties-symbolic.svg</file>
+    <file preprocess="xml-stripblanks" alias="list-add-symbolic.svg">images/icons/list-add-symbolic.svg</file>
+    <file preprocess="xml-stripblanks" alias="view-refresh-symbolic.svg">images/icons/view-refresh-symbolic.svg</file>
+    <file preprocess="xml-stripblanks" alias="applications-games-symbolic.svg">images/icons/applications-games-symbolic.svg</file>
+    <file preprocess="xml-stripblanks" alias="applications-graphics-symbolic.svg">images/icons/applications-graphics-symbolic.svg</file>
+    <file preprocess="xml-stripblanks" alias="go-next-symbolic.svg">images/icons/go-next-symbolic.svg</file>
+    <file preprocess="xml-stripblanks" alias="dialog-information-symbolic.svg">images/icons/dialog-information-symbolic.svg</file>
+
+    <!-- Additional icons icons -->
+
+    <file preprocess="xml-stripblanks" alias="violence-symbolic.svg">images/icons/violence-symbolic.svg</file>
   </gresource>
 </gresources>

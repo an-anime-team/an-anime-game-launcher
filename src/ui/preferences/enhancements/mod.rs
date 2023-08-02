@@ -21,7 +21,6 @@ use game::*;
 use sandbox::*;
 use environment::*;
 
-use crate::i18n::tr;
 use crate::*;
 
 use super::gamescope::*;
@@ -123,15 +122,15 @@ impl SimpleAsyncComponent for EnhancementsApp {
     view! {
         #[root]
         adw::PreferencesPage {
-            set_title: &tr("enhancements"),
+            set_title: &tr!("enhancements"),
             set_icon_name: Some("applications-graphics-symbolic"),
 
             add = &adw::PreferencesGroup {
-                set_title: &tr("options"),
+                set_title: &tr!("options"),
 
                 adw::ActionRow {
-                    set_title: &tr("game"),
-                    set_subtitle: &tr("game-settings-description"),
+                    set_title: &tr!("game"),
+                    set_subtitle: &tr!("game-settings-description"),
 
                     add_suffix = &gtk::Image {
                         set_icon_name: Some("go-next-symbolic")
@@ -143,8 +142,8 @@ impl SimpleAsyncComponent for EnhancementsApp {
                 },
 
                 adw::ActionRow {
-                    set_title: &tr("sandbox"),
-                    set_subtitle: &tr("sandbox-settings-description"),
+                    set_title: &tr!("sandbox"),
+                    set_subtitle: &tr!("sandbox-settings-description"),
 
                     add_suffix = &gtk::Image {
                         set_icon_name: Some("go-next-symbolic")
@@ -156,8 +155,8 @@ impl SimpleAsyncComponent for EnhancementsApp {
                 },
 
                 adw::ActionRow {
-                    set_title: &tr("environment"),
-                    set_subtitle: &tr("environment-settings-description"),
+                    set_title: &tr!("environment"),
+                    set_subtitle: &tr!("environment-settings-description"),
 
                     add_suffix = &gtk::Image {
                         set_icon_name: Some("go-next-symbolic")
@@ -170,15 +169,15 @@ impl SimpleAsyncComponent for EnhancementsApp {
             },
 
             add = &adw::PreferencesGroup {
-                set_title: &tr("wine"),
+                set_title: &tr!("wine"),
 
                 adw::ComboRow {
-                    set_title: &tr("synchronization"),
-                    set_subtitle: &tr("wine-sync-description"),
+                    set_title: &tr!("synchronization"),
+                    set_subtitle: &tr!("wine-sync-description"),
 
                     #[wrap(Some)]
                     set_model = &gtk::StringList::new(&[
-                        &tr("none"),
+                        &tr!("none"),
                         "ESync",
                         "FSync"
                     ]),
@@ -197,12 +196,12 @@ impl SimpleAsyncComponent for EnhancementsApp {
                 },
 
                 adw::ComboRow {
-                    set_title: &tr("language"),
-                    set_subtitle: &tr("wine-lang-description"),
+                    set_title: &tr!("language"),
+                    set_subtitle: &tr!("wine-lang-description"),
 
                     #[wrap(Some)]
                     set_model = &gtk::StringList::new(&[
-                        &tr("system"),
+                        &tr!("system"),
                         "English",
                         "Русский",
                         "Deutsch",
@@ -229,7 +228,7 @@ impl SimpleAsyncComponent for EnhancementsApp {
                 },
 
                 adw::ActionRow {
-                    set_title: &tr("borderless-window"),
+                    set_title: &tr!("borderless-window"),
 
                     add_suffix = &gtk::Switch {
                         set_valign: gtk::Align::Center,
@@ -249,7 +248,7 @@ impl SimpleAsyncComponent for EnhancementsApp {
                 },
 
                 adw::ComboRow {
-                    set_title: &tr("virtual-desktop"),
+                    set_title: &tr!("virtual-desktop"),
 
                     #[wrap(Some)]
                     set_model = &gtk::StringList::new(&[
@@ -258,7 +257,7 @@ impl SimpleAsyncComponent for EnhancementsApp {
                         "1920x1080",
                         "2560x1440",
                         "3840x2160",
-                        &tr("custom")
+                        &tr!("custom")
                     ]),
 
                     set_selected: CONFIG.game.wine.virtual_desktop.get_resolution().into(),
@@ -295,14 +294,14 @@ impl SimpleAsyncComponent for EnhancementsApp {
             },
 
             add = &adw::PreferencesGroup {
-                set_title: &tr("game"),
+                set_title: &tr!("game"),
 
                 adw::ComboRow {
-                    set_title: &tr("hud"),
+                    set_title: &tr!("hud"),
 
                     #[wrap(Some)]
                     set_model = &gtk::StringList::new(&[
-                        &tr("none"),
+                        &tr!("none"),
                         "DXVK",
                         "MangoHud"
                     ]),
@@ -321,15 +320,15 @@ impl SimpleAsyncComponent for EnhancementsApp {
                 },
 
                 adw::ComboRow {
-                    set_title: &tr("fsr"),
-                    set_subtitle: &tr("fsr-description"),
+                    set_title: &tr!("fsr"),
+                    set_subtitle: &tr!("fsr-description"),
 
                     #[wrap(Some)]
                     set_model = &gtk::StringList::new(&[
-                        &tr("ultra-quality"),
-                        &tr("quality"),
-                        &tr("balanced"),
-                        &tr("performance")
+                        &tr!("ultra-quality"),
+                        &tr!("quality"),
+                        &tr!("balanced"),
+                        &tr!("performance")
                     ]),
 
                     set_selected: CONFIG.game.enhancements.fsr.quality.ordinal() as u32,
@@ -362,8 +361,8 @@ impl SimpleAsyncComponent for EnhancementsApp {
                 },
 
                 adw::ActionRow {
-                    set_title: &tr("gamemode"),
-                    set_subtitle: &tr("gamemode-description"),
+                    set_title: &tr!("gamemode"),
+                    set_subtitle: &tr!("gamemode-description"),
 
                     set_sensitive: is_available("gamemoderun"),
 
@@ -385,8 +384,8 @@ impl SimpleAsyncComponent for EnhancementsApp {
                 },
 
                 adw::ActionRow {
-                    set_title: &tr("gamescope"),
-                    set_subtitle: &tr("gamescope-description"),
+                    set_title: &tr!("gamescope"),
+                    set_subtitle: &tr!("gamescope-description"),
 
                     set_sensitive: is_available("gamescope"),
 
@@ -418,11 +417,11 @@ impl SimpleAsyncComponent for EnhancementsApp {
             },
 
             add = &adw::PreferencesGroup {
-                set_title: &tr("discord-rpc"),
+                set_title: &tr!("discord-rpc"),
 
                 adw::ActionRow {
-                    set_title: &tr("enabled"),
-                    set_subtitle: &tr("discord-rpc-description"),
+                    set_title: &tr!("enabled"),
+                    set_subtitle: &tr!("discord-rpc-description"),
 
                     add_suffix = &gtk::Switch {
                         set_valign: gtk::Align::Center,
@@ -442,11 +441,11 @@ impl SimpleAsyncComponent for EnhancementsApp {
 
                 #[local_ref]
                 discord_rpc_icons -> adw::ExpanderRow {
-                    set_title: &tr("icon")
+                    set_title: &tr!("icon")
                 },
 
                 adw::EntryRow {
-                    set_title: &tr("title"),
+                    set_title: &tr!("title"),
                     set_text: &CONFIG.launcher.discord_rpc.title,
 
                     connect_changed: |row| {
@@ -461,7 +460,7 @@ impl SimpleAsyncComponent for EnhancementsApp {
                 },
 
                 adw::EntryRow {
-                    set_title: &tr("description"),
+                    set_title: &tr!("description"),
                     set_text: &CONFIG.launcher.discord_rpc.subtitle,
 
                     connect_changed: |row| {
@@ -477,11 +476,11 @@ impl SimpleAsyncComponent for EnhancementsApp {
             },
 
             add = &adw::PreferencesGroup {
-                set_title: &tr("fps-unlocker"),
+                set_title: &tr!("fps-unlocker"),
 
                 adw::ComboRow {
-                    set_title: &tr("enabled"),
-                    set_subtitle: &tr("fps-unlocker-description"),
+                    set_title: &tr!("enabled"),
+                    set_subtitle: &tr!("fps-unlocker-description"),
 
                     #[wrap(Some)]
                     set_model = &gtk::StringList::new(&[
@@ -492,7 +491,7 @@ impl SimpleAsyncComponent for EnhancementsApp {
                         "180",
                         "200",
                         "240",
-                        &tr("custom")
+                        &tr!("custom")
                     ]),
 
                     set_selected: match Fps::from_num(CONFIG.game.enhancements.fps_unlocker.config.fps) {
@@ -535,8 +534,8 @@ impl SimpleAsyncComponent for EnhancementsApp {
                 },
 
                 adw::ActionRow {
-                    set_title: &tr("power-saving"),
-                    set_subtitle: &tr("power-saving-description"),
+                    set_title: &tr!("power-saving"),
+                    set_subtitle: &tr!("power-saving-description"),
 
                     add_suffix = &gtk::Switch {
                         set_valign: gtk::Align::Center,
@@ -556,8 +555,8 @@ impl SimpleAsyncComponent for EnhancementsApp {
                 },
 
                 adw::ActionRow {
-                    set_title: &tr("monitor"),
-                    set_subtitle: &tr("monitor-description"),
+                    set_title: &tr!("monitor"),
+                    set_subtitle: &tr!("monitor-description"),
 
                     add_suffix = &gtk::SpinButton {
                         set_valign: gtk::Align::Center,
@@ -578,13 +577,13 @@ impl SimpleAsyncComponent for EnhancementsApp {
                 },
 
                 adw::ComboRow {
-                    set_title: &tr("window-mode"),
+                    set_title: &tr!("window-mode"),
 
                     #[wrap(Some)]
                     set_model = &gtk::StringList::new(&[
-                        &tr("default"),
-                        &tr("popup"),
-                        &tr("fullscreen")
+                        &tr!("default"),
+                        &tr!("popup"),
+                        &tr!("fullscreen")
                     ]),
 
                     set_selected: CONFIG.game.enhancements.fps_unlocker.config.window_mode.ordinal() as u32,
@@ -601,17 +600,17 @@ impl SimpleAsyncComponent for EnhancementsApp {
                 },
 
                 adw::ComboRow {
-                    set_title: &tr("priority"),
-                    set_subtitle: &tr("priority-description"),
+                    set_title: &tr!("priority"),
+                    set_subtitle: &tr!("priority-description"),
 
                     #[wrap(Some)]
                     set_model = &gtk::StringList::new(&[
-                        &tr("realtime"),
-                        &tr("high"),
-                        &tr("above-normal"),
-                        &tr("normal"),
-                        &tr("below-normal"),
-                        &tr("low")
+                        &tr!("realtime"),
+                        &tr!("high"),
+                        &tr!("above-normal"),
+                        &tr!("normal"),
+                        &tr!("below-normal"),
+                        &tr!("low")
                     ]),
 
                     set_selected: CONFIG.game.enhancements.fps_unlocker.config.priority as u32,
@@ -699,7 +698,7 @@ impl SimpleAsyncComponent for EnhancementsApp {
 
                             /*if let Err(err) = result {
                                 sender.input(EnhancementsAppMsg::Toast {
-                                    title: tr("discord-rpc-icon-download-failed"),
+                                    title: tr!("discord-rpc-icon-download-failed"),
                                     description: Some(err.to_string())
                                 });
                             }*/
@@ -726,7 +725,7 @@ impl SimpleAsyncComponent for EnhancementsApp {
             }
 
             Err(err) => sender.input(EnhancementsAppMsg::Toast {
-                title: tr("discord-rpc-icons-fetch-failed"),
+                title: tr!("discord-rpc-icons-fetch-failed"),
                 description: Some(err.to_string())
             })
         }

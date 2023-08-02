@@ -16,8 +16,17 @@ debug-file = File debug
 wish-url = Buka wishes 
 about = Tentang 
 
+close = { $form ->
+    [verb] Menutup
+    *[noun] Tutup
+}
 
-close = Tutup 
+hide = { $form ->
+    [verb] Sembunyikan
+    *[noun] Sembunyi
+}
+
+nothing = Tidak berubah
 save = Simpan
 continue = Lanjutkan
 resume = Lanjutkan
@@ -61,6 +70,8 @@ create-prefix = Buat prefix
 update = Perbarui
 download = Unduh 
 predownload-update = Pra-unduh pembaruan versi {$version} ({$size})
+
+kill-game-process = Hentikan paksa proses game
 
 main-window--patch-unavailable-tooltip = Server patch tidak tersedia dan launcher tidak bisa memverifikasi status patch game. Anda bisa menjalankan game dengan resiko sendiri 
 main-window--patch-outdated-tooltip = Patch kadaluarsa atau sedang dalam persiapan sehingga tidak tersedia. Kembali lagi nanti untuk melihat status patch

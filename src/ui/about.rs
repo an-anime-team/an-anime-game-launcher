@@ -96,18 +96,37 @@ impl SimpleComponent for AboutDialog {
                 format!("Anime Launcher SDK: {SDK_VERSION}"),
                 format!("Anime Game Core: {CORE_VERSION}"),
                 String::new(),
-                format!("GTK: {}.{}.{}", gtk::major_version(), gtk::minor_version(), gtk::micro_version()),
+                format!("gtk: {}.{}.{}", gtk::major_version(), gtk::minor_version(), gtk::micro_version()),
                 format!("libadwaita: {}.{}.{}", adw::major_version(), adw::minor_version(), adw::micro_version()),
                 format!("pango: {}", gtk::pango::version_string()),
-                format!("cairo: {}", gtk::cairo::version_string()),
+                format!("cairo: {}", gtk::cairo::version_string())
             ].join("\n"),
 
             set_release_notes_version: &APP_VERSION,
             set_release_notes: &[
+                "<p>Added</p>",
+
+                "<ul>",
+                    "<li>Added new gamescope version compatibility</li>",
+                    "<li>Added \"launcher behavior\" option</li>",
+                    "<li>Added \"kill game process\" button when chosen behavior keeps launcher window open</li>",
+                    "<li>Bundled some icons into the app for consistency across the systems</li>",
+                    "<li>Added better panics handler</li>",
+                "</ul>",
+
                 "<p>Fixed</p>",
 
                 "<ul>",
-                    "<li>Fixed game launching on installs without `launcher.bat` file</li>",
+                    "<li>Fixed predownload button sensitivity</li>",
+                "</ul>",
+
+                "<p>Changed</p>",
+
+                "<ul>",
+                    "<li>Improved pre-downloads state checking</li>",
+                    "<li>Replaced translation functions by `tr!` macro</li>",
+                    "<li>Reworked app resources structure</li>",
+                    "<li>Improved game running status check (wasn't working properly with Chinese client)</li>",
                 "</ul>",
             ].join("\n"),
 

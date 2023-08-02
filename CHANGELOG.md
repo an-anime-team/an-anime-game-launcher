@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added new gamescope version compatibility
+- Added "launcher behavior" option
+- Added "kill game process" button when chosen behavior keeps launcher window open
+- Bundled some icons into the app for consistency across the systems
+- Added better panics handler
+
+### Fixed
+
+- Fixed predownload button sensitivity
+
+### Changed
+
+- Improved pre-downloads state checking
+- Replaced translation functions by `tr!` macro
+- Reworked app resources structure
+- Improved game running status check (wasn't working properly with Chinese client)
+
 ## [3.7.6] - 15.07.2023
 
 ### Fixed

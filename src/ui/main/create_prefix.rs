@@ -5,7 +5,7 @@ use anime_launcher_sdk::wincompatlib::prelude::*;
 use anime_launcher_sdk::config::ConfigExt;
 use anime_launcher_sdk::genshin::config::Config;
 
-use crate::i18n::*;
+use crate::*;
 
 use super::{App, AppMsg};
 
@@ -27,7 +27,7 @@ pub fn create_prefix(sender: ComponentSender<App>) {
                     tracing::error!("Failed to create wine prefix");
 
                     sender.input(AppMsg::Toast {
-                        title: tr("wine-prefix-update-failed"),
+                        title: tr!("wine-prefix-update-failed"),
                         description: Some(err.to_string())
                     });
                 }
@@ -44,7 +44,7 @@ pub fn create_prefix(sender: ComponentSender<App>) {
             tracing::error!("Failed to get selected wine executable");
 
             sender.input(AppMsg::Toast {
-                title: tr("failed-get-selected-wine"),
+                title: tr!("failed-get-selected-wine"),
                 description: None
             });
         }
@@ -53,7 +53,7 @@ pub fn create_prefix(sender: ComponentSender<App>) {
             tracing::error!("Failed to get selected wine executable: {err}");
 
             sender.input(AppMsg::Toast {
-                title: tr("failed-get-selected-wine"),
+                title: tr!("failed-get-selected-wine"),
                 description: Some(err.to_string())
             });
         }

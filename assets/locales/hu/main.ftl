@@ -18,6 +18,8 @@ about = Részletek
 
 
 close = Bezárás
+hide = Hide
+nothing = Nothing
 save = Mentés
 continue = Folytatás
 resume = Resume
@@ -61,6 +63,8 @@ create-prefix = Prefix létrehozása
 update = Frissítés
 download = Letöltés
 predownload-update = {$version} verzió előtöltése ({$size})
+
+kill-game-process = Kill game process
 
 main-window--patch-unavailable-tooltip = A patch szerverek nem elérhetőek és a launcher nem tudja ellenőrizni a játék patch státuszát. Saját felelősségre futtathatod a játékot
 main-window--patch-outdated-tooltip = A patch jelenleg nem elérhető mert túl elavult, vagy előkészítés alatt áll. Nézz vissza később

@@ -1,0 +1,40 @@
+name: Check source code
+
+on:
+  push:
+    branches: [ "next" ]
+    paths: [ "src/**" ]
+
+  pull_request:
+    branches: [ "main", "next" ]
+    paths: [ "src/**" ]
+
+  workflow_dispatch:
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:   
+  check_source_code:
+    runs-on: ubuntu-latest
+
+    container:
+      image: ubuntu:devel
+      env:
+        DEBIAN_FRONTEND: noninteractive
+
+    steps:
+      - name: Install dependencies
+        run: |
+          apt update
+          apt install -y libgtk-4-dev libadwaita-1-dev git curl
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: stable
+
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Check source code
+        run: cargo check --verbose

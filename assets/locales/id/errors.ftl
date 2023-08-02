@@ -13,6 +13,8 @@ failed-get-selected-wine = Gagal mendapatkan versi wine yang dipilih
 downloading-failed = Gagal mengunduh
 unpacking-failed = Gagal mengekstrak berkas
 
+kill-game-process-failed = Gagal menghentikan paksa proses game
+
 game-file-repairing-error = Gagal memperbaiki file game
 integrity-files-getting-error = Gagal mendapatkan integritas file
 

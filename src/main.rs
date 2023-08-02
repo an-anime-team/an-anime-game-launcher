@@ -1,3 +1,6 @@
+use std::path::PathBuf;
+use std::sync::atomic::{AtomicBool, Ordering};
+
 use relm4::prelude::*;
 
 use anime_launcher_sdk::config::ConfigExt;
@@ -12,9 +15,6 @@ use anime_launcher_sdk::anime_game_core::genshin::prelude::*;
 use tracing_subscriber::prelude::*;
 use tracing_subscriber::filter::*;
 
-use std::path::PathBuf;
-use std::sync::atomic::{AtomicBool, Ordering};
-
 pub mod move_folder;
 pub mod i18n;
 pub mod background;
@@ -24,6 +24,8 @@ use ui::main::*;
 use ui::first_run::main::*;
 
 pub const APP_ID: &str = "moe.launcher.an-anime-game-launcher";
+pub const APP_RESOURCE_PATH: &str = "/moe/launcher/an-anime-game-launcher";
+
 pub const APP_VERSION: &str = env!("CARGO_PKG_VERSION");
 pub const APP_DEBUG: bool = cfg!(debug_assertions);
 
@@ -68,6 +70,9 @@ lazy_static::lazy_static! {
 }
 
 fn main() {
+    // Setup custom panic handler
+    human_panic::setup_panic!(human_panic::metadata!());
+
     // Create launcher folder if it isn't
     if !LAUNCHER_FOLDER.exists() {
         std::fs::create_dir_all(LAUNCHER_FOLDER.as_path()).expect("Failed to create launcher folder");
@@ -93,6 +98,9 @@ fn main() {
     // Forcely run the game
     let just_run_game = std::env::args().any(|arg| &arg == "--just-run-game");
 
+    // Forcely disable verbode tracing output in stdout
+    let no_verbose_tracing = std::env::args().any(|arg| &arg == "--no-verbose-tracing");
+
     // Prepare stdout logger
     let stdout = tracing_subscriber::fmt::layer()
         .pretty()
@@ -103,8 +111,8 @@ fn main() {
                 LevelFilter::WARN
             }
         })
-        .with_filter(filter_fn(|metadata| {
-            !metadata.target().contains("rustls")
+        .with_filter(filter_fn(move |metadata| {
+            !metadata.target().contains("rustls") && !no_verbose_tracing
         }));
 
     // Prepare debug file logger
@@ -133,6 +141,10 @@ fn main() {
     // Register and include resources
     gtk::gio::resources_register_include!("resources.gresource")
         .expect("Failed to register resources");
+
+    // Set icons search path
+    gtk::IconTheme::for_display(&gtk::gdk::Display::default().unwrap())
+        .add_resource_path(&format!("{APP_RESOURCE_PATH}/icons"));
 
     // Set application's title
     gtk::glib::set_application_name("An Anime Game Launcher");

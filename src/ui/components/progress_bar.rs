@@ -6,7 +6,7 @@ use adw::prelude::*;
 use anime_launcher_sdk::anime_game_core::prelude::*;
 use anime_launcher_sdk::anime_game_core::genshin::prelude::*;
 
-use crate::i18n::*;
+use crate::*;
 
 pub struct ProgressBarInit {
     pub caption: Option<String>,
@@ -133,19 +133,19 @@ impl SimpleAsyncComponent for ProgressBar {
             ProgressBarMsg::UpdateFromState(state) => {
                 match state {
                     DiffUpdate::CheckingFreeSpace(_) |
-                    DiffUpdate::InstallerUpdate(InstallerUpdate::CheckingFreeSpace(_)) => self.caption = Some(tr("checking-free-space")),
+                    DiffUpdate::InstallerUpdate(InstallerUpdate::CheckingFreeSpace(_)) => self.caption = Some(tr!("checking-free-space")),
 
-                    DiffUpdate::InstallerUpdate(InstallerUpdate::DownloadingStarted(_)) => self.caption = Some(tr("downloading")),
-                    DiffUpdate::InstallerUpdate(InstallerUpdate::UnpackingStarted(_))   => self.caption = Some(tr("unpacking")),
+                    DiffUpdate::InstallerUpdate(InstallerUpdate::DownloadingStarted(_)) => self.caption = Some(tr!("downloading")),
+                    DiffUpdate::InstallerUpdate(InstallerUpdate::UnpackingStarted(_))   => self.caption = Some(tr!("unpacking")),
 
                     DiffUpdate::ApplyingHdiffStarted => {
-                        self.caption = Some(tr("applying-hdiff"));
+                        self.caption = Some(tr!("applying-hdiff"));
 
                         self.display_fraction = false;
                     },
 
                     DiffUpdate::RemovingOutdatedStarted => {
-                        self.caption = Some(tr("removing-outdated"));
+                        self.caption = Some(tr!("removing-outdated"));
 
                         self.display_fraction = false;
                     },
