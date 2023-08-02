@@ -25,3 +25,4 @@ id-id = Indonesia
 zh-cn = 简体中文
 ja-jp = 日本語
 hu-hu = Magyar
+sv-se = Svenska
