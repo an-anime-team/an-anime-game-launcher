@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added "launcher behavior" option
 - Added "kill game process" button when chosen behavior keeps launcher window open
 - Bundled some icons into the app for consistency across the systems
+- Added better panics handler
 
 ### Fixed
 

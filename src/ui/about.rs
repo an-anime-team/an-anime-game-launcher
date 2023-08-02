@@ -111,6 +111,7 @@ impl SimpleComponent for AboutDialog {
                     "<li>Added \"launcher behavior\" option</li>",
                     "<li>Added \"kill game process\" button when chosen behavior keeps launcher window open</li>",
                     "<li>Bundled some icons into the app for consistency across the systems</li>",
+                    "<li>Added better panics handler</li>",
                 "</ul>",
 
                 "<p>Fixed</p>",
