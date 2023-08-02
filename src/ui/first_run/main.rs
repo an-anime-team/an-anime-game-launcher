@@ -285,7 +285,7 @@ impl SimpleComponent for FirstRunApp {
 
                     let dialog = adw::MessageDialog::new(MAIN_WINDOW.as_ref(), Some(&title), Some(&description));
 
-                    dialog.add_response("close", &tr!("close"));
+                    dialog.add_response("close", &tr!("close", { "form" = "noun" }));
                     dialog.add_response("save", &tr!("save"));
 
                     dialog.set_response_appearance("save", adw::ResponseAppearance::Suggested);

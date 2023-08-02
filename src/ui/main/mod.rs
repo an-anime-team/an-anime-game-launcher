@@ -308,13 +308,13 @@ impl SimpleComponent for App {
                                         set_width_request: 44,
 
                                         #[watch]
-                                        set_tooltip_text: Some(&tr!("predownload-update", [
-                                            ("version", match model.state.as_ref() {
+                                        set_tooltip_text: Some(&tr!("predownload-update", {
+                                            "version" = match model.state.as_ref() {
                                                 Some(LauncherState::PredownloadAvailable { game, .. }) => game.latest().to_string(),
                                                 _ => String::from("?")
-                                            }),
+                                            },
 
-                                            ("size", match model.state.as_ref() {
+                                            "size" = match model.state.as_ref() {
                                                 Some(LauncherState::PredownloadAvailable { game, voices }) => {
                                                     let mut size = game.downloaded_size().unwrap_or(0);
 
@@ -326,8 +326,8 @@ impl SimpleComponent for App {
                                                 }
 
                                                 _ => String::from("?")
-                                            })
-                                        ])),
+                                            }
+                                        })),
 
                                         #[watch]
                                         set_visible: matches!(model.state.as_ref(), Some(LauncherState::PredownloadAvailable { .. })),
@@ -1002,9 +1002,9 @@ impl SimpleComponent for App {
                             }
 
                             StateUpdating::Voice(locale) => {
-                                sender.input(AppMsg::SetLoadingStatus(Some(Some(tr!("loading-launcher-state--voice", [
-                                    ("locale", locale.to_name())
-                                ])))));
+                                sender.input(AppMsg::SetLoadingStatus(Some(Some(tr!("loading-launcher-state--voice", {
+                                    "locale" = locale.to_name()
+                                })))));
                             }
 
                             StateUpdating::Patch => {
@@ -1189,7 +1189,7 @@ impl App {
                 Some(description.as_ref())
             );
 
-            dialog.add_response("close", &tr!("close"));
+            dialog.add_response("close", &tr!("close", { "form" = "noun" }));
             dialog.add_response("save", &tr!("save"));
 
             dialog.set_response_appearance("save", adw::ResponseAppearance::Suggested);

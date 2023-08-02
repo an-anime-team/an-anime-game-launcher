@@ -397,10 +397,10 @@ impl SimpleAsyncComponent for GeneralApp {
                         #[watch]
                         set_css_classes: match model.game_diff.as_ref() {
                             Some(diff) => match diff {
-                                VersionDiff::Latest { .. } => &["success"],
-                                VersionDiff::Predownload { .. } => &["accent"],
-                                VersionDiff::Diff { .. } => &["warning"],
-                                VersionDiff::Outdated { .. } => &["error"],
+                                VersionDiff::Latest { .. }       => &["success"],
+                                VersionDiff::Predownload { .. }  => &["accent"],
+                                VersionDiff::Diff { .. }         => &["warning"],
+                                VersionDiff::Outdated { .. }     => &["error"],
                                 VersionDiff::NotInstalled { .. } => &[]
                             }
 
@@ -411,17 +411,21 @@ impl SimpleAsyncComponent for GeneralApp {
                         set_tooltip_text: Some(&match model.game_diff.as_ref() {
                             Some(diff) => match diff {
                                 VersionDiff::Latest { .. } => String::new(),
-                                VersionDiff::Predownload { current, latest, .. } => tr!("game-predownload-available", [
-                                    ("old", current.to_string()),
-                                    ("new", latest.to_string())
-                                ]),
-                                VersionDiff::Diff { current, latest, .. } => tr!("game-update-available", [
-                                    ("old", current.to_string()),
-                                    ("new", latest.to_string())
-                                ]),
-                                VersionDiff::Outdated { latest, ..} => tr!("game-outdated", [
-                                    ("latest", latest.to_string())
-                                ]),
+
+                                VersionDiff::Predownload { current, latest, .. } => tr!("game-predownload-available", {
+                                    "old" = current.to_string(),
+                                    "new" = latest.to_string()
+                                }),
+
+                                VersionDiff::Diff { current, latest, .. } => tr!("game-update-available", {
+                                    "old" = current.to_string(),
+                                    "new" = latest.to_string()
+                                }),
+
+                                VersionDiff::Outdated { latest, ..} => tr!("game-outdated", {
+                                    "latest" = latest.to_string()
+                                }),
+
                                 VersionDiff::NotInstalled { .. } => String::new()
                             }
 
@@ -439,8 +443,13 @@ impl SimpleAsyncComponent for GeneralApp {
                         set_text: &match model.player_patch.as_ref() {
                             Some(patch) => match patch.status() {
                                 PatchStatus::NotAvailable => tr!("patch-not-available"),
-                                PatchStatus::Outdated { current, .. } => tr!("patch-outdated", [("current", current.to_string())]),
+
+                                PatchStatus::Outdated { current, .. } => tr!("patch-outdated", {
+                                    "current" = current.to_string()
+                                }),
+
                                 PatchStatus::Preparation { .. } => tr!("patch-preparation"),
+
                                 PatchStatus::Testing { version, .. } |
                                 PatchStatus::Available { version, .. } => version.to_string()
                             }
@@ -452,9 +461,11 @@ impl SimpleAsyncComponent for GeneralApp {
                         set_css_classes: match model.player_patch.as_ref() {
                             Some(patch) => match patch.status() {
                                 PatchStatus::NotAvailable => &["error"],
+
                                 PatchStatus::Outdated { .. } |
                                 PatchStatus::Preparation { .. } |
                                 PatchStatus::Testing { .. } => &["warning"],
+
                                 PatchStatus::Available { .. } => unsafe {
                                     let path = match Config::get() {
                                         Ok(config) => config.game.path.for_edition(config.launcher.edition).to_path_buf(),
@@ -476,12 +487,15 @@ impl SimpleAsyncComponent for GeneralApp {
                         set_tooltip_text: Some(&match model.player_patch.as_ref() {
                             Some(patch) => match patch.status() {
                                 PatchStatus::NotAvailable => tr!("patch-not-available-tooltip"),
-                                PatchStatus::Outdated { current, latest, .. } => tr!("patch-outdated-tooltip", [
-                                    ("current", current.to_string()),
-                                    ("latest", latest.to_string())
-                                ]),
+
+                                PatchStatus::Outdated { current, latest, .. } => tr!("patch-outdated-tooltip", {
+                                    "current" = current.to_string(),
+                                    "latest" = latest.to_string()
+                                }),
+
                                 PatchStatus::Preparation { .. } => tr!("patch-preparation-tooltip"),
                                 PatchStatus::Testing { .. } => tr!("patch-testing-tooltip"),
+
                                 PatchStatus::Available { .. } => unsafe {
                                     let path = match Config::get() {
                                         Ok(config) => config.game.path.for_edition(config.launcher.edition).to_path_buf(),
@@ -582,8 +596,8 @@ impl SimpleAsyncComponent for GeneralApp {
 
                     set_model: Some(&gtk::StringList::new(&[
                         &tr!("nothing"),
-                        &tr!("hide", [("form", "verb")]),
-                        &tr!("close", [("form", "verb")]),
+                        &tr!("hide", { "form" = "verb" }),
+                        &tr!("close", { "form" = "verb" }),
                     ])),
 
                     set_selected: match CONFIG.launcher.behavior {
@@ -873,9 +887,9 @@ impl SimpleAsyncComponent for GeneralApp {
 
                     if let Err(err) = result {
                         sender.input(GeneralAppMsg::Toast {
-                            title: tr!("wine-run-error", [
-                                ("executable", executable.join(" "))
-                            ]),
+                            title: tr!("wine-run-error", {
+                                "executable" = executable.join(" ")
+                            }),
                             description: Some(err.to_string())
                         });
 

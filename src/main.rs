@@ -98,6 +98,9 @@ fn main() {
     // Forcely run the game
     let just_run_game = std::env::args().any(|arg| &arg == "--just-run-game");
 
+    // Forcely disable verbode tracing output in stdout
+    let no_verbose_tracing = std::env::args().any(|arg| &arg == "--no-verbose-tracing");
+
     // Prepare stdout logger
     let stdout = tracing_subscriber::fmt::layer()
         .pretty()
@@ -108,8 +111,8 @@ fn main() {
                 LevelFilter::WARN
             }
         })
-        .with_filter(filter_fn(|metadata| {
-            !metadata.target().contains("rustls")
+        .with_filter(filter_fn(move |metadata| {
+            !metadata.target().contains("rustls") && !no_verbose_tracing
         }));
 
     // Prepare debug file logger

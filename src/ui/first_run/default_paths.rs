@@ -243,7 +243,7 @@ impl SimpleAsyncComponent for DefaultPathsApp {
 
                     gtk::Button {
                         set_label: &if model.migrate_installation {
-                            tr!("close")
+                            tr!("close", { "form" = "noun" })
                         } else {
                             tr!("exit")
                         },

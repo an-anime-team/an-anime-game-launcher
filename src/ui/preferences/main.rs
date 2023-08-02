@@ -154,7 +154,7 @@ impl SimpleAsyncComponent for PreferencesApp {
 
                     let dialog = adw::MessageDialog::new(PREFERENCES_WINDOW.as_ref(), Some(&title), Some(&description));
 
-                    dialog.add_response("close", &tr!("close"));
+                    dialog.add_response("close", &tr!("close", { "form" = "noun" }));
                     dialog.add_response("save", &tr!("save"));
 
                     dialog.set_response_appearance("save", adw::ResponseAppearance::Suggested);

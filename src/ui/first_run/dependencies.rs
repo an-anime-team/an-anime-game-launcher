@@ -175,7 +175,9 @@ impl SimpleAsyncComponent for DependenciesApp {
                 for package in packages {
                     if !is_available(package) {
                         sender.output(Self::Output::Toast {
-                            title: tr!("package-not-available", [("package", package)]),
+                            title: tr!("package-not-available", {
+                                "package" = package
+                            }),
                             description: None
                         });
 

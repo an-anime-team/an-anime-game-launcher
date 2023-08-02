@@ -88,10 +88,10 @@ pub fn format_lang(lang: &LanguageIdentifier) -> String {
 /// With parameters:
 /// 
 /// ```no_run
-/// println!("Translated message: {}", tr!("game-outdated", [
-///     ("latest", "3.3.0")
-/// ]));
-/// ``` 
+/// println!("Translated message: {}", tr!("game-outdated", {
+///     "latest" = "3.3.0"
+/// }));
+/// ```
 macro_rules! tr {
     ($id:expr) => {
         {
@@ -104,19 +104,22 @@ macro_rules! tr {
         }
     };
 
-    ($id:expr, $args:expr) => {
+    ($id:expr, { $($key:literal = $value:expr),* }) => {
         {
+            use std::collections::HashMap;
+
             use fluent_templates::Loader;
             use fluent_templates::fluent_bundle::FluentValue;
 
+            let mut args = HashMap::new();
+
+            $(
+                args.insert($key, FluentValue::from($value));
+            )*
+
             #[allow(unused_unsafe)]
             $crate::i18n::LOCALES
-                .lookup_with_args(
-                    unsafe { &$crate::i18n::LANG },
-                    $id,
-                    &std::collections::HashMap::from_iter($args.into_iter()
-                        .map(|(key, value)| (key, FluentValue::from(value))))
-                )
+                .lookup_complete(unsafe { &$crate::i18n::LANG }, $id, Some(&args))
                 .expect(&format!("Failed to find a message with given id: {}", stringify!($id)))
         }
     };
