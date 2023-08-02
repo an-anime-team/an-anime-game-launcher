@@ -90,6 +90,7 @@ impl SimpleComponent for AboutDialog {
                 "简体中文 — Caibin Chen https://github.com/tigersoldier",
                 "日本語 — @zozonteq https://github.com/zozonteq",
                 // Hungarian?
+                "Svenska — Jakob Fridesjö https://github.com/jakobfridesjo",
             ].join("\n"),
 
             set_debug_info: &[
@@ -112,6 +113,7 @@ impl SimpleComponent for AboutDialog {
                     "<li>Added \"kill game process\" button when chosen behavior keeps launcher window open</li>",
                     "<li>Bundled some icons into the app for consistency across the systems</li>",
                     "<li>Added better panics handler</li>",
+                    "<li>Added Swedish</li>",
                 "</ul>",
 
                 "<p>Fixed</p>",
