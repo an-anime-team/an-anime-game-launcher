@@ -1,6 +1,3 @@
-use std::process::Command;
-use std::time::Duration;
-
 use relm4::{
     prelude::*,
     component::*,
@@ -569,12 +566,12 @@ impl SimpleComponent for App {
                                             sender.input(AppMsg::DisableKillGameButton(true));
 
                                             std::thread::spawn(clone!(@strong sender => move || {
-                                                std::thread::sleep(Duration::from_secs(3));
+                                                std::thread::sleep(std::time::Duration::from_secs(3));
 
                                                 sender.input(AppMsg::DisableKillGameButton(false));
                                             }));
 
-                                            let result = Command::new("pkill")
+                                            let result = std::process::Command::new("pkill")
                                                 .arg("GenshinImpact|YuanShen|unlocker\\.exe")
                                                 .spawn();
 
@@ -584,6 +581,51 @@ impl SimpleComponent for App {
                                                     description: Some(err.to_string())
                                                 });
                                             }
+
+                                            // Doesn't work on all the systems
+                                            // e.g. won't work if you didn't install wine system-wide
+                                            // there's some reasons for it
+
+                                            // match Config::get() {
+                                            //     Ok(config) => {
+                                            //         match config.get_selected_wine() {
+                                            //             Ok(Some(version)) => {
+                                            //                 use anime_launcher_sdk::wincompatlib::prelude::*;
+
+                                            //                 let result = version.to_wine(config.components.path, Some(config.game.wine.builds.join(&version.name)))
+                                            //                     .stop_processes(false);
+
+                                            //                 if let Err(err) = result {
+                                            //                     sender.input(AppMsg::Toast {
+                                            //                         title: tr!("kill-game-process-failed"),
+                                            //                         description: Some(err.to_string())
+                                            //                     });
+                                            //                 }
+                                            //             }
+
+                                            //             Ok(None) => {
+                                            //                 sender.input(AppMsg::Toast {
+                                            //                     title: tr!("failed-get-selected-wine"),
+                                            //                     description: None
+                                            //                 });
+                                            //             }
+
+                                            //             Err(err) => {
+                                            //                 sender.input(AppMsg::Toast {
+                                            //                     title: tr!("failed-get-selected-wine"),
+                                            //                     description: Some(err.to_string())
+                                            //                 });
+                                            //             }
+                                            //         }
+                                            //     }
+
+                                            //     Err(err) => {
+                                            //         sender.input(AppMsg::Toast {
+                                            //             title: tr!("config-file-opening-error"),
+                                            //             description: Some(err.to_string())
+                                            //         });
+                                            //     }
+                                            // }
                                         }
                                     }
                                 },
