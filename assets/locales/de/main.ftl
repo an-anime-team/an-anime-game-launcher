@@ -18,8 +18,8 @@ about = Über
 
 
 close = Schließen
-hide = Hide
-nothing = Nothing
+hide = Verstecken
+nothing = Nichts
 save = Speichern
 continue = Weiter
 resume = Fortsetzen
@@ -64,7 +64,7 @@ update = Updaten
 download = Herunterladen
 predownload-update = Vorab-Update von Version {$version} herunterladen ({$size})
 
-kill-game-process = Kill game process
+kill-game-process = Spielprozesse terminieren
 
 main-window--patch-unavailable-tooltip = Die Patch-Server sind nicht verfügbar und der Launcher kann den Patch-Status des Spiels nicht überprüfen. Sie können das Spiel auf eigene Gefahr spielen.
 main-window--patch-outdated-tooltip = Der Patch ist veraltet oder befindet sich in Vorbereitung und kann daher nicht verwendet werden. Kehren Sie später zurück, um den Status zu sehen.
