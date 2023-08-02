@@ -552,9 +552,6 @@ impl SimpleComponent for App {
                                         },
 
                                         #[watch]
-                                        set_visible: model.kill_game_button,
-
-                                        #[watch]
                                         set_sensitive: !model.disabled_kill_game_button,
 
                                         set_css_classes: &["error", "pill"],
