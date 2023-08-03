@@ -28,8 +28,8 @@ impl SimpleAsyncComponent for WelcomeApp {
                 set_valign: gtk::Align::Center,
                 set_vexpand: true,
 
-                gtk::Image {
-                    set_icon_name: Some(APP_ID),
+                gtk::Picture {
+                    set_resource: Some(&format!("{APP_RESOURCE_PATH}/icons/hicolor/scalable/apps/{APP_ID}.png")),
                     set_height_request: 128
                 },
 
