@@ -17,9 +17,18 @@ wish-url = Apri i desideri
 about = Informazioni
 
 
-close = Chiudi
-hide = Hide
-nothing = Nothing
+close = { $commandType ->
+    [verb] Chiudersi
+    *[noun] Chiudi
+}
+
+hide = { $commandType ->
+    [verb] Nascondersi
+    *[noun] Nascondi
+}
+
+nothing = Nulla
+
 save = Salva
 continue = Continua
 resume = Riprendi
