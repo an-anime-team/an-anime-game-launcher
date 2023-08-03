@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated Italian
 - Updated Japanese
 
+### Fixed
+
+- Fixed logo size in the first run window
+
 ## [3.8.0] - 02.08.2023
 
 ### Added
