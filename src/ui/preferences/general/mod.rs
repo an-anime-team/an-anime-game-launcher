@@ -291,21 +291,15 @@ impl SimpleAsyncComponent for GeneralApp {
                         &tr!("china")
                     ])),
 
-                    set_selected: match CONFIG.launcher.edition {
-                        GameEdition::Global => 0,
-                        GameEdition::China => 1
-                    },
+                    set_selected: GameEdition::list().iter()
+                        .position(|edition| edition == &CONFIG.launcher.edition)
+                        .unwrap() as u32,
 
                     connect_selected_notify[sender] => move |row| {
                         if is_ready() {
                             #[allow(unused_must_use)]
                             if let Ok(mut config) = Config::get() {
-                                config.launcher.edition = match row.selected() {
-                                    0 => GameEdition::Global,
-                                    1 => GameEdition::China,
-
-                                    _ => unreachable!()
-                                };
+                                config.launcher.edition = GameEdition::list()[row.selected() as usize];
 
                                 Config::update(config);
 
