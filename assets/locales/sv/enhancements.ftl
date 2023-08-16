@@ -4,7 +4,7 @@ environment-settings-description = Ange miljövariabler och kommando för att st
 
 wine = Wine
 
-synchronization = Synkronisation
+synchronization = Synkronisering
 wine-sync-description = Teknik som används för att synkronisera inre händelser i Wine
 
 language = Språk
