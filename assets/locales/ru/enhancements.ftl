@@ -14,6 +14,12 @@ system = Системный
 borderless-window = Окно без рамок
 virtual-desktop = Виртуальный рабочий стол
 
+map-drive-c = Создавать диск C:
+map-drive-c-description = Автоматически создавать ссылку на папку drive_c из префикса Wine в dosdevices
+
+map-game-folder = Создавать диск с папкой игры
+map-game-folder-description = Автоматически создавать ссылку на папку с игрой в dosdevices
+
 game = Игра
 
 hud = HUD

@@ -14,6 +14,12 @@ system = システム
 borderless-window = ボーダーレスウィンドウ
 virtual-desktop = 仮想デスクトップ
 
+map-drive-c = Map drive C:
+map-drive-c-description = Automatically symlink drive_c folder from the wine prefix to the dosdevices
+
+map-game-folder = Map game folder
+map-game-folder-description = Automatically symlink game folder to the dosdevices
+
 game = ゲーム
 
 hud = HUD

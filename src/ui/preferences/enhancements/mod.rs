@@ -1,6 +1,11 @@
 use relm4::prelude::*;
 use relm4::component::*;
-use relm4::factory::*;
+
+use relm4::factory::{
+    AsyncFactoryComponent,
+    AsyncFactorySender,
+    AsyncFactoryVecDeque
+};
 
 use adw::prelude::*;
 
@@ -284,6 +289,76 @@ impl SimpleAsyncComponent for EnhancementsApp {
                             if is_ready() {
                                 if let Ok(mut config) = Config::get() {
                                     config.game.wine.virtual_desktop.enabled = switch.state();
+
+                                    Config::update(config);
+                                }
+                            }
+                        }
+                    }
+                },
+
+                adw::ActionRow {
+                    set_title: &tr!("map-drive-c"),
+                    set_subtitle: &tr!("map-drive-c-description"),
+
+                    add_suffix = &gtk::Switch {
+                        set_valign: gtk::Align::Center,
+
+                        set_state: CONFIG.game.wine.drives.drive_c,
+
+                        connect_state_notify => |switch| {
+                            if is_ready() {
+                                if let Ok(mut config) = Config::get() {
+                                    config.game.wine.drives.drive_c = switch.state();
+
+                                    Config::update(config);
+                                }
+                            }
+                        }
+                    }
+                },
+
+                #[name = "map_game_folder_row"]
+                adw::ComboRow {
+                    set_title: &tr!("map-game-folder"),
+                    set_subtitle: &tr!("map-game-folder-description"),
+
+                    #[wrap(Some)]
+                    set_model = &gtk::StringList::new(&AllowedDrives::list().iter()
+                        .map(|drive| drive.to_drive())
+                        .collect::<Vec<_>>()),
+
+                    set_selected: match CONFIG.game.wine.drives.game_folder {
+                        Some(drive) => AllowedDrives::list().iter()
+                            .position(|allowed| *allowed == drive)
+                            .unwrap_or(8) as u32,
+
+                        None => 8 // G:
+                    },
+
+                    connect_selected_notify => |row| {
+                        if is_ready() {
+                            if let Ok(mut config) = Config::get() {
+                                config.game.wine.drives.game_folder = Some(AllowedDrives::list()[row.selected() as usize]);
+
+                                Config::update(config);
+                            }
+                        }
+                    },
+
+                    add_suffix = &gtk::Switch {
+                        set_valign: gtk::Align::Center,
+
+                        set_state: CONFIG.game.wine.drives.game_folder.is_some(),
+
+                        connect_state_notify[map_game_folder_row] => move |switch| {
+                            if is_ready() {
+                                if let Ok(mut config) = Config::get() {
+                                    if switch.state() {
+                                        config.game.wine.drives.game_folder = Some(AllowedDrives::list()[map_game_folder_row.selected() as usize]);
+                                    } else {
+                                        config.game.wine.drives.game_folder = None;
+                                    }
 
                                     Config::update(config);
                                 }
