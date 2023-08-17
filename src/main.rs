@@ -209,13 +209,10 @@ fn main() {
                     return;
                 }
 
-                LauncherState::PredownloadAvailable { .. } |
-                LauncherState::PlayerPatchAvailable { patch: PlayerPatch { status: PatchStatus::NotAvailable, .. }, .. } => {
-                    if just_run_game {
-                        anime_launcher_sdk::genshin::game::run().expect("Failed to run the game");
+                LauncherState::PredownloadAvailable { .. } if just_run_game => {
+                    anime_launcher_sdk::genshin::game::run().expect("Failed to run the game");
 
-                        return;
-                    }
+                    return;
                 }
 
                 _ => ()

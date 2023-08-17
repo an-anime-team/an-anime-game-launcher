@@ -25,7 +25,6 @@ pub struct DefaultPathsApp {
     game_china: PathBuf,
     fps_unlocker: PathBuf,
     components: PathBuf,
-    patch: PathBuf,
     temp: PathBuf
 }
 
@@ -39,7 +38,6 @@ pub enum Folders {
     GameChina,
     FpsUnlocker,
     Components,
-    Patch,
     Temp
 }
 
@@ -195,17 +193,6 @@ impl SimpleAsyncComponent for DefaultPathsApp {
                 },
 
                 adw::ActionRow {
-                    set_title: &tr!("patch-folder"),
-                    set_icon_name: Some("folder-symbolic"),
-                    set_activatable: true,
-
-                    #[watch]
-                    set_subtitle: model.patch.to_str().unwrap(),
-
-                    connect_activated => DefaultPathsAppMsg::ChoosePath(Folders::Patch)
-                },
-
-                adw::ActionRow {
                     set_title: &tr!("temp-folder"),
                     set_icon_name: Some("folder-symbolic"),
                     set_activatable: true,
@@ -302,7 +289,6 @@ impl SimpleAsyncComponent for DefaultPathsApp {
             game_china: CONFIG.game.path.china.clone(),
             fps_unlocker: CONFIG.game.enhancements.fps_unlocker.path.clone(),
             components: CONFIG.components.path.clone(),
-            patch: CONFIG.patch.path.clone(),
 
             #[allow(clippy::or_fun_call)]
             temp: CONFIG.launcher.temp.clone().unwrap_or(std::env::temp_dir())
@@ -337,7 +323,6 @@ impl SimpleAsyncComponent for DefaultPathsApp {
                             self.game_china   = result.join(concat!("Yu", "anS", "hen"));
                             self.fps_unlocker = result.join("fps-unlocker");
                             self.components   = result.join("components");
-                            self.patch        = result.join("patch");
                             self.temp         = result.clone();
 
                             self.launcher = result;
@@ -350,7 +335,6 @@ impl SimpleAsyncComponent for DefaultPathsApp {
                         Folders::GameChina   => self.game_china   = result,
                         Folders::FpsUnlocker => self.fps_unlocker = result,
                         Folders::Components  => self.components   = result,
-                        Folders::Patch       => self.patch        = result,
                         Folders::Temp        => self.temp         = result
                     }
                 }
@@ -374,7 +358,6 @@ impl SimpleAsyncComponent for DefaultPathsApp {
                                 (old_config.game.path.global, &self.game_global),
                                 (old_config.game.path.china,  &self.game_china),
                                 (old_config.components.path,  &self.components),
-                                (old_config.patch.path,       &self.patch),
 
                                 (old_config.game.enhancements.fps_unlocker.path, &self.fps_unlocker)
                             ];
@@ -437,7 +420,6 @@ impl DefaultPathsApp {
         config.game.path.global = self.game_global.clone();
         config.game.path.china  = self.game_china.clone();
         config.components.path  = self.components.clone();
-        config.patch.path       = self.patch.clone();
         config.launcher.temp    = Some(self.temp.clone());
 
         config.game.enhancements.fps_unlocker.path = self.fps_unlocker.clone();

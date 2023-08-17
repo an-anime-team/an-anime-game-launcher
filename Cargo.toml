@@ -15,12 +15,12 @@ lto = true
 opt-level = "s"
 
 [build-dependencies]
-glib-build-tools = "0.17"
+glib-build-tools = "0.18"
 
 [dependencies.anime-launcher-sdk]
 git = "https://github.com/an-anime-team/anime-launcher-sdk"
-tag = "1.8.13"
-features = ["all", "genshin", "genshin-patch"]
+tag = "1.10.0"
+features = ["all", "genshin"]
 
 # path = "../anime-launcher-sdk" # ! for dev purposes only
 
@@ -30,7 +30,7 @@ gtk = { package = "gtk4", version = "0.6", features = ["v4_8"] }
 adw = { package = "libadwaita", version = "0.4", features = ["v1_2"] }
 
 rfd = { version = "0.11", features = ["xdg-portal"], default-features = false }
-open = "4.0"
+open = "5.0.0"
 whatadistro = "0.1.0"
 
 serde_json = "1.0"

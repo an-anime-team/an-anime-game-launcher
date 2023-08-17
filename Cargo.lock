@@ -39,8 +39,8 @@ dependencies = [
 
 [[package]]
 name = "anime-game-core"
-version = "1.13.5"
-source = "git+https://github.com/an-anime-team/anime-game-core?tag=1.13.5#11e48e47563acf97a6885d3cc369875031dc5f61"
+version = "1.15.0"
+source = "git+https://github.com/an-anime-team/anime-game-core?tag=1.15.0#e34a35e04dd97d8268e47769f82591100b3354ae"
 dependencies = [
  "anyhow",
  "bzip2",
@@ -88,8 +88,8 @@ dependencies = [
 
 [[package]]
 name = "anime-launcher-sdk"
-version = "1.8.13"
-source = "git+https://github.com/an-anime-team/anime-launcher-sdk?tag=1.8.13#1669dceafce3eaa3e9332fb4ac6ff78ea9fb1639"
+version = "1.10.0"
+source = "git+https://github.com/an-anime-team/anime-launcher-sdk?tag=1.10.0#916d4b56e0de0b3ed7720603da2090cbd9a11210"
 dependencies = [
  "anime-game-core",
  "anyhow",
@@ -1288,9 +1288,9 @@ dependencies = [
 
 [[package]]
 name = "glib-build-tools"
-version = "0.17.10"
+version = "0.18.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7a65d79efe318ef2cbbbb37032b125866fd82c34ea44c816132621bbc552e716"
+checksum = "3431c56f463443cba9bc3600248bc6d680cb614c2ee1cdd39dab5415bd12ac5c"
 
 [[package]]
 name = "glib-macros"
@@ -1971,9 +1971,9 @@ checksum = "dd8b5dd2ae5ed71462c540258bedcb51965123ad7e7ccf4b9a8cafaa4a63576d"
 
 [[package]]
 name = "open"
-version = "4.2.0"
+version = "5.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3a083c0c7e5e4a8ec4176346cf61f67ac674e8bfb059d9226e1c54a96b377c12"
+checksum = "cfabf1927dce4d6fdf563d63328a0a506101ced3ec780ca2135747336c98cef8"
 dependencies = [
  "is-wsl",
  "libc",

@@ -111,10 +111,7 @@ pub struct GeneralApp {
     components_page: AsyncController<ComponentsPage>,
 
     game_diff: Option<VersionDiff>,
-    player_patch: Option<PlayerPatch>,
-
     style: LauncherStyle,
-
     languages: Vec<String>
 }
 
@@ -123,10 +120,6 @@ pub enum GeneralAppMsg {
     /// Supposed to be called automatically on app's run when the latest game version
     /// was retrieved from the API
     SetGameDiff(Option<VersionDiff>),
-
-    /// Supposed to be called automatically on app's run when the latest UnityPlayer patch version
-    /// was retrieved from remote repos
-    SetPlayerPatch(Option<PlayerPatch>),
 
     // If one ever wish to change it to accept VoiceLocale
     // I'd recommend to use clone!(@strong self.locale as locale => move |_| { .. })
@@ -426,158 +419,6 @@ impl SimpleAsyncComponent for GeneralApp {
                             None => String::new()
                         })
                     }
-                },
-
-                adw::ActionRow {
-                    set_title: &tr!("player-patch-version"),
-                    set_subtitle: &tr!("player-patch-version-description"),
-
-                    add_suffix = &gtk::Label {
-                        #[watch]
-                        set_text: &match model.player_patch.as_ref() {
-                            Some(patch) => match patch.status() {
-                                PatchStatus::NotAvailable => tr!("patch-not-available"),
-
-                                PatchStatus::Outdated { current, .. } => tr!("patch-outdated", {
-                                    "current" = current.to_string()
-                                }),
-
-                                PatchStatus::Preparation { .. } => tr!("patch-preparation"),
-
-                                PatchStatus::Testing { version, .. } |
-                                PatchStatus::Available { version, .. } => version.to_string()
-                            }
-
-                            None => String::from("?")
-                        },
-
-                        #[watch]
-                        set_css_classes: match model.player_patch.as_ref() {
-                            Some(patch) => match patch.status() {
-                                PatchStatus::NotAvailable => &["error"],
-
-                                PatchStatus::Outdated { .. } |
-                                PatchStatus::Preparation { .. } |
-                                PatchStatus::Testing { .. } => &["warning"],
-
-                                PatchStatus::Available { .. } => unsafe {
-                                    let path = match Config::get() {
-                                        Ok(config) => config.game.path.for_edition(config.launcher.edition).to_path_buf(),
-                                        Err(_) => CONFIG.game.path.for_edition(CONFIG.launcher.edition).to_path_buf(),
-                                    };
-
-                                    if let Ok(true) = model.player_patch.as_ref().unwrap_unchecked().is_applied(path) {
-                                        &["success"]
-                                    } else {
-                                        &["warning"]
-                                    }
-                                }
-                            }
-
-                            None => &[]
-                        },
-
-                        #[watch]
-                        set_tooltip_text: Some(&match model.player_patch.as_ref() {
-                            Some(patch) => match patch.status() {
-                                PatchStatus::NotAvailable => tr!("patch-not-available-tooltip"),
-
-                                PatchStatus::Outdated { current, latest, .. } => tr!("patch-outdated-tooltip", {
-                                    "current" = current.to_string(),
-                                    "latest" = latest.to_string()
-                                }),
-
-                                PatchStatus::Preparation { .. } => tr!("patch-preparation-tooltip"),
-                                PatchStatus::Testing { .. } => tr!("patch-testing-tooltip"),
-
-                                PatchStatus::Available { .. } => unsafe {
-                                    let path = match Config::get() {
-                                        Ok(config) => config.game.path.for_edition(config.launcher.edition).to_path_buf(),
-                                        Err(_) => CONFIG.game.path.for_edition(CONFIG.launcher.edition).to_path_buf(),
-                                    };
-
-                                    if let Ok(true) = model.player_patch.as_ref().unwrap_unchecked().is_applied(path) {
-                                        String::new()
-                                    } else {
-                                        tr!("patch-not-applied-tooltip")
-                                    }
-                                }
-                            }
-
-                            None => String::new()
-                        })
-                    }
-                }
-            },
-
-            add = &adw::PreferencesGroup {
-                adw::ActionRow {
-                    set_title: &tr!("apply-main-patch"),
-                    set_subtitle: &tr!("apply-main-patch-description"),
-
-                    add_suffix = &gtk::Switch {
-                        set_valign: gtk::Align::Center,
-
-                        set_state: CONFIG.patch.apply,
-
-                        connect_state_notify[sender] => move |switch| {
-                            if is_ready() {
-                                #[allow(unused_must_use)]
-                                if let Ok(mut config) = Config::get() {
-                                    config.patch.apply = switch.state();
-
-                                    Config::update(config);
-
-                                    sender.output(PreferencesAppMsg::UpdateLauncherState);
-                                }
-                            }
-                        }
-                    }
-                },
-
-                adw::ActionRow {
-                    set_title: &tr!("disable-mhypbase"),
-                    set_subtitle: &tr!("disable-mhypbase-description"),
-
-                    add_suffix = &gtk::Switch {
-                        set_valign: gtk::Align::Center,
-
-                        set_state: CONFIG.patch.disable_mhypbase,
-
-                        connect_state_notify[sender] => move |switch| {
-                            if is_ready() {
-                                #[allow(unused_must_use)]
-                                if let Ok(mut config) = Config::get() {
-                                    config.patch.disable_mhypbase = switch.state();
-
-                                    Config::update(config);
-
-                                    sender.output(PreferencesAppMsg::UpdateLauncherState);
-                                }
-                            }
-                        }
-                    }
-                },
-
-                adw::ActionRow {
-                    set_title: &tr!("ask-superuser-permissions"),
-                    set_subtitle: &tr!("ask-superuser-permissions-description"),
-
-                    add_suffix = &gtk::Switch {
-                        set_valign: gtk::Align::Center,
-
-                        set_state: CONFIG.patch.root,
-
-                        connect_state_notify => |switch| {
-                            if is_ready() {
-                                if let Ok(mut config) = Config::get() {
-                                    config.patch.root = switch.state();
-
-                                    Config::update(config);
-                                }
-                            }
-                        }
-                    }
                 }
             },
 
@@ -713,10 +554,7 @@ impl SimpleAsyncComponent for GeneralApp {
                 .forward(sender.input_sender(), std::convert::identity),
 
             game_diff: None,
-            player_patch: None,
-
             style: CONFIG.launcher.style,
-
             languages: SUPPORTED_LANGUAGES.iter().map(|lang| tr!(format_lang(lang).as_str())).collect()
         };
 
@@ -741,10 +579,6 @@ impl SimpleAsyncComponent for GeneralApp {
         match msg {
             GeneralAppMsg::SetGameDiff(diff) => {
                 self.game_diff = diff;
-            }
-
-            GeneralAppMsg::SetPlayerPatch(patch) => {
-                self.player_patch = patch;
             }
 
             #[allow(unused_must_use)]

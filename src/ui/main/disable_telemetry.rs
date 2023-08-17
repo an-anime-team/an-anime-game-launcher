@@ -1,4 +1,5 @@
 use std::process::Command;
+use std::path::PathBuf;
 
 use relm4::prelude::*;
 
@@ -19,7 +20,12 @@ pub fn disable_telemetry(sender: ComponentSender<App>) {
             .collect::<Vec<String>>()
             .join(" ; ");
 
-        let output = if config.patch.root {
+        // TODO: perhaps find some another way? Or doesn't matter?
+        let use_root = std::env::var("LAUNCHER_USE_ROOT")
+            .map(|var| var == "1")
+            .unwrap_or_else(|_| !PathBuf::from("/.flatpak-info").exists());
+
+        let output = if use_root {
             Command::new("pkexec")
                 .arg("bash")
                 .arg("-c")
