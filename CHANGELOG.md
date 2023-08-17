@@ -12,10 +12,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated Turkish
 - Updated Italian
 - Updated Japanese
+- Updated Swedish
 
 ### Fixed
 
 - Fixed logo size in the first run window
+
+### Removed
+
+- Removed patch integration
 
 ## [3.8.0] - 02.08.2023
 
