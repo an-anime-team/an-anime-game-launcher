@@ -11,6 +11,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added feature to map wine drives
 - Added Portuguese
+- Added `%launch_args%` magic word for game launching command.
+  Now you can use `%bash_command% <script> %launch_args%` to run custom script
+- Added 4.0.0 voiceovers sizes
+
+### Fixed
+
+- Fixed logo size in the first run window
 
 ### Changed
 
@@ -18,10 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated Italian
 - Updated Japanese
 - Updated Swedish
-
-### Fixed
-
-- Fixed logo size in the first run window
+- Improved files migration code. In the best case scenarios, it will work immediately now
 
 ### Removed
 

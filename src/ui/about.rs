@@ -91,27 +91,32 @@ impl SimpleComponent for AboutDialog {
                 "<p>Added</p>",
 
                 "<ul>",
-                    "<li>Added new gamescope version compatibility</li>",
-                    "<li>Added \"launcher behavior\" option</li>",
-                    "<li>Added \"kill game process\" button when chosen behavior keeps launcher window open</li>",
-                    "<li>Bundled some icons into the app for consistency across the systems</li>",
-                    "<li>Added better panics handler</li>",
-                    "<li>Added Swedish</li>",
+                    "<li>Added feature to map wine drives</li>",
+                    "<li>Added Portuguese</li>",
+                    "<li>Added `%launch_args%` magic word for game launching command</li>",
+                    "<li>Added 4.0.0 voiceovers sizes</li>",
                 "</ul>",
 
                 "<p>Fixed</p>",
 
                 "<ul>",
-                    "<li>Fixed predownload button sensitivity</li>",
+                    "<li>Fixed logo size in the first run window</li>",
                 "</ul>",
 
                 "<p>Changed</p>",
 
                 "<ul>",
-                    "<li>Improved pre-downloads state checking</li>",
-                    "<li>Replaced translation functions by `tr!` macro</li>",
-                    "<li>Reworked app resources structure</li>",
-                    "<li>Improved game running status check (wasn't working properly with Chinese client)</li>",
+                    "<li>Updated Turkish</li>",
+                    "<li>Updated Italian</li>",
+                    "<li>Updated Japanese</li>",
+                    "<li>Updated Swedish</li>",
+                    "<li>Improved files migration code</li>",
+                "</ul>",
+
+                "<p>Removed</p>",
+
+                "<ul>",
+                    "<li>Removed patch integration</li>",
                 "</ul>",
             ].join("\n"),
 
