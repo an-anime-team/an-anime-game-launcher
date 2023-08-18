@@ -46,25 +46,6 @@ impl SimpleComponent for AboutDialog {
                 "Nikita Podvirnyy https://github.com/krypt0nn"
             ],
 
-            // Took patch credits from the CREDITS.md;
-            // If you want to change your name, link, or have any other questions - contact me
-
-            add_credit_section: (Some("Patch credits"), &[
-                "@Krock https://notabug.org/Krock",
-                "@y0soro https://notabug.org/y0soro",
-                "@3Shain https://notabug.org/3Shain",
-                "@timbuntu https://www.playonlinux.com/de/profil-95714.html",
-                "@geearf2",
-                "@SeppNel https://www.playonlinux.com/en/profil-95643.html",
-                "@0x90 https://www.playonlinux.com/en/profil-96196.html",
-                "@Th1nkCh3ck https://notabug.org/Th1nkCh3ck",
-                "@humanik12",
-                "@Makksim https://notabug.org/Makksim",
-                "@Kowalski https://notabug.org/Kowalski",
-                "@WerWolv",
-                "@Various"
-            ]),
-
             add_credit_section: (Some("An Anime Team"), &[
                 "Nikita Podvirnyy https://github.com/krypt0nn",
                 "Marie Piontek https://github.com/Mar0xy",
@@ -81,6 +62,7 @@ impl SimpleComponent for AboutDialog {
             set_translator_credits: &[
                 "Русский, English — Nikita Podvirnyy https://github.com/krypt0nn",
                 "Deutsch — Marie Piontek https://github.com/Mar0xy",
+                "Deutsch — @caem",
                 "Français — @zeGolem https://github.com/zeGolem",
                 "Español — Lautaro Garavano https://github.com/Rattlehead15",
                 "Türkçe — @Kaozix https://github.com/Kaozix1776",
@@ -91,6 +73,7 @@ impl SimpleComponent for AboutDialog {
                 "日本語 — @zozonteq https://github.com/zozonteq",
                 // Hungarian?
                 "Svenska — Jakob Fridesjö https://github.com/jakobfridesjo",
+                "Português — @kafushy"
             ].join("\n"),
 
             set_debug_info: &[
