@@ -369,7 +369,7 @@ impl SimpleAsyncComponent for DefaultPathsApp {
                                 )));
 
                                 if &from != to && from.exists() {
-                                    move_folder::move_folder(from, to).expect(&format!("Failed to move folder: {:?} -> {:?}", from, to));
+                                    move_files::move_files(from, to).expect(&format!("Failed to move folder: {:?} -> {:?}", from, to));
                                 }
 
                                 self.progress_bar.sender().send(ProgressBarMsg::UpdateProgress(i as u64 + 1, folders.len() as u64));

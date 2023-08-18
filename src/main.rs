@@ -15,7 +15,7 @@ use anime_launcher_sdk::anime_game_core::genshin::prelude::*;
 use tracing_subscriber::prelude::*;
 use tracing_subscriber::filter::*;
 
-pub mod move_folder;
+pub mod move_files;
 pub mod i18n;
 pub mod background;
 pub mod ui;

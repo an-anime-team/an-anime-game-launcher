@@ -10,7 +10,7 @@ pub fn migrate_folder(sender: ComponentSender<App>, from: PathBuf, to: PathBuf, 
     sender.input(AppMsg::DisableButtons(true));
 
     std::thread::spawn(move || {
-        move_folder::move_folder(&from, &to).expect("Failed to perform migration");
+        move_files::move_files(&from, &to).expect("Failed to perform migration");
 
         if let Some(cleanup_folder) = cleanup_folder {
             std::fs::remove_dir_all(cleanup_folder).expect("Failed to remove cleanup folder");
