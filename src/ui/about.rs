@@ -95,6 +95,7 @@ impl SimpleComponent for AboutDialog {
                     "<li>Added Portuguese</li>",
                     "<li>Added `%launch_args%` magic word for game launching command</li>",
                     "<li>Added 4.0.0 voiceovers sizes</li>",
+                    "<li>Added `--session <name>` flag to switch active session</li>",
                 "</ul>",
 
                 "<p>Fixed</p>",

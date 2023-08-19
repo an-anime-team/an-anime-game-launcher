@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `%launch_args%` magic word for game launching command.
   Now you can use `%bash_command% <script> %launch_args%` to run custom script
 - Added 4.0.0 voiceovers sizes
+- Added `--session <name>` flag to switch active session
 
 ### Fixed
 
