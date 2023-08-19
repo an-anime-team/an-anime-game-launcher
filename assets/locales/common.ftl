@@ -27,3 +27,4 @@ ja-jp = 日本語
 hu-hu = Magyar
 sv-se = Svenska
 pt-br = Português
+pl-pl = Polski
