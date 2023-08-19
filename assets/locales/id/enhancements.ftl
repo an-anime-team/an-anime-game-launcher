@@ -14,6 +14,12 @@ system = Sistem
 borderless-window = window tanpa border
 virtual-desktop = Desktop virtual
 
+map-drive-c = Petakan drive C:
+map-drive-c-description = Otomatis menghubungkan folder drive_c secara simbolik dari prefiks wine ke dosdevices
+
+map-game-folder = Petakan folder game
+map-game-folder-description = Otomatis menghubungkan folder game secara simbolik ke dosdevices
+
 game = Game
 
 hud = HUD

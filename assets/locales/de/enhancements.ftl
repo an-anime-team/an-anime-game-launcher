@@ -14,6 +14,12 @@ system = System
 borderless-window = Randloses Fenster
 virtual-desktop = Virtueller Desktop
 
+map-drive-c = Laufwerk C: abbilden
+map-drive-c-description = Symlink den drive_c ordner vom Wine-Prefix automatisch zu den DOS-Geräten
+
+map-game-folder = Spielordner abbilden
+map-game-folder-description = Symlink den Spielordner automatisch zu den DOS-Geräten
+
 game = Spiel
 
 hud = HUD

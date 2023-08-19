@@ -14,6 +14,12 @@ system = Sistema
 borderless-window = Finestra senza bordi
 virtual-desktop = Desktop virtuale
 
+map-drive-c = Mappa disco C:
+map-drive-c-description = Crea automaticamente un collegamento simbolico dalla cartella drive_c del prefisso di Wine a dosdevices
+
+map-game-folder = Mappa cartella del gioco
+map-game-folder-description = Crea automaticamente un collegamento simbolico dalla cartella del gioco a dosdevices
+
 game = Gioco
 
 hud = HUD

@@ -1,5 +1,3 @@
-use std::path::Path;
-
 use relm4::{
     prelude::*,
     Sender
@@ -105,59 +103,16 @@ pub fn repair_game(sender: ComponentSender<App>, progress_bar_input: Sender<Prog
 
                     tracing::warn!("Found broken files:\n{}", broken.iter().fold(String::new(), |acc, file| acc + &format!("- {}\n", file.path.to_string_lossy())));
 
-                    // Get main patch status
-
-                    let player_patch = PlayerPatch::from_folder(&config.patch.path, config.launcher.edition)
-                        .and_then(|patch| patch.is_applied(&game_path))
-                        .unwrap_or_else(|err| {
-                            tracing::warn!("Failed to get player patch status: {err}. Used config value instead: {}", config.patch.apply);
-
-                            config.patch.apply
-                        });
-
-                    tracing::debug!("Patch status: {player_patch}. Disable mhypbase: {}", config.patch.disable_mhypbase);
-
-                    fn should_ignore(path: &Path, player_patch: bool, disable_mhypbase: bool) -> bool {
-                        // Files managed by launch.bat file
-                        for part in ["crashreport.exe", "upload_crash.exe"] {
-                            if path.ends_with(part) {
-                                return true;
-                            }
-                        }
-
-                        // UnityPlayer patch related files
-                        if player_patch {
-                            for part in ["UnityPlayer.dll", "vulkan-1.dll"] {
-                                if path.ends_with(part) {
-                                    return true;
-                                }
-                            }
-                        }
-
-                        // If mhypbase should be disabled
-                        if disable_mhypbase && path.ends_with("mhypbase.dll") {
-                            return true;
-                        }
-
-                        false
-                    }
-
                     for (i, file) in broken.into_iter().enumerate() {
-                        if !should_ignore(&file.path, player_patch, config.patch.disable_mhypbase) {
-                            tracing::debug!("Repairing file: {}", file.path.to_string_lossy());
+                        tracing::debug!("Repairing file: {}", file.path.to_string_lossy());
 
-                            if let Err(err) = file.repair(&game_path) {
-                                sender.input(AppMsg::Toast {
-                                    title: tr!("game-file-repairing-error"),
-                                    description: Some(err.to_string())
-                                });
+                        if let Err(err) = file.repair(&game_path) {
+                            sender.input(AppMsg::Toast {
+                                title: tr!("game-file-repairing-error"),
+                                description: Some(err.to_string())
+                            });
 
-                                tracing::error!("Failed to repair game file: {err}");
-                            }
-                        }
-
-                        else {
-                            tracing::debug!("Skipped file: {}", file.path.to_string_lossy());
+                            tracing::error!("Failed to repair game file: {err}");
                         }
 
                         progress_bar_input.send(ProgressBarMsg::UpdateProgress(i as u64 + 1, total));

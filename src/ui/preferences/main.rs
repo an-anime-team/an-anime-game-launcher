@@ -4,7 +4,6 @@ use relm4::component::*;
 use gtk::prelude::*;
 use adw::prelude::*;
 
-use anime_launcher_sdk::anime_game_core::prelude::*;
 use anime_launcher_sdk::anime_game_core::genshin::prelude::*;
 
 use anime_launcher_sdk::config::ConfigExt;
@@ -28,11 +27,6 @@ pub enum PreferencesAppMsg {
     /// Supposed to be called automatically on app's run when the latest game version
     /// was retrieved from the API
     SetGameDiff(Option<VersionDiff>),
-
-    /// Supposed to be called automatically on app's run when the latest UnityPlayer patch version
-    /// was retrieved from remote repos
-    SetPlayerPatch(Option<PlayerPatch>),
-
     SetLauncherStyle(LauncherStyle),
 
     UpdateLauncherState,
@@ -117,11 +111,6 @@ impl SimpleAsyncComponent for PreferencesApp {
             #[allow(unused_must_use)]
             PreferencesAppMsg::SetGameDiff(diff) => {
                 self.general.sender().send(GeneralAppMsg::SetGameDiff(diff));
-            }
-
-            #[allow(unused_must_use)]
-            PreferencesAppMsg::SetPlayerPatch(patch) => {
-                self.general.sender().send(GeneralAppMsg::SetPlayerPatch(patch));
             }
 
             #[allow(unused_must_use)]

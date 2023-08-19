@@ -11,7 +11,6 @@ use adw::prelude::*;
 use gtk::glib::clone;
 
 mod repair_game;
-mod apply_patch;
 mod download_wine;
 mod create_prefix;
 mod download_diff;
@@ -78,10 +77,6 @@ pub enum AppMsg {
     /// Supposed to be called automatically on app's run when the latest game version
     /// was retrieved from the API
     SetGameDiff(Option<VersionDiff>),
-
-    /// Supposed to be called automatically on app's run when the latest UnityPlayer patch version
-    /// was retrieved from remote repos
-    SetPlayerPatch(Option<PlayerPatch>),
 
     /// Supposed to be called automatically on app's run when the launcher state was chosen
     SetLauncherState(Option<LauncherState>),
@@ -418,15 +413,6 @@ impl SimpleComponent for App {
                                                 Some(LauncherState::VoiceUpdateAvailable(_)) |
                                                 Some(LauncherState::VoiceNotInstalled(_)) => "document-save-symbolic",
 
-                                                Some(LauncherState::PlayerPatchAvailable { patch: PlayerPatch { status, .. }, .. }) => match status {
-                                                    PatchStatus::NotAvailable |
-                                                    PatchStatus::Outdated { .. } |
-                                                    PatchStatus::Preparation { .. } => "window-close-symbolic",
-
-                                                    PatchStatus::Testing { .. } |
-                                                    PatchStatus::Available { .. } => "document-save-symbolic"
-                                                }
-
                                                 Some(LauncherState::TelemetryNotDisabled) => "security-high-symbolic",
 
                                                 Some(LauncherState::VoiceOutdated(_)) |
@@ -440,8 +426,6 @@ impl SimpleComponent for App {
                                                 Some(LauncherState::PredownloadAvailable { .. }) => tr!("launch"),
 
                                                 Some(LauncherState::FolderMigrationRequired { .. }) => tr!("migrate-folders"),
-                                                Some(LauncherState::PlayerPatchAvailable { .. }) => tr!("apply-patch"),
-
                                                 Some(LauncherState::TelemetryNotDisabled) => tr!("disable-telemetry"),
 
                                                 Some(LauncherState::WineNotInstalled) => tr!("download-wine"),
@@ -480,17 +464,7 @@ impl SimpleComponent for App {
                                             Some(LauncherState::GameOutdated { .. }) |
                                             Some(LauncherState::VoiceOutdated(_)) => false,
 
-                                            Some(LauncherState::PlayerPatchAvailable { patch: PlayerPatch { status, .. }, .. }) => match status {
-                                                PatchStatus::NotAvailable |
-                                                PatchStatus::Outdated { .. } |
-                                                PatchStatus::Preparation { .. } => false,
-
-                                                PatchStatus::Testing { .. } |
-                                                PatchStatus::Available { .. } => true
-                                            },
-
                                             Some(_) => true,
-
                                             None => false
                                         },
 
@@ -499,17 +473,7 @@ impl SimpleComponent for App {
                                             Some(LauncherState::GameOutdated { .. }) |
                                             Some(LauncherState::VoiceOutdated(_)) => &["warning", "pill"],
 
-                                            Some(LauncherState::PlayerPatchAvailable { patch: PlayerPatch { status, .. }, .. }) => match status {
-                                                PatchStatus::NotAvailable |
-                                                PatchStatus::Outdated { .. } |
-                                                PatchStatus::Preparation { .. } => &["error", "pill"],
-
-                                                PatchStatus::Testing { .. } => &["warning", "pill"],
-                                                PatchStatus::Available { .. } => &["suggested-action", "pill"]
-                                            },
-
                                             Some(_) => &["suggested-action", "pill"],
-
                                             None => &["pill"]
                                         },
 
@@ -519,15 +483,6 @@ impl SimpleComponent for App {
                                             Some(LauncherState::VoiceOutdated(_)) => tr!("main-window--version-outdated-tooltip"),
 
                                             Some(LauncherState::FolderMigrationRequired { .. }) => tr!("migrate-folders-tooltip"),
-
-                                            Some(LauncherState::PlayerPatchAvailable { patch: PlayerPatch { status, .. }, .. }) => match status {
-                                                PatchStatus::NotAvailable => tr!("main-window--patch-unavailable-tooltip"),
-
-                                                PatchStatus::Outdated { .. } |
-                                                PatchStatus::Preparation { .. } => tr!("main-window--patch-outdated-tooltip"),
-
-                                                _ => String::new()
-                                            },
 
                                             _ => String::new()
                                         }),
@@ -550,9 +505,6 @@ impl SimpleComponent for App {
                                             set_icon_name: "violence-symbolic", // window-close-symbolic
                                             set_label: &tr!("kill-game-process")
                                         },
-
-                                        #[watch]
-                                        set_visible: model.kill_game_button,
 
                                         #[watch]
                                         set_sensitive: !model.disabled_kill_game_button,
@@ -929,61 +881,6 @@ impl SimpleComponent for App {
                 }
             })));
 
-            // Update initial patch status
-
-            tasks.push(std::thread::spawn(clone!(@strong sender => move || {
-                // Sync local patch repo
-                let patch = Patch::new(&CONFIG.patch.path, CONFIG.launcher.edition);
-
-                match patch.is_sync(&CONFIG.patch.servers) {
-                    Ok(Some(_)) => (),
-
-                    Ok(None) => {
-                        for server in &CONFIG.patch.servers {
-                            match patch.sync(server) {
-                                Ok(_) => break,
-
-                                Err(err) => {
-                                    tracing::error!("Failed to sync patch folder with remote: {server}: {err}");
-
-                                    sender.input(AppMsg::Toast {
-                                        title: tr!("patch-sync-failed"),
-                                        description: Some(err.to_string())
-                                    });
-                                }
-                            }
-                        }
-                    }
-
-                    Err(err) => {
-                        tracing::error!("Failed to compare local patch folder with remote: {err}");
-
-                        sender.input(AppMsg::Toast {
-                            title: tr!("patch-state-check-failed"),
-                            description: Some(err.to_string())
-                        });
-                    }
-                }
-
-                // Get main UnityPlayer patch status
-                sender.input(AppMsg::SetPlayerPatch(match patch.player_patch() {
-                    Ok(patch) => Some(patch),
-
-                    Err(err) => {
-                        tracing::error!("Failed to fetch player patch info: {err}");
-
-                        sender.input(AppMsg::Toast {
-                            title: tr!("patch-info-fetching-error"),
-                            description: Some(err.to_string())
-                        });
-
-                        None
-                    }
-                }));
-
-                tracing::info!("Updated patch status");
-            })));
-
             // Update initial game version status
 
             tasks.push(std::thread::spawn(clone!(@strong sender => move || {
@@ -1048,10 +945,6 @@ impl SimpleComponent for App {
                                     "locale" = locale.to_name()
                                 })))));
                             }
-
-                            StateUpdating::Patch => {
-                                sender.input(AppMsg::SetLoadingStatus(Some(Some(tr!("loading-launcher-state--patch")))));
-                            }
                         }
                     }
                 });
@@ -1092,11 +985,6 @@ impl SimpleComponent for App {
             #[allow(unused_must_use)]
             AppMsg::SetGameDiff(diff) => unsafe {
                 PREFERENCES_WINDOW.as_ref().unwrap_unchecked().sender().send(PreferencesAppMsg::SetGameDiff(diff));
-            }
-
-            #[allow(unused_must_use)]
-            AppMsg::SetPlayerPatch(patch) => unsafe {
-                PREFERENCES_WINDOW.as_ref().unwrap_unchecked().sender().send(PreferencesAppMsg::SetPlayerPatch(patch));
             }
 
             AppMsg::SetLauncherState(state) => {
@@ -1177,15 +1065,11 @@ impl SimpleComponent for App {
 
             AppMsg::PerformAction => unsafe {
                 match self.state.as_ref().unwrap_unchecked() {
-                    LauncherState::PlayerPatchAvailable { patch: PlayerPatch { status: PatchStatus::NotAvailable, .. }, .. } |
                     LauncherState::PredownloadAvailable { .. } |
                     LauncherState::Launch => launch::launch(sender),
 
                     LauncherState::FolderMigrationRequired { from, to, cleanup_folder } =>
                         migrate_folder::migrate_folder(sender, from.to_owned(), to.to_owned(), cleanup_folder.to_owned()),
-
-                    LauncherState::PlayerPatchAvailable { patch, disable_mhypbase } =>
-                        apply_patch::apply_patch(sender, patch.to_owned(), *disable_mhypbase),
 
                     LauncherState::TelemetryNotDisabled => disable_telemetry::disable_telemetry(sender),
 
