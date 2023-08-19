@@ -14,11 +14,11 @@ system = System
 borderless-window = Kantlöst fönster
 virtual-desktop = Virtuellt skrivbord
 
-map-drive-c = Map drive C:
-map-drive-c-description = Automatically symlink drive_c folder from the wine prefix to the dosdevices
+map-drive-c = Mappa hårddisk C:
+map-drive-c-description = Symlänka automatiskt mappen drive_c från Wine-prefixet till dosdevices
 
-map-game-folder = Map game folder
-map-game-folder-description = Automatically symlink game folder to the dosdevices
+map-game-folder = Mappa spelets mapp
+map-game-folder-description = Symlänka automatiskt spelets mapp till dosdevices
 
 game = Spel
 
