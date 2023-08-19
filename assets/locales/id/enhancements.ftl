@@ -14,11 +14,11 @@ system = Sistem
 borderless-window = window tanpa border
 virtual-desktop = Desktop virtual
 
-map-drive-c = Map drive C:
-map-drive-c-description = Automatically symlink drive_c folder from the wine prefix to the dosdevices
+map-drive-c = Petakan drive C:
+map-drive-c-description = Otomatis menghubungkan folder drive_c secara simbolik dari prefiks wine ke dosdevices
 
-map-game-folder = Map game folder
-map-game-folder-description = Automatically symlink game folder to the dosdevices
+map-game-folder = Petakan folder game
+map-game-folder-description = Otomatis menghubungkan folder game secara simbolik ke dosdevices
 
 game = Game
 
