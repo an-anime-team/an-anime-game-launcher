@@ -12,6 +12,9 @@ use anime_launcher_sdk::genshin::consts::*;
 use anime_launcher_sdk::anime_game_core::prelude::*;
 use anime_launcher_sdk::anime_game_core::genshin::prelude::*;
 
+use anime_launcher_sdk::sessions::SessionsExt;
+use anime_launcher_sdk::genshin::sessions::Sessions;
+
 use tracing_subscriber::prelude::*;
 use tracing_subscriber::filter::*;
 
@@ -69,7 +72,7 @@ lazy_static::lazy_static! {
     pub static ref FIRST_RUN_FILE: PathBuf = LAUNCHER_FOLDER.join(".first-run");
 }
 
-fn main() {
+fn main() -> anyhow::Result<()> {
     // Setup custom panic handler
     human_panic::setup_panic!(human_panic::metadata!());
 
@@ -90,16 +93,36 @@ fn main() {
     }
 
     // Force debug output
-    let force_debug = std::env::args().any(|arg| &arg == "--debug");
+    let mut force_debug = false;
 
     // Run the game
-    let run_game = std::env::args().any(|arg| &arg == "--run-game");
+    let mut run_game = false;
 
     // Forcely run the game
-    let just_run_game = std::env::args().any(|arg| &arg == "--just-run-game");
+    let mut just_run_game = false;
 
     // Forcely disable verbode tracing output in stdout
-    let no_verbose_tracing = std::env::args().any(|arg| &arg == "--no-verbose-tracing");
+    let mut no_verbose_tracing = false;
+
+    let args = std::env::args().collect::<Vec<_>>();
+
+    // Parse arguments
+    for i in 0..args.len() {
+        if args[i] == "--debug" {
+            force_debug = true;
+        } else if args[i] == "--run-game" {
+            run_game = true;
+        } else if args[i] == "--just-run-game" {
+            just_run_game = true;
+        } else if args[i] == "--no-verbose-tracing" {
+            no_verbose_tracing = true;
+        } else if args[i] == "--session" {
+            // Switch active session prior running the app
+            if let Some(session) = args.get(i + 1) {
+                Sessions::set_current(session.to_owned())?;
+            }
+        }
+    }
 
     // Prepare stdout logger
     let stdout = tracing_subscriber::fmt::layer()
@@ -116,10 +139,7 @@ fn main() {
         }));
 
     // Prepare debug file logger
-    let file = match std::fs::File::create(DEBUG_FILE.as_path()) {
-        Ok(file) => file,
-        Err(error) => panic!("Failed to create debug.log file: {:?}", error)
-    };
+    let file = std::fs::File::create(DEBUG_FILE.as_path())?;
 
     let debug_log = tracing_subscriber::fmt::layer()
         .pretty()
@@ -206,13 +226,13 @@ fn main() {
                 LauncherState::Launch => {
                     anime_launcher_sdk::genshin::game::run().expect("Failed to run the game");
 
-                    return;
+                    return Ok(());
                 }
 
                 LauncherState::PredownloadAvailable { .. } if just_run_game => {
                     anime_launcher_sdk::genshin::game::run().expect("Failed to run the game");
 
-                    return;
+                    return Ok(());
                 }
 
                 _ => ()
@@ -225,4 +245,6 @@ fn main() {
         // Show main window
         app.run::<App>(());
     }
+
+    Ok(())
 }
