@@ -13,7 +13,7 @@ failed-get-selected-wine = Seçilen Wine versiyonunu alma başarısız oldu
 downloading-failed = İndirme başarısız oldu
 unpacking-failed = Oyun dosyalarını çıkarma başarısız oldu
 
-kill-game-process-failed = Failed to kill the game's process
+kill-game-process-failed = Oyunu zorla kapatma başarısız oldu
 
 game-file-repairing-error = Oyun dosyaları tamir edilemedi
 integrity-files-getting-error = Dosyaların bütünlüğü kontrol edilemedi

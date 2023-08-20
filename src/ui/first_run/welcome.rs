@@ -3,6 +3,8 @@ use relm4::component::*;
 
 use adw::prelude::*;
 
+use anime_launcher_sdk::is_available;
+
 use crate::*;
 
 use super::main::FirstRunAppMsg;
@@ -28,8 +30,8 @@ impl SimpleAsyncComponent for WelcomeApp {
                 set_valign: gtk::Align::Center,
                 set_vexpand: true,
 
-                gtk::Image {
-                    set_icon_name: Some(APP_ID),
+                gtk::Picture {
+                    set_resource: Some(&format!("{APP_RESOURCE_PATH}/icons/hicolor/scalable/apps/{APP_ID}.png")),
                     set_height_request: 128
                 },
 
@@ -83,7 +85,11 @@ impl SimpleAsyncComponent for WelcomeApp {
         match msg {
             #[allow(unused_must_use)]
             WelcomeAppMsg::Continue => {
-                sender.output(Self::Output::ScrollToTosWarning);
+                if is_available("git") && is_available("xdelta3") {
+                    sender.output(Self::Output::ScrollToDefaultPaths);
+                } else {
+                    sender.output(Self::Output::ScrollToDependencies);
+                }
             }
         }
     }

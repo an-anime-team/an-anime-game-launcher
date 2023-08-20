@@ -17,9 +17,17 @@ wish-url = 祈願履歴を開く
 about = "An anime Game launcher"について 
 
 
-close = 閉じる
-hide = Hide
-nothing = Nothing
+close = { $form ->
+    [verb] 閉じる
+    *[noun] 閉じる
+}
+
+hide = { $form ->
+    [verb] 隠す
+    *[noun] 非表示
+}
+
+nothing = 何もしない
 save = 保存
 continue = 続行
 resume = 一時停止
@@ -64,7 +72,7 @@ update = 更新
 download = ダウンロード
 predownload-update = {$version} の早期アップデート({$size})
 
-kill-game-process = Kill game process
+kill-game-process = ゲームを停止させる
 
 main-window--patch-unavailable-tooltip = パッチサーバーが利用できないため、パッチの状態を確認することができません。リスクを理解した上で実行することができます。
 main-window--patch-outdated-tooltip = パッチは期限切れか準備中のため利用できません。しばらく立ってからパッチステータスを確認してください。

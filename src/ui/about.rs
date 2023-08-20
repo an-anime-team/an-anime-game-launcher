@@ -46,25 +46,6 @@ impl SimpleComponent for AboutDialog {
                 "Nikita Podvirnyy https://github.com/krypt0nn"
             ],
 
-            // Took patch credits from the CREDITS.md;
-            // If you want to change your name, link, or have any other questions - contact me
-
-            add_credit_section: (Some("Patch credits"), &[
-                "@Krock https://notabug.org/Krock",
-                "@y0soro https://notabug.org/y0soro",
-                "@3Shain https://notabug.org/3Shain",
-                "@timbuntu https://www.playonlinux.com/de/profil-95714.html",
-                "@geearf2",
-                "@SeppNel https://www.playonlinux.com/en/profil-95643.html",
-                "@0x90 https://www.playonlinux.com/en/profil-96196.html",
-                "@Th1nkCh3ck https://notabug.org/Th1nkCh3ck",
-                "@humanik12",
-                "@Makksim https://notabug.org/Makksim",
-                "@Kowalski https://notabug.org/Kowalski",
-                "@WerWolv",
-                "@Various"
-            ]),
-
             add_credit_section: (Some("An Anime Team"), &[
                 "Nikita Podvirnyy https://github.com/krypt0nn",
                 "Marie Piontek https://github.com/Mar0xy",
@@ -81,6 +62,7 @@ impl SimpleComponent for AboutDialog {
             set_translator_credits: &[
                 "Русский, English — Nikita Podvirnyy https://github.com/krypt0nn",
                 "Deutsch — Marie Piontek https://github.com/Mar0xy",
+                "Deutsch — @caem",
                 "Français — @zeGolem https://github.com/zeGolem",
                 "Español — Lautaro Garavano https://github.com/Rattlehead15",
                 "Türkçe — @Kaozix https://github.com/Kaozix1776",
@@ -91,6 +73,8 @@ impl SimpleComponent for AboutDialog {
                 "日本語 — @zozonteq https://github.com/zozonteq",
                 // Hungarian?
                 "Svenska — Jakob Fridesjö https://github.com/jakobfridesjo",
+                "Português — @kafushy",
+                "Polski — Dominik Opyd https://github.com/oritwoen"
             ].join("\n"),
 
             set_debug_info: &[
@@ -108,27 +92,34 @@ impl SimpleComponent for AboutDialog {
                 "<p>Added</p>",
 
                 "<ul>",
-                    "<li>Added new gamescope version compatibility</li>",
-                    "<li>Added \"launcher behavior\" option</li>",
-                    "<li>Added \"kill game process\" button when chosen behavior keeps launcher window open</li>",
-                    "<li>Bundled some icons into the app for consistency across the systems</li>",
-                    "<li>Added better panics handler</li>",
-                    "<li>Added Swedish</li>",
+                    "<li>Added feature to map wine drives</li>",
+                    "<li>Added `%launch_args%` magic word for game launching command</li>",
+                    "<li>Added 4.0.0 voiceovers sizes</li>",
+                    "<li>Added `--session <name>` flag to switch active session</li>",
+                    "<li>Added Portuguese</li>",
+                    "<li>Added Polish</li>",
                 "</ul>",
 
                 "<p>Fixed</p>",
 
                 "<ul>",
-                    "<li>Fixed predownload button sensitivity</li>",
+                    "<li>Fixed logo size in the first run window</li>",
                 "</ul>",
 
                 "<p>Changed</p>",
 
                 "<ul>",
-                    "<li>Improved pre-downloads state checking</li>",
-                    "<li>Replaced translation functions by `tr!` macro</li>",
-                    "<li>Reworked app resources structure</li>",
-                    "<li>Improved game running status check (wasn't working properly with Chinese client)</li>",
+                    "<li>Updated Turkish</li>",
+                    "<li>Updated Italian</li>",
+                    "<li>Updated Japanese</li>",
+                    "<li>Updated Swedish</li>",
+                    "<li>Improved files migration code</li>",
+                "</ul>",
+
+                "<p>Removed</p>",
+
+                "<ul>",
+                    "<li>Removed patch integration</li>",
                 "</ul>",
             ].join("\n"),
 

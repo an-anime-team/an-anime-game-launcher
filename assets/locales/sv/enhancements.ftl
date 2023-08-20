@@ -4,7 +4,7 @@ environment-settings-description = Ange miljövariabler och kommando för att st
 
 wine = Wine
 
-synchronization = Synkronisation
+synchronization = Synkronisering
 wine-sync-description = Teknik som används för att synkronisera inre händelser i Wine
 
 language = Språk
@@ -13,6 +13,12 @@ system = System
 
 borderless-window = Kantlöst fönster
 virtual-desktop = Virtuellt skrivbord
+
+map-drive-c = Mappa hårddisk C:
+map-drive-c-description = Symlänka automatiskt mappen drive_c från Wine-prefixet till dosdevices
+
+map-game-folder = Mappa spelets mapp
+map-game-folder-description = Symlänka automatiskt spelets mapp till dosdevices
 
 game = Spel
 

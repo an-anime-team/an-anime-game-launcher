@@ -43,10 +43,10 @@ loading-launcher-state--patch = Laddar starthanterarens tillstånd: verifierar i
 checking-free-space = Kontrollerar ledigt utrymme
 downloading = Laddar ner
 unpacking = Packar upp
-verifying-files = Verifierar filerna
-repairing-files = Reparerar filerna
-migrating-folders = Migrerar mapparna
-applying-hdiff = Applicerar hdiff-patcharna
+verifying-files = Verifierar filer
+repairing-files = Reparerar filer
+migrating-folders = Migrerar mappar
+applying-hdiff = Applicerar hdiff-patchar
 removing-outdated = Tar bort utdaterade filer
 
 
@@ -71,5 +71,5 @@ main-window--patch-outdated-tooltip = Patchen är utdaterad eller i förberedels
 main-window--version-outdated-tooltip = Versionen är för utdaterad och kan inte uppdateras
 
 preferences = Preferenser
-general = Allmän
+general = Allmänt
 enhancements = Förbättringar
