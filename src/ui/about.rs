@@ -73,7 +73,8 @@ impl SimpleComponent for AboutDialog {
                 "日本語 — @zozonteq https://github.com/zozonteq",
                 // Hungarian?
                 "Svenska — Jakob Fridesjö https://github.com/jakobfridesjo",
-                "Português — @kafushy"
+                "Português — @kafushy",
+                "Polski — Dominik Opyd https://github.com/oritwoen"
             ].join("\n"),
 
             set_debug_info: &[
@@ -92,10 +93,11 @@ impl SimpleComponent for AboutDialog {
 
                 "<ul>",
                     "<li>Added feature to map wine drives</li>",
-                    "<li>Added Portuguese</li>",
                     "<li>Added `%launch_args%` magic word for game launching command</li>",
                     "<li>Added 4.0.0 voiceovers sizes</li>",
                     "<li>Added `--session <name>` flag to switch active session</li>",
+                    "<li>Added Portuguese</li>",
+                    "<li>Added Polish</li>",
                 "</ul>",
 
                 "<p>Fixed</p>",
