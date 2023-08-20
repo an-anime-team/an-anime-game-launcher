@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.9.0] - 20.08.2023
+
 ### Added
 
 - Added feature to map wine drives
@@ -398,9 +400,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <br>
 
-[unreleased]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.8.0...next
+[unreleased]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.9.0...next
+[3.9.0]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.8.0...3.9.0
 [3.8.0]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.7.6...3.8.0
-[3.7.5]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.7.5...3.7.6
+[3.7.6]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.7.5...3.7.6
 [3.7.5]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.7.4...3.7.5
 [3.7.4]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.7.3...3.7.4
 [3.7.3]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.7.2...3.7.3
