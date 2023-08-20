@@ -18,7 +18,6 @@
 
 # ♥️ Useful links and thanks
 
-* Original patch project without which this project wouldn't be possible. Link is omitted for "privacy" purposes
 * [macOS launcher](https://github.com/3Shain/yet-another-anime-game-launcher) which contains some additional compatibility components
 * [Wiki](https://github.com/an-anime-team/an-anime-game-launcher/wiki) contains some basic FAQ, installation instructions and more
 * [Releases page](https://github.com/an-anime-team/an-anime-game-launcher/releases) where you can find latest available version
