@@ -1,8 +1,3 @@
-<picture>
-    <source media="(prefers-color-scheme: dark)" srcset="repository/logo-dark.png">
-    <img src="repository/logo-light.png">
-</picture>
-
 | Modern style | Classic style |
 | :-: | :-: |
 | <picture><source media="(prefers-color-scheme: dark)" srcset="repository/main-modern-dark.png"><img src="repository/main-modern.png"></picture> | <picture><source media="(prefers-color-scheme: dark)" srcset="repository/main-classic-dark.png"><img src="repository/main-classic.png"></picture> |
