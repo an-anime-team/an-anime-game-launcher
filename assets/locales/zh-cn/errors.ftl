@@ -13,7 +13,7 @@ failed-get-selected-wine = 选择 Wine 版本失败
 downloading-failed = 下载失败
 unpacking-failed = 解压缩失败
 
-kill-game-process-failed = Failed to kill the game's process
+kill-game-process-failed = 无法中止游戏进程
 
 game-file-repairing-error = 修复游戏文件失败
 integrity-files-getting-error = 获取一致性文件失败
