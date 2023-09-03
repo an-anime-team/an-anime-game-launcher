@@ -5,3 +5,4 @@ Exec=AppRun
 Type=Application
 Categories=Game
 Terminal=false
+StartupWMClass=moe.launcher.an-anime-game-launcher
