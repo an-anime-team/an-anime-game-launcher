@@ -12,9 +12,9 @@ wine-options = Wine 选项
 wine-use-shared-libraries = 使用 Wine 共享库
 wine-use-shared-libraries-description = 设置 LD_LIBRARY_PATH 环境变量，从选中的 Wine 版本加载系统库
 
-gstreamer-use-shared-libraries = 使用 gstreamer 共享库
-gstreamer-use-shared-libraries-description = 设置 GST_PLUGIN_PATH 环境变量，从选中的 Wine 版本加载 gstreamer 库
+gstreamer-use-shared-libraries = 使用 GStreamer 共享库
+gstreamer-use-shared-libraries-description = 设置 GST_PLUGIN_PATH 环境变量，从选中的 Wine 版本加载 GStreamer 库
 
 dxvk-version = DXVK 版本
-dxvk-selection-disabled = 您的葡萄酒组首选项禁用 DXVK 选择
+dxvk-selection-disabled = 您的 Wine 首选项禁用 DXVK 选择
 dxvk-recommended-description = 仅显示推荐的 DXVK 版本
