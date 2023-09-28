@@ -69,7 +69,7 @@ impl SimpleAsyncComponent for DependenciesApp {
                         },
 
                         gtk::Entry {
-                            set_text: "sudo pacman -Syu git xdelta3",
+                            set_text: "sudo pacman -Syu git xdelta3 p7zip",
                             set_editable: false
                         }
                     },
@@ -86,7 +86,7 @@ impl SimpleAsyncComponent for DependenciesApp {
                         },
 
                         gtk::Entry {
-                            set_text: "sudo apt install git xdelta3",
+                            set_text: "sudo apt install git xdelta3 p7zip-full",
                             set_editable: false
                         }
                     },
@@ -103,7 +103,7 @@ impl SimpleAsyncComponent for DependenciesApp {
                         },
 
                         gtk::Entry {
-                            set_text: "sudo dnf install git xdelta",
+                            set_text: "sudo dnf install git xdelta p7zip",
                             set_editable: false
                         }
                     }
@@ -183,6 +183,18 @@ impl SimpleAsyncComponent for DependenciesApp {
 
                         return;
                     }
+                }
+
+                // 7z sometimes has different binaries
+                if !is_available("7z") && !is_available("7za") {
+                    sender.output(Self::Output::Toast {
+                        title: tr!("package-not-available", {
+                            "package" = "7z"
+                        }),
+                        description: None
+                    });
+
+                    return;
                 }
 
                 sender.output(Self::Output::ScrollToDefaultPaths);

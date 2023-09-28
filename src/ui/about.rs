@@ -74,7 +74,8 @@ impl SimpleComponent for AboutDialog {
                 // Hungarian?
                 "Svenska — Jakob Fridesjö https://github.com/jakobfridesjo",
                 "Português — @kafushy",
-                "Polski — Dominik Opyd https://github.com/oritwoen"
+                "Polski — Dominik Opyd https://github.com/oritwoen",
+                "Tiếng Việt — Nguyễn Hữu Chánh https://github.com/Chanhnh"
             ].join("\n"),
 
             set_debug_info: &[
@@ -92,35 +93,15 @@ impl SimpleComponent for AboutDialog {
                 "<p>Added</p>",
 
                 "<ul>",
-                    "<li>Added feature to map wine drives</li>",
-                    "<li>Added `%launch_args%` magic word for game launching command</li>",
-                    "<li>Added 4.0.0 voiceovers sizes</li>",
-                    "<li>Added `--session <name>` flag to switch active session</li>",
-                    "<li>Added Portuguese</li>",
-                    "<li>Added Polish</li>",
-                "</ul>",
-
-                "<p>Fixed</p>",
-
-                "<ul>",
-                    "<li>Fixed logo size in the first run window</li>",
+                    "<li>Added Vietnamese</li>",
+                    "<li>Added support for segmented zip archives (fixed initial game downloading)</li>",
                 "</ul>",
 
                 "<p>Changed</p>",
 
                 "<ul>",
-                    "<li>Updated Turkish</li>",
-                    "<li>Updated Italian</li>",
-                    "<li>Updated Japanese</li>",
-                    "<li>Updated Swedish</li>",
-                    "<li>Improved files migration code</li>",
-                "</ul>",
-
-                "<p>Removed</p>",
-
-                "<ul>",
-                    "<li>Removed patch integration</li>",
-                "</ul>",
+                    "<li>Updated Chinese</li>",
+                "</ul>"
             ].join("\n"),
 
             set_modal: true,

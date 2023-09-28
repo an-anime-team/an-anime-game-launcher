@@ -85,7 +85,12 @@ impl SimpleAsyncComponent for WelcomeApp {
         match msg {
             #[allow(unused_must_use)]
             WelcomeAppMsg::Continue => {
-                if is_available("git") && is_available("xdelta3") {
+                let installed =
+                    is_available("git") &&
+                    is_available("xdelta3") &&
+                    (is_available("7z") || is_available("7za"));
+
+                if installed {
                     sender.output(Self::Output::ScrollToDefaultPaths);
                 } else {
                     sender.output(Self::Output::ScrollToDependencies);

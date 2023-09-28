@@ -28,3 +28,4 @@ hu-hu = Magyar
 sv-se = Svenska
 pt-br = Português
 pl-pl = Polski
+vi-vn = Tiếng Việt

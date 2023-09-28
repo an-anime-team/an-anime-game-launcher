@@ -6,14 +6,14 @@ debug-file-opening-error = 打开调试文件失败
 wish-url-search-failed = 找不到祈愿 URL
 wish-url-opening-error = 无法转到祈愿 URL
 
-wine-run-error = 使用 wine 运行 {$executable} 失败
+wine-run-error = 使用 Wine 运行 {$executable} 失败
 
 game-launching-failed = 启动游戏失败
 failed-get-selected-wine = 选择 Wine 版本失败
 downloading-failed = 下载失败
 unpacking-failed = 解压缩失败
 
-kill-game-process-failed = Failed to kill the game's process
+kill-game-process-failed = 中止游戏进程失败
 
 game-file-repairing-error = 修复游戏文件失败
 integrity-files-getting-error = 获取一致性文件失败
@@ -22,7 +22,7 @@ background-downloading-failed = 下载背景图片失败
 components-index-sync-failed = 同步组件索引失败
 components-index-verify-failed = 验证组件索引失败
 config-update-error = 保存配置失败
-wine-prefix-update-failed = 更新 Wine prefix 失败
+wine-prefix-update-failed = 更新 Wine Prefix 失败
 dxvk-install-failed = 安装 DXVK 失败
 voice-package-deletion-error = 删除语音包失败
 
@@ -46,7 +46,7 @@ game-patching-error = 应用游戏补丁失败
 
 # Disable telemetry
 
-telemetry-servers-disabling-error = 禁用监测服务器
+telemetry-servers-disabling-error = 监测服务器禁用失败
 
 # Sandbox
 
