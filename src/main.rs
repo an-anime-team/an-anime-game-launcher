@@ -98,10 +98,10 @@ fn main() -> anyhow::Result<()> {
     // Run the game
     let mut run_game = false;
 
-    // Forcely run the game
+    // Force run the game
     let mut just_run_game = false;
 
-    // Forcely disable verbode tracing output in stdout
+    // Force disable verbose tracing output in stdout
     let mut no_verbose_tracing = false;
 
     let args = std::env::args().collect::<Vec<_>>();
