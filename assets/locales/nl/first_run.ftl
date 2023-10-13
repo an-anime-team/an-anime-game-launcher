@@ -16,7 +16,7 @@ tos-violation-warning-message =
 
     Sommige hier gebruikte componenten zijn echter waarschijnlijk in strijd met de servicevoorwaarden van {company-name} voor {game-name}.
 
-    Als je deze launcher gebruikt, kan je account worden geïdentificeerd als niet-conform met de TOS door {bedrijfsnaam}/{bedrijfsnaam wijzigen.
+    Als je deze launcher gebruikt, kan je account worden geïdentificeerd als niet-conform met de TOS door {company-name}/{company-alter-name} wijzigen.
 
     Als dit gebeurt, is {company-name}/{company-alter-name} vrij om te doen wat ze willen, omdat je account de Servicevoorwaarden zou schenden. Inclusief een game ban.
 
