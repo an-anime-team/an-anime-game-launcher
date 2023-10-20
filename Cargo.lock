@@ -56,8 +56,8 @@ checksum = "0942ffc6dcaadf03badf6e6a2d0228460359d5e34b57ccdc720b7382dfbd5ec5"
 
 [[package]]
 name = "anime-game-core"
-version = "1.16.0"
-source = "git+https://github.com/an-anime-team/anime-game-core?tag=1.16.0#e36867453184dd8ee2ce7eacbbf9e9a1d46c592d"
+version = "1.16.1"
+source = "git+https://github.com/an-anime-team/anime-game-core?tag=1.16.1#5864e5f00219c3355fc3f4cc2ac3a730a5397391"
 dependencies = [
  "anyhow",
  "bzip2",
@@ -105,8 +105,8 @@ dependencies = [
 
 [[package]]
 name = "anime-launcher-sdk"
-version = "1.11.2"
-source = "git+https://github.com/an-anime-team/anime-launcher-sdk?tag=1.11.2#45b0c6cc9ef907e6be4ee12236bf8b015a0da141"
+version = "1.11.4"
+source = "git+https://github.com/an-anime-team/anime-launcher-sdk?tag=1.11.4#ea5a501a0f4dec6dee0cc33d5b2d6757503764cb"
 dependencies = [
  "anime-game-core",
  "anyhow",
@@ -183,6 +183,18 @@ name = "arc-swap"
 version = "1.6.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "bddcadddf5e9015d310179a59bb28c4d4b9920ad0f11e8e14dbadf654890c9a6"
+
+[[package]]
+name = "arrayref"
+version = "0.3.7"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6b4930d2cb77ce62f89ee5d5289b4ac049559b1c45539271f5ed4fdc7db34545"
+
+[[package]]
+name = "arrayvec"
+version = "0.7.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "96d30a06541fbafbc7f82ed10c06164cfbd2c401138f6addd8404629c4b16711"
 
 [[package]]
 name = "ashpd"
@@ -441,6 +453,19 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b4682ae6287fcf752ecaabbfcc7b6f9b72aa33933dc23a554d853aea8eea8635"
 
 [[package]]
+name = "blake3"
+version = "1.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0231f06152bf547e9c2b5194f247cd97aacf6dcd8b15d8e5ec0663f64580da87"
+dependencies = [
+ "arrayref",
+ "arrayvec",
+ "cc",
+ "cfg-if",
+ "constant_time_eq 0.3.0",
+]
+
+[[package]]
 name = "block"
 version = "0.1.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -630,6 +655,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "245097e9a4535ee1e3e3931fcfcd55a796a44c643e8596ff6566d68f09b87bbc"
 
 [[package]]
+name = "constant_time_eq"
+version = "0.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f7144d30dcf0fafbce74250a3963025d8d52177934239851c917d29f1df280c2"
+
+[[package]]
 name = "core-foundation"
 version = "0.9.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -800,9 +831,9 @@ dependencies = [
 
 [[package]]
 name = "dns-lookup"
-version = "2.0.3"
+version = "2.0.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8d0fa3cd8dc96ada974e126a940d37d4079bbbe6a24aca15b1113c2f362441c5"
+checksum = "e5766087c2235fec47fafa4cfecc81e494ee679d0fd4a59887ea0919bfb0e4fc"
 dependencies = [
  "cfg-if",
  "libc",
@@ -1850,9 +1881,9 @@ dependencies = [
 
 [[package]]
 name = "minreq"
-version = "2.10.0"
+version = "2.11.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "731ff3277257ac76a410e8e2e2465afb7a5e6a1d13bb68d306d97bf96605546c"
+checksum = "cb3371dfc7b772c540da1380123674a8e20583aca99907087d990ca58cf44203"
 dependencies = [
  "base64 0.12.3",
  "log",
@@ -3303,11 +3334,12 @@ checksum = "712e227841d057c1ee1cd2fb22fa7e5a5461ae8e48fa2ca79ec42cfc1931183f"
 
 [[package]]
 name = "wincompatlib"
-version = "0.7.3"
+version = "0.7.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "89cd8dd63a2925273bdc4efd837ac5b847b06b23f141ce73664e274d54bbfa83"
+checksum = "07b1763cc16b78378280633bd4648b3c89064cb34105586ba73f4f75f7e428d8"
 dependencies = [
  "anyhow",
+ "blake3",
  "minreq",
 ]
 
@@ -3498,7 +3530,7 @@ dependencies = [
  "aes",
  "byteorder",
  "bzip2",
- "constant_time_eq",
+ "constant_time_eq 0.1.5",
  "crc32fast",
  "crossbeam-utils",
  "flate2",
