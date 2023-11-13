@@ -1,6 +1,4 @@
 use relm4::prelude::*;
-use relm4::component::*;
-
 use adw::prelude::*;
 
 use anime_launcher_sdk::config::ConfigExt;

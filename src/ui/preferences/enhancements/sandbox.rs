@@ -1,5 +1,4 @@
 use relm4::prelude::*;
-use relm4::component::*;
 use relm4::factory::*;
 
 use adw::prelude::*;
@@ -24,7 +23,6 @@ macro_rules! impl_directory {
             type Input = SandboxPageMsg;
             type Output = SandboxPageMsg;
             type CommandOutput = ();
-            type ParentInput = SandboxPageMsg;
             type ParentWidget = adw::PreferencesGroup;
 
             view! {
@@ -41,7 +39,8 @@ macro_rules! impl_directory {
                         set_valign: gtk::Align::Center,
 
                         connect_clicked[sender, index] => move |_| {
-                            sender.output($msg(index.clone()));
+                            sender.output($msg(index.clone()))
+                                .unwrap();
                         }
                     }
                 }
@@ -56,10 +55,6 @@ macro_rules! impl_directory {
                     from: init.0,
                     to: init.1
                 }
-            }
-
-            fn forward_to_parent(output: Self::Output) -> Option<Self::ParentInput> {
-                Some(output)
             }
         }
     }
@@ -335,9 +330,17 @@ impl SimpleAsyncComponent for SandboxPage {
         tracing::info!("Initializing sandbox settings");
 
         let mut model = Self {
-            private_paths: AsyncFactoryVecDeque::new(adw::PreferencesGroup::new(), sender.input_sender()),
-            shared_paths: AsyncFactoryVecDeque::new(adw::PreferencesGroup::new(), sender.input_sender()),
-            symlink_paths: AsyncFactoryVecDeque::new(adw::PreferencesGroup::new(), sender.input_sender()),
+            private_paths: AsyncFactoryVecDeque::builder()
+                .launch_default()
+                .forward(sender.input_sender(), std::convert::identity),
+
+            shared_paths: AsyncFactoryVecDeque::builder()
+                .launch_default()
+                .forward(sender.input_sender(), std::convert::identity),
+
+            symlink_paths: AsyncFactoryVecDeque::builder()
+                .launch_default()
+                .forward(sender.input_sender(), std::convert::identity),
 
             private_path_entry: adw::EntryRow::new(),
 

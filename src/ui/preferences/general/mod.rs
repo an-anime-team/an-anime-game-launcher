@@ -1,5 +1,5 @@
 use relm4::prelude::*;
-use relm4::component::*;
+
 use relm4::factory::{
     AsyncFactoryVecDeque,
     AsyncFactoryComponent,
@@ -41,7 +41,6 @@ impl AsyncFactoryComponent for VoicePackageComponent {
     type Input = GeneralAppMsg;
     type Output = GeneralAppMsg;
     type CommandOutput = ();
-    type ParentInput = GeneralAppMsg;
     type ParentWidget = adw::ExpanderRow;
 
     view! {
@@ -97,11 +96,8 @@ impl AsyncFactoryComponent for VoicePackageComponent {
     async fn update(&mut self, msg: Self::Input, sender: AsyncFactorySender<Self>) {
         self.installed = !self.installed;
 
-        sender.output(msg);
-    }
-
-    fn forward_to_parent(output: Self::Output) -> Option<Self::ParentInput> {
-        Some(output)
+        sender.output(msg)
+            .unwrap();
     }
 }
 
@@ -543,7 +539,9 @@ impl SimpleAsyncComponent for GeneralApp {
         tracing::info!("Initializing general settings");
 
         let mut model = Self {
-            voice_packages: AsyncFactoryVecDeque::new(adw::ExpanderRow::new(), sender.input_sender()),
+            voice_packages: AsyncFactoryVecDeque::builder()
+                .launch_default()
+                .forward(sender.input_sender(), std::convert::identity),
 
             migrate_installation: MigrateInstallationApp::builder()
                 .launch(())
@@ -655,7 +653,7 @@ impl SimpleAsyncComponent for GeneralApp {
                     self.migrate_installation.widget().set_transient_for(Some(window.widget()));
                 }
 
-                self.migrate_installation.widget().show();
+                self.migrate_installation.widget().present();
             }
 
             GeneralAppMsg::RepairGame => {

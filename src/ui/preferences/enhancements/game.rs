@@ -1,5 +1,4 @@
 use relm4::prelude::*;
-use relm4::component::*;
 use relm4::factory::*;
 
 use adw::prelude::*;
@@ -24,7 +23,6 @@ impl AsyncFactoryComponent for GameSession {
     type Input = GamePageMsg;
     type Output = GamePageMsg;
     type CommandOutput = ();
-    type ParentInput = GamePageMsg;
     type ParentWidget = adw::PreferencesGroup;
 
     view! {
@@ -48,7 +46,8 @@ impl AsyncFactoryComponent for GameSession {
                 set_valign: gtk::Align::Center,
 
                 connect_clicked[sender, index] => move |_| {
-                    sender.output(GamePageMsg::UpdateSession(index.current_index()));
+                    sender.output(GamePageMsg::UpdateSession(index.current_index()))
+                        .unwrap();
                 }
             },
 
@@ -61,14 +60,16 @@ impl AsyncFactoryComponent for GameSession {
                 set_valign: gtk::Align::Center,
 
                 connect_clicked[sender, index] => move |_| {
-                    sender.output(GamePageMsg::RemoveSession(index.current_index()));
+                    sender.output(GamePageMsg::RemoveSession(index.current_index()))
+                        .unwrap();
                 }
             },
 
             set_activatable: true,
 
             connect_activated[sender, index] => move |_| {
-                sender.output(GamePageMsg::SetCurrent(index.current_index()));
+                sender.output(GamePageMsg::SetCurrent(index.current_index()))
+                    .unwrap();
             }
         }
     }
@@ -79,10 +80,6 @@ impl AsyncFactoryComponent for GameSession {
         _sender: AsyncFactorySender<Self>,
     ) -> Self {
         init
-    }
-
-    fn forward_to_parent(output: Self::Output) -> Option<Self::ParentInput> {
-        Some(output)
     }
 }
 
@@ -162,7 +159,9 @@ impl SimpleAsyncComponent for GamePage {
         tracing::info!("Initializing game settings");
 
         let mut model = Self {
-            sessions: AsyncFactoryVecDeque::new(adw::PreferencesGroup::new(), sender.input_sender()),
+            sessions: AsyncFactoryVecDeque::builder()
+                .launch_default()
+                .forward(sender.input_sender(), std::convert::identity),
 
             sessions_root_widget: gtk::CheckButton::new(),
             session_name_entry: adw::EntryRow::new()

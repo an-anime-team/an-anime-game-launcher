@@ -1,5 +1,4 @@
 use relm4::prelude::*;
-use relm4::component::*;
 
 use gtk::prelude::*;
 use adw::prelude::*;
@@ -64,7 +63,7 @@ impl SimpleAsyncComponent for PreferencesApp {
                     });
                 }
 
-                gtk::Inhibit::default()
+                gtk::glib::Propagation::Proceed
             }
         }
     }
@@ -94,12 +93,10 @@ impl SimpleAsyncComponent for PreferencesApp {
             PREFERENCES_WINDOW = Some(widgets.preferences_window.clone());
         }
 
-        #[allow(unused_must_use)] {
-            model.enhancements.sender().send(EnhancementsAppMsg::SetGamescopeParent(widgets.preferences_window.clone()));
+        model.enhancements.emit(EnhancementsAppMsg::SetGamescopeParent);
 
-            model.general.sender().send(GeneralAppMsg::UpdateDownloadedWine);
-            model.general.sender().send(GeneralAppMsg::UpdateDownloadedDxvk);
-        }
+        model.general.emit(GeneralAppMsg::UpdateDownloadedWine);
+        model.general.emit(GeneralAppMsg::UpdateDownloadedDxvk);
 
         AsyncComponentParts { model, widgets }
     }
@@ -108,9 +105,8 @@ impl SimpleAsyncComponent for PreferencesApp {
         tracing::debug!("Called preferences window event: {:?}", msg);
 
         match msg {
-            #[allow(unused_must_use)]
             PreferencesAppMsg::SetGameDiff(diff) => {
-                self.general.sender().send(GeneralAppMsg::SetGameDiff(diff));
+                self.general.emit(GeneralAppMsg::SetGameDiff(diff));
             }
 
             #[allow(unused_must_use)]

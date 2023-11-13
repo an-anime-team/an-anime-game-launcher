@@ -113,7 +113,7 @@ impl SimpleComponent for AboutDialog {
             connect_close_request[sender] => move |_| {
                 sender.input(AboutDialogMsg::Hide);
 
-                gtk::Inhibit(false)
+                gtk::glib::Propagation::Proceed
             }
         }
     }
