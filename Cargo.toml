@@ -2,7 +2,7 @@
 name = "anime-game-launcher"
 version = "3.9.1"
 description = "Anime Game launcher"
-authors = ["Nikita Podvirnyy <suimin.tu.mu.ga.mi@gmail.com>"]
+authors = ["Nikita Podvirnyy <krypt0nn@vk.com>"]
 homepage = "https://github.com/an-anime-team/an-anime-game-launcher"
 repository = "https://github.com/an-anime-team/an-anime-game-launcher"
 license = "GPL-3.0"
@@ -19,7 +19,7 @@ glib-build-tools = "0.18"
 
 [dependencies.anime-launcher-sdk]
 git = "https://github.com/an-anime-team/anime-launcher-sdk"
-tag = "1.11.4"
+tag = "1.12.2"
 features = ["all", "genshin"]
 
 # path = "../anime-launcher-sdk" # ! for dev purposes only

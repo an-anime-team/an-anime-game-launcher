@@ -57,8 +57,8 @@ checksum = "0942ffc6dcaadf03badf6e6a2d0228460359d5e34b57ccdc720b7382dfbd5ec5"
 
 [[package]]
 name = "anime-game-core"
-version = "1.16.1"
-source = "git+https://github.com/an-anime-team/anime-game-core?tag=1.16.1#5864e5f00219c3355fc3f4cc2ac3a730a5397391"
+version = "1.17.2"
+source = "git+https://github.com/an-anime-team/anime-game-core?tag=1.17.2#79fa0ea967b05efcbf19b2db4800ddd2b731c2c9"
 dependencies = [
  "anyhow",
  "bzip2",
@@ -106,8 +106,8 @@ dependencies = [
 
 [[package]]
 name = "anime-launcher-sdk"
-version = "1.11.4"
-source = "git+https://github.com/an-anime-team/anime-launcher-sdk?tag=1.11.4#ea5a501a0f4dec6dee0cc33d5b2d6757503764cb"
+version = "1.12.2"
+source = "git+https://github.com/an-anime-team/anime-launcher-sdk?tag=1.12.2#923a389dffe44c2076bbacb7085084069fbaee4f"
 dependencies = [
  "anime-game-core",
  "anyhow",
@@ -3094,9 +3094,9 @@ dependencies = [
 
 [[package]]
 name = "tracing-log"
-version = "0.1.4"
+version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f751112709b4e791d8ce53e32c4ed2d353565a795ce84da2285393f41557bdf2"
+checksum = "ee855f1f400bd0e5c02d150ae5de3840039a3f54b025156404e34c23c03f47c3"
 dependencies = [
  "log",
  "once_cell",
@@ -3105,9 +3105,9 @@ dependencies = [
 
 [[package]]
 name = "tracing-subscriber"
-version = "0.3.17"
+version = "0.3.18"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "30a651bc37f915e81f087d86e62a18eec5f79550c7faff886f7090b4ea757c77"
+checksum = "ad0f048c97dbd9faa9b7df56362b8ebcaa52adb06b498c050d2f4e32f90a7a8b"
 dependencies = [
  "nu-ansi-term",
  "sharded-slab",
