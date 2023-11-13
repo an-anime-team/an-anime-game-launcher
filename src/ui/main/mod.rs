@@ -1,6 +1,5 @@
 use relm4::{
     prelude::*,
-    component::*,
     actions::*,
     MessageBroker
 };
@@ -415,8 +414,8 @@ impl SimpleComponent for App {
 
                                                 Some(LauncherState::TelemetryNotDisabled) => "security-high-symbolic",
 
-                                                Some(LauncherState::VoiceOutdated(_)) |
                                                 Some(LauncherState::GameOutdated(_)) |
+                                                Some(LauncherState::VoiceOutdated(_)) |
                                                 None => "window-close-symbolic"
                                             },
 
@@ -611,7 +610,7 @@ impl SimpleComponent for App {
                     });
                 }
 
-                gtk::Inhibit::default()
+                gtk::glib::Propagation::Proceed
             }
         }
     }
@@ -1076,14 +1075,14 @@ impl SimpleComponent for App {
                     LauncherState::WineNotInstalled => download_wine::download_wine(sender, self.progress_bar.sender().to_owned()),
                     LauncherState::PrefixNotExists  => create_prefix::create_prefix(sender),
 
-                    LauncherState::VoiceUpdateAvailable(diff) |
-                    LauncherState::VoiceNotInstalled(diff) |
                     LauncherState::GameUpdateAvailable(diff) |
-                    LauncherState::GameNotInstalled(diff) =>
+                    LauncherState::GameNotInstalled(diff) |
+                    LauncherState::VoiceUpdateAvailable(diff) |
+                    LauncherState::VoiceNotInstalled(diff) =>
                         download_diff::download_diff(sender, self.progress_bar.sender().to_owned(), diff.to_owned()),
 
-                    LauncherState::VoiceOutdated(_) |
-                    LauncherState::GameOutdated(_) => ()
+                    LauncherState::GameOutdated(_) |
+                    LauncherState::VoiceOutdated(_) => ()
                 }
             }
 

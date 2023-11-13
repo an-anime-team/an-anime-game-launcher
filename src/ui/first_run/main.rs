@@ -1,5 +1,4 @@
 use relm4::prelude::*;
-use relm4::component::*;
 
 use gtk::prelude::*;
 use adw::prelude::*;

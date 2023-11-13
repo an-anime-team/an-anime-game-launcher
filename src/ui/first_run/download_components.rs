@@ -1,8 +1,6 @@
 use std::path::PathBuf;
 
 use relm4::prelude::*;
-use relm4::component::*;
-
 use adw::prelude::*;
 
 use anime_launcher_sdk::anime_game_core::prelude::*;
@@ -163,11 +161,13 @@ impl SimpleAsyncComponent for DownloadComponentsApp {
                     #[watch]
                     set_subtitle: &model.downloading_wine_version,
 
-                    #[watch]
-                    set_icon_name: match model.downloading_wine {
-                        Some(true) => Some("emblem-ok-symbolic"),
-                        Some(false) => None, // Some("process-working"),
-                        None => None
+                    add_prefix = &gtk::Image {
+                        #[watch]
+                        set_icon_name: match model.downloading_wine {
+                            Some(true) => Some("emblem-ok-symbolic"),
+                            Some(false) => None, // Some("process-working"),
+                            None => None
+                        }
                     },
 
                     add_prefix = &gtk::Spinner {
@@ -184,11 +184,13 @@ impl SimpleAsyncComponent for DownloadComponentsApp {
                     #[watch]
                     set_subtitle: &model.creating_prefix_path,
 
-                    #[watch]
-                    set_icon_name: match model.creating_prefix {
-                        Some(true) => Some("emblem-ok-symbolic"),
-                        Some(false) => None, // Some("process-working"),
-                        None => None
+                    add_prefix = &gtk::Image {
+                        #[watch]
+                        set_icon_name: match model.creating_prefix {
+                            Some(true) => Some("emblem-ok-symbolic"),
+                            Some(false) => None, // Some("process-working"),
+                            None => None
+                        }
                     },
 
                     add_prefix = &gtk::Spinner {
@@ -205,11 +207,13 @@ impl SimpleAsyncComponent for DownloadComponentsApp {
                     #[watch]
                     set_subtitle: &model.downloading_dxvk_version,
 
-                    #[watch]
-                    set_icon_name: match model.downloading_dxvk {
-                        Some(true) => Some("emblem-ok-symbolic"),
-                        Some(false) => None, // Some("process-working"),
-                        None => None
+                    add_prefix = &gtk::Image {
+                        #[watch]
+                        set_icon_name: match model.downloading_dxvk {
+                            Some(true) => Some("emblem-ok-symbolic"),
+                            Some(false) => None, // Some("process-working"),
+                            None => None
+                        }
                     },
 
                     add_prefix = &gtk::Spinner {
@@ -223,11 +227,13 @@ impl SimpleAsyncComponent for DownloadComponentsApp {
                 adw::ActionRow {
                     set_title: &tr!("apply-dxvk"),
 
-                    #[watch]
-                    set_icon_name: match model.applying_dxvk {
-                        Some(true) => Some("emblem-ok-symbolic"),
-                        Some(false) => None, // Some("process-working"),
-                        None => None
+                    add_prefix = &gtk::Image {
+                        #[watch]
+                        set_icon_name: match model.applying_dxvk {
+                            Some(true) => Some("emblem-ok-symbolic"),
+                            Some(false) => None, // Some("process-working"),
+                            None => None
+                        }
                     },
 
                     add_prefix = &gtk::Spinner {

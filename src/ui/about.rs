@@ -65,16 +65,18 @@ impl SimpleComponent for AboutDialog {
                 "Deutsch — @caem",
                 "Français — @zeGolem https://github.com/zeGolem",
                 "Español — Lautaro Garavano https://github.com/Rattlehead15",
+                "Português — @kafushy",
+                "Italiano — @QuazarOmega https://github.com/quazar-omega",
                 "Türkçe — @Kaozix https://github.com/Kaozix1776",
                 "Türkçe — Kayra Nachfolger https://github.com/kayranachfolger",
-                "Italiano — @QuazarOmega https://github.com/quazar-omega",
-                "Indonesia — @yumekarisu https://github.com/yumekarisu",
-                "简体中文 — Caibin Chen https://github.com/tigersoldier",
-                "日本語 — @zozonteq https://github.com/zozonteq",
+                "Polski — Dominik Opyd https://github.com/oritwoen",
                 // Hungarian?
                 "Svenska — Jakob Fridesjö https://github.com/jakobfridesjo",
-                "Português — @kafushy",
-                "Polski — Dominik Opyd https://github.com/oritwoen",
+                "Nederlands — @everlyy https://github.com/everlyy",
+                "简体中文 — Caibin Chen https://github.com/tigersoldier",
+                "日本語 — @zozonteq https://github.com/zozonteq",
+                "한국어 — @project-dy https://github.com/project-dy",
+                "Indonesia — @yumekarisu https://github.com/yumekarisu",
                 "Tiếng Việt — Nguyễn Hữu Chánh https://github.com/Chanhnh"
             ].join("\n"),
 
@@ -93,14 +95,17 @@ impl SimpleComponent for AboutDialog {
                 "<p>Added</p>",
 
                 "<ul>",
-                    "<li>Added Vietnamese</li>",
-                    "<li>Added support for segmented zip archives (fixed initial game downloading)</li>",
+                    "<li>Added Korean</li>",
+                    "<li>Added Dutch</li>",
+                    "<li>Added 4.2.0 voiceovers sizes</li>",
+                    "<li>Made free space checks resolve symlinks</li>",
                 "</ul>",
 
                 "<p>Changed</p>",
 
                 "<ul>",
-                    "<li>Updated Chinese</li>",
+                    "<li>Updated development libraries versions</li>",
+                    "<li>Updated Japanese</li>",
                 "</ul>"
             ].join("\n"),
 
@@ -113,7 +118,7 @@ impl SimpleComponent for AboutDialog {
             connect_close_request[sender] => move |_| {
                 sender.input(AboutDialogMsg::Hide);
 
-                gtk::Inhibit(false)
+                gtk::glib::Propagation::Proceed
             }
         }
     }

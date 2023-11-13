@@ -1,5 +1,4 @@
 use relm4::prelude::*;
-use relm4::component::*;
 
 use relm4::factory::{
     AsyncFactoryComponent,
@@ -45,7 +44,6 @@ impl AsyncFactoryComponent for DiscordRpcIcon {
     type Input = EnhancementsAppMsg;
     type Output = EnhancementsAppMsg;
     type CommandOutput = ();
-    type ParentInput = EnhancementsAppMsg;
     type ParentWidget = adw::ExpanderRow;
 
     view! {
@@ -70,7 +68,8 @@ impl AsyncFactoryComponent for DiscordRpcIcon {
             set_activatable: true,
 
             connect_activated[sender, index] => move |_| {
-                sender.output(EnhancementsAppMsg::SetDiscordRpcIcon(index.clone()));
+                sender.output(EnhancementsAppMsg::SetDiscordRpcIcon(index.clone()))
+                    .unwrap();
             }
         }
     }
@@ -82,11 +81,6 @@ impl AsyncFactoryComponent for DiscordRpcIcon {
         _sender: AsyncFactorySender<Self>,
     ) -> Self {
         init
-    }
-
-    #[inline]
-    fn forward_to_parent(output: Self::Output) -> Option<Self::ParentInput> {
-        Some(output)
     }
 }
 
@@ -102,7 +96,7 @@ pub struct EnhancementsApp {
 
 #[derive(Debug)]
 pub enum EnhancementsAppMsg {
-    SetGamescopeParent(adw::PreferencesWindow),
+    SetGamescopeParent,
 
     SetDiscordRpcIcon(DynamicIndex),
 
@@ -721,7 +715,10 @@ impl SimpleAsyncComponent for EnhancementsApp {
         tracing::info!("Initializing enhancements settings");
 
         let mut model = Self {
-            discord_rpc_icons: AsyncFactoryVecDeque::new(adw::ExpanderRow::new(), sender.input_sender()),
+            discord_rpc_icons: AsyncFactoryVecDeque::builder()
+                .launch_default()
+                .forward(sender.input_sender(), std::convert::identity),
+
             discord_rpc_root_check_button: gtk::CheckButton::new(),
 
             gamescope: GamescopeApp::builder()
@@ -792,6 +789,7 @@ impl SimpleAsyncComponent for EnhancementsApp {
 
                         model.discord_rpc_icons.guard().push_back(DiscordRpcIcon {
                             check_button,
+
                             name: icon.name.clone(),
                             path: cache_file.clone()
                         });
@@ -818,8 +816,8 @@ impl SimpleAsyncComponent for EnhancementsApp {
 
     async fn update(&mut self, msg: Self::Input, sender: AsyncComponentSender<Self>) {
         match msg {
-            EnhancementsAppMsg::SetGamescopeParent(parent) => {
-                self.gamescope.widget().set_transient_for(Some(&parent));
+            EnhancementsAppMsg::SetGamescopeParent => unsafe {
+                self.gamescope.widget().set_transient_for(super::main::PREFERENCES_WINDOW.as_ref());
             }
 
             EnhancementsAppMsg::SetDiscordRpcIcon(index) => {

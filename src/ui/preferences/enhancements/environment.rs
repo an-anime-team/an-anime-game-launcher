@@ -1,5 +1,4 @@
 use relm4::prelude::*;
-use relm4::component::*;
 use relm4::factory::*;
 
 use adw::prelude::*;
@@ -20,7 +19,6 @@ impl AsyncFactoryComponent for Variable {
     type Input = EnvironmentPageMsg;
     type Output = EnvironmentPageMsg;
     type CommandOutput = ();
-    type ParentInput = EnvironmentPageMsg;
     type ParentWidget = adw::PreferencesGroup;
 
     view! {
@@ -34,7 +32,8 @@ impl AsyncFactoryComponent for Variable {
                 set_valign: gtk::Align::Center,
 
                 connect_clicked[sender, index] => move |_| {
-                    sender.output(EnvironmentPageMsg::Remove(index.clone()));
+                    sender.output(EnvironmentPageMsg::Remove(index.clone()))
+                        .unwrap();
                 }
             }
         }
@@ -49,10 +48,6 @@ impl AsyncFactoryComponent for Variable {
             key: init.0,
             value: init.1
         }
-    }
-
-    fn forward_to_parent(output: Self::Output) -> Option<Self::ParentInput> {
-        Some(output)
     }
 }
 
@@ -164,7 +159,9 @@ impl SimpleAsyncComponent for EnvironmentPage {
         tracing::info!("Initializing environment settings");
 
         let mut model = Self {
-            variables: AsyncFactoryVecDeque::new(adw::PreferencesGroup::new(), sender.input_sender()),
+            variables: AsyncFactoryVecDeque::builder()
+                .launch_default()
+                .forward(sender.input_sender(), std::convert::identity),
 
             name_entry: adw::EntryRow::new(),
             value_entry: adw::EntryRow::new()

@@ -1,8 +1,6 @@
 use std::path::PathBuf;
 
 use relm4::prelude::*;
-use relm4::component::*;
-
 use adw::prelude::*;
 
 use crate::*;
@@ -79,13 +77,16 @@ impl SimpleAsyncComponent for DefaultPathsApp {
 
                 adw::ActionRow {
                     set_title: &tr!("launcher-folder"),
-                    set_icon_name: Some("folder-symbolic"),
                     set_activatable: true,
 
                     #[watch]
                     set_subtitle: model.launcher.to_str().unwrap(),
 
-                    connect_activated => DefaultPathsAppMsg::ChoosePath(Folders::Launcher)
+                    connect_activated => DefaultPathsAppMsg::ChoosePath(Folders::Launcher),
+
+                    add_prefix = &gtk::Image {
+                        set_icon_name: Some("folder-symbolic")
+                    }
                 },
             },
 
@@ -117,90 +118,114 @@ impl SimpleAsyncComponent for DefaultPathsApp {
 
                 adw::ActionRow {
                     set_title: &tr!("runners-folder"),
-                    set_icon_name: Some("folder-symbolic"),
                     set_activatable: true,
 
                     #[watch]
                     set_subtitle: model.runners.to_str().unwrap(),
 
-                    connect_activated => DefaultPathsAppMsg::ChoosePath(Folders::Runners)
+                    connect_activated => DefaultPathsAppMsg::ChoosePath(Folders::Runners),
+
+                    add_prefix = &gtk::Image {
+                        set_icon_name: Some("folder-symbolic")
+                    }
                 },
 
                 adw::ActionRow {
                     set_title: &tr!("dxvks-folder"),
-                    set_icon_name: Some("folder-symbolic"),
                     set_activatable: true,
 
                     #[watch]
                     set_subtitle: model.dxvks.to_str().unwrap(),
 
-                    connect_activated => DefaultPathsAppMsg::ChoosePath(Folders::DXVK)
+                    connect_activated => DefaultPathsAppMsg::ChoosePath(Folders::DXVK),
+
+                    add_prefix = &gtk::Image {
+                        set_icon_name: Some("folder-symbolic")
+                    }
                 },
 
                 adw::ActionRow {
                     set_title: &tr!("wine-prefix-folder"),
-                    set_icon_name: Some("folder-symbolic"),
                     set_activatable: true,
 
                     #[watch]
                     set_subtitle: model.prefix.to_str().unwrap(),
 
-                    connect_activated => DefaultPathsAppMsg::ChoosePath(Folders::Prefix)
+                    connect_activated => DefaultPathsAppMsg::ChoosePath(Folders::Prefix),
+
+                    add_prefix = &gtk::Image {
+                        set_icon_name: Some("folder-symbolic")
+                    }
                 },
 
                 adw::ActionRow {
                     set_title: &tr!("global-game-installation-folder"),
-                    set_icon_name: Some("folder-symbolic"),
                     set_activatable: true,
 
                     #[watch]
                     set_subtitle: model.game_global.to_str().unwrap(),
 
-                    connect_activated => DefaultPathsAppMsg::ChoosePath(Folders::GameGlobal)
+                    connect_activated => DefaultPathsAppMsg::ChoosePath(Folders::GameGlobal),
+
+                    add_prefix = &gtk::Image {
+                        set_icon_name: Some("folder-symbolic")
+                    }
                 },
 
                 adw::ActionRow {
                     set_title: &tr!("chinese-game-installation-folder"),
-                    set_icon_name: Some("folder-symbolic"),
                     set_activatable: true,
 
                     #[watch]
                     set_subtitle: model.game_china.to_str().unwrap(),
 
-                    connect_activated => DefaultPathsAppMsg::ChoosePath(Folders::GameChina)
+                    connect_activated => DefaultPathsAppMsg::ChoosePath(Folders::GameChina),
+
+                    add_prefix = &gtk::Image {
+                        set_icon_name: Some("folder-symbolic")
+                    }
                 },
 
                 adw::ActionRow {
                     set_title: &tr!("fps-unlocker-folder"),
-                    set_icon_name: Some("folder-symbolic"),
                     set_activatable: true,
 
                     #[watch]
                     set_subtitle: model.fps_unlocker.to_str().unwrap(),
 
-                    connect_activated => DefaultPathsAppMsg::ChoosePath(Folders::FpsUnlocker)
+                    connect_activated => DefaultPathsAppMsg::ChoosePath(Folders::FpsUnlocker),
+
+                    add_prefix = &gtk::Image {
+                        set_icon_name: Some("folder-symbolic")
+                    }
                 },
 
                 adw::ActionRow {
                     set_title: &tr!("components-index"),
-                    set_icon_name: Some("folder-symbolic"),
                     set_activatable: true,
 
                     #[watch]
                     set_subtitle: model.components.to_str().unwrap(),
 
-                    connect_activated => DefaultPathsAppMsg::ChoosePath(Folders::Components)
+                    connect_activated => DefaultPathsAppMsg::ChoosePath(Folders::Components),
+
+                    add_prefix = &gtk::Image {
+                        set_icon_name: Some("folder-symbolic")
+                    }
                 },
 
                 adw::ActionRow {
                     set_title: &tr!("temp-folder"),
-                    set_icon_name: Some("folder-symbolic"),
                     set_activatable: true,
 
                     #[watch]
                     set_subtitle: model.temp.to_str().unwrap(),
 
-                    connect_activated => DefaultPathsAppMsg::ChoosePath(Folders::Temp)
+                    connect_activated => DefaultPathsAppMsg::ChoosePath(Folders::Temp),
+
+                    add_prefix = &gtk::Image {
+                        set_icon_name: Some("folder-symbolic")
+                    }
                 },
             },
 

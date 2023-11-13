@@ -2,7 +2,7 @@
 name = "anime-game-launcher"
 version = "3.9.1"
 description = "Anime Game launcher"
-authors = ["Nikita Podvirnyy <suimin.tu.mu.ga.mi@gmail.com>"]
+authors = ["Nikita Podvirnyy <krypt0nn@vk.com>"]
 homepage = "https://github.com/an-anime-team/an-anime-game-launcher"
 repository = "https://github.com/an-anime-team/an-anime-game-launcher"
 license = "GPL-3.0"
@@ -19,17 +19,17 @@ glib-build-tools = "0.18"
 
 [dependencies.anime-launcher-sdk]
 git = "https://github.com/an-anime-team/anime-launcher-sdk"
-tag = "1.11.2"
+tag = "1.12.2"
 features = ["all", "genshin"]
 
 # path = "../anime-launcher-sdk" # ! for dev purposes only
 
 [dependencies]
-relm4 = { version = "0.6.0", features = ["macros", "libadwaita"] }
-gtk = { package = "gtk4", version = "0.6", features = ["v4_8"] }
-adw = { package = "libadwaita", version = "0.4", features = ["v1_2"] }
+relm4 = { version = "0.7.0-beta.2", features = ["macros", "libadwaita"] }
+gtk = { package = "gtk4", version = "0.7.3", features = ["v4_12"] }
+adw = { package = "libadwaita", version = "0.5.3", features = ["v1_3"] }
 
-rfd = { version = "0.12.0", features = ["xdg-portal"], default-features = false }
+rfd = { version = "0.12.1", features = ["xdg-portal"], default-features = false }
 open = "5.0.0"
 whatadistro = "0.1.0"
 
@@ -45,4 +45,4 @@ tracing-subscriber = "0.3"
 fluent-templates = "0.8"
 unic-langid = "0.9"
 
-human-panic = "1.2.0"
+human-panic = "1.2.2"

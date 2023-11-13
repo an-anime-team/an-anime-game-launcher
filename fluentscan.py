@@ -168,7 +168,7 @@ if command == "unused":
             output += f"[en/{all_entries[i][0]}]\n  [Unused]\n"
         output += f"    {all_entries[i][1]} | {i} = {every_variable[i].strip()}\n"
 
-    output = re.sub("\[en", "\n[en", output)
+    output = re.sub("\\[en", "\n[en", output)
 
     if not output:
         print("Nothing is unused")
@@ -187,7 +187,7 @@ elif command == "missing":
             output += f"[{missing_entries[i]}]\n  [Missing]\n"
         output += f"    {script_entries[i][1]} | {i}\n"
 
-    output = re.sub("\[src/", "\n[src/", output)
+    output = re.sub("\\[src/", "\n[src/", output)
     if not output:
         print("Nothing is missing")
         sys.exit()
