@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.9.2] - 13.11.2023
+
 ### Added
 
 - Added Korean
@@ -423,7 +425,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <br>
 
-[unreleased]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.9.1...next
+[unreleased]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.9.2...next
+[3.9.2]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.9.1...3.9.2
 [3.9.1]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.9.0...3.9.1
 [3.9.0]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.8.0...3.9.0
 [3.8.0]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.7.6...3.8.0
