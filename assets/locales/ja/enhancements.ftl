@@ -14,11 +14,11 @@ system = システム
 borderless-window = ボーダーレスウィンドウ
 virtual-desktop = 仮想デスクトップ
 
-map-drive-c = Cドライブを作成する
-map-drive-c-description = DOSデバイスに、WineプレフィックスのCドライブのソフトリンクを自動的に作成します
+map-drive-c = WineプレフィックスにCドライブをマップする。
+map-drive-c-description = prefixフォルダーの "dosdevices" フォルダーにCドライブのソフトリンクを自動的に作成します
 
-map-game-folder = ゲームフォルダを作成する。
-map-game-folder-description = DOSデバイスにゲームフォルダのソフトリンクを自動的に作成します
+map-game-folder = Wineプレフィックスにゲームフォルダをマップする。
+map-game-folder-description = prefixフォルダーの "dosdevices" フォルダーにゲームフォルダのソフトリンクを自動的に作成します
 
 game = ゲーム
 
