@@ -42,6 +42,7 @@ loading-launcher-state--patch = Loading launcher state: verifying installed patc
 
 checking-free-space = Checking free space
 downloading = Downloading
+updating-permissions = Updating permissions
 unpacking = Unpacking
 verifying-files = Verifying files
 repairing-files = Repairing files

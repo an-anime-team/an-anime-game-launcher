@@ -42,6 +42,7 @@ loading-launcher-state--patch = Launcher állapot betöltése: telepített patch
 
 checking-free-space = Szabad hely ellenőrzése
 downloading = Letöltés
+updating-permissions = Updating permissions
 unpacking = Kicsomagolás
 verifying-files = Fájlok ellenőrzése
 repairing-files = Fájlok javítása

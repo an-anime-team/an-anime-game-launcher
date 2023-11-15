@@ -42,6 +42,7 @@ loading-launcher-state--patch = Laddar starthanterarens tillstånd: verifierar i
 
 checking-free-space = Kontrollerar ledigt utrymme
 downloading = Laddar ner
+updating-permissions = Updating permissions
 unpacking = Packar upp
 verifying-files = Verifierar filer
 repairing-files = Reparerar filer

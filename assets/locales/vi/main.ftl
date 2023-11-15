@@ -42,6 +42,7 @@ loading-launcher-state--patch = Đang tải trạng thái launcher: xác minh b�
 
 checking-free-space = Kiểm tra dung lượng trống
 downloading = Đang tải xuống
+updating-permissions = Updating permissions
 unpacking = Đang giải nén
 verifying-files = Đang xác minh tập tin
 repairing-files = Sửa chữa tập tin

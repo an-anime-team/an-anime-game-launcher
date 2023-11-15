@@ -133,8 +133,9 @@ impl SimpleAsyncComponent for ProgressBar {
                     DiffUpdate::CheckingFreeSpace(_) |
                     DiffUpdate::InstallerUpdate(InstallerUpdate::CheckingFreeSpace(_)) => self.caption = Some(tr!("checking-free-space")),
 
-                    DiffUpdate::InstallerUpdate(InstallerUpdate::DownloadingStarted(_)) => self.caption = Some(tr!("downloading")),
-                    DiffUpdate::InstallerUpdate(InstallerUpdate::UnpackingStarted(_))   => self.caption = Some(tr!("unpacking")),
+                    DiffUpdate::InstallerUpdate(InstallerUpdate::DownloadingStarted(_))         => self.caption = Some(tr!("downloading")),
+                    DiffUpdate::InstallerUpdate(InstallerUpdate::UpdatingPermissionsStarted(_)) => self.caption = Some(tr!("updating-permissions")),
+                    DiffUpdate::InstallerUpdate(InstallerUpdate::UnpackingStarted(_))           => self.caption = Some(tr!("unpacking")),
 
                     DiffUpdate::ApplyingHdiffStarted => {
                         self.caption = Some(tr!("applying-hdiff"));
@@ -149,6 +150,7 @@ impl SimpleAsyncComponent for ProgressBar {
                     },
 
                     DiffUpdate::InstallerUpdate(InstallerUpdate::DownloadingProgress(curr, total)) |
+                    DiffUpdate::InstallerUpdate(InstallerUpdate::UpdatingPermissions(curr, total)) |
                     DiffUpdate::InstallerUpdate(InstallerUpdate::UnpackingProgress(curr, total)) |
                     DiffUpdate::ApplyingHdiffProgress(curr, total) |
                     DiffUpdate::RemovingOutdatedProgress(curr, total) => {
@@ -160,8 +162,9 @@ impl SimpleAsyncComponent for ProgressBar {
                         ));
                     }
 
-                    DiffUpdate::InstallerUpdate(InstallerUpdate::DownloadingFinished) => tracing::info!("Downloading finished"),
-                    DiffUpdate::InstallerUpdate(InstallerUpdate::UnpackingFinished)   => tracing::info!("Unpacking finished"),
+                    DiffUpdate::InstallerUpdate(InstallerUpdate::DownloadingFinished)         => tracing::info!("Downloading finished"),
+                    DiffUpdate::InstallerUpdate(InstallerUpdate::UpdatingPermissionsFinished) => tracing::info!("Updating permissions finished"),
+                    DiffUpdate::InstallerUpdate(InstallerUpdate::UnpackingFinished)           => tracing::info!("Unpacking finished"),
 
                     DiffUpdate::ApplyingHdiffFinished    => tracing::info!("Applying hdiffs finished"),
                     DiffUpdate::RemovingOutdatedFinished => tracing::info!("Removing outdated files finished"),
