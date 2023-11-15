@@ -50,7 +50,7 @@ loading-launcher-state--patch = ランチャーの状態を読み込み中 イ�
 
 checking-free-space = 空き容量を確認しています
 downloading = ダウンロード中
-updating-permissions = Updating permissions
+updating-permissions = 権限を更新中
 unpacking = 展開
 verifying-files = ファイルの整合性を確認中
 repairing-files = ファイルを修正中

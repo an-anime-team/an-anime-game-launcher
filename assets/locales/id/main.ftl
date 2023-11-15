@@ -49,7 +49,7 @@ loading-launcher-state--patch = Memuat keadaan launcher: memverifikasi patch yan
 
 checking-free-space = Mengecek penyimpanan kosong 
 downloading = Mengunduh
-updating-permissions = Updating permissions 
+updating-permissions = Perbaharui izin akses baca, tulis, dan eksekusi berkas atau direktori
 unpacking = Membongkar
 verifying-files = Memverifikasi file
 repairing-files = Memperbaiki file 

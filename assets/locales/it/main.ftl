@@ -51,7 +51,7 @@ loading-launcher-state--patch = Caricamento dello stato del launcher: verifica d
 
 checking-free-space = Controllo dello spazio disponibile in corso
 downloading = Scaricamento in corso
-updating-permissions = Updating permissions
+updating-permissions = Aggiornamento dei permessi in corso
 unpacking = Unpacking in corso
 verifying-files = Verifica dei file in corso
 repairing-files = Riparazione dei file in corso
