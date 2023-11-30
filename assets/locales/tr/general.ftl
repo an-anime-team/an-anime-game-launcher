@@ -12,7 +12,7 @@ global = Evrensel
 china = Çin
 
 game-environment = Oyun ortamı
-game-environment-description = Ek ödeme yöntemleri gibi özelliklere erişin
+game-environment-description = Ek ödeme yöntemleri gibi özelliklere eriş
 
 game-voiceovers = Oyun içi sesler
 game-voiceovers-description = İndirilmiş oyun seslendirmeleri listesi. Oyun içi ayarlardan seçebilirsiniz
@@ -22,7 +22,7 @@ korean = Korece
 chinese = Çince
 
 migrate-installation = Yüklemeyi aktar
-migrate-installation-description = Oyun yükleme yerini değiştirebileceğiniz özel pencereyi açın
+migrate-installation-description = Oyun yükleme yerinin değiştirilebileceği özel pencereyi aç
 repair-game = Oyunu tamir et
 
 status = Durum

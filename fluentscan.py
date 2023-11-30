@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/opt/homebrew/bin/python3
 
 # Author: @xstraok
 # Modified by Observer KRypt0n_ <https://github.com/krypt0nn>
