@@ -95,17 +95,19 @@ impl SimpleComponent for AboutDialog {
                 "<p>Added</p>",
 
                 "<ul>",
-                    "<li>Added Korean</li>",
-                    "<li>Added Dutch</li>",
-                    "<li>Added 4.2.0 voiceovers sizes</li>",
-                    "<li>Made free space checks resolve symlinks</li>",
+                    "<li>Added `UpdatingPermissions` installation step</li>",
+                    "<li>Downloaders now will skip finished files and truncate them if needed</li>",
                 "</ul>",
 
                 "<p>Changed</p>",
 
                 "<ul>",
-                    "<li>Updated development libraries versions</li>",
-                    "<li>Updated Japanese</li>",
+                    "<li>Increased voiceovers version prediction error</li>",
+                    "<li>Updated FPS Unlocker version which fixes new game version integration issue</li>",
+                    "<li>Updated Turkish</li>",
+                    "<li>Updated German</li>",
+                    "<li>Updated Chinese</li>",
+                    "<li>Updated Polish</li>",
                 "</ul>"
             ].join("\n"),
 
