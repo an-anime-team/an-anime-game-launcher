@@ -1,7 +1,7 @@
 welcome = Merhaba
 
 welcome-page-message =
-    Merhaba, bir anime oyunu istemcisine hoş geldiniz
+    Merhaba, "bir anime oyunu" istemcisine hoş geldiniz
 
     Oyunu çalıştırmadan önce bazı şeyleri hazırlamamız ve varsayılan bileşenleri indirmemiz gerekiyor.
 
@@ -60,5 +60,5 @@ apply-dxvk = DXVK'yi uygula
 
 
 finish = Bitir
-finish-title = Herşey bitti!
-finish-message = Tüm temel bileşenler indirildi. Artık başlatıcıyı yeniden başlatabilir ve oyunu indirebilirsiniz. kulübümüze hoşgeldiniz!
+finish-title = Her şey bitti!
+finish-message = Tüm temel bileşenler indirildi. Artık başlatıcıyı yeniden başlatabilir ve oyunu indirebilirsiniz. Aramıza hoşgeldiniz!
