@@ -42,6 +42,7 @@ loading-launcher-state--patch = Laadstatus van de launcher: geïnstalleerde patc
 
 checking-free-space = Vrije ruimte controleren
 downloading = Downloaden
+updating-permissions = Updating permissions
 unpacking = Uitpakken
 verifying-files = Bestanden verifiëren
 repairing-files = Bestanden repareren

@@ -50,6 +50,7 @@ loading-launcher-state--patch = Loading launcher state: indirilmiş yamanın dur
 
 checking-free-space = Boş alan kontrol ediliyor
 downloading = İndiriliyor
+updating-permissions = Updating permissions
 unpacking = Paketten çıkartılıyor
 verifying-files = Dosyalar Doğrulanıyor
 repairing-files = Dosyalar tamir ediliyor

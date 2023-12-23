@@ -42,6 +42,7 @@ loading-launcher-state--patch = Ładowanie stanu launchera: weryfikowanie zainst
 
 checking-free-space = Sprawdzanie dostępnej przestrzeni
 downloading = Pobieranie
+updating-permissions = Aktualizacja uprawnień
 unpacking = Rozpakowywanie
 verifying-files = Weryfikacja plików
 repairing-files = Naprawianie plików

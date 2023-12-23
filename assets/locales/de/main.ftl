@@ -42,6 +42,7 @@ loading-launcher-state--patch = Launcher status wird geladen: Verifizierung des 
 
 checking-free-space = Überprüfe Freien Speicherplatz
 downloading = Lade Herunter
+updating-permissions = Aktualisiere Berechtigungen
 unpacking = Entpacken
 verifying-files = Verifiziere Dateien
 repairing-files = Repariere Dateien

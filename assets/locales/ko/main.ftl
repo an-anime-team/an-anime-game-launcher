@@ -42,6 +42,7 @@ loading-launcher-state--patch = 런처 상태 로드 중: 설치된 패치 확�
 
 checking-free-space = 여유 공간 확인 중
 downloading = 다운로드 중
+updating-permissions = Updating permissions
 unpacking = 압축 해제 중
 verifying-files = 파일 검증 중
 repairing-files = 파일 복구 중

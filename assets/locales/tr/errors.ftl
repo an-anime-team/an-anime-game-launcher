@@ -38,7 +38,7 @@ dxvk-download-error = DXVK indirilemedi
 dxvk-unpack-error = DXVK paketten çıkarılamadı
 dxvk-apply-error = DXVK uygulanamadı
 
-downloaded-wine-list-failed = İndirilmiş Wine versiyonlarını listeleme başarısız oldu
+downloaded-wine-list-failed = İndirilmiş Wine sürümlerini listeleme başarısız oldu
 
 patch-sync-failed = Yama dosyalarını senkronize etme başarısız oldu
 patch-state-check-failed = Yama dosyalarının durumunu kontrol etme başarısız oldu

@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added `UpdatingPermissions` installation step
+- Downloaders now will skip finished files and truncate them if needed
+
+### Changed
+
+- Increased voiceovers version prediction error
+- Updated FPS Unlocker version which fixes new game version integration issue
+- Updated Turkish
+- Updated German
+- Updated Chinese
+- Updated Polish
+
 ## [3.9.2] - 13.11.2023
 
 ### Added

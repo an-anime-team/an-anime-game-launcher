@@ -19,7 +19,7 @@ glib-build-tools = "0.18"
 
 [dependencies.anime-launcher-sdk]
 git = "https://github.com/an-anime-team/anime-launcher-sdk"
-tag = "1.12.2"
+tag = "1.12.4"
 features = ["all", "genshin"]
 
 # path = "../anime-launcher-sdk" # ! for dev purposes only
