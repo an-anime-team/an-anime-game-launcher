@@ -523,6 +523,8 @@ impl SimpleComponent for App {
                                             }));
 
                                             let result = std::process::Command::new("pkill")
+                                                .arg("-f") // full text search
+                                                .arg("-i") // case-insensitive
                                                 .arg("GenshinImpact|YuanShen|unlocker\\.exe")
                                                 .spawn();
 
@@ -533,18 +535,26 @@ impl SimpleComponent for App {
                                                 });
                                             }
 
+                                            // Old warning message which I don't really understand now:
+                                            // 
                                             // Doesn't work on all the systems
                                             // e.g. won't work if you didn't install wine system-wide
                                             // there's some reasons for it
+                                            // 
+                                            // UPD: I've tried this, and the problem is that it's completely pointless
+                                            //      For whatever reason it just doesn't work
 
                                             // match Config::get() {
                                             //     Ok(config) => {
                                             //         match config.get_selected_wine() {
                                             //             Ok(Some(version)) => {
-                                            //                 use anime_launcher_sdk::wincompatlib::prelude::*;
+                                            //                 let result = version
+                                            //                     .to_wine(&config.components.path, Some(&config.game.wine.builds.join(&version.name)))
+                                            //                     .with_prefix(config.get_wine_prefix_path())
+                                            //                     .stop_processes(true);
 
-                                            //                 let result = version.to_wine(config.components.path, Some(config.game.wine.builds.join(&version.name)))
-                                            //                     .stop_processes(false);
+                                            //                 dbg!(String::from_utf8_lossy(&result.as_ref().ok().unwrap().stdout));
+                                            //                 dbg!(String::from_utf8_lossy(&result.as_ref().ok().unwrap().stderr));
 
                                             //                 if let Err(err) = result {
                                             //                     sender.input(AppMsg::Toast {
