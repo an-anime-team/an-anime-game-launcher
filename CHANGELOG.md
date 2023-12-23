@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.9.3] - 23.12.2023
+
 ### Added
 
 - Added `UpdatingPermissions` installation step
