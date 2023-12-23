@@ -42,7 +42,7 @@ loading-launcher-state--patch = 正在计算启动器状态: 验证已安装补�
 
 checking-free-space = 正在检查剩余空间
 downloading = 正在下载
-updating-permissions = Updating permissions
+updating-permissions = 正在更新权限
 unpacking = 正在解压缩
 verifying-files = 正在检验文件
 repairing-files = 正在修复文件
