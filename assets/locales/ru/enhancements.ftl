@@ -46,24 +46,15 @@ description = Описание
 fps-unlocker = FPS Unlocker
 
 enabled = Включен
-fps-unlocker-description = Убрать ограничение количества кадров модифицируя память игры. Может быть обнаружено античитом
+fps-unlocker-description = Изменить ограничение частоты кадров путём модификации памяти игры. Может быть обнаружено античитом
 
-power-saving = Энергосбережение
-power-saving-description = Автоматически устанавливать предел количества кадров до 10 и снижать приоритет процесса игры когда она не находится в фокусе
+periodic-unlock = Периодическая перезапись
+periodic-unlock-description = Периодически перезаписывать значение ограничения частоты кадров, чтобы предотвратить его сброс
 
-monitor = Монитор
-monitor-description = Номер монитора, на котором стоит запустить игру
+unlock-interval = Задержка между перезаписями
+unlock-interval-description = Задержка между перезаписями в миллисекундах
 
 window-mode = Режим окна
 borderless = Безрамочный
 popup = Всплывающий
 fullscreen = Полноэкранный
-
-priority = Приоритет
-priority-description = Приоритет процесса игры
-realtime = Реального времени
-high = Высокий
-above-normal = Выше среднего
-normal = Средний
-below-normal = Ниже среднего
-low = Низкий
