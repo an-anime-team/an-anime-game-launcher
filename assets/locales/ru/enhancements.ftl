@@ -48,9 +48,6 @@ fps-unlocker = FPS Unlocker
 enabled = Включен
 fps-unlocker-description = Изменить ограничение частоты кадров путём модификации памяти игры. Может быть обнаружено античитом
 
-periodic-unlock = Периодическая перезапись
-periodic-unlock-description = Периодически перезаписывать значение ограничения частоты кадров, чтобы предотвратить его сброс
-
 unlock-interval = Задержка между перезаписями
 unlock-interval-description = Задержка между перезаписями в миллисекундах
 

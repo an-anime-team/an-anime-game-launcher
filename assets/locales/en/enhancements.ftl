@@ -48,9 +48,6 @@ fps-unlocker = FPS Unlocker
 enabled = Enabled
 fps-unlocker-description = Remove frames rendering limitation by modifying the game's memory. Can be detected by the anti-cheat
 
-periodic-unlock = Periodic overwrites
-periodic-unlock-description = Periodically overwrite the FPS limit value in the game to prevent it from dropping
-
 unlock-interval = Overwrite interval
 unlock-interval-description = Delay in milliseconds between overwrites
 

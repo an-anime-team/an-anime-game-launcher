@@ -603,27 +603,6 @@ impl SimpleAsyncComponent for EnhancementsApp {
                 },
 
                 adw::ActionRow {
-                    set_title: &tr!("periodic-unlock"),
-                    set_subtitle: &tr!("periodic-unlock-description"),
-
-                    add_suffix = &gtk::Switch {
-                        set_valign: gtk::Align::Center,
-
-                        set_state: CONFIG.game.enhancements.fps_unlocker.config.periodic_writes,
-
-                        connect_state_notify => |switch| {
-                            if is_ready() {
-                                if let Ok(mut config) = Config::get() {
-                                    config.game.enhancements.fps_unlocker.config.periodic_writes = switch.state();
-
-                                    Config::update(config);
-                                }
-                            }
-                        }
-                    }
-                },
-
-                adw::ActionRow {
                     set_title: &tr!("unlock-interval"),
                     set_subtitle: &tr!("unlock-interval-description"),
 
