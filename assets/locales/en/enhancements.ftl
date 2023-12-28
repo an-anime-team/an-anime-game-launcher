@@ -49,7 +49,7 @@ enabled = Enabled
 fps-unlocker-description = Remove frames rendering limitation by modifying the game's memory. Can be detected by the anti-cheat
 
 unlock-interval = Overwrite interval
-unlock-interval-description = Delay in milliseconds between overwrites
+unlock-interval-description = Delay in milliseconds between overwriting the FPS limit value. Periodic overwrites are necessary to prevent it from resetting
 
 window-mode = Window Mode
 borderless = Borderless
