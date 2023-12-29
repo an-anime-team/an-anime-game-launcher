@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Replaced FPS unlocker by a custom one
+
 ## [3.9.3] - 23.12.2023
 
 ### Added
