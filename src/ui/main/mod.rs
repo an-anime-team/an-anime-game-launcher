@@ -525,7 +525,7 @@ impl SimpleComponent for App {
                                             let result = std::process::Command::new("pkill")
                                                 .arg("-f") // full text search
                                                 .arg("-i") // case-insensitive
-                                                .arg("GenshinImpact|YuanShen|unlocker\\.exe")
+                                                .arg("GenshinImpact|YuanShen|fpsunlock\\.exe")
                                                 .spawn();
 
                                             if let Err(err) = result {
