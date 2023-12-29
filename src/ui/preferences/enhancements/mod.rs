@@ -603,93 +603,22 @@ impl SimpleAsyncComponent for EnhancementsApp {
                 },
 
                 adw::ActionRow {
-                    set_title: &tr!("power-saving"),
-                    set_subtitle: &tr!("power-saving-description"),
-
-                    add_suffix = &gtk::Switch {
-                        set_valign: gtk::Align::Center,
-
-                        set_state: CONFIG.game.enhancements.fps_unlocker.config.power_saving,
-
-                        connect_state_notify => |switch| {
-                            if is_ready() {
-                                if let Ok(mut config) = Config::get() {
-                                    config.game.enhancements.fps_unlocker.config.power_saving = switch.state();
-
-                                    Config::update(config);
-                                }
-                            }
-                        }
-                    }
-                },
-
-                adw::ActionRow {
-                    set_title: &tr!("monitor"),
-                    set_subtitle: &tr!("monitor-description"),
+                    set_title: &tr!("fps-unlocker-interval"),
+                    set_subtitle: &tr!("fps-unlocker-interval-description"),
 
                     add_suffix = &gtk::SpinButton {
                         set_valign: gtk::Align::Center,
-                        set_adjustment: &gtk::Adjustment::new(1.0, 1.0, 10.0, 1.0, 1.0, 0.0),
+                        set_adjustment: &gtk::Adjustment::new(1.0, 1000.0, 60000.0, 1000.0, 1.0, 0.0),
 
-                        set_value: CONFIG.game.enhancements.fps_unlocker.config.monitor as f64,
+                        set_value: CONFIG.game.enhancements.fps_unlocker.config.interval as f64,
 
                         connect_changed => |row| {
                             if is_ready() {
                                 if let Ok(mut config) = Config::get() {
-                                    config.game.enhancements.fps_unlocker.config.monitor = row.value() as u64;
+                                    config.game.enhancements.fps_unlocker.config.interval = row.value() as u64;
 
                                     Config::update(config);
                                 }
-                            }
-                        }
-                    }
-                },
-
-                adw::ComboRow {
-                    set_title: &tr!("window-mode"),
-
-                    #[wrap(Some)]
-                    set_model = &gtk::StringList::new(&[
-                        &tr!("default"),
-                        &tr!("popup"),
-                        &tr!("fullscreen")
-                    ]),
-
-                    set_selected: CONFIG.game.enhancements.fps_unlocker.config.window_mode.ordinal() as u32,
-
-                    connect_selected_notify => |row| unsafe {
-                        if is_ready() {
-                            if let Ok(mut config) = Config::get() {
-                                config.game.enhancements.fps_unlocker.config.window_mode = WindowMode::from_ordinal_unsafe(row.selected() as i8);
-
-                                Config::update(config);
-                            }
-                        }
-                    }
-                },
-
-                adw::ComboRow {
-                    set_title: &tr!("priority"),
-                    set_subtitle: &tr!("priority-description"),
-
-                    #[wrap(Some)]
-                    set_model = &gtk::StringList::new(&[
-                        &tr!("realtime"),
-                        &tr!("high"),
-                        &tr!("above-normal"),
-                        &tr!("normal"),
-                        &tr!("below-normal"),
-                        &tr!("low")
-                    ]),
-
-                    set_selected: CONFIG.game.enhancements.fps_unlocker.config.priority as u32,
-
-                    connect_selected_notify => |row| {
-                        if is_ready() {
-                            if let Ok(mut config) = Config::get() {
-                                config.game.enhancements.fps_unlocker.config.priority = row.selected() as u64;
-
-                                Config::update(config);
                             }
                         }
                     }

@@ -44,26 +44,14 @@ title = Başlık
 description = Açıklama
 
 fps-unlocker = FPS kilidi kırıcı
-
-enabled = Etkin
 fps-unlocker-description = Kare işleme sınırlamasını kaldırır, fakat oyunun anti-hile sistemi tarafından tespit edilebilir
 
-power-saving = Güç tasarrufu
-power-saving-description = Pencere değiştirdiğinizde oyunun kare sınırını 10'a indirir ve oyuna verilen işlem önceliğini azaltır
+enabled = Etkin
 
-monitor = Monitör
-monitor-description = Oyunu çalıştırmak istediğiniz monitör sayısı
+fps-unlocker-interval = Overwrite interval
+fps-unlocker-interval-description = Delay in milliseconds between overwriting the FPS limit value. Periodic overwrites are necessary to prevent it from resetting
 
 window-mode = Pencereli 
 borderless = Köşesiz
 popup = Popup
 fullscreen = Tam ekran
-
-priority = Öncelik
-priority-description = Oyun işlem önceliği
-realtime = Gerçek zamanlı
-high = Yüksek
-above-normal = Ortalama Üstü
-normal = Ortalama
-below-normal = Ortalama altı
-low = Düşük

@@ -43,26 +43,14 @@ title = タイトル
 description = 説明
 
 fps-unlocker = FPS上限解除
-
-enabled = 機能を有効にする
 fps-unlocker-description = ゲーム内のメモリを書き換えてFPSの上限を解除します。アンチチートによって検知されることはありません。
 
-power-saving = 省電力
-power-saving-description = タブアウトなどをしたときに、自動的にFPS制限をかけることで省電力化します。
+enabled = 機能を有効にする
 
-monitor = モニター
-monitor-description = このゲームを動かしたいモニターの番号
+fps-unlocker-interval = Overwrite interval
+fps-unlocker-interval-description = Delay in milliseconds between overwriting the FPS limit value. Periodic overwrites are necessary to prevent it from resetting
 
 window-mode = ウィンドウモード
 borderless = ボーダーレス
 popup = ポップアップ
 fullscreen = フルスクリーン
-
-priority = 優先度
-priority-description = ゲームプロセスの優先度
-realtime = リアルタイム
-high = 高い
-above-normal = 少し高い
-normal = 普通
-below-normal = 少し低い
-low = 低い

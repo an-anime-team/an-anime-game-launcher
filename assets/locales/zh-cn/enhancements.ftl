@@ -44,26 +44,14 @@ title = 标题
 description = 描述
 
 fps-unlocker = 解除帧率限制
-
-enabled = 开启
 fps-unlocker-description = 修改游戏内存，解除渲染帧率限制。可能会触发反作弊检查
 
-power-saving = 省电模式
-power-saving-description = 当游戏失去焦点时 (例如切出游戏) 自动当帧率设为 10, 并降低进程优先级
+enabled = 开启
 
-monitor = 显示器
-monitor-description = 运行游戏的显示器编号
+fps-unlocker-interval = Overwrite interval
+fps-unlocker-interval-description = Delay in milliseconds between overwriting the FPS limit value. Periodic overwrites are necessary to prevent it from resetting
 
 window-mode = 窗口模式
 borderless = 无边框
 popup = 弹出窗口
 fullscreen = 全屏
-
-priority = 优先级
-priority-description = 游戏进程的优先级
-realtime = 实时
-high = 高
-above-normal = 较高
-normal = 正常
-below-normal = 较低
-low = 低
