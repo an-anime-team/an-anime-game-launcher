@@ -603,8 +603,8 @@ impl SimpleAsyncComponent for EnhancementsApp {
                 },
 
                 adw::ActionRow {
-                    set_title: &tr!("unlock-interval"),
-                    set_subtitle: &tr!("unlock-interval-description"),
+                    set_title: &tr!("fps-unlocker-interval"),
+                    set_subtitle: &tr!("fps-unlocker-interval-description"),
 
                     add_suffix = &gtk::SpinButton {
                         set_valign: gtk::Align::Center,

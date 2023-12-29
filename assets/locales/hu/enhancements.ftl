@@ -44,26 +44,14 @@ title = Title
 description = Description
 
 fps-unlocker = FPS Unlocker
-
-enabled = Bekapcsolva
 fps-unlocker-description = Eltávolítja az fps limitet. Az anti-cheat észreveheti
 
-power-saving = Energiatakarékos
-power-saving-description = Fókuszvesztésnél(pl. alt-tab) az FPS limitet 10-re állítja
+enabled = Bekapcsolva
 
-monitor = Monitor
-monitor-description = Ahány monitoron szeretnéd futtatni a játékot
+fps-unlocker-interval = Overwrite interval
+fps-unlocker-interval-description = Delay in milliseconds between overwriting the FPS limit value. Periodic overwrites are necessary to prevent it from resetting
 
 window-mode = Ablak mód
 borderless = Keretmentes
 popup = Popup
 fullscreen = Teljesképernyő
-
-priority = Prioritás
-priority-description = Játékfolyamat prioritás
-realtime = Legmagasabb
-high = Magas
-above-normal = Normál felett
-normal = Normál
-below-normal = Normál alatt
-low = Alacsony

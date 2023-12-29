@@ -44,26 +44,14 @@ title = Titel
 description = Beskrivning
 
 fps-unlocker = FPS-upplåsare
-
-enabled = Aktiverad
 fps-unlocker-description = Ta bort begränsningen för rendering av bildrutor genom att modifiera spelets minne. Kan upptäckas av anti-cheat
 
-power-saving = Spara ström
-power-saving-description = Ställ automatiskt in FPS-gränsen till 10 och sätt låg processprioritet när du tappar fokus på spelet (t.ex. tabbar ut)
+enabled = Aktiverad
 
-monitor = Bildskärm
-monitor-description = Antal bildskärmar som du vill köra spelet på
+fps-unlocker-interval = Overwrite interval
+fps-unlocker-interval-description = Delay in milliseconds between overwriting the FPS limit value. Periodic overwrites are necessary to prevent it from resetting
 
 window-mode = Fönsterläge
 borderless = Kantlöst
 popup = Popup
 fullscreen = Fullskärm
-
-priority = Prioritet
-priority-description = Prioritet för spelprocess
-realtime = Realtid
-high = Hög
-above-normal = Över Normal
-normal = Normal
-below-normal = Under Normal
-low = Låg

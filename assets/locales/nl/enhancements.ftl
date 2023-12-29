@@ -44,26 +44,14 @@ title = Titel
 description = Omschrijving
 
 fps-unlocker = FPS Unlocker
-
-enabled = Ingeschakeld
 fps-unlocker-description = Haalt het FPS limit weg van het spel door het geheugen aan te passen. Kan gedetecteerd worden door ant-cheat
 
-power-saving = Energiebesparing
-power-saving-description = Zet het FPS limit automatisch op 10 en een lage process prioriteit waneer het spel focus verliest (bijvoorbeeld als je niet op het spel gefocust bent)
+enabled = Ingeschakeld
 
-monitor = Monitor
-monitor-description = Nummer van de monitor waar je het spel op wilt starten
+fps-unlocker-interval = Overwrite interval
+fps-unlocker-interval-description = Delay in milliseconds between overwriting the FPS limit value. Periodic overwrites are necessary to prevent it from resetting
 
 window-mode = Venster Mode
 borderless = Randloos
 popup = Popup
 fullscreen = Volledig scherm
-
-priority = Prioriteit
-priority-description = Spel process prioriteit
-realtime = Realtime
-high = Hoog
-above-normal = Boven Normaal
-normal = Normall
-below-normal = Onder Normal
-low = Laag

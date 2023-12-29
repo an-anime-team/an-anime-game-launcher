@@ -44,26 +44,14 @@ title = Título
 description = Descripción
 
 fps-unlocker = Liberar FPS
-
-enabled = Activado
 fps-unlocker-description = Elimina la restricción de frames por segundo modificando la memoria del juego. Puede ser detectado por el anti-cheat
 
-power-saving = Ahorro de energía
-power-saving-description = Automáticamente establece el límite de FPS en 10 y baja la prioridad del juego cuando queda en segundo plano (por ejemplo cuando usás Alt+Tab)
+enabled = Activado
 
-monitor = Monitor
-monitor-description = Número del monitor en el que quieres correr el juego
+fps-unlocker-interval = Overwrite interval
+fps-unlocker-interval-description = Delay in milliseconds between overwriting the FPS limit value. Periodic overwrites are necessary to prevent it from resetting
 
 window-mode = Modo de ventana
 borderless = Sin bordes
 popup = Popup
 fullscreen = Pantalla completa
-
-priority = Prioridad
-priority-description = Prioridad de proceso del juego
-realtime = En tiempo real
-high = Alta
-above-normal = Más de lo normal
-normal = Normal
-below-normal = Menos de lo normal
-low = Baja

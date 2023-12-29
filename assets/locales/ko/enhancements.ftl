@@ -44,26 +44,14 @@ title = 타이틀
 description = 설명
 
 fps-unlocker = FPS Unlocker
-
-enabled = Enabled
 fps-unlocker-description = 게임 메모리를 수정하여 프레임 렌더링 제한을 제거합니다. 안티 치트에 의해 감지 될 수 있습니다
 
-power-saving = 절전
-power-saving-description = 게임에 집중하지 않을 때(예: 탭아웃) 자동으로 FPS 제한을 10으로 설정하고 프로세스 우선순위를 낮춥니다
+enabled = Enabled
 
-monitor = 모니터
-monitor-description = 게임을 실행하고자 하는 모니터의 수
+fps-unlocker-interval = Overwrite interval
+fps-unlocker-interval-description = Delay in milliseconds between overwriting the FPS limit value. Periodic overwrites are necessary to prevent it from resetting
 
 window-mode = 창 모드
 borderless = 테두리 없는 창 모드
 popup = 팝업
 fullscreen = 전체 화면
-
-priority = 우선 순위
-priority-description = 게임 프로세스 우선 순위
-realtime = 실시간
-high = 높음
-above-normal = 보통 이상
-normal = 보통
-below-normal = 보통 이하
-low = 낮음

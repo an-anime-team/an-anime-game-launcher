@@ -44,26 +44,14 @@ title = Judul
 description = Deskripsi
 
 fps-unlocker = FPS Unlocker
-
-enabled = Aktifkan
 fps-unlocker-description = Meniadakan batas maksimum frame yang dapat dirender oleh game dengan memodifikasi memori game. Dapat terdeteksi oleh anti-cheat 
 
-power-saving = Menghemat daya
-power-saving-description = Secara otomatis membatasi FPS ke 10 dan menurunkan prioritas proses ketika game sedang tidak dalam fokus (contoh ketika alt-tab) 
+enabled = Aktifkan
 
-monitor = Monitor
-monitor-description = Pada monitor mana kau ingin game dijalankan 
+fps-unlocker-interval = Overwrite interval
+fps-unlocker-interval-description = Delay in milliseconds between overwriting the FPS limit value. Periodic overwrites are necessary to prevent it from resetting
 
 window-mode = Window Mode
 borderless = Tanpa border
 popup = Popup
 fullscreen = Penuhi layar
-
-priority = Prioritas
-priority-description = Prioritas proses game
-realtime = realtime
-high = Tinggi
-above-normal = Di atas Normal
-normal = Normal
-below-normal = Di bawah Normal
-low = Rendah

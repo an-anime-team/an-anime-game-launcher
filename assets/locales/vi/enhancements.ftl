@@ -43,26 +43,14 @@ title = Tiêu đề
 description = Mô tả
 
 fps-unlocker = Mở khóa FPS
-
-enabled = Đã bật
 fps-unlocker-description = Xóa giới hạn FPS bằng cách sửa đổi trò chơi. Có thể bị phát hiện bởi hệ thống chống gian lận
 
-power-saving = Tiết kiệm điện
-power-saving-description = Tự động đặt giới hạn FPS thành 10 và mức độ ưu tiên xử lý thấp khi không chơi (ví dụ: ẩn tab)
+enabled = Đã bật
 
-monitor = Màn hình
-monitor-description = Số lượng màn hình muốn chạy trò chơi trên đó
+fps-unlocker-interval = Overwrite interval
+fps-unlocker-interval-description = Delay in milliseconds between overwriting the FPS limit value. Periodic overwrites are necessary to prevent it from resetting
 
 window-mode = Chế độ cửa sổ
 borderless = Cửa sổ không viền
 popup = Popup
 fullscreen = Toàn màn hình
-
-priority = Ưu tiên
-priority-description = Mức độ ưu tiên của tiến trình trò chơi
-realtime = Thời gian thực
-high = Cao
-above-normal = Trên mức bình thường
-normal = Bình thường
-below-normal = Dưới mức bình thường
-low = Thấp
