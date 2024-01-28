@@ -31,3 +31,4 @@ ja-jp = 日本語
 ko-kr = 한국어
 id-id = Indonesia
 vi-vn = Tiếng Việt
+uk-ua = Українська
