@@ -16,5 +16,5 @@ gstreamer-use-shared-libraries = ใช้ไลบรารีที่ใช�
 gstreamer-use-shared-libraries-description = ตั้งค่าตัวแปร GST_PLUGIN_PATH เพื่อโหลดไลบรารี gstreamer จากบิลด์ wine ที่เลือก
 
 dxvk-version = เวอร์ชันของ DXVK
-dxvk-selection-disabled = DXVK selection is disabled by your wine group preferences
+dxvk-selection-disabled = การเลือก DXVK ถูกปิดใช้งานโดยการตั้งค่ากลุ่ม wine ของคุณ
 dxvk-recommended-description = แสดงเฉพาะเวอร์ชัน DXVK ที่แนะนำเท่านั้น
