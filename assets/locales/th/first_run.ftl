@@ -1,7 +1,7 @@
 welcome = ยินดีต้อนรับ
 
 welcome-page-message =
-    สวัสดี! ยินดีต้อนรับสู่ตัวเปิดเกมอะนิเมะ
+    สวัสดี! ยินดีต้อนรับสู่ An Anime Game Launcher
 
     เราจำเป็นต้องเตรียมบางสิ่งและดาวน์โหลดส่วนประกอบเริ่มต้นก่อนที่คุณจะสามารถเล่นเกมได้
 
@@ -12,26 +12,26 @@ tos-violation-warning-message =
 
     This tool is designed to facilitate playing {game-name} on Linux, and was built with the sole purpose of installing and running the game with less hassle.
 
-    It does so by using existing components and making the experience simple for the user.
+    Launcher นี้ทำงานได้โดยใช้คอมโพเนนต์ที่มีอยู่แล้ว ผู้ใช้จึงจะได้รับประสบการณ์ที่เรียบง่าย
 
     However, some components used here likely break the {company-name} Terms of Service for {game-name}.
 
-    If you are using this launcher, your player account could become identified as TOS-non-compliant by {company-name}/{company-alter-name}.
+    หากคุณใช้ Launcher นี้ บัญชีของคุณอาจถูกระบุว่าไม่เป็นไปตามข้อกำหนดของ {company-name}/{company-alter-name}.
 
-    If this happens, as your account would be disobeying TOS, {company-name}/{company-alter-name} are free to do what they want. Including banning.
+    หากเกิดเหตุการณ์เช่นนี้ เนื่องจากบัญชีของคุณไม่ปฏิบัติตามข้อกำหนด, {company-name}/{company-alter-name} จึงมีอิสระที่จะทำสิ่งที่พวกเขาอยาก รวมถึงการแบนบัญชีของคุณ
 
-    If you understand the risk of trying to play the game in an unofficial capacity, press OK to continue
+    หากคุณเข้าใจถึงความเสี่ยงในการพยายามเล่นเกมอย่างไม่เป็นทางการ ให้กด ตกลง เพื่อดำเนินการต่อ
 
-tos-dialog-title = Are you sure you understand what we want to say?
+tos-dialog-title = คุณแน่ใจหรือว่าคุณเข้าใจสิ่งที่เราพูด?
 tos-dialog-message =
-    1. Don't publish any information about this project
-    2. Don't abuse it by using some modded clients and so
-    3. Ask questions exceptionally in our discord or matrix server
+    1. อย่าเผยแพร่ข้อมูลใดๆ เกี่ยวกับโครงการนี้
+    2. อย่าใช้มันในทางที่ผิดโดยใช้ไคลเอนต์ดัดแปลง
+    3. ถามคำถามเป็นพิเศษในเซิร์ฟเวอร์ Discord หรือ Matrix ของเรา
 
 
-dependencies = Dependencies
-missing-dependencies-title = You're missing some dependencies!
-missing-dependencies-message = You must install some packages to your system before continue installation process
+dependencies = โปรแกรมที่จำเป็น
+missing-dependencies-title = คุณขาดโปรแกรมที่จำเป็น!
+missing-dependencies-message = คุณต้องติดตั้งแพ็คเกจบางอย่างให้กับระบบของคุณก่อนที่จะดำเนินการติดตั้งต่อ
 
 
 default-paths = Default paths
@@ -51,14 +51,14 @@ temp-folder = Temp folder
 migrate = Migrate
 
 
-select-voice-packages = Select voice packages
+select-voice-packages = เลือกแพ็คเกจภาษาเสียง
 
 
-download-components = Download components
-download-dxvk = Download DXVK
-apply-dxvk = Apply DXVK
+download-components = ดาวน์โหลดส่วนประกอบ
+download-dxvk = ดาวน์โหลด DXVK
+apply-dxvk = ติดตั้ง DXVK
 
 
-finish = Finish
-finish-title = Everything's done!
-finish-message = All the basic components were downloaded. Now you can restart the launcher and download the game. Welcome to our club!
+finish = สำเร็จ
+finish-title = ทุกอย่างเสร็จแล้ว!
+finish-message = ดาวน์โหลดส่วนประกอบพื้นฐานทั้งหมดแล้ว ตอนนี้คุณสามารถรีสตาร์ท Launcher และดาวน์โหลดเกมได้ ยินดีต้อนรับสู่ club ของเรา!

@@ -1,56 +1,56 @@
-launcher-folder-opening-error = Failed to open launcher folder
-game-folder-opening-error = Failed to open game folder
-config-file-opening-error = Failed to open config file
-debug-file-opening-error = Failed to open debug file
+launcher-folder-opening-error = ไม่สามารถเปิดโฟลเดอร์ Launcher ได้
+game-folder-opening-error = ไม่สามารถเปิดโฟลเดอร์เกมได้
+config-file-opening-error = ไม่สามารถเปิดไฟล์ config ได้
+debug-file-opening-error = ไม่สามารถเปิดไฟล์ debug ได้
 
-wish-url-search-failed = No wishes url found
-wish-url-opening-error = Could not open wishes url
+wish-url-search-failed = ไม่พบ wishes URL
+wish-url-opening-error = ไม่สามารถเปิด wishes URL ได้
 
 wine-run-error = Failed to run {$executable} executable using wine
 
-game-launching-failed = Failed to launch game
-failed-get-selected-wine = Failed to get selected wine version
-downloading-failed = Downloading failed
-unpacking-failed = Unpacking failed
+game-launching-failed = ไม่สามารถเปิดเกมได้
+failed-get-selected-wine = ไม่สามารถดาวน์โหลดเวอร์ชัน wine ที่เลือกไปได้
+downloading-failed = การดาวน์โหลดล้มเหลว
+unpacking-failed = การแกะไฟล์ล้มเหลว
 
-kill-game-process-failed = Failed to kill the game's process
+kill-game-process-failed = ไม่สามารถฆ่ากระบวนการของเกมได้
 
-game-file-repairing-error = Failed to repair game file
+game-file-repairing-error = ไม่สามารถซ่อมแซมไฟล์เกมได้
 integrity-files-getting-error = Failed to get integrity files
 
-background-downloading-failed = Failed to download background picture
-components-index-sync-failed = Failed to sync components index
-components-index-verify-failed = Failed to verify components index
-config-update-error = Failed to save config
+background-downloading-failed = ดาวน์โหลดภาพพื้นหลังไม่สำเร็จ
+components-index-sync-failed = ไม่สามารถซิงค์ index ส่วนประกอบ
+components-index-verify-failed = ไม่สามารถตรวจสอบ index ส่วนประกอบได้
+config-update-error = บันทึกการกำหนดค่าไม่สำเร็จ
 wine-prefix-update-failed = Failed to update wine prefix
-dxvk-install-failed = Failed to install DXVK
-voice-package-deletion-error = Failed to delete voice package
+dxvk-install-failed = ติดตั้ง DXVK ไม่สำเร็จ
+voice-package-deletion-error = ลบแพ็คเกจเสียงไม่สำเร็จ
 
-game-diff-finding-error = Failed to find game diff
-patch-info-fetching-error = Failed to fetch patch info
-launcher-state-updating-error = Failed to update launcher state
+game-diff-finding-error = ไม่พบความแตกต่างของเกม?
+patch-info-fetching-error = ไม่สามารถเรียกข้อมูลแพตช์ได้
+launcher-state-updating-error = อัปเดตสถานะแอปไม่สำเร็จ
 
-package-not-available = Package is not available: {$package}
-wine-download-error = Failed to download wine
-wine-unpack-errror = Failed to unpack wine
-wine-install-failed = Failed to install wine
-dxvk-download-error = Failed to download DXVK
-dxvk-unpack-error = Failed to unpack DXVK
-dxvk-apply-error = Failed to apply DXVK
+package-not-available = ไม่พบแพ็คเกจนี้: {$package}
+wine-download-error = ดาวน์โหลด wine ไม่สำเร็จ
+wine-unpack-errror = ไม่สามารถแกะไฟล์ wine ได้
+wine-install-failed = ไม่สามารถติดตั้ง wine ได้
+dxvk-download-error = ดาวน์โหลด DXVK ไม่สำเร็จ
+dxvk-unpack-error = ไม่สามารถแกะไฟล์ DXVK ได้
+dxvk-apply-error = ไม่สามารถติดตั้ง DXVK ได้
 
 downloaded-wine-list-failed = Failed to list downloaded wine versions
 
 patch-sync-failed = Failed to sync patch folder
 patch-state-check-failed = Failed to check patch folder state
-game-patching-error = Failed to patch game
+game-patching-error = ไม่สามารถแพตช์เกมได้
 
 # Disable telemetry
 
-telemetry-servers-disabling-error = Failed to disable telemetry servers
+telemetry-servers-disabling-error = ไม่สามารถปิดใช้งานเซิร์ฟเวอร์การวัดและส่งข้อมูล
 
 # Sandbox
 
-documentation-url-open-failed = Failed to open documentation URL
+documentation-url-open-failed = ไม่สามารถเปิด URL เอกสาร
 
 # Game
 

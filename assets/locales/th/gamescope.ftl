@@ -1,7 +1,7 @@
-game-resolution = Game resolution
-gamescope-resolution = Gamescope resolution
+game-resolution = ความละเอียดของเกม
+gamescope-resolution = ความละเอียดของ Gamescope
 
-upscaling = Upscaling
+upscaling = การเพิ่มขนาดความละเอียด
 
 integer-scaling = Integer scaling
 integer-scaling-description = Turns each pixel into a square or rectangular group of integer number of same-color pixels. Prevents sharpness loss when scaling Full HD to 4K
