@@ -50,7 +50,7 @@ telemetry-servers-disabling-error = ไม่สามารถปิดใช�
 
 # Sandbox
 
-documentation-url-open-failed = ไม่สามารถเปิด URL เอกสาร
+documentation-url-open-failed = ไม่สามารถเปิด URL เอกสารประกอบ
 
 # Game
 

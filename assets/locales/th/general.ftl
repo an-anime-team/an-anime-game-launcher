@@ -11,19 +11,19 @@ game-edition = ฉบับเกม
 global = สากล
 china = จีน
 
-game-environment = Game environment
-game-environment-description = Get specific features like additional payment methods
+game-environment = สภาพแวดล้อมของเกม
+game-environment-description = รับคุณสมบัติเฉพาะ เช่น วิธีการชำระเงินอื่นๆ
 
-game-voiceovers = ภาษาพากย์เสียงสำหรับเกม
+game-voiceovers = ภาษาพากย์เสียงเกม
 game-voiceovers-description = รายชื่อภาษาเสียงพากย์เกมที่ดาวน์โหลด คุณสามารถเลือกได้ในการตั้งค่าเกม
 english = ภาษาอังกฤษ
 japanese = ภาษาญี่ปุ่น
 korean = ภาษาเกาหลี
 chinese = ภาษาจีน
 
-migrate-installation = Migrate installation
-migrate-installation-description = Open special window where you can change your game installation folder
-repair-game = ซ่อมเกม
+migrate-installation = ย้ายการติดตั้งเกม
+migrate-installation-description = เปิดหน้าต่างพิเศษที่คุณสามารถเปลี่ยนโฟลเดอร์การติดตั้งเกมของคุณได้
+repair-game = ซ่อมแซมการติดตั้งเกม
 
 status = สถานะ
 
@@ -34,8 +34,8 @@ game-predownload-available = มีการอัปเดตเกมให้
 game-update-available = มีอัปเดตเวอร์ชันเกมใหม่: {$old} -> {$new}
 game-outdated = เวอร์ชันเกมล้าสมัยเกินไปและไม่สามารถอัปเดตได้. เวอร์ชันล่าสุด: {$latest}
 
-player-patch-version = Player patch version
-player-patch-version-description = Main patch that lets you play the game on Linux
+player-patch-version = เวอร์ชั่นแพทช์
+player-patch-version-description = แพทช์หลักที่ให้คุณเล่นเกมบน Linux
 
 patch-not-available = not available
 patch-not-available-tooltip = Patch servers are unreachable
