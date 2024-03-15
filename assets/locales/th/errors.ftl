@@ -3,10 +3,10 @@ game-folder-opening-error = ไม่สามารถเปิดโฟลเ�
 config-file-opening-error = ไม่สามารถเปิดไฟล์ config ได้
 debug-file-opening-error = ไม่สามารถเปิดไฟล์ debug ได้
 
-wish-url-search-failed = ไม่พบ wishes URL
-wish-url-opening-error = ไม่สามารถเปิด wishes URL ได้
+wish-url-search-failed = ไม่พบ Wishes URL
+wish-url-opening-error = ไม่สามารถเปิด Wishes URL ได้
 
-wine-run-error = Failed to run {$executable} executable using wine
+wine-run-error = ล้มเหลวในการปฏิบัติการเรียกใช้ไฟล์ {$executable} โดยใช้ Wine
 
 game-launching-failed = ไม่สามารถเปิดเกมได้
 failed-get-selected-wine = ไม่สามารถดาวน์โหลดเวอร์ชัน wine ที่เลือกไปได้
@@ -38,7 +38,7 @@ dxvk-download-error = ดาวน์โหลด DXVK ไม่สำเร็�
 dxvk-unpack-error = ไม่สามารถแกะไฟล์ DXVK ได้
 dxvk-apply-error = ไม่สามารถติดตั้ง DXVK ได้
 
-downloaded-wine-list-failed = Failed to list downloaded wine versions
+downloaded-wine-list-failed = ไม่สามารถแสดงเวอร์ชัน Wine ที่ดาวน์โหลดไปแล้วได้
 
 patch-sync-failed = Failed to sync patch folder
 patch-state-check-failed = Failed to check patch folder state

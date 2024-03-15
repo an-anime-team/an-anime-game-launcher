@@ -1,43 +1,43 @@
-custom = Custom
-none = None
-default = Default
-details = Details
-options = Options
+custom = กำหนดเอง
+none = ไม่มี
+default = ค่าเริ่มต้น
+details = รายละเอียด
+options = ตัวเลือก
 
-width = Width
-height = Height
+width = ความกว้าง
+height = ความสูง
 
 # Menu items
 
-launcher-folder = Launcher folder
-game-folder = Game folder
+launcher-folder = โฟลเดอร์ Launcher
+game-folder = โฟลเดอร์เกม
 config-file = Config file
 debug-file = Debug file
 wish-url = Open wishes
-about = About
+about = เกี่ยวกับ
 
 
-close = Close
-hide = Hide
-nothing = Nothing
-save = Save
-continue = Continue
-resume = Resume
-exit = Exit
-check = Check
-restart = Restart
-agree = Agree
+close = ปิด
+hide = ซ่อน
+nothing = ไม่ทำอะไร
+save = บันทึก
+continue = ดำเนินการต่อ
+resume = ดำเนินการต่อ
+exit = ออก
+check = ตรวจสอบ
+restart = เริ่มต้นใหม่
+agree = ตกลง
 
 
-loading-data = Loading data
-downloading-background-picture = Downloading background picture
-updating-components-index = Updating components index
-loading-game-version = Loading game version
-loading-patch-status = Loading patch status
-loading-launcher-state = Loading launcher state
-loading-launcher-state--game = Loading launcher state: verifying game version
-loading-launcher-state--voice = Loading launcher state: verifying {$locale} voiceover
-loading-launcher-state--patch = Loading launcher state: verifying installed patch
+loading-data = กำลังโหลดข้อมูล
+downloading-background-picture = กำลังดาวน์โหลดภาพพื้นหลัง
+updating-components-index = กำลังอัปเดต index ส่วนประกอบ
+loading-game-version = กำลังโหลดเวอร์ชั่นเกม
+loading-patch-status = กำลังโหลดสถานะแพทช์
+loading-launcher-state = กำลังโหลดสถานะ launcher
+loading-launcher-state--game = กำลังโหลดสถานะ launcher: กำลังตรวจสอบเวอร์ชันเกม
+loading-launcher-state--voice = กำลังโหลดสถานะ launcher: กำลังตรวจสอบภาษาพากย์เสียง {$locale}
+loading-launcher-state--patch = กำลังโหลดสถานะ launcher: กำลังตรวจสอบแพตช์ที่ติดตั้ง
 
 
 checking-free-space = Checking free space

@@ -37,31 +37,31 @@ game-outdated = เวอร์ชันเกมล้าสมัยเกิ�
 player-patch-version = เวอร์ชั่นแพทช์
 player-patch-version-description = แพทช์หลักที่ให้คุณเล่นเกมบน Linux
 
-patch-not-available = not available
-patch-not-available-tooltip = Patch servers are unreachable
+patch-not-available = ไม่พร้อมใช้งาน?
+patch-not-available-tooltip = ไม่สามารถเข้าถึงเซิร์ฟเวอร์แพทช์ได้
 
-patch-outdated = outdated ({$current})
-patch-outdated-tooltip = Patch is outdated: {$current} -> {$latest}
+patch-outdated = แพทช์ล้าสมัย ({$current})
+patch-outdated-tooltip = แพทช์ล้าสมัยแล้ว: {$current} -> {$latest}
 
-patch-preparation = preparation
-patch-preparation-tooltip = Patch is in development
+patch-preparation = เตรียมการ
+patch-preparation-tooltip = แพทช์อยู่ระหว่างการพัฒนา
 
-patch-testing-tooltip = Test patch is available
-patch-not-applied-tooltip = Patch is not applied
+patch-testing-tooltip = มีแพทช์ทดสอบให้ใช้งาน
+patch-not-applied-tooltip = แพทช์ยังไม่มีการติดตั้ง
 
-apply-main-patch = Apply main patch
-apply-main-patch-description = Experimental. Disabling this allows you to run the game without applying the patch. This may not work, or require manual files modifications. Use if you know what you're doing
+apply-main-patch = ติดตั้งแพทช์หลัก
+apply-main-patch-description = การทดลอง. การปิดใช้งานจะทำให้คุณสามารถรันเกมได้โดยไม่ต้องใช้แพตช์ สิ่งนี้อาจไม่ทำงานหรือต้องมีการแก้ไขไฟล์ด้วยตนเอง ใใช้เฉพาะเมื่อคุณรู้ว่าคุณกำลังทำอะไรอยู่
 
-disable-mhypbase = Disable mhypbase
+disable-mhypbase = ปิดการใช้งาน mhypbase
 disable-mhypbase-description = Experimental. If enabled, launcher will disable mhypbase.dll during the main patch applying, which is currently an equivalent to the xlua patch. Improves performance and reduces CPU usage
 
 ask-superuser-permissions = Ask superuser permissions
 ask-superuser-permissions-description = Launcher will use them to automatically update your hosts file. This is not needed in flatpak edition
 
-launcher-behavior = Launcher behavior
-launcher-behavior-description = What should launcher window do when it starts the game
+launcher-behavior = พฤติกรรม Launcher
+launcher-behavior-description = หน้าต่าง Launcher ควรทำอย่างไรเมื่อเริ่มเกม
 
-wine-tools = Wine tools
+wine-tools = เครื่องมือ Wine
 command-line = Command line
 registry-editor = Registry editor
 explorer = Explorer

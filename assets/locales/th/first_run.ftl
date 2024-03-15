@@ -48,7 +48,7 @@ components-index = Components index
 patch-folder = Patch folder
 temp-folder = Temp folder
 
-migrate = Migrate
+migrate = โยกย้าย
 
 
 select-voice-packages = เลือกแพ็คเกจภาษาเสียง

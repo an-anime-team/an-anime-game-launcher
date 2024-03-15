@@ -5,7 +5,7 @@ environment-settings-description = ระบุตัวแปรสภาวะ
 wine = Wine
 
 synchronization = การซิงโครไนซ์
-wine-sync-description = เทคโนโลยีที่ใช้ในการประสานเหตุการณ์ wine ภายใน
+wine-sync-description = เทคโนโลยีที่ใช้ในการประสานเหตุการณ์ Wine ภายใน
 
 language = ภาษา
 wine-lang-description = ภาษาที่ใช้ในสภาพแวดล้อมไวน์ สามารถแก้ไขปัญหารูปแบบแป้นพิมพ์ได้
@@ -15,7 +15,7 @@ borderless-window = หน้าต่างไร้ขอบ
 virtual-desktop = เดสก์ท็อปเสมือน
 
 map-drive-c = เชื่อม ไดรฟ์ C:
-map-drive-c-description = เชื่อมโยง ไดรฟ์ C: จาก wine prefix ไปยังระบบ dosdevices โดยอัตโนมัติ
+map-drive-c-description = เชื่อมโยง ไดรฟ์ C: จาก Wine prefix ไปยังระบบ dosdevices โดยอัตโนมัติ
 
 map-game-folder = เชื่อม โฟลเดอร์เกม
 map-game-folder-description = เชื่อมโยงโฟลเดอร์เกมไปยังระบบ dosdevices โดยอัตโนมัติ
