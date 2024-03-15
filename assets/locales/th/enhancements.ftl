@@ -15,7 +15,7 @@ borderless-window = หน้าต่างไร้ขอบ
 virtual-desktop = เดสก์ท็อปเสมือน
 
 map-drive-c = เชื่อม ไดรฟ์ C:
-map-drive-c-description = Automatically symlink drive_c folder from the wine prefix to the dosdevices
+map-drive-c-description = เชื่อมโยง ไดรฟ์ C: จาก wine prefix ไปยังระบบ dosdevices โดยอัตโนมัติ
 
 map-game-folder = เชื่อม โฟลเดอร์เกม
 map-game-folder-description = เชื่อมโยงโฟลเดอร์เกมไปยังระบบ dosdevices โดยอัตโนมัติ

@@ -1,38 +1,38 @@
-appearance = Appearance
-modern = Modern
-classic = Classic
-update-background = Update background picture
-update-background-description = Download official background picture for the launcher. You can disable it to use your custom image instead
+appearance = รูปร่าง
+modern = โมเดิร์น
+classic = คลาสสิค
+update-background = อัพเดตภาพพื้นหลัง
+update-background-description = ดาวน์โหลดภาพพื้นหลังสำหรับแอป คุณสามารถปิดการใช้งานเพื่อใช้รูปภาพที่คุณกำหนดเองแทนได้
 
-launcher-language = Launcher language
-launcher-language-description = Applies after restart
+launcher-language = ภาษาของแอป
+launcher-language-description = ใช้หลังจากรีสตาร์ทแอป
 
-game-edition = Game edition
-global = Global
-china = China
+game-edition = ฉบับเกม
+global = สากล
+china = จีน
 
 game-environment = Game environment
 game-environment-description = Get specific features like additional payment methods
 
-game-voiceovers = Game voiceovers
-game-voiceovers-description = List of downloaded game voiceovers. You can select them in the game settings
-english = English
-japanese = Japanese
-korean = Korean
-chinese = Chinese
+game-voiceovers = ภาษาพากย์เสียงสำหรับเกม
+game-voiceovers-description = รายชื่อภาษาเสียงพากย์เกมที่ดาวน์โหลด คุณสามารถเลือกได้ในการตั้งค่าเกม
+english = ภาษาอังกฤษ
+japanese = ภาษาญี่ปุ่น
+korean = ภาษาเกาหลี
+chinese = ภาษาจีน
 
 migrate-installation = Migrate installation
 migrate-installation-description = Open special window where you can change your game installation folder
-repair-game = Repair game
+repair-game = ซ่อมเกม
 
-status = Status
+status = สถานะ
 
-game-version = Game version
-game-not-installed = not installed
+game-version = เวอร์ชันเกม
+game-not-installed = ยังไม่ได้ติดตั้ง
 
-game-predownload-available = Game update pre-downloading available: {$old} -> {$new}
-game-update-available = Game update available: {$old} -> {$new}
-game-outdated = Game is too outdated and can't be updated. Latest version: {$latest}
+game-predownload-available = มีการอัปเดตเกมให้ดาวน์โหลดล่วงหน้าแล้ว: {$old} -> {$new}
+game-update-available = มีอัปเดตเวอร์ชันเกมใหม่: {$old} -> {$new}
+game-outdated = เวอร์ชันเกมล้าสมัยเกินไปและไม่สามารถอัปเดตได้. เวอร์ชันล่าสุด: {$latest}
 
 player-patch-version = Player patch version
 player-patch-version-description = Main patch that lets you play the game on Linux

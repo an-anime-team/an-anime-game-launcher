@@ -1,15 +1,14 @@
-welcome = Welcome
+welcome = ยินดีต้อนรับ
 
 welcome-page-message =
-    Hi there! Welcome to the An Anime Game Launcher
+    สวัสดี! ยินดีต้อนรับสู่ตัวเปิดเกมอะนิเมะ
 
-    We need to prepare some stuff and download default components before you could run the game
+    เราจำเป็นต้องเตรียมบางสิ่งและดาวน์โหลดส่วนประกอบเริ่มต้นก่อนที่คุณจะสามารถเล่นเกมได้
 
-
-tos-violation-warning = ToS violation warning
+tos-violation-warning = คำเตือนการละเมิดข้อตกลงการใช้บริการของเกม
 
 tos-violation-warning-message =
-    This launcher is an unofficial tool, in no way related to {company-name} nor {company-alter-name}.
+    แอปนี้เป็นเครื่องมือที่ไม่การเกี่ยวข้องแต่อย่างใดกับ {company-name} หรือ {company-alter-name}.
 
     This tool is designed to facilitate playing {game-name} on Linux, and was built with the sole purpose of installing and running the game with less hassle.
 
