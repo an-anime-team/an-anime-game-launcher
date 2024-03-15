@@ -3,8 +3,8 @@ game-folder-opening-error = ไม่สามารถเปิดโฟลเ�
 config-file-opening-error = ไม่สามารถเปิดไฟล์ config ได้
 debug-file-opening-error = ไม่สามารถเปิดไฟล์ debug ได้
 
-wish-url-search-failed = ไม่พบ Wishes URL
-wish-url-opening-error = ไม่สามารถเปิด Wishes URL ได้
+wish-url-search-failed = ไม่พบ URL การอธิษฐาน
+wish-url-opening-error = ไม่สามารถเปิด URL การอธิษฐานได้
 
 wine-run-error = ล้มเหลวในการปฏิบัติการเรียกใช้ไฟล์ {$executable} โดยใช้ Wine
 
@@ -40,8 +40,8 @@ dxvk-apply-error = ไม่สามารถติดตั้ง DXVK ได�
 
 downloaded-wine-list-failed = ไม่สามารถแสดงเวอร์ชัน Wine ที่ดาวน์โหลดไปแล้วได้
 
-patch-sync-failed = Failed to sync patch folder
-patch-state-check-failed = Failed to check patch folder state
+patch-sync-failed = ไม่สามารถซิงค์โฟลเดอร์แพตช์ได้
+patch-state-check-failed = ไม่สามารถตรวจสอบสถานะโฟลเดอร์แพตช์ได้
 game-patching-error = ไม่สามารถแพตช์เกมได้
 
 # Disable telemetry
@@ -54,13 +54,13 @@ documentation-url-open-failed = ไม่สามารถเปิด URL เ�
 
 # Game
 
-game-session-add-failed = Failed to add game session
-game-session-update-failed = Failed to update game session
-game-session-remove-failed = Failed to remove game session
-game-session-set-current-failed = Failed to set current game session
-game-session-apply-failed = Failed to apply game session
+game-session-add-failed = ไม่สามารถเพิ่มเซสชันเกมได้
+game-session-update-failed = ไม่สามารถอัปเดตเซสชันเกมได้
+game-session-remove-failed = ไม่สามารถลบเซสชันเกมได้
+game-session-set-current-failed = ไม่สามารถตั้งเซสชันเกมปัจจุบันได้
+game-session-apply-failed = ไม่สามารถใช้เซสชันเกมได้
 
 # Enhancements
 
-discord-rpc-icons-fetch-failed = Failed to fetch Discord RPC icons
-discord-rpc-icon-download-failed = Failed to download Discord RPC icon
+discord-rpc-icons-fetch-failed = ไม่สามารถดึงไอคอน Discord RPC
+discord-rpc-icon-download-failed = ไม่สามารถดาวน์โหลดไอคอน Discord RPC

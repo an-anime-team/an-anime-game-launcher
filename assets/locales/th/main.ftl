@@ -11,9 +11,9 @@ height = ความสูง
 
 launcher-folder = โฟลเดอร์ Launcher
 game-folder = โฟลเดอร์เกม
-config-file = Config file
-debug-file = Debug file
-wish-url = Open wishes
+config-file = ไฟล์ Config
+debug-file = ไฟล์ Debug
+wish-url = เปิด URL การอธิษฐาน
 about = เกี่ยวกับ
 
 
@@ -40,37 +40,37 @@ loading-launcher-state--voice = กำลังโหลดสถานะ launc
 loading-launcher-state--patch = กำลังโหลดสถานะ launcher: กำลังตรวจสอบแพตช์ที่ติดตั้ง
 
 
-checking-free-space = Checking free space
-downloading = Downloading
-updating-permissions = Updating permissions
-unpacking = Unpacking
-verifying-files = Verifying files
-repairing-files = Repairing files
-migrating-folders = Migrating folders
-applying-hdiff = Applying hdiff patches
-removing-outdated = Removing outdated files
+checking-free-space = กำลังตรวจสอบพื้นที่ว่าง
+downloading = กำลังดาวน์โหลด
+updating-permissions = กำลังอัปเดตสิทธิ์
+unpacking = กำลังแกะ
+verifying-files = กำลังตรวจสอบไฟล์
+repairing-files = กำลังซ่อมแซมไฟล์
+migrating-folders = กำลังย้ายโฟลเดอร์
+applying-hdiff = กำลังติดตั้งแพตช์ hdiff
+removing-outdated = กำลังลบไฟล์ที่ล้าสมัย
 
 
 components-index-updated = Components index was updated
 
 
-launch = Launch
-migrate-folders = Migrate folders
-migrate-folders-tooltip = Update game folders structure
-apply-patch = Apply patch
-disable-telemetry = Disable telemetry
-download-wine = Download wine
+launch = เปิดตัว
+migrate-folders = ย้ายโฟลเดอร์
+migrate-folders-tooltip = อัพเดตโครงสร้างโฟลเดอร์เกม
+apply-patch = ติดตั้งแพทช์
+disable-telemetry = ปิดใช้งานการวัดและส่งข้อมูล
+download-wine = ดาวน์โหลด Wine
 create-prefix = Create prefix
-update = Update
-download = Download
-predownload-update = Pre-download {$version} update ({$size})
+update = อัปเดต
+download = ดาวน์โหลด
+predownload-update = ดาวน์โหลดล่วงหน้า {$version} อัปเดต ({$size})
 
-kill-game-process = Kill game process
+kill-game-process = ฆ่ากระบวนการเกม
 
 main-window--patch-unavailable-tooltip = Patch servers are unavailable and launcher can't verify the game's patching status. You're allowed to run the game on your own risk
 main-window--patch-outdated-tooltip = Patch is outdated or in preparation state, so unavailable for usage. Return back later to see its status
 main-window--version-outdated-tooltip = Version is too outdated and can't be updated
 
-preferences = Preferences
-general = General
-enhancements = Enhancements
+preferences = การตั้งค่า
+general = ทั่วไป
+enhancements = การปรับปรุง
