@@ -51,7 +51,7 @@ applying-hdiff = กำลังติดตั้งแพตช์ hdiff
 removing-outdated = กำลังลบไฟล์ที่ล้าสมัย
 
 
-components-index-updated = Components index was updated
+components-index-updated = อัปเดตส่วนประกอบแล้ว
 
 
 launch = เปิดตัว
@@ -67,9 +67,9 @@ predownload-update = ดาวน์โหลดล่วงหน้า {$versi
 
 kill-game-process = ฆ่ากระบวนการเกม
 
-main-window--patch-unavailable-tooltip = Patch servers are unavailable and launcher can't verify the game's patching status. You're allowed to run the game on your own risk
-main-window--patch-outdated-tooltip = Patch is outdated or in preparation state, so unavailable for usage. Return back later to see its status
-main-window--version-outdated-tooltip = Version is too outdated and can't be updated
+main-window--patch-unavailable-tooltip = เซิร์ฟเวอร์แพตช์ไม่พร้อมใช้งานและ launcher ไม่สามารถตรวจสอบสถานะการแพตช์ของเกมได้ คุณสามารถรันเกมได้แต่ต้องยอมรับความเสี่ยงเอง
+main-window--patch-outdated-tooltip = โปรแกรมแก้ไขล้าสมัยหรืออยู่ในสถานะเตรียมการ ดังนั้นจึงไม่สามารถใช้งานได้ โปรดกลับมาใหม่ในภายหลังเพื่อดูสถานะ
+main-window--version-outdated-tooltip = เวอร์ชันล้าสมัยเกินไปและไม่สามารถอัปเดตได้
 
 preferences = การตั้งค่า
 general = ทั่วไป

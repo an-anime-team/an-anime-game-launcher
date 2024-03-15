@@ -14,7 +14,7 @@ tos-violation-warning-message =
 
     Launcher นี้ทำงานได้โดยใช้คอมโพเนนต์ที่มีอยู่แล้ว ผู้ใช้จึงจะได้รับประสบการณ์ที่เรียบง่าย
 
-    However, some components used here likely break the {company-name} Terms of Service for {game-name}.
+    อย่างไรก็ตาม ส่วนประกอบบางอย่างที่ใช้อาจฝ่าฝืนข้อกำหนดในการให้บริการของ {company-name} สำหรับเกม {game-name}
 
     หากคุณใช้ Launcher นี้ บัญชีของคุณอาจถูกระบุว่าไม่เป็นไปตามข้อกำหนดของ {company-name}/{company-alter-name}.
 
@@ -34,12 +34,12 @@ missing-dependencies-title = คุณขาดโปรแกรมที่จ
 missing-dependencies-message = คุณต้องติดตั้งแพ็คเกจบางอย่างให้กับระบบของคุณก่อนที่จะดำเนินการติดตั้งต่อ
 
 
-default-paths = Default paths
-choose-default-paths = Choose default paths
-show-all-folders = I know what I'm doing
+default-paths = เส้นทางเริ่มต้น
+choose-default-paths = เลือกเส้นทางเริ่มต้น
+show-all-folders = ฉันรู้ว่าฉันกำลังทำอะไรอยู่
 show-all-folders-subtitle = Show additional path selection settings. Do as I say...
 runners-folder = Runners folder
-dxvks-folder = DXVKs folder
+dxvks-folder = โฟลเดอร์ DXVKs
 wine-prefix-folder = Wine prefix folder
 global-game-installation-folder = Global game version installation folder
 chinese-game-installation-folder = Chinese game version installation folder
@@ -48,7 +48,7 @@ components-index = Components index
 patch-folder = Patch folder
 temp-folder = Temp folder
 
-migrate = โยกย้าย
+migrate = ย้าย
 
 
 select-voice-packages = เลือกแพ็คเกจภาษาเสียง
