@@ -4,25 +4,25 @@ sandbox-description = รันเกมที่แยกออกจากร�
 enable-sandboxing = เปิดใช้งานแซนด์บ็อกซ์
 enable-sandboxing-description = รันเกมในระบบไฟล์รูทของคุณแบบอ่านได้อย่างเดียว
 
-hide-home-directory = Hide home directory
-hide-home-directory-description = Isolate your /home, /var/home/$USER, and $HOME folders from the game
+hide-home-directory = ซ่อนโฮมไดเร็กตอรี่
+hide-home-directory-description = ซ่อนโฟลเดอร์ /home, /var/home/$USER และ $HOME ของคุณจากเกม
 
 hostname = ชื่อโฮสต์
-additional-arguments = Additional arguments
+additional-arguments = arguments เพิ่มเติม
 
 private-directories = ไดเรกทอรีส่วนตัว
-private-directories-description = These folders will be replaced by an empty virtual filesystem (tmpfs), and their original content will not be available to sandboxed game
+private-directories-description = โฟลเดอร์เหล่านี้จะถูกแทนที่ด้วยระบบไฟล์เสมือนที่ว่างเปล่า (tmpfs) และไฟล์เหล่านั้นจะไม่สามารถเข้าถึงได้โดยเกมแซนด์บ็อกซ์
 
-path = Path
+path = เส้นทาง
 
 shared-directories = ไดเรกทอรีใช้ร่วมกัน
 shared-directories-description = ไดเร็กทอรีเหล่านี้จะเชื่อมโยงกับไดเร็กทอรีในระบบโฮสต์ของคุณ
 
-original-path = Original path
-new-path = New path
+original-path = เส้นทางเดิม
+new-path = เส้นทางใหม่
 
 read-only = อ่านได้เท่านั้น
 read-only-description = ห้ามเกมเขียนข้อมูลใดๆ ลงในไดเร็กทอรีนี้
 
 symlinks = Symlinks
-symlinks-description = Symlink original path to the new one inside of your sandbox
+symlinks-description = สร้าง Symbolic Link จากตำแหน่งเดิมไปยังตำแหน่งใหม่ภายในแซนด์บ็อกซ์ของคุณ 

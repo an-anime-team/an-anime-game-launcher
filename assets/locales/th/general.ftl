@@ -15,7 +15,7 @@ game-environment = สภาพแวดล้อมของเกม
 game-environment-description = รับคุณสมบัติเฉพาะ เช่น วิธีการชำระเงินอื่นๆ
 
 game-voiceovers = ภาษาพากย์เสียงเกม
-game-voiceovers-description = รายชื่อภาษาเสียงพากย์เกมที่ดาวน์โหลด คุณสามารถเลือกได้ในการตั้งค่าเกม
+game-voiceovers-description = ภาษาเสียงพากย์เกมที่ดาวน์โหลดได้ คุณสามารถเลือกในการตั้งค่าเกม
 english = ภาษาอังกฤษ
 japanese = ภาษาญี่ปุ่น
 korean = ภาษาเกาหลี

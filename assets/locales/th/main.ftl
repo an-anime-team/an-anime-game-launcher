@@ -1,5 +1,5 @@
 custom = กำหนดเอง
-none = ไม่มี
+none = ไม่ใช้
 default = ค่าเริ่มต้น
 details = รายละเอียด
 options = ตัวเลือก
@@ -54,13 +54,13 @@ removing-outdated = กำลังลบไฟล์ที่ล้าสมั
 components-index-updated = อัปเดตส่วนประกอบแล้ว
 
 
-launch = เปิดตัว
+launch = เริ่มเกมส์
 migrate-folders = ย้ายโฟลเดอร์
 migrate-folders-tooltip = อัพเดตโครงสร้างโฟลเดอร์เกม
 apply-patch = ติดตั้งแพทช์
 disable-telemetry = ปิดใช้งานการวัดและส่งข้อมูล
 download-wine = ดาวน์โหลด Wine
-create-prefix = Create prefix
+create-prefix = สร้างการตั้งค่า Wine
 update = อัปเดต
 download = ดาวน์โหลด
 predownload-update = ดาวน์โหลดล่วงหน้า {$version} อัปเดต ({$size})

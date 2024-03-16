@@ -37,16 +37,16 @@ missing-dependencies-message = คุณต้องติดตั้งแพ�
 default-paths = เส้นทางเริ่มต้น
 choose-default-paths = เลือกเส้นทางเริ่มต้น
 show-all-folders = ฉันรู้ว่าฉันกำลังทำอะไรอยู่
-show-all-folders-subtitle = Show additional path selection settings. Do as I say...
-runners-folder = Runners folder
+show-all-folders-subtitle = แสดงการตั้งค่าการเลือกเส้นทางเพิ่มเติม (ทำตามที่ฉันบอก...)
+runners-folder = โฟลเดอร์ Runners
 dxvks-folder = โฟลเดอร์ DXVKs
-wine-prefix-folder = Wine prefix folder
-global-game-installation-folder = Global game version installation folder
-chinese-game-installation-folder = Chinese game version installation folder
-fps-unlocker-folder = FPS Unlocker folder
-components-index = Components index
-patch-folder = Patch folder
-temp-folder = Temp folder
+wine-prefix-folder = โฟลเดอร์ prefix ของ Wine
+global-game-installation-folder = โฟลเดอร์การติดตั้งเวอร์ชันเกมสากล
+chinese-game-installation-folder = โฟลเดอร์การติดตั้งเวอร์ชันเกมจีน
+fps-unlocker-folder = โฟลเดอร์ FPS Unlocker
+components-index = Index ส่วนประกอบ
+patch-folder = โฟลเดอร์แพทช์
+temp-folder = โฟลเดอร์ชั่วคราว
 
 migrate = ย้าย
 

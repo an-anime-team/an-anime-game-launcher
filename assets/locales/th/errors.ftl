@@ -16,7 +16,7 @@ unpacking-failed = การแกะไฟล์ล้มเหลว
 kill-game-process-failed = ไม่สามารถฆ่ากระบวนการของเกมได้
 
 game-file-repairing-error = ไม่สามารถซ่อมแซมไฟล์เกมได้
-integrity-files-getting-error = Failed to get integrity files
+integrity-files-getting-error = ไม่สามารถรับไฟล์การตรวจสอบความสมบูรณ์ได้
 
 background-downloading-failed = ดาวน์โหลดภาพพื้นหลังไม่สำเร็จ
 components-index-sync-failed = ไม่สามารถซิงค์ index ส่วนประกอบ
@@ -58,7 +58,7 @@ game-session-add-failed = ไม่สามารถเพิ่มเซสช
 game-session-update-failed = ไม่สามารถอัปเดตเซสชันเกมได้
 game-session-remove-failed = ไม่สามารถลบเซสชันเกมได้
 game-session-set-current-failed = ไม่สามารถตั้งเซสชันเกมปัจจุบันได้
-game-session-apply-failed = ไม่สามารถใช้เซสชันเกมได้
+game-session-apply-failed = ไม่สามารถติดตั้งเซสชันเกมได้
 
 # Enhancements
 
