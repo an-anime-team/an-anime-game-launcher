@@ -22,13 +22,13 @@ background-downloading-failed = ดาวน์โหลดภาพพื้น
 components-index-sync-failed = ไม่สามารถซิงค์ index ส่วนประกอบ
 components-index-verify-failed = ไม่สามารถตรวจสอบ index ส่วนประกอบได้
 config-update-error = บันทึกการกำหนดค่าไม่สำเร็จ
-wine-prefix-update-failed = Failed to update wine prefix
+wine-prefix-update-failed = ไม่สามารถอัปเดตการตั้งค่า Wine
 dxvk-install-failed = ติดตั้ง DXVK ไม่สำเร็จ
 voice-package-deletion-error = ลบแพ็คเกจเสียงไม่สำเร็จ
 
-game-diff-finding-error = ไม่พบความแตกต่างของเกม?
+game-diff-finding-error = ไม่พบความแตกต่างของเกม
 patch-info-fetching-error = ไม่สามารถเรียกข้อมูลแพตช์ได้
-launcher-state-updating-error = อัปเดตสถานะแอปไม่สำเร็จ
+launcher-state-updating-error = อัปเดตสถานะ launcher ไม่สำเร็จ
 
 package-not-available = ไม่พบแพ็คเกจนี้: {$package}
 wine-download-error = ดาวน์โหลด wine ไม่สำเร็จ

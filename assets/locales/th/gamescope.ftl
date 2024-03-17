@@ -4,10 +4,10 @@ gamescope-resolution = ความละเอียดของ Gamescope
 upscaling = การเพิ่มขนาดความละเอียด
 
 integer-scaling = มาตราส่วนจำนวนเต็ม
-integer-scaling-description = Turns each pixel into a square or rectangular group of integer number of same-color pixels. Prevents sharpness loss when scaling Full HD to 4K
+integer-scaling-description = เปลี่ยนแต่ละพิกเซลเป็นกลุ่มสี่เหลี่ยมจัตุรัสหรือสี่เหลี่ยมของจำนวนเต็มของพิกเซลสีเดียวกัน ป้องกันการสูญเสียความคมชัดเมื่อปรับขนาด Full HD เป็น 4K
 gamescope-fsr-description = เทคนิคการขยายขนาดที่พัฒนาโดย AMD เพื่อคุณภาพการขยายขนาดที่ดีขึ้น
-nis-description = An open source upscaling technique developed by Nvidia as a cross-vendor, low-overhead alternative to their proprietary DLSS solution, meaning it works on AMD and Intel GPUs as well as Nvidia GPUs
+nis-description = เทคนิคการขยายขนาดโอเพ่นซอร์สที่พัฒนาโดย Nvidia เป็นทางเลือกข้ามผู้จำหน่ายและมีค่าใช้จ่ายต่ำแทนโซลูชัน DLSS ที่เป็นกรรมสิทธิ์ ซึ่งหมายความว่าใช้งานได้กับ AMD และ Intel GPU รวมถึง Nvidia GPU
 
 other-settings = การตั้งค่าอื่นๆ
 framerate-limit = ขีดจำกัดเฟรมเรต
-unfocused-framerate-limit = Unfocused framerate limit
+unfocused-framerate-limit = เฟรมเรทจำกัดขณะไม่ได้โฟกัส
