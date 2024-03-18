@@ -30,7 +30,7 @@ status = สถานะ
 game-version = เวอร์ชันเกม
 game-not-installed = ยังไม่ได้ติดตั้ง
 
-game-predownload-available = มีการอัปเดตเกมให้ดาวน์โหลดล่วงหน้าแล้ว: {$old} -> {$new}
+game-predownload-available = มีการอัปเดตเกมให้ดาวน์โหลดได้ล่วงหน้าแล้ว: {$old} -> {$new}
 game-update-available = มีอัปเดตเวอร์ชันเกมใหม่: {$old} -> {$new}
 game-outdated = เวอร์ชันเกมล้าสมัยเกินไปและไม่สามารถอัปเดตได้. เวอร์ชันล่าสุด: {$latest}
 
