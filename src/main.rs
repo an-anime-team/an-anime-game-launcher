@@ -135,22 +135,24 @@ fn main() -> anyhow::Result<()> {
     let mut no_verbose_tracing = false;
 
     let args = std::env::args().collect::<Vec<_>>();
+    let mut gtk_args = Vec::new();
 
     // Parse arguments
     for i in 0..args.len() {
-        if args[i] == "--debug" {
-            force_debug = true;
-        } else if args[i] == "--run-game" {
-            run_game = true;
-        } else if args[i] == "--just-run-game" {
-            just_run_game = true;
-        } else if args[i] == "--no-verbose-tracing" {
-            no_verbose_tracing = true;
-        } else if args[i] == "--session" {
-            // Switch active session prior running the app
-            if let Some(session) = args.get(i + 1) {
-                Sessions::set_current(session.to_owned())?;
-            }
+        match args[i].as_str() {
+            "--debug"              => force_debug        = true,
+            "--run-game"           => run_game           = true,
+            "--just-run-game"      => just_run_game      = true,
+            "--no-verbose-tracing" => no_verbose_tracing = true,
+
+            "--session" => {
+                // Switch active session prior running the app
+                if let Some(session) = args.get(i + 1) {
+                    Sessions::set_current(session.to_owned())?;
+                }
+            },
+
+            arg => gtk_args.push(arg.to_string())
         }
     }
 
@@ -210,7 +212,8 @@ fn main() -> anyhow::Result<()> {
     // Run FirstRun window if .first-run file persist
     if FIRST_RUN_FILE.exists() {
         // Create the app
-        let app = RelmApp::new(APP_ID);
+        let app = RelmApp::new(APP_ID)
+            .with_args(gtk_args);
 
         // Set global css
         app.set_global_css(&GLOBAL_CSS);
@@ -243,7 +246,8 @@ fn main() -> anyhow::Result<()> {
         }
 
         // Create the app
-        let app = RelmApp::new(APP_ID);
+        let app = RelmApp::new(APP_ID)
+            .with_args(gtk_args);
 
         // Set global css
         app.set_global_css(&GLOBAL_CSS);
