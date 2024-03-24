@@ -12,5 +12,5 @@ other-settings = Andere Einstellungen
 framerate-limit = Framerate-Limit
 unfocused-framerate-limit = Unfokussiert Framerate-Limit
 
-force-grab-cursor = Force grab cursor
-force-grab-cursor-description = Always use relative mouse mode instead of flipping dependent on cursor visibility. The mouse cursor will correctly be centered in the game
+force-grab-cursor = Cursor greifen erzwingen
+force-grab-cursor-description = Verwende immer den relativen Mausmodus, anstatt abhängig von der Sichtbarkeit des Cursors umzuschalten. Der Mauszeiger wird korrekt in der Mitte des Spiels zentriert.
