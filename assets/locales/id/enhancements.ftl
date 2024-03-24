@@ -48,8 +48,8 @@ fps-unlocker-description = Meniadakan batas maksimum frame yang dapat dirender o
 
 enabled = Aktifkan
 
-fps-unlocker-interval = Overwrite interval
-fps-unlocker-interval-description = Delay in milliseconds between overwriting the FPS limit value. Periodic overwrites are necessary to prevent it from resetting
+fps-unlocker-interval = Interval penulisan ulang FPS
+fps-unlocker-interval-description = Jeda antara penulisan ulang nilai batas FPS dalam milidetik. Penulisan ulang secara berkala dibutuhkan untuk mencegah nilai batas FPS kembali seperti semula
 
 window-mode = Window Mode
 borderless = Tanpa border
