@@ -57,12 +57,12 @@ checksum = "0942ffc6dcaadf03badf6e6a2d0228460359d5e34b57ccdc720b7382dfbd5ec5"
 
 [[package]]
 name = "anime-game-core"
-version = "1.17.4"
-source = "git+https://github.com/an-anime-team/anime-game-core?tag=1.17.4#74a7c5a18cc4a870ff78e12d63ec136b3ef2d424"
+version = "1.17.5"
+source = "git+https://github.com/an-anime-team/anime-game-core?tag=1.17.5#55dd60f6b5f78aa80e2217404c3ee1151657f011"
 dependencies = [
  "anyhow",
  "bzip2",
- "cached 0.46.1",
+ "cached",
  "dns-lookup",
  "flate2",
  "fs_extra",
@@ -86,7 +86,8 @@ version = "3.9.4"
 dependencies = [
  "anime-launcher-sdk",
  "anyhow",
- "cached 0.49.2",
+ "cached",
+ "enum-ordinalize",
  "fluent-templates",
  "glib-build-tools",
  "gtk4",
@@ -106,12 +107,12 @@ dependencies = [
 
 [[package]]
 name = "anime-launcher-sdk"
-version = "1.12.5"
-source = "git+https://github.com/an-anime-team/anime-launcher-sdk?tag=1.12.5#fae9497c43f9d7636d32ba755163808f805049b1"
+version = "1.12.7"
+source = "git+https://github.com/an-anime-team/anime-launcher-sdk?tag=1.12.7#f4133c0875af54b07b4c0dac04df4598193ac9ec"
 dependencies = [
  "anime-game-core",
  "anyhow",
- "cached 0.46.1",
+ "cached",
  "discord-rich-presence",
  "enum-ordinalize",
  "lazy_static",
@@ -494,44 +495,17 @@ dependencies = [
 
 [[package]]
 name = "cached"
-version = "0.46.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c7c8c50262271cdf5abc979a5f76515c234e764fa025d1ba4862c0f0bcda0e95"
-dependencies = [
- "ahash",
- "cached_proc_macro 0.18.1",
- "cached_proc_macro_types",
- "hashbrown",
- "instant",
- "once_cell",
- "thiserror",
-]
-
-[[package]]
-name = "cached"
 version = "0.49.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f251fd1e72720ca07bf5d8e310f54a193fd053479a1f6342c6663ee4fa01cf96"
 dependencies = [
  "ahash",
- "cached_proc_macro 0.20.0",
+ "cached_proc_macro",
  "cached_proc_macro_types",
  "hashbrown",
  "instant",
  "once_cell",
  "thiserror",
-]
-
-[[package]]
-name = "cached_proc_macro"
-version = "0.18.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c878c71c2821aa2058722038a59a67583a4240524687c6028571c9b395ded61f"
-dependencies = [
- "darling",
- "proc-macro2",
- "quote",
- "syn 1.0.109",
 ]
 
 [[package]]
@@ -841,12 +815,19 @@ checksum = "a3d8a32ae18130a3c84dd492d4215c3d913c3b07c6b63c2eb3eb7ff1101ab7bf"
 
 [[package]]
 name = "enum-ordinalize"
-version = "3.1.15"
+version = "4.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1bf1fa3f06bbff1ea5b1a9c7b14aa992a39657db60a2759457328d7e058f49ee"
+checksum = "fea0dcfa4e54eeb516fe454635a95753ddd39acda650ce703031c6973e315dd5"
 dependencies = [
- "num-bigint",
- "num-traits",
+ "enum-ordinalize-derive",
+]
+
+[[package]]
+name = "enum-ordinalize-derive"
+version = "4.3.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0d28318a75d4aead5c4db25382e8ef717932d0346600cacae6357eb5941bc5ff"
+dependencies = [
  "proc-macro2",
  "quote",
  "syn 2.0.43",
@@ -1905,36 +1886,6 @@ checksum = "77a8165726e8236064dbb45459242600304b42a5ea24ee2948e18e023bf7ba84"
 dependencies = [
  "overload",
  "winapi",
-]
-
-[[package]]
-name = "num-bigint"
-version = "0.4.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "608e7659b5c3d7cba262d894801b9ec9d00de989e8a82bd4bef91d08da45cdc0"
-dependencies = [
- "autocfg",
- "num-integer",
- "num-traits",
-]
-
-[[package]]
-name = "num-integer"
-version = "0.1.45"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "225d3389fb3509a24c93f5c29eb6bde2586b98d9f016636dff58d7c6f7569cd9"
-dependencies = [
- "autocfg",
- "num-traits",
-]
-
-[[package]]
-name = "num-traits"
-version = "0.2.17"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "39e3200413f237f41ab11ad6d161bc7239c84dcb631773ccd7de3dfe4b5c267c"
-dependencies = [
- "autocfg",
 ]
 
 [[package]]

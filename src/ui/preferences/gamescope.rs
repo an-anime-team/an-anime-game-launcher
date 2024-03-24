@@ -6,6 +6,8 @@ use anime_launcher_sdk::genshin::config::Config;
 
 use anime_launcher_sdk::config::schema_blanks::prelude::*;
 
+use enum_ordinalize::Ordinalize;
+
 use crate::*;
 
 pub struct GamescopeApp;

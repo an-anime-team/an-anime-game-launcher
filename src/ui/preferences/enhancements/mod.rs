@@ -17,6 +17,8 @@ use anime_launcher_sdk::anime_game_core::installer::downloader::Downloader;
 use anime_launcher_sdk::discord_rpc::DiscordRpc;
 use anime_launcher_sdk::is_available;
 
+use enum_ordinalize::Ordinalize;
+
 pub mod game;
 pub mod sandbox;
 pub mod environment;
