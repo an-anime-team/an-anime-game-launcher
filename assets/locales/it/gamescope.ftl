@@ -12,5 +12,5 @@ other-settings = Altre impostazioni
 framerate-limit = Limite del framerate
 unfocused-framerate-limit = Limite del framerate quando fuori dal focus
 
-force-grab-cursor = Force grab cursor
-force-grab-cursor-description = Always use relative mouse mode instead of flipping dependent on cursor visibility. The mouse cursor will correctly be centered in the game
+force-grab-cursor = Forza la cattura del cursore
+force-grab-cursor-description = Usa sempre la modalità relativa del mouse invece di cambiare in base alla visibilità del cursore. Il cursore del mouse verrà correttamente centrato nel gioco
