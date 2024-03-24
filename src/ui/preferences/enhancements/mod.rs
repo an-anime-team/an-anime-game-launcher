@@ -627,13 +627,13 @@ impl SimpleAsyncComponent for EnhancementsApp {
         },
 
         #[local_ref]
-        game_page -> gtk::Box {},
+        game_page -> adw::NavigationPage,
 
         #[local_ref]
-        sandbox_page -> gtk::Box {},
+        sandbox_page -> adw::NavigationPage,
 
         #[local_ref]
-        environment_page -> gtk::Box {}
+        environment_page -> adw::NavigationPage,
     }
 
     async fn init(
@@ -769,28 +769,28 @@ impl SimpleAsyncComponent for EnhancementsApp {
                 PREFERENCES_WINDOW.as_ref()
                     .unwrap_unchecked()
                     .widget()
-                    .close_subpage();
+                    .pop_subpage();
             }
 
             EnhancementsAppMsg::OpenGameSettingsPage => unsafe {
                 PREFERENCES_WINDOW.as_ref()
                     .unwrap_unchecked()
                     .widget()
-                    .present_subpage(self.game_page.widget());
+                    .push_subpage(self.game_page.widget());
             }
 
             EnhancementsAppMsg::OpenSandboxSettingsPage => unsafe {
                 PREFERENCES_WINDOW.as_ref()
                     .unwrap_unchecked()
                     .widget()
-                    .present_subpage(self.sandbox_page.widget());
+                    .push_subpage(self.sandbox_page.widget());
             }
 
             EnhancementsAppMsg::OpenEnvironmentSettingsPage => unsafe {
                 PREFERENCES_WINDOW.as_ref()
                     .unwrap_unchecked()
                     .widget()
-                    .present_subpage(self.environment_page.widget());
+                    .push_subpage(self.environment_page.widget());
             }
 
             EnhancementsAppMsg::Toast { title, description } => {

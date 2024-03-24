@@ -528,7 +528,7 @@ impl SimpleAsyncComponent for GeneralApp {
         },
 
         #[local_ref]
-        components_page -> gtk::Box {}
+        components_page -> adw::NavigationPage,
     }
 
     async fn init(
@@ -664,14 +664,14 @@ impl SimpleAsyncComponent for GeneralApp {
                 PREFERENCES_WINDOW.as_ref()
                     .unwrap_unchecked()
                     .widget()
-                    .close_subpage();
+                    .pop_subpage();
             }
 
             GeneralAppMsg::OpenComponentsPage => unsafe {
                 PREFERENCES_WINDOW.as_ref()
                     .unwrap_unchecked()
                     .widget()
-                    .present_subpage(self.components_page.widget());
+                    .push_subpage(self.components_page.widget());
             }
 
             #[allow(unused_must_use)]

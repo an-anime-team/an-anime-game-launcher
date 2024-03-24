@@ -71,82 +71,85 @@ impl SimpleAsyncComponent for EnvironmentPage {
     type Output = EnhancementsAppMsg;
 
     view! {
-        gtk::Box {
-            set_orientation: gtk::Orientation::Vertical,
+        adw::NavigationPage {
+            #[wrap(Some)]
+            set_child = &gtk::Box {
+                set_orientation: gtk::Orientation::Vertical,
 
-            adw::HeaderBar {
-                #[wrap(Some)]
-                set_title_widget = &adw::WindowTitle {
-                    set_title: &tr!("environment")
-                },
+                adw::HeaderBar {
+                    #[wrap(Some)]
+                    set_title_widget = &adw::WindowTitle {
+                        set_title: &tr!("environment")
+                    },
 
-                pack_start = &gtk::Button {
-                    set_icon_name: "go-previous-symbolic",
+                    pack_start = &gtk::Button {
+                        set_icon_name: "go-previous-symbolic",
 
-                    connect_clicked[sender] => move |_| {
-                        sender.output(EnhancementsAppMsg::OpenMainPage).unwrap();
-                    }
-                }
-            },
-
-            adw::PreferencesPage {
-                set_title: &tr!("environment"),
-                set_icon_name: Some("document-properties-symbolic"),
-
-                add = &adw::PreferencesGroup {
-                    set_title: &tr!("game-command"),
-                    set_description: Some(&tr!("game-command-description")),
-
-                    adw::EntryRow {
-                        set_title: "%command%",
-                        set_text: CONFIG.game.command.as_ref().unwrap_or(&String::new()).trim(),
-
-                        connect_changed => |entry| {
-                            if let Ok(mut config) = Config::get() {
-                                let command = entry.text().trim().to_string();
-
-                                config.game.command = if command.is_empty() {
-                                    None
-                                } else {
-                                    Some(command)
-                                };
-
-                                Config::update(config);
-                            }
+                        connect_clicked[sender] => move |_| {
+                            sender.output(EnhancementsAppMsg::OpenMainPage).unwrap();
                         }
                     }
                 },
 
-                add = &adw::PreferencesGroup {
-                    set_title: &tr!("new-variable"),
+                adw::PreferencesPage {
+                    set_title: &tr!("environment"),
+                    set_icon_name: Some("document-properties-symbolic"),
 
-                    #[wrap(Some)]
-                    set_header_suffix = &gtk::Button {
-                        add_css_class: "flat",
+                    add = &adw::PreferencesGroup {
+                        set_title: &tr!("game-command"),
+                        set_description: Some(&tr!("game-command-description")),
 
-                        set_valign: gtk::Align::Center,
+                        adw::EntryRow {
+                            set_title: "%command%",
+                            set_text: CONFIG.game.command.as_ref().unwrap_or(&String::new()).trim(),
 
-                        adw::ButtonContent {
-                            set_icon_name: "list-add-symbolic",
-                            set_label: &tr!("add")
+                            connect_changed => |entry| {
+                                if let Ok(mut config) = Config::get() {
+                                    let command = entry.text().trim().to_string();
+
+                                    config.game.command = if command.is_empty() {
+                                        None
+                                    } else {
+                                        Some(command)
+                                    };
+
+                                    Config::update(config);
+                                }
+                            }
+                        }
+                    },
+
+                    add = &adw::PreferencesGroup {
+                        set_title: &tr!("new-variable"),
+
+                        #[wrap(Some)]
+                        set_header_suffix = &gtk::Button {
+                            add_css_class: "flat",
+
+                            set_valign: gtk::Align::Center,
+
+                            adw::ButtonContent {
+                                set_icon_name: "list-add-symbolic",
+                                set_label: &tr!("add")
+                            },
+
+                            connect_clicked => EnvironmentPageMsg::Add
                         },
 
-                        connect_clicked => EnvironmentPageMsg::Add
+                        #[local_ref]
+                        name_entry -> adw::EntryRow {
+                            set_title: &tr!("name")
+                        },
+
+                        #[local_ref]
+                        value_entry -> adw::EntryRow {
+                            set_title: &tr!("value")
+                        }
                     },
 
                     #[local_ref]
-                    name_entry -> adw::EntryRow {
-                        set_title: &tr!("name")
-                    },
-
-                    #[local_ref]
-                    value_entry -> adw::EntryRow {
-                        set_title: &tr!("value")
-                    }
-                },
-
-                #[local_ref]
-                add = variables -> adw::PreferencesGroup {}
+                    add = variables -> adw::PreferencesGroup {}
+                }
             }
         }
     }

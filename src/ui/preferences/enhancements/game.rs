@@ -105,48 +105,51 @@ impl SimpleAsyncComponent for GamePage {
     type Output = EnhancementsAppMsg;
 
     view! {
-        gtk::Box {
-            set_orientation: gtk::Orientation::Vertical,
+        adw::NavigationPage {
+            #[wrap(Some)]
+            set_child = &gtk::Box {
+                set_orientation: gtk::Orientation::Vertical,
 
-            adw::HeaderBar {
-                #[wrap(Some)]
-                set_title_widget = &adw::WindowTitle {
-                    set_title: &tr!("game")
-                },
+                adw::HeaderBar {
+                    #[wrap(Some)]
+                    set_title_widget = &adw::WindowTitle {
+                        set_title: &tr!("game")
+                    },
 
-                pack_start = &gtk::Button {
-                    set_icon_name: "go-previous-symbolic",
+                    pack_start = &gtk::Button {
+                        set_icon_name: "go-previous-symbolic",
 
-                    connect_clicked[sender] => move |_| {
-                        sender.output(EnhancementsAppMsg::OpenMainPage).unwrap();
-                    }
-                }
-            },
-
-            adw::PreferencesPage {
-                set_title: &tr!("game"),
-                set_icon_name: Some("applications-games-symbolic"),
-
-                add = &adw::PreferencesGroup {
-                    set_title: &tr!("game-sessions"),
-
-                    #[local_ref]
-                    session_name_entry -> adw::EntryRow {
-                        set_title: &tr!("name"),
-
-                        add_suffix = &gtk::Button {
-                            set_icon_name: "list-add-symbolic",
-                            add_css_class: "flat",
-
-                            set_valign: gtk::Align::Center,
-
-                            connect_clicked => GamePageMsg::AddSession
+                        connect_clicked[sender] => move |_| {
+                            sender.output(EnhancementsAppMsg::OpenMainPage).unwrap();
                         }
                     }
                 },
 
-                #[local_ref]
-                add = sessions -> adw::PreferencesGroup {},
+                adw::PreferencesPage {
+                    set_title: &tr!("game"),
+                    set_icon_name: Some("applications-games-symbolic"),
+
+                    add = &adw::PreferencesGroup {
+                        set_title: &tr!("game-sessions"),
+
+                        #[local_ref]
+                        session_name_entry -> adw::EntryRow {
+                            set_title: &tr!("name"),
+
+                            add_suffix = &gtk::Button {
+                                set_icon_name: "list-add-symbolic",
+                                add_css_class: "flat",
+
+                                set_valign: gtk::Align::Center,
+
+                                connect_clicked => GamePageMsg::AddSession
+                            }
+                        }
+                    },
+
+                    #[local_ref]
+                    add = sessions -> adw::PreferencesGroup {},
+                }
             }
         }
     }

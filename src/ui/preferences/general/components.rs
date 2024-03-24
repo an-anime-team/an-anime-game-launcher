@@ -49,193 +49,196 @@ impl SimpleAsyncComponent for ComponentsPage {
     type Output = GeneralAppMsg;
 
     view! {
-        gtk::Box {
-            set_orientation: gtk::Orientation::Vertical,
+        adw::NavigationPage {
+            #[wrap(Some)]
+            set_child = &gtk::Box {
+                set_orientation: gtk::Orientation::Vertical,
 
-            adw::HeaderBar {
-                #[wrap(Some)]
-                set_title_widget = &adw::WindowTitle {
-                    set_title: &tr!("components")
+                adw::HeaderBar {
+                    #[wrap(Some)]
+                    set_title_widget = &adw::WindowTitle {
+                        set_title: &tr!("components")
+                    },
+
+                    pack_start = &gtk::Button {
+                        set_icon_name: "go-previous-symbolic",
+
+                        connect_clicked[sender] => move |_| {
+                            sender.output(GeneralAppMsg::OpenMainPage).unwrap();
+                        }
+                    }
                 },
 
-                pack_start = &gtk::Button {
-                    set_icon_name: "go-previous-symbolic",
+                adw::PreferencesPage {
+                    add = &adw::PreferencesGroup {
+                        set_title: &tr!("wine-version"),
 
-                    connect_clicked[sender] => move |_| {
-                        sender.output(GeneralAppMsg::OpenMainPage).unwrap();
-                    }
+                        adw::ComboRow {
+                            set_title: &tr!("selected-version"),
+
+                            #[watch]
+                            #[block_signal(wine_selected_notify)]
+                            set_model: Some(&gtk::StringList::new(&model.downloaded_wine_versions.iter().map(|(version, _)| version.title.as_str()).collect::<Vec<&str>>())),
+
+                            #[watch]
+                            #[block_signal(wine_selected_notify)]
+                            set_selected: model.selected_wine_version,
+
+                            #[watch]
+                            set_activatable: !model.selecting_wine_version,
+
+                            connect_selected_notify[sender] => move |row| {
+                                if is_ready() {
+                                    sender.input(ComponentsPageMsg::SelectWine(row.selected() as usize));
+                                }
+                            } @wine_selected_notify,
+
+                            add_suffix = &gtk::Spinner {
+                                set_spinning: true,
+
+                                #[watch]
+                                set_visible: model.selecting_wine_version
+                            }
+                        },
+
+                        adw::ActionRow {
+                            set_title: &tr!("recommended-only"),
+                            set_subtitle: &tr!("wine-recommended-description"),
+
+                            add_suffix = &gtk::Switch {
+                                set_valign: gtk::Align::Center,
+
+                                #[block_signal(wine_recommended_notify)]
+                                set_state: true,
+
+                                connect_state_notify[sender] => move |switch| {
+                                    if is_ready() {
+                                        sender.input(ComponentsPageMsg::WineRecommendedOnly(switch.state()));
+                                    }
+                                } @wine_recommended_notify
+                            }
+                        }
+                    },
+
+                    add = &adw::PreferencesGroup {
+                        add = model.wine_components.widget(),
+                    },
+
+                    add = &adw::PreferencesGroup {
+                        set_title: &tr!("wine-options"),
+
+                        adw::ActionRow {
+                            set_title: &tr!("wine-use-shared-libraries"),
+                            set_subtitle: &tr!("wine-use-shared-libraries-description"),
+
+                            add_suffix = &gtk::Switch {
+                                set_valign: gtk::Align::Center,
+
+                                #[block_signal(wine_shared_libraries_notify)]
+                                set_state: CONFIG.game.wine.shared_libraries.wine,
+
+                                connect_state_notify => |switch| {
+                                    if is_ready() {
+                                        if let Ok(mut config) = Config::get() {
+                                            config.game.wine.shared_libraries.wine = switch.state();
+
+                                            Config::update(config);
+                                        }
+                                    }
+                                } @wine_shared_libraries_notify
+                            }
+                        },
+
+                        adw::ActionRow {
+                            set_title: &tr!("gstreamer-use-shared-libraries"),
+                            set_subtitle: &tr!("gstreamer-use-shared-libraries-description"),
+
+                            add_suffix = &gtk::Switch {
+                                set_valign: gtk::Align::Center,
+
+                                #[block_signal(gstreamer_shared_libraries_notify)]
+                                set_state: CONFIG.game.wine.shared_libraries.gstreamer,
+
+                                connect_state_notify => |switch| {
+                                    if is_ready() {
+                                        if let Ok(mut config) = Config::get() {
+                                            config.game.wine.shared_libraries.gstreamer = switch.state();
+
+                                            Config::update(config);
+                                        }
+                                    }
+                                } @gstreamer_shared_libraries_notify
+                            }
+                        }
+                    },
+
+                    add = &adw::PreferencesGroup {
+                        set_title: &tr!("dxvk-version"),
+
+                        #[watch]
+                        set_description: Some(&if !model.allow_dxvk_selection {
+                            tr!("dxvk-selection-disabled")
+                        } else {
+                            String::new()
+                        }),
+
+                        #[watch]
+                        set_sensitive: model.allow_dxvk_selection,
+
+                        adw::ComboRow {
+                            set_title: &tr!("selected-version"),
+        
+                            #[watch]
+                            #[block_signal(dxvk_selected_notify)]
+                            set_model: Some(&gtk::StringList::new(&model.downloaded_dxvk_versions.iter().map(|version| version.name.as_str()).collect::<Vec<&str>>())),
+
+                            #[watch]
+                            #[block_signal(dxvk_selected_notify)]
+                            set_selected: model.selected_dxvk_version,
+
+                            #[watch]
+                            set_activatable: !model.selecting_dxvk_version,
+
+                            connect_selected_notify[sender] => move |row| {
+                                if is_ready() {
+                                    sender.input(ComponentsPageMsg::SelectDxvk(row.selected() as usize));
+                                }
+                            } @dxvk_selected_notify,
+
+                            add_suffix = &gtk::Spinner {
+                                set_spinning: true,
+
+                                #[watch]
+                                set_visible: model.selecting_dxvk_version
+                            }
+                        },
+
+                        adw::ActionRow {
+                            set_title: &tr!("recommended-only"),
+                            set_subtitle: &tr!("dxvk-recommended-description"),
+
+                            add_suffix = &gtk::Switch {
+                                set_valign: gtk::Align::Center,
+
+                                #[block_signal(dxvk_recommended_notify)]
+                                set_state: true,
+
+                                connect_state_notify[sender] => move |switch| {
+                                    if is_ready() {
+                                        sender.input(ComponentsPageMsg::DxvkRecommendedOnly(switch.state()));
+                                    }
+                                } @dxvk_recommended_notify
+                            }
+                        }
+                    },
+
+                    add = &adw::PreferencesGroup {
+                        #[watch]
+                        set_sensitive: model.allow_dxvk_selection,
+
+                        add = model.dxvk_components.widget(),
+                    },
                 }
-            },
-
-            adw::PreferencesPage {
-                add = &adw::PreferencesGroup {
-                    set_title: &tr!("wine-version"),
-
-                    adw::ComboRow {
-                        set_title: &tr!("selected-version"),
-
-                        #[watch]
-                        #[block_signal(wine_selected_notify)]
-                        set_model: Some(&gtk::StringList::new(&model.downloaded_wine_versions.iter().map(|(version, _)| version.title.as_str()).collect::<Vec<&str>>())),
-
-                        #[watch]
-                        #[block_signal(wine_selected_notify)]
-                        set_selected: model.selected_wine_version,
-
-                        #[watch]
-                        set_activatable: !model.selecting_wine_version,
-
-                        connect_selected_notify[sender] => move |row| {
-                            if is_ready() {
-                                sender.input(ComponentsPageMsg::SelectWine(row.selected() as usize));
-                            }
-                        } @wine_selected_notify,
-
-                        add_suffix = &gtk::Spinner {
-                            set_spinning: true,
-
-                            #[watch]
-                            set_visible: model.selecting_wine_version
-                        }
-                    },
-
-                    adw::ActionRow {
-                        set_title: &tr!("recommended-only"),
-                        set_subtitle: &tr!("wine-recommended-description"),
-
-                        add_suffix = &gtk::Switch {
-                            set_valign: gtk::Align::Center,
-
-                            #[block_signal(wine_recommended_notify)]
-                            set_state: true,
-
-                            connect_state_notify[sender] => move |switch| {
-                                if is_ready() {
-                                    sender.input(ComponentsPageMsg::WineRecommendedOnly(switch.state()));
-                                }
-                            } @wine_recommended_notify
-                        }
-                    }
-                },
-
-                add = &adw::PreferencesGroup {
-                    add = model.wine_components.widget(),
-                },
-
-                add = &adw::PreferencesGroup {
-                    set_title: &tr!("wine-options"),
-
-                    adw::ActionRow {
-                        set_title: &tr!("wine-use-shared-libraries"),
-                        set_subtitle: &tr!("wine-use-shared-libraries-description"),
-
-                        add_suffix = &gtk::Switch {
-                            set_valign: gtk::Align::Center,
-
-                            #[block_signal(wine_shared_libraries_notify)]
-                            set_state: CONFIG.game.wine.shared_libraries.wine,
-
-                            connect_state_notify => |switch| {
-                                if is_ready() {
-                                    if let Ok(mut config) = Config::get() {
-                                        config.game.wine.shared_libraries.wine = switch.state();
-
-                                        Config::update(config);
-                                    }
-                                }
-                            } @wine_shared_libraries_notify
-                        }
-                    },
-
-                    adw::ActionRow {
-                        set_title: &tr!("gstreamer-use-shared-libraries"),
-                        set_subtitle: &tr!("gstreamer-use-shared-libraries-description"),
-
-                        add_suffix = &gtk::Switch {
-                            set_valign: gtk::Align::Center,
-
-                            #[block_signal(gstreamer_shared_libraries_notify)]
-                            set_state: CONFIG.game.wine.shared_libraries.gstreamer,
-
-                            connect_state_notify => |switch| {
-                                if is_ready() {
-                                    if let Ok(mut config) = Config::get() {
-                                        config.game.wine.shared_libraries.gstreamer = switch.state();
-
-                                        Config::update(config);
-                                    }
-                                }
-                            } @gstreamer_shared_libraries_notify
-                        }
-                    }
-                },
-
-                add = &adw::PreferencesGroup {
-                    set_title: &tr!("dxvk-version"),
-
-                    #[watch]
-                    set_description: Some(&if !model.allow_dxvk_selection {
-                        tr!("dxvk-selection-disabled")
-                    } else {
-                        String::new()
-                    }),
-
-                    #[watch]
-                    set_sensitive: model.allow_dxvk_selection,
-
-                    adw::ComboRow {
-                        set_title: &tr!("selected-version"),
-    
-                        #[watch]
-                        #[block_signal(dxvk_selected_notify)]
-                        set_model: Some(&gtk::StringList::new(&model.downloaded_dxvk_versions.iter().map(|version| version.name.as_str()).collect::<Vec<&str>>())),
-
-                        #[watch]
-                        #[block_signal(dxvk_selected_notify)]
-                        set_selected: model.selected_dxvk_version,
-
-                        #[watch]
-                        set_activatable: !model.selecting_dxvk_version,
-
-                        connect_selected_notify[sender] => move |row| {
-                            if is_ready() {
-                                sender.input(ComponentsPageMsg::SelectDxvk(row.selected() as usize));
-                            }
-                        } @dxvk_selected_notify,
-
-                        add_suffix = &gtk::Spinner {
-                            set_spinning: true,
-
-                            #[watch]
-                            set_visible: model.selecting_dxvk_version
-                        }
-                    },
-
-                    adw::ActionRow {
-                        set_title: &tr!("recommended-only"),
-                        set_subtitle: &tr!("dxvk-recommended-description"),
-
-                        add_suffix = &gtk::Switch {
-                            set_valign: gtk::Align::Center,
-
-                            #[block_signal(dxvk_recommended_notify)]
-                            set_state: true,
-
-                            connect_state_notify[sender] => move |switch| {
-                                if is_ready() {
-                                    sender.input(ComponentsPageMsg::DxvkRecommendedOnly(switch.state()));
-                                }
-                            } @dxvk_recommended_notify
-                        }
-                    }
-                },
-
-                add = &adw::PreferencesGroup {
-                    #[watch]
-                    set_sensitive: model.allow_dxvk_selection,
-
-                    add = model.dxvk_components.widget(),
-                },
             }
         }
     }
