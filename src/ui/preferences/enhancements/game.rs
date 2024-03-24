@@ -74,11 +74,7 @@ impl AsyncFactoryComponent for GameSession {
         }
     }
 
-    async fn init_model(
-        init: Self::Init,
-        _index: &DynamicIndex,
-        _sender: AsyncFactorySender<Self>,
-    ) -> Self {
+    async fn init_model(init: Self::Init, _index: &DynamicIndex, _sender: AsyncFactorySender<Self>) -> Self {
         init
     }
 }
@@ -114,14 +110,6 @@ impl SimpleAsyncComponent for GamePage {
                     #[wrap(Some)]
                     set_title_widget = &adw::WindowTitle {
                         set_title: &tr!("game")
-                    },
-
-                    pack_start = &gtk::Button {
-                        set_icon_name: "go-previous-symbolic",
-
-                        connect_clicked[sender] => move |_| {
-                            sender.output(EnhancementsAppMsg::OpenMainPage).unwrap();
-                        }
                     }
                 },
 
@@ -154,11 +142,7 @@ impl SimpleAsyncComponent for GamePage {
         }
     }
 
-    async fn init(
-        _init: Self::Init,
-        root: Self::Root,
-        sender: AsyncComponentSender<Self>,
-    ) -> AsyncComponentParts<Self> {
+    async fn init(_init: Self::Init, root: Self::Root, sender: AsyncComponentSender<Self>) -> AsyncComponentParts<Self> {
         tracing::info!("Initializing game settings");
 
         let mut model = Self {

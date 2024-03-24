@@ -107,14 +107,6 @@ impl SimpleAsyncComponent for SandboxPage {
                     #[wrap(Some)]
                     set_title_widget = &adw::WindowTitle {
                         set_title: &tr!("sandbox")
-                    },
-
-                    pack_start = &gtk::Button {
-                        set_icon_name: "go-previous-symbolic",
-
-                        connect_clicked[sender] => move |_| {
-                            sender.output(EnhancementsAppMsg::OpenMainPage).unwrap();
-                        }
                     }
                 },
 
