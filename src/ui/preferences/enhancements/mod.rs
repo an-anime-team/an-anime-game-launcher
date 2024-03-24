@@ -232,12 +232,12 @@ impl SimpleAsyncComponent for EnhancementsApp {
                     add_suffix = &gtk::Switch {
                         set_valign: gtk::Align::Center,
 
-                        set_state: CONFIG.game.wine.borderless,
+                        set_active: CONFIG.game.wine.borderless,
 
                         connect_state_notify => |switch| {
                             if is_ready() {
                                 if let Ok(mut config) = Config::get() {
-                                    config.game.wine.borderless = switch.state();
+                                    config.game.wine.borderless = switch.is_active();
 
                                     Config::update(config);
                                 }
@@ -277,12 +277,12 @@ impl SimpleAsyncComponent for EnhancementsApp {
                     add_suffix = &gtk::Switch {
                         set_valign: gtk::Align::Center,
 
-                        set_state: CONFIG.game.wine.virtual_desktop.enabled,
+                        set_active: CONFIG.game.wine.virtual_desktop.enabled,
 
                         connect_state_notify => |switch| {
                             if is_ready() {
                                 if let Ok(mut config) = Config::get() {
-                                    config.game.wine.virtual_desktop.enabled = switch.state();
+                                    config.game.wine.virtual_desktop.enabled = switch.is_active();
 
                                     Config::update(config);
                                 }
@@ -298,12 +298,12 @@ impl SimpleAsyncComponent for EnhancementsApp {
                     add_suffix = &gtk::Switch {
                         set_valign: gtk::Align::Center,
 
-                        set_state: CONFIG.game.wine.drives.drive_c,
+                        set_active: CONFIG.game.wine.drives.drive_c,
 
                         connect_state_notify => |switch| {
                             if is_ready() {
                                 if let Ok(mut config) = Config::get() {
-                                    config.game.wine.drives.drive_c = switch.state();
+                                    config.game.wine.drives.drive_c = switch.is_active();
 
                                     Config::update(config);
                                 }
@@ -343,12 +343,12 @@ impl SimpleAsyncComponent for EnhancementsApp {
                     add_suffix = &gtk::Switch {
                         set_valign: gtk::Align::Center,
 
-                        set_state: CONFIG.game.wine.drives.game_folder.is_some(),
+                        set_active: CONFIG.game.wine.drives.game_folder.is_some(),
 
                         connect_state_notify[map_game_folder_row] => move |switch| {
                             if is_ready() {
                                 if let Ok(mut config) = Config::get() {
-                                    if switch.state() {
+                                    if switch.is_active() {
                                         config.game.wine.drives.game_folder = Some(AllowedDrives::list()[map_game_folder_row.selected() as usize]);
                                     } else {
                                         config.game.wine.drives.game_folder = None;
@@ -415,12 +415,12 @@ impl SimpleAsyncComponent for EnhancementsApp {
                     add_suffix = &gtk::Switch {
                         set_valign: gtk::Align::Center,
 
-                        set_state: CONFIG.game.enhancements.fsr.enabled,
+                        set_active: CONFIG.game.enhancements.fsr.enabled,
 
                         connect_state_notify => |switch| {
                             if is_ready() {
                                 if let Ok(mut config) = Config::get() {
-                                    config.game.enhancements.fsr.enabled = switch.state();
+                                    config.game.enhancements.fsr.enabled = switch.is_active();
 
                                     Config::update(config);
                                 }
@@ -438,12 +438,12 @@ impl SimpleAsyncComponent for EnhancementsApp {
                     add_suffix = &gtk::Switch {
                         set_valign: gtk::Align::Center,
 
-                        set_state: CONFIG.game.enhancements.gamemode,
+                        set_active: CONFIG.game.enhancements.gamemode,
 
                         connect_state_notify => |switch| {
                             if is_ready() {
                                 if let Ok(mut config) = Config::get() {
-                                    config.game.enhancements.gamemode = switch.state();
+                                    config.game.enhancements.gamemode = switch.is_active();
 
                                     Config::update(config);
                                 }
@@ -470,12 +470,12 @@ impl SimpleAsyncComponent for EnhancementsApp {
                     add_suffix = &gtk::Switch {
                         set_valign: gtk::Align::Center,
 
-                        set_state: CONFIG.game.enhancements.gamescope.enabled,
+                        set_active: CONFIG.game.enhancements.gamescope.enabled,
 
                         connect_state_notify => |switch| {
                             if is_ready() {
                                 if let Ok(mut config) = Config::get() {
-                                    config.game.enhancements.gamescope.enabled = switch.state();
+                                    config.game.enhancements.gamescope.enabled = switch.is_active();
 
                                     Config::update(config);
                                 }
@@ -494,12 +494,12 @@ impl SimpleAsyncComponent for EnhancementsApp {
 
                     add_suffix = &gtk::Switch {
                         set_valign: gtk::Align::Center,
-                        set_state: CONFIG.launcher.discord_rpc.enabled,
+                        set_active: CONFIG.launcher.discord_rpc.enabled,
 
                         connect_state_notify => |switch| {
                             if is_ready() {
                                 if let Ok(mut config) = Config::get() {
-                                    config.launcher.discord_rpc.enabled = switch.state();
+                                    config.launcher.discord_rpc.enabled = switch.is_active();
 
                                     Config::update(config);
                                 }
@@ -588,12 +588,12 @@ impl SimpleAsyncComponent for EnhancementsApp {
                     add_suffix = &gtk::Switch {
                         set_valign: gtk::Align::Center,
 
-                        set_state: CONFIG.game.enhancements.fps_unlocker.enabled,
+                        set_active: CONFIG.game.enhancements.fps_unlocker.enabled,
 
                         connect_state_notify => |switch| {
                             if is_ready() {
                                 if let Ok(mut config) = Config::get() {
-                                    config.game.enhancements.fps_unlocker.enabled = switch.state();
+                                    config.game.enhancements.fps_unlocker.enabled = switch.is_active();
 
                                     Config::update(config);
                                 }
