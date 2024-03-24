@@ -135,12 +135,12 @@ impl SimpleAsyncComponent for SandboxPage {
                             add_suffix = &gtk::Switch {
                                 set_valign: gtk::Align::Center,
 
-                                set_state: CONFIG.sandbox.enabled,
+                                set_active: CONFIG.sandbox.enabled,
 
                                 connect_state_notify => |switch| {
                                     if is_ready() {
                                         if let Ok(mut config) = Config::get() {
-                                            config.sandbox.enabled = switch.state();
+                                            config.sandbox.enabled = switch.is_active();
 
                                             Config::update(config);
                                         }
@@ -156,12 +156,12 @@ impl SimpleAsyncComponent for SandboxPage {
                             add_suffix = &gtk::Switch {
                                 set_valign: gtk::Align::Center,
 
-                                set_state: CONFIG.sandbox.isolate_home,
+                                set_active: CONFIG.sandbox.isolate_home,
 
                                 connect_state_notify => |switch| {
                                     if is_ready() {
                                         if let Ok(mut config) = Config::get() {
-                                            config.sandbox.isolate_home = switch.state();
+                                            config.sandbox.isolate_home = switch.is_active();
 
                                             Config::update(config);
                                         }

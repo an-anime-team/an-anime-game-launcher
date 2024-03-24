@@ -109,11 +109,11 @@ impl SimpleAsyncComponent for ComponentsPage {
                                 set_valign: gtk::Align::Center,
 
                                 #[block_signal(wine_recommended_notify)]
-                                set_state: true,
+                                set_active: true,
 
                                 connect_state_notify[sender] => move |switch| {
                                     if is_ready() {
-                                        sender.input(ComponentsPageMsg::WineRecommendedOnly(switch.state()));
+                                        sender.input(ComponentsPageMsg::WineRecommendedOnly(switch.is_active()));
                                     }
                                 } @wine_recommended_notify
                             }
@@ -135,12 +135,12 @@ impl SimpleAsyncComponent for ComponentsPage {
                                 set_valign: gtk::Align::Center,
 
                                 #[block_signal(wine_shared_libraries_notify)]
-                                set_state: CONFIG.game.wine.shared_libraries.wine,
+                                set_active: CONFIG.game.wine.shared_libraries.wine,
 
                                 connect_state_notify => |switch| {
                                     if is_ready() {
                                         if let Ok(mut config) = Config::get() {
-                                            config.game.wine.shared_libraries.wine = switch.state();
+                                            config.game.wine.shared_libraries.wine = switch.is_active();
 
                                             Config::update(config);
                                         }
@@ -157,12 +157,12 @@ impl SimpleAsyncComponent for ComponentsPage {
                                 set_valign: gtk::Align::Center,
 
                                 #[block_signal(gstreamer_shared_libraries_notify)]
-                                set_state: CONFIG.game.wine.shared_libraries.gstreamer,
+                                set_active: CONFIG.game.wine.shared_libraries.gstreamer,
 
                                 connect_state_notify => |switch| {
                                     if is_ready() {
                                         if let Ok(mut config) = Config::get() {
-                                            config.game.wine.shared_libraries.gstreamer = switch.state();
+                                            config.game.wine.shared_libraries.gstreamer = switch.is_active();
 
                                             Config::update(config);
                                         }
@@ -221,11 +221,11 @@ impl SimpleAsyncComponent for ComponentsPage {
                                 set_valign: gtk::Align::Center,
 
                                 #[block_signal(dxvk_recommended_notify)]
-                                set_state: true,
+                                set_active: true,
 
                                 connect_state_notify[sender] => move |switch| {
                                     if is_ready() {
-                                        sender.input(ComponentsPageMsg::DxvkRecommendedOnly(switch.state()));
+                                        sender.input(ComponentsPageMsg::DxvkRecommendedOnly(switch.is_active()));
                                     }
                                 } @dxvk_recommended_notify
                             }

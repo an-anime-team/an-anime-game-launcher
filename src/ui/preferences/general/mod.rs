@@ -232,7 +232,7 @@ impl SimpleAsyncComponent for GeneralApp {
 
                         connect_state_notify => |switch| {
                             #[allow(unused_must_use)]
-                            if switch.state() {
+                            if switch.is_active() {
                                 std::fs::remove_file(KEEP_BACKGROUND_FILE.as_path());
                             } else {
                                 std::fs::write(KEEP_BACKGROUND_FILE.as_path(), "");

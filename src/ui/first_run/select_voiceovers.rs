@@ -51,7 +51,7 @@ impl SimpleAsyncComponent for SelectVoiceoversApp {
                     #[local_ref]
                     add_suffix = english -> gtk::Switch {
                         set_valign: gtk::Align::Center,
-                        set_state: true
+                        set_active: true
                     }
                 },
 
