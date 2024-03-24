@@ -11,3 +11,6 @@ nis-description = Uma técnica de upscaling de código aberto desenvolvida pela 
 other-settings = Outras configuraões
 framerate-limit = Limite de taxa de quadros
 unfocused-framerate-limit = Limite de taxa de quadros desfocado
+
+force-grab-cursor = Force grab cursor
+force-grab-cursor-description = Always use relative mouse mode instead of flipping dependent on cursor visibility. The mouse cursor will correctly be centered in the game

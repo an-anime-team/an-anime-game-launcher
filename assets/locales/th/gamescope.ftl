@@ -11,3 +11,6 @@ nis-description = เทคนิคการขยายขนาดโอเ�
 other-settings = การตั้งค่าอื่นๆ
 framerate-limit = ขีดจำกัดเฟรมเรต
 unfocused-framerate-limit = เฟรมเรทจำกัดขณะไม่ได้โฟกัส
+
+force-grab-cursor = Force grab cursor
+force-grab-cursor-description = Always use relative mouse mode instead of flipping dependent on cursor visibility. The mouse cursor will correctly be centered in the game
