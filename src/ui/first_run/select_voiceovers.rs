@@ -110,11 +110,7 @@ impl SimpleAsyncComponent for SelectVoiceoversApp {
         }
     }
 
-    async fn init(
-        _init: Self::Init,
-        root: Self::Root,
-        _sender: AsyncComponentSender<Self>,
-    ) -> AsyncComponentParts<Self> {
+    async fn init(_init: Self::Init, root: Self::Root, _sender: AsyncComponentSender<Self>) -> AsyncComponentParts<Self> {
         let model = Self {
             english: gtk::Switch::new(),
             japanese: gtk::Switch::new(),

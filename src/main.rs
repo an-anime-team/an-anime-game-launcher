@@ -70,6 +70,36 @@ lazy_static::lazy_static! {
     /// 
     /// Standard is `$HOME/.local/share/anime-game-launcher/.first-run`
     pub static ref FIRST_RUN_FILE: PathBuf = LAUNCHER_FOLDER.join(".first-run");
+
+    /// Global app's css
+    static ref GLOBAL_CSS: String = format!("
+        progressbar > text {{
+            margin-bottom: 4px;
+        }}
+
+        window.classic-style {{
+            background: url(\"file://{}\");
+            background-repeat: no-repeat;
+            background-size: cover;
+        }}
+
+        window.classic-style progressbar {{
+            background-color: #00000020;
+            border-radius: 16px;
+            padding: 8px 16px;
+        }}
+
+        window.classic-style progressbar:hover {{
+            background-color: #00000060;
+            color: #ffffff;
+            transition-duration: 0.5s;
+            transition-timing-function: linear;
+        }}
+
+        .round-bin {{
+            border-radius: 24px;
+        }}
+    ", BACKGROUND_FILE.to_string_lossy());
 }
 
 fn main() -> anyhow::Result<()> {
@@ -170,36 +200,6 @@ fn main() -> anyhow::Result<()> {
     gtk::glib::set_application_name("An Anime Game Launcher");
     gtk::glib::set_program_name(Some("An Anime Game Launcher"));
 
-    // Set global css
-    relm4::set_global_css(&format!("
-        progressbar > text {{
-            margin-bottom: 4px;
-        }}
-
-        window.classic-style {{
-            background: url(\"file://{}\");
-            background-repeat: no-repeat;
-            background-size: cover;
-        }}
-
-        window.classic-style progressbar {{
-            background-color: #00000020;
-            border-radius: 16px;
-            padding: 8px 16px;
-        }}
-
-        window.classic-style progressbar:hover {{
-            background-color: #00000060;
-            color: #ffffff;
-            transition-duration: 0.5s;
-            transition-timing-function: linear;
-        }}
-
-        .round-bin {{
-            border-radius: 24px;
-        }}
-    ", BACKGROUND_FILE.to_string_lossy()));
-
     // Set UI language
     let lang = CONFIG.launcher.language.parse().expect("Wrong language format used in config");
 
@@ -211,6 +211,9 @@ fn main() -> anyhow::Result<()> {
     if FIRST_RUN_FILE.exists() {
         // Create the app
         let app = RelmApp::new(APP_ID);
+
+        // Set global css
+        app.set_global_css(&GLOBAL_CSS);
 
         // Show first run window
         app.run::<FirstRunApp>(());
@@ -241,6 +244,9 @@ fn main() -> anyhow::Result<()> {
 
         // Create the app
         let app = RelmApp::new(APP_ID);
+
+        // Set global css
+        app.set_global_css(&GLOBAL_CSS);
 
         // Show main window
         app.run::<App>(());

@@ -36,11 +36,7 @@ impl SimpleComponent for MigrateInstallationApp {
         }
     }
 
-    fn init(
-        _init: Self::Init,
-        root: &Self::Root,
-        _sender: ComponentSender<Self>,
-    ) -> ComponentParts<Self> {
+    fn init(_init: Self::Init, root: Self::Root, _sender: ComponentSender<Self>) -> ComponentParts<Self> {
         tracing::info!("Initializing migration window");
 
         let model = Self {

@@ -322,11 +322,7 @@ impl SimpleAsyncComponent for SandboxPage {
         }
     }
 
-    async fn init(
-        _init: Self::Init,
-        root: Self::Root,
-        sender: AsyncComponentSender<Self>,
-    ) -> AsyncComponentParts<Self> {
+    async fn init(_init: Self::Init, root: Self::Root, sender: AsyncComponentSender<Self>) -> AsyncComponentParts<Self> {
         tracing::info!("Initializing sandbox settings");
 
         let mut model = Self {

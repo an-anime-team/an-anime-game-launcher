@@ -78,6 +78,7 @@ impl SimpleComponent for AboutDialog {
                 "한국어 — @project-dy https://github.com/project-dy",
                 "Indonesia — @yumekarisu https://github.com/yumekarisu",
                 "Tiếng Việt — Nguyễn Hữu Chánh https://github.com/Chanhnh",
+                "Українська — Іван Потієнко https://github.com/xxanqw",
                 "ไทย — @thegooglerider https://github.com/TheGoogleRider2"
             ].join("\n"),
 
@@ -114,11 +115,7 @@ impl SimpleComponent for AboutDialog {
         }
     }
 
-    fn init(
-        _init: Self::Init,
-        root: &Self::Root,
-        sender: ComponentSender<Self>,
-    ) -> ComponentParts<Self> {
+    fn init(_init: Self::Init, root: Self::Root, sender: ComponentSender<Self>) -> ComponentParts<Self> {
         tracing::info!("Initializing about dialog");
 
         let model = Self {

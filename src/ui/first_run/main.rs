@@ -115,11 +115,7 @@ impl SimpleComponent for FirstRunApp {
         }
     }
 
-    fn init(
-        _parent: Self::Init,
-        root: &Self::Root,
-        sender: ComponentSender<Self>,
-    ) -> ComponentParts<Self> {
+    fn init(_parent: Self::Init, root: Self::Root, sender: ComponentSender<Self>) -> ComponentParts<Self> {
         tracing::info!("Initializing first run window");
 
         let toast_overlay = adw::ToastOverlay::new();
