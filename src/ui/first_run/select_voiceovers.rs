@@ -51,7 +51,7 @@ impl SimpleAsyncComponent for SelectVoiceoversApp {
                     #[local_ref]
                     add_suffix = english -> gtk::Switch {
                         set_valign: gtk::Align::Center,
-                        set_state: true
+                        set_active: true
                     }
                 },
 
@@ -110,11 +110,7 @@ impl SimpleAsyncComponent for SelectVoiceoversApp {
         }
     }
 
-    async fn init(
-        _init: Self::Init,
-        root: Self::Root,
-        _sender: AsyncComponentSender<Self>,
-    ) -> AsyncComponentParts<Self> {
+    async fn init(_init: Self::Init, root: Self::Root, _sender: AsyncComponentSender<Self>) -> AsyncComponentParts<Self> {
         let model = Self {
             english: gtk::Switch::new(),
             japanese: gtk::Switch::new(),

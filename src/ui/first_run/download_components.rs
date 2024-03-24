@@ -264,11 +264,7 @@ impl SimpleAsyncComponent for DownloadComponentsApp {
         }
     }
 
-    async fn init(
-        _init: Self::Init,
-        root: Self::Root,
-        sender: AsyncComponentSender<Self>,
-    ) -> AsyncComponentParts<Self> {
+    async fn init(_init: Self::Init, root: Self::Root, sender: AsyncComponentSender<Self>) -> AsyncComponentParts<Self> {
         let model = Self {
             progress_bar: ProgressBar::builder()
                 .launch(ProgressBarInit {

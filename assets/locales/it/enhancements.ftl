@@ -48,8 +48,8 @@ fps-unlocker-description = Rimuovi la limitazione del rendering dei frame modifi
 
 enabled = Abilitato
 
-fps-unlocker-interval = Overwrite interval
-fps-unlocker-interval-description = Delay in milliseconds between overwriting the FPS limit value. Periodic overwrites are necessary to prevent it from resetting
+fps-unlocker-interval = Intervallo di sovrascrittura
+fps-unlocker-interval-description = Ritardo in millisecondi tra le sovrascritture del valore limite FPS. Sovrascritture periodiche sono necessarie per impedire che si reimposti al valore predefinito
 
 window-mode = Modalità della finestra
 borderless = Senza bordi

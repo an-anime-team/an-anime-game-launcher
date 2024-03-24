@@ -11,3 +11,6 @@ nis-description = Una técnica de escalado de código abierto desarrollada por N
 other-settings = Otras opciones
 framerate-limit = Límite de framerate
 unfocused-framerate-limit = Límite de framerate en segundo plano
+
+force-grab-cursor = Force grab cursor
+force-grab-cursor-description = Always use relative mouse mode instead of flipping dependent on cursor visibility. The mouse cursor will correctly be centered in the game

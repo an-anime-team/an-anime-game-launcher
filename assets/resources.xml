@@ -26,6 +26,7 @@
     <file preprocess="xml-stripblanks" alias="list-add-symbolic.svg">images/icons/list-add-symbolic.svg</file>
     <file preprocess="xml-stripblanks" alias="view-refresh-symbolic.svg">images/icons/view-refresh-symbolic.svg</file>
     <file preprocess="xml-stripblanks" alias="applications-games-symbolic.svg">images/icons/applications-games-symbolic.svg</file>
+    <file preprocess="xml-stripblanks" alias="applications-system-symbolic.svg">images/icons/applications-system-symbolic.svg</file>
     <file preprocess="xml-stripblanks" alias="applications-graphics-symbolic.svg">images/icons/applications-graphics-symbolic.svg</file>
     <file preprocess="xml-stripblanks" alias="go-next-symbolic.svg">images/icons/go-next-symbolic.svg</file>
     <file preprocess="xml-stripblanks" alias="dialog-information-symbolic.svg">images/icons/dialog-information-symbolic.svg</file>

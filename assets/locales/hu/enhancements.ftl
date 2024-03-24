@@ -48,8 +48,8 @@ fps-unlocker-description = Eltávolítja az fps limitet. Az anti-cheat észreveh
 
 enabled = Bekapcsolva
 
-fps-unlocker-interval = Overwrite interval
-fps-unlocker-interval-description = Delay in milliseconds between overwriting the FPS limit value. Periodic overwrites are necessary to prevent it from resetting
+fps-unlocker-interval = Felülírási időköz
+fps-unlocker-interval-description =  Milliszekundumban (ms) hogy mekkora időközönként van felülírva az fps limit értéke. Erre szükség van hogy ne állítsa vissza magát az fps limit
 
 window-mode = Ablak mód
 borderless = Keretmentes

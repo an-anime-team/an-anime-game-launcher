@@ -11,3 +11,6 @@ nis-description = DLSS teknolojisine düşük maliyetli bir alternatif olarak Nv
 other-settings = Diğer ayarlar
 framerate-limit = Kare hızı limiti
 unfocused-framerate-limit = Odakta değilken kare hızı limiti
+
+force-grab-cursor = Force grab cursor
+force-grab-cursor-description = Always use relative mouse mode instead of flipping dependent on cursor visibility. The mouse cursor will correctly be centered in the game

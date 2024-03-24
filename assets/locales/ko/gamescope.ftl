@@ -11,3 +11,6 @@ nis-description = Nvidia가 독점 DLSS 솔루션에 대한 낮은 오버헤드 
 other-settings = 기타 설정
 framerate-limit = 프레임 속도 제한
 unfocused-framerate-limit = 초점이 맞지 않는 프레임 속도 제한
+
+force-grab-cursor = Force grab cursor
+force-grab-cursor-description = Always use relative mouse mode instead of flipping dependent on cursor visibility. The mouse cursor will correctly be centered in the game

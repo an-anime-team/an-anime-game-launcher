@@ -11,3 +11,6 @@ nis-description = Teknik peningkatan skala yang dikembangkan oleh Nvidia sebagai
 other-settings = Pengaturan lainnya
 framerate-limit = Batas framerate
 unfocused-framerate-limit = Batas framerate saat tidak fokus
+
+force-grab-cursor = Force grab cursor
+force-grab-cursor-description = Always use relative mouse mode instead of flipping dependent on cursor visibility. The mouse cursor will correctly be centered in the game

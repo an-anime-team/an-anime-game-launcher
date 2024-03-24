@@ -27,7 +27,8 @@ pub const SUPPORTED_LANGUAGES: &[LanguageIdentifier] = &[
     langid!("pl-pl"),
     langid!("vi-vn"),
     langid!("nl-nl"),
-    langid!("uk-ua")
+    langid!("uk-ua"),
+    langid!("th-th")
 ];
 
 pub static mut LANG: LanguageIdentifier = langid!("en-us");
@@ -105,9 +106,7 @@ macro_rules! tr {
             use fluent_templates::Loader;
 
             #[allow(unused_unsafe)]
-            $crate::i18n::LOCALES
-                .lookup(unsafe { &$crate::i18n::LANG }, $id)
-                .expect(&format!("Failed to find a message with given id: {}", stringify!($id)))
+            $crate::i18n::LOCALES.lookup(unsafe { &$crate::i18n::LANG }, $id)
         }
     };
 
@@ -125,9 +124,7 @@ macro_rules! tr {
             )*
 
             #[allow(unused_unsafe)]
-            $crate::i18n::LOCALES
-                .lookup_complete(unsafe { &$crate::i18n::LANG }, $id, Some(&args))
-                .expect(&format!("Failed to find a message with given id: {}", stringify!($id)))
+            $crate::i18n::LOCALES.lookup_complete(unsafe { &$crate::i18n::LANG }, $id, Some(&args))
         }
     };
 }

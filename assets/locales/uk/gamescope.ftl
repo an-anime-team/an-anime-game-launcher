@@ -11,3 +11,6 @@ nis-description = Відкрита техніка масштабування з�
 other-settings = Інші налаштування
 framerate-limit = Обмеження кількості кадрів
 unfocused-framerate-limit = Обмеження кількості кадрів поза фокусом
+
+force-grab-cursor = Force grab cursor
+force-grab-cursor-description = Always use relative mouse mode instead of flipping dependent on cursor visibility. The mouse cursor will correctly be centered in the game

@@ -6,6 +6,8 @@ use anime_launcher_sdk::genshin::config::Config;
 
 use anime_launcher_sdk::config::schema_blanks::prelude::*;
 
+use enum_ordinalize::Ordinalize;
+
 use crate::*;
 
 pub struct GamescopeApp;
@@ -128,13 +130,13 @@ impl SimpleAsyncComponent for GamescopeApp {
 
                         add_suffix = &gtk::Switch {
                             set_valign: gtk::Align::Center,
-                            set_state: CONFIG.game.enhancements.gamescope.integer_scaling,
+                            set_active: CONFIG.game.enhancements.gamescope.integer_scaling,
 
                             connect_state_notify => |switch| {
                                 if is_ready() {
                                     if let Ok(mut config) = Config::get() {
-                                        config.game.enhancements.gamescope.integer_scaling = switch.state();
-        
+                                        config.game.enhancements.gamescope.integer_scaling = switch.is_active();
+
                                         Config::update(config);
                                     }
                                 }
@@ -148,13 +150,13 @@ impl SimpleAsyncComponent for GamescopeApp {
 
                         add_suffix = &gtk::Switch {
                             set_valign: gtk::Align::Center,
-                            set_state: CONFIG.game.enhancements.gamescope.fsr,
+                            set_active: CONFIG.game.enhancements.gamescope.fsr,
 
                             connect_state_notify => |switch| {
                                 if is_ready() {
                                     if let Ok(mut config) = Config::get() {
-                                        config.game.enhancements.gamescope.fsr = switch.state();
-        
+                                        config.game.enhancements.gamescope.fsr = switch.is_active();
+
                                         Config::update(config);
                                     }
                                 }
@@ -168,13 +170,13 @@ impl SimpleAsyncComponent for GamescopeApp {
 
                         add_suffix = &gtk::Switch {
                             set_valign: gtk::Align::Center,
-                            set_state: CONFIG.game.enhancements.gamescope.nis,
+                            set_active: CONFIG.game.enhancements.gamescope.nis,
 
                             connect_state_notify => |switch| {
                                 if is_ready() {
                                     if let Ok(mut config) = Config::get() {
-                                        config.game.enhancements.gamescope.nis = switch.state();
-        
+                                        config.game.enhancements.gamescope.nis = switch.is_active();
+
                                         Config::update(config);
                                     }
                                 }
@@ -250,17 +252,33 @@ impl SimpleAsyncComponent for GamescopeApp {
                                 }
                             }
                         }
+                    },
+
+                    adw::ActionRow {
+                        set_title: &tr!("force-grab-cursor"),
+                        set_subtitle: &tr!("force-grab-cursor-description"),
+
+                        add_suffix = &gtk::Switch {
+                            set_valign: gtk::Align::Center,
+                            set_active: CONFIG.game.enhancements.gamescope.force_grab_cursor,
+
+                            connect_state_notify => |switch| {
+                                if is_ready() {
+                                    if let Ok(mut config) = Config::get() {
+                                        config.game.enhancements.gamescope.force_grab_cursor = switch.is_active();
+
+                                        Config::update(config);
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
         }
     }
 
-    async fn init(
-        _init: Self::Init,
-        root: Self::Root,
-        _sender: AsyncComponentSender<Self>,
-    ) -> AsyncComponentParts<Self> {
+    async fn init(_init: Self::Init, root: Self::Root, _sender: AsyncComponentSender<Self>) -> AsyncComponentParts<Self> {
         tracing::info!("Initializing gamescope settings");
 
         let model = Self;

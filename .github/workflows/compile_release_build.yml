@@ -26,7 +26,7 @@ jobs:
       - name: Install dependencies
         run: |
           apt update
-          apt install -y libgtk-4-dev libadwaita-1-dev git curl
+          apt install -y build-essential libgtk-4-dev libadwaita-1-dev git curl
 
       - uses: dtolnay/rust-toolchain@stable
         with:

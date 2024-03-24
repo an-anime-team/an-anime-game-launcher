@@ -68,11 +68,7 @@ impl SimpleAsyncComponent for WelcomeApp {
         }
     }
 
-    async fn init(
-        _init: Self::Init,
-        root: Self::Root,
-        _sender: AsyncComponentSender<Self>,
-    ) -> AsyncComponentParts<Self> {
+    async fn init(_init: Self::Init, root: Self::Root, _sender: AsyncComponentSender<Self>) -> AsyncComponentParts<Self> {
         let model = Self;
         let widgets = view_output!();
 

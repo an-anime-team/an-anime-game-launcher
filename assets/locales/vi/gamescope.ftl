@@ -11,3 +11,6 @@ nis-description = Một kỹ thuật nâng cấp mã nguồn mở do Nvidia phá
 other-settings = Cài đặt khác
 framerate-limit = Giới hạn tốc độ khung hình
 unfocused-framerate-limit = Giới hạn tốc độ khung hình khi không tập trung
+
+force-grab-cursor = Force grab cursor
+force-grab-cursor-description = Always use relative mouse mode instead of flipping dependent on cursor visibility. The mouse cursor will correctly be centered in the game

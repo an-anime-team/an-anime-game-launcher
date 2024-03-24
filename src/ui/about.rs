@@ -77,7 +77,9 @@ impl SimpleComponent for AboutDialog {
                 "日本語 — @zozonteq https://github.com/zozonteq",
                 "한국어 — @project-dy https://github.com/project-dy",
                 "Indonesia — @yumekarisu https://github.com/yumekarisu",
-                "Tiếng Việt — Nguyễn Hữu Chánh https://github.com/Chanhnh"
+                "Tiếng Việt — Nguyễn Hữu Chánh https://github.com/Chanhnh",
+                "Українська — Іван Потієнко https://github.com/xxanqw",
+                "ไทย — @thegooglerider https://github.com/TheGoogleRider2"
             ].join("\n"),
 
             set_debug_info: &[
@@ -92,10 +94,28 @@ impl SimpleComponent for AboutDialog {
 
             set_release_notes_version: &APP_VERSION,
             set_release_notes: &[
+                "<p>Added</p>",
+
+                "<ul>",
+                    "<li>Bundle applications-system-symbolic icon to the app</li>",
+                    "<li>Added force grab cursor option to the gamescope settings</li>",
+                    "<li>Added Thai</li>",
+                    "<li>Added Ukrainian</li>",
+                "</ul>",
+
                 "<p>Changed</p>",
 
                 "<ul>",
-                    "<li>Replaced FPS unlocker by a custom one</li>",
+                    "<li>Update wish url</li>",
+                    "<li>Updated dependencies</li>",
+                    "<li>Improved app args parsing</li>",
+                    "<li>Updated locales</li>",
+                "</ul>",
+
+                "<p>Fixed</p>",
+
+                "<ul>",
+                    "<li>Fixed GtkSwitch UI state representation</li>",
                 "</ul>"
             ].join("\n"),
 
@@ -113,11 +133,7 @@ impl SimpleComponent for AboutDialog {
         }
     }
 
-    fn init(
-        _init: Self::Init,
-        root: &Self::Root,
-        sender: ComponentSender<Self>,
-    ) -> ComponentParts<Self> {
+    fn init(_init: Self::Init, root: Self::Root, sender: ComponentSender<Self>) -> ComponentParts<Self> {
         tracing::info!("Initializing about dialog");
 
         let model = Self {

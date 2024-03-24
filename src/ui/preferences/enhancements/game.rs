@@ -74,11 +74,7 @@ impl AsyncFactoryComponent for GameSession {
         }
     }
 
-    async fn init_model(
-        init: Self::Init,
-        _index: &DynamicIndex,
-        _sender: AsyncFactorySender<Self>,
-    ) -> Self {
+    async fn init_model(init: Self::Init, _index: &DynamicIndex, _sender: AsyncFactorySender<Self>) -> Self {
         init
     }
 }
@@ -105,57 +101,48 @@ impl SimpleAsyncComponent for GamePage {
     type Output = EnhancementsAppMsg;
 
     view! {
-        gtk::Box {
-            set_orientation: gtk::Orientation::Vertical,
+        adw::NavigationPage {
+            #[wrap(Some)]
+            set_child = &gtk::Box {
+                set_orientation: gtk::Orientation::Vertical,
 
-            adw::HeaderBar {
-                #[wrap(Some)]
-                set_title_widget = &adw::WindowTitle {
-                    set_title: &tr!("game")
+                adw::HeaderBar {
+                    #[wrap(Some)]
+                    set_title_widget = &adw::WindowTitle {
+                        set_title: &tr!("game")
+                    }
                 },
 
-                pack_start = &gtk::Button {
-                    set_icon_name: "go-previous-symbolic",
+                adw::PreferencesPage {
+                    set_title: &tr!("game"),
+                    set_icon_name: Some("applications-games-symbolic"),
 
-                    connect_clicked[sender] => move |_| {
-                        sender.output(EnhancementsAppMsg::OpenMainPage).unwrap();
-                    }
-                }
-            },
+                    add = &adw::PreferencesGroup {
+                        set_title: &tr!("game-sessions"),
 
-            adw::PreferencesPage {
-                set_title: &tr!("game"),
-                set_icon_name: Some("applications-games-symbolic"),
+                        #[local_ref]
+                        session_name_entry -> adw::EntryRow {
+                            set_title: &tr!("name"),
 
-                add = &adw::PreferencesGroup {
-                    set_title: &tr!("game-sessions"),
+                            add_suffix = &gtk::Button {
+                                set_icon_name: "list-add-symbolic",
+                                add_css_class: "flat",
+
+                                set_valign: gtk::Align::Center,
+
+                                connect_clicked => GamePageMsg::AddSession
+                            }
+                        }
+                    },
 
                     #[local_ref]
-                    session_name_entry -> adw::EntryRow {
-                        set_title: &tr!("name"),
-
-                        add_suffix = &gtk::Button {
-                            set_icon_name: "list-add-symbolic",
-                            add_css_class: "flat",
-
-                            set_valign: gtk::Align::Center,
-
-                            connect_clicked => GamePageMsg::AddSession
-                        }
-                    }
-                },
-
-                #[local_ref]
-                add = sessions -> adw::PreferencesGroup {},
+                    add = sessions -> adw::PreferencesGroup {},
+                }
             }
         }
     }
 
-    async fn init(
-        _init: Self::Init,
-        root: Self::Root,
-        sender: AsyncComponentSender<Self>,
-    ) -> AsyncComponentParts<Self> {
+    async fn init(_init: Self::Init, root: Self::Root, sender: AsyncComponentSender<Self>) -> AsyncComponentParts<Self> {
         tracing::info!("Initializing game settings");
 
         let mut model = Self {

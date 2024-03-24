@@ -11,3 +11,6 @@ nis-description = Technika skalowania otwartego źródła opracowana przez Nvidi
 other-settings = Inne ustawienia
 framerate-limit = Limit klatek na sekundę
 unfocused-framerate-limit = Limit klatek na sekundę po utraceniu skupienia
+
+force-grab-cursor = Force grab cursor
+force-grab-cursor-description = Always use relative mouse mode instead of flipping dependent on cursor visibility. The mouse cursor will correctly be centered in the game

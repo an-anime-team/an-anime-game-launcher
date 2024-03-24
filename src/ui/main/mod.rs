@@ -625,11 +625,7 @@ impl SimpleComponent for App {
         }
     }
 
-    fn init(
-        _init: Self::Init,
-        root: &Self::Root,
-        sender: ComponentSender<Self>,
-    ) -> ComponentParts<Self> {
+    fn init(_init: Self::Init, root: Self::Root, sender: ComponentSender<Self>) -> ComponentParts<Self> {
         tracing::info!("Initializing main window");
 
         let model = App {
@@ -763,7 +759,7 @@ impl SimpleComponent for App {
                             let web_cache = String::from_utf8_lossy(&web_cache);
 
                             // https://webstatic-sea.[ho-yo-ver-se].com/[ge-nsh-in]/event/e20190909gacha-v2/index.html?......
-                            if let Some(url) = web_cache.lines().rev().find(|line| line.contains("gacha-v2/index.html")) {
+                            if let Some(url) = web_cache.lines().rev().find(|line| line.contains("gacha-v3/index.html")) {
                                 let url_begin_pos = url.find("https://").unwrap();
                                 let url_end_pos = url_begin_pos + url[url_begin_pos..].find("\0\0\0\0").unwrap();
 

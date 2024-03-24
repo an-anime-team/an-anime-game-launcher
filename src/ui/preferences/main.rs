@@ -68,11 +68,7 @@ impl SimpleAsyncComponent for PreferencesApp {
         }
     }
 
-    async fn init(
-        parent: Self::Init,
-        root: Self::Root,
-        sender: AsyncComponentSender<Self>,
-    ) -> AsyncComponentParts<Self> {
+    async fn init(parent: Self::Init, root: Self::Root, sender: AsyncComponentSender<Self>) -> AsyncComponentParts<Self> {
         tracing::info!("Initializing preferences window");
 
         let model = Self {
