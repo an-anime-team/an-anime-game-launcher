@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.9.5] - 24.03.2023
+
 ### Added
 
 - Bundle `applications-system-symbolic` icon to the app
@@ -465,7 +467,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <br>
 
-[unreleased]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.9.4...next
+[unreleased]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.9.5...next
+[3.9.5]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.9.4...3.9.5
 [3.9.4]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.9.3...3.9.4
 [3.9.3]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.9.2...3.9.3
 [3.9.2]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.9.1...3.9.2
