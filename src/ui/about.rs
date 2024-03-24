@@ -94,10 +94,28 @@ impl SimpleComponent for AboutDialog {
 
             set_release_notes_version: &APP_VERSION,
             set_release_notes: &[
+                "<p>Added</p>",
+
+                "<ul>",
+                    "<li>Bundle applications-system-symbolic icon to the app</li>",
+                    "<li>Added force grab cursor option to the gamescope settings</li>",
+                    "<li>Added Thai</li>",
+                    "<li>Added Ukrainian</li>",
+                "</ul>",
+
                 "<p>Changed</p>",
 
                 "<ul>",
-                    "<li>Replaced FPS unlocker by a custom one</li>",
+                    "<li>Update wish url</li>",
+                    "<li>Updated dependencies</li>",
+                    "<li>Improved app args parsing</li>",
+                    "<li>Updated locales</li>",
+                "</ul>",
+
+                "<p>Fixed</p>",
+
+                "<ul>",
+                    "<li>Fixed GtkSwitch UI state representation</li>",
                 "</ul>"
             ].join("\n"),
 

@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Bundle `applications-system-symbolic` icon to the app
+- Added "force grab cursor" option to the gamescope settings
+- Added Thai
+- Added Ukrainian
+
+### Changed
+
+- Update wish url
+- Updated dependencies
+- Improved app args parsing
+- Updated locales
+
+### Fixed
+
+- Fixed GtkSwitch UI state representation
+
 ## [3.9.4] - 29.12.2023
 
 ### Changed
