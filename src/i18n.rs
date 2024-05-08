@@ -106,7 +106,7 @@ macro_rules! tr {
             use fluent_templates::Loader;
 
             #[allow(unused_unsafe)]
-            $crate::i18n::LOCALES.lookup(unsafe { &$crate::i18n::LANG }, $id)
+            $crate::i18n::LOCALES.lookup(unsafe { $crate::i18n::LANG.as_ref() }, $id)
         }
     };
 
@@ -124,7 +124,7 @@ macro_rules! tr {
             )*
 
             #[allow(unused_unsafe)]
-            $crate::i18n::LOCALES.lookup_complete(unsafe { &$crate::i18n::LANG }, $id, Some(&args))
+            $crate::i18n::LOCALES.lookup_complete(unsafe { $crate::i18n::LANG.as_ref() }, $id, Some(&args))
         }
     };
 }

@@ -754,7 +754,7 @@ impl SimpleAsyncComponent for EnhancementsApp {
             EnhancementsAppMsg::SetDiscordRpcIcon(index) => {
                 if let Some(icon) = self.discord_rpc_icons.guard().get(index.current_index()) {
                     if let Ok(mut config) = Config::get() {
-                        config.launcher.discord_rpc.icon = icon.name.clone();
+                        config.launcher.discord_rpc.icon.clone_from(&icon.name);
 
                         Config::update(config);
 

@@ -344,7 +344,8 @@ impl SimpleAsyncComponent for DefaultPathsApp {
                             self.game_china   = result.join(concat!("Yu", "anS", "hen"));
                             self.fps_unlocker = result.join("fps-unlocker");
                             self.components   = result.join("components");
-                            self.temp         = result.clone();
+
+                            self.temp.clone_from(&result);
 
                             self.launcher = result;
                         }
@@ -435,15 +436,15 @@ impl DefaultPathsApp {
     pub fn update_config(&self) -> anyhow::Result<()> {
         let mut config = Config::get()?;
 
-        config.game.wine.builds = self.runners.clone();
-        config.game.dxvk.builds = self.dxvks.clone();
-        config.game.wine.prefix = self.prefix.clone();
-        config.game.path.global = self.game_global.clone();
-        config.game.path.china  = self.game_china.clone();
-        config.components.path  = self.components.clone();
-        config.launcher.temp    = Some(self.temp.clone());
+        config.game.wine.builds.clone_from(&self.runners);
+        config.game.dxvk.builds.clone_from(&self.dxvks);
+        config.game.wine.prefix.clone_from(&self.prefix);
+        config.game.path.global.clone_from(&self.game_global);
+        config.game.path.china.clone_from(&self.game_china);
+        config.components.path.clone_from(&self.components);
+        config.game.enhancements.fps_unlocker.path.clone_from(&self.fps_unlocker);
 
-        config.game.enhancements.fps_unlocker.path = self.fps_unlocker.clone();
+        config.launcher.temp = Some(self.temp.clone());
 
         Config::update_raw(config)
     }
