@@ -303,8 +303,8 @@ impl SimpleAsyncComponent for GeneralApp {
                     set_subtitle: &tr!("game-environment-description"),
 
                     set_model: Some(&gtk::StringList::new(&[
-                        "PC",
-                        "Android"
+                        "Hoyoverse",
+                        "Google Play"
                     ])),
 
                     set_selected: match CONFIG.launcher.environment {
