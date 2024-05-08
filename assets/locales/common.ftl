@@ -33,3 +33,4 @@ id-id = Indonesia
 vi-vn = Tiếng Việt
 uk-ua = Українська
 th-th = ไทย
+cs-cz = Čeština

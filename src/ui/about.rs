@@ -43,11 +43,11 @@ impl SimpleComponent for AboutDialog {
             set_version: &APP_VERSION,
 
             set_developers: &[
-                "Nikita Podvirnyy https://github.com/krypt0nn"
+                "Nikita Podvirnyi https://github.com/krypt0nn"
             ],
 
             add_credit_section: (Some("An Anime Team"), &[
-                "Nikita Podvirnyy https://github.com/krypt0nn",
+                "Nikita Podvirnyi https://github.com/krypt0nn",
                 "Marie Piontek https://github.com/Mar0xy",
                 "Luna Neff  https://github.com/lunaneff",
                 "Renaud Lepage https://github.com/cybik",
@@ -60,7 +60,7 @@ impl SimpleComponent for AboutDialog {
             ],
 
             set_translator_credits: &[
-                "Русский, English — Nikita Podvirnyy https://github.com/krypt0nn",
+                "Русский, English — Nikita Podvirnyi https://github.com/krypt0nn",
                 "Deutsch — Marie Piontek https://github.com/Mar0xy",
                 "Deutsch — @caem",
                 "Français — @zeGolem https://github.com/zeGolem",
@@ -79,7 +79,8 @@ impl SimpleComponent for AboutDialog {
                 "Indonesia — @yumekarisu https://github.com/yumekarisu",
                 "Tiếng Việt — Nguyễn Hữu Chánh https://github.com/Chanhnh",
                 "Українська — Іван Потієнко https://github.com/xxanqw",
-                "ไทย — @thegooglerider https://github.com/TheGoogleRider2"
+                "ไทย — @vbrabandt2005 https://github.com/vbrabandt2005",
+                "Čeština — @panmourovaty https://github.com/panmourovaty"
             ].join("\n"),
 
             set_debug_info: &[
@@ -97,25 +98,15 @@ impl SimpleComponent for AboutDialog {
                 "<p>Added</p>",
 
                 "<ul>",
-                    "<li>Bundle applications-system-symbolic icon to the app</li>",
-                    "<li>Added force grab cursor option to the gamescope settings</li>",
-                    "<li>Added Thai</li>",
-                    "<li>Added Ukrainian</li>",
+                    "<li>Added 4.6.0 voiceovers sizes</li>",
+                    "<li>Added Czech</li>",
                 "</ul>",
 
                 "<p>Changed</p>",
 
                 "<ul>",
-                    "<li>Update wish url</li>",
-                    "<li>Updated dependencies</li>",
-                    "<li>Improved app args parsing</li>",
-                    "<li>Updated locales</li>",
-                "</ul>",
-
-                "<p>Fixed</p>",
-
-                "<ul>",
-                    "<li>Fixed GtkSwitch UI state representation</li>",
+                    "<li>Changed labels for the payment processing options</li>",
+                    "<li>Changed one of translator's username</li>",
                 "</ul>"
             ].join("\n"),
 
