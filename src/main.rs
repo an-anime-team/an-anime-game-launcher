@@ -241,10 +241,6 @@ fn main() -> anyhow::Result<()> {
                     return Ok(());
                 }
 
-                LauncherState::PredownloadAvailable { .. } if run_game => {
-                    return Err(anyhow::anyhow!("Predownload available. Use --just-run-game to run anyway, or open the UI to download it"));
-                }
-
                 _ => ()
             }
         }
