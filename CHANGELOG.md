@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added 4.6.0 voiceovers sizes
+- Added Czech
+
+### Changed
+
+- Changed labels for the payment processing options
+- Changed one of translator's username
+
 ## [3.9.5] - 24.03.2024
 
 ### Added
