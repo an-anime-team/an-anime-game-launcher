@@ -16,9 +16,8 @@ let
 
 in pkgs.mkShell {
     nativeBuildInputs = with pkgs; [
-        pkgs-unstable.rustc
+        pkgs-unstable.rustup
         pkgs-unstable.rustfmt
-        pkgs-unstable.cargo
         pkgs-unstable.clippy
 
         gcc
@@ -34,7 +33,4 @@ in pkgs.mkShell {
 
         libadwaita
     ];
-
-    RUST_SRC_PATH = "${pkgs-unstable.rust.packages.stable.rustPlatform.rustLibSrc}";
-    RUST_BACKTRACE = 1;
 }
