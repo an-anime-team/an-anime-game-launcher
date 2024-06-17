@@ -32,7 +32,12 @@ pub fn get_background_info() -> anyhow::Result<Background> {
     let uri = json["data"]["game_info_list"].as_array()
         .ok_or_else(|| anyhow::anyhow!("Failed to list games in the backgrounds API"))?
         .iter()
-        .find(|game| game["game"]["biz"].as_str() == Some("hk4e_global"))
+        .find(|game| {
+            match game["game"]["biz"].as_str() {
+                Some(biz) => biz.starts_with("hk4e_"),
+                _ => false
+            }
+        })
         .ok_or_else(|| anyhow::anyhow!("Failed to find the game in the backgrounds API"))?["backgrounds"]
         .as_array()
         .and_then(|backgrounds| backgrounds.iter().next())
