@@ -10,30 +10,41 @@ pub struct Background {
 }
 
 pub fn get_uri() -> String {
-    let uri = concat!("https://sdk-os-static.", "ho", "yo", "verse", ".com/hk4e_global/mdk/launcher/api/content?filter_adv=true&key=gcStgarh&launcher_id=10&language=");
+    let lang = crate::i18n::get_lang();
 
-    uri.to_owned() + &crate::i18n::format_lang(&crate::i18n::get_lang())
+    if lang.language == unic_langid::langid!("zh-cn").language {
+        concat!("https://hyp-api.", "mi", "ho", "yo", ".com/hyp/hyp-connect/api/getGames?launcher_id=jGHBHlcOq1").to_owned()
+    }
+
+    else {
+        let uri = concat!("https://sg-hyp-api.", "ho", "yo", "verse", ".com/hyp/hyp-connect/api/getGames?launcher_id=VYTpXlbWo8&language=");
+
+        uri.to_owned() + &crate::i18n::format_lang(&lang)
+    }
 }
 
 #[cached::proc_macro::cached(result)]
 pub fn get_background_info() -> anyhow::Result<Background> {
     let json = serde_json::from_slice::<serde_json::Value>(minreq::get(get_uri()).send()?.as_bytes())?;
 
-    let uri = match json["data"]["adv"]["background"].as_str() {
-        Some(uri) => uri.to_owned(),
-        None => anyhow::bail!("Failed to get background picture uri")
-    };
+    let uri = json["data"]["games"].as_array()
+        .ok_or_else(|| anyhow::anyhow!("Failed to get background picture uri"))?
+        .iter()
+        .find(|game| game["biz"].as_str() == Some("hk4e_global"))
+        .and_then(|game| {
+            game["display"]["background"]["url"].as_str()
+                .or_else(|| game["display"]["thumbnail"]["url"].as_str())
+        })
+        .ok_or_else(|| anyhow::anyhow!("Failed to get background picture uri"))?
+        .to_string();
 
-    // This API field contains wrong md5 hash, but file's name
-    // from the uri above actually contains correct one, so
-    // I parse and use it few lines below
-
-    /*let hash = match json["data"]["adv"]["bg_checksum"].as_str() {
-        Some(uri) => uri.to_owned(),
-        None => anyhow::bail!("Failed to get background picture checksum")
-    };*/
-
-    let hash = uri.split('/').last().unwrap_or_default().split('_').next().unwrap_or_default().to_owned();
+    let hash = uri.split('/')
+        .last()
+        .unwrap_or_default()
+        .split('_')
+        .next()
+        .unwrap_or_default()
+        .to_owned();
 
     Ok(Background {
         uri,
