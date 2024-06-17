@@ -25,6 +25,7 @@ in pkgs.mkShell {
         pkg-config
 
         xdelta
+        libwebp
     ];
 
     buildInputs = with pkgs; [
