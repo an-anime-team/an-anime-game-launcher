@@ -102,6 +102,12 @@ impl SimpleComponent for AboutDialog {
                     "<li>Added 4.7.0 voiceovers sizes</li>",
                 "</ul>",
 
+                "<p>Fixed</p>",
+
+                "<ul>",
+                    "<li>Fixed Italian localization breaking the launcher</li>",
+                "</ul>",
+
                 "<p>Changed</p>",
 
                 "<ul>",

@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - List missing dependencies on non-standard distros during initial setup
 - Added 4.7.0 voiceovers sizes
 
+### Fixed
+
+- Fixed Italian localization breaking the launcher
+
 ### Changed
 
 - Support new game API
@@ -40,16 +44,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added Thai
 - Added Ukrainian
 
+### Fixed
+
+- Fixed GtkSwitch UI state representation
+
 ### Changed
 
 - Update wish url
 - Updated dependencies
 - Improved app args parsing
 - Updated locales
-
-### Fixed
-
-- Fixed GtkSwitch UI state representation
 
 ## [3.9.4] - 29.12.2023
 
