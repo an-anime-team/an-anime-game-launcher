@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- List missing dependencies on non-standard distros during initial setup
+- Added 4.7.0 voiceovers sizes
+
+### Changed
+
+- Support new game API
+- Improved background pictures processing
+- Updated desktop file entry to include "aagl" keyword
+- Localized `force-grab-cursor` to Ukrainian
+
 ## [3.9.6] - 08.05.2024
 
 ### Added
