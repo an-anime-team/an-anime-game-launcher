@@ -17,12 +17,12 @@ wish-url = Apri i desideri
 about = Informazioni
 
 
-close = { $commandType ->
+close = { $form ->
     [verb] Chiudersi
     *[noun] Chiudi
 }
 
-hide = { $commandType ->
+hide = { $form ->
     [verb] Nascondersi
     *[noun] Nascondi
 }

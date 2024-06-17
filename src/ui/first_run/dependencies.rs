@@ -10,7 +10,8 @@ use super::main::FirstRunAppMsg;
 pub struct DependenciesApp {
     show_arch: bool,
     show_debian: bool,
-    show_fedora: bool
+    show_fedora: bool,
+    show_list: bool
 }
 
 #[derive(Debug, Clone)]
@@ -21,9 +22,9 @@ pub enum DependenciesAppMsg {
 
 #[relm4::component(async, pub)]
 impl SimpleAsyncComponent for DependenciesApp {
-    type Init = ();
     type Input = DependenciesAppMsg;
     type Output = FirstRunAppMsg;
+    type Init = ();
 
     view! {
         adw::PreferencesPage {
@@ -67,7 +68,7 @@ impl SimpleAsyncComponent for DependenciesApp {
                         },
 
                         gtk::Entry {
-                            set_text: "sudo pacman -Syu git xdelta3 p7zip",
+                            set_text: "sudo pacman -Syu git xdelta3 p7zip libwebp",
                             set_editable: false
                         }
                     },
@@ -84,7 +85,7 @@ impl SimpleAsyncComponent for DependenciesApp {
                         },
 
                         gtk::Entry {
-                            set_text: "sudo apt install git xdelta3 p7zip-full",
+                            set_text: "sudo apt install git xdelta3 p7zip-full webp",
                             set_editable: false
                         }
                     },
@@ -101,8 +102,34 @@ impl SimpleAsyncComponent for DependenciesApp {
                         },
 
                         gtk::Entry {
-                            set_text: "sudo dnf install git xdelta p7zip",
+                            set_text: "sudo dnf install git xdelta p7zip libwebp",
                             set_editable: false
+                        }
+                    },
+
+                    gtk::Box {
+                        set_orientation: gtk::Orientation::Vertical,
+                        set_spacing: 16,
+
+                        #[watch]
+                        set_visible: model.show_list,
+
+                        adw::PreferencesGroup {
+                            adw::ActionRow {
+                                set_title: "git"
+                            },
+
+                            adw::ActionRow {
+                                set_title: "xdelta3"
+                            },
+
+                            adw::ActionRow {
+                                set_title: "p7zip"
+                            },
+
+                            adw::ActionRow {
+                                set_title: "libwebp"
+                            }
                         }
                     }
                 }
@@ -138,7 +165,7 @@ impl SimpleAsyncComponent for DependenciesApp {
     async fn init(_init: Self::Init, root: Self::Root, _sender: AsyncComponentSender<Self>) -> AsyncComponentParts<Self> {
         let distro = whatadistro::identify();
 
-        let model = Self {
+        let mut model = Self {
             show_arch: match &distro {
                 Some(distro) => distro.is_similar("arch"),
                 None => false
@@ -152,8 +179,12 @@ impl SimpleAsyncComponent for DependenciesApp {
             show_fedora: match &distro {
                 Some(distro) => distro.is_similar("fedora"),
                 None => false
-            }
+            },
+
+            show_list: false
         };
+
+        model.show_list = !model.show_arch && !model.show_debian && !model.show_fedora;
 
         let widgets = view_output!();
 
@@ -164,7 +195,7 @@ impl SimpleAsyncComponent for DependenciesApp {
         match msg {
             #[allow(unused_must_use)]
             DependenciesAppMsg::Continue => {
-                let packages = ["git", "xdelta3"];
+                let packages = ["git", "xdelta3", "dwebp"];
 
                 for package in packages {
                     if !is_available(package) {
