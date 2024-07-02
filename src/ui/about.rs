@@ -98,23 +98,13 @@ impl SimpleComponent for AboutDialog {
                 "<p>Added</p>",
 
                 "<ul>",
-                    "<li>List missing dependencies on non-standard distros during initial setup</li>",
-                    "<li>Added 4.7.0 voiceovers sizes</li>",
+                    "<li>Handle dwebp re-coding errors</li>",
                 "</ul>",
 
                 "<p>Fixed</p>",
 
                 "<ul>",
-                    "<li>Fixed Italian localization breaking the launcher</li>",
-                "</ul>",
-
-                "<p>Changed</p>",
-
-                "<ul>",
-                    "<li>Support new game API</li>",
-                    "<li>Improved background pictures processing</li>",
-                    "<li>Updated desktop file entry to include aagl keyword</li>",
-                    "<li>Localized force-grab-cursor to Ukrainian</li>",
+                    "<li>Added workaround for wrong pre-downloads API format</li>",
                 "</ul>"
             ].join("\n"),
 
