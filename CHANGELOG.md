@@ -11,6 +11,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Handle dwebp re-coding errors
+
+### Fixed
+
+- Added workaround for wrong pre-downloads API format
+
+## [3.10.0] - 17.06.2024
+
+### Added
+
 - List missing dependencies on non-standard distros during initial setup
 - Added 4.7.0 voiceovers sizes
 

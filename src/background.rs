@@ -99,7 +99,14 @@ pub fn download_background() -> anyhow::Result<()> {
             .arg("-o")
             .arg(crate::BACKGROUND_PRIMARY_FILE.as_path())
             .spawn()?
-            .wait_with_output()?;
+            .wait()?;
+
+        // If it failed to re-code the file - just copy it
+        // Will happen with HSR because devs apparently named
+        // their background image ".webp" while it's JPEG
+        if !crate::BACKGROUND_PRIMARY_FILE.exists() {
+            std::fs::copy(crate::BACKGROUND_FILE.as_path(), crate::BACKGROUND_PRIMARY_FILE.as_path())?;
+        }
     }
 
     else {
