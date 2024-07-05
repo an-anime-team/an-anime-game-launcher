@@ -68,7 +68,7 @@ impl SimpleAsyncComponent for DependenciesApp {
                         },
 
                         gtk::Entry {
-                            set_text: "sudo pacman -Syu git xdelta3 p7zip libwebp",
+                            set_text: "sudo pacman -Syu git p7zip libwebp",
                             set_editable: false
                         }
                     },
@@ -85,7 +85,7 @@ impl SimpleAsyncComponent for DependenciesApp {
                         },
 
                         gtk::Entry {
-                            set_text: "sudo apt install git xdelta3 p7zip-full webp",
+                            set_text: "sudo apt install git p7zip-full webp",
                             set_editable: false
                         }
                     },
@@ -102,7 +102,7 @@ impl SimpleAsyncComponent for DependenciesApp {
                         },
 
                         gtk::Entry {
-                            set_text: "sudo dnf install git xdelta p7zip libwebp",
+                            set_text: "sudo dnf install git p7zip libwebp-tools",
                             set_editable: false
                         }
                     },
@@ -117,10 +117,6 @@ impl SimpleAsyncComponent for DependenciesApp {
                         adw::PreferencesGroup {
                             adw::ActionRow {
                                 set_title: "git"
-                            },
-
-                            adw::ActionRow {
-                                set_title: "xdelta3"
                             },
 
                             adw::ActionRow {
@@ -195,7 +191,7 @@ impl SimpleAsyncComponent for DependenciesApp {
         match msg {
             #[allow(unused_must_use)]
             DependenciesAppMsg::Continue => {
-                let packages = ["git", "xdelta3", "dwebp"];
+                let packages = ["git", "dwebp"];
 
                 for package in packages {
                     if !is_available(package) {
