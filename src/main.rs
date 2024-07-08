@@ -120,7 +120,7 @@ fn main() -> anyhow::Result<()> {
         // CONFIG is initialized lazily so it will contain following changes as well
         let mut config = Config::get().expect("Failed to get config");
 
-        config.launcher.language = i18n::format_lang(&i18n::get_default_lang());
+        config.launcher.language = i18n::format_lang(i18n::get_default_lang());
 
         Config::update_raw(config).expect("Failed to update config");
     }
