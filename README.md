@@ -63,8 +63,8 @@ These packages are supported by third party distributors. They either did not co
 
 | Format | Source | Distributions |
 | - | - | - |
+| DEB | [an-anime-game-launcher](https://launchpad.net/~thundergemios10/+archive/ubuntu/an-anime-game-launcher) | Ubuntu, Linux Mint, Pop!_OS |
 | Pacstall | [an-anime-game-launcher-bin](https://pacstall.dev/packages/an-anime-game-launcher-bin) | Ubuntu |
-| DEB | [an-anime-game-launcher](https://launchpad.net/~thundergemios10/+archive/ubuntu/an-anime-game-launcher) | Ubuntu |
 | Ebuild | [aagl-ebuilds](https://github.com/an-anime-team/gentoo-ebuilds) * | Gentoo |
 | Lutris | `lutris.net/games/gen...-imp...` (stripping the link) | Any |
 
