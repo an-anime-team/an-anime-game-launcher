@@ -12,7 +12,7 @@
 
 # 🚧 Project status
 
-Due to lack of interest from my side the project stays in a legacy, maintaining-only state for a long period of time. This project will not receive huge updated unless really necessary. I still keep it up to date with latest changes in the game and work with community to solve the issues, but old-known unessential bugs will not be fixed, and new features will not be added. Instead, I'm working on other projects, and the future is in uniting all the launchers in one single [universal launcher](https://github.com/an-anime-team/anime-games-launcher). This project stays in "proof of concept" stage right now and required major changes, which, again, require interest from my side.
+Due to lack of interest from my side the project stays in a legacy, maintaining-only state for a long period of time. This project will not receive huge updates unless really necessary. I still keep it up to date with latest changes in the game and work with community to solve the issues, but old-known unessential bugs will not be fixed, and new features will not be added. Instead, I'm working on other projects, and the future is in uniting all the launchers in one single [universal launcher](https://github.com/an-anime-team/anime-games-launcher). This project stays in "proof of concept" stage right now and requires major changes, which, again, require interest from my side. Keep your eye on our discord server for more details.
 
 <br>
 
@@ -63,9 +63,9 @@ These packages are supported by third party distributors. They either did not co
 
 | Format | Source | Distributions |
 | - | - | - |
-| pacstall | [an-anime-game-launcher-bin](https://pacstall.dev/packages/an-anime-game-launcher-bin) | Ubuntu |
-| ebuild | [aagl-ebuilds](https://github.com/an-anime-team/gentoo-ebuilds) * | Gentoo |
-| lutris | `lutris.net/games/gen...-imp...` (stripping the link) | Any |
+| Pacstall | [an-anime-game-launcher-bin](https://pacstall.dev/packages/an-anime-game-launcher-bin) | Ubuntu |
+| Ebuild | [aagl-ebuilds](https://github.com/an-anime-team/gentoo-ebuilds) * | Gentoo |
+| Lutris | `lutris.net/games/gen...-imp...` (stripping the link) | Any |
 
 > \* Note: although it's hosted in our official repo we didn't contact with its maintainer for some time already, and recent updates were made via merge requests by the community.
 
