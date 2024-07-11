@@ -5,9 +5,14 @@
 
 <p align="center">
     <a href="https://discord.gg/ck37X6UWBp">Discord</a> ·
-    <a href="https://matrix.to/#/#an-anime-game:envs.net">Matrix</a> ·
     <a href="https://github.com/an-anime-team/an-anime-game-launcher/wiki">Wiki</a>
 </p>
+
+<br>
+
+# 🚧 Project status
+
+Due to lack of interest from my side the project stays in a legacy, maintaining-only state for a long period of time. This project will not receive huge updated unless really necessary. I still keep it up to date with latest changes in the game and work with community to solve the issues, but old-known unessential bugs will not be fixed, and new features will not be added. Instead, I'm working on other projects, and the future is in uniting all the launchers in one single [universal launcher](https://github.com/an-anime-team/anime-games-launcher). This project stays in "proof of concept" stage right now and required major changes, which, again, require interest from my side.
 
 <br>
 
@@ -18,58 +23,58 @@
 * [Releases page](https://github.com/an-anime-team/an-anime-game-launcher/releases) where you can find latest available version
 * [Changelog](CHANGELOG.md) with chronology of the project
 
+All the project's life happen in our discord server. If you have any questions or want to report an issue - please contact the dev directly there.
+
 <br>
 
 # ⬇️ Download
 
-| Distribution | Format | Wiki | Source |
-| - | - | - | - |
-| Fedora | Flatpak | [link](https://github.com/an-anime-team/an-anime-game-launcher/wiki/Installation#-any-distribution-flatpak) | - |
-| Arch Linux, Manjaro | AUR | [link](https://github.com/an-anime-team/an-anime-game-launcher/wiki/Installation#-arch-linux-aur) | [an-anime-game-launcher-bin](https://aur.archlinux.org/packages/an-anime-game-launcher-bin) |
-| Fedora, OpenSUSE | RPM | [link](https://github.com/an-anime-team/an-anime-game-launcher/wiki/Installation#-fedora-rpm) | [AAGL](https://build.opensuse.org/repositories/home:Maroxy:AAT-Apps/AAGL) |
-| Ubuntu | pacstall | - | [an-anime-game-launcher-bin](https://pacstall.dev/packages/an-anime-game-launcher-bin) |
-| Gentoo | ebuild | [link](https://github.com/an-anime-team/an-anime-game-launcher/wiki/Installation#-gentoo-linux-ebuild) | [aagl-ebuilds](https://github.com/an-anime-team/gentoo-ebuilds) |
-| NixOS | nixpkg | [link](https://github.com/an-anime-team/an-anime-game-launcher/wiki/Installation#-nixos-nixpkg) | [aagl-gtk-on-nix](https://github.com/ezKEa/aagl-gtk-on-nix) |
+Launcher developer does not provide any packages for this programm. Instead, we almost fully rely on other people to maintain them.
 
-To see the installation guides, please visit the wiki page [here](https://github.com/an-anime-team/an-anime-game-launcher/wiki/Installation)
+To see the installation guides, please visit [this wiki page](https://github.com/an-anime-team/an-anime-game-launcher/wiki/Installation).
 
-Lutris integration described [here](https://github.com/an-anime-team/an-anime-game-launcher/wiki/Installation#-lutris)
+Instructions may be outdated due to lack of interest in maintaining them. You can help the project by keeping documentation up to date if you're interested in it.
+
+## 😀 Official support
+
+These packages are officially supported by the An Anime Team, and we try to ensure that they work for everyone.
+
+| Format | Wiki | Source | Distributions | Maintainer |
+| - | - | - | - | - |
+| Flatpak | [wiki](https://github.com/an-anime-team/an-anime-game-launcher/wiki/Installation#-any-distribution-flatpak) | [flatpak-builds](https://github.com/an-anime-team/flatpak-builds) | Any (Fedora, Pop!_OS, etc.) | Luna (available in discord) |
+| RPM | [wiki](https://github.com/an-anime-team/an-anime-game-launcher/wiki/Installation#-fedora-rpm) | [AAGL](https://build.opensuse.org/repositories/home:Maroxy:AAT-Apps/AAGL) * | Fedora, OpenSUSE | Maroxy (second discord admin) |
+
+> \* Note: RPM packages are often really outdated. It's not recommended to use them.
+
+## 🙂 Community support
+
+These packages are supported by active members of our community. They're widely used and we keep some level of interactions with their maintainers.
+
+| Format | Wiki | Source | Distributions | Maintainer |
+| - | - | - | - | - |
+| AUR | [wiki](https://github.com/an-anime-team/an-anime-game-launcher/wiki/Installation#-arch-linux-aur) | ... | Arch Linux, Manjaro, EndeavourOS | xstra * |
+| NixOS module | [wiki](https://github.com/an-anime-team/an-anime-game-launcher/wiki/Installation#-nixos-nixpkg) | [aagl-gtk-on-nix](https://github.com/ezKEa/aagl-gtk-on-nix) | NixOS | Luxxy * |
+
+> \* Note: honorary members of our discord server. We have direct contact with them.
+
+## 😑 Third party support
+
+These packages are supported by third party distributors. They either did not contact us, or contact exceptionally rarely. We do not verify state of these packages, and we are not related to their state at all.
+
+| Format | Source | Distributions |
+| - | - | - |
+| pacstall | [an-anime-game-launcher-bin](https://pacstall.dev/packages/an-anime-game-launcher-bin) | Ubuntu |
+| ebuild | [aagl-ebuilds](https://github.com/an-anime-team/gentoo-ebuilds) * | Gentoo |
+| lutris | `lutris.net/games/gen...-imp...` (stripping the link) | Any |
+
+> \* Note: although it's hosted in our official repo we didn't contact with its maintainer for some time already, and recent updates were made via merge requests by the community.
 
 ## Chinese version support
 
-This should be automatically enabled if you're using zh_cn (Chinese) as your system language. If you're not using it - you can change the game edition in the launcher settings
+This should be automatically enabled if you're using `zh_cn` (Chinese) as your system language. If you're not using it - you can change the game edition in the launcher settings.
 
-<br>
+The main problem, though, is that github is blocked in China, and it's used in other parts of the launcher - not just in game edition. Notably, you can't use the same components index as other people do.
 
-# 💻 Development
+To fix this, you have to make your own copy of the [components](https://github.com/an-anime-team/components) repository and change all the links there from github releases to some mirror. Later you can update the components index repo link in your launcher's `config.json` file.
 
-| Folder | Description |
-| - | - |
-| src | Rust source code |
-| assets | App assets folder |
-| assets/locales | App localizations |
-| target/release | Release build of the app |
-
-## Clone repo
-
-```sh
-git clone --recursive https://github.com/an-anime-team/an-anime-game-launcher
-```
-
-## Run app
-
-```sh
-cargo run
-```
-
-## Build app
-
-```sh
-cargo build --release
-```
-
-## Updates strategy
-
-Starting from 3.2.1 ([fcab428](https://github.com/an-anime-team/an-anime-game-launcher/commit/fcab428cb40b1457f41e0856f9d1e1473acbe653)) we have 2 branches: stable ([main](https://github.com/an-anime-team/an-anime-game-launcher/tree/main)) and dev ([next](https://github.com/an-anime-team/an-anime-game-launcher/tree/next)). Code changes will be pushed into dev branch and merged into stable once they're ready for new version release
-
-<img src="repository/branches.png" />
+If you have any questions - feel free to contact the dev in our discord server (or if you have no way to use discord - try sending me an email, but it's unlikely to be received).
