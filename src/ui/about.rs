@@ -111,6 +111,7 @@ impl SimpleComponent for AboutDialog {
                 "<p>Changed</p>",
 
                 "<ul>",
+                    "<li>Updated FPS unlocker version</li>",
                     "<li>Changed background images processing logic</li>",
                 "</ul>",
 
