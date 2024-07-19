@@ -20,7 +20,6 @@
                     cmake
                     pkg-config
 
-                    xdelta
                     libwebp
                 ];
 
