@@ -44,7 +44,8 @@ These packages are officially supported by the An Anime Team, and we try to ensu
 | Flatpak | [wiki](https://github.com/an-anime-team/an-anime-game-launcher/wiki/Installation#-any-distribution-flatpak) | [flatpak-builds](https://github.com/an-anime-team/flatpak-builds) | Any (Fedora, Pop!_OS, etc.) | Luna (available in discord) |
 | RPM | [wiki](https://github.com/an-anime-team/an-anime-game-launcher/wiki/Installation#-fedora-rpm) | [AAGL](https://build.opensuse.org/repositories/home:Maroxy:AAT-Apps/AAGL) * | Fedora, OpenSUSE | Maroxy (second discord admin) |
 
-> \* Note: RPM packages are often really outdated. It's not recommended to use them.
+> [!NOTE]
+> RPM packages are often really outdated. It's not recommended to use them.
 
 ## 🙂 Community support
 
@@ -55,7 +56,8 @@ These packages are supported by active members of our community. They're widely 
 | AUR | [wiki](https://github.com/an-anime-team/an-anime-game-launcher/wiki/Installation#-arch-linux-aur) | [an-anime-game-launcher-bin](https://aur.archlinux.org/packages/an-anime-game-launcher-bin) | Arch Linux, Manjaro, EndeavourOS | xstra * |
 | NixOS module | [wiki](https://github.com/an-anime-team/an-anime-game-launcher/wiki/Installation#-nixos-nixpkg) | [aagl-gtk-on-nix](https://github.com/ezKEa/aagl-gtk-on-nix) | NixOS | Luxxy * |
 
-> \* Note: honorary members of our discord server. We have direct contact with them.
+> [!NOTE]
+> Honorary members of our discord server. We have direct contact with them.
 
 ## 😑 Third party support
 
@@ -68,7 +70,8 @@ These packages are supported by third party distributors. They either did not co
 | Ebuild | [aagl-ebuilds](https://github.com/an-anime-team/gentoo-ebuilds) * | Gentoo |
 | Lutris | `lutris.net/games/gen...-imp...` (stripping the link) | Any |
 
-> \* Note: although it's hosted in our official repo we didn't contact with its maintainer for some time already, and recent updates were made via merge requests by the community.
+> [!NOTE]
+> Although it's hosted in our official repo we didn't contact with its maintainer for some time already, and recent updates were made via merge requests by the community.
 
 ## Chinese version support
 
