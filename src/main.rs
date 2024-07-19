@@ -61,8 +61,8 @@ lazy_static::lazy_static! {
     /// Path to `background` file. Standard is `$HOME/.local/share/anime-game-launcher/background`
     pub static ref BACKGROUND_FILE: PathBuf = LAUNCHER_FOLDER.join("background");
 
-    /// Path to `background-primary` file. Standard is `$HOME/.local/share/anime-game-launcher/background-primary`
-    pub static ref BACKGROUND_PRIMARY_FILE: PathBuf = LAUNCHER_FOLDER.join("background-primary");
+    /// Path to the processed `background` file. Standard is `$HOME/.cache/anime-game-launcher/background`
+    pub static ref PROCESSED_BACKGROUND_FILE: PathBuf = CACHE_FOLDER.join("background");
 
     /// Path to `.keep-background` file. Used to mark launcher that it shouldn't update background picture
     /// 
@@ -102,7 +102,7 @@ lazy_static::lazy_static! {
         .round-bin {{
             border-radius: 24px;
         }}
-    ", BACKGROUND_PRIMARY_FILE.to_string_lossy());
+    ", PROCESSED_BACKGROUND_FILE.to_string_lossy());
 }
 
 fn main() -> anyhow::Result<()> {
