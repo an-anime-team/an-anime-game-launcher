@@ -10,7 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Added "Indonesia" wine language option
-- Added writing of the game's output to the `game.log` file in the launcher's folder
+- Added writing of the game's output to the `game.log` file in the launcher's folder.
+  Size of this file is controlled by the `LAUNCHER_GAME_LOG_FILE_LIMIT` environment variable.
 
 ### Fixed
 
