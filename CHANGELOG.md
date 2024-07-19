@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.10.2] - 19.07.2024
+
 ### Added
 
 - Added "Indonesia" wine language option
@@ -526,7 +528,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <br>
 
-[unreleased]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.10.1...next
+[unreleased]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.10.2...next
+[3.10.2]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.10.1...3.10.2
 [3.10.1]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.10.0...3.10.1
 [3.10.0]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.9.6...3.10.0
 [3.9.6]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.9.5...3.9.6
