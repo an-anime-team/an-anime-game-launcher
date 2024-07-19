@@ -21,33 +21,38 @@ pub fn download_diff(sender: ComponentSender<App>, progress_bar_input: Sender<Pr
             diff = diff.with_temp_folder(temp);
         }
 
-        let result = diff.install_to(game_path, clone!(@strong sender => move |state| {
-            match &state {
-                DiffUpdate::InstallerUpdate(InstallerUpdate::DownloadingError(err)) => {
-                    tracing::error!("Downloading failed: {err}");
+        let result = diff.install_to(game_path, clone!(
+            #[strong]
+            sender,
 
-                    sender.input(AppMsg::Toast {
-                        title: tr!("downloading-failed"),
-                        description: Some(err.to_string())
-                    });
+            move |state| {
+                match &state {
+                    DiffUpdate::InstallerUpdate(InstallerUpdate::DownloadingError(err)) => {
+                        tracing::error!("Downloading failed: {err}");
+
+                        sender.input(AppMsg::Toast {
+                            title: tr!("downloading-failed"),
+                            description: Some(err.to_string())
+                        });
+                    }
+
+                    DiffUpdate::InstallerUpdate(InstallerUpdate::UnpackingError(err)) => {
+                        tracing::error!("Unpacking failed: {err}");
+
+                        sender.input(AppMsg::Toast {
+                            title: tr!("unpacking-failed"),
+                            description: Some(err.clone())
+                        });
+                    }
+
+                    _ => ()
                 }
 
-                DiffUpdate::InstallerUpdate(InstallerUpdate::UnpackingError(err)) => {
-                    tracing::error!("Unpacking failed: {err}");
-
-                    sender.input(AppMsg::Toast {
-                        title: tr!("unpacking-failed"),
-                        description: Some(err.clone())
-                    });
+                #[allow(unused_must_use)] {
+                    progress_bar_input.send(ProgressBarMsg::UpdateFromState(state));
                 }
-
-                _ => ()
             }
-
-            #[allow(unused_must_use)] {
-                progress_bar_input.send(ProgressBarMsg::UpdateFromState(state));
-            }
-        }));
+        ));
 
         let mut perform_on_download_needed = true;
 

@@ -62,17 +62,22 @@ pub fn repair_game(sender: ComponentSender<App>, progress_bar_input: Sender<Prog
 
                     let thread_sender = verify_sender.clone();
 
-                    std::thread::spawn(clone!(@strong game_path => move || {
-                        for file in thread_files {
-                            let status = if config.launcher.repairer.fast {
-                                file.fast_verify(&game_path)
-                            } else {
-                                file.verify(&game_path)
-                            };
+                    std::thread::spawn(clone!(
+                        #[strong]
+                        game_path, 
 
-                            thread_sender.send((file, status)).unwrap();
+                        move || {
+                            for file in thread_files {
+                                let status = if config.launcher.repairer.fast {
+                                    file.fast_verify(&game_path)
+                                } else {
+                                    file.verify(&game_path)
+                                };
+
+                                thread_sender.send((file, status)).unwrap();
+                            }
                         }
-                    }));
+                    ));
                 }
 
                 // We have [config.launcher.repairer.threads] copies of this sender + the original one

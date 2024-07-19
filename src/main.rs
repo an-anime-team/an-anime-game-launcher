@@ -201,6 +201,9 @@ fn main() -> anyhow::Result<()> {
     gtk::IconTheme::for_display(&gtk::gdk::Display::default().unwrap())
         .add_resource_path(&format!("{APP_RESOURCE_PATH}/icons"));
 
+    // Set global css
+    relm4::set_global_css(&GLOBAL_CSS);
+
     // Set application's title
     gtk::glib::set_application_name("An Anime Game Launcher");
     gtk::glib::set_program_name(Some("An Anime Game Launcher"));
@@ -217,9 +220,6 @@ fn main() -> anyhow::Result<()> {
         // Create the app
         let app = RelmApp::new(APP_ID)
             .with_args(gtk_args);
-
-        // Set global css
-        app.set_global_css(&GLOBAL_CSS);
 
         // Show first run window
         app.run::<FirstRunApp>(());
@@ -251,9 +251,6 @@ fn main() -> anyhow::Result<()> {
         // Create the app
         let app = RelmApp::new(APP_ID)
             .with_args(gtk_args);
-
-        // Set global css
-        app.set_global_css(&GLOBAL_CSS);
 
         // Show main window
         app.run::<App>(());

@@ -21,7 +21,7 @@ pub fn get_uri() -> String {
     else {
         let uri = concat!("https://sg-hyp-api.", "ho", "yo", "verse", ".com/hyp/hyp-connect/api/getAllGameBasicInfo?launcher_id=VYTpXlbWo8&language=");
 
-        uri.to_owned() + &crate::i18n::format_lang(&lang)
+        uri.to_owned() + &crate::i18n::format_lang(lang)
     }
 }
 

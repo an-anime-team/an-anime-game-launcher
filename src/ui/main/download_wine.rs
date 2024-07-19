@@ -52,45 +52,55 @@ pub fn download_wine(sender: ComponentSender<App>, progress_bar_input: Sender<Pr
 
                         sender.input(AppMsg::SetDownloading(true));
 
-                        std::thread::spawn(clone!(@strong sender => move || {
-                            installer.install(&config.game.wine.builds, clone!(@strong sender => move |state| {
-                                match &state {
-                                    InstallerUpdate::DownloadingError(err) => {
-                                        tracing::error!("Downloading failed: {err}");
+                        std::thread::spawn(clone!(
+                            #[strong]
+                            sender,
 
-                                        sender.input(AppMsg::Toast {
-                                            title: tr!("downloading-failed"),
-                                            description: Some(err.to_string())
-                                        });
+                            move || {
+                                installer.install(&config.game.wine.builds, clone!(
+                                    #[strong]
+                                    sender,
+
+                                    move |state| {
+                                        match &state {
+                                            InstallerUpdate::DownloadingError(err) => {
+                                                tracing::error!("Downloading failed: {err}");
+
+                                                sender.input(AppMsg::Toast {
+                                                    title: tr!("downloading-failed"),
+                                                    description: Some(err.to_string())
+                                                });
+                                            }
+
+                                            InstallerUpdate::UnpackingError(err) => {
+                                                tracing::error!("Unpacking failed: {err}");
+
+                                                sender.input(AppMsg::Toast {
+                                                    title: tr!("unpacking-failed"),
+                                                    description: Some(err.clone())
+                                                });
+                                            }
+
+                                            _ => ()
+                                        }
+
+                                        #[allow(unused_must_use)] {
+                                            progress_bar_input.send(ProgressBarMsg::UpdateFromState(DiffUpdate::InstallerUpdate(state)));
+                                        }
                                     }
+                                ));
 
-                                    InstallerUpdate::UnpackingError(err) => {
-                                        tracing::error!("Unpacking failed: {err}");
+                                config.game.wine.selected = Some(wine.name.clone());
 
-                                        sender.input(AppMsg::Toast {
-                                            title: tr!("unpacking-failed"),
-                                            description: Some(err.clone())
-                                        });
-                                    }
+                                Config::update(config);
 
-                                    _ => ()
-                                }
-
-                                #[allow(unused_must_use)] {
-                                    progress_bar_input.send(ProgressBarMsg::UpdateFromState(DiffUpdate::InstallerUpdate(state)));
-                                }
-                            }));
-
-                            config.game.wine.selected = Some(wine.name.clone());
-
-                            Config::update(config);
-
-                            sender.input(AppMsg::SetDownloading(false));
-                            sender.input(AppMsg::UpdateLauncherState {
-                                perform_on_download_needed: false,
-                                show_status_page: true
-                            });
-                        }));
+                                sender.input(AppMsg::SetDownloading(false));
+                                sender.input(AppMsg::UpdateLauncherState {
+                                    perform_on_download_needed: false,
+                                    show_status_page: true
+                                });
+                            }
+                        ));
                     }
 
                     Err(err) => sender.input(AppMsg::Toast {
