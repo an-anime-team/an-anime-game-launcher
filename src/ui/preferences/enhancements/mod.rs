@@ -212,7 +212,8 @@ impl SimpleAsyncComponent for EnhancementsApp {
                         "Español",
                         "中国",
                         "日本語",
-                        "한국어"
+                        "한국어",
+                        "Indonesia"
                     ]),
 
                     set_selected: CONFIG.game.wine.language.ordinal() as u32,

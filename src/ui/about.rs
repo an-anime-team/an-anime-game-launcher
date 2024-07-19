@@ -98,13 +98,27 @@ impl SimpleComponent for AboutDialog {
                 "<p>Added</p>",
 
                 "<ul>",
-                    "<li>Handle dwebp re-coding errors</li>",
+                    "<li>Added \"Indonesia\" wine language option</li>",
+                    "<li>Added writing of the game's output to the \"game.log\" file in the launcher's folder</li>",
                 "</ul>",
 
                 "<p>Fixed</p>",
 
                 "<ul>",
-                    "<li>Added workaround for wrong pre-downloads API format</li>",
+                    "<li>Fixed \"dwebp\" package name for fedora during initial setup</li>",
+                "</ul>",
+
+                "<p>Changed</p>",
+
+                "<ul>",
+                    "<li>Updated FPS unlocker version</li>",
+                    "<li>Changed background images processing logic</li>",
+                "</ul>",
+
+                "<p>Removed</p>",
+
+                "<ul>",
+                    "<li>Removed \"xdelta3\" dependency</li>",
                 "</ul>"
             ].join("\n"),
 
