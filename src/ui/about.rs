@@ -95,30 +95,12 @@ impl SimpleComponent for AboutDialog {
 
             set_release_notes_version: &APP_VERSION,
             set_release_notes: &[
-                "<p>Added</p>",
-
-                "<ul>",
-                    "<li>Added \"Indonesia\" wine language option</li>",
-                    "<li>Added writing of the game's output to the \"game.log\" file in the launcher's folder</li>",
-                "</ul>",
-
                 "<p>Fixed</p>",
 
                 "<ul>",
-                    "<li>Fixed \"dwebp\" package name for fedora during initial setup</li>",
-                "</ul>",
-
-                "<p>Changed</p>",
-
-                "<ul>",
-                    "<li>Updated FPS unlocker version</li>",
-                    "<li>Changed background images processing logic</li>",
-                "</ul>",
-
-                "<p>Removed</p>",
-
-                "<ul>",
-                    "<li>Removed \"xdelta3\" dependency</li>",
+                    "<li>Fixed \"game.log\" file overfilling at the start of the game</li>",
+                    "<li>Fixed RAM filling with the buffered game logs</li>",
+                    "<li>Fixed Discord RPC updates</li>",
                 "</ul>"
             ].join("\n"),
 
