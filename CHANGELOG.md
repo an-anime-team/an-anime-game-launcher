@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- (potentially) Fixed `game.log` file overfilling at the start of the game
+- (potentially) Fixed RAM filling with the buffered game logs
+
 ## [3.10.2] - 19.07.2024
 
 ### Added
