@@ -22,7 +22,6 @@ pub mod components;
 
 use components::*;
 
-use crate::ui::migrate_installation::MigrateInstallationApp;
 use crate::i18n::*;
 use crate::*;
 
@@ -103,7 +102,6 @@ impl AsyncFactoryComponent for VoicePackageComponent {
 
 pub struct GeneralApp {
     voice_packages: AsyncFactoryVecDeque<VoicePackageComponent>,
-    migrate_installation: Controller<MigrateInstallationApp>,
     components_page: AsyncController<ComponentsPage>,
 
     game_diff: Option<VersionDiff>,
@@ -127,7 +125,6 @@ pub enum GeneralAppMsg {
     UpdateDownloadedWine,
     UpdateDownloadedDxvk,
 
-    OpenMigrateInstallation,
     RepairGame,
 
     OpenMainPage,
@@ -342,13 +339,6 @@ impl SimpleAsyncComponent for GeneralApp {
                     set_margin_top: 16,
 
                     gtk::Button {
-                        set_label: &tr!("migrate-installation"),
-                        set_tooltip_text: Some(&tr!("migrate-installation-description")),
-
-                        connect_clicked => GeneralAppMsg::OpenMigrateInstallation
-                    },
-
-                    gtk::Button {
                         set_label: &tr!("repair-game"),
 
                         connect_clicked => GeneralAppMsg::RepairGame
@@ -543,10 +533,6 @@ impl SimpleAsyncComponent for GeneralApp {
                 .launch_default()
                 .forward(sender.input_sender(), std::convert::identity),
 
-            migrate_installation: MigrateInstallationApp::builder()
-                .launch(())
-                .detach(),
-
             components_page: ComponentsPage::builder()
                 .launch(())
                 .forward(sender.input_sender(), std::convert::identity),
@@ -646,14 +632,6 @@ impl SimpleAsyncComponent for GeneralApp {
                 self.components_page.sender()
                     .send(ComponentsPageMsg::UpdateDownloadedDxvk)
                     .unwrap();
-            }
-
-            GeneralAppMsg::OpenMigrateInstallation => unsafe {
-                if let Some(window) = crate::ui::main::PREFERENCES_WINDOW.as_ref() {
-                    self.migrate_installation.widget().set_transient_for(Some(window.widget()));
-                }
-
-                self.migrate_installation.widget().present();
             }
 
             GeneralAppMsg::RepairGame => {

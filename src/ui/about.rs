@@ -39,7 +39,7 @@ impl SimpleComponent for AboutDialog {
             set_website: "https://github.com/an-anime-team/an-anime-game-launcher",
             set_issue_url: "https://github.com/an-anime-team/an-anime-game-launcher/issues",
 
-            set_license_type: gtk::License::Gpl30,
+            set_license_type: gtk::License::Gpl30Only,
             set_version: &APP_VERSION,
 
             set_developers: &[
@@ -95,12 +95,22 @@ impl SimpleComponent for AboutDialog {
 
             set_release_notes_version: &APP_VERSION,
             set_release_notes: &[
-                "<p>Fixed</p>",
+                "<p>Added</p>",
 
                 "<ul>",
-                    "<li>Fixed \"game.log\" file overfilling at the start of the game</li>",
-                    "<li>Fixed RAM filling with the buffered game logs</li>",
-                    "<li>Fixed Discord RPC updates</li>",
+                    "<li>Respect root \".version\" file for game version parsing</li>",
+                "</ul>",
+
+                "<p>Changed</p>",
+
+                "<ul>",
+                    "<li>Prioritize parsed game version over the API response</li>",
+                "</ul>",
+
+                "<p>Removed</p>",
+
+                "<ul>",
+                    "<li>Removed migrate installation feature</li>",
                 "</ul>"
             ].join("\n"),
 
