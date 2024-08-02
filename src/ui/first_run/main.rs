@@ -131,7 +131,7 @@ impl SimpleComponent for FirstRunApp {
                 .forward(sender.input_sender(), std::convert::identity),
 
             default_paths: DefaultPathsApp::builder()
-                .launch(false)
+                .launch(())
                 .forward(sender.input_sender(), std::convert::identity),
 
             select_voiceovers: SelectVoiceoversApp::builder()

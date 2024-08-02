@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Prioritize parsed game version over the API response 
 
+### Removed
+
+- Removed migrate installation feature
+
 ## [3.10.3] - 21.07.2024
 
 ### Fixed
