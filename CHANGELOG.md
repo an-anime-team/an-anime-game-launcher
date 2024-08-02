@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Respect root `.version` file for game version parsing
+
+### Changed
+
+- Prioritize parsed game version over the API response 
+
 ## [3.10.3] - 21.07.2024
 
 ### Fixed
