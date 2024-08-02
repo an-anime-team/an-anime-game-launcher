@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.11.0] - 02.08.2024
+
 ### Added
 
 - Respect root `.version` file for game version parsing
@@ -548,7 +550,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <br>
 
-[unreleased]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.10.3...next
+[unreleased]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.11.0...next
+[3.10.3]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.10.3...3.11.0
 [3.10.3]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.10.2...3.10.2
 [3.10.2]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.10.1...3.10.2
 [3.10.1]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.10.0...3.10.1
