@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Create cache folder if it doesn't exist
+
 ## [3.11.0] - 02.08.2024
 
 ### Added
