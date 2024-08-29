@@ -53,5 +53,6 @@ fps-unlocker-interval-description = Prodleva v milisekundách mezi přepisován�
 
 window-mode = Režim v okně
 borderless = Celá obrazovka v okně
+headless = Headless
 popup = Popup
 fullscreen = Celá obrazovka

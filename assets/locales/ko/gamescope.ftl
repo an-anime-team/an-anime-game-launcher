@@ -1,16 +1,52 @@
 game-resolution = 게임 해상도
 gamescope-resolution = 게임 범위 해상도
 
+framerate = Framerate
+framerate-limit = Framerate limit
+unfocused-framerate-limit = Unfocused framerate limit
+
 upscaling = 업스케일링
+upscaling-description = Render the game in lower resolution and improve the image quality using special algorithms
 
-integer-scaling = 정수 스케일링
-integer-scaling-description = 각 픽셀을 정수로 구성된 정사각형 또는 직사각형의 동일한 색상 픽셀 그룹으로 변환합니다. Full HD에서 4K로 업스케일링할 때 선명도 손실을 방지합니다
-gamescope-fsr-description = 더 나은 업스케일링 품질을 위해 AMD에서 개발한 오픈 소스 업스케일링 기술입니다
-nis-description = Nvidia가 독점 DLSS 솔루션에 대한 낮은 오버헤드 대안으로 공급업체 간, 낮은 오버헤드로 개발한 오픈 소스 업스케일링 기술입니다. 즉, Nvidia GPU는 물론 AMD 및 Intel GPU에서도 작동합니다
+upscaler = Upscaler
+upscaler-description = Algorithm used to perform image upscaling
 
-other-settings = 기타 설정
-framerate-limit = 프레임 속도 제한
-unfocused-framerate-limit = 초점이 맞지 않는 프레임 속도 제한
+auto = Auto
+integer = Integer
+fit = Fit
+fill = Fill
+stretch = Stretch
+
+upscale-filter = Filter
+upscale-filter-description = Algorithm used to filter upscaled image
+
+linear = Linear
+nearest = Nearest
+nis = NIS
+pixel = Pixel
+
+upscale-sharpness = Sharpness
+upscale-sharpness-description = Upscaling sharpness
+
+smallest = Smallest
+small = Small
+high = High
+highest = Highest
+
+hdr-support = HDR support
+hdr-support-description = Enable gamescope HDR output. Requires display support
+
+realtime-scheduler = Realtime scheduler
+realtime-scheduler-description = Use realtime game process scheduling. Improves game performance in cost of slowing down background processes
+
+adaptive-sync = Adaptive sync
+adaptive-sync-description = Enable variable refresh rate. Requires display support
 
 force-grab-cursor = Force grab cursor
 force-grab-cursor-description = Always use relative mouse mode instead of flipping dependent on cursor visibility. The mouse cursor will correctly be centered in the game
+
+mangohud = MangoHUD
+mangohud-description = Launch with the mangoapp (mangohud) performance overlay enabled
+
+extra-args = Extra arguments
+extra-args-description = Extra arguments appended to the gamescope

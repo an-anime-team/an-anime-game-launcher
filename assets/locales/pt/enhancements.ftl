@@ -53,5 +53,6 @@ fps-unlocker-interval-description = Delay in milliseconds between overwriting th
 
 window-mode = Modo janela
 borderless = Sem borda
+headless = Headless
 popup = Popup
 fullscreen = Tela cheia

@@ -1,16 +1,52 @@
 game-resolution = Rozdzielczość gry
 gamescope-resolution = Rozdzielczość Gamescope
 
+framerate = Framerate
+framerate-limit = Framerate limit
+unfocused-framerate-limit = Unfocused framerate limit
+
 upscaling = Skalowanie
+upscaling-description = Render the game in lower resolution and improve the image quality using special algorithms
 
-integer-scaling = Skalowanie całkowitoliczbowe
-integer-scaling-description = Zamienia każdy piksel na grupę kwadratowych lub prostokątnych pikseli o całkowitej liczbie tego samego koloru. Zapobiega utracie ostrości przy skalowaniu Full HD do 4K.
-gamescope-fsr-description = Technika skalowania otwartego źródła opracowana przez AMD w celu poprawy jakości skalowania
-nis-description = Technika skalowania otwartego źródła opracowana przez Nvidia jako alternatywa o niskim narzucie dla ich własnego rozwiązania DLSS, co oznacza, że działa ona również na GPU AMD i Intel, a nie tylko na GPU Nvidia
+upscaler = Upscaler
+upscaler-description = Algorithm used to perform image upscaling
 
-other-settings = Inne ustawienia
-framerate-limit = Limit klatek na sekundę
-unfocused-framerate-limit = Limit klatek na sekundę po utraceniu skupienia
+auto = Auto
+integer = Integer
+fit = Fit
+fill = Fill
+stretch = Stretch
+
+upscale-filter = Filter
+upscale-filter-description = Algorithm used to filter upscaled image
+
+linear = Linear
+nearest = Nearest
+nis = NIS
+pixel = Pixel
+
+upscale-sharpness = Sharpness
+upscale-sharpness-description = Upscaling sharpness
+
+smallest = Smallest
+small = Small
+high = High
+highest = Highest
+
+hdr-support = HDR support
+hdr-support-description = Enable gamescope HDR output. Requires display support
+
+realtime-scheduler = Realtime scheduler
+realtime-scheduler-description = Use realtime game process scheduling. Improves game performance in cost of slowing down background processes
+
+adaptive-sync = Adaptive sync
+adaptive-sync-description = Enable variable refresh rate. Requires display support
 
 force-grab-cursor = Force grab cursor
 force-grab-cursor-description = Always use relative mouse mode instead of flipping dependent on cursor visibility. The mouse cursor will correctly be centered in the game
+
+mangohud = MangoHUD
+mangohud-description = Launch with the mangoapp (mangohud) performance overlay enabled
+
+extra-args = Extra arguments
+extra-args-description = Extra arguments appended to the gamescope

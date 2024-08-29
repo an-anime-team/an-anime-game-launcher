@@ -1,16 +1,52 @@
 game-resolution = Spiel-Auflösung
 gamescope-resolution = Gamescope-Auflösung
 
+framerate = Framerate
+framerate-limit = Framerate limit
+unfocused-framerate-limit = Unfocused framerate limit
+
 upscaling = Upscaling
+upscaling-description = Render the game in lower resolution and improve the image quality using special algorithms
 
-integer-scaling = Integer-Skalierung
-integer-scaling-description = Verwandelt jeden Pixel in eine quadratische oder rechteckige Gruppe mit einer ganzzahligen Anzahl gleichfarbiger Pixel. Verhindert Schärfeverluste bei der Skalierung von Full HD auf 4K
-gamescope-fsr-description = Eine von AMD entwickelte Open-Source-Upscaling-Technik für bessere Upscaling-Qualität
-nis-description = Eine Open-Source-Upscaling-Technik, die von Nvidia als herstellerübergreifende, kostengünstige Alternative zu ihrer proprietären DLSS-Lösung entwickelt wurde, d. h. sie funktioniert sowohl auf AMD- und Intel-GPUs als auch auf Nvidia-GPUs
+upscaler = Upscaler
+upscaler-description = Algorithm used to perform image upscaling
 
-other-settings = Andere Einstellungen
-framerate-limit = Framerate-Limit
-unfocused-framerate-limit = Unfokussiert Framerate-Limit
+auto = Auto
+integer = Integer
+fit = Fit
+fill = Fill
+stretch = Stretch
+
+upscale-filter = Filter
+upscale-filter-description = Algorithm used to filter upscaled image
+
+linear = Linear
+nearest = Nearest
+nis = NIS
+pixel = Pixel
+
+upscale-sharpness = Sharpness
+upscale-sharpness-description = Upscaling sharpness
+
+smallest = Smallest
+small = Small
+high = High
+highest = Highest
+
+hdr-support = HDR support
+hdr-support-description = Enable gamescope HDR output. Requires display support
+
+realtime-scheduler = Realtime scheduler
+realtime-scheduler-description = Use realtime game process scheduling. Improves game performance in cost of slowing down background processes
+
+adaptive-sync = Adaptive sync
+adaptive-sync-description = Enable variable refresh rate. Requires display support
 
 force-grab-cursor = Cursor greifen erzwingen
 force-grab-cursor-description = Verwende immer den relativen Mausmodus, anstatt abhängig von der Sichtbarkeit des Cursors umzuschalten. Der Mauszeiger wird korrekt in der Mitte des Spiels zentriert.
+
+mangohud = MangoHUD
+mangohud-description = Launch with the mangoapp (mangohud) performance overlay enabled
+
+extra-args = Extra arguments
+extra-args-description = Extra arguments appended to the gamescope

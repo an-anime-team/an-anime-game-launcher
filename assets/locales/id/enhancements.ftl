@@ -25,7 +25,7 @@ game = Game
 hud = HUD
 
 fsr = FSR
-fsr-description = Menaikkan skala resolusi game ke ukuran monitor Anda. Untuk menggunakan, pilih resolusi yang lebih rendah di pengaturan game dan tekan Alt+Enter 
+fsr-description = Menaikkan skala resolusi game ke ukuran monitor Anda. Untuk menggunakan, pilih resolusi yang lebih rendah di pengaturan game dan tekan Alt+Enter
 ultra-quality = Kualitas Ultra
 quality = Kualitas
 balanced = Seimbang
@@ -44,7 +44,7 @@ title = Judul
 description = Deskripsi
 
 fps-unlocker = FPS Unlocker
-fps-unlocker-description = Meniadakan batas maksimum frame yang dapat dirender oleh game dengan memodifikasi memori game. Dapat terdeteksi oleh anti-cheat 
+fps-unlocker-description = Meniadakan batas maksimum frame yang dapat dirender oleh game dengan memodifikasi memori game. Dapat terdeteksi oleh anti-cheat
 
 enabled = Aktifkan
 
@@ -53,5 +53,6 @@ fps-unlocker-interval-description = Jeda antara penulisan ulang nilai batas FPS 
 
 window-mode = Window Mode
 borderless = Tanpa border
+headless = Headless
 popup = Popup
 fullscreen = Penuhi layar

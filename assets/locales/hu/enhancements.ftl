@@ -53,5 +53,6 @@ fps-unlocker-interval-description =  Milliszekundumban (ms) hogy mekkora időkö
 
 window-mode = Ablak mód
 borderless = Keretmentes
+headless = Headless
 popup = Popup
 fullscreen = Teljesképernyő

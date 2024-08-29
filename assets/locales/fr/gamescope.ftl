@@ -1,16 +1,52 @@
 game-resolution = Résolution du jeu
 gamescope-resolution = Résolution de Gamescope
 
+framerate = Framerate
+framerate-limit = Framerate limit
+unfocused-framerate-limit = Unfocused framerate limit
+
 upscaling = Upscaling (mise à l'échelle intelligente)
+upscaling-description = Render the game in lower resolution and improve the image quality using special algorithms
 
-integer-scaling = Mise à l'échelle à l'entier
-integer-scaling-description = Transforme chaque pixel en un nombre entier de pixel de même couleur, sous la forme d'un carré ou d'un rectangle. Permet d'éviter l'effet de flou lors de la mise à l'échelle entre la Full-HD et la 4K par exemple
-gamescope-fsr-description = Une technique de mise à l'échelle Open Source développée par AMD pour avoir une meilleur qualité de mise à l'échelle
-nis-description = Une technologie de mise à l'échelle Open Source développée par NVidia comme alternative compatible avec les autres marques à leur solution DLSS qui est propriétaire. Ainsi, cette option foctionne non seulement sur les cartes graphiques NVidia, mais aussi sur celles d'Intel et d'AMD.
+upscaler = Upscaler
+upscaler-description = Algorithm used to perform image upscaling
 
-other-settings = Autres paramètres
-framerate-limit = Limitation des FPS
-unfocused-framerate-limit = Limitation des FPS hors focus
+auto = Auto
+integer = Integer
+fit = Fit
+fill = Fill
+stretch = Stretch
+
+upscale-filter = Filter
+upscale-filter-description = Algorithm used to filter upscaled image
+
+linear = Linear
+nearest = Nearest
+nis = NIS
+pixel = Pixel
+
+upscale-sharpness = Sharpness
+upscale-sharpness-description = Upscaling sharpness
+
+smallest = Smallest
+small = Small
+high = High
+highest = Highest
+
+hdr-support = HDR support
+hdr-support-description = Enable gamescope HDR output. Requires display support
+
+realtime-scheduler = Realtime scheduler
+realtime-scheduler-description = Use realtime game process scheduling. Improves game performance in cost of slowing down background processes
+
+adaptive-sync = Adaptive sync
+adaptive-sync-description = Enable variable refresh rate. Requires display support
 
 force-grab-cursor = Force grab cursor
 force-grab-cursor-description = Always use relative mouse mode instead of flipping dependent on cursor visibility. The mouse cursor will correctly be centered in the game
+
+mangohud = MangoHUD
+mangohud-description = Launch with the mangoapp (mangohud) performance overlay enabled
+
+extra-args = Extra arguments
+extra-args-description = Extra arguments appended to the gamescope
