@@ -7,9 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added 4.8.0 and 5.0.0 voiceovers sizes
+- Apply chmod 755 to extracted files if 7z was used
+
+### Changed
+
+- Reworked gamescope settings
+
 ### Fixed
 
 - Create cache folder if it doesn't exist
+- (potentially) fixed a bug with pre-download button
+- Fixed calculation of unpacked files size due to API changes
+- Respect downloaded file size in free space check
 
 ## [3.11.0] - 02.08.2024
 
@@ -491,7 +503,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Improved components downloading in initial setup 
+- Improved components downloading in initial setup
 
 ## [3.1.2] - 07.03.2023
 

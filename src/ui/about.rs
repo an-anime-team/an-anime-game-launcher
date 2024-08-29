@@ -98,19 +98,23 @@ impl SimpleComponent for AboutDialog {
                 "<p>Added</p>",
 
                 "<ul>",
-                    "<li>Respect root \".version\" file for game version parsing</li>",
+                    "<li>Added 4.8.0 and 5.0.0 voiceovers sizes</li>",
+                    "<li>Apply chmod 755 to extracted files if 7z was used</li>",
                 "</ul>",
 
                 "<p>Changed</p>",
 
                 "<ul>",
-                    "<li>Prioritize parsed game version over the API response</li>",
+                    "<li>Reworked gamescope settings</li>",
                 "</ul>",
 
-                "<p>Removed</p>",
+                "<p>Fixed</p>",
 
                 "<ul>",
-                    "<li>Removed migrate installation feature</li>",
+                    "<li>Create cache folder if it doesn't exist</li>",
+                    "<li>(potentially) fixed a bug with pre-download button</li>",
+                    "<li>Fixed calculation of unpacked files size due to API changes</li>",
+                    "<li>Respect downloaded file size in free space check</li>",
                 "</ul>"
             ].join("\n"),
 
