@@ -2,51 +2,51 @@ game-resolution = Spiel-Auflösung
 gamescope-resolution = Gamescope-Auflösung
 
 framerate = Framerate
-framerate-limit = Framerate limit
-unfocused-framerate-limit = Unfocused framerate limit
+framerate-limit = Framerate Begrenzung
+unfocused-framerate-limit = Unfokussiertes Framerate Begrenzung
 
-upscaling = Upscaling
-upscaling-description = Render the game in lower resolution and improve the image quality using special algorithms
+upscaling = Upscaling 
+upscaling-description = Rendern des Spiels in niedrigeres Auflösung und das Spielqualität mit Spezial-Algorithmus verbessern
 
 upscaler = Upscaler
-upscaler-description = Algorithm used to perform image upscaling
+upscaler-description = Welches Algorithmus für das Upscaling verwendet wird
 
-auto = Auto
-integer = Integer
-fit = Fit
-fill = Fill
-stretch = Stretch
+auto = Automatisch
+integer = Ganze Zahl
+fit = Passen
+fill = Füllen
+stretch = Strecken
 
 upscale-filter = Filter
-upscale-filter-description = Algorithm used to filter upscaled image
+upscale-filter-description = Algorithmus um das Upscaliertes Bild zu filtern 
 
 linear = Linear
-nearest = Nearest
+nearest = Nächste
 nis = NIS
 pixel = Pixel
 
-upscale-sharpness = Sharpness
-upscale-sharpness-description = Upscaling sharpness
+upscale-sharpness = Shärfe
+upscale-sharpness-description = Upscaling Shärfe
 
-smallest = Smallest
-small = Small
-high = High
-highest = Highest
+smallest = Kleinste
+small = Klein
+high = Hoch
+highest = Höchste
 
-hdr-support = HDR support
-hdr-support-description = Enable gamescope HDR output. Requires display support
+hdr-support = HDR-Unterstützung
+hdr-support-description = Gamescope HDR-Ausgabe aktivieren. Neustart des Displays ist erforderlich
 
-realtime-scheduler = Realtime scheduler
-realtime-scheduler-description = Use realtime game process scheduling. Improves game performance in cost of slowing down background processes
+realtime-scheduler = Echtzeit-Planer 
+realtime-scheduler-description = Benutzte Echtzeit-Planung. Verbessert die Spielleistung auf Kosten der Verlangsamung von Hintergrundprozessen
 
-adaptive-sync = Adaptive sync
-adaptive-sync-description = Enable variable refresh rate. Requires display support
+adaptive-sync = Adaptive Synchronisierung 
+adaptive-sync-description = Aktiviere Variable Bildwiederholfrequenz. Neustart des Displays ist erforderlich
 
 force-grab-cursor = Cursor greifen erzwingen
 force-grab-cursor-description = Verwende immer den relativen Mausmodus, anstatt abhängig von der Sichtbarkeit des Cursors umzuschalten. Der Mauszeiger wird korrekt in der Mitte des Spiels zentriert.
 
 mangohud = MangoHUD
-mangohud-description = Launch with the mangoapp (mangohud) performance overlay enabled
+mangohud-description = Mit mangohud Overlay starten 
 
-extra-args = Extra arguments
-extra-args-description = Extra arguments appended to the gamescope
+extra-args = Zusätzliche Argumente
+extra-args-description = Zusätzliche Argumente nach gamescope anhängen
