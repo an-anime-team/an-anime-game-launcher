@@ -53,6 +53,6 @@ fps-unlocker-interval-description = Delay in milliseconds between overwriting th
 
 window-mode = Type de fenêtre
 borderless = Sans bordure
-headless = Headless
+headless = Sans fenêtre
 popup = Popup
 fullscreen = Plein écran
