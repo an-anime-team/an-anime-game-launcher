@@ -2,51 +2,48 @@ game-resolution = Resolusi game
 gamescope-resolution = Resolusi Gamescope
 
 framerate = Framerate
-framerate-limit = Framerate limit
-unfocused-framerate-limit = Unfocused framerate limit
+framerate-limit = Batas framerate
+unfocused-framerate-limit = Batas framerate tidak fokus
 
-upscaling = Peningkatan skala resolusi game
-upscaling-description = Render the game in lower resolution and improve the image quality using special algorithms
+upscaling = Upscaling
+upscaling-description = Render game dengan resolusi rendah dan meningkatkan kualitas gambar dengan algoritma
 
 upscaler = Upscaler
-upscaler-description = Algorithm used to perform image upscaling
+upscaler-description = Algoritma yang dipakai untuk melakukan proses upscaling
 
-auto = Auto
+auto = Otomatis
 integer = Integer
 fit = Fit
-fill = Fill
-stretch = Stretch
+fill = Penuh
+stretch = Perlebar
 
 upscale-filter = Filter
-upscale-filter-description = Algorithm used to filter upscaled image
+upscale-filter-description = Algoritma yang digunakan untuk memfilter gambar yang di-upscale
 
-linear = Linear
-nearest = Nearest
+linear = Linier
+nearest = Terdekat
 nis = NIS
 pixel = Pixel
 
-upscale-sharpness = Sharpness
-upscale-sharpness-description = Upscaling sharpness
+upscale-sharpness = Ketajaman
+upscale-sharpness-description = Ketajaman upscaling
 
-smallest = Smallest
-small = Small
-high = High
-highest = Highest
+smallest = Terkecil
+small = kecil
+high = Tinggi
+highest = Tertinggi
 
-hdr-support = HDR support
-hdr-support-description = Enable gamescope HDR output. Requires display support
+hdr-support = Dukungan HDR
+hdr-support-description = Aktifkan output HDR gamescope. Dibutuhkan monitor yang mendukung fitur HDR
 
 realtime-scheduler = Realtime scheduler
-realtime-scheduler-description = Use realtime game process scheduling. Improves game performance in cost of slowing down background processes
+realtime-scheduler-description =  Menjadwalkan proses game secara realtime. Meningkatkan performa game dengan penalti terhadap proses yang berjalan di background
 
 adaptive-sync = Adaptive sync
-adaptive-sync-description = Enable variable refresh rate. Requires display support
-
-force-grab-cursor = Force grab cursor
-force-grab-cursor-description = Always use relative mouse mode instead of flipping dependent on cursor visibility. The mouse cursor will correctly be centered in the game
+adaptive-sync-description = Aktifkan variable refresh rate (VRR). Dibutuhkan monitor yang mendukung fitur VRR
 
 mangohud = MangoHUD
-mangohud-description = Launch with the mangoapp (mangohud) performance overlay enabled
+mangohud-description = Luncurkan dengan overlay performance monitor mangoapp (mangohud)
 
-extra-args = Extra arguments
-extra-args-description = Extra arguments appended to the gamescope
+extra-args = Argumen tambahan
+extra-args-description = Argumen tambahan untuk gamescope
