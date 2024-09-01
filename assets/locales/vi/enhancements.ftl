@@ -52,5 +52,6 @@ fps-unlocker-interval-description = Delay in milliseconds between overwriting th
 
 window-mode = Chế độ cửa sổ
 borderless = Cửa sổ không viền
+headless = Headless
 popup = Popup
 fullscreen = Toàn màn hình

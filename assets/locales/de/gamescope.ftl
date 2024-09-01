@@ -1,16 +1,52 @@
 game-resolution = Spiel-Auflösung
 gamescope-resolution = Gamescope-Auflösung
 
-upscaling = Upscaling
+framerate = Framerate
+framerate-limit = Framerate Begrenzung
+unfocused-framerate-limit = Unfokussiertes Framerate Begrenzung
 
-integer-scaling = Integer-Skalierung
-integer-scaling-description = Verwandelt jeden Pixel in eine quadratische oder rechteckige Gruppe mit einer ganzzahligen Anzahl gleichfarbiger Pixel. Verhindert Schärfeverluste bei der Skalierung von Full HD auf 4K
-gamescope-fsr-description = Eine von AMD entwickelte Open-Source-Upscaling-Technik für bessere Upscaling-Qualität
-nis-description = Eine Open-Source-Upscaling-Technik, die von Nvidia als herstellerübergreifende, kostengünstige Alternative zu ihrer proprietären DLSS-Lösung entwickelt wurde, d. h. sie funktioniert sowohl auf AMD- und Intel-GPUs als auch auf Nvidia-GPUs
+upscaling = Upscaling 
+upscaling-description = Rendern des Spiels in niedrigeres Auflösung und das Spielqualität mit Spezial-Algorithmus verbessern
 
-other-settings = Andere Einstellungen
-framerate-limit = Framerate-Limit
-unfocused-framerate-limit = Unfokussiert Framerate-Limit
+upscaler = Upscaler
+upscaler-description = Welches Algorithmus für das Upscaling verwendet wird
+
+auto = Automatisch
+integer = Ganze Zahl
+fit = Passen
+fill = Füllen
+stretch = Strecken
+
+upscale-filter = Filter
+upscale-filter-description = Algorithmus um das Upscaliertes Bild zu filtern 
+
+linear = Linear
+nearest = Nächste
+nis = NIS
+pixel = Pixel
+
+upscale-sharpness = Shärfe
+upscale-sharpness-description = Upscaling Shärfe
+
+smallest = Kleinste
+small = Klein
+high = Hoch
+highest = Höchste
+
+hdr-support = HDR-Unterstützung
+hdr-support-description = Gamescope HDR-Ausgabe aktivieren. Neustart des Displays ist erforderlich
+
+realtime-scheduler = Echtzeit-Planer 
+realtime-scheduler-description = Benutzte Echtzeit-Planung. Verbessert die Spielleistung auf Kosten der Verlangsamung von Hintergrundprozessen
+
+adaptive-sync = Adaptive Synchronisierung 
+adaptive-sync-description = Aktiviere Variable Bildwiederholfrequenz. Neustart des Displays ist erforderlich
 
 force-grab-cursor = Cursor greifen erzwingen
 force-grab-cursor-description = Verwende immer den relativen Mausmodus, anstatt abhängig von der Sichtbarkeit des Cursors umzuschalten. Der Mauszeiger wird korrekt in der Mitte des Spiels zentriert.
+
+mangohud = MangoHUD
+mangohud-description = Mit mangohud Overlay starten 
+
+extra-args = Zusätzliche Argumente
+extra-args-description = Zusätzliche Argumente nach gamescope anhängen

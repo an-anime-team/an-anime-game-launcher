@@ -30,23 +30,56 @@ impl SimpleAsyncComponent for GamescopeApp {
 
             add = &adw::PreferencesPage {
                 add = &adw::PreferencesGroup {
+                    adw::ComboRow {
+                        set_title: &tr!("window-mode"),
+
+                        #[wrap(Some)]
+                        set_model = &gtk::StringList::new(&[
+                            &tr!("default"),
+                            &tr!("borderless"),
+                            &tr!("headless"),
+                            &tr!("fullscreen")
+                        ]),
+
+                        set_selected: CONFIG.game.enhancements.gamescope.window_mode.ordinal() as u32,
+
+                        connect_selected_notify => |row| unsafe {
+                            if is_ready() {
+                                if let Ok(mut config) = Config::get() {
+                                    config.game.enhancements.gamescope.window_mode = GamescopeWindowMode::from_ordinal_unsafe(row.selected() as i8);
+
+                                    Config::update(config);
+                                }
+                            }
+                        }
+                    }
+                },
+
+                add = &adw::PreferencesGroup {
                     set_title: &tr!("game-resolution"),
 
                     adw::EntryRow {
                         set_title: &tr!("width"),
                         set_input_purpose: gtk::InputPurpose::Digits,
 
-                        set_text: &if CONFIG.game.enhancements.gamescope.game.width > 0 {
-                            CONFIG.game.enhancements.gamescope.game.width.to_string()
-                        } else {
-                            String::new()
+                        set_text: &match CONFIG.game.enhancements.gamescope.game_window.width {
+                            Some(value) if value > 0 => value.to_string(),
+                            _ => String::new()
                         },
 
                         connect_changed => |row| {
                             if is_ready() {
                                 if let Ok(mut config) = Config::get() {
-                                    config.game.enhancements.gamescope.game.width = row.text().parse().unwrap_or_default();
-    
+                                    let value = row.text()
+                                        .parse::<u64>()
+                                        .unwrap_or_default();
+
+                                    config.game.enhancements.gamescope.game_window.width = if value > 0 {
+                                        Some(value)
+                                    } else {
+                                        None
+                                    };
+
                                     Config::update(config);
                                 }
                             }
@@ -57,17 +90,24 @@ impl SimpleAsyncComponent for GamescopeApp {
                         set_title: &tr!("height"),
                         set_input_purpose: gtk::InputPurpose::Digits,
 
-                        set_text: &if CONFIG.game.enhancements.gamescope.game.height > 0 {
-                            CONFIG.game.enhancements.gamescope.game.height.to_string()
-                        } else {
-                            String::new()
+                        set_text: &match CONFIG.game.enhancements.gamescope.game_window.height {
+                            Some(value) if value > 0 => value.to_string(),
+                            _ => String::new()
                         },
 
                         connect_changed => |row| {
                             if is_ready() {
                                 if let Ok(mut config) = Config::get() {
-                                    config.game.enhancements.gamescope.game.height = row.text().parse().unwrap_or_default();
-    
+                                    let value = row.text()
+                                        .parse::<u64>()
+                                        .unwrap_or_default();
+
+                                    config.game.enhancements.gamescope.game_window.height = if value > 0 {
+                                        Some(value)
+                                    } else {
+                                        None
+                                    };
+
                                     Config::update(config);
                                 }
                             }
@@ -82,17 +122,24 @@ impl SimpleAsyncComponent for GamescopeApp {
                         set_title: &tr!("width"),
                         set_input_purpose: gtk::InputPurpose::Digits,
 
-                        set_text: &if CONFIG.game.enhancements.gamescope.gamescope.width > 0 {
-                            CONFIG.game.enhancements.gamescope.gamescope.width.to_string()
-                        } else {
-                            String::new()
+                        set_text: &match CONFIG.game.enhancements.gamescope.gamescope_window.width {
+                            Some(value) if value > 0 => value.to_string(),
+                            _ => String::new()
                         },
 
                         connect_changed => |row| {
                             if is_ready() {
                                 if let Ok(mut config) = Config::get() {
-                                    config.game.enhancements.gamescope.gamescope.width = row.text().parse().unwrap_or_default();
-    
+                                    let value = row.text()
+                                        .parse::<u64>()
+                                        .unwrap_or_default();
+
+                                    config.game.enhancements.gamescope.gamescope_window.width = if value > 0 {
+                                        Some(value)
+                                    } else {
+                                        None
+                                    };
+
                                     Config::update(config);
                                 }
                             }
@@ -103,17 +150,24 @@ impl SimpleAsyncComponent for GamescopeApp {
                         set_title: &tr!("height"),
                         set_input_purpose: gtk::InputPurpose::Digits,
 
-                        set_text: &if CONFIG.game.enhancements.gamescope.gamescope.height > 0 {
-                            CONFIG.game.enhancements.gamescope.gamescope.height.to_string()
-                        } else {
-                            String::new()
+                        set_text: &match CONFIG.game.enhancements.gamescope.gamescope_window.height {
+                            Some(value) if value > 0 => value.to_string(),
+                            _ => String::new()
                         },
 
                         connect_changed => |row| {
                             if is_ready() {
                                 if let Ok(mut config) = Config::get() {
-                                    config.game.enhancements.gamescope.gamescope.height = row.text().parse().unwrap_or_default();
-    
+                                    let value = row.text()
+                                        .parse::<u64>()
+                                        .unwrap_or_default();
+
+                                    config.game.enhancements.gamescope.gamescope_window.height = if value > 0 {
+                                        Some(value)
+                                    } else {
+                                        None
+                                    };
+
                                     Config::update(config);
                                 }
                             }
@@ -122,89 +176,30 @@ impl SimpleAsyncComponent for GamescopeApp {
                 },
 
                 add = &adw::PreferencesGroup {
-                    set_title: &tr!("upscaling"),
-
-                    adw::ActionRow {
-                        set_title: &tr!("integer-scaling"),
-                        set_subtitle: &tr!("integer-scaling-description"),
-
-                        add_suffix = &gtk::Switch {
-                            set_valign: gtk::Align::Center,
-                            set_active: CONFIG.game.enhancements.gamescope.integer_scaling,
-
-                            connect_state_notify => |switch| {
-                                if is_ready() {
-                                    if let Ok(mut config) = Config::get() {
-                                        config.game.enhancements.gamescope.integer_scaling = switch.is_active();
-
-                                        Config::update(config);
-                                    }
-                                }
-                            }
-                        }
-                    },
-
-                    adw::ActionRow {
-                        set_title: "FSR",
-                        set_subtitle: &tr!("gamescope-fsr-description"),
-
-                        add_suffix = &gtk::Switch {
-                            set_valign: gtk::Align::Center,
-                            set_active: CONFIG.game.enhancements.gamescope.fsr,
-
-                            connect_state_notify => |switch| {
-                                if is_ready() {
-                                    if let Ok(mut config) = Config::get() {
-                                        config.game.enhancements.gamescope.fsr = switch.is_active();
-
-                                        Config::update(config);
-                                    }
-                                }
-                            }
-                        }
-                    },
-
-                    adw::ActionRow {
-                        set_title: "Nvidia Image Scaling",
-                        set_subtitle: &tr!("nis-description"),
-
-                        add_suffix = &gtk::Switch {
-                            set_valign: gtk::Align::Center,
-                            set_active: CONFIG.game.enhancements.gamescope.nis,
-
-                            connect_state_notify => |switch| {
-                                if is_ready() {
-                                    if let Ok(mut config) = Config::get() {
-                                        config.game.enhancements.gamescope.nis = switch.is_active();
-
-                                        Config::update(config);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-
-                add = &adw::PreferencesGroup {
-                    set_title: &tr!("other-settings"),
-
-                    // TODO: maybe use Fps enum like in fps unlocker settings
+                    set_title: &tr!("framerate"),
 
                     adw::EntryRow {
                         set_title: &tr!("framerate-limit"),
                         set_input_purpose: gtk::InputPurpose::Digits,
 
-                        set_text: &if CONFIG.game.enhancements.gamescope.framerate.focused > 0 {
-                            CONFIG.game.enhancements.gamescope.framerate.focused.to_string()
-                        } else {
-                            String::new()
+                        set_text: &match CONFIG.game.enhancements.gamescope.framerate.focused {
+                            Some(value) if value > 0 => value.to_string(),
+                            _ => String::new()
                         },
 
                         connect_changed => |row| {
                             if is_ready() {
                                 if let Ok(mut config) = Config::get() {
-                                    config.game.enhancements.gamescope.framerate.focused = row.text().parse().unwrap_or_default();
-    
+                                    let value = row.text()
+                                        .parse::<u64>()
+                                        .unwrap_or_default();
+
+                                    config.game.enhancements.gamescope.framerate.focused = if value > 0 {
+                                        Some(value)
+                                    } else {
+                                        None
+                                    };
+
                                     Config::update(config);
                                 }
                             }
@@ -215,17 +210,56 @@ impl SimpleAsyncComponent for GamescopeApp {
                         set_title: &tr!("unfocused-framerate-limit"),
                         set_input_purpose: gtk::InputPurpose::Digits,
 
-                        set_text: &if CONFIG.game.enhancements.gamescope.framerate.unfocused > 0 {
-                            CONFIG.game.enhancements.gamescope.framerate.unfocused.to_string()
-                        } else {
-                            String::new()
+                        set_text: &match CONFIG.game.enhancements.gamescope.framerate.unfocused {
+                            Some(value) if value > 0 => value.to_string(),
+                            _ => String::new()
                         },
 
                         connect_changed => |row| {
                             if is_ready() {
                                 if let Ok(mut config) = Config::get() {
-                                    config.game.enhancements.gamescope.framerate.unfocused = row.text().parse().unwrap_or_default();
-    
+                                    let value = row.text()
+                                        .parse::<u64>()
+                                        .unwrap_or_default();
+
+                                    config.game.enhancements.gamescope.framerate.unfocused = if value > 0 {
+                                        Some(value)
+                                    } else {
+                                        None
+                                    };
+
+                                    Config::update(config);
+                                }
+                            }
+                        }
+                    }
+                },
+
+                add = &adw::PreferencesGroup {
+                    set_title: &tr!("upscaling"),
+                    set_description: Some(&tr!("upscaling-description")),
+
+                    adw::ComboRow {
+                        set_title: &tr!("upscaler"),
+                        set_subtitle: &tr!("upscaler-description"),
+
+                        #[wrap(Some)]
+                        set_model = &gtk::StringList::new(&[
+                            &tr!("none"),
+                            &tr!("auto"),
+                            &tr!("integer"),
+                            &tr!("fit"),
+                            &tr!("fill"),
+                            &tr!("stretch")
+                        ]),
+
+                        set_selected: CONFIG.game.enhancements.gamescope.upscaling.upscaler.ordinal() as u32,
+
+                        connect_selected_notify => |row| unsafe {
+                            if is_ready() {
+                                if let Ok(mut config) = Config::get() {
+                                    config.game.enhancements.gamescope.upscaling.upscaler = GamescopeUpscaler::from_ordinal_unsafe(row.selected() as i8);
+
                                     Config::update(config);
                                 }
                             }
@@ -233,42 +267,164 @@ impl SimpleAsyncComponent for GamescopeApp {
                     },
 
                     adw::ComboRow {
-                        set_title: &tr!("window-mode"),
+                        set_title: &tr!("upscale-filter"),
+                        set_subtitle: &tr!("upscale-filter-description"),
 
                         #[wrap(Some)]
                         set_model = &gtk::StringList::new(&[
-                            &tr!("borderless"),
-                            &tr!("fullscreen")
+                            &tr!("none"),
+                            &tr!("linear"),
+                            &tr!("nearest"),
+                            &tr!("fsr"),
+                            &tr!("nis"),
+                            &tr!("pixel")
                         ]),
 
-                        set_selected: CONFIG.game.enhancements.gamescope.window_type.ordinal() as u32,
+                        set_selected: CONFIG.game.enhancements.gamescope.upscaling.filter.ordinal() as u32,
 
                         connect_selected_notify => |row| unsafe {
                             if is_ready() {
                                 if let Ok(mut config) = Config::get() {
-                                    config.game.enhancements.gamescope.window_type = WindowType::from_ordinal_unsafe(row.selected() as i8);
-    
+                                    config.game.enhancements.gamescope.upscaling.filter = GamescopeUpscaleFilter::from_ordinal_unsafe(row.selected() as i8);
+
                                     Config::update(config);
                                 }
                             }
                         }
                     },
 
-                    adw::ActionRow {
+                    adw::ComboRow {
+                        set_title: &tr!("upscale-sharpness"),
+                        set_subtitle: &tr!("upscale-sharpness-description"),
+
+                        #[wrap(Some)]
+                        set_model = &gtk::StringList::new(&[
+                            &tr!("none"),
+                            &tr!("smallest"),
+                            &tr!("small"),
+                            &tr!("balanced"),
+                            &tr!("high"),
+                            &tr!("highest")
+                        ]),
+
+                        set_selected: CONFIG.game.enhancements.gamescope.upscaling.sharpness.ordinal() as u32,
+
+                        connect_selected_notify => |row| unsafe {
+                            if is_ready() {
+                                if let Ok(mut config) = Config::get() {
+                                    config.game.enhancements.gamescope.upscaling.sharpness = GamescopeUpscaleSharpness::from_ordinal_unsafe(row.selected() as i8);
+
+                                    Config::update(config);
+                                }
+                            }
+                        }
+                    }
+                },
+
+                add = &adw::PreferencesGroup {
+                    set_title: &tr!("options"),
+
+                    adw::SwitchRow {
+                        set_title: &tr!("hdr-support"),
+                        set_subtitle: &tr!("hdr-support-description"),
+
+                        set_active: CONFIG.game.enhancements.gamescope.options.hdr_support,
+
+                        connect_active_notify => |switch| {
+                            if is_ready() {
+                                if let Ok(mut config) = Config::get() {
+                                    config.game.enhancements.gamescope.options.hdr_support = switch.is_active();
+
+                                    Config::update(config);
+                                }
+                            }
+                        }
+                    },
+
+                    adw::SwitchRow {
+                        set_title: &tr!("realtime-scheduler"),
+                        set_subtitle: &tr!("realtime-scheduler-description"),
+
+                        set_active: CONFIG.game.enhancements.gamescope.options.realtime_scheduler,
+
+                        connect_active_notify => |switch| {
+                            if is_ready() {
+                                if let Ok(mut config) = Config::get() {
+                                    config.game.enhancements.gamescope.options.realtime_scheduler = switch.is_active();
+
+                                    Config::update(config);
+                                }
+                            }
+                        }
+                    },
+
+                    adw::SwitchRow {
+                        set_title: &tr!("adaptive-sync"),
+                        set_subtitle: &tr!("adaptive-sync-description"),
+
+                        set_active: CONFIG.game.enhancements.gamescope.options.adaptive_sync,
+
+                        connect_active_notify => |switch| {
+                            if is_ready() {
+                                if let Ok(mut config) = Config::get() {
+                                    config.game.enhancements.gamescope.options.adaptive_sync = switch.is_active();
+
+                                    Config::update(config);
+                                }
+                            }
+                        }
+                    },
+
+                    adw::SwitchRow {
                         set_title: &tr!("force-grab-cursor"),
                         set_subtitle: &tr!("force-grab-cursor-description"),
 
-                        add_suffix = &gtk::Switch {
-                            set_valign: gtk::Align::Center,
-                            set_active: CONFIG.game.enhancements.gamescope.force_grab_cursor,
+                        set_active: CONFIG.game.enhancements.gamescope.options.force_grab_cursor,
 
-                            connect_state_notify => |switch| {
-                                if is_ready() {
-                                    if let Ok(mut config) = Config::get() {
-                                        config.game.enhancements.gamescope.force_grab_cursor = switch.is_active();
+                        connect_active_notify => |switch| {
+                            if is_ready() {
+                                if let Ok(mut config) = Config::get() {
+                                    config.game.enhancements.gamescope.options.force_grab_cursor = switch.is_active();
 
-                                        Config::update(config);
-                                    }
+                                    Config::update(config);
+                                }
+                            }
+                        }
+                    },
+
+                    adw::SwitchRow {
+                        set_title: &tr!("mangohud"),
+                        set_subtitle: &tr!("mangohud-description"),
+
+                        set_active: CONFIG.game.enhancements.gamescope.options.mangohud,
+
+                        connect_active_notify => |switch| {
+                            if is_ready() {
+                                if let Ok(mut config) = Config::get() {
+                                    config.game.enhancements.gamescope.options.mangohud = switch.is_active();
+
+                                    Config::update(config);
+                                }
+                            }
+                        }
+                    }
+                },
+
+                add = &adw::PreferencesGroup {
+                    set_title: &tr!("extra-args"),
+                    set_description: Some(&tr!("extra-args-description")),
+
+                    adw::EntryRow {
+                        set_title: &tr!("extra-args"),
+
+                        set_text: &CONFIG.game.enhancements.gamescope.extra_args,
+
+                        connect_changed => |row| {
+                            if is_ready() {
+                                if let Ok(mut config) = Config::get() {
+                                    config.game.enhancements.gamescope.extra_args = row.text().parse().unwrap_or_default();
+
+                                    Config::update(config);
                                 }
                             }
                         }

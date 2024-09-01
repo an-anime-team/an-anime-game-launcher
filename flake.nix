@@ -20,6 +20,9 @@
                     cmake
                     pkg-config
 
+                    git
+                    unzip
+                    p7zip
                     libwebp
                 ];
 

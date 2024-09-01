@@ -51,7 +51,8 @@ enabled = Etkin
 fps-unlocker-interval = Overwrite interval
 fps-unlocker-interval-description = Delay in milliseconds between overwriting the FPS limit value. Periodic overwrites are necessary to prevent it from resetting
 
-window-mode = Pencereli 
+window-mode = Pencereli
 borderless = Köşesiz
+headless = Headless
 popup = Popup
 fullscreen = Tam ekran

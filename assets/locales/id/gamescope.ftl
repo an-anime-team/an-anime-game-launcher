@@ -1,16 +1,49 @@
-game-resolution = Resolusi game 
+game-resolution = Resolusi game
 gamescope-resolution = Resolusi Gamescope
 
-upscaling = Peningkatan skala resolusi game
-
-integer-scaling = Skala integer
-integer-scaling-description = Membuat setiap pixel menjadi kelompok persegi atau persegi panjang dengan bilangan bulat dari pixel dengan warna yang sama. Mengecah hilangnya ketajaman ketika menskala dari Full HD ke 4K
-gamescope-fsr-description = Teknik peningkatan skala Open-source yang dikembangkan oleh AMD untuk kualitas peningkatan skala yang lebih baik 
-nis-description = Teknik peningkatan skala yang dikembangkan oleh Nvidia sebagai alternatif antar-vendor, overhead rendah DLSS yang artinya bisa dijalankan pada GPU AMD, Intel, dan tentunya Nvidia
-
-other-settings = Pengaturan lainnya
+framerate = Framerate
 framerate-limit = Batas framerate
-unfocused-framerate-limit = Batas framerate saat tidak fokus
+unfocused-framerate-limit = Batas framerate tidak fokus
 
-force-grab-cursor = Force grab cursor
-force-grab-cursor-description = Always use relative mouse mode instead of flipping dependent on cursor visibility. The mouse cursor will correctly be centered in the game
+upscaling = Upscaling
+upscaling-description = Render game dengan resolusi rendah dan meningkatkan kualitas gambar dengan algoritma
+
+upscaler = Upscaler
+upscaler-description = Algoritma yang dipakai untuk melakukan proses upscaling
+
+auto = Otomatis
+integer = Integer
+fit = Fit
+fill = Penuh
+stretch = Perlebar
+
+upscale-filter = Filter
+upscale-filter-description = Algoritma yang digunakan untuk memfilter gambar yang di-upscale
+
+linear = Linier
+nearest = Terdekat
+nis = NIS
+pixel = Pixel
+
+upscale-sharpness = Ketajaman
+upscale-sharpness-description = Ketajaman upscaling
+
+smallest = Terkecil
+small = kecil
+high = Tinggi
+highest = Tertinggi
+
+hdr-support = Dukungan HDR
+hdr-support-description = Aktifkan output HDR gamescope. Dibutuhkan monitor yang mendukung fitur HDR
+
+realtime-scheduler = Realtime scheduler
+realtime-scheduler-description =  Menjadwalkan proses game secara realtime. Meningkatkan performa game dengan penalti terhadap proses yang berjalan di background
+
+adaptive-sync = Adaptive sync
+adaptive-sync-description = Aktifkan variable refresh rate (VRR). Dibutuhkan monitor yang mendukung fitur VRR
+
+mangohud = MangoHUD
+mangohud-description = Luncurkan dengan overlay performance monitor mangoapp (mangohud)
+
+extra-args = Argumen tambahan
+extra-args-description = Argumen tambahan untuk gamescope

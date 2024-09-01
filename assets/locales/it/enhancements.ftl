@@ -53,5 +53,6 @@ fps-unlocker-interval-description = Ritardo in millisecondi tra le sovrascrittur
 
 window-mode = Modalità della finestra
 borderless = Senza bordi
+headless = Headless
 popup = Popup
 fullscreen = Schermo intero

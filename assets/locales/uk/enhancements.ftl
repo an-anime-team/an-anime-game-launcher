@@ -53,5 +53,6 @@ fps-unlocker-interval-description = Затримка між перезаписа
 
 window-mode = Режим вікна
 borderless = Безрамковий
+headless = Headless
 popup = Спливаючий
 fullscreen = Повноекранний

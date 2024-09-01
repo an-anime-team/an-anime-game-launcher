@@ -53,5 +53,6 @@ fps-unlocker-interval-description = Delay in milliseconds between overwriting th
 
 window-mode = 창 모드
 borderless = 테두리 없는 창 모드
+headless = Headless
 popup = 팝업
 fullscreen = 전체 화면

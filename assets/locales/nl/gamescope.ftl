@@ -1,16 +1,52 @@
 game-resolution = Spelresolutie
 gamescope-resolution = Gamescope resolutie
 
+framerate = Framerate
+framerate-limit = Framerate limit
+unfocused-framerate-limit = Unfocused framerate limit
+
 upscaling = Opschaling
+upscaling-description = Render the game in lower resolution and improve the image quality using special algorithms
 
-integer-scaling = Schalen van gehele getallen
-integer-scaling-description = Verandert elke pixel in een vierkante of rechthoekige groep van een geheel aantal pixels met dezelfde kleur. Voorkomt scherpteverlies bij het schalen van Full HD naar 4K
-gamescope-fsr-description = Een open-source opschalingstechniek ontwikkeld door AMD voor een betere opschalingskwaliteit
-nis-description = Een open source opschalingstechniek ontwikkeld door Nvidia als een cross-vendor, low-overhead alternatief voor hun eigen DLSS-oplossing, wat betekent dat het werkt op AMD- en Intel GPU's en Nvidia GPU's
+upscaler = Upscaler
+upscaler-description = Algorithm used to perform image upscaling
 
-other-settings = Andere instellingen
-framerate-limit = Frameratelimiet
-unfocused-framerate-limit = Ongefocuste frameratelimiet
+auto = Auto
+integer = Integer
+fit = Fit
+fill = Fill
+stretch = Stretch
+
+upscale-filter = Filter
+upscale-filter-description = Algorithm used to filter upscaled image
+
+linear = Linear
+nearest = Nearest
+nis = NIS
+pixel = Pixel
+
+upscale-sharpness = Sharpness
+upscale-sharpness-description = Upscaling sharpness
+
+smallest = Smallest
+small = Small
+high = High
+highest = Highest
+
+hdr-support = HDR support
+hdr-support-description = Enable gamescope HDR output. Requires display support
+
+realtime-scheduler = Realtime scheduler
+realtime-scheduler-description = Use realtime game process scheduling. Improves game performance in cost of slowing down background processes
+
+adaptive-sync = Adaptive sync
+adaptive-sync-description = Enable variable refresh rate. Requires display support
 
 force-grab-cursor = Force grab cursor
 force-grab-cursor-description = Always use relative mouse mode instead of flipping dependent on cursor visibility. The mouse cursor will correctly be centered in the game
+
+mangohud = MangoHUD
+mangohud-description = Launch with the mangoapp (mangohud) performance overlay enabled
+
+extra-args = Extra arguments
+extra-args-description = Extra arguments appended to the gamescope

@@ -7,7 +7,7 @@ wine = Wine
 synchronization = 同期
 wine-sync-description = Wine内部のイベントを同期するためのものです。
 
-language =言語 
+language =言語
 wine-lang-description = wine環境で使用される言語です。キーボードの問題を修正できます。
 system = システム
 
@@ -52,5 +52,6 @@ fps-unlocker-interval-description = Delay in milliseconds between overwriting th
 
 window-mode = ウィンドウモード
 borderless = ボーダーレス
+headless = Headless
 popup = ポップアップ
 fullscreen = フルスクリーン

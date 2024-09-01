@@ -53,5 +53,6 @@ fps-unlocker-interval-description = Delay in milliseconds between overwriting th
 
 window-mode = Venster Mode
 borderless = Randloos
+headless = Headless
 popup = Popup
 fullscreen = Volledig scherm

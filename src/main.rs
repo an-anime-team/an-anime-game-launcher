@@ -109,11 +109,11 @@ fn main() -> anyhow::Result<()> {
     // Setup custom panic handler
     human_panic::setup_panic!(human_panic::metadata!());
 
-    // Create launcher folder if it isn't
+    // Create launcher folder if it doesn't exist.
     if !LAUNCHER_FOLDER.exists() {
         std::fs::create_dir_all(LAUNCHER_FOLDER.as_path()).expect("Failed to create launcher folder");
 
-        // This one is kinda critical buy well, I can't do something with it
+        // This one is kinda critical but well, I can't do anything about it
         std::fs::write(FIRST_RUN_FILE.as_path(), "").expect("Failed to create .first-run file");
 
         // Set initial launcher language based on system language
@@ -123,6 +123,12 @@ fn main() -> anyhow::Result<()> {
         config.launcher.language = i18n::format_lang(i18n::get_default_lang());
 
         Config::update_raw(config).expect("Failed to update config");
+    }
+
+    // Create cache folder if it doesn't exist.
+    if !CACHE_FOLDER.exists() {
+        std::fs::create_dir_all(CACHE_FOLDER.as_path())
+            .expect("Failed to create cache folder");
     }
 
     // Force debug output
