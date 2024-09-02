@@ -43,7 +43,7 @@ enum-ordinalize = "4.3"
 tracing = "0.1"
 tracing-subscriber = "0.3"
 
-fluent-templates = "0.9"
+fluent-templates = "0.10"
 unic-langid = "0.9"
 
 human-panic = "2.0.1"
