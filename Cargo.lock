@@ -63,8 +63,8 @@ checksum = "5c6cb57a04249c6480766f7f7cef5467412af1490f8d1e243141daddada3264f"
 
 [[package]]
 name = "anime-game-core"
-version = "1.24.2"
-source = "git+https://github.com/an-anime-team/anime-game-core?tag=1.24.2#dd0e9fd265d7600005840fe4cbda9f1a76d7b520"
+version = "1.25.0"
+source = "git+https://github.com/an-anime-team/anime-game-core?tag=1.25.0#4c6efced5fccacc82831d31881ae80635306db20"
 dependencies = [
  "anyhow",
  "bzip2",
@@ -113,13 +113,11 @@ dependencies = [
 
 [[package]]
 name = "anime-launcher-sdk"
-version = "1.20.3"
-source = "git+https://github.com/an-anime-team/anime-launcher-sdk?tag=1.20.3#a101b856e8e2d7b57ca6566b2752d2c8ab7cc3d9"
+version = "1.21.0"
 dependencies = [
  "anime-game-core",
  "anyhow",
  "cached",
- "discord-rich-presence",
  "enum-ordinalize",
  "lazy_static",
  "md-5",
@@ -754,18 +752,6 @@ dependencies = [
  "block-buffer",
  "crypto-common",
  "subtle",
-]
-
-[[package]]
-name = "discord-rich-presence"
-version = "0.2.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f632a41e3e97febf8edff46b1405f9875894c29e20a25c5abe566872226b3f84"
-dependencies = [
- "serde",
- "serde_derive",
- "serde_json",
- "uuid 0.8.2",
 ]
 
 [[package]]
@@ -1489,7 +1475,7 @@ dependencies = [
  "serde",
  "serde_derive",
  "toml",
- "uuid 1.10.0",
+ "uuid",
 ]
 
 [[package]]
@@ -2925,15 +2911,6 @@ name = "utf8parse"
 version = "0.2.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "06abde3611657adf66d383f00b093d7faecc7fa57071cce2578660c9f1010821"
-
-[[package]]
-name = "uuid"
-version = "0.8.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bc5cf98d8186244414c848017f0e2676b3fcb46807f6668a97dfe67359a3c4b7"
-dependencies = [
- "getrandom",
-]
 
 [[package]]
 name = "uuid"
