@@ -37,13 +37,13 @@ hdr-support = HDR 支持
 hdr-support-description = 啟用 Gamescope HDR 輸出。需要顯示器支持
 
 realtime-scheduler = 實時調度器
-realtime-scheduler-description = 使用實時遊戲進程調度。提高遊戲性能，但會減慢背景進程
+realtime-scheduler-description = 使用實時遊戲進程調度。提高遊戲性能，但會減慢背景程序
 
 adaptive-sync = 自適應同步
 adaptive-sync-description = 啟用可變刷新率。需要顯示器支持
 
-force-grab-cursor = 強制抓取光標
-force-grab-cursor-description = 始終使用相對鼠標模式，而不是根據光標可見性進行翻轉。鼠標光標將正確地在遊戲中居中
+force-grab-cursor = 強制抓取鼠標
+force-grab-cursor-description = 始終使用相對鼠標模式，而不是根據鼠標可見性進行翻轉。鼠標將正確地在遊戲中居中
 
 mangohud = MangoHUD
 mangohud-description = 啟用 mangoapp (mangohud) 性能覆蓋層啟動

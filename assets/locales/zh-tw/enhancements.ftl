@@ -1,6 +1,6 @@
-game-settings-description = 管理遊戲內設置和帳號會話
+game-settings-description = 管理遊戲內設置和帳號
 sandbox-settings-description = 在 bubblewrap 沙盒中運行遊戲，與 Flatpak 的行為類似
-environment-settings-description = 指定環境變量和遊戲啟動命令
+environment-settings-description = 指定環境變數和遊戲啟動命令
 
 wine = Wine
 
@@ -11,10 +11,10 @@ language = 語言
 wine-lang-description = 設置 Wine 的語言。可以用於解決鍵盤佈局問題
 system = 系統
 
-borderless-window = 無邊框窗口
+borderless-window = 無邊框視窗
 virtual-desktop = 虛擬桌面
 
-map-drive-c = 映射 C 盤
+map-drive-c = 映射 C 磁碟機
 map-drive-c-description = 自動將 Wine prefix 裡的 drive_c 文件夾符號鏈接至 Wine 的 dosdevices 目錄裡
 
 map-game-folder = 映射遊戲文件夾
@@ -25,7 +25,7 @@ game = 遊戲
 hud = HUD
 
 fsr = FSR
-fsr-description = 將遊戲分辨率提升到與屏幕相同。需要在遊戲中選擇較低分辨率，然後按 Alt+Enter
+fsr-description = 將遊戲分辨率提升到與螢幕相同。需要在遊戲中選擇較低分辨率，然後按 Alt+Enter
 ultra-quality = 超級畫質
 quality = 畫質優先
 balanced = 平衡畫質與性能
@@ -39,7 +39,7 @@ gamescope-description = Gamescope 是 Valve 開發的工具，可以讓遊戲運
 
 discord-rpc = Discord RPC
 discord-rpc-description = Discord RPC 可以設置 Discord 狀態，讓你的好友知道你正在玩遊戲
-icon = 圖標
+icon = 圖示
 title = 標題
 description = 描述
 
@@ -51,8 +51,8 @@ enabled = 開啟
 fps-unlocker-interval = 覆蓋間隔
 fps-unlocker-interval-description = 以毫秒為單位的延遲時間，用於覆蓋幀率限制值。需要定期覆蓋以防止其重置
 
-window-mode = 窗口模式
+window-mode = 視窗模式
 borderless = 無邊框
 headless = Headless
-popup = 彈出窗口
+popup = 彈出視窗
 fullscreen = 全螢幕

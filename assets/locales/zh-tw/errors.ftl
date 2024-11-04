@@ -13,7 +13,7 @@ failed-get-selected-wine = 選擇 Wine 版本失敗
 downloading-failed = 下載失敗
 unpacking-failed = 解壓縮失敗
 
-kill-game-process-failed = 中止遊戲進程失敗
+kill-game-process-failed = 中止遊戲程序失敗
 
 game-file-repairing-error = 修復遊戲文件失敗
 integrity-files-getting-error = 獲取一致性文件失敗
@@ -27,7 +27,7 @@ dxvk-install-failed = 安裝 DXVK 失敗
 voice-package-deletion-error = 刪除語音包失敗
 
 game-diff-finding-error = 查找遊戲 diff 失敗
-patch-info-fetching-error = 獲取補丁信息失敗
+patch-info-fetching-error = 獲取補丁資訊失敗
 launcher-state-updating-error = 更新啟動器狀態失敗
 
 package-not-available = 缺失依賴包: {$package}
@@ -38,7 +38,7 @@ dxvk-download-error = 下載 DXVK 失敗
 dxvk-unpack-error = 解壓縮 DXVK 失敗
 dxvk-apply-error = 應用 DXVK 失敗
 
-downloaded-wine-list-failed = 列舉 Wine 版本失敗
+downloaded-wine-list-failed = 取得 Wine 版本列表失敗
 
 patch-sync-failed = 同步補丁文件夾失敗
 patch-state-check-failed = 檢查補丁文件夾失敗
@@ -46,11 +46,11 @@ game-patching-error = 應用遊戲補丁失敗
 
 # Disable telemetry
 
-telemetry-servers-disabling-error = 監測服務器禁用失敗
+telemetry-servers-disabling-error = 監測伺服器禁用失敗
 
 # Sandbox
 
-documentation-url-open-failed = 打開文檔 URL 失敗
+documentation-url-open-failed = 打開文件 URL 失敗
 
 # Game
 
@@ -62,5 +62,5 @@ game-session-apply-failed = 應用遊戲會話失敗
 
 # Enhancements
 
-discord-rpc-icons-fetch-failed = 獲取 Discord RPC 圖標失敗
-discord-rpc-icon-download-failed = 下載 Discord RPC 圖標失敗
+discord-rpc-icons-fetch-failed = 獲取 Discord RPC 圖示失敗
+discord-rpc-icon-download-failed = 下載 Discord RPC 圖示失敗

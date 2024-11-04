@@ -16,5 +16,5 @@ gstreamer-use-shared-libraries = 使用 GStreamer 共享庫
 gstreamer-use-shared-libraries-description = 設置 GST_PLUGIN_PATH 環境變數，從選中的 Wine 版本加載 GStreamer 庫
 
 dxvk-version = DXVK 版本
-dxvk-selection-disabled = 您的 Wine 首選項進用 DXVK 選擇
+dxvk-selection-disabled = 您的 Wine 首選項禁用 DXVK 選擇
 dxvk-recommended-description = 僅顯示推薦的 DXVK 版本

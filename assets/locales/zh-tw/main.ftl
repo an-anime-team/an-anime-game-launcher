@@ -60,7 +60,7 @@ update = 更新
 download = 下載
 predownload-update = 預下載版本更新 {$version} ({$size})
 
-kill-game-process = 中止遊戲進程
+kill-game-process = 中止遊戲程序
 
 main-window--patch-unavailable-tooltip = 補丁伺服器不可用，啟動器無法驗證遊戲補丁狀態。你可以運行遊戲，但是有出問題的風險
 main-window--patch-outdated-tooltip = 補丁版本太舊，新版補丁可能還沒製作完成，無法使用。請過段時間再回來查看最新狀態
