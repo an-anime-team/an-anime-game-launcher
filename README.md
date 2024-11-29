@@ -55,7 +55,7 @@ These packages are supported by active members of our community. They're widely 
 | - | - | - | - | - |
 | AUR | [wiki](https://github.com/an-anime-team/an-anime-game-launcher/wiki/Installation#-arch-linux-aur) | [an-anime-game-launcher-bin](https://aur.archlinux.org/packages/an-anime-game-launcher-bin) | Arch Linux, Manjaro, EndeavourOS | xstra * |
 | NixOS module | [wiki](https://github.com/an-anime-team/an-anime-game-launcher/wiki/Installation#-nixos-nixpkg) | [aagl-gtk-on-nix](https://github.com/ezKEa/aagl-gtk-on-nix) | NixOS | Luxxy * |
-| DEB | [wiki](https://github.com/an-anime-team/an-anime-game-launcher/wiki/Installation#-debianubuntu-ppa) | [an-anime-game-launcher](https://launchpad.net/~thundergemios10/+archive/ubuntu/an-anime-game-launcher) | Ubuntu, Debian | ThunderGemios10 * |
+| Ebuild | [aagl-ebuilds](https://github.com/an-anime-team/gentoo-ebuilds) * | Gentoo |
 
 > [!NOTE]
 > Honorary members of our discord server. We have direct contact with them.
@@ -68,8 +68,6 @@ These packages are supported by third party distributors. They either did not co
 | - | - | - |
 | DEB | [an-anime-game-launcher](https://launchpad.net/~thundergemios10/+archive/ubuntu/an-anime-game-launcher) | Ubuntu, Linux Mint, Pop!_OS |
 | Pacstall | [an-anime-game-launcher-bin](https://pacstall.dev/packages/an-anime-game-launcher-bin) | Ubuntu |
-| Ebuild | [aagl-ebuilds](https://github.com/an-anime-team/gentoo-ebuilds) * | Gentoo |
-| Lutris | `lutris.net/games/gen...-imp...` (stripping the link) | Any |
 
 > [!NOTE]
 > Although it's hosted in our official repo we didn't contact with its maintainer for some time already, and recent updates were made via merge requests by the community.
