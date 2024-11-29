@@ -69,9 +69,6 @@ These packages are supported by third party distributors. They either did not co
 | DEB | [an-anime-game-launcher](https://launchpad.net/~thundergemios10/+archive/ubuntu/an-anime-game-launcher) | Ubuntu, Linux Mint, Pop!_OS |
 | Pacstall | [an-anime-game-launcher-bin](https://pacstall.dev/packages/an-anime-game-launcher-bin) | Ubuntu |
 
-> [!NOTE]
-> Although it's hosted in our official repo we didn't contact with its maintainer for some time already, and recent updates were made via merge requests by the community.
-
 ## Chinese version support
 
 This should be automatically enabled if you're using `zh_cn` (Chinese) as your system language. If you're not using it - you can change the game edition in the launcher settings.
