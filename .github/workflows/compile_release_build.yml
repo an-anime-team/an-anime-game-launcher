@@ -13,7 +13,7 @@ on:
 env:
   CARGO_TERM_COLOR: always
 
-jobs:   
+jobs:
   build_and_upload:
     runs-on: ubuntu-latest
 
@@ -33,13 +33,13 @@ jobs:
           toolchain: stable
 
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Compile release build
         run: cargo build --release --verbose
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v3.1.0
+        uses: actions/upload-artifact@v4
         with:
           name: Release build
           path: target/release/anime-game-launcher
