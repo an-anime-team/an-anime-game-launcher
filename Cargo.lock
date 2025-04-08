@@ -57,12 +57,12 @@ checksum = "683d7910e743518b0e34f1186f92494becacb047c7b6bf616c96772180fef923"
 
 [[package]]
 name = "anime-game-core"
-version = "1.25.1"
-source = "git+https://github.com/an-anime-team/anime-game-core?tag=1.25.1#1e95d2cc4c609e4680550c4d2211f1e03f56a683"
+version = "1.29.1"
+source = "git+https://github.com/an-anime-team/anime-game-core?tag=1.29.1#8f0f582088c787d1735c2e124866282c667dcd5a"
 dependencies = [
  "anyhow",
  "bzip2 0.4.4",
- "cached 0.53.1",
+ "cached 0.55.1",
  "dns-lookup",
  "flate2",
  "fs_extra",
@@ -107,8 +107,8 @@ dependencies = [
 
 [[package]]
 name = "anime-launcher-sdk"
-version = "1.22.0"
-source = "git+https://github.com/an-anime-team/anime-launcher-sdk?tag=1.22.0#5863addeda421b14892947397ec3d94b44b81f26"
+version = "1.27.1"
+source = "git+https://github.com/an-anime-team/anime-launcher-sdk?tag=1.27.1#7fe575238e203fc7fc8ea58fd2adb0bea41e4083"
 dependencies = [
  "anime-game-core",
  "anyhow",
@@ -718,12 +718,6 @@ dependencies = [
  "socket2",
  "windows-sys 0.48.0",
 ]
-
-[[package]]
-name = "either"
-version = "1.15.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "48c757948c5ede0e46177b7add2e67155f70e33c07fea8284df6576da70b3719"
 
 [[package]]
 name = "endi"
@@ -2177,26 +2171,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "20675572f6f24e9e76ef639bc5552774ed45f1c30e2951e1e99c59888861c539"
 
 [[package]]
-name = "rayon"
-version = "1.10.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b418a60154510ca1a002a752ca9714984e21e4241e804d32555251faf8b78ffa"
-dependencies = [
- "either",
- "rayon-core",
-]
-
-[[package]]
-name = "rayon-core"
-version = "1.12.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1465873a3dfdaa8ae7cb14b4383657caab0b3e8a0aa9ae8e04b044854c8dfce2"
-dependencies = [
- "crossbeam-deque",
- "crossbeam-utils",
-]
-
-[[package]]
 name = "redox_syscall"
 version = "0.5.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2637,15 +2611,14 @@ dependencies = [
 
 [[package]]
 name = "sysinfo"
-version = "0.32.1"
+version = "0.34.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4c33cd241af0f2e9e3b5c32163b873b29956890b5342e6745b917ce9d490f4af"
+checksum = "a4b93974b3d3aeaa036504b8eefd4c039dced109171c1ae973f1dc63b2c7e4b2"
 dependencies = [
- "core-foundation-sys",
  "libc",
  "memchr",
  "ntapi",
- "rayon",
+ "objc2-core-foundation",
  "windows",
 ]
 
@@ -3184,13 +3157,14 @@ checksum = "712e227841d057c1ee1cd2fb22fa7e5a5461ae8e48fa2ca79ec42cfc1931183f"
 
 [[package]]
 name = "wincompatlib"
-version = "0.7.5"
+version = "0.7.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2475ec2859b4310dbf008f8c0cafc55202137aac0062f52a0e7651459f6ad88e"
+checksum = "aae41600d3750bfc93d709117e7099510d5e2ea40a228b8288384dd8e7f5cd04"
 dependencies = [
  "anyhow",
  "blake3",
  "minreq",
+ "serde",
 ]
 
 [[package]]

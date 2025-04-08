@@ -17,11 +17,9 @@ pub fn create_prefix(sender: ComponentSender<App>) {
             sender.input(AppMsg::DisableButtons(true));
 
             std::thread::spawn(move || {
-                let wine = wine
-                    .to_wine(config.components.path, Some(config.game.wine.builds.join(&wine.name)))
+                let wine = wine.to_wine(config.components.path, Some(config.game.wine.builds.join(&wine.name)))
                     .with_prefix(&config.game.wine.prefix)
-                    .with_loader(WineLoader::Current)
-                    .with_arch(WineArch::Win64);
+                    .with_loader(WineLoader::Current);
 
                 if let Err(err) = wine.init_prefix(None::<&str>) {
                     tracing::error!("Failed to create wine prefix");
