@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added (initial?) support for `wow64` wine builds
+- Added 5.5.0 voiceovers
+- Added Traditional Chinese
+
+### Changed
+
+- Updated Ukrainian
+
 ## [3.13.0] - 09.10.2024
 
 ### Added

@@ -89,13 +89,15 @@ impl SimpleComponent for AboutDialog {
                 "<p>Added</p>",
 
                 "<ul>",
-                    "<li>Added 5.1.0 voiceovers sizes</li>",
+                    "<li>Added (initial?) support for wow64 wine builds</li>",
+                    "<li>Added 5.5.0 voiceovers sizes</li>",
+                    "<li>Added Traditional Chinese</li>",
                 "</ul>",
 
-                "<p>Removed</p>",
+                "<p>Changed</p>",
 
                 "<ul>",
-                    "<li>Removed Discord RPC support</li>",
+                    "<li>Updated Ukrainian</li>",
                 "</ul>"
             ].join("\n")
         }
