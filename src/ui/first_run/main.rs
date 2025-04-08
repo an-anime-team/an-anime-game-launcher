@@ -261,6 +261,7 @@ impl SimpleComponent for FirstRunApp {
 
                 toast.set_timeout(4);
 
+                #[allow(static_mut_refs)]
                 if let Some(description) = description {
                     toast.set_button_label(Some(&tr!("details")));
 

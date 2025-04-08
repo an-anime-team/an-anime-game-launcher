@@ -545,6 +545,8 @@ impl SimpleAsyncComponent for EnhancementsApp {
     }
 
     async fn update(&mut self, msg: Self::Input, sender: AsyncComponentSender<Self>) {
+        // Don't care about it, don't want to rewrite everything.
+        #[allow(static_mut_refs)]
         match msg {
             EnhancementsAppMsg::SetGamescopeParent => unsafe {
                 self.gamescope.widget().set_transient_for(super::main::PREFERENCES_WINDOW.as_ref());

@@ -27,6 +27,7 @@ hu-hu = Magyar
 sv-se = Svenska
 nl-nl = Nederlands
 zh-cn = 简体中文
+zh-tw = 繁體中文
 ja-jp = 日本語
 ko-kr = 한국어
 id-id = Indonesia

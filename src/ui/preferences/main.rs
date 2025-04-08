@@ -1,6 +1,4 @@
 use relm4::prelude::*;
-
-use gtk::prelude::*;
 use adw::prelude::*;
 
 use anime_launcher_sdk::anime_game_core::genshin::prelude::*;
@@ -100,29 +98,28 @@ impl SimpleAsyncComponent for PreferencesApp {
     async fn update(&mut self, msg: Self::Input, sender: AsyncComponentSender<Self>) {
         tracing::debug!("Called preferences window event: {:?}", msg);
 
+        // Don't care about it, don't want to rewrite everything.
+        #[allow(static_mut_refs)]
         match msg {
             PreferencesAppMsg::SetGameDiff(diff) => {
                 self.general.emit(GeneralAppMsg::SetGameDiff(diff));
             }
 
-            #[allow(unused_must_use)]
             PreferencesAppMsg::SetLauncherStyle(style) => {
-                sender.output(Self::Output::SetLauncherStyle(style));
+                let _ = sender.output(Self::Output::SetLauncherStyle(style));
             }
 
-            #[allow(unused_must_use)]
             PreferencesAppMsg::UpdateLauncherState => {
-                sender.output(Self::Output::UpdateLauncherState {
+                let _ = sender.output(Self::Output::UpdateLauncherState {
                     perform_on_download_needed: false,
                     show_status_page: false
                 });
             }
 
-            #[allow(unused_must_use)]
             PreferencesAppMsg::RepairGame => unsafe {
                 PREFERENCES_WINDOW.as_ref().unwrap_unchecked().close();
 
-                sender.output(Self::Output::RepairGame);
+                let _ = sender.output(Self::Output::RepairGame);
             }
 
             PreferencesAppMsg::Toast { title, description } => unsafe {
