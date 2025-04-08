@@ -57,7 +57,7 @@ pub fn get_lang() -> &'static LanguageIdentifier {
 }
 
 /// Get system language or default language if system one is not supported
-/// 
+///
 /// Checks env variables in following order:
 /// - `LC_ALL`
 /// - `LC_MESSAGES`
@@ -87,17 +87,17 @@ pub fn format_lang(lang: &LanguageIdentifier) -> String {
 
 #[macro_export]
 /// Get translated message by key, with optional translation parameters
-/// 
+///
 /// # Examples:
-/// 
+///
 /// Without parameters:
-/// 
+///
 /// ```no_run
 /// println!("Translated message: {}", tr!("launch"));
 /// ```
-/// 
+///
 /// With parameters:
-/// 
+///
 /// ```no_run
 /// println!("Translated message: {}", tr!("game-outdated", {
 ///     "latest" = "3.3.0"
@@ -115,8 +115,6 @@ macro_rules! tr {
     ($id:expr, { $($key:literal = $value:expr),* }) => {
         {
             use std::collections::HashMap;
-
-            use fluent_templates::Loader;
             use fluent_templates::fluent_bundle::FluentValue;
 
             let mut args = HashMap::new();
@@ -125,7 +123,8 @@ macro_rules! tr {
                 args.insert($key, FluentValue::from($value));
             )*
 
-            $crate::i18n::LOCALES.lookup_complete($crate::i18n::get_lang(), $id, Some(&args))
+            $crate::i18n::LOCALES.lookup_no_default_fallback($crate::i18n::get_lang(), $id, Some(&args))
+                .unwrap_or_default()
         }
     };
 }
