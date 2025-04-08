@@ -46,7 +46,7 @@ pub fn get_background_info() -> anyhow::Result<Background> {
         .to_string();
 
     let hash = uri.split('/')
-        .last()
+        .next_back()
         .unwrap_or_default()
         .split('_')
         .next()

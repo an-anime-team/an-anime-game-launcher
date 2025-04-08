@@ -1,6 +1,4 @@
 use relm4::prelude::*;
-use relm4::factory::*;
-
 use adw::prelude::*;
 
 use anime_launcher_sdk::is_available;
@@ -230,7 +228,7 @@ impl SimpleAsyncComponent for SandboxPage {
                                 add_css_class: "flat",
 
                                 set_valign: gtk::Align::Center,
-            
+
                                 connect_clicked => SandboxPageMsg::AddPrivate
                             }
                         }

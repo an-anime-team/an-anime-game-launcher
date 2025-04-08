@@ -1073,6 +1073,8 @@ impl SimpleComponent for App {
                 self.disabled_kill_game_button = state;
             }
 
+            // Don't care about it, don't want to rewrite everything.
+            #[allow(static_mut_refs)]
             AppMsg::OpenPreferences => unsafe {
                 PREFERENCES_WINDOW.as_ref().unwrap_unchecked().widget().present();
             }
@@ -1177,11 +1179,12 @@ impl App {
 
         toast.set_timeout(4);
 
-        if let Some(description) = description {
+        #[allow(static_mut_refs)]
+        if let (Some(window), Some(description)) = (unsafe { MAIN_WINDOW.as_ref() }, description) {
             toast.set_button_label(Some(&tr!("details")));
 
             let dialog = adw::MessageDialog::new(
-                Some(unsafe { MAIN_WINDOW.as_ref().unwrap_unchecked() }),
+                Some(window),
                 Some(title.as_ref()),
                 Some(description.as_ref())
             );
