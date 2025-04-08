@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.13.1] - 08.04.2025
+
 ### Added
 
 - Added (initial?) support for `wow64` wine builds
