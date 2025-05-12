@@ -65,12 +65,12 @@ lazy_static::lazy_static! {
     pub static ref PROCESSED_BACKGROUND_FILE: PathBuf = CACHE_FOLDER.join("background");
 
     /// Path to `.keep-background` file. Used to mark launcher that it shouldn't update background picture
-    /// 
+    ///
     /// Standard is `$HOME/.local/share/anime-game-launcher/.keep-background`
     pub static ref KEEP_BACKGROUND_FILE: PathBuf = LAUNCHER_FOLDER.join(".keep-background");
 
     /// Path to `.first-run` file. Used to mark launcher that it should run FirstRun window
-    /// 
+    ///
     /// Standard is `$HOME/.local/share/anime-game-launcher/.first-run`
     pub static ref FIRST_RUN_FILE: PathBuf = LAUNCHER_FOLDER.join(".first-run");
 
@@ -176,7 +176,10 @@ fn main() -> anyhow::Result<()> {
             }
         })
         .with_filter(filter_fn(move |metadata| {
-            !metadata.target().contains("rustls") && !metadata.target().contains("reqwest") && !no_verbose_tracing
+            !metadata.target().contains("rustls") &&
+            !metadata.target().contains("reqwest") &&
+            !metadata.target().contains("hyper_util") &&
+            !no_verbose_tracing
         }));
 
     // Prepare debug file logger
@@ -187,7 +190,9 @@ fn main() -> anyhow::Result<()> {
         .with_ansi(false)
         .with_writer(std::sync::Arc::new(file))
         .with_filter(filter_fn(|metadata| {
-            !metadata.target().contains("rustls") && !metadata.target().contains("reqwest")
+            !metadata.target().contains("rustls") &&
+            !metadata.target().contains("reqwest") &&
+            !metadata.target().contains("hyper_util")
         }));
 
     tracing_subscriber::registry()
