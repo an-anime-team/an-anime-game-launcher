@@ -27,7 +27,7 @@ jobs:
       - name: Install dependencies
         run: |
           apt update
-          apt install -y build-essential libgtk-4-dev libadwaita-1-dev git curl cmake openssl protobuf-compiler
+          apt install -y build-essential libgtk-4-dev libadwaita-1-dev git curl cmake libssl-dev protobuf-compiler
 
       - uses: dtolnay/rust-toolchain@stable
         with:
