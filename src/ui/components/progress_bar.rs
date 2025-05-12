@@ -3,6 +3,7 @@ use adw::prelude::*;
 
 use anime_launcher_sdk::anime_game_core::prelude::*;
 use anime_launcher_sdk::anime_game_core::genshin::prelude::*;
+use anime_launcher_sdk::anime_game_core::sophon::{installer::Update as SophonInstallerUpdate, updater::Update as SophonPatcherUpdate};
 
 use crate::*;
 
@@ -170,7 +171,35 @@ impl SimpleAsyncComponent for ProgressBar {
                     DiffUpdate::RemovingOutdatedFinished => tracing::info!("Removing outdated files finished"),
 
                     DiffUpdate::InstallerUpdate(InstallerUpdate::DownloadingError(err)) => tracing::error!("Downloading error: {:?}", err),
-                    DiffUpdate::InstallerUpdate(InstallerUpdate::UnpackingError(err)) => tracing::error!("Unpacking error: {:?}", err)
+                    DiffUpdate::InstallerUpdate(InstallerUpdate::UnpackingError(err)) => tracing::error!("Unpacking error: {:?}", err),
+
+                    DiffUpdate::SophonInstallerUpdate(SophonInstallerUpdate::DownloadingFinished) => tracing::info!("Downloading finished"),
+                    DiffUpdate::SophonInstallerUpdate(SophonInstallerUpdate::DownloadingProgressBytes { downloaded_bytes, total_bytes }) => {
+                        tracing::debug!("Downloaded [{downloaded_bytes}/{total_bytes}]");
+                        self.fraction = downloaded_bytes as f64 / total_bytes as f64;
+
+                        self.downloaded = Some((prettify_bytes(downloaded_bytes), prettify_bytes(total_bytes)));
+                    }
+                    DiffUpdate::SophonInstallerUpdate(SophonInstallerUpdate::DownloadingProgressFiles { downloaded_files, total_files }) => tracing::info!("Downloaded {downloaded_files} files out of {total_files}"),
+                    DiffUpdate::SophonInstallerUpdate(SophonInstallerUpdate::CheckingFreeSpace(_)) => self.caption = Some(tr!("checking-free-space")),
+                    DiffUpdate::SophonInstallerUpdate(SophonInstallerUpdate::DownloadingStarted(_))         => self.caption = Some(tr!("downloading")),
+                    DiffUpdate::SophonInstallerUpdate(SophonInstallerUpdate::DownloadingError(err)) => tracing::error!("Downloading error: {:?}", err),
+                    DiffUpdate::SophonInstallerUpdate(SophonInstallerUpdate::FileHashCheckFailed(path)) => tracing::error!("File hash check failed om {path:?}"),
+
+                    DiffUpdate::SophonPatcherUpdate(SophonPatcherUpdate::DownloadingFinished) => tracing::info!("Downloading finished"),
+                    DiffUpdate::SophonPatcherUpdate(SophonPatcherUpdate::DownloadingProgressBytes { downloaded_bytes, total_bytes }) => {
+                        tracing::debug!("Patch downloaded [{downloaded_bytes}/{total_bytes}]");
+                        self.fraction = downloaded_bytes as f64 / total_bytes as f64;
+
+                        self.downloaded = Some((prettify_bytes(downloaded_bytes), prettify_bytes(total_bytes)));
+                    }
+                    DiffUpdate::SophonPatcherUpdate(SophonPatcherUpdate::DownloadingProgressFiles { patched_files, total_files }) => tracing::info!("Patched {patched_files} files out of {total_files}"),
+                    DiffUpdate::SophonPatcherUpdate(SophonPatcherUpdate::CheckingFreeSpace(_)) => self.caption = Some(tr!("checking-free-space")),
+                    DiffUpdate::SophonPatcherUpdate(SophonPatcherUpdate::DownloadingStarted(_)) => self.caption = Some(tr!("downloading")),
+                    DiffUpdate::SophonPatcherUpdate(SophonPatcherUpdate::DownloadingError(err)) => tracing::error!("Downloading error: {err:?}"),
+                    DiffUpdate::SophonPatcherUpdate(SophonPatcherUpdate::FileHashCheckFailed(path)) => tracing::error!("File hash check failed om {path:?}"),
+                    DiffUpdate::SophonPatcherUpdate(SophonPatcherUpdate::DownloadingProgressDeletedFiles { deleted_files, total_unused }) => tracing::info!("Deleted {deleted_files} files out of {total_unused}"),
+                    DiffUpdate::SophonPatcherUpdate(SophonPatcherUpdate::PatchingError(err)) => tracing::error!("Patching error: {err:?}")
                 }
             }
 

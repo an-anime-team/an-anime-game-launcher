@@ -176,7 +176,7 @@ fn main() -> anyhow::Result<()> {
             }
         })
         .with_filter(filter_fn(move |metadata| {
-            !metadata.target().contains("rustls") && !no_verbose_tracing
+            !metadata.target().contains("rustls") && !metadata.target().contains("reqwest") && !no_verbose_tracing
         }));
 
     // Prepare debug file logger
@@ -187,7 +187,7 @@ fn main() -> anyhow::Result<()> {
         .with_ansi(false)
         .with_writer(std::sync::Arc::new(file))
         .with_filter(filter_fn(|metadata| {
-            !metadata.target().contains("rustls")
+            !metadata.target().contains("rustls") && !metadata.target().contains("reqwest")
         }));
 
     tracing_subscriber::registry()
