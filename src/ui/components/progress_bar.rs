@@ -134,9 +134,15 @@ impl SimpleAsyncComponent for ProgressBar {
                     DiffUpdate::CheckingFreeSpace(_) |
                     DiffUpdate::InstallerUpdate(InstallerUpdate::CheckingFreeSpace(_)) => self.caption = Some(tr!("checking-free-space")),
 
+                    DiffUpdate::SophonPatcherUpdate(SophonPatcherUpdate::CheckingFreeSpace(_)) => self.caption = Some(tr!("checking-free-space")),
+
                     DiffUpdate::InstallerUpdate(InstallerUpdate::DownloadingStarted(_))         => self.caption = Some(tr!("downloading")),
                     DiffUpdate::InstallerUpdate(InstallerUpdate::UpdatingPermissionsStarted(_)) => self.caption = Some(tr!("updating-permissions")),
                     DiffUpdate::InstallerUpdate(InstallerUpdate::UnpackingStarted(_))           => self.caption = Some(tr!("unpacking")),
+
+                    DiffUpdate::SophonPatcherUpdate(SophonPatcherUpdate::DeletingStarted) => self.caption = Some(tr!("removing-outdated")),
+                    DiffUpdate::SophonPatcherUpdate(SophonPatcherUpdate::DownloadingStarted(_)) => self.caption = Some(tr!("downloading")),
+                    DiffUpdate::SophonPatcherUpdate(SophonPatcherUpdate::PatchingStarted) => self.caption = Some(tr!("applying-hdiff")),
 
                     DiffUpdate::ApplyingHdiffStarted => {
                         self.caption = Some(tr!("applying-hdiff"));
@@ -186,19 +192,31 @@ impl SimpleAsyncComponent for ProgressBar {
                     DiffUpdate::SophonInstallerUpdate(SophonInstallerUpdate::DownloadingError(err)) => tracing::error!("Downloading error: {:?}", err),
                     DiffUpdate::SophonInstallerUpdate(SophonInstallerUpdate::FileHashCheckFailed(path)) => tracing::error!("File hash check failed om {path:?}"),
 
+                    DiffUpdate::SophonPatcherUpdate(SophonPatcherUpdate::DeletingFinished) => tracing::info!("Deleting unused files finished"),
                     DiffUpdate::SophonPatcherUpdate(SophonPatcherUpdate::DownloadingFinished) => tracing::info!("Downloading finished"),
+                    DiffUpdate::SophonPatcherUpdate(SophonPatcherUpdate::PatchingFinished) => tracing::info!("Patching finished"),
+
+                    DiffUpdate::SophonPatcherUpdate(SophonPatcherUpdate::DeletingProgress { deleted_files, total_unused }) => {
+                        tracing::debug!("Deleted {deleted_files} unused files out of {total_unused}");
+                        self.fraction = deleted_files as f64 / total_unused as f64;
+                        self.downloaded = Some((deleted_files.to_string(), total_unused.to_string()));
+                    }
                     DiffUpdate::SophonPatcherUpdate(SophonPatcherUpdate::DownloadingProgressBytes { downloaded_bytes, total_bytes }) => {
                         tracing::debug!("Patch downloaded [{downloaded_bytes}/{total_bytes}]");
-                        self.fraction = downloaded_bytes as f64 / total_bytes as f64;
-
-                        self.downloaded = Some((prettify_bytes(downloaded_bytes), prettify_bytes(total_bytes)));
+                        // check to not use this data if applying hdiff
+                        if self.caption == Some(tr!("downloading")) {
+                            self.fraction = downloaded_bytes as f64 / total_bytes as f64;
+                            self.downloaded = Some((prettify_bytes(downloaded_bytes), prettify_bytes(total_bytes)));
+                        }
                     }
-                    DiffUpdate::SophonPatcherUpdate(SophonPatcherUpdate::DownloadingProgressFiles { patched_files, total_files }) => tracing::info!("Patched {patched_files} files out of {total_files}"),
-                    DiffUpdate::SophonPatcherUpdate(SophonPatcherUpdate::CheckingFreeSpace(_)) => self.caption = Some(tr!("checking-free-space")),
-                    DiffUpdate::SophonPatcherUpdate(SophonPatcherUpdate::DownloadingStarted(_)) => self.caption = Some(tr!("downloading")),
+                    DiffUpdate::SophonPatcherUpdate(SophonPatcherUpdate::PatchingProgress { patched_files, total_files }) => {
+                        tracing::info!("Patched {patched_files} files out of {total_files}");
+                        self.fraction = patched_files as f64 / total_files as f64;
+                        self.downloaded = Some((patched_files.to_string(), total_files.to_string()));
+                    },
+
                     DiffUpdate::SophonPatcherUpdate(SophonPatcherUpdate::DownloadingError(err)) => tracing::error!("Downloading error: {err:?}"),
                     DiffUpdate::SophonPatcherUpdate(SophonPatcherUpdate::FileHashCheckFailed(path)) => tracing::error!("File hash check failed om {path:?}"),
-                    DiffUpdate::SophonPatcherUpdate(SophonPatcherUpdate::DownloadingProgressDeletedFiles { deleted_files, total_unused }) => tracing::info!("Deleted {deleted_files} files out of {total_unused}"),
                     DiffUpdate::SophonPatcherUpdate(SophonPatcherUpdate::PatchingError(err)) => tracing::error!("Patching error: {err:?}")
                 }
             }
