@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.14.1] - 18.05.2025
+
 ### Added
 
 - Added 5.6.0 voiceover sizes
@@ -613,7 +615,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <br>
 
-[unreleased]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.14.0...next
+[unreleased]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.14.1...next
+[3.14.1]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.14.0...3.14.1
 [3.14.0]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.13.1...3.14.0
 [3.13.1]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.13.0...3.13.1
 [3.13.0]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.12.1...3.13.0
