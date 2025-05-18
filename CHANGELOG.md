@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added 5.6.0 voiceover sizes
+- Store sophon chunks in subfolders
+- Now temporary sophon chunks will be removed after applying
+- Improved RAM usage in files MD5 hashes verifier
+
+### Fixed
+
+- Fixed multiple sophon chunks progress counting
+
 ## [3.14.0] - 12.05.2025
 
 ### Added
