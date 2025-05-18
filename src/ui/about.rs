@@ -89,7 +89,16 @@ impl SimpleComponent for AboutDialog {
                 "<p>Added</p>",
 
                 "<ul>",
-                    "<li>Added sophon support (thanks to John the Cooling Fan and community members!)</li>",
+                    "<li>Added 5.6.0 voiceover sizes</li>",
+                    "<li>Store sophon chunks in subfolders</li>",
+                    "<li>Now temporary sophon chunks will be removed after applying</li>",
+                    "<li>Improved RAM usage in files MD5 hashes verifier</li>",
+                "</ul>",
+
+                "<p>Fixed</p>",
+
+                "<ul>",
+                    "<li>Fixed multiple sophon chunks progress counting</li>",
                 "</ul>"
             ].join("\n")
         }
