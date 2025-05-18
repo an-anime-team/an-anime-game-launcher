@@ -57,12 +57,12 @@ checksum = "683d7910e743518b0e34f1186f92494becacb047c7b6bf616c96772180fef923"
 
 [[package]]
 name = "anime-game-core"
-version = "1.30.2"
-source = "git+https://github.com/an-anime-team/anime-game-core?tag=1.30.2#5623e008f3e909de7a21501b03c0418d6211455d"
+version = "1.31.0"
+source = "git+https://github.com/an-anime-team/anime-game-core?tag=1.31.0#e909fa53a70c9d06c1043509d264800f12773a03"
 dependencies = [
  "anyhow",
  "bzip2 0.4.4",
- "cached 0.55.1",
+ "cached",
  "dns-lookup",
  "flate2",
  "fs_extra",
@@ -90,7 +90,7 @@ version = "3.14.0"
 dependencies = [
  "anime-launcher-sdk",
  "anyhow",
- "cached 0.55.1",
+ "cached",
  "enum-ordinalize",
  "fluent-templates",
  "glib-build-tools",
@@ -111,12 +111,12 @@ dependencies = [
 
 [[package]]
 name = "anime-launcher-sdk"
-version = "1.28.2"
-source = "git+https://github.com/an-anime-team/anime-launcher-sdk?tag=1.28.2#8b144b119a6a8cf26f7ec9c5cf098997da8803f5"
+version = "1.28.3"
+source = "git+https://github.com/an-anime-team/anime-launcher-sdk?tag=1.28.3#5d3e743add0abf7ce674b3c3766859b28c05aadb"
 dependencies = [
  "anime-game-core",
  "anyhow",
- "cached 0.53.1",
+ "cached",
  "enum-ordinalize",
  "lazy_static",
  "md-5",
@@ -393,44 +393,17 @@ dependencies = [
 
 [[package]]
 name = "cached"
-version = "0.53.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b4d73155ae6b28cf5de4cfc29aeb02b8a1c6dab883cb015d15cd514e42766846"
-dependencies = [
- "ahash",
- "cached_proc_macro 0.23.0",
- "cached_proc_macro_types",
- "hashbrown 0.14.5",
- "once_cell",
- "thiserror 1.0.69",
- "web-time",
-]
-
-[[package]]
-name = "cached"
 version = "0.55.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b0839c297f8783316fcca9d90344424e968395413f0662a5481f79c6648bbc14"
 dependencies = [
  "ahash",
- "cached_proc_macro 0.24.0",
+ "cached_proc_macro",
  "cached_proc_macro_types",
  "hashbrown 0.14.5",
  "once_cell",
  "thiserror 2.0.12",
  "web-time",
-]
-
-[[package]]
-name = "cached_proc_macro"
-version = "0.23.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2f42a145ed2d10dce2191e1dcf30cfccfea9026660e143662ba5eec4017d5daa"
-dependencies = [
- "darling",
- "proc-macro2",
- "quote",
- "syn",
 ]
 
 [[package]]
