@@ -1,3 +1,4 @@
+use anime_launcher_sdk::anime_game_core::sophon::{self, repairer::{SophonRepairer, Update as SophonRepairerUpdate}};
 use relm4::{
     prelude::*,
     Sender
@@ -18,6 +19,69 @@ pub fn repair_game(sender: ComponentSender<App>, progress_bar_input: Sender<Prog
     sender.input(AppMsg::SetDownloading(true));
 
     std::thread::spawn(move || {
+        let client = Default::default();
+
+        let game_branches_info = sophon::get_game_branches_info(Clone::clone(&client), config.launcher.edition.into()).unwrap();
+        let game_branch_info = game_branches_info.get_game_latest_by_id(config.launcher.edition.game_id()).unwrap();
+
+        let downloads = sophon::installer::get_game_download_sophon_info(client.clone(), &game_branch_info.main, config.launcher.edition.into()).unwrap();
+        let game_download_info = downloads.manifests.iter().find(|sdi| sdi.matching_field == "game").unwrap();
+
+        let mut manifests = vec![game_download_info];
+
+        let game_path = config.game.path.for_edition(config.launcher.edition).to_path_buf();
+        let game = Game::new(&game_path, config.launcher.edition);
+
+        if let Ok(voiceovers) = game.get_voice_packages() {
+            for package in voiceovers {
+                if let Some(voice_download_info) = downloads.manifests.iter().find(|sdi| sdi.matching_field == package.locale().to_code()) {
+                    manifests.push(voice_download_info);
+                }
+            }
+        }
+
+        let repairer = SophonRepairer::new(&manifests, client, config.launcher.temp.unwrap_or_else(std::env::temp_dir)).unwrap();
+
+        let updater = move |msg: SophonRepairerUpdate| {
+            match msg {
+                SophonRepairerUpdate::VerifyingProgress { total, checked } => {
+                    tracing::trace!("Verification progress [{checked}/{total}]");
+                    progress_bar_input.send(ProgressBarMsg::UpdateProgressCounter(checked, total));
+                }
+                SophonRepairerUpdate::RepairingProgress { total, repaired } => {
+                    tracing::trace!("Repairing progress [{repaired}/{total}]");
+                    progress_bar_input.send(ProgressBarMsg::UpdateProgressCounter(repaired, total));
+                }
+
+                SophonRepairerUpdate::VerifyingStarted => {
+                    tracing::trace!("Verification started");
+                }
+                SophonRepairerUpdate::VerifyingFinished { broken } => {
+                    tracing::info!("Verification finished with {broken} broken files")
+                }
+
+                SophonRepairerUpdate::RepairingStarted => {
+                    progress_bar_input.send(ProgressBarMsg::UpdateCaption(Some(tr!("repairing-files"))));
+                    tracing::trace!("Repairing started");
+                }
+                SophonRepairerUpdate::RepairingFinished => {
+                    tracing::trace!("Repair finished");
+                }
+
+                SophonRepairerUpdate::DownloadingError(err) => {
+                    tracing::error!("Error during repairing: {err}")
+                }
+                SophonRepairerUpdate::FileHashCheckFailed(path) => {
+                    tracing::error!("File hash check error for `{path:?}`")
+                }
+            }
+        };
+
+        repairer.check_and_repair(&game_path, config.launcher.repairer.threads as usize, updater);
+
+        let _ = std::fs::remove_dir_all(repairer.downloading_temp());
+
+        /*
         match repairer::try_get_integrity_files(config.launcher.edition, None) {
             Ok(mut files) => {
                 // Add voiceovers files
@@ -136,6 +200,7 @@ pub fn repair_game(sender: ComponentSender<App>, progress_bar_input: Sender<Prog
                 });
             }
         }
+        */
 
         sender.input(AppMsg::SetDownloading(false));
     });
