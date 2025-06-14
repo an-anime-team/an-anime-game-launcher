@@ -178,6 +178,7 @@ fn main() -> anyhow::Result<()> {
         .with_filter(filter_fn(move |metadata| {
             !metadata.target().contains("rustls") &&
             !metadata.target().contains("reqwest") &&
+            !metadata.target().contains("h2") &&
             !metadata.target().contains("hyper_util") &&
             !no_verbose_tracing
         }));
@@ -192,6 +193,7 @@ fn main() -> anyhow::Result<()> {
         .with_filter(filter_fn(|metadata| {
             !metadata.target().contains("rustls") &&
             !metadata.target().contains("reqwest") &&
+            !metadata.target().contains("h2") &&
             !metadata.target().contains("hyper_util")
         }));
 
