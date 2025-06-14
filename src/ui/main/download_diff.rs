@@ -21,7 +21,7 @@ pub fn download_diff(sender: ComponentSender<App>, progress_bar_input: Sender<Pr
             diff = diff.with_temp_folder(temp);
         }
 
-        let result = diff.install_to(game_path, clone!(
+        let result = diff.install_to(game_path, config.launcher.install_update_threads, clone!(
             #[strong]
             sender,
 
