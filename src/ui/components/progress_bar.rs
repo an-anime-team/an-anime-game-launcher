@@ -44,6 +44,8 @@ pub enum ProgressBarMsg {
 
     /// (current bytes, total bytes) 
     UpdateProgress(u64, u64),
+    /// (current items, total items)
+    UpdateProgressCounter(u64, u64),
 
     UpdateFromState(DiffUpdate),
     SetVisible(bool)
@@ -126,6 +128,15 @@ impl SimpleAsyncComponent for ProgressBar {
                 self.downloaded = Some((
                     prettify_bytes(curr),
                     prettify_bytes(total)
+                ));
+            }
+
+            ProgressBarMsg::UpdateProgressCounter(curr, total) => {
+                self.fraction = curr as f64 / total as f64;
+
+                self.downloaded = Some((
+                    curr.to_string(),
+                    total.to_string()
                 ));
             }
 

@@ -321,6 +321,7 @@ impl SimpleComponent for App {
                                         #[watch]
                                         set_sensitive: match model.state.as_ref() {
                                             Some(LauncherState::PredownloadAvailable { game, voices }) => {
+                                                /*
                                                 let config = Config::get().unwrap();
                                                 let temp = config.launcher.temp.unwrap_or_else(std::env::temp_dir);
 
@@ -339,6 +340,9 @@ impl SimpleComponent for App {
                                                         }
                                                     }
                                                 }
+                                                */
+
+                                                let downloaded = false;
 
                                                 !downloaded
                                             }
@@ -349,6 +353,7 @@ impl SimpleComponent for App {
                                         #[watch]
                                         set_css_classes: match model.state.as_ref() {
                                             Some(LauncherState::PredownloadAvailable { game, voices }) => {
+                                                /*
                                                 let config = Config::get().unwrap();
                                                 let temp = config.launcher.temp.unwrap_or_else(std::env::temp_dir);
 
@@ -367,6 +372,9 @@ impl SimpleComponent for App {
                                                         }
                                                     }
                                                 }
+                                                */
+
+                                                let downloaded = false;
 
                                                 if downloaded {
                                                     &["success", "circular"]
