@@ -320,25 +320,27 @@ impl SimpleComponent for App {
 
                                         #[watch]
                                         set_sensitive: match model.state.as_ref() {
-                                            Some(LauncherState::PredownloadAvailable { game, voices }) => {
-                                                let config = Config::get().unwrap();
-                                                let temp = config.launcher.temp.unwrap_or_else(std::env::temp_dir);
+                                            Some(LauncherState::PredownloadAvailable { .. }) => {
+                                                // let config = Config::get().unwrap();
+                                                // let temp = config.launcher.temp.unwrap_or_else(std::env::temp_dir);
 
-                                                let mut downloaded = temp.join(game.file_name().unwrap()).metadata()
-                                                    .map(|metadata| Some(metadata.len()) >= game.downloaded_size())
-                                                    .unwrap_or(false);
+                                                // let mut downloaded = temp.join(game.file_name().unwrap()).metadata()
+                                                //     .map(|metadata| Some(metadata.len()) >= game.downloaded_size())
+                                                //     .unwrap_or(false);
 
-                                                if downloaded {
-                                                    for voice in voices {
-                                                        downloaded = temp.join(voice.file_name().unwrap()).metadata()
-                                                            .map(|metadata| Some(metadata.len()) >= voice.downloaded_size())
-                                                            .unwrap_or(false);
+                                                // if downloaded {
+                                                //     for voice in voices {
+                                                //         downloaded = temp.join(voice.file_name().unwrap()).metadata()
+                                                //             .map(|metadata| Some(metadata.len()) >= voice.downloaded_size())
+                                                //             .unwrap_or(false);
 
-                                                        if !downloaded {
-                                                            break;
-                                                        }
-                                                    }
-                                                }
+                                                //         if !downloaded {
+                                                //             break;
+                                                //         }
+                                                //     }
+                                                // }
+
+                                                let downloaded = false;
 
                                                 !downloaded
                                             }
@@ -348,25 +350,27 @@ impl SimpleComponent for App {
 
                                         #[watch]
                                         set_css_classes: match model.state.as_ref() {
-                                            Some(LauncherState::PredownloadAvailable { game, voices }) => {
-                                                let config = Config::get().unwrap();
-                                                let temp = config.launcher.temp.unwrap_or_else(std::env::temp_dir);
+                                            Some(LauncherState::PredownloadAvailable { .. }) => {
+                                                // let config = Config::get().unwrap();
+                                                // let temp = config.launcher.temp.unwrap_or_else(std::env::temp_dir);
 
-                                                let mut downloaded = temp.join(game.file_name().unwrap()).metadata()
-                                                    .map(|metadata| Some(metadata.len()) >= game.downloaded_size())
-                                                    .unwrap_or(false);
+                                                // let mut downloaded = temp.join(game.file_name().unwrap()).metadata()
+                                                //     .map(|metadata| Some(metadata.len()) >= game.downloaded_size())
+                                                //     .unwrap_or(false);
 
-                                                if downloaded {
-                                                    for voice in voices {
-                                                        downloaded = temp.join(voice.file_name().unwrap()).metadata()
-                                                            .map(|metadata| Some(metadata.len()) >= voice.downloaded_size())
-                                                            .unwrap_or(false);
+                                                // if downloaded {
+                                                //     for voice in voices {
+                                                //         downloaded = temp.join(voice.file_name().unwrap()).metadata()
+                                                //             .map(|metadata| Some(metadata.len()) >= voice.downloaded_size())
+                                                //             .unwrap_or(false);
 
-                                                        if !downloaded {
-                                                            break;
-                                                        }
-                                                    }
-                                                }
+                                                //         if !downloaded {
+                                                //             break;
+                                                //         }
+                                                //     }
+                                                // }
+
+                                                let downloaded = false;
 
                                                 if downloaded {
                                                     &["success", "circular"]

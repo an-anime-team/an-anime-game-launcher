@@ -1,6 +1,6 @@
 [package]
 name = "anime-game-launcher"
-version = "3.14.1"
+version = "3.14.2"
 description = "Anime Game launcher"
 authors = ["Nikita Podvirnyi <krypt0nn@vk.com>"]
 homepage = "https://github.com/an-anime-team/an-anime-game-launcher"
@@ -19,7 +19,7 @@ glib-build-tools = "0.20"
 
 [dependencies.anime-launcher-sdk]
 git = "https://github.com/an-anime-team/anime-launcher-sdk"
-tag = "1.28.4"
+tag = "1.28.6"
 features = ["all", "genshin"]
 
 # path = "../anime-launcher-sdk" # ! for dev purposes only
