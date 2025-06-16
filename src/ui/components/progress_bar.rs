@@ -3,7 +3,11 @@ use adw::prelude::*;
 
 use anime_launcher_sdk::anime_game_core::prelude::*;
 use anime_launcher_sdk::anime_game_core::genshin::prelude::*;
-use anime_launcher_sdk::anime_game_core::sophon::{installer::Update as SophonInstallerUpdate, updater::Update as SophonPatcherUpdate};
+
+use anime_launcher_sdk::anime_game_core::sophon::{
+    installer::Update as SophonInstallerUpdate,
+    updater::Update as SophonPatcherUpdate
+};
 
 use crate::*;
 
@@ -42,8 +46,9 @@ pub enum ProgressBarMsg {
     DisplayProgress(bool),
     DisplayFraction(bool),
 
-    /// (current bytes, total bytes) 
+    /// (current bytes, total bytes)
     UpdateProgress(u64, u64),
+
     /// (current items, total items)
     UpdateProgressCounter(u64, u64),
 
@@ -159,13 +164,13 @@ impl SimpleAsyncComponent for ProgressBar {
                         self.caption = Some(tr!("applying-hdiff"));
 
                         self.display_fraction = false;
-                    },
+                    }
 
                     DiffUpdate::RemovingOutdatedStarted => {
                         self.caption = Some(tr!("removing-outdated"));
 
                         self.display_fraction = false;
-                    },
+                    }
 
                     DiffUpdate::InstallerUpdate(InstallerUpdate::DownloadingProgress(curr, total)) |
                     DiffUpdate::InstallerUpdate(InstallerUpdate::UpdatingPermissions(curr, total)) |
@@ -191,15 +196,18 @@ impl SimpleAsyncComponent for ProgressBar {
                     DiffUpdate::InstallerUpdate(InstallerUpdate::UnpackingError(err)) => tracing::error!("Unpacking error: {:?}", err),
 
                     DiffUpdate::SophonInstallerUpdate(SophonInstallerUpdate::DownloadingFinished) => tracing::info!("Downloading finished"),
+
                     DiffUpdate::SophonInstallerUpdate(SophonInstallerUpdate::DownloadingProgressBytes { downloaded_bytes, total_bytes }) => {
                         tracing::debug!("Downloaded [{downloaded_bytes}/{total_bytes}]");
+
                         self.fraction = downloaded_bytes as f64 / total_bytes as f64;
 
                         self.downloaded = Some((prettify_bytes(downloaded_bytes), prettify_bytes(total_bytes)));
                     }
+
                     DiffUpdate::SophonInstallerUpdate(SophonInstallerUpdate::DownloadingProgressFiles { downloaded_files, total_files }) => tracing::info!("Downloaded {downloaded_files} files out of {total_files}"),
                     DiffUpdate::SophonInstallerUpdate(SophonInstallerUpdate::CheckingFreeSpace(_)) => self.caption = Some(tr!("checking-free-space")),
-                    DiffUpdate::SophonInstallerUpdate(SophonInstallerUpdate::DownloadingStarted(_))         => self.caption = Some(tr!("downloading")),
+                    DiffUpdate::SophonInstallerUpdate(SophonInstallerUpdate::DownloadingStarted(_)) => self.caption = Some(tr!("downloading")),
                     DiffUpdate::SophonInstallerUpdate(SophonInstallerUpdate::DownloadingError(err)) => tracing::error!("Downloading error: {:?}", err),
                     DiffUpdate::SophonInstallerUpdate(SophonInstallerUpdate::FileHashCheckFailed(path)) => tracing::error!("File hash check failed om {path:?}"),
 
@@ -209,22 +217,34 @@ impl SimpleAsyncComponent for ProgressBar {
 
                     DiffUpdate::SophonPatcherUpdate(SophonPatcherUpdate::DeletingProgress { deleted_files, total_unused }) => {
                         tracing::debug!("Deleted {deleted_files} unused files out of {total_unused}");
+
                         self.fraction = deleted_files as f64 / total_unused as f64;
+
                         self.downloaded = Some((deleted_files.to_string(), total_unused.to_string()));
                     }
+
                     DiffUpdate::SophonPatcherUpdate(SophonPatcherUpdate::DownloadingProgressBytes { downloaded_bytes, total_bytes }) => {
                         tracing::debug!("Patch downloaded [{downloaded_bytes}/{total_bytes}]");
+
                         // check to not use this data if applying hdiff
+                        //
+                        // I'm keeping it like this ONLY because I've seen
+                        // a promise to change this in future iteration of the
+                        // sophon downloader implementation.
                         if self.caption == Some(tr!("downloading")) {
                             self.fraction = downloaded_bytes as f64 / total_bytes as f64;
+
                             self.downloaded = Some((prettify_bytes(downloaded_bytes), prettify_bytes(total_bytes)));
                         }
                     }
+
                     DiffUpdate::SophonPatcherUpdate(SophonPatcherUpdate::PatchingProgress { patched_files, total_files }) => {
                         tracing::info!("Patched {patched_files} files out of {total_files}");
+
                         self.fraction = patched_files as f64 / total_files as f64;
+
                         self.downloaded = Some((patched_files.to_string(), total_files.to_string()));
-                    },
+                    }
 
                     DiffUpdate::SophonPatcherUpdate(SophonPatcherUpdate::DownloadingError(err)) => tracing::error!("Downloading error: {err:?}"),
                     DiffUpdate::SophonPatcherUpdate(SophonPatcherUpdate::FileHashCheckFailed(path)) => tracing::error!("File hash check failed om {path:?}"),
