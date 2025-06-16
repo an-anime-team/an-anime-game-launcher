@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added new game repairing support
+
+### Fixed
+
+- Fixed game updates pre-downloading
+
 ## [3.14.1] - 18.05.2025
 
 ### Added
