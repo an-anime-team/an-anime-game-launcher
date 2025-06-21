@@ -89,13 +89,14 @@ impl SimpleComponent for AboutDialog {
                 "<p>Added</p>",
 
                 "<ul>",
-                    "<li>Added new game repairing support</li>",
+                    "<li>Added 5.7.0 voiceover sizes</li>",
+                    "<li>Added logic to get voiceover sizes from the API for the currently live version</li>",
                 "</ul>",
 
                 "<p>Fixed</p>",
 
                 "<ul>",
-                    "<li>Fixed game updates pre-downloading</li>",
+                    "<li>Fixed crashes on game predownloading attempt</li>",
                 "</ul>"
             ].join("\n")
         }
