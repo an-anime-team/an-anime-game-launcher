@@ -88,7 +88,6 @@
                             gdk-pixbuf
                             gobject-introspection
                             libadwaita
-                            openssl
                             protobuf
                         ];
                     };

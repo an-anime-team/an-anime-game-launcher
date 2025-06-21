@@ -19,6 +19,7 @@ pub struct PreferencesApp {
     enhancements: AsyncController<EnhancementsApp>
 }
 
+#[allow(clippy::large_enum_variant)]
 #[derive(Debug, Clone)]
 pub enum PreferencesAppMsg {
     /// Supposed to be called automatically on app's run when the latest game version
