@@ -109,6 +109,7 @@ pub struct GeneralApp {
     languages: Vec<String>
 }
 
+#[allow(clippy::large_enum_variant)]
 #[derive(Debug, Clone)]
 pub enum GeneralAppMsg {
     /// Supposed to be called automatically on app's run when the latest game version
