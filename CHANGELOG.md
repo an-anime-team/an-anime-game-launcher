@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added 5.7.0 voiceover sizes
+- Added logic to get voiceover sizes from the API for the currently live version
+
+### Fixed
+
+- Fixed crashes on game predownloading attempt
+
 ## [3.14.2] - 16.06.2025
 
 ### Added
