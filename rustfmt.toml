@@ -1,0 +1,5 @@
+unstable_features = true
+trailing_comma = "Never"
+imports_granularity = "Module"
+group_imports = "StdExternalCrate"
+control_brace_style = "ClosingNextLine"
