@@ -86,17 +86,10 @@ impl SimpleComponent for AboutDialog {
 
             set_release_notes_version: &APP_VERSION,
             set_release_notes: &[
-                "<p>Added</p>",
+                "<p>Changed</p>",
 
                 "<ul>",
-                    "<li>Added 5.7.0 voiceover sizes</li>",
-                    "<li>Added logic to get voiceover sizes from the API for the currently live version</li>",
-                "</ul>",
-
-                "<p>Fixed</p>",
-
-                "<ul>",
-                    "<li>Fixed crashes on game predownloading attempt</li>",
+                    "<li>Improved sophon implementation to utilize multiple threads</li>",
                 "</ul>"
             ].join("\n")
         }

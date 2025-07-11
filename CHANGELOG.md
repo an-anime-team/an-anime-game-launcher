@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Improved sophon implementation to utilize multiple threads
+
 ## [3.14.3] - 21.06.2025
 
 ### Added
