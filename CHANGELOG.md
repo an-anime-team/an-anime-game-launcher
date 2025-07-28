@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed preload not using the configured temporary folder
+
 ## [3.15.0] - 11.07.2025
 
 ### Changed
