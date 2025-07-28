@@ -86,10 +86,10 @@ impl SimpleComponent for AboutDialog {
 
             set_release_notes_version: &APP_VERSION,
             set_release_notes: &[
-                "<p>Changed</p>",
+                "<p>Fixed</p>",
 
                 "<ul>",
-                    "<li>Improved sophon implementation to utilize multiple threads</li>",
+                    "<li>Fixed preload not using the configured temporary folder</li>",
                 "</ul>"
             ].join("\n")
         }
