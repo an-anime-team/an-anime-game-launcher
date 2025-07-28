@@ -1102,6 +1102,8 @@ impl SimpleComponent for App {
 
                     std::thread::spawn(move || {
                         for mut diff in diffs {
+                            diff = diff.with_temp_folder(tmp.clone());
+
                             let result = diff.download_to(&tmp, clone!(
                                 #[strong]
                                 progress_bar_input,
