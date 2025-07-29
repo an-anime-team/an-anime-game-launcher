@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed preload progress bar not displaying  any progress
+- Fixed preload sometimes getting stuck on a wait condition in multiple threads
+- Fixed updating the game after a preload deleting preloaded data for voice packs
+
+### Changed
+
+- Download and Update now use subdirectories in the temporary files directory for each component (game, voice packs)
+- The preload button now displays whether the preload for all components was completed or not
+
 ## [3.15.1] - 28.07.2025
 
 ### Fixed
