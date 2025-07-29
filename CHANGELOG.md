@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.15.2] - 29.07.2025
+
 ### Fixed
 
 - Fixed preload progress bar not displaying  any progress
@@ -659,7 +661,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <br>
 
-[unreleased]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.15.1...next
+[unreleased]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.15.2...next
+[3.15.2]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.15.1...3.15.2
 [3.15.1]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.15.0...3.15.1
 [3.15.0]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.14.3...3.15.0
 [3.14.3]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.14.2...3.14.3
