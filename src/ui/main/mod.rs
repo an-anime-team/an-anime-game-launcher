@@ -126,11 +126,11 @@ impl SimpleComponent for App {
             set_default_size: (
                 match model.style {
                     LauncherStyle::Modern => 900,
-                    LauncherStyle::Classic => 1094 // (w = 1280 / 730 * h, where 1280x730 is default background picture resolution)
+                    LauncherStyle::Classic => 1152 // (w = 2560 / 1440 * h, where 2560x1440 is default background picture resolution)
                 },
                 match model.style {
                     LauncherStyle::Modern => 600,
-                    LauncherStyle::Classic => 624
+                    LauncherStyle::Classic => 648
                 }
             ),
 

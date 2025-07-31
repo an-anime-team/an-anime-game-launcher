@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed update getting stuck at 100% or close, fix applied to install part too
+
+### Changed
+
+- Updated classic mode default window size to better match the 1440p background images
+
 ## [3.15.2] - 29.07.2025
 
 ### Fixed
