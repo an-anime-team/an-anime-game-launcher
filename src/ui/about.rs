@@ -89,16 +89,7 @@ impl SimpleComponent for AboutDialog {
                 "<p>Fixed</p>",
 
                 "<ul>",
-                    "<li>Fixed preload progress bar not displaying  any progress</li>",
-                    "<li>Fixed preload sometimes getting stuck on a wait condition in multiple threads</li>",
-                    "<li>Fixed updating the game after a preload deleting preloaded data for voice packs</li>",
-                "</ul>",
-
-                "<p>Changed</p>",
-
-                "<ul>",
-                    "<li>Download and Update now use subdirectories in the temporary files directory for each component (game, voice packs)</li>",
-                    "<li>The preload button now displays whether the preload for all components was completed or not</li>",
+                    "<li>Fixed update getting stuck at 100% or close, fix applied to install part too</li>",
                 "</ul>"
             ].join("\n")
         }
