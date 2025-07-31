@@ -90,6 +90,12 @@ impl SimpleComponent for AboutDialog {
 
                 "<ul>",
                     "<li>Fixed update getting stuck at 100% or close, fix applied to install part too</li>",
+                "</ul>",
+
+                "<p>Changed</p>",
+
+                "<ul>",
+                    "<li>Updated classic mode default window size to better match the 1440p background images</li>",
                 "</ul>"
             ].join("\n")
         }
