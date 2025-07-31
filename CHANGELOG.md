@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.15.4] - 31.07.2025
+
+### Fixed
+
+- Fixed the update getting stuck fix not being included
+
 ## [3.15.3] - 31.07.2025
 
 ### Fixed
@@ -671,7 +677,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <br>
 
-[unreleased]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.15.3...next
+[unreleased]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.15.4...next
+[3.15.4]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.15.3...3.15.4
 [3.15.3]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.15.2...3.15.3
 [3.15.2]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.15.1...3.15.2
 [3.15.1]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.15.0...3.15.1
