@@ -89,7 +89,7 @@ impl SimpleComponent for AboutDialog {
                 "<p>Fixed</p>",
 
                 "<ul>",
-                    "<li>Fixed the update getting stuck fix not being included</li>",
+                    "<li>Fixed download starting again after reaching 100% in an endless loop</li>",
                 "</ul>"
             ].join("\n")
         }

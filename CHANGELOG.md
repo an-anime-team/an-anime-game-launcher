@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed download starting again after reaching 100% in an endless loop
+
 ## [3.15.4] - 31.07.2025
 
 ### Fixed
