@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fixed download starting again after reaching 100% in an endless loop
 
+### Changed
+
+- Updated fps unlocker to 1.2.1 and bat script to work with latest wine behavior
+
 ## [3.15.4] - 31.07.2025
 
 ### Fixed

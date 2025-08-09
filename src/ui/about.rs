@@ -1,5 +1,4 @@
 use relm4::prelude::*;
-
 use anime_launcher_sdk::VERSION as SDK_VERSION;
 use anime_launcher_sdk::anime_game_core::VERSION as CORE_VERSION;
 
@@ -90,17 +89,30 @@ impl SimpleComponent for AboutDialog {
 
                 "<ul>",
                     "<li>Fixed download starting again after reaching 100% in an endless loop</li>",
+                "</ul>",
+
+                "<p>Changed</p>",
+
+                "<ul>",
+                    "<li>Updated fps unlocker to 1.2.1 and bat script to work with latest wine behavior</li>",
                 "</ul>"
             ].join("\n")
         }
     }
 
-    fn init(_init: Self::Init, root: Self::Root, _sender: ComponentSender<Self>) -> ComponentParts<Self> {
+    fn init(
+        _init: Self::Init,
+        root: Self::Root,
+        _sender: ComponentSender<Self>
+    ) -> ComponentParts<Self> {
         tracing::info!("Initializing about dialog");
 
         let model = Self;
         let widgets = view_output!();
 
-        ComponentParts { model, widgets }
+        ComponentParts {
+            model,
+            widgets
+        }
     }
 }
