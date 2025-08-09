@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.15.5] - 09.08.2025
+
 ### Fixed
 
 - Fixed download starting again after reaching 100% in an endless loop
@@ -685,7 +687,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <br>
 
-[unreleased]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.15.4...next
+[unreleased]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.15.5...next
+[3.15.5]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.15.4...3.15.5
 [3.15.4]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.15.3...3.15.4
 [3.15.3]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.15.2...3.15.3
 [3.15.2]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.15.1...3.15.2
