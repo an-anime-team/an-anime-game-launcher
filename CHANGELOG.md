@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed some places that should have localized strings being empty instead
+
 ## [3.15.5] - 09.08.2025
 
 ### Fixed
