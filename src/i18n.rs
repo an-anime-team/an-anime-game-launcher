@@ -115,16 +115,16 @@ macro_rules! tr {
     ($id:expr, { $($key:literal = $value:expr),* }) => {
         {
             use std::collections::HashMap;
+            use fluent_templates::Loader;
             use fluent_templates::fluent_bundle::FluentValue;
 
             let mut args = HashMap::new();
 
             $(
-                args.insert($key, FluentValue::from($value));
+                args.insert($key.into(), FluentValue::from($value));
             )*
 
-            $crate::i18n::LOCALES.lookup_no_default_fallback($crate::i18n::get_lang(), $id, Some(&args))
-                .unwrap_or_default()
+            $crate::i18n::LOCALES.lookup_complete($crate::i18n::get_lang(), $id, Some(&args))
         }
     };
 }
