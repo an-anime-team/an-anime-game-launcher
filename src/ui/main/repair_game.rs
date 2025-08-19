@@ -38,7 +38,7 @@ pub fn repair_game(
 
         let downloads = sophon::installer::get_game_download_sophon_info(
             &client,
-            &game_branch_info.main,
+            game_branch_info.main.as_ref().expect("`None` case would've been caught earlier"),
             config.launcher.edition.into()
         ).expect("failed to get game info");
 
