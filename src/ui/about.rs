@@ -88,13 +88,8 @@ impl SimpleComponent for AboutDialog {
                 "<p>Fixed</p>",
 
                 "<ul>",
-                    "<li>Fixed download starting again after reaching 100% in an endless loop</li>",
-                "</ul>",
-
-                "<p>Changed</p>",
-
-                "<ul>",
-                    "<li>Updated fps unlocker to 1.2.1 and bat script to work with latest wine behavior</li>",
+                    "<li>Fixed some places that should have localized strings being empty instead</li>",
+                    "<li>Fixed \"Failed to find game diff\" error</li>",
                 "</ul>"
             ].join("\n")
         }

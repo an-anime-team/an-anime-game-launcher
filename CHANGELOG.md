@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Fixed some places that should have localized strings being empty instead
+- Fixed "Failed to find game diff" error
 
 ## [3.15.5] - 09.08.2025
 
