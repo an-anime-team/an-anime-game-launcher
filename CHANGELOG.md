@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Removed support fro launching with Proton from the launcher.
+- Removed support for launching with Proton from the launcher.
   Launching with proton externally is unaffected.
 
 ## [3.15.6] - 19.08.2025
