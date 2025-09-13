@@ -5,7 +5,6 @@ use adw::prelude::*;
 use anime_launcher_sdk::wincompatlib::prelude::*;
 
 use anime_launcher_sdk::components::*;
-use anime_launcher_sdk::components::wine::UnifiedWine;
 
 use super::GeneralAppMsg;
 
@@ -18,7 +17,6 @@ pub struct ComponentsPage {
 
     downloaded_wine_versions: Vec<(wine::Version, wine::Features)>,
     downloaded_dxvk_versions: Vec<dxvk::Version>,
-    allow_dxvk_selection: bool,
 
     selected_wine_version: u32,
     selected_dxvk_version: u32,
@@ -167,16 +165,6 @@ impl SimpleAsyncComponent for ComponentsPage {
                     add = &adw::PreferencesGroup {
                         set_title: &tr!("dxvk-version"),
 
-                        #[watch]
-                        set_description: Some(&if !model.allow_dxvk_selection {
-                            tr!("dxvk-selection-disabled")
-                        } else {
-                            String::new()
-                        }),
-
-                        #[watch]
-                        set_sensitive: model.allow_dxvk_selection,
-
                         adw::ComboRow {
                             set_title: &tr!("selected-version"),
         
@@ -225,9 +213,6 @@ impl SimpleAsyncComponent for ComponentsPage {
                     },
 
                     add = &adw::PreferencesGroup {
-                        #[watch]
-                        set_sensitive: model.allow_dxvk_selection,
-
                         add = model.dxvk_components.widget(),
                     },
                 }
@@ -303,15 +288,6 @@ impl SimpleAsyncComponent for ComponentsPage {
 
             downloaded_wine_versions: vec![],
             downloaded_dxvk_versions: vec![],
-
-            allow_dxvk_selection: match &CONFIG.game.wine.selected {
-                Some(version) => match wine::Group::find_in(&CONFIG.components.path, version) {
-                    Ok(Some(group)) => group.features.unwrap_or_default().need_dxvk,
-                    _ => true
-                }
-
-                None => true
-            },
 
             selected_wine_version: 0,
             selected_dxvk_version: 0,
@@ -398,10 +374,9 @@ impl SimpleAsyncComponent for ComponentsPage {
 
             ComponentsPageMsg::SelectWine(index) => {
                 if let Ok(mut config) = Config::get() {
-                    if let Some((version, features)) = self.downloaded_wine_versions.get(index) {
+                    if let Some((version, _)) = self.downloaded_wine_versions.get(index) {
                         if config.game.wine.selected.as_ref() != Some(&version.title) {
                             self.selecting_wine_version = true;
-                            self.allow_dxvk_selection = features.need_dxvk;
 
                             let wine = version
                                 .to_wine(&config.components.path, Some(&config.game.wine.builds.join(&version.name)))
@@ -448,10 +423,7 @@ impl SimpleAsyncComponent for ComponentsPage {
 
                                 let mut wine = match config.get_selected_wine() {
                                     Ok(Some(version)) => {
-                                        match version.to_wine(config.components.path, Some(config.game.wine.builds.join(&version.name))) {
-                                            UnifiedWine::Default(wine) => wine,
-                                            UnifiedWine::Proton(_) => return
-                                        }
+                                        version.to_wine(config.components.path, Some(config.game.wine.builds.join(&version.name)))
                                     }
 
                                     _ => Wine::default()

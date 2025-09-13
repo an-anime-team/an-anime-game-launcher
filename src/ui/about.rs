@@ -85,11 +85,10 @@ impl SimpleComponent for AboutDialog {
 
             set_release_notes_version: &APP_VERSION,
             set_release_notes: &[
-                "<p>Fixed</p>",
+                "<p>Changed</p>",
 
                 "<ul>",
-                    "<li>Fixed some places that should have localized strings being empty instead</li>",
-                    "<li>Fixed \"Failed to find game diff\" error</li>",
+                    "<li>Removed support for launching with Proton from the launcher. Launching with proton externally is unaffected.</li>",
                 "</ul>"
             ].join("\n")
         }
