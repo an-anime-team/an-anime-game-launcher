@@ -1229,7 +1229,9 @@ impl SimpleComponent for App {
                         download_wine::download_wine(sender, self.progress_bar.sender().to_owned())
                     }
                     LauncherState::PrefixNotExists => create_prefix::create_prefix(sender),
-                    LauncherState::DxvkNotInstalled => install_dxvk::install_dxvk(sender),
+                    LauncherState::DxvkNotInstalled => {
+                        install_dxvk::install_dxvk(sender, self.progress_bar.sender().to_owned())
+                    }
 
                     LauncherState::GameUpdateAvailable(diff)
                     | LauncherState::GameNotInstalled(diff)
