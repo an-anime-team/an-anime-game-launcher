@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.17.0] - 20.09.2025
+
+### Added
+
+- Added DXVK installation check for broken dxvk installations
+
+### Fixed
+
+- Fixed FPS unlocker not working with some runners
+
 ## [3.16.0] - 13.09.2025
 
 ### Changed
