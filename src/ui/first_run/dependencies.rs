@@ -68,7 +68,7 @@ impl SimpleAsyncComponent for DependenciesApp {
                         },
 
                         gtk::Entry {
-                            set_text: "sudo pacman -Syu git p7zip libwebp",
+                            set_text: "sudo pacman -Syu git p7zip libwebp-utils",
                             set_editable: false
                         }
                     },
