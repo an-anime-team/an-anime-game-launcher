@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed size of images in the "Appearance" preferences section (most noticeable on flatpak)
+- Fixed the package name for libwebp-utils on Arch Linux
+
+### Changed
+
+- Updated Korean translation
+
 ## [3.17.0] - 20.09.2025
 
 ### Added
