@@ -10,12 +10,6 @@
 
 <br>
 
-# 🚧 Project status
-
-Due to lack of interest from my side the project stays in a legacy, maintaining-only state for a long period of time. This project will not receive huge updates unless really necessary. I still keep it up to date with latest changes in the game and work with community to solve the issues, but old-known unessential bugs will not be fixed, and new features will not be added. Instead, I'm working on other projects, and the future is in uniting all the launchers in one single [universal launcher](https://github.com/an-anime-team/anime-games-launcher). This project stays in "proof of concept" stage right now and requires major changes, which, again, require interest from my side. Keep your eye on our discord server for more details.
-
-<br>
-
 # ♥️ Useful links and thanks
 
 * [macOS launcher](https://github.com/3Shain/yet-another-anime-game-launcher) which contains some additional compatibility components
@@ -78,3 +72,9 @@ The main problem, though, is that github is blocked in China, and it's used in o
 To fix this, you have to make your own copy of the [components](https://github.com/an-anime-team/components) repository and change all the links there from github releases to some mirror. Later you can update the components index repo link in your launcher's `config.json` file.
 
 If you have any questions - feel free to contact the dev in our discord server (or if you have no way to use discord - try sending me an email, but it's unlikely to be received).
+
+<br>
+
+# 🚧 Project status
+
+This project is in maintenance mode and is considered feature complete. It will continue to receive updates with bugfixes and support for new versions of the game. The various contributors help keep this project alive by keeping it up to date with latest game changes. I'm working on other projects, and the future is in uniting all the launchers in one single [universal launcher](https://github.com/an-anime-team/anime-games-launcher). This project stays in "proof of concept" stage right now and requires major changes, which, again, require interest from my side. Keep your eye on our discord server for more details.
