@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<component type="desktop-application">
+  <id>moe.launcher.an-anime-game-launcher</id>
+  <name>An Anime Game Launcher</name>
+  <summary>Play your favorite anime game on Linux</summary>
+  <summary xml:lang="de">Spielen Sie Ihr Lieblings-Anime-Spiel auf Linux</summary>
+  <summary xml:lang="ru">Играйте в вашу любимую аниме-игру на линуксе</summary>
+  <summary xml:lang="es">Juega a tu juego favorito de anime en Linux</summary>
+  <summary xml:lang="it">Gioca al tuo gioco anime preferito su Linux</summary>
+  <summary xml:lang="hu">Játssz a kedvenc játékoddal Linux-on!</summary>
+  <description>
+    <p>An Anime Game Launcher is an unofficial launcher for Genshin Impact that handles setting up Wine and installing the game on Linux.</p>
+    <p xml:lang="de">An Anime Game Launcher ist ein inoffizieller Launcher für Genshin Impact, der die Installation von Wine und des Spiels unter Linux erleichtert.</p>
+    <p xml:lang="ru">An Anime Game Launcher - это неофициальный лаунчер для Genshin Impact, который настраивает Wine и устанавливает игру на линуксе.</p>
+    <p xml:lang="es">Launcher de un Juego de Anime es un launcher no oficial para Genshin Impact. Se encarga de configurar Wine e instalar el juego en Linux.</p>
+    <p xml:lang="it">An Anime Game Launcher è un launcher non ufficiale per Genshin Impact che gestisce e configura automaticamente Wine e l'installazione del gioco su Linux.</p>
+    <p xml:lang="hu">Az Anime Game Launcher egy nem-hivatalos launcher a Genshin Impact játékhoz, amely helyetted beállítja a Wine-t és telepíti a játékot Linux-on.</p>
+  </description>
+  <developer id="moe.launcher">
+    <name>An Anime Team</name>
+  </developer>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://raw.githubusercontent.com/an-anime-team/an-anime-game-launcher/5afbfb239d058142cb803d2d0a0fc84cdf084ca2/repository/main-classic.png</image>
+      <caption>Main launcher window (Classic look)</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://raw.githubusercontent.com/an-anime-team/an-anime-game-launcher/5afbfb239d058142cb803d2d0a0fc84cdf084ca2/repository/settings-classic.png</image>
+      <caption>Launcher settings (Classic look)</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://raw.githubusercontent.com/an-anime-team/an-anime-game-launcher/5afbfb239d058142cb803d2d0a0fc84cdf084ca2/repository/main-modern.png</image>
+      <caption>Main launcher window (Modern look)</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://raw.githubusercontent.com/an-anime-team/an-anime-game-launcher/5afbfb239d058142cb803d2d0a0fc84cdf084ca2/repository/settings-modern.png</image>
+      <caption>Launcher settings (Modern look)</caption>
+    </screenshot>
+  </screenshots>
+  <launchable type="desktop-id">moe.launcher.an-anime-game-launcher.desktop</launchable>
+  <url type="homepage">https://github.com/an-anime-team/an-anime-game-launcher</url>
+  <url type="bugtracker">https://github.com/an-anime-team/an-anime-game-launcher/issues</url>
+  <project_license>GPL-3.0-or-later</project_license>
+  <metadata_license>CC0-1.0</metadata_license>
+  <categories>
+    <category>Game</category>
+  </categories>
+  <content_rating type="oars-1.1" />
+  <releases>
+   <release version="3.18.0" date="2025-11-12">
+     <description>
+       <p>Fixed size of images in the "Appearance" preferences section (most noticeable on flatpak)</p>
+       <p>Fixed the package name for libwebp-utils on Arch Linux</p>
+       <p>Updated Korean translation</p>
+     </description>
+   </release>
+  </releases>
+  <branding>
+    <color type="primary" scheme_preference="light">#ffd9b3</color>
+    <color type="primary" scheme_preference="dark">#2d1a1a</color>
+  </branding>
+</component>
