@@ -15,7 +15,7 @@ unpacking-failed = 展開失敗
 
 kill-game-process-failed = ゲームの停止に失敗しました。
 
-game-file-repairing-error = ゲームファイルの修正に失敗しました。
+game-file-repairing-error = ゲームファイルの修復に失敗しました。
 integrity-files-getting-error = 整合性ファイルの取得に失敗しました
 
 background-downloading-failed = 背景画像のダウンロードに失敗しました。
@@ -27,8 +27,8 @@ dxvk-install-failed = DXVKのインストールに失敗しました。
 voice-package-deletion-error = ボイスパッケージの消去に失敗しました。
 
 game-diff-finding-error = ゲームの差異の検索に失敗しました。
-patch-info-fetching-error = パッチ情報のフェチに失敗しました。
-launcher-state-updating-error = ランチャーの状態を更新するのに失敗しました。
+patch-info-fetching-error = パッチ情報の取得に失敗しました。
+launcher-state-updating-error = ランチャーの状態の更新に失敗しました。
 
 package-not-available = パッケージが存在しません: {$package}
 wine-download-error = wineのダウンロードに失敗しました。
@@ -38,10 +38,10 @@ dxvk-download-error = DXVKのダウンロードに失敗しました
 dxvk-unpack-error = DXVKの展開に失敗しました
 dxvk-apply-error = DXVKの適用に失敗しました。
 
-downloaded-wine-list-failed = ダウンロードされたwineのリストの表示にしっぱいしました。
+downloaded-wine-list-failed = ダウンロードされたwineのリスト表示に失敗しました。
 
 patch-sync-failed = パッチフォルダの同期に失敗しました
-patch-state-check-failed = パッチフォルダの状態を確認するのに失敗しました
+patch-state-check-failed = パッチフォルダの状態の確認に失敗しました
 game-patching-error = ゲームのパッチに失敗しました。
 
 # Disable telemetry
@@ -57,10 +57,10 @@ documentation-url-open-failed = ドキュメントページを開けませんで
 game-session-add-failed = ゲームセッションの追加に失敗しました。
 game-session-update-failed = ゲームセッションの更新に失敗しました。
 game-session-remove-failed = ゲームセッションの消去に失敗しました。
-game-session-set-current-failed = 現在のゲームセッションに設定するのに失敗しました。
+game-session-set-current-failed = 現在のゲームセッションの設定に失敗しました。
 game-session-apply-failed = ゲームセッションの適用に失敗しました。
 
 # Enhancements
 
-discord-rpc-icons-fetch-failed = Discord RPCのアイコンのフェチに失敗しました。
-discord-rpc-icon-download-failed = Discord RPCのアイコンのダウンロードに失敗しました。
+discord-rpc-icons-fetch-failed = Discord RPCのアイコンの取得に失敗しました。
+discord-rpc-icon-download-failed = Discord RPCアイコンのダウンロードに失敗しました。

@@ -26,7 +26,7 @@ hud = HUD
 
 fsr = FSR
 fsr-description = ゲームをモニターの解像度に合わせて拡大します。ゲーム内で、Alt+Enterをする必要があります。
-ultra-quality = ハイクオリティ
+ultra-quality = ウルトラクオリティ
 quality = クオリティ
 balanced = バランス
 performance = パフォーマンス
@@ -43,12 +43,12 @@ title = タイトル
 description = 説明
 
 fps-unlocker = FPS上限解除
-fps-unlocker-description = ゲーム内のメモリを書き換えてFPSの上限を解除します。アンチチートによって検知されることはありません。
+fps-unlocker-description = ゲーム内のメモリを書き換えてFPSの上限を解除します。アンチチートによって検知される可能性があります。
 
 enabled = 機能を有効にする
 
-fps-unlocker-interval = Overwrite interval
-fps-unlocker-interval-description = Delay in milliseconds between overwriting the FPS limit value. Periodic overwrites are necessary to prevent it from resetting
+fps-unlocker-interval = 上書き間隔
+fps-unlocker-interval-description = FPS制限値を上書きする間隔(ミリ秒単位)。リセットを防ぐため、定期的な上書きが必要です。
 
 window-mode = ウィンドウモード
 borderless = ボーダーレス

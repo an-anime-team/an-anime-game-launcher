@@ -22,8 +22,8 @@ korean = 韓国語
 chinese = 中国語
 
 migrate-installation = インストール場所を変更する。
-migrate-installation-description = ゲームのインストール先を変更できる、ウィンドウを表示します。
-repair-game = ゲームを修正する
+migrate-installation-description = ゲームのインストール先を変更できるウィンドウを表示します。
+repair-game = ゲームを修復する
 
 status = ステータス
 
@@ -32,7 +32,7 @@ game-not-installed = 未インストール
 
 game-predownload-available = ゲームの事前アップデートがあります: {$old} -> {$new}
 game-update-available = ゲームの更新があります: {$old} -> {$new}
-game-outdated = ゲームが非常に古いためアップデートできません. 最新バージョン: {$latest}
+game-outdated = ゲームが古すぎるためアップデートできません。 最新バージョン: {$latest}
 
 player-patch-version = プレイヤーのパッチバージョン
 player-patch-version-description = Linuxでプレイするためのメインのパッチです。

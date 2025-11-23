@@ -5,7 +5,7 @@ selected-version = バージョン選択
 recommended-only = 推奨版のみを使う。
 
 wine-version = Wineのバージョン
-wine-recommended-description = 推奨するWineバージョンのみ
+wine-recommended-description = Wine の推奨バージョンのみ表示する。
 
 wine-options = Wineの設定
 

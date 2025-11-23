@@ -1,15 +1,15 @@
 game-resolution = ゲーム解像度
 gamescope-resolution = ゲームスコープの解像度
 
-framerate = Framerate
-framerate-limit = Framerate limit
-unfocused-framerate-limit = Unfocused framerate limit
+framerate = フレームレート
+framerate-limit = フレームレート上限
+unfocused-framerate-limit = ウィンドウがアクティブでない時のフレームレート上限
 
-upscaling = 拡大
-upscaling-description = Render the game in lower resolution and improve the image quality using special algorithms
+upscaling = アップスケール
+upscaling-description = ゲームを低解像度で描画した後、特殊なアルゴリズムを使用して画質を向上させます。
 
-upscaler = Upscaler
-upscaler-description = Algorithm used to perform image upscaling
+upscaler = アップスケーラー
+upscaler-description = アップスケールに使用するアルゴリズム
 
 auto = Auto
 integer = Integer
@@ -17,8 +17,8 @@ fit = Fit
 fill = Fill
 stretch = Stretch
 
-upscale-filter = Filter
-upscale-filter-description = Algorithm used to filter upscaled image
+upscale-filter = フィルタ
+upscale-filter-description = アップスケールに使用するフィルタ
 
 linear = Linear
 nearest = Nearest
@@ -33,20 +33,20 @@ small = Small
 high = High
 highest = Highest
 
-hdr-support = HDR support
-hdr-support-description = Enable gamescope HDR output. Requires display support
+hdr-support = HDR サポート
+hdr-support-description = gamescopeのHDR出力を有効にします。対応するディスプレイが必要です。
 
-realtime-scheduler = Realtime scheduler
-realtime-scheduler-description = Use realtime game process scheduling. Improves game performance in cost of slowing down background processes
+realtime-scheduler = リアルタイムスケジューラ
+realtime-scheduler-description = ゲームプロセスに対してリアルタイムスケジューリングを使用します。ゲームのパフォーマンスは向上しますが、バックグラウンドプロセスの処理性能が低下します。
 
-adaptive-sync = Adaptive sync
-adaptive-sync-description = Enable variable refresh rate. Requires display support
+adaptive-sync = アダプティブシンク
+adaptive-sync-description = 可変リフレッシュレートを有効にします。対応するディスプレイが必要です。
 
-force-grab-cursor = Force grab cursor
-force-grab-cursor-description = Always use relative mouse mode instead of flipping dependent on cursor visibility. The mouse cursor will correctly be centered in the game
+force-grab-cursor = カーソルを強制的に固定する
+force-grab-cursor-description = カーソルの表示状態に関わらず、常に相対マウスモードを使用します。カーソルは適切に中央に配置されます。
 
 mangohud = MangoHUD
-mangohud-description = Launch with the mangoapp (mangohud) performance overlay enabled
+mangohud-description = mangoapp (mangohud) によるパフォーマンスオーバーレイを有効にします。
 
-extra-args = Extra arguments
-extra-args-description = Extra arguments appended to the gamescope
+extra-args = 追加の引数
+extra-args-description = gamescopeに渡す追加の引数

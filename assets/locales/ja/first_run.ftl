@@ -32,7 +32,7 @@ tos-dialog-message =
 
 dependencies = 依存関係
 missing-dependencies-title = いくつかの依存関係を満たしていません。
-missing-dependencies-message = あなたはいくつかのパッケージをインストールする必要があります。その後システムを再起動して続行してください。
+missing-dependencies-message = 続行する前に、システムにいくつかのパッケージをインストールする必要があります。
 
 
 default-paths = デフォルトのパス
@@ -40,14 +40,14 @@ choose-default-paths = デフォルトのパスを選択する
 show-all-folders = すべてのフォルダを表示する。
 show-all-folders-subtitle = 追加の設定を表示します。
 runners-folder = ランナーフォルダ
-dxvks-folder = DXVKs フォルダ
+dxvks-folder = DXVK フォルダ
 wine-prefix-folder = Wine プレフィックスフォルダ
-global-game-installation-folder = グローバル版のインストールフォルダー
-chinese-game-installation-folder = 中国版のインストールフォルダー
-fps-unlocker-folder = FPSアンロッカーフォルダー
+global-game-installation-folder = グローバル版のインストールフォルダ
+chinese-game-installation-folder = 中国版のインストールフォルダ
+fps-unlocker-folder = FPSアンロッカーフォルダ
 components-index = コンポーネントインデックス
-patch-folder = パッチフォルダー
-temp-folder = 一時的なフォルダ
+patch-folder = パッチフォルダ
+temp-folder = 一時フォルダ
 
 migrate = Migrate
 
