@@ -23,7 +23,7 @@ All the project's life happen in our discord server. If you have any questions o
 
 # ⬇️ Download
 
-Launcher developer does not provide any packages for this programm. Instead, we almost fully rely on other people to maintain them.
+Launcher developer does not provide any packages for this program. Instead, we almost fully rely on other people to maintain them.
 
 To see the installation guides, please visit [this wiki page](https://github.com/an-anime-team/an-anime-game-launcher/wiki/Installation).
 
