@@ -24,5 +24,5 @@ new-path = 新しいファイルパス
 read-only = 読み出し専用
 read-only-description = ゲームはこれらのディレクトリへの書き込みを禁止します。
 
-symlinks = シンボリック
+symlinks = シンボリックリンク
 symlinks-description = サンドボックス内の元のパスを新しいパスにシンボリックリンクします。
