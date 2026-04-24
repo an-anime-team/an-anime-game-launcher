@@ -184,7 +184,13 @@ impl SimpleComponent for App {
                             set_loop: true,
                             #[watch]
                             set_playing: !model.kill_game_button && model.style == LauncherStyle::Classic && model.use_video_background && model.loading.is_none() && crate::BACKGROUND_VIDEO_FILE.exists(),
-
+                            connect_timestamp_notify => move |media| {
+                                if !media.is_seeking() && media.timestamp() >= media.duration() {
+                                    media.seek(0);
+                                    media.set_playing(true);
+                                }
+                            },
+                            
                             connect_error_notify: |mstream| {
                                 if let Some(err) = mstream.error() {
                                     tracing::error!("Background video stream error: {err}");
