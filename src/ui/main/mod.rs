@@ -187,7 +187,7 @@ impl SimpleComponent for App {
 
                             connect_error_notify: |mstream| {
                                 if let Some(err) = mstream.error() {
-                                    tracing::error!("Background video stream error: {err}");
+                                    tracing::error!(?err, "Background video stream error");
                                 }
                             }
                         }
