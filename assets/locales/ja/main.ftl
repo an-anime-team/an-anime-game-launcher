@@ -14,7 +14,7 @@ game-folder = ゲームフォルダ
 config-file = 設定ファイル
 debug-file = デバッグファイル
 wish-url = 祈願履歴を開く
-about = "An anime Game launcher"について 
+about = "An Anime Game launcher"について
 
 
 close = { $form ->
@@ -72,22 +72,22 @@ download-wine = ワインをダウンロード
 create-prefix = プレフィックスを作成
 update = 更新
 download = ダウンロード
-import-game = Import game
-predownload-update = {$version} の早期アップデート({$size})
+import-game = ゲームをインポートする
+predownload-update = {$version} の事前アップデート({$size})
 
-kill-game-process = ゲームを停止させる
+kill-game-process = ゲームを強制終了させる
 
-timeout-fix-detected = Driver error detected
+timeout-fix-detected = ドライバエラーが検出されました。
 timeout-fix-detected-description =
-    The game exited within a few seconds and a driver error log was found.
-    This usually means the connection to Genshin Impact's servers timed out.
+    ゲームがすぐに終了し、ドライバエラーが記録されたことを確認しました。
+    これは通常、原神のサーバーとの接続がタイムアウトしたことを意味します。
 
-    Latest Spritz-based Wine runners can work around this via WINE_ENABLE_TIMEOUT_FIX=1.
-    Do you want to enable it?
+    最新バージョンのSpritzベースのWineでは、WINE_ENABLE_TIMEOUT_FIX=1を設定することによりこれを回避できます。
+    有効にしますか？
 
-    You can also toggle this in Preferences -> Enhancements -> Wine.
+    この設定は、設定 -> 上級者向け -> Wineから変更できます。
 
-main-window--patch-unavailable-tooltip = パッチサーバーが利用できないため、パッチの状態を確認することができません。リスクを理解した上で実行することができます。
+main-window--patch-unavailable-tooltip = パッチサーバーが利用できないため、パッチの状態を確認することができません。リスクを理解した上で実行することは可能です。
 main-window--patch-outdated-tooltip = パッチは期限切れか準備中のため利用できません。しばらく経ってからパッチステータスを確認してください。
 main-window--version-outdated-tooltip = バージョンが古すぎるため、更新できませんでした。
 

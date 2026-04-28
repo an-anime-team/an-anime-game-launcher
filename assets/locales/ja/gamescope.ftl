@@ -25,13 +25,13 @@ nearest = Nearest
 nis = NIS
 pixel = Pixel
 
-upscale-sharpness = Sharpness
-upscale-sharpness-description = Upscaling sharpness
+upscale-sharpness = シャープネス
+upscale-sharpness-description = アップスケール時のシャープネス
 
-smallest = Smallest
-small = Small
-high = High
-highest = Highest
+smallest = 最小
+small = 小
+high = 高
+highest = 最高
 
 hdr-support = HDR サポート
 hdr-support-description = gamescopeのHDR出力を有効にします。対応するディスプレイが必要です。
