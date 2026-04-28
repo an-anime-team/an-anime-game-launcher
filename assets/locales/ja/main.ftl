@@ -31,7 +31,7 @@ hide = { $form ->
 nothing = 何もしない
 save = 保存
 continue = 続行
-resume = 一時停止
+resume = 再開
 exit = 閉じる
 check = 確認
 restart = 再起動
@@ -46,7 +46,7 @@ loading-patch-status = パッチステータスを確認中
 loading-launcher-state = ランチャーの状態を読み込み中
 loading-launcher-state--game = ランチャーの状態を読み込み中: ゲームバージョンを確認中
 loading-launcher-state--voice = ランチャーの状態を読み込み中: {$locale} の音声を確認中
-loading-launcher-state--patch = ランチャーの状態を読み込み中 インストール済みパッチを確認中
+loading-launcher-state--patch = ランチャーの状態を読み込み中: インストール済みパッチを確認中
 
 
 checking-free-space = 空き容量を確認しています
