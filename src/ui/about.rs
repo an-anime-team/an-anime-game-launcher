@@ -61,6 +61,7 @@ impl SimpleComponent for AboutDialog {
                 "Italiano — @QuazarOmega https://github.com/quazar-omega",
                 "Türkçe — @Kaozix https://github.com/Kaozix1776",
                 "Türkçe — Kayra Nachfolger https://github.com/kayranachfolger",
+                "Türkçe — Berke Güzel https://github.com/wenekar",
                 "Polski — Dominik Opyd https://github.com/oritwoen",
                 // Hungarian?
                 "Svenska — Jakob Fridesjö https://github.com/jakobfridesjo",
