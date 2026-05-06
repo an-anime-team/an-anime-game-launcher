@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Changed .version file format to be a textual file taht can be edited in a text editor.
+  Old format files will still work correctly and will be overwritten on game update.
+
 ## [3.19.1] - 2026-04-23
 
 ### Fixed
