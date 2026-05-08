@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Changed .version file format to be an ascii text file that can be edited in a text editor.
   Old format files will still work correctly and will be overwritten on game update.
+- Added a proper icon to the game import button
 - Improved Japanese localization
 - Improved Turkish localization
 
