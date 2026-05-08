@@ -1,7 +1,7 @@
 welcome = Merhaba
 
 welcome-page-message =
-    Merhaba, "bir anime oyunu" istemcisine hoş geldiniz
+    Merhaba, "Bir Anime Oyunu" istemcisine hoş geldiniz
 
     Oyunu çalıştırmadan önce bazı şeyleri hazırlamamız ve varsayılan bileşenleri indirmemiz gerekiyor.
 
@@ -38,15 +38,15 @@ default-paths = Varsayılan yollar
 choose-default-paths = Varsayılan yolları seç
 show-all-folders = Ne yaptığımı biliyorum
 show-all-folders-subtitle = Ek yol seçimi ayarlarını göster. Dediğimi yap...
-runners-folder = Başlatıcılar(Runnerlar) klasörü
-dxvks-folder = DXVK'nin klasörü
-wine-prefix-folder = Wine prefix'inin klasörü
-global-game-installation-folder = Evrensel oyun sürümünü yükleme klasörü
-chinese-game-installation-folder = Oyun'un Çin sürümünü yükleme klasörü 
+runners-folder = Başlatıcılar (Runnerlar) klasörü
+dxvks-folder = DXVK klasörü
+wine-prefix-folder = Wine Prefix klasörü
+global-game-installation-folder = Oyunun Global sürümünü yükleme klasörü
+chinese-game-installation-folder = Oyunun Çin sürümü yükleme klasörü
 fps-unlocker-folder = FPS Unlocker klasörü
-components-index = Bileşenlerin dizini
+components-index = Bileşen dizini
 patch-folder = Yama klasörü
-temp-folder = "Geçici" klasörü
+temp-folder = Geçici klasör
 
 migrate = Aktarma
 
@@ -55,8 +55,8 @@ select-voice-packages = Ses paketlerini seç
 
 
 download-components = Bileşenleri indir
-download-dxvk = DXVK'yi İndir
-apply-dxvk = DXVK'yi uygula
+download-dxvk = DXVK İndir
+apply-dxvk = DXVK uygula
 
 
 finish = Bitir

@@ -1,19 +1,19 @@
 custom = Özel
-none = Boş
+none = Hiçbiri
 default = Varsayılan
 details = Detaylar
 options = Seçenekler
 
 width = Genişlik
-height = Uzunluk
+height = Yükseklik
 
 # Menu items
 
-launcher-folder = İstemci dosyası
-game-folder = Oyun dosyası
-config-file = Config dosyası
-debug-file = Debug dosyası
-wish-url = Dilekleri aç
+launcher-folder = Başlatıcı klasörünü aç
+game-folder = Oyun klasörünü aç
+config-file = Ayarlar dosyasını aç
+debug-file = Hata ayıklama dosyasını aç
+wish-url = Wish geçmişini göster
 about = Hakkında
 
 
@@ -38,7 +38,7 @@ restart = Tekrardan başlat
 agree = Onayla
 
 
-loading-data = Bilgiler yükleniyor
+loading-data = Veriler yükleniyor
 downloading-background-picture = Arkaplan dosyası indiriliyor
 updating-components-index = Bileşenlerin dizini güncelleniyor
 loading-game-version = Oyun sürümü yükleniyor
