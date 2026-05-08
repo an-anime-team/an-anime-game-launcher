@@ -661,7 +661,7 @@ impl SimpleComponent for App {
                                         gtk::Button {
                                             set_width_request: 44,
                                             set_css_classes: &["circular"],
-                                            set_icon_name: "document-import-symbolic",
+                                            set_icon_name: "document-open-symbolic",
                                             set_tooltip_text: Some(&tr!("import-game")),
 
                                             #[watch]
