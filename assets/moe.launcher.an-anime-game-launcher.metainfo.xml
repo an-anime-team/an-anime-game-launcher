@@ -49,6 +49,11 @@
   </categories>
   <content_rating type="oars-1.1" />
   <releases>
+   <release version="3.19.3" date="2026-05-09">
+     <description>
+        <p>Fixed "Path not mounted" error when checking for free space during component download</p>
+     </description>
+   </release>
    <release version="3.19.2" date="2026-05-08">
      <description>
         <p>Changed .version file format to be an ascii text file that can be edited in a text editor. Old format files will still work correctly and will be overwritten on game update.</p>
