@@ -38,7 +38,9 @@
     </screenshot>
   </screenshots>
   <launchable type="desktop-id">moe.launcher.an-anime-game-launcher.desktop</launchable>
-  <url type="homepage">https://github.com/an-anime-team/an-anime-game-launcher</url>
+  <url type="homepage">https://launcher.moe/</url>
+  <url type="donation">https://opencollective.com/dawn-winery</url>
+  <url type="vcs-browser">https://github.com/an-anime-team/an-anime-game-launcher</url>
   <url type="bugtracker">https://github.com/an-anime-team/an-anime-game-launcher/issues</url>
   <project_license>GPL-3.0-or-later</project_license>
   <metadata_license>CC0-1.0</metadata_license>
