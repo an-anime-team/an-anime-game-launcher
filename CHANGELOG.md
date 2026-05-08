@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.19.2] - 2026-05-08
+
 ### Changed
 
 - Changed .version file format to be an ascii text file that can be edited in a text editor.
@@ -762,7 +764,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <br>
 
-[unreleased]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.19.1...next
+[unreleased]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.19.2...next
+[3.19.2]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.19.1...3.19.1
 [3.19.1]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.19.0...3.19.1
 [3.19.0]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.18.0...3.19.0
 [3.18.0]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.17.0...3.18.0

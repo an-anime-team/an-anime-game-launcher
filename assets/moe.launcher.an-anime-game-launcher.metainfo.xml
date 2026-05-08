@@ -54,6 +54,19 @@
        <p>Fixed deleting the wrong directory at the end of repair</p>
      </description>
    </release>
+   <release version="3.19.2" date="2026-05-08">
+     <description>
+        <p>Changed .version file format to be an ascii text file that can be edited in a text editor. Old format files will still work correctly and will be overwritten on game update.</p>
+        <p>Added a proper icon to the game import button</p>
+        <p>Improved Japanese localization</p>
+        <p>Improved Turkish localization</p>
+     </description>
+   </release>
+   <release version="3.19.1" date="2026-04-23">
+     <description>
+       <p>Fixed deleting the wrong directory at the end of repair</p>
+     </description>
+   </release>
    <release version="3.19.0" date="2026-04-23">
      <description>
        <p>Added 'Remake prefix' button</p>
