@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.19.3] - 2026-05-09
+
+### Fixed
+
+- Fixed "Path not mounted" error when checking for free space during component download
+
 ## [3.19.2] - 2026-05-08
 
 ### Changed
@@ -764,7 +770,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <br>
 
-[unreleased]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.19.2...next
+[unreleased]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.19.3...next
+[3.19.3]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.19.2...3.19.3
 [3.19.2]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.19.1...3.19.2
 [3.19.1]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.19.0...3.19.1
 [3.19.0]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.18.0...3.19.0
