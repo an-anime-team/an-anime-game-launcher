@@ -45,7 +45,7 @@ pub fn import_game(sender: relm4::ComponentSender<App>, path: PathBuf) {
     if !version_path.exists() {
         match game.get_version() {
             Ok(version) => {
-                if let Err(err) = std::fs::write(&version_path, version.version) {
+                if let Err(err) = std::fs::write(&version_path, version.to_string()) {
                     tracing::warn!("Failed to write .version during import: {err}");
                 }
             }

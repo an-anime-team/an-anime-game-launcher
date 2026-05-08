@@ -1,52 +1,52 @@
 game-resolution = Oyun çözünürlüğü
 gamescope-resolution = Gamescope çözünürlüğü
 
-framerate = Framerate
+framerate = FPS
 framerate-limit = Kare hızı limiti
-unfocused-framerate-limit = Odakta değilken kare hızı limiti
+unfocused-framerate-limit = Oyun penceresi odak halinde olmadığında kare hızı limiti
 
-upscaling = Görüntü keskinleştirme
-upscaling-description = Render the game in lower resolution and improve the image quality using special algorithms
+upscaling = Görüntü yükseltme
+upscaling-description = Oyunu daha düşük bir çözünürlükte çalıştırıp özel algoritmalar aracılığıyla görüntü kalitesini artırın.
 
-upscaler = Upscaler
-upscaler-description = Algorithm used to perform image upscaling
+upscaler = Görüntü yükseltici
+upscaler-description = Görüntü yükseltme için kullanılacak algoritma
 
-auto = Auto
-integer = Integer
-fit = Fit
-fill = Fill
-stretch = Stretch
+auto = Otomatik
+integer = Integer, tek sayı
+fit = Fit, ekrana sığdır
+fill = Fill, ekranı doldur
+stretch = Stretch, ekrana genişlet
 
-upscale-filter = Filter
-upscale-filter-description = Algorithm used to filter upscaled image
+upscale-filter = Görüntü yükseltme filtresi
+upscale-filter-description = Görüntü yükseltme için kullanılacak filtre
 
 linear = Linear
-nearest = Nearest
-nis = NIS
+nearest = Nearest, en yakın komşu
+nis = NIS, Nvidia Resim Yükseltici
 pixel = Pixel
 
-upscale-sharpness = Sharpness
-upscale-sharpness-description = Upscaling sharpness
+upscale-sharpness = Keskinlik
+upscale-sharpness-description = Görüntü yükseltmede uygulanacak olan keskinleştirme miktarı
 
-smallest = Smallest
-small = Small
-high = High
-highest = Highest
+smallest = En az
+small = Az
+high = Yüksek
+highest = En yüksek
 
-hdr-support = HDR support
-hdr-support-description = Enable gamescope HDR output. Requires display support
+hdr-support = HDR desteği
+hdr-support-description = gamescope HDR görüntü desteği, monitör tarafından desteklenmesi gerekmektedir.
 
-realtime-scheduler = Realtime scheduler
-realtime-scheduler-description = Use realtime game process scheduling. Improves game performance in cost of slowing down background processes
+realtime-scheduler = Gerçek zamanlı zamanlayıcı (scheduler)
+realtime-scheduler-description = Oyun için gerçek zamanlı (realtime) zamanlayıcı kullan. Bu seçenek arkaplan uygulamalarının yavaşlamasına sebep olabilir.
 
-adaptive-sync = Adaptive sync
-adaptive-sync-description = Enable variable refresh rate. Requires display support
+adaptive-sync = Adaptif yenileme
+adaptive-sync-description = Variable Refresh Rate (VRR) özelliğini aktif eder, monitör tarafından desteklenmesi gerekmektedir.
 
-force-grab-cursor = Force grab cursor
-force-grab-cursor-description = Always use relative mouse mode instead of flipping dependent on cursor visibility. The mouse cursor will correctly be centered in the game
+force-grab-cursor = İmleci zorla yakala
+force-grab-cursor-description = İmleci her daim ekranın ortasında tutar. İmlecin (mouse'un) pencere dışına çıkması veya kenara gelince durması gibi sorunlar yaşıyorsanız bu seçeneği açmak sorunları çözebilir.
 
 mangohud = MangoHUD
-mangohud-description = Launch with the mangoapp (mangohud) performance overlay enabled
+mangohud-description = Oyunu mangoapp (mangohud) oyun-içi performans katmanı ile açın.
 
-extra-args = Extra arguments
-extra-args-description = Extra arguments appended to the gamescope
+extra-args = Extra argümanlar
+extra-args-description = gamescope için ekstra argümanlar

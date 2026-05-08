@@ -2,11 +2,7 @@ name: Compile release build
 
 on:
   push:
-    branches: [ "main" ]
-    paths: [ "src/**" ]
-
-  release:
-    types: [ published ]
+    tags: [ "[0-9]+.[0-9]+.[0-9]+" ]
 
   workflow_dispatch:
 
@@ -15,7 +11,7 @@ env:
 
 jobs:
   build_and_upload:
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
 
     container:
       image: ubuntu:devel

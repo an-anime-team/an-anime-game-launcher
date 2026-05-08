@@ -1,52 +1,52 @@
-launcher-folder-opening-error = ランチャーフォルダを開くのに失敗しました。 
-game-folder-opening-error = ゲームフォルダを開くのに失敗しました
-config-file-opening-error = 設定ファイルを開くのに失敗しました
-debug-file-opening-error = デバッグファイルを開くのに失敗しました
+launcher-folder-opening-error = ランチャーフォルダを開けませんでした
+game-folder-opening-error = ゲームフォルダを開けませんでした
+config-file-opening-error = 設定ファイルを開けませんでした
+debug-file-opening-error = デバッグファイルを開けませんでした
 
-wish-url-search-failed = 祈願履歴がありません
-wish-url-opening-error = 祈願履歴ページを開けませんでした。
+wish-url-search-failed = 祈願URLが見つかりませんでした。
+wish-url-opening-error = 祈願URLを開けませんでした。
 
-wine-run-error = wineを利用して{$executable} を実行するのに失敗しました。
+wine-run-error = wineで{$executable} を実行できませんでした。
 
-game-launching-failed = ゲームの起動に失敗しました
-failed-get-selected-wine = 選択されたwineバージョンを入手できませんでした。
-downloading-failed = ダウンロードに失敗。
-unpacking-failed = 展開失敗
+game-launching-failed = ゲームを起動できませんでした
+failed-get-selected-wine = 選択されたwineバージョンを取得できませんでした。
+downloading-failed = ダウンロードできませんでした。
+unpacking-failed = 展開できませんでした。
 
-kill-game-process-failed = ゲームの停止に失敗しました。
+kill-game-process-failed = ゲームを強制終了できませんでした。
 
-game-file-repairing-error = ゲームファイルの修復に失敗しました。
-integrity-files-getting-error = 整合性ファイルの取得に失敗しました
+game-file-repairing-error = ゲームファイルを修復できませんでした。
+integrity-files-getting-error = 整合性ファイルを取得できませんでした。
 
-background-downloading-failed = 背景画像のダウンロードに失敗しました。
-components-index-sync-failed = コンポーネントのインデックスの同期に失敗しました。
-components-index-verify-failed = コンポーネントのインデックスの確認に失敗しました。
-config-update-error = 設定の保存に失敗しました。
-wine-prefix-update-failed = Wine のプレフィックスの更新に失敗しました。
-dxvk-install-failed = DXVKのインストールに失敗しました。
-voice-package-deletion-error = ボイスパッケージの消去に失敗しました。
+background-downloading-failed = 背景画像をダウンロードできませんでした。
+components-index-sync-failed = コンポーネントのインデックスを同期できませんでした。
+components-index-verify-failed = コンポーネントのインデックスを確認できませんでした。
+config-update-error = 設定を保存できませんでした。
+wine-prefix-update-failed = Wine のプレフィックスを更新できませんでした。
+dxvk-install-failed = DXVKをインストールできませんでした。
+voice-package-deletion-error = ボイスパッケージを消去できませんでした。
 
-game-diff-finding-error = ゲームの差異の検索に失敗しました。
-patch-info-fetching-error = パッチ情報の取得に失敗しました。
-launcher-state-updating-error = ランチャーの状態の更新に失敗しました。
+game-diff-finding-error = ゲームの差分を確認できませんでした。
+patch-info-fetching-error = パッチ情報を取得できませんでした。
+launcher-state-updating-error = ランチャーの状態を更新できませんでした。
 
 package-not-available = パッケージが存在しません: {$package}
-wine-download-error = wineのダウンロードに失敗しました。
-wine-unpack-errror = wineの展開に失敗しました。
-wine-install-failed = wineのインストールに失敗しました。
-dxvk-download-error = DXVKのダウンロードに失敗しました
-dxvk-unpack-error = DXVKの展開に失敗しました
-dxvk-apply-error = DXVKの適用に失敗しました。
+wine-download-error = wineをダウンロードできませんでした
+wine-unpack-errror = wineを展開できませんでした
+wine-install-failed = wineをインストールできませんでした
+dxvk-download-error = DXVKをダウンロードできませんでした
+dxvk-unpack-error = DXVKを展開できませんでした
+dxvk-apply-error = DXVKを適用できませんでした
 
-downloaded-wine-list-failed = ダウンロードされたwineのリスト表示に失敗しました。
+downloaded-wine-list-failed = ダウンロード済みのwineバージョンをリスト表示できませんでした。
 
-patch-sync-failed = パッチフォルダの同期に失敗しました
-patch-state-check-failed = パッチフォルダの状態の確認に失敗しました
-game-patching-error = ゲームのパッチに失敗しました。
+patch-sync-failed = パッチフォルダを同期できませんでした
+patch-state-check-failed = パッチフォルダの状態を確認できませんでした
+game-patching-error = ゲームにパッチを適用できませんでした
 
 # Disable telemetry
 
-telemetry-servers-disabling-error = テレメトリサーバーの無効化に失敗しました。
+telemetry-servers-disabling-error = テレメトリサーバーを無効化できませんでした。
 
 # Sandbox
 
@@ -54,19 +54,19 @@ documentation-url-open-failed = ドキュメントページを開けませんで
 
 # Game
 
-game-session-add-failed = ゲームセッションの追加に失敗しました。
-game-session-update-failed = ゲームセッションの更新に失敗しました。
-game-session-remove-failed = ゲームセッションの消去に失敗しました。
-game-session-set-current-failed = 現在のゲームセッションの設定に失敗しました。
-game-session-apply-failed = ゲームセッションの適用に失敗しました。
+game-session-add-failed = ゲームセッションを追加できませんでした。
+game-session-update-failed = ゲームセッションを更新できませんでした。
+game-session-remove-failed = ゲームセッションを消去できませんでした。
+game-session-set-current-failed = 現在のゲームセッションを設定できませんでした。
+game-session-apply-failed = ゲームセッションを適用できませんでした。
 
 # Enhancements
 
-discord-rpc-icons-fetch-failed = Discord RPCのアイコンの取得に失敗しました。
-discord-rpc-icon-download-failed = Discord RPCアイコンのダウンロードに失敗しました。
+discord-rpc-icons-fetch-failed = Discord RPCアイコンを取得できませんでした。
+discord-rpc-icon-download-failed = Discord RPCアイコンをダウンロードできませんでした。
 
 # Import game
 
-import-game-invalid-path = Selected folder doesn't contain a valid game installation
-import-game-error = Failed to import game
-import-game-path-runtime = This path is temporary (Flatpak portal or runtime dir) and won't be valid after the session ends
+import-game-invalid-path = 選択されたフォルダには有効なゲームファイルがありません。
+import-game-error = ゲームをインポートできませんでした。
+import-game-path-runtime = この場所は一時的なもの(Flatpakポータルまたはランタイムディレクトリ)であり、一度セッションが終了すると利用できなくなります。

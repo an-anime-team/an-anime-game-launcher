@@ -16,7 +16,7 @@ env:
 
 jobs:
   check_source_code:
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-2vcpu-ubuntu-2404
 
     container:
       image: ubuntu:devel

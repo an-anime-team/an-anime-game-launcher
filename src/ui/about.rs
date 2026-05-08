@@ -61,6 +61,7 @@ impl SimpleComponent for AboutDialog {
                 "Italiano — @QuazarOmega https://github.com/quazar-omega",
                 "Türkçe — @Kaozix https://github.com/Kaozix1776",
                 "Türkçe — Kayra Nachfolger https://github.com/kayranachfolger",
+                "Türkçe — Berke Güzel https://github.com/wenekar",
                 "Polski — Dominik Opyd https://github.com/oritwoen",
                 // Hungarian?
                 "Svenska — Jakob Fridesjö https://github.com/jakobfridesjo",
@@ -87,10 +88,13 @@ impl SimpleComponent for AboutDialog {
 
             set_release_notes_version: &APP_VERSION,
             set_release_notes: &[
-                "<p>Fixed</p>",
+                "<p>Changed</p>",
 
                 "<ul>",
-                    "<li>Fixed deleting the wrong directory at the end of repair</li>",
+                    "<li>Changed .version file format to be an ascii text file that can be edited in a text editor. Old format files will still work correctly and will be overwritten on game update.</li>",
+                    "<li>Added a proper icon to the game import button</li>",
+                    "<li>Improved Japanese localization</li>",
+                    "<li>Improved Turkish localization</li>",
                 "</ul>",
             ].join("\n")
         }
