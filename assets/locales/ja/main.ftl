@@ -89,7 +89,7 @@ timeout-fix-detected-description =
 
 main-window--patch-unavailable-tooltip = パッチサーバーが利用できないため、パッチの状態を確認することができません。リスクを理解した上で実行することは可能です。
 main-window--patch-outdated-tooltip = パッチは期限切れか準備中のため利用できません。しばらく経ってからパッチステータスを確認してください。
-main-window--version-outdated-tooltip = バージョンが古すぎるため、更新できませんでした。
+main-window--version-outdated-tooltip = バージョンが古すぎるため、更新できません。
 
 preferences = 設定
 general = 一般
