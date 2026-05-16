@@ -49,46 +49,52 @@
   </categories>
   <content_rating type="oars-1.1" />
   <releases>
-   <release version="3.19.3" date="2026-05-09">
-     <description>
-        <p>Fixed "Path not mounted" error when checking for free space during component download</p>
-     </description>
-   </release>
-   <release version="3.19.2" date="2026-05-08">
-     <description>
-        <p>Changed .version file format to be an ascii text file that can be edited in a text editor. Old format files will still work correctly and will be overwritten on game update.</p>
-        <p>Added a proper icon to the game import button</p>
-        <p>Improved Japanese localization</p>
-        <p>Improved Turkish localization</p>
-     </description>
-   </release>
-   <release version="3.19.1" date="2026-04-23">
-     <description>
-       <p>Fixed deleting the wrong directory at the end of repair</p>
-     </description>
-   </release>
-   <release version="3.19.0" date="2026-04-23">
-     <description>
-       <p>Added 'Remake prefix' button</p>
-       <p>Added 'Import game' button</p>
-       <p>Added support for animated launcher background</p>
-       <p>Added setting to enable Winewayland to make the game use Wayland instead of X11</p>
-       <p>Added a setting to enable 'Timeout fix'</p>
-       <p>Added automatic detection and suggestion for the 'Timeout fix' setting</p>
-       <p>Updated Japanese, French and Thai locales</p>
-       <p>Changed sophon download and update backend, introducing performance improvements and various fixes</p>
-       <p>Fixed parts of the game update function to handle new files</p>
-       <p>Fixed a panic when the launcher folder is a broken symlink, the launcher will exit with an error message instead</p>
-       <p>Removed dependency on dwebp/libwebp-utils</p>
-     </description>
-   </release>
-   <release version="3.18.0" date="2025-11-12">
-     <description>
-       <p>Fixed size of images in the "Appearance" preferences section (most noticeable on flatpak)</p>
-       <p>Fixed the package name for libwebp-utils on Arch Linux</p>
-       <p>Updated Korean translation</p>
-     </description>
-   </release>
+    <release version="3.19.4" date="2026-05-16">
+      <description>
+        <p>Improved game version detection</p>
+        <p>Updated Japanese locale</p>
+      </description>
+    </release>
+    <release version="3.19.3" date="2026-05-09">
+      <description>
+         <p>Fixed "Path not mounted" error when checking for free space during component download</p>
+      </description>
+    </release>
+    <release version="3.19.2" date="2026-05-08">
+      <description>
+         <p>Changed .version file format to be an ascii text file that can be edited in a text editor. Old format files will still work correctly and will be overwritten on game update.</p>
+         <p>Added a proper icon to the game import button</p>
+         <p>Improved Japanese localization</p>
+         <p>Improved Turkish localization</p>
+      </description>
+    </release>
+    <release version="3.19.1" date="2026-04-23">
+      <description>
+        <p>Fixed deleting the wrong directory at the end of repair</p>
+      </description>
+    </release>
+    <release version="3.19.0" date="2026-04-23">
+      <description>
+        <p>Added 'Remake prefix' button</p>
+        <p>Added 'Import game' button</p>
+        <p>Added support for animated launcher background</p>
+        <p>Added setting to enable Winewayland to make the game use Wayland instead of X11</p>
+        <p>Added a setting to enable 'Timeout fix'</p>
+        <p>Added automatic detection and suggestion for the 'Timeout fix' setting</p>
+        <p>Updated Japanese, French and Thai locales</p>
+        <p>Changed sophon download and update backend, introducing performance improvements and various fixes</p>
+        <p>Fixed parts of the game update function to handle new files</p>
+        <p>Fixed a panic when the launcher folder is a broken symlink, the launcher will exit with an error message instead</p>
+        <p>Removed dependency on dwebp/libwebp-utils</p>
+      </description>
+    </release>
+    <release version="3.18.0" date="2025-11-12">
+      <description>
+        <p>Fixed size of images in the "Appearance" preferences section (most noticeable on flatpak)</p>
+        <p>Fixed the package name for libwebp-utils on Arch Linux</p>
+        <p>Updated Korean translation</p>
+      </description>
+    </release>
   </releases>
   <branding>
     <color type="primary" scheme_preference="light">#ffd9b3</color>

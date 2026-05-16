@@ -88,11 +88,12 @@ impl SimpleComponent for AboutDialog {
 
             set_release_notes_version: &APP_VERSION,
             set_release_notes: &[
-                "<p>Fixed</p>",
+                "<p>Changed</p>",
 
                 "<ul>",
-                    "<li>Fixed 'Path not mounted' error when checking for free space during component download</li>",
-                "</ul>",
+                    "<li>Improved game version detection</li>",
+                    "<li>Updated Japanese locale</li>",
+                "</ul>"
             ].join("\n")
         }
     }
