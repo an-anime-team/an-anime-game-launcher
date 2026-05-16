@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Improved game version detection
+- Updated Japanese locale
+
 ## [3.19.3] - 2026-05-09
 
 ### Fixed
