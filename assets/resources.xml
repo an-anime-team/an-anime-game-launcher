@@ -13,7 +13,7 @@
     <!-- Standard icons -->
 
     <file preprocess="xml-stripblanks" alias="document-save-symbolic.svg">images/icons/document-save-symbolic.svg</file>
-    <file preprocess="xml-stripblanks" alias="document-open-symbolic.svg">images/icons/document-open-symbolic.svg</file>
+    <file preprocess="xml-stripblanks" alias="document-import-symbolic.svg">images/icons/document-open-symbolic.svg</file>
     <file preprocess="xml-stripblanks" alias="folder-symbolic.svg">images/icons/folder-symbolic.svg</file>
     <file preprocess="xml-stripblanks" alias="emblem-ok-symbolic.svg">images/icons/emblem-ok-symbolic.svg</file>
     <file preprocess="xml-stripblanks" alias="open-menu-symbolic.svg">images/icons/open-menu-symbolic.svg</file>

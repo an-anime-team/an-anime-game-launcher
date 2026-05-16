@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.19.4] - 2026-05-16
+
+### Changed
+
+- Improved game version detection
+- Updated Japanese locale
+
 ## [3.19.3] - 2026-05-09
 
 ### Fixed
@@ -770,7 +777,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <br>
 
-[unreleased]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.19.3...next
+[unreleased]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.19.4...next
+[3.19.4]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.19.3...3.19.4
 [3.19.3]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.19.2...3.19.3
 [3.19.2]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.19.1...3.19.2
 [3.19.1]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.19.0...3.19.1
