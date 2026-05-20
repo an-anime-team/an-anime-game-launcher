@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Fixed 'Failed to determine voice package version' error, latest will be assumed to update in-game 
+- Fixed launcher failing to load backgrounds if the user cache folder was on a btrfs subvolume
 
 ## [3.19.4] - 2026-05-16
 
