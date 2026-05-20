@@ -88,12 +88,14 @@ impl SimpleComponent for AboutDialog {
 
             set_release_notes_version: &APP_VERSION,
             set_release_notes: &[
-                "<p>Changed</p>",
+                r#"
+                <p>Fixed</p>
 
-                "<ul>",
-                    "<li>Improved game version detection</li>",
-                    "<li>Updated Japanese locale</li>",
-                "</ul>"
+                <ul>
+                    <li>Fixed 'Failed to determine voice package version' error, latest will be assumed to update in-game</li>,
+                    <li>Fixed launcher failing to load backgrounds if the user cache folder was on a btrfs subvolume</li>,
+                </ul>
+                "#
             ].join("\n")
         }
     }

@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.19.5] - 2026-05-20
+
+### Fixed
+
+- Fixed 'Failed to determine voice package version' error, latest will be assumed to update in-game
+- Fixed launcher failing to load backgrounds if the user cache folder was on a btrfs subvolume
+
 ## [3.19.4] - 2026-05-16
 
 ### Changed
@@ -777,7 +784,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <br>
 
-[unreleased]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.19.4...next
+[unreleased]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.19.5...next
+[3.19.5]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.19.4...3.19.5
 [3.19.4]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.19.3...3.19.4
 [3.19.3]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.19.2...3.19.3
 [3.19.2]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.19.1...3.19.2
