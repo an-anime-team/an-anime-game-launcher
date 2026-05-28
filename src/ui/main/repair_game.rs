@@ -1,3 +1,5 @@
+use std::sync::atomic::AtomicU64;
+
 use relm4::prelude::*;
 use relm4::Sender;
 use anime_launcher_sdk::anime_game_core::reqwest::blocking::Client;
@@ -71,9 +73,25 @@ pub fn repair_game(sender: ComponentSender<App>, progress_bar_input: Sender<Prog
         let repairer_temp = config.launcher.temp.unwrap_or_else(std::env::temp_dir);
 
         for manifest in manifests {
-            let mut repairer = SophonInstaller::new(client.clone(), &manifest, &repairer_temp)
-                .expect("failed to initialize sophon repairer");
+            let mut repairer = match SophonInstaller::new(client.clone(), &manifest, &repairer_temp)
+            {
+                Ok(r) => r,
+                Err(e) => {
+                    tracing::error!("Error initializing repairer: {e:?}");
+                    sender.input(AppMsg::Toast {
+                        title: "Repair error".to_owned(),
+                        description: Some(e.to_string())
+                    });
+                    continue;
+                }
+            };
             repairer.mode_repair = true;
+            repairer.inplace = true;
+            repairer.chunks_in_mem = true;
+            repairer.chunks_queue_data_limit = Some(2 * 1024 * 1024 * 1024); // 2GiB
+
+            let total_files_to_repair = AtomicU64::new(0);
+            let total_to_repair = &total_files_to_repair;
 
             let updater = |msg: SophonRepairerUpdate| match msg {
                 SophonRepairerUpdate::CheckingFilesProgress {
@@ -86,14 +104,17 @@ pub fn repair_game(sender: ComponentSender<App>, progress_bar_input: Sender<Prog
                 }
 
                 SophonRepairerUpdate::DownloadingProgressFiles {
-                    total_files,
-                    downloaded_files
+                    downloaded_files, ..
                 } => {
-                    tracing::trace!(downloaded_files, total_files, "Repairing progress");
+                    tracing::trace!(
+                        downloaded_files,
+                        total_to_repair = total_to_repair.load(Ordering::Acquire),
+                        "Repairing progress"
+                    );
 
                     progress_bar_input.send(ProgressBarMsg::UpdateProgressCounter(
                         downloaded_files,
-                        total_files
+                        total_to_repair.load(Ordering::Acquire)
                     ));
                 }
 
@@ -104,9 +125,11 @@ pub fn repair_game(sender: ComponentSender<App>, progress_bar_input: Sender<Prog
                 }
 
                 SophonRepairerUpdate::DownloadingStarted {
-                    ..
+                    total_files, ..
                 } => {
                     tracing::trace!("Repairing started");
+
+                    total_to_repair.store(total_files, Ordering::Release);
 
                     progress_bar_input
                         .send(ProgressBarMsg::UpdateCaption(Some(tr!("repairing-files"))));
