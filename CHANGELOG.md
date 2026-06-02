@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.19.6] - 2026-06-02
+
+### Fixed
+
+- Fixed repair progress reporting
+- Fixed several minor inefficiencies in download/repair
+
+### Changed
+
+- Improved repair progress bar by changing the total amount to the amount of files that didn't pass the check
+
 ## [3.19.5] - 2026-05-20
 
 ### Fixed
@@ -784,7 +795,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <br>
 
-[unreleased]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.19.5...next
+[unreleased]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.19.6...next
+[3.19.6]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.19.5...3.19.6
 [3.19.5]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.19.4...3.19.5
 [3.19.4]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.19.3...3.19.4
 [3.19.3]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.19.2...3.19.3
