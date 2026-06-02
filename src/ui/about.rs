@@ -92,8 +92,14 @@ impl SimpleComponent for AboutDialog {
                 <p>Fixed</p>
 
                 <ul>
-                    <li>Fixed 'Failed to determine voice package version' error, latest will be assumed to update in-game</li>,
-                    <li>Fixed launcher failing to load backgrounds if the user cache folder was on a btrfs subvolume</li>,
+                    <li>Fixed repair progress reporting</li>
+                    <li>Fixed several minor inefficiencies in download/repair</li>
+                </ul>
+
+                <p>Changed</p>
+
+                <ul>
+                    <li>Improved repair progress bar by changing the total amount to the amount of files that didn't pass the check</li>
                 </ul>
                 "#
             ].join("\n")

@@ -49,6 +49,13 @@
   </categories>
   <content_rating type="oars-1.1" />
   <releases>
+    <release version="3.19.6" date="2026-06-02">
+      <description>
+        <p>Fixed repair progress reporting</p>
+        <p>Fixed several minor inefficiencies in download/repair</p>
+        <p>Improved repair progress bar by changing the total amount to the amount of files that didn't pass the check</p>
+      </description>
+    </release>
     <release version="3.19.5" date="2026-05-20">
       <description>
         <p>Fixed 'Failed to determine voice package version' error, latest will be assumed to update in-game</p>
