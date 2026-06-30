@@ -13,14 +13,14 @@ system = 시스템
 
 borderless-window = 테두리 없는 창
 
-winewayland = Enable Winewayland
-winewayland-description = Use the Wayland driver instead of X11 (sets DISPLAY="")
-winewayland-unavailable-tooltip = Wayland is not available. If using Flatpak, make sure the app can access the Wayland socket from Flatseal.
+winewayland = Winewayland 활성화
+winewayland-description = X11 대신 Wayland 드라이버를 사용합니다. (DISPLAY="")
+winewayland-unavailable-tooltip = Wayland를 사용할 수 없습니다. Flatpak 이용중이라면, Flatseal에서 Wayland 소켓에 접근할수있도록 허용해주세요.
 
 virtual-desktop = 가상 데스크톱
 
-timeout-fix = Enable timeout fix
-timeout-fix-description = Set WINE_ENABLE_TIMEOUT_FIX=1 to work around crash shortly after launch
+timeout-fix = 타임아웃 방지 활성화
+timeout-fix-description = 실행 직후 발생하는 충돌을 우회하기 위해 WINE_ENABLE_TIMEOUT_FIX=1을 설정합니다.
 
 map-drive-c = C: 드라이브 맵핑
 map-drive-c-description = 자동적으로 와인 구성에서 drive_c폴더를 dosdevices로 심볼릭 링크합니다.
