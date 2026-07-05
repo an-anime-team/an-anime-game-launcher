@@ -16,9 +16,6 @@ china = Китайська
 game-environment = Оточення гри
 game-environment-description = Отримати спеціальні функції, такі як додаткові методи оплати
 
-disable-telemetry-setting = Вимкнути телеметрію
-disable-telemetry-setting-description = Блокувати сервери телеметрії гри через hosts. Додані записи не видаляються автоматично
-
 game-voiceovers = Мова озвучення
 game-voiceovers-description = Список встановлених озвучок гри. Ви можете вибрати їх в налаштуваннях гри
 english = Англійська

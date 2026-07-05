@@ -16,9 +16,6 @@ china = Kina
 game-environment = Spelmiljö
 game-environment-description = Få specifika funktioner som ytterligare betalningsmetoder
 
-disable-telemetry-setting = Inaktivera telemetri
-disable-telemetry-setting-description = Blockera spelets telemetriservrar via hosts. Tillagda poster tas inte bort automatiskt
-
 game-voiceovers = Spel-voiceovers
 game-voiceovers-description = Lista över nedladdade spel-voiceovers. Du kan välja dem i spelinställningarna
 english = Engelska

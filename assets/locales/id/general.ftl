@@ -16,9 +16,6 @@ china = Cina
 game-environment = Platform game
 game-environment-description = Dapatkan fitur tertentu seperti metode pembayaran lainnya
 
-disable-telemetry-setting = Nonaktifkan telemetri
-disable-telemetry-setting-description = Blokir server telemetri game melalui berkas hosts. Entri yang ditambahkan tidak dihapus secara otomatis
-
 game-voiceovers = Bahasa suara 
 game-voiceovers-description = Daftar bahasa untuk suara game. Anda bisa memilihnya di pengaturan dalam game
 english = Inggris

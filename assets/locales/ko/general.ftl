@@ -16,9 +16,6 @@ china = 중국
 game-environment = 게임 환경
 game-environment-description = 추가 결제와 같은 특정 기능 얻기
 
-disable-telemetry-setting = 텔레메트리 비활성화
-disable-telemetry-setting-description = hosts를 통해 게임의 텔레메트리 서버를 차단합니다. 추가된 항목은 자동으로 제거되지 않습니다
-
 game-voiceovers = 게임 보이스오버
 game-voiceovers-description = 다운로드한 게임 보이스오버 목록을 표시합니다. 게임 설정에서 선택할 수 있습니다.
 english = 영어

@@ -16,9 +16,6 @@ china = 中国版
 game-environment = ゲーム環境
 game-environment-description = 特定の購入方法を利用するために使われます。
 
-disable-telemetry-setting = テレメトリを無効化
-disable-telemetry-setting-description = hosts を使用してゲームのテレメトリサーバーをブロックします。追加した項目は自動削除されません
-
 game-voiceovers = ゲーム内ボイス
 game-voiceovers-description = ダウンロードされたゲーム内ボイスです。ゲーム内の設定から変えることができます。
 english = 英語

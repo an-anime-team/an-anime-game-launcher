@@ -16,9 +16,6 @@ china = Kínai
 game-environment = Játék környezet
 game-environment-description = Egyedi lehetőségek érhetőek el vele a játékban, mint például extra fizetési módok
 
-disable-telemetry-setting = Telemetria letiltása
-disable-telemetry-setting-description = A játék telemetriai kiszolgálóinak blokkolása a hosts fájlon keresztül. A hozzáadott bejegyzések nem kerülnek automatikusan eltávolításra
-
 game-voiceovers = Játék hangnyelv
 game-voiceovers-description = Letöltött játékhangok listája. Megváltoztathatod a játékbeállításokban
 english = Angol

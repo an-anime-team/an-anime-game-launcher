@@ -16,9 +16,6 @@ china = Čínská (China)
 game-environment = Herní prostředí
 game-environment-description = Získejte specifické funkce, jako jsou další platební metody
 
-disable-telemetry-setting = Zakázat telemetrii
-disable-telemetry-setting-description = Blokovat telemetrické servery hry pomocí souboru hosts. Přidané položky se automaticky neodstraňují
-
 game-voiceovers = Herní dabingy
 game-voiceovers-description = Seznam stažených dabingů, můžete je přepínat ve hře
 english = Anglický

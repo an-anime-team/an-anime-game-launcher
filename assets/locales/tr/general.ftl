@@ -16,9 +16,6 @@ china = Çin
 game-environment = Ödeme altyapısı
 game-environment-description = Ödeme platformu seçmenizi sağlar, Google Play ile yerel fiyatlardan faydalanabilirsiniz.
 
-disable-telemetry-setting = Telemetriyi devre dışı bırak
-disable-telemetry-setting-description = Oyunun telemetri sunucularını hosts dosyası üzerinden engelle. Eklenen girdiler otomatik olarak kaldırılmaz
-
 game-voiceovers = Oyun içi dublajlar
 game-voiceovers-description = Yüklü olan ve indirilebilir dublajlar. Yükleme tamamlandıktan sonra dili oyun içi ayarlardan değiştirebilirsiniz.
 english = İngilizce

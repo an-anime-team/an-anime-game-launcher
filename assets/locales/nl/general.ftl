@@ -16,9 +16,6 @@ china = China
 game-environment = Spelomgeving
 game-environment-description = Ontvang specifieke functies zoals extra betaalmethoden
 
-disable-telemetry-setting = Telemetrie uitschakelen
-disable-telemetry-setting-description = Blokkeer telemetrieservers van het spel via hosts. Toegevoegde vermeldingen worden niet automatisch verwijderd
-
 game-voiceovers = Spel voice-over
 game-voiceovers-description = Lijst met gedownloade spel voice-overs. Je kunt ze selecteren in de spelinstellingen
 english = Engels

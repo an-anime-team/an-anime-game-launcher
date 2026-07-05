@@ -16,9 +16,6 @@ china = จีน
 game-environment = สภาพแวดล้อมของเกม
 game-environment-description = รับคุณสมบัติเฉพาะ เช่น วิธีการชำระเงินอื่นๆ
 
-disable-telemetry-setting = ปิดใช้งานเทเลเมตรี
-disable-telemetry-setting-description = บล็อกเซิร์ฟเวอร์เทเลเมตรีของเกมผ่านไฟล์ hosts รายการที่เพิ่มไว้จะไม่ถูกลบโดยอัตโนมัติ
-
 game-voiceovers = ภาษาพากย์เสียงเกม
 game-voiceovers-description = ภาษาเสียงพากย์เกมที่ดาวน์โหลดได้ คุณสามารถเลือกในการตั้งค่าเกม
 english = ภาษาอังกฤษ

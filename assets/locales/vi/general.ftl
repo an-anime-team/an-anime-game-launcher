@@ -20,9 +20,6 @@ japan = Nhật Bản
 game-environment = Môi trường trò chơi
 game-environment-description = Nhận các tính năng cụ thể như phương thức thanh toán bổ sung
 
-disable-telemetry-setting = Tắt telemetry
-disable-telemetry-setting-description = Chặn các máy chủ telemetry của trò chơi thông qua tệp hosts. Các mục đã thêm sẽ không được tự động xóa
-
 game-voiceovers = Giọng nói trò chơi
 game-voiceovers-description = Danh sách giọng nói đã tải xuống. Bạn có thể chọn chúng trong cài đặt trò chơi
 english = Tiếng Anh
