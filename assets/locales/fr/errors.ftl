@@ -19,18 +19,18 @@ game-file-repairing-error = Impossible de réparer les fichiers du jeu
 integrity-files-getting-error = Impossible de récupérer les fichiers d'intégrité du jeu
 
 background-downloading-failed = Impossible de télécharger l'image de fond
-components-index-sync-failed = La syncronisation de l'index des composants à échoué.
-components-index-verify-failed = La verification de l'index des compisants à échoué.
+components-index-sync-failed = La synchronisation de l'index des composants a échoué.
+components-index-verify-failed = La verification de l'index des composants a échoué.
 config-update-error = Impossible d'enregistrer la configuration
-wine-prefix-update-failed = Impossible de mettre à jour le préfix wine
+wine-prefix-update-failed = Impossible de mettre à jour le préfixe wine
 dxvk-install-failed = Impossible d'installer DXVK
-voice-package-deletion-error = La suppression des pack de voix a échoué
+voice-package-deletion-error = La suppression des packs de voix a échoué
 
 game-diff-finding-error = Impossible de trouver la diff du jeu
 patch-info-fetching-error = Impossible de récupérer les informations du patch
 launcher-state-updating-error = Impossible de mettre à jour l'état du launcher
 
-package-not-available = Le packet {$package} n'est pas disponible
+package-not-available = Le paquet {$package} n'est pas disponible
 wine-download-error = Le téléchargement de wine a échoué
 wine-unpack-errror = L'extraction de wine a échoué
 wine-install-failed = L'installation de wine a échoué
@@ -46,7 +46,7 @@ game-patching-error = Le patch du jeu a échoué
 
 # Disable telemetry
 
-telemetry-servers-disabling-error = La desactivation des serveurs de télémétrie à échoué!
+telemetry-servers-disabling-error = La désactivation des serveurs de télémétrie a échoué!
 
 # Sandbox
 
@@ -54,11 +54,11 @@ documentation-url-open-failed = Impossible d'ouvrir l'URL des documentations.
 
 # Game
 
-game-session-add-failed = Imposible d'ajouter la session de jeu
-game-session-update-failed = Imposible de mettre à jour la session de jeu
-game-session-remove-failed = Imposible de supprimer la session de jeu
-game-session-set-current-failed = Imposible de sélectionner la session de jeu par défaut
-game-session-apply-failed = Imposible d'appliquer la session de jeu
+game-session-add-failed = Impossible d'ajouter la session de jeu
+game-session-update-failed = Impossible de mettre à jour la session de jeu
+game-session-remove-failed = Impossible de supprimer la session de jeu
+game-session-set-current-failed = Impossible de sélectionner la session de jeu par défaut
+game-session-apply-failed = Impossible d'appliquer la session de jeu
 
 # Enhancements
 
@@ -67,6 +67,6 @@ discord-rpc-icon-download-failed = Impossible de télécharger les icônes pour 
 
 # Import game
 
-import-game-invalid-path = Selected folder doesn't contain a valid game installation
-import-game-error = Failed to import game
-import-game-path-runtime = This path is temporary (Flatpak portal or runtime dir) and won't be valid after the session ends
+import-game-invalid-path = Le dossier sélectionné ne contient pas une installation de jeu valide
+import-game-error = Importation du jeu échouée
+import-game-path-runtime = Ce chemin est temporaire (portail Flatpak ou dossier runtime) et ne sera plus valide à la fin de la session
