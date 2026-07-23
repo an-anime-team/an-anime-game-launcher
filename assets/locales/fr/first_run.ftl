@@ -1,7 +1,7 @@
 welcome = Bienvenu
 
 welcome-page-message =
-    Bonjour ! Bienvenu dans An Anime Game Launcher
+    Bonjour ! Bienvenue dans An Anime Game Launcher
 
     Nous devons préparer quelques choses et télécharger les composants par défaut avant que vous ne puissiez démarrer le jeu
 
@@ -13,7 +13,7 @@ tos-violation-warning-message =
 
     Cet outil est conçu pour faciliter l'accès au jeu {game-name} sur Linux, et a été créé dans le seul but d'installer et de lancer le jeu plus facilement.
 
-    L'outil utilise pour cela des composants existant pour fournir à l'utilisateur une expérience simple.
+    L'outil utilise pour cela des composants existants pour fournir à l'utilisateur une expérience simple.
 
     Cependant, certains composants utilisés ne respectent pas les Conditions Générales d'Utilisation de {company-name} pour {game-name}.
 
@@ -23,26 +23,26 @@ tos-violation-warning-message =
 
     Si vous comprenez ces risques, appuyez sur "Continuer" pour venir explorer le monde de Teyvat !
 
-tos-dialog-title = Are you sure you understand what we want to say?
+tos-dialog-title = Êtes-vous sûr d'avoir compris ce que nous avons dit?
 tos-dialog-message =
-    1. Ne pas publier d'informations à propos de ce projet.
-    2. Ne pas abuser de ce dernier en utilisant des modifications de client ou autre.
-    3. Posez des question exceptionelement dans notre serveur Matrix.
+    1. Ne publiez pas d'informations à propos de ce projet.
+    2. N'abusez pas de ce dernier en utilisant des modifications de client ou autre.
+    3. Posez des questions exceptionnellement dans notre serveur Matrix.
 
 dependencies = Dépendances
 missing-dependencies-title = Il vous manque des dépendances !
-missing-dependencies-message = Vous devez installer certain packets sur votre système avant de continuer la procédure d'installation
+missing-dependencies-message = Vous devez installer certain paquets sur votre système avant de continuer la procédure d'installation
 
 
 default-paths = Emplacements par défaut
 choose-default-paths = Choisissez les emplacements par défaut
 show-all-folders = Je sais ce que je fait
-show-all-folders-subtitle = Afficher plus de paramètres de sélection d'emplacement. « Do as I say »...
+show-all-folders-subtitle = Afficher plus de paramètres de sélection d'emplacement. « Fais ce que je dis »...
 runners-folder = Emplacement des runners
 dxvks-folder = Emplacement des versions de DXVK
-wine-prefix-folder = Emplacement du préfix wine
-global-game-installation-folder = Global game version installation folder
-chinese-game-installation-folder = Chinese game version installation folder
+wine-prefix-folder = Emplacement du préfixe wine
+global-game-installation-folder = Dossier d'installation de la version globale du jeu
+chinese-game-installation-folder = Dossier d'installation de la version chinoise du jeu
 fps-unlocker-folder = Emplacement des fichiers du débloqueur de FPS
 components-index = Indice des composants
 patch-folder = Emplacement du patch
@@ -61,4 +61,4 @@ apply-dxvk = Application de DXVK
 
 finish = Terminer
 finish-title = Tout est bon !
-finish-message = Tous les composants ont été téléchargé. Vous pouvez désormais redémarrer le launcher et télécharger le jeu. Bienvenu au club !
+finish-message = Tous les composants ont été téléchargés. Vous pouvez désormais redémarrer le launcher et télécharger le jeu. Bienvenue dans le club !
