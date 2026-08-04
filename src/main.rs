@@ -157,9 +157,39 @@ lazy_static::lazy_static! {
         );
 }
 
+/// Actually document the launcher's command line options
+fn print_help() {
+    println!(r#"
+An Anime Game Launcher {APP_VERSION}
+
+Usage:
+  anime-game-launcher [OPTION...]
+
+Options:
+  -h, --help            Show this help message and exit
+  --debug               Force debug output in stdout
+  --no-verbose-tracing  Disable verbose tracing output in stdout
+  --run-game            Launch the game right away if it's ready to run,
+                        otherwise open the launcher window
+  --just-run-game       Same as --run-game, but also launches the game when
+                        an update is available for predownload
+  --session <NAME>      Switch to the given session before starting
+
+GTK options are supported as well. Use --help-all to list them.
+    "#);
+}
+
 fn main() -> anyhow::Result<()> {
     // Setup custom panic handler
     human_panic::setup_panic!(human_panic::metadata!());
+
+    // Print the help message before doing anything else so that it doesn't get
+    // mixed with the tracing output, and doesn't create the launcher folders
+    if std::env::args().any(|arg| arg == "--help" || arg == "-h") {
+        print_help();
+
+        return Ok(());
+    }
 
     // Create launcher folder if it doesn't exist.
     if !LAUNCHER_FOLDER.exists() {
