@@ -149,7 +149,7 @@ pub fn repair_game(sender: ComponentSender<App>, progress_bar_input: Sender<Prog
             repairer.install(
                 game_path,
                 config.launcher.repairer.threads as usize,
-                updater
+                Box::new(updater)
             );
 
             let _ = std::fs::remove_dir_all(repairer.downloading_temp());
