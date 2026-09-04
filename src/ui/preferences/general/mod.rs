@@ -337,6 +337,29 @@ impl SimpleAsyncComponent for GeneralApp {
                     }
                 },
 
+                adw::ActionRow {
+                    set_title: &tr!("disable-telemetry-setting"),
+                    set_subtitle: &tr!("disable-telemetry-setting-description"),
+
+                    add_suffix = &gtk::Switch {
+                        set_valign: gtk::Align::Center,
+
+                        set_active: CONFIG.launcher.disable_telemetry,
+
+                        connect_state_notify[sender] => move |switch| {
+                            if is_ready() {
+                                if let Ok(mut config) = Config::get() {
+                                    config.launcher.disable_telemetry = switch.is_active();
+
+                                    Config::update(config);
+
+                                    let _ = sender.output(PreferencesAppMsg::UpdateLauncherState);
+                                }
+                            }
+                        }
+                    }
+                },
+
                 #[local_ref]
                 voice_packages -> adw::ExpanderRow {
                     set_title: &tr!("game-voiceovers"),

@@ -15,6 +15,7 @@ china = China
 
 game-environment = Contexto de jogo
 game-environment-description = Acesse funcionalidades específicas como métodos de pagamento adicionais
+
 game-voiceovers = Pacotes de voz do jogo
 game-voiceovers-description = Lista de pacotes de voz baixados. Pode acessá-los nas configurações do jogo
 english = Inglês
