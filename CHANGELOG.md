@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added NTSync as a wine sync method (cosmetic/no-op, NTSync is used automatically on supported wine versions)
 - Added command-line arguments help text
 
+### Fixed
+
+- Fixed %temp% and %game% command keywords being mixed up
+
 ### Changed
 
 - Improved readability of progress bar text
