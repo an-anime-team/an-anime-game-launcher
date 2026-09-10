@@ -16,6 +16,9 @@ china = China
 game-environment = Game environment
 game-environment-description = Get specific features like additional payment methods
 
+disable-telemetry-setting = Disable telemetry
+disable-telemetry-setting-description = Block game telemetry servers via the hosts file. Added entries will not be removed automatically
+
 game-voiceovers = Game voiceovers
 game-voiceovers-description = List of downloaded game voiceovers. You can select them in the game settings
 english = English
