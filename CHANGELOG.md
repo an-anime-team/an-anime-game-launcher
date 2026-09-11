@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.19.8] - 2026-09-11
+
+### Added
+
+- Added NTSync as a wine sync method (cosmetic/no-op, NTSync is used automatically on supported wine versions)
+- Added command-line arguments help text
+
+### Fixed
+
+- Fixed %temp% and %game% command keywords being mixed up
+
+### Changed
+
+- Improved readability of progress bar text
+- Updated french locale
+
 ## [3.19.7] - 2026-07-05
 
 ### Fixed
@@ -805,7 +821,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <br>
 
-[unreleased]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.19.7...next
+[unreleased]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.19.8...next
+[3.19.8]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.19.7...3.19.8
 [3.19.7]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.19.6...3.19.7
 [3.19.6]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.19.5...3.19.6
 [3.19.5]: https://github.com/an-anime-team/an-anime-game-launcher/compare/3.19.4...3.19.5

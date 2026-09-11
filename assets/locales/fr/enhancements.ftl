@@ -5,28 +5,28 @@ environment-settings-description = Spécifie les variables d'environnement et la
 wine = Wine
 
 synchronization = Synchronisation
-wine-sync-description = Technologie utilisé pour synchroniser les évènements wine internes
+wine-sync-description = Technologie utilisée pour synchroniser les évènements wine internes
 
 language = Langue
-wine-lang-description = Langue utilisé dans l'environnement wine. Peut résoudre des problèmes de clavier
+wine-lang-description = Langue utilisée dans l'environnement wine. Peut résoudre des problèmes de clavier
 system = Système
 
 borderless-window = Utiliser une fenêtre sans bordure
 
-winewayland = Enable Winewayland
-winewayland-description = Use the Wayland driver instead of X11 (sets DISPLAY="")
-winewayland-unavailable-tooltip = Wayland is not available. If using Flatpak, make sure the app can access the Wayland socket from Flatseal.
+winewayland = Activer Winewayland
+winewayland-description = Utiliser le pilote Wayland au lieu de X11 (définit DISPLAY="")
+winewayland-unavailable-tooltip = Wayland n'est pas disponible. Si vous utilisez flatpak, vérifiez dans FlatSeal que l'appli a bien accès au socket Wayland.
 
 virtual-desktop = Bureau virtuel
 
-timeout-fix = Enable timeout fix
-timeout-fix-description = Set WINE_ENABLE_TIMEOUT_FIX=1 to work around crash shortly after launch
+timeout-fix = Activer le correctif timeout
+timeout-fix-description = Évite un crash potentiel au lancement en définissant WINE_ENABLE_TIMEOUT_FIX=1
 
 map-drive-c = Map drive C:
-map-drive-c-description = Automatically symlink drive_c folder from the wine prefix to the dosdevices
+map-drive-c-description = Lien symbolique automatique du drive_c du préfixe wine vers celui de dosdevices
 
 map-game-folder = Dossier des maps de jeux
-map-game-folder-description = Automatically symlink game folder to the dosdevices
+map-game-folder-description = Lien symbolique automatique du dossier de jeu vers les dosdevices
 
 game = Jeu
 
@@ -57,7 +57,7 @@ fps-unlocker-description = Enlève les limitations de FPS en modifiant la mémoi
 enabled = Activer
 
 fps-unlocker-interval = Overwrite interval
-fps-unlocker-interval-description = Delay in milliseconds between overwriting the FPS limit value. Periodic overwrites are necessary to prevent it from resetting
+fps-unlocker-interval-description = Délai en millisecondes entre les écrasages de la valeur limite de FPS. Des écrasages périodiques sont nécessaires l'empêcher de se réinitialiser
 
 window-mode = Type de fenêtre
 borderless = Sans bordure

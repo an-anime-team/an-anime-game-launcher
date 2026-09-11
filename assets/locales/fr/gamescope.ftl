@@ -3,10 +3,10 @@ gamescope-resolution = Résolution de Gamescope
 
 framerate = Fréquence de trame
 framerate-limit = Limite de fréquence de trame 
-unfocused-framerate-limit = Limite de fréquence de trame non concentré
+unfocused-framerate-limit = Limite de fréquence de trame quand non focalisé
 
 upscaling = Upscaling (mise à l'échelle intelligente)
-upscaling-description = Rendu du jeu en résolution inférieure et l'amélioré avec les algorithmes spéciales
+upscaling-description = Rendu du jeu en résolution inférieure puis amélioré avec des algorithmes spéciaux
 
 upscaler = Algorithme de mise à l'échelle
 upscaler-description = Algorithme utilisé pour effectuer la mise à l'échelle de l'image 
@@ -34,19 +34,19 @@ high = Haut
 highest = Le plus haut
 
 hdr-support = Prise en charge HDR
-hdr-support-description = Activer la sortie HDR du gamescope. Nécessite la prise en charge de l'écran 
+hdr-support-description = Activer la sortie HDR de gamescope. Nécessite la prise en charge de l'écran
 
-realtime-scheduler = Programmateur en temps réel 
-realtime-scheduler-description = Utiliser la programmation des processus de jeu en temp réel. Améliore les performances du jeu au prix d'un ralentissement des processus d'arrière-plan
+realtime-scheduler = Ordonnanceur en temps réel
+realtime-scheduler-description = Utiliser l'ordonnancement en temps réel des processus de jeu. Améliore les performances du jeu au prix d'un ralentissement des processus en arrière-plan
 
-adaptive-sync = Synchronisation adaptif 
+adaptive-sync = Synchronisation adaptive
 adaptive-sync-description = Activer la fréquence de trame variable. Nécessite la prise en charge de l'écran
 
 force-grab-cursor = Forcer la saisie du curseur 
-force-grab-cursor-description = Utilisez toujours le mode souris relatif au lieu d'inverser le mode en fonction de la visibilité du curseur. Le curseur de la souris sera correctement centré dans le jeu
+force-grab-cursor-description = Toujours utiliser le mode souris relatif au lieu d'inverser le mode en fonction de la visibilité du curseur. Le curseur de la souris sera correctement centré dans le jeu
 
 mangohud = MangoHUD
-mangohud-description = Lacement avec la surcouche MangoHUD activée 
+mangohud-description = Lancement avec la surcouche MangoHUD activée
 
 extra-args = Arguments supplémentaires 
-extra-args-description = Arguments supplémentaires ajoutés au Gamescope 
+extra-args-description = Arguments supplémentaires passés à Gamescope

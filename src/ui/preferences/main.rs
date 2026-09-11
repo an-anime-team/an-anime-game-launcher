@@ -21,7 +21,7 @@ pub struct PreferencesApp {
 pub enum PreferencesAppMsg {
     /// Supposed to be called automatically on app's run when the latest game
     /// version was retrieved from the API
-    SetGameDiff(Option<VersionDiff>),
+    SetGameDiff(Option<Box<VersionDiff>>),
 
     SetLauncherStyle(LauncherStyle),
     SetVideoBackground(bool),
@@ -149,7 +149,8 @@ impl SimpleAsyncComponent for PreferencesApp {
             },
 
             PreferencesAppMsg::SetTimeoutFix(value) => {
-                self.enhancements.emit(EnhancementsAppMsg::SetTimeoutFix(value));
+                self.enhancements
+                    .emit(EnhancementsAppMsg::SetTimeoutFix(value));
             }
 
             PreferencesAppMsg::Toast {

@@ -95,7 +95,8 @@ lazy_static::lazy_static! {
     /// Global app's css
     static ref GLOBAL_CSS: String = format!("
         progressbar > text {{
-            margin-bottom: 4px;
+            margin-bottom: 6px;
+            font-weight: bold;
         }}
 
         window.classic-style {{
@@ -111,16 +112,39 @@ lazy_static::lazy_static! {
         }}
 
         window.classic-style progressbar {{
-            background-color: #00000020;
-            border-radius: 16px;
-            padding: 8px 16px;
+            background-color: rgba(0, 0, 0, 0.65);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 18px;
+            padding: 10px 18px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
+            color: #ffffff;
+            transition-duration: 0.3s;
+            transition-timing-function: ease;
         }}
 
         window.classic-style progressbar:hover {{
-            background-color: #00000060;
+            background-color: rgba(0, 0, 0, 0.8);
+        }}
+
+        window.classic-style progressbar > text {{
             color: #ffffff;
-            transition-duration: 0.5s;
-            transition-timing-function: linear;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+        }}
+
+        window.classic-style progressbar > trough {{
+            min-height: 10px;
+            border: none;
+            border-radius: 999px;
+            background-color: rgba(255, 255, 255, 0.22);
+            box-shadow: none;
+        }}
+
+        window.classic-style progressbar > trough > progress {{
+            min-height: 10px;
+            margin: 0;
+            border: none;
+            border-radius: 999px;
+            box-shadow: none;
         }}
 
         .round-bin {{
@@ -133,9 +157,39 @@ lazy_static::lazy_static! {
         );
 }
 
+/// Actually document the launcher's command line options
+fn print_help() {
+    println!(r#"
+An Anime Game Launcher {APP_VERSION}
+
+Usage:
+  anime-game-launcher [OPTION...]
+
+Options:
+  -h, --help            Show this help message and exit
+  --debug               Force debug output in stdout
+  --no-verbose-tracing  Disable verbose tracing output in stdout
+  --run-game            Launch the game right away if it's ready to run,
+                        otherwise open the launcher window
+  --just-run-game       Same as --run-game, but also launches the game when
+                        an update is available for predownload
+  --session <NAME>      Switch to the given session before starting
+
+GTK options are supported as well. Use --help-all to list them.
+    "#);
+}
+
 fn main() -> anyhow::Result<()> {
     // Setup custom panic handler
     human_panic::setup_panic!(human_panic::metadata!());
+
+    // Print the help message before doing anything else so that it doesn't get
+    // mixed with the tracing output, and doesn't create the launcher folders
+    if std::env::args().any(|arg| arg == "--help" || arg == "-h") {
+        print_help();
+
+        return Ok(());
+    }
 
     // Create launcher folder if it doesn't exist.
     if !LAUNCHER_FOLDER.exists() {

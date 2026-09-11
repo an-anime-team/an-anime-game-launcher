@@ -1,28 +1,28 @@
 sandbox = Bac à sable
-sandbox-description = Lancer le jeu dans un environment isolé, l'empéchant d'accèder à vos informations personels
+sandbox-description = Lancer le jeu dans un environnement isolé, l'empêchant ainsi d'accéder à vos informations personnelles
 
 enable-sandboxing = Activer le bac à sable
-enable-sandboxing-description = Lancer le jeu dans un environement copié lécture seulement de votre système root
+enable-sandboxing-description = Lancer le jeu dans un environnement copié lecture seulement de votre système root
 
-hide-home-directory = Hide home directory
-hide-home-directory-description = Isoler votres dossiers /home, /var/home/$USER, et $HOME du jeu
+hide-home-directory = Cacher le dossier home
+hide-home-directory-description = Isoler vos dossiers /home, /var/home/$USER, et $HOME du jeu
 
-hostname = Hostname
-additional-arguments = Arguments additionel
+hostname = Nom d'hôte
+additional-arguments = Arguments additionnels
 
-private-directories = Répètoire privés
-private-directories-description = Ces dossies vont être ramplacer par un système de fichier vide (tmpfs), et leurs contenu original ne sera pas disponible au jeu dans le bac à sable
+private-directories = Répertoires privés
+private-directories-description = Ces dossiers vont être remplacés par un système de fichier vide (tmpfs), et leurs contenus originaux ne seront pas accessibles au jeu dans le bac à sable
 
-path = Path
+path = Chemin
 
-shared-directories = Dossiers partagé
-shared-directories-description = These directories will be symlinked to directories in your host system
+shared-directories = Dossiers partagés
+shared-directories-description = Ces dossiers deviendront des liens symboliques vers des dossiers de votre système
 
 original-path = Chemin original
-new-path = Nouveau path
+new-path = Nouveau chemin
 
-read-only = Lécture seulement
-read-only-description = Empêche le jeu d'écrire des donées dans ce dossier
+read-only = Lecture seulement
+read-only-description = Empêche le jeu d'écrire des données dans ce dossier
 
-symlinks = Symlinks
-symlinks-description = Symlink original path to the new one inside of your sandbox
+symlinks = Liens symboliques
+symlinks-description = Faire un lien symbolique de l'ancien au nouveau chemin à l'intérieur de votre bac à sable
