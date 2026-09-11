@@ -89,16 +89,24 @@ impl SimpleComponent for AboutDialog {
             set_release_notes_version: &APP_VERSION,
             set_release_notes: &[
                 r#"
+                <p>Added</p>
+
+                <ul>
+                    <li>Added NTSync as a wine sync method (cosmetic/no-op, NTSync is used automatically on supported wine versions)</li>
+                    <li>Added command-line arguments help text</li>
+                </ul>
+
                 <p>Fixed</p>
 
                 <ul>
-                    <li>Fixed Wish history URL extraction pattern</li>
+                    <li>Fixed %temp% and %game% command keywords being mixed up</li>
                 </ul>
 
                 <p>Changed</p>
 
                 <ul>
-                    <li>Updated Korean locale</li>
+                    <li>Improved readability of progress bar text</li>
+                    <li>Updated french locale</li>
                 </ul>
                 "#
             ].join("\n")

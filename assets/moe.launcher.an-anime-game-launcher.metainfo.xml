@@ -49,6 +49,15 @@
   </categories>
   <content_rating type="oars-1.1" />
   <releases>
+    <release version="3.19.8" date="2026-09-11">
+      <description>
+        <p>Added NTSync as a wine sync method (cosmetic/no-op, NTSync is used automatically on supported wine versions)</p>
+        <p>Added command-line arguments help text</p>
+        <p>Fixed %temp% and %game% command keywords being mixed up</p>
+        <p>Improved readability of progress bar text</p>
+        <p>Updated french locale</p>
+      </description>
+    </release>
     <release version="3.19.7" date="2026-07-05">
       <description>
         <p>Fixed Wish history URL extraction pattern</p>
