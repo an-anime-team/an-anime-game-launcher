@@ -16,6 +16,9 @@ china = 國服
 game-environment = 遊戲環境
 game-environment-description = 獲取特定功能，如其他付款方式
 
+disable-telemetry-setting = 停用遙測
+disable-telemetry-setting-description = 透過 hosts 封鎖遊戲遙測伺服器。已新增的條目不會自動移除
+
 game-voiceovers = 遊戲語音
 game-voiceovers-description = 已下載的遊戲語音，可以在遊戲設置中更換
 english = 英語
