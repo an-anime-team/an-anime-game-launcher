@@ -17,6 +17,57 @@ use crate::i18n::*;
 use crate::*;
 use super::main::PreferencesAppMsg;
 
+/// Game environment options exposed in the general settings
+///
+/// Order of items defines their indices in the `game-environment` combo row
+const ENVIRONMENTS: &[Environment] = &[
+    Environment::PC,
+    Environment::Android,
+    Environment::Bilibili
+];
+
+/// Labels of the `game-environment` combo row
+///
+/// Must be in the same order as `ENVIRONMENTS`
+const ENVIRONMENT_LABELS: &[&str] = &[
+    "Hoyoverse",
+    "Google Play",
+    "Bilibili"
+];
+
+/// State of the Bilibili channel server plugin
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum BilibiliPluginState {
+    NotInstalled,
+
+    Downloading {
+        downloaded: u64,
+        total: u64
+    },
+
+    Installed
+}
+
+impl BilibiliPluginState {
+    /// Check if the plugin is being downloaded right now
+    #[inline]
+    fn is_downloading(&self) -> bool {
+        matches!(self, Self::Downloading { .. })
+    }
+
+    /// Get plugin downloading progress in 0.0..=1.0 range
+    #[inline]
+    fn fraction(&self) -> f64 {
+        match self {
+            Self::Downloading { downloaded, total } if *total > 0 => {
+                *downloaded as f64 / *total as f64
+            }
+
+            _ => 0.0
+        }
+    }
+}
+
 #[derive(Debug)]
 struct VoicePackageComponent {
     locale: VoiceLocale,
@@ -95,6 +146,8 @@ pub struct GeneralApp {
 
     game_diff: Option<Box<VersionDiff>>,
     style: LauncherStyle,
+    environment: Environment,
+    bilibili_plugin: BilibiliPluginState,
     use_video_background: bool,
     background_index: u8,
     languages: Vec<String>
@@ -126,11 +179,127 @@ pub enum GeneralAppMsg {
     UpdateLauncherStyle(LauncherStyle),
     SetVideoBackground(bool),
 
+    SetEnvironment(Environment),
+    InstallBilibiliPlugin,
+    UpdateBilibiliPluginState,
+    BilibiliPluginProgress(u64, u64),
+    BilibiliPluginInstalled,
+    BilibiliPluginNotInstalled,
+
     WineOpen(&'static [&'static str]),
 
     Toast {
         title: String,
         description: Option<String>
+    }
+}
+
+impl GeneralApp {
+    /// Get launcher edition from the config
+    ///
+    /// Unlike `CONFIG` it always contains the up-to-date value
+    fn bilibili_plugin_edition() -> GameEdition {
+        Config::get()
+            .map(|config| config.launcher.edition)
+            .unwrap_or(CONFIG.launcher.edition)
+    }
+
+    /// Check if the Bilibili plugin can be installed for the current game edition
+    #[inline]
+    fn bilibili_plugin_installable(&self) -> bool {
+        Self::bilibili_plugin_edition() == GameEdition::China
+    }
+
+    /// Get Bilibili plugin settings row subtitle
+    fn bilibili_plugin_status(&self) -> String {
+        if !self.bilibili_plugin_installable() {
+            return tr!("bilibili-plugin-china-only");
+        }
+
+        match self.bilibili_plugin {
+            BilibiliPluginState::Installed => tr!("bilibili-plugin-installed"),
+            BilibiliPluginState::Downloading { .. } => tr!("downloading"),
+            BilibiliPluginState::NotInstalled => tr!("bilibili-plugin-description")
+        }
+    }
+
+    /// Update Bilibili plugin installation state from the game folder
+    fn update_bilibili_plugin_state(&mut self) {
+        // Don't interrupt the installation
+        if self.bilibili_plugin.is_downloading() {
+            return;
+        }
+
+        self.bilibili_plugin = match Config::get() {
+            Ok(config) => {
+                let game_path = config.game.path.for_edition(config.launcher.edition);
+
+                if anime_launcher_sdk::genshin::env_emulation::is_bilibili_plugin_installed(game_path) {
+                    BilibiliPluginState::Installed
+                }
+
+                else {
+                    BilibiliPluginState::NotInstalled
+                }
+            }
+
+            Err(_) => BilibiliPluginState::NotInstalled
+        };
+    }
+
+    /// Download and install Bilibili plugin in a separate thread
+    fn start_bilibili_plugin_install(&mut self, sender: AsyncComponentSender<Self>) {
+        if self.bilibili_plugin.is_downloading() {
+            return;
+        }
+
+        let Ok(config) = Config::get()
+        else {
+            return;
+        };
+
+        if config.launcher.edition != GameEdition::China {
+            return;
+        }
+
+        let game_path = config
+            .game
+            .path
+            .for_edition(config.launcher.edition)
+            .to_path_buf();
+
+        self.bilibili_plugin = BilibiliPluginState::Downloading {
+            downloaded: 0,
+            total: 0
+        };
+
+        std::thread::spawn(move || {
+            let progress_sender = sender.clone();
+
+            let result = anime_launcher_sdk::genshin::env_emulation::install_bilibili_plugin(
+                game_path,
+                move |downloaded, total| {
+                    let _ = progress_sender.input(
+                        GeneralAppMsg::BilibiliPluginProgress(downloaded, total)
+                    );
+                }
+            );
+
+            match result {
+                Ok(()) => sender.input(GeneralAppMsg::BilibiliPluginInstalled),
+
+                Err(err) => {
+                    tracing::error!("Failed to install Bilibili plugin: {err}");
+
+                    sender.input(GeneralAppMsg::BilibiliPluginNotInstalled);
+
+                    sender.input(GeneralAppMsg::Toast {
+                        title: tr!("downloading-failed"),
+                        description: Some(err.to_string())
+                    });
+                }
+            }
+        });
     }
 }
 
@@ -299,6 +468,9 @@ impl SimpleAsyncComponent for GeneralApp {
 
                                 Config::update(config);
 
+                                // Bilibili plugin availability depends on the selected edition
+                                sender.input(GeneralAppMsg::UpdateBilibiliPluginState);
+
                                 sender.output(PreferencesAppMsg::UpdateLauncherState);
                             }
                         }
@@ -309,29 +481,16 @@ impl SimpleAsyncComponent for GeneralApp {
                     set_title: &tr!("game-environment"),
                     set_subtitle: &tr!("game-environment-description"),
 
-                    set_model: Some(&gtk::StringList::new(&[
-                        "Hoyoverse",
-                        "Google Play"
-                    ])),
+                    set_model: Some(&gtk::StringList::new(ENVIRONMENT_LABELS)),
 
-                    set_selected: match CONFIG.launcher.environment {
-                        Environment::PC => 0,
-                        Environment::Android => 1,
+                    set_selected: ENVIRONMENTS.iter()
+                        .position(|environment| environment == &model.environment)
+                        .unwrap_or(0) as u32,
 
-                        _ => unreachable!()
-                    },
-
-                    connect_selected_notify => |row| {
+                    connect_selected_notify[sender] => move |row| {
                         if is_ready() {
-                            if let Ok(mut config) = Config::get() {
-                                config.launcher.environment = match row.selected() {
-                                    0 => Environment::PC,
-                                    1 => Environment::Android,
-
-                                    _ => unreachable!()
-                                };
-
-                                Config::update(config);
+                            if let Some(environment) = ENVIRONMENTS.get(row.selected() as usize) {
+                                sender.input(GeneralAppMsg::SetEnvironment(*environment));
                             }
                         }
                     }
@@ -360,6 +519,42 @@ impl SimpleAsyncComponent for GeneralApp {
                         add_css_class: "destructive-action",
 
                         connect_clicked => GeneralAppMsg::RemakePrefix
+                    }
+                }
+            },
+
+            add = &adw::PreferencesGroup {
+                #[watch]
+                set_visible: model.environment == Environment::Bilibili,
+
+                adw::ActionRow {
+                    set_title: &tr!("bilibili-plugin"),
+
+                    #[watch]
+                    set_subtitle: &model.bilibili_plugin_status(),
+
+                    add_suffix = &gtk::Button {
+                        #[watch]
+                        set_visible: !model.bilibili_plugin.is_downloading(),
+
+                        #[watch]
+                        set_sensitive: model.bilibili_plugin_installable(),
+
+                        set_label: &tr!("download"),
+                        set_valign: gtk::Align::Center,
+
+                        connect_clicked => GeneralAppMsg::InstallBilibiliPlugin
+                    },
+
+                    add_suffix = &gtk::ProgressBar {
+                        #[watch]
+                        set_visible: model.bilibili_plugin.is_downloading(),
+
+                        #[watch]
+                        set_fraction: model.bilibili_plugin.fraction(),
+
+                        set_valign: gtk::Align::Center,
+                        set_width_request: 200
                     }
                 }
             },
@@ -557,6 +752,8 @@ impl SimpleAsyncComponent for GeneralApp {
 
             game_diff: None,
             style: CONFIG.launcher.style,
+            environment: CONFIG.launcher.environment,
+            bilibili_plugin: BilibiliPluginState::NotInstalled,
             use_video_background: CONFIG.launcher.video_background,
             background_index: CONFIG.launcher.background_index,
             languages: SUPPORTED_LANGUAGES
@@ -564,6 +761,8 @@ impl SimpleAsyncComponent for GeneralApp {
                 .map(|lang| tr!(format_lang(lang).as_str()))
                 .collect()
         };
+
+        model.update_bilibili_plugin_state();
 
         for package in VoiceLocale::list() {
             model.voice_packages.guard().push_back((
@@ -770,6 +969,49 @@ impl SimpleAsyncComponent for GeneralApp {
                 self.use_video_background = use_video;
 
                 let _ = sender.output(Self::Output::SetVideoBackground(use_video));
+            }
+
+            GeneralAppMsg::SetEnvironment(environment) => {
+                if let Ok(mut config) = Config::get() {
+                    config.launcher.environment = environment;
+
+                    Config::update(config);
+                }
+
+                self.environment = environment;
+
+                self.update_bilibili_plugin_state();
+
+                // Bilibili plugin is required for the game to actually connect
+                // to the Bilibili channel server, so we're installing it right away
+                if environment == Environment::Bilibili
+                    && self.bilibili_plugin == BilibiliPluginState::NotInstalled
+                {
+                    self.start_bilibili_plugin_install(sender);
+                }
+            }
+
+            GeneralAppMsg::InstallBilibiliPlugin => {
+                self.start_bilibili_plugin_install(sender);
+            }
+
+            GeneralAppMsg::UpdateBilibiliPluginState => {
+                self.update_bilibili_plugin_state();
+            }
+
+            GeneralAppMsg::BilibiliPluginProgress(downloaded, total) => {
+                self.bilibili_plugin = BilibiliPluginState::Downloading {
+                    downloaded,
+                    total
+                };
+            }
+
+            GeneralAppMsg::BilibiliPluginInstalled => {
+                self.bilibili_plugin = BilibiliPluginState::Installed;
+            }
+
+            GeneralAppMsg::BilibiliPluginNotInstalled => {
+                self.bilibili_plugin = BilibiliPluginState::NotInstalled;
             }
 
             GeneralAppMsg::WineOpen(executable) => {
