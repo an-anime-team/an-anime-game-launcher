@@ -16,6 +16,11 @@ china = Čínská (China)
 game-environment = Herní prostředí
 game-environment-description = Získejte specifické funkce, jako jsou další platební metody
 
+bilibili-plugin = Bilibili plugin
+bilibili-plugin-description = Vyžadován pro server kanálu Bilibili. Stáhne se z oficiálního balíčku Bilibili SDK
+bilibili-plugin-installed = nainstalováno
+bilibili-plugin-china-only = Dostupné pouze pro čínskou edici
+
 game-voiceovers = Herní dabingy
 game-voiceovers-description = Seznam stažených dabingů, můžete je přepínat ve hře
 english = Anglický
