@@ -17,9 +17,9 @@ game-environment = Окружение игры
 game-environment-description = Получить особые функции такие как дополнительные методы оплаты
 
 bilibili-plugin = Плагин Bilibili
-bilibili-plugin-description = Требуется для сервера канала Bilibili. Скачивается из официального пакета Bilibili SDK
+bilibili-plugin-description = Требуется для сервера Bilibili. Устанавливается с официального пакета Bilibili SDK
 bilibili-plugin-installed = установлен
-bilibili-plugin-china-only = Доступно только для китайской версии
+bilibili-plugin-china-only = Доступен только для китайской редакции игры
 
 game-voiceovers = Язык озвучки
 game-voiceovers-description = Список установленных озвучек игры. Вы можете выбрать их в настройках игры

@@ -63,7 +63,10 @@ impl BilibiliPluginState {
                 *downloaded as f64 / *total as f64
             }
 
-            _ => 0.0
+            // Total size is not known yet at the beginning of the download
+            Self::Downloading { .. } | Self::NotInstalled => 0.0,
+
+            Self::Installed => 1.0
         }
     }
 }
@@ -253,14 +256,14 @@ impl GeneralApp {
             return;
         }
 
+        if !self.bilibili_plugin_installable() {
+            return;
+        }
+
         let Ok(config) = Config::get()
         else {
             return;
         };
-
-        if config.launcher.edition != GameEdition::China {
-            return;
-        }
 
         let game_path = config
             .game
