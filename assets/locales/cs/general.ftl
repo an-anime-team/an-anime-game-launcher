@@ -17,9 +17,9 @@ game-environment = Herní prostředí
 game-environment-description = Získejte specifické funkce, jako jsou další platební metody
 
 bilibili-plugin = Bilibili plugin
-bilibili-plugin-description = Vyžadován pro server kanálu Bilibili. Stáhne se z oficiálního balíčku Bilibili SDK
-bilibili-plugin-installed = nainstalováno
-bilibili-plugin-china-only = Dostupné pouze pro čínskou edici
+bilibili-plugin-description = Required for the Bilibili channel server. Downloaded from the official Bilibili SDK package
+bilibili-plugin-installed = installed
+bilibili-plugin-china-only = Available for the China edition only
 
 game-voiceovers = Herní dabingy
 game-voiceovers-description = Seznam stažených dabingů, můžete je přepínat ve hře

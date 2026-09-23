@@ -16,10 +16,10 @@ china = Cina
 game-environment = Platform game
 game-environment-description = Dapatkan fitur tertentu seperti metode pembayaran lainnya
 
-bilibili-plugin = Plugin Bilibili
-bilibili-plugin-description = Diperlukan untuk server kanal Bilibili. Diunduh dari paket SDK resmi Bilibili
-bilibili-plugin-installed = terpasang
-bilibili-plugin-china-only = Hanya tersedia untuk edisi Tiongkok
+bilibili-plugin = Bilibili plugin
+bilibili-plugin-description = Required for the Bilibili channel server. Downloaded from the official Bilibili SDK package
+bilibili-plugin-installed = installed
+bilibili-plugin-china-only = Available for the China edition only
 
 game-voiceovers = Bahasa suara 
 game-voiceovers-description = Daftar bahasa untuk suara game. Anda bisa memilihnya di pengaturan dalam game

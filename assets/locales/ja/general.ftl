@@ -16,10 +16,10 @@ china = 中国版
 game-environment = ゲーム環境
 game-environment-description = 特定の購入方法を利用するために使われます。
 
-bilibili-plugin = Bilibili プラグイン
-bilibili-plugin-description = Bilibili チャンネルサーバーに必要です。公式の Bilibili SDK パッケージからダウンロードされます
-bilibili-plugin-installed = インストール済み
-bilibili-plugin-china-only = 中国版でのみ利用可能です
+bilibili-plugin = Bilibili plugin
+bilibili-plugin-description = Required for the Bilibili channel server. Downloaded from the official Bilibili SDK package
+bilibili-plugin-installed = installed
+bilibili-plugin-china-only = Available for the China edition only
 
 game-voiceovers = ゲーム内ボイス
 game-voiceovers-description = ダウンロードされたゲーム内ボイスです。ゲーム内の設定から変えることができます。

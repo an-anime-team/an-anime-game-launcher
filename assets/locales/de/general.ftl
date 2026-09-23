@@ -16,10 +16,10 @@ china = China
 game-environment = Spielumgebung
 game-environment-description = Spezielle Funktionen wie zusätzliche Zahlungsmöglichkeiten
 
-bilibili-plugin = Bilibili-Plugin
-bilibili-plugin-description = Wird für den Bilibili-Channel-Server benötigt. Wird aus dem offiziellen Bilibili-SDK-Paket heruntergeladen
-bilibili-plugin-installed = installiert
-bilibili-plugin-china-only = Nur für die chinesische Edition verfügbar
+bilibili-plugin = Bilibili plugin
+bilibili-plugin-description = Required for the Bilibili channel server. Downloaded from the official Bilibili SDK package
+bilibili-plugin-installed = installed
+bilibili-plugin-china-only = Available for the China edition only
 
 game-voiceovers = Spiel-Sprachen
 game-voiceovers-description = Liste der heruntergeladenen Sprachausgabe für das Spiel. Sie können diese in den Spieleinstellungen auswählen

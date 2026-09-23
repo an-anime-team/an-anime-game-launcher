@@ -16,10 +16,10 @@ china = 중국
 game-environment = 게임 환경
 game-environment-description = 추가 결제와 같은 특정 기능 얻기
 
-bilibili-plugin = Bilibili 플러그인
-bilibili-plugin-description = Bilibili 채널 서버에 필요합니다. 공식 Bilibili SDK 패키지에서 다운로드됩니다
-bilibili-plugin-installed = 설치됨
-bilibili-plugin-china-only = 중국 에디션에서만 사용할 수 있습니다
+bilibili-plugin = Bilibili plugin
+bilibili-plugin-description = Required for the Bilibili channel server. Downloaded from the official Bilibili SDK package
+bilibili-plugin-installed = installed
+bilibili-plugin-china-only = Available for the China edition only
 
 game-voiceovers = 게임 보이스오버
 game-voiceovers-description = 다운로드한 게임 보이스오버 목록을 표시합니다. 게임 설정에서 선택할 수 있습니다.

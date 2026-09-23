@@ -20,10 +20,10 @@ japan = Nhật Bản
 game-environment = Môi trường trò chơi
 game-environment-description = Nhận các tính năng cụ thể như phương thức thanh toán bổ sung
 
-bilibili-plugin = Plugin Bilibili
-bilibili-plugin-description = Bắt buộc đối với máy chủ kênh Bilibili. Được tải xuống từ gói SDK chính thức của Bilibili
-bilibili-plugin-installed = đã cài đặt
-bilibili-plugin-china-only = Chỉ khả dụng cho bản Trung Quốc
+bilibili-plugin = Bilibili plugin
+bilibili-plugin-description = Required for the Bilibili channel server. Downloaded from the official Bilibili SDK package
+bilibili-plugin-installed = installed
+bilibili-plugin-china-only = Available for the China edition only
 
 game-voiceovers = Giọng nói trò chơi
 game-voiceovers-description = Danh sách giọng nói đã tải xuống. Bạn có thể chọn chúng trong cài đặt trò chơi
