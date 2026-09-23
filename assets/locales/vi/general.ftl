@@ -16,10 +16,10 @@ china = Trung Quốc
 game-environment = Môi trường trò chơi
 game-environment-description = Nhận các tính năng cụ thể như phương thức thanh toán bổ sung
 
-bilibili-plugin = Bilibili plugin
-bilibili-plugin-description = Required for the Bilibili channel server. Downloaded from the official Bilibili SDK package
-bilibili-plugin-installed = installed
-bilibili-plugin-china-only = Available for the China edition only
+bilibili-plugin = Plugin Bilibili
+bilibili-plugin-description = Bắt buộc phải có khi dùng máy chủ Bilibili. Được tải xuống từ SDK chính thức của Bilibili
+bilibili-plugin-installed = đã cài đặt
+bilibili-plugin-china-only = Chỉ dành cho phiên bản Trung Quốc
 
 game-voiceovers = Gói lồng tiếng trò chơi
 game-voiceovers-description = Danh sách gói lồng tiếng đã tải xuống. Bạn có thể chọn chúng trong cài đặt trò chơi
