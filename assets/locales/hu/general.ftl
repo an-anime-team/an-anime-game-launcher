@@ -16,6 +16,11 @@ china = Kínai
 game-environment = Játék környezet
 game-environment-description = Egyedi lehetőségek érhetőek el vele a játékban, mint például extra fizetési módok
 
+bilibili-plugin = Bilibili beépülő modul
+bilibili-plugin-description = A Bilibili csatorna-kiszolgálóhoz szükséges. A hivatalos Bilibili SDK csomagból töltődik le
+bilibili-plugin-installed = telepítve
+bilibili-plugin-china-only = Csak a kínai kiadáshoz érhető el
+
 game-voiceovers = Játék hangnyelv
 game-voiceovers-description = Letöltött játékhangok listája. Megváltoztathatod a játékbeállításokban
 english = Angol

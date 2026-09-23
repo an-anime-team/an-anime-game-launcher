@@ -16,6 +16,11 @@ china = Chine
 game-environment = Environnement du jeu
 game-environment-description = Obtenir des fonctionnalités spécifiques telles que la méthode de paiement
 
+bilibili-plugin = Plugin Bilibili
+bilibili-plugin-description = Requis pour le serveur de canal Bilibili. Téléchargé depuis le paquet SDK officiel de Bilibili
+bilibili-plugin-installed = installé
+bilibili-plugin-china-only = Disponible uniquement pour l'édition chinoise
+
 game-voiceovers = Voiceover en jeu
 game-voiceovers-description = Liste des voix du jeu téléchargées. Vous pouvez en sélectionné dans les paramètres en jeu
 english = Anglais

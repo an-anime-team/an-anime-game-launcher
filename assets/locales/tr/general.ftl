@@ -16,6 +16,11 @@ china = Çin
 game-environment = Ödeme altyapısı
 game-environment-description = Ödeme platformu seçmenizi sağlar, Google Play ile yerel fiyatlardan faydalanabilirsiniz.
 
+bilibili-plugin = Bilibili eklentisi
+bilibili-plugin-description = Bilibili kanal sunucusu için gereklidir. Resmî Bilibili SDK paketinden indirilir
+bilibili-plugin-installed = kurulu
+bilibili-plugin-china-only = Yalnızca Çin sürümünde kullanılabilir
+
 game-voiceovers = Oyun içi dublajlar
 game-voiceovers-description = Yüklü olan ve indirilebilir dublajlar. Yükleme tamamlandıktan sonra dili oyun içi ayarlardan değiştirebilirsiniz.
 english = İngilizce

@@ -16,6 +16,11 @@ china = 国服
 game-environment = 游戏环境
 game-environment-description = 获取特定功能，如其他付款方式
 
+bilibili-plugin = 哔哩哔哩插件
+bilibili-plugin-description = B服需要此插件，将从哔哩哔哩官方 SDK 包中下载
+bilibili-plugin-installed = 已安装
+bilibili-plugin-china-only = 仅国服版本可用
+
 game-voiceovers = 游戏语音
 game-voiceovers-description = 已下载的游戏语音，可以在游戏设置中更换
 english = 英语

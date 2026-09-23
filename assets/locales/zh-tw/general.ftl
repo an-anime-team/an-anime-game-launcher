@@ -16,6 +16,11 @@ china = 國服
 game-environment = 遊戲環境
 game-environment-description = 獲取特定功能，如其他付款方式
 
+bilibili-plugin = 嗶哩嗶哩插件
+bilibili-plugin-description = B服需要此插件，將從嗶哩嗶哩官方 SDK 包中下載
+bilibili-plugin-installed = 已安裝
+bilibili-plugin-china-only = 僅國服版本可用
+
 game-voiceovers = 遊戲語音
 game-voiceovers-description = 已下載的遊戲語音，可以在遊戲設置中更換
 english = 英語
