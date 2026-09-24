@@ -8,10 +8,10 @@ hide-home-directory = Ẩn thư mục home
 hide-home-directory-description = Cô lập các thư mục /home, /var/home/$USER và $HOME của bạn khỏi trò chơi
 
 hostname = Tên máy chủ
-additional-arguments = Đối số bổ sung
+additional-arguments = Tham số bổ sung
 
 private-directories = Các thư mục riêng tư
-private-directories-description = Các thư mục này sẽ được thay thế bằng một hệ thống tệp ảo trống (tmpfs) và nội dung ban đầu của chúng sẽ không có sẵn cho Sandbox
+private-directories-description = Các thư mục này sẽ được thay thế bằng một hệ thống tệp ảo trống (tmpfs) và nội dung ban đầu của chúng sẽ không có sẵn cho trò chơi trong Sandbox
 
 path = Đường dẫn
 
@@ -25,4 +25,4 @@ read-only = Chỉ đọc
 read-only-description = Chặn trò chơi ghi bất kỳ dữ liệu nào vào thư mục này
 
 symlinks = Liên kết tượng trưng
-symlinks-description = Đường dẫn ban đầu của liên kết đến đường dẫn mới bên trong sandbox
+symlinks-description = Tạo liên kết tượng trưng từ đường dẫn ban đầu đến đường dẫn mới bên trong Sandbox

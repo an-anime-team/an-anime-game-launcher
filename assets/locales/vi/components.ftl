@@ -2,7 +2,7 @@ components = Các thành phần
 components-description = Quản lý các phiên bản Wine và DXVK
 
 selected-version = Phiên bản đã chọn
-recommended-only = Chỉ được đề xuất
+recommended-only = Chỉ các bản được đề xuất
 
 wine-version = Phiên bản Wine
 wine-recommended-description = Chỉ hiển thị các phiên bản Wine được đề xuất
@@ -10,7 +10,7 @@ wine-recommended-description = Chỉ hiển thị các phiên bản Wine đượ
 wine-options = Tùy chọn Wine
 
 wine-use-shared-libraries = Sử dụng thư viện dùng chung Wine
-wine-use-shared-libraries-description = Đặt biến LD_LIBRARY_PATH để tải các thư viện dùng chung từ phiên bản Wine đã chọn
+wine-use-shared-libraries-description = Đặt biến LD_LIBRARY_PATH để tải các thư viện hệ thống từ phiên bản Wine đã chọn
 
 gstreamer-use-shared-libraries = Sử dụng thư viện dùng chung của GStreamer
 gstreamer-use-shared-libraries-description = Đặt biến GST_PLUGIN_PATH để tải các thư viện của GStreamer từ phiên bản Wine đã chọn

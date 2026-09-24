@@ -13,17 +13,17 @@ launcher-folder = Thư mục Launcher
 game-folder = Thư mục trò chơi
 config-file = Tệp cấu hình
 debug-file = Tệp gỡ lỗi
-wish-url = Lịch sử Cầu Nguyện
-about = Về chúng tôi
+wish-url = Mở lịch sử Cầu Nguyện
+about = Giới thiệu
 
 
 close = Đóng
-enable = Enable
+enable = Bật
 hide = Ẩn
 nothing = Không có gì
 save = Lưu
 continue = Tiếp tục
-resume = Tạm dừng
+resume = Tiếp tục
 exit = Thoát
 check = Kiểm tra
 restart = Khởi động lại
@@ -37,19 +37,19 @@ loading-game-version = Đang tải phiên bản trò chơi
 loading-patch-status = Đang tải trạng thái bản vá
 loading-launcher-state = Đang tải trạng thái Launcher
 loading-launcher-state--game = Đang tải trạng thái Launcher: xác minh phiên bản trò chơi
-loading-launcher-state--voice =  Đang tải trạng thái Launcher: xác minh giọng nói {$locale}
-loading-launcher-state--patch = Đang tải trạng thái launcher: xác minh bản vá đã cài đặt
+loading-launcher-state--voice =  Đang tải trạng thái Launcher: xác minh gói lồng tiếng {$locale}
+loading-launcher-state--patch = Đang tải trạng thái Launcher: xác minh bản vá đã cài đặt
 
 
-checking-free-space = Kiểm tra dung lượng trống
+checking-free-space = Đang kiểm tra dung lượng trống
 downloading = Đang tải xuống
-updating-permissions = Updating permissions
+updating-permissions = Đang cập nhật các quyền
 unpacking = Đang giải nén
 verifying-files = Đang xác minh tập tin
-repairing-files = Sửa chữa tập tin
-migrating-folders = Di chuyển thư mục
-applying-hdiff = Áp dụng các bản vá lỗi hdiff
-removing-outdated = Xóa các tập tin lỗi thời
+repairing-files = Đang sửa chữa tập tin
+migrating-folders = Đang di chuyển thư mục
+applying-hdiff = Đang áp dụng các bản vá hdiff
+removing-outdated = Đang xóa các tập tin lỗi thời
 
 
 components-index-updated = Chỉ mục thành phần đã được cập nhật
@@ -59,34 +59,31 @@ launch = Khởi chạy
 migrate-folders = Di chuyển các thư mục
 migrate-folders-tooltip = Cập nhật cấu trúc thư mục trò chơi
 apply-patch = Áp dụng bản vá
-disable-telemetry = Vô hiệu hóa telemetry
+disable-telemetry = Vô hiệu hóa đo lường
 download-wine = Tải xuống Wine
 create-prefix = Tạo tiền tố
+install-dxvk = Cài đặt DXVK
 update = Cập nhật
 download = Tải xuống
-import-game = Import game
-predownload-update = Tải xuống trước {$version} cập nhật ({$size})
-download-patch = Tải xuống bản vá
-
-patch-broken = Bản vá bị hỏng
-patch-unsafe = Bản vá không an toàn
+import-game = Nhập trò chơi
+predownload-update = Tải trước bản cập nhật {$version} ({$size})
 
 kill-game-process = Buộc đóng tiến trình trò chơi
 
-timeout-fix-detected = Driver error detected
+timeout-fix-detected = Phát hiện lỗi driver
 timeout-fix-detected-description =
-    The game exited within a few seconds and a driver error log was found.
-    This usually means the connection to Genshin Impact's servers timed out.
+    Trò chơi bị thoát trong vòng vài giây và bản ghi lỗi driver được tìm thấy.
+    Điều này thường xảy ra khi kết nối tới máy chủ Genshin Impact bị quá hạn.
 
-    Latest Spritz-based Wine runners can work around this via WINE_ENABLE_TIMEOUT_FIX=1.
-    Do you want to enable it?
+    Các bản Wine mới nhất dựa trên Spritz có thể khắc phục lỗi này bằng cách sử dụng WINE_ENABLE_TIMEOUT_FIX=1.
+    Bạn có muốn bật nó không?
 
-    You can also toggle this in Preferences -> Enhancements -> Wine.
+    Bạn cũng có thể thay đổi cài đặt này ở Cài đặt -> Cải tiến -> Wine.
 
-main-window--patch-unavailable-tooltip = Máy chủ vá không khả dụng và Launcher không thể xác minh trạng thái vá. Bạn có thể chơi trò chơi nhưng rất không an toàn
+main-window--patch-unavailable-tooltip = Máy chủ vá không khả dụng và Launcher không thể xác minh trạng thái vá. Bạn có thể chạy trò chơi nhưng bạn tự chịu rủi ro
 main-window--patch-outdated-tooltip = Bản vá đã lỗi thời hoặc đang ở trạng thái chuẩn bị nên không thể sử dụng. Quay lại sau để xem trạng thái
 main-window--version-outdated-tooltip = Phiên bản quá lỗi thời và không thể cập nhật
 
-preferences = Sở thích
+preferences = Cài đặt
 general = Tổng quát
 enhancements = Cải tiến

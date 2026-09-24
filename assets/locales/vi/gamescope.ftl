@@ -1,52 +1,52 @@
-game-resolution = Độ phân giải trò chơi
+game-resolution = Độ phân giải của trò chơi
 gamescope-resolution = Độ phân giải của gamescope
 
 framerate = Framerate
 framerate-limit = Giới hạn tốc độ khung hình
-unfocused-framerate-limit = Giới hạn tốc độ khung hình khi không tập trung
+unfocused-framerate-limit = Giới hạn tốc độ khung hình khi cửa sổ không được chọn
 
-upscaling = Nâng độ phận giải
-upscaling-description = Render the game in lower resolution and improve the image quality using special algorithms
+upscaling = Nâng độ phân giải
+upscaling-description = Chạy trò chơi ở độ phân giải thấp và cải thiện chất lượng hình ảnh bằng các thuật toán đặc biệt
 
 upscaler = Upscaler
-upscaler-description = Algorithm used to perform image upscaling
+upscaler-description = Thuật toán được sử dụng để upscale
 
-auto = Auto
-integer = Integer
-fit = Fit
-fill = Fill
-stretch = Stretch
+auto = Tự động
+integer = Nhân số nguyên
+fit = Làm vừa
+fill = Làm đầy
+stretch = Kéo dãn
 
-upscale-filter = Filter
-upscale-filter-description = Algorithm used to filter upscaled image
+upscale-filter = Bộ lọc
+upscale-filter-description = Bộ lọc được sử dụng cho hình ảnh được upscale
 
 linear = Linear
 nearest = Nearest
 nis = NIS
 pixel = Pixel
 
-upscale-sharpness = Sharpness
-upscale-sharpness-description = Upscaling sharpness
+upscale-sharpness = Độ sắc nét
+upscale-sharpness-description = Độ sắc nét khi upscale
 
-smallest = Smallest
-small = Small
-high = High
-highest = Highest
+smallest = Thấp nhất
+small = Thấp
+high = Cao
+highest = Cao nhất
 
-hdr-support = HDR support
-hdr-support-description = Enable gamescope HDR output. Requires display support
+hdr-support = Hỗ trợ HDR
+hdr-support-description = Bật đầu ra HDR cho gamescope. Cần có màn hình tương thích
 
-realtime-scheduler = Realtime scheduler
-realtime-scheduler-description = Use realtime game process scheduling. Improves game performance in cost of slowing down background processes
+realtime-scheduler = Lập lịch thời gian thực
+realtime-scheduler-description = Sử dụng lập lịch thời gian thực cho trò chơi. Cải thiện hiệu năng nhưng làm chậm các tiến trình nền
 
-adaptive-sync = Adaptive sync
-adaptive-sync-description = Enable variable refresh rate. Requires display support
+adaptive-sync = Tần số quét thích ứng
+adaptive-sync-description = Bật tần số quét động. Cần có màn hình tương thích
 
-force-grab-cursor = Force grab cursor
-force-grab-cursor-description = Always use relative mouse mode instead of flipping dependent on cursor visibility. The mouse cursor will correctly be centered in the game
+force-grab-cursor = Giữ con trỏ chuột
+force-grab-cursor-description = Luôn sử dụng chế độ chuột tương đối thay vì phụ thuộc vào trạng thái hiển thị của con trỏ. Chuột sẽ bị giữ ở chính giữa cửa sổ trò chơi
 
 mangohud = MangoHUD
-mangohud-description = Launch with the mangoapp (mangohud) performance overlay enabled
+mangohud-description = Chạy trò chơi với bộ đo hiệu năng MangoHUD
 
-extra-args = Extra arguments
-extra-args-description = Extra arguments appended to the gamescope
+extra-args = Tùy chọn thêm
+extra-args-description = Các tùy chọn bổ sung cho Gamescope
