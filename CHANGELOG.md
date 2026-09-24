@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added Bilibili environment setting
 
+### Changed
+
+- Updated Vietnamese locale (by OHaiiBuzzle)
+
 ## [3.19.8] - 2026-09-11
 
 ### Added

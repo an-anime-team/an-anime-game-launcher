@@ -71,6 +71,7 @@ impl SimpleComponent for AboutDialog {
                 "한국어 — @project-dy https://github.com/project-dy",
                 "Indonesia — @yumekarisu https://github.com/yumekarisu",
                 "Tiếng Việt — Nguyễn Hữu Chánh https://github.com/Chanhnh",
+                "Tiếng Việt — OHaiiBuzzle https://github.com/ohaiibuzzle",
                 "Українська — Іван Потієнко https://github.com/xxanqw",
                 "ไทย — @vbrabandt https://github.com/vbrabandt",
                 "Čeština — @panmourovaty https://github.com/panmourovaty"
