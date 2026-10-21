@@ -46,7 +46,7 @@ impl SimpleAsyncComponent for WelcomeApp {
                 set_vexpand: true,
 
                 gtk::Picture {
-                    set_resource: Some(&format!("{APP_RESOURCE_PATH}/icons/hicolor/scalable/apps/{APP_ID}.png")),
+                    set_resource: Some(&format!("{APP_RESOURCE_PATH}/icons/scalable/apps/{APP_ID}.png")),
                     set_height_request: 128
                 },
 

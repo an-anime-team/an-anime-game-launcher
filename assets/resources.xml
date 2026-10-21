@@ -5,7 +5,7 @@
     <file preprocess="xml-stripblanks">images/classic.svg</file>
   </gresource>
 
-  <gresource prefix="/moe/launcher/an-anime-game-launcher/icons/hicolor/scalable/apps">
+  <gresource prefix="/moe/launcher/an-anime-game-launcher/icons/scalable/apps">
     <file alias="moe.launcher.an-anime-game-launcher.png">images/icon.png</file>
   </gresource>
 
