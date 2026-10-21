@@ -1,5 +1,24 @@
-use relm4::prelude::*;
+// SPDX-License-Identifier: GPL-3.0-or-later
+//
+// an-anime-game-launcher
+// Copyright (C) 2021 - 2026  Nikita Podvirnyi <krypt0nn@dawn.wine>
+// Copyright (C) 2025 - 2026  @JohnTheCoolingFan <ivan8215145640@gmail.com>
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 use relm4::actions::*;
+
 use adw::prelude::*;
 use gtk::glib::clone;
 
@@ -18,7 +37,6 @@ use anime_launcher_sdk::config::ConfigExt;
 use anime_launcher_sdk::genshin::config::Config;
 use anime_launcher_sdk::genshin::config::schema::launcher::LauncherStyle;
 use anime_launcher_sdk::genshin::states::*;
-use anime_launcher_sdk::genshin::consts::*;
 
 use crate::*;
 use crate::ui::components::*;
@@ -113,18 +131,18 @@ impl SimpleComponent for App {
     menu! {
         main_menu: {
             section! {
-                &tr!("launcher-folder") => LauncherFolder,
-                &tr!("game-folder") => GameFolder,
-                &tr!("config-file") => ConfigFile,
-                &tr!("debug-file") => DebugFile,
+                &i18n!("launcher-folder") => LauncherFolder,
+                &i18n!("game-folder") => GameFolder,
+                &i18n!("config-file") => ConfigFile,
+                &i18n!("debug-file") => DebugFile,
             },
 
             section! {
-                &tr!("wish-url") => WishUrl
+                &i18n!("wish-url") => WishUrl
             },
 
             section! {
-                &tr!("about") => About
+                &i18n!("about") => About
             }
         }
     }
@@ -225,7 +243,7 @@ impl SimpleComponent for App {
                         },
 
                         adw::StatusPage {
-                            set_title: &tr!("loading-data"),
+                            set_title: &i18n!("loading-data"),
                             set_icon_name: Some(APP_ID),
                             set_vexpand: true,
 
@@ -332,13 +350,13 @@ impl SimpleComponent for App {
                                             set_width_request: 44,
 
                                             #[watch]
-                                            set_tooltip_text: Some(&tr!("predownload-update", {
-                                                "version" = match model.state.as_deref() {
+                                            set_tooltip_text: Some(&i18n!("predownload-update", {
+                                                "version" => match model.state.as_deref() {
                                                     Some(LauncherState::PredownloadAvailable { game, .. }) => game.latest().to_string(),
                                                     _ => String::from("?")
                                                 },
 
-                                                "size" = match model.state.as_deref() {
+                                                "size" => match model.state.as_deref() {
                                                     Some(LauncherState::PredownloadAvailable { game, voices }) => {
                                                         let mut size = game.downloaded_size().unwrap_or(0);
 
@@ -474,14 +492,14 @@ impl SimpleComponent for App {
                                                 #[watch]
                                                 set_label: &match &model.state.as_deref() {
                                                     Some(LauncherState::Launch) |
-                                                    Some(LauncherState::PredownloadAvailable { .. }) => tr!("launch"),
+                                                    Some(LauncherState::PredownloadAvailable { .. }) => i18n!("launch"),
 
-                                                    Some(LauncherState::FolderMigrationRequired { .. }) => tr!("migrate-folders"),
-                                                    Some(LauncherState::TelemetryNotDisabled) => tr!("disable-telemetry"),
+                                                    Some(LauncherState::FolderMigrationRequired { .. }) => i18n!("migrate-folders"),
+                                                    Some(LauncherState::TelemetryNotDisabled) => i18n!("disable-telemetry"),
 
-                                                    Some(LauncherState::WineNotInstalled) => tr!("download-wine"),
-                                                    Some(LauncherState::PrefixNotExists)  => tr!("create-prefix"),
-                                                    Some(LauncherState::DxvkNotInstalled) => tr!("install-dxvk"),
+                                                    Some(LauncherState::WineNotInstalled) => i18n!("download-wine"),
+                                                    Some(LauncherState::PrefixNotExists)  => i18n!("create-prefix"),
+                                                    Some(LauncherState::DxvkNotInstalled) => i18n!("install-dxvk"),
 
                                                     Some(LauncherState::GameUpdateAvailable(diff)) |
                                                     Some(LauncherState::GameOutdated(diff)) |
@@ -492,20 +510,20 @@ impl SimpleComponent for App {
                                                                 let temp = config.launcher.temp.unwrap_or_else(std::env::temp_dir);
 
                                                                 if temp.join(filename).exists() {
-                                                                    tr!("resume")
+                                                                    i18n!("resume")
                                                                 }
 
                                                                 else {
-                                                                    tr!("update")
+                                                                    i18n!("update")
                                                                 }
                                                             }
 
-                                                            _ => tr!("update")
+                                                            _ => i18n!("update")
                                                         }
                                                     },
 
                                                     Some(LauncherState::GameNotInstalled(_)) |
-                                                    Some(LauncherState::VoiceNotInstalled(_)) => tr!("download"),
+                                                    Some(LauncherState::VoiceNotInstalled(_)) => i18n!("download"),
 
                                                     None => String::from("...")
                                                 }
@@ -532,9 +550,9 @@ impl SimpleComponent for App {
                                             #[watch]
                                             set_tooltip_text: Some(&match &model.state.as_deref() {
                                                 Some(LauncherState::GameOutdated { .. }) |
-                                                Some(LauncherState::VoiceOutdated(_)) => tr!("main-window--version-outdated-tooltip"),
+                                                Some(LauncherState::VoiceOutdated(_)) => i18n!("main-window--version-outdated-tooltip"),
 
-                                                Some(LauncherState::FolderMigrationRequired { .. }) => tr!("migrate-folders-tooltip"),
+                                                Some(LauncherState::FolderMigrationRequired { .. }) => i18n!("migrate-folders-tooltip"),
 
                                                 _ => String::new()
                                             }),
@@ -555,7 +573,7 @@ impl SimpleComponent for App {
                                         gtk::Button {
                                             adw::ButtonContent {
                                                 set_icon_name: "violence-symbolic", // window-close-symbolic
-                                                set_label: &tr!("kill-game-process")
+                                                set_label: &i18n!("kill-game-process")
                                             },
 
                                             #[watch]
@@ -588,7 +606,7 @@ impl SimpleComponent for App {
 
                                                 if let Err(err) = result {
                                                     sender.input(AppMsg::Toast {
-                                                        title: tr!("kill-game-process-failed"),
+                                                        title: i18n!("kill-game-process-failed"),
                                                         description: Some(err.to_string())
                                                     });
                                                 }
@@ -616,7 +634,7 @@ impl SimpleComponent for App {
 
                                                 //                 if let Err(err) = result {
                                                 //                     sender.input(AppMsg::Toast {
-                                                //                         title: tr!("kill-game-process-failed"),
+                                                //                         title: i18n!("kill-game-process-failed"),
                                                 //                         description: Some(err.to_string())
                                                 //                     });
                                                 //                 }
@@ -624,14 +642,14 @@ impl SimpleComponent for App {
 
                                                 //             Ok(None) => {
                                                 //                 sender.input(AppMsg::Toast {
-                                                //                     title: tr!("failed-get-selected-wine"),
+                                                //                     title: i18n!("failed-get-selected-wine"),
                                                 //                     description: None
                                                 //                 });
                                                 //             }
 
                                                 //             Err(err) => {
                                                 //                 sender.input(AppMsg::Toast {
-                                                //                     title: tr!("failed-get-selected-wine"),
+                                                //                     title: i18n!("failed-get-selected-wine"),
                                                 //                     description: Some(err.to_string())
                                                 //                 });
                                                 //             }
@@ -640,7 +658,7 @@ impl SimpleComponent for App {
 
                                                 //     Err(err) => {
                                                 //         sender.input(AppMsg::Toast {
-                                                //             title: tr!("config-file-opening-error"),
+                                                //             title: i18n!("config-file-opening-error"),
                                                 //             description: Some(err.to_string())
                                                 //         });
                                                 //     }
@@ -662,7 +680,7 @@ impl SimpleComponent for App {
                                             set_width_request: 44,
                                             set_css_classes: &["circular"],
                                             set_icon_name: "document-import-symbolic",
-                                            set_tooltip_text: Some(&tr!("import-game")),
+                                            set_tooltip_text: Some(&i18n!("import-game")),
 
                                             #[watch]
                                             set_sensitive: !model.disabled_buttons,
@@ -698,7 +716,7 @@ impl SimpleComponent for App {
             connect_close_request[sender] => move |_| {
                 if let Err(err) = Config::flush() {
                     sender.input(AppMsg::Toast {
-                        title: tr!("config-update-error"),
+                        title: i18n!("config-update-error"),
                         description: Some(err.to_string())
                     });
                 }
@@ -756,14 +774,15 @@ impl SimpleComponent for App {
                 #[strong]
                 sender,
                 move |_, value, _, _| {
-                    if let Ok(file_list) = value.get::<gtk::gdk::FileList>() {
-                        if let Some(file) = file_list.files().first() {
-                            if let Some(path) = file.path() {
-                                sender.input(AppMsg::ImportGameFromPath(path));
-                                return true;
-                            }
-                        }
+                    if let Ok(file_list) = value.get::<gtk::gdk::FileList>()
+                        && let Some(file) = file_list.files().first()
+                        && let Some(path) = file.path()
+                    {
+                        sender.input(AppMsg::ImportGameFromPath(path));
+
+                        return true;
                     }
+
                     false
                 }
             ));
@@ -790,7 +809,7 @@ impl SimpleComponent for App {
             move |_| {
                 if let Err(err) = open::that(LAUNCHER_FOLDER.as_path()) {
                     sender.input(AppMsg::Toast {
-                        title: tr!("launcher-folder-opening-error"),
+                        title: i18n!("launcher-folder-opening-error"),
                         description: Some(err.to_string())
                     });
 
@@ -818,7 +837,7 @@ impl SimpleComponent for App {
 
                 if let Err(err) = open::that(path) {
                     sender.input(AppMsg::Toast {
-                        title: tr!("game-folder-opening-error"),
+                        title: i18n!("game-folder-opening-error"),
                         description: Some(err.to_string())
                     });
 
@@ -831,15 +850,15 @@ impl SimpleComponent for App {
             #[strong]
             sender,
             move |_| {
-                if let Ok(file) = config_file() {
-                    if let Err(err) = open::that(file) {
-                        sender.input(AppMsg::Toast {
-                            title: tr!("config-file-opening-error"),
-                            description: Some(err.to_string())
-                        });
+                if let Ok(file) = config_file()
+                    && let Err(err) = open::that(file)
+                {
+                    sender.input(AppMsg::Toast {
+                        title: i18n!("config-file-opening-error"),
+                        description: Some(err.to_string())
+                    });
 
-                        tracing::error!("Failed to open config file: {err}");
-                    }
+                    tracing::error!("Failed to open config file: {err}");
                 }
             }
         )));
@@ -850,7 +869,7 @@ impl SimpleComponent for App {
             move |_| {
                 if let Err(err) = open::that(crate::DEBUG_FILE.as_os_str()) {
                     sender.input(AppMsg::Toast {
-                        title: tr!("debug-file-opening-error"),
+                        title: i18n!("debug-file-opening-error"),
                         description: Some(err.to_string())
                     });
 
@@ -918,7 +937,7 @@ impl SimpleComponent for App {
                                             tracing::error!("Failed to open wishes URL: {err}");
 
                                             sender.input(AppMsg::Toast {
-                                                title: tr!("wish-url-opening-error"),
+                                                title: i18n!("wish-url-opening-error"),
                                                 description: Some(err.to_string())
                                             });
                                         }
@@ -926,7 +945,7 @@ impl SimpleComponent for App {
                                         tracing::error!("Couldn't find wishes URL: no url found");
 
                                         sender.input(AppMsg::Toast {
-                                            title: tr!("wish-url-search-failed"),
+                                            title: i18n!("wish-url-search-failed"),
                                             description: None
                                         });
                                     }
@@ -938,7 +957,7 @@ impl SimpleComponent for App {
                                     );
 
                                     sender.input(AppMsg::Toast {
-                                        title: tr!("wish-url-search-failed"),
+                                        title: i18n!("wish-url-search-failed"),
                                         description: Some(err.to_string())
                                     });
                                 }
@@ -947,7 +966,7 @@ impl SimpleComponent for App {
                             tracing::error!("Couldn't find wishes URL: cache file doesn't exist");
 
                             sender.input(AppMsg::Toast {
-                                title: tr!("wish-url-search-failed"),
+                                title: i18n!("wish-url-search-failed"),
                                 description: None
                             });
                         }
@@ -997,7 +1016,7 @@ impl SimpleComponent for App {
                             tracing::error!("Failed to download background picture: {err}");
 
                             sender.input(AppMsg::Toast {
-                                title: tr!("background-downloading-failed"),
+                                title: i18n!("background-downloading-failed"),
                                 description: Some(err.to_string())
                             });
                         }
@@ -1021,7 +1040,7 @@ impl SimpleComponent for App {
                                 match components.sync(host) {
                                     Ok(changes) => {
                                         sender.input(AppMsg::Toast {
-                                            title: tr!("components-index-updated"),
+                                            title: i18n!("components-index-updated"),
                                             description: if changes.is_empty() {
                                                 None
                                             } else {
@@ -1042,7 +1061,7 @@ impl SimpleComponent for App {
                                         tracing::error!("Failed to sync components index");
 
                                         sender.input(AppMsg::Toast {
-                                            title: tr!("components-index-sync-failed"),
+                                            title: i18n!("components-index-sync-failed"),
                                             description: Some(err.to_string())
                                         });
                                     }
@@ -1054,7 +1073,7 @@ impl SimpleComponent for App {
                             tracing::error!("Failed to verify that components index synced");
 
                             sender.input(AppMsg::Toast {
-                                title: tr!("components-index-verify-failed"),
+                                title: i18n!("components-index-verify-failed"),
                                 description: Some(err.to_string())
                             });
                         }
@@ -1074,7 +1093,7 @@ impl SimpleComponent for App {
                             tracing::error!("Failed to find game diff: {err}");
 
                             sender.input(AppMsg::Toast {
-                                title: tr!("game-diff-finding-error"),
+                                title: i18n!("game-diff-finding-error"),
                                 description: Some(err.to_string())
                             });
 
@@ -1119,7 +1138,7 @@ impl SimpleComponent for App {
                 show_status_page
             } => {
                 if show_status_page {
-                    sender.input(AppMsg::SetLoadingStatus(Some(Some(tr!(
+                    sender.input(AppMsg::SetLoadingStatus(Some(Some(i18n!(
                         "loading-launcher-state"
                     )))));
                 } else {
@@ -1133,15 +1152,18 @@ impl SimpleComponent for App {
                         if show_status_page {
                             match state {
                                 StateUpdating::Game => {
-                                    sender.input(AppMsg::SetLoadingStatus(Some(Some(tr!(
+                                    sender.input(AppMsg::SetLoadingStatus(Some(Some(i18n!(
                                         "loading-launcher-state--game"
                                     )))));
                                 }
 
                                 StateUpdating::Voice(locale) => {
-                                    sender.input(AppMsg::SetLoadingStatus(Some(Some(tr!(
-                                        "loading-launcher-state--voice",
-                                        { "locale" = locale.to_name() }
+                                    sender.input(AppMsg::SetLoadingStatus(Some(Some(i18n!(
+                                        format!(
+                                            "loading-launcher-state--voice-{}",
+                                            locale.to_name().to_lowercase()
+                                        ),
+                                        { "locale" => locale.to_name() }
                                     )))));
                                 }
                             }
@@ -1154,7 +1176,7 @@ impl SimpleComponent for App {
                     Err(err) => {
                         tracing::error!("Failed to update launcher state: {err}");
 
-                        self.toast(tr!("launcher-state-updating-error"), Some(err.to_string()));
+                        self.toast(i18n!("launcher-state-updating-error"), Some(err.to_string()));
 
                         None
                     }
@@ -1249,17 +1271,15 @@ impl SimpleComponent for App {
                 let config = Config::get().unwrap();
                 let prefix = config.game.wine.prefix.clone();
 
-                if prefix.exists() {
-                    if let Err(err) = std::fs::remove_dir_all(&prefix) {
-                        tracing::error!("Failed to remove wine prefix: {err}");
+                if prefix.exists() && let Err(err) = std::fs::remove_dir_all(&prefix) {
+                    tracing::error!("Failed to remove wine prefix: {err}");
 
-                        sender.input(AppMsg::Toast {
-                            title: tr!("wine-prefix-update-failed"),
-                            description: Some(err.to_string())
-                        });
+                    sender.input(AppMsg::Toast {
+                        title: i18n!("wine-prefix-update-failed"),
+                        description: Some(err.to_string())
+                    });
 
-                        return;
-                    }
+                    return;
                 }
 
                 sender.input(AppMsg::UpdateLauncherState {
@@ -1286,7 +1306,7 @@ impl SimpleComponent for App {
                     let progress_bar_input = self.progress_bar.sender().clone();
 
                     progress_bar_input
-                        .send(ProgressBarMsg::UpdateCaption(Some(tr!("downloading"))));
+                        .send(ProgressBarMsg::UpdateCaption(Some(i18n!("downloading"))));
 
                     let mut diffs: Vec<VersionDiff> = vec![game];
 
@@ -1310,7 +1330,7 @@ impl SimpleComponent for App {
 
                             if let Err(err) = result {
                                 sender.input(AppMsg::Toast {
-                                    title: tr!("downloading-failed"),
+                                    title: i18n!("downloading-failed"),
                                     description: Some(err.to_string())
                                 });
 
@@ -1427,12 +1447,12 @@ impl App {
 
         let dialog = adw::MessageDialog::new(
             Some(window),
-            Some(&tr!("timeout-fix-detected")),
-            Some(&tr!("timeout-fix-detected-description"))
+            Some(&i18n!("timeout-fix-detected")),
+            Some(&i18n!("timeout-fix-detected-description"))
         );
 
-        dialog.add_response("ignore", &tr!("close"));
-        dialog.add_response("enable", &tr!("enable"));
+        dialog.add_response("ignore", &i18n!("close"));
+        dialog.add_response("enable", &i18n!("enable"));
 
         dialog.set_response_appearance("enable", adw::ResponseAppearance::Suggested);
 
@@ -1461,7 +1481,7 @@ impl App {
 
         #[allow(static_mut_refs)]
         if let (Some(window), Some(description)) = (unsafe { MAIN_WINDOW.as_ref() }, description) {
-            toast.set_button_label(Some(&tr!("details")));
+            toast.set_button_label(Some(&i18n!("details")));
 
             let dialog = adw::MessageDialog::new(
                 Some(window),
@@ -1469,8 +1489,8 @@ impl App {
                 Some(description.as_ref())
             );
 
-            dialog.add_response("close", &tr!("close", { "form" = "noun" }));
-            dialog.add_response("save", &tr!("save"));
+            dialog.add_response("close", &i18n!("close"));
+            dialog.add_response("save", &i18n!("save"));
 
             dialog.set_response_appearance("save", adw::ResponseAppearance::Suggested);
 

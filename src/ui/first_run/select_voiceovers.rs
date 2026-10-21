@@ -1,4 +1,22 @@
-use relm4::prelude::*;
+// SPDX-License-Identifier: GPL-3.0-or-later
+//
+// an-anime-game-launcher
+// Copyright (C) 2021 - 2026  Nikita Podvirnyi <krypt0nn@dawn.wine>
+// Copyright (C) 2025 - 2026  @JohnTheCoolingFan <ivan8215145640@gmail.com>
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 use adw::prelude::*;
 
 use anime_launcher_sdk::config::ConfigExt;
@@ -36,7 +54,7 @@ impl SimpleAsyncComponent for SelectVoiceoversApp {
                 set_vexpand: true,
 
                 gtk::Label {
-                    set_label: &tr!("select-voice-packages"),
+                    set_label: &i18n!("select-voice-packages"),
                     add_css_class: "title-1"
                 }
             },
@@ -46,7 +64,7 @@ impl SimpleAsyncComponent for SelectVoiceoversApp {
                 set_vexpand: true,
 
                 adw::ActionRow {
-                    set_title: &tr!("english"),
+                    set_title: &i18n!("english"),
 
                     #[local_ref]
                     add_suffix = english -> gtk::Switch {
@@ -56,7 +74,7 @@ impl SimpleAsyncComponent for SelectVoiceoversApp {
                 },
 
                 adw::ActionRow {
-                    set_title: &tr!("japanese"),
+                    set_title: &i18n!("japanese"),
 
                     #[local_ref]
                     add_suffix = japanese -> gtk::Switch {
@@ -65,7 +83,7 @@ impl SimpleAsyncComponent for SelectVoiceoversApp {
                 },
 
                 adw::ActionRow {
-                    set_title: &tr!("korean"),
+                    set_title: &i18n!("korean"),
 
                     #[local_ref]
                     add_suffix = korean -> gtk::Switch {
@@ -74,7 +92,7 @@ impl SimpleAsyncComponent for SelectVoiceoversApp {
                 },
 
                 adw::ActionRow {
-                    set_title: &tr!("chinese"),
+                    set_title: &i18n!("chinese"),
 
                     #[local_ref]
                     add_suffix = chinese -> gtk::Switch {
@@ -86,21 +104,21 @@ impl SimpleAsyncComponent for SelectVoiceoversApp {
             add = &adw::PreferencesGroup {
                 set_valign: gtk::Align::Center,
                 set_vexpand: true,
-    
+
                 gtk::Box {
                     set_orientation: gtk::Orientation::Horizontal,
                     set_halign: gtk::Align::Center,
                     set_spacing: 8,
-    
+
                     gtk::Button {
-                        set_label: &tr!("continue"),
+                        set_label: &i18n!("continue"),
                         set_css_classes: &["suggested-action", "pill"],
 
                         connect_clicked => SelectVoiceoversAppMsg::Continue
                     },
 
                     gtk::Button {
-                        set_label: &tr!("exit"),
+                        set_label: &i18n!("exit"),
                         add_css_class: "pill",
 
                         connect_clicked => SelectVoiceoversAppMsg::Exit
@@ -134,9 +152,9 @@ impl SimpleAsyncComponent for SelectVoiceoversApp {
             SelectVoiceoversAppMsg::Continue => {
                 match self.update_config() {
                     Ok(_) => sender.output(Self::Output::ScrollToDownloadComponents),
-    
+
                     Err(err) => sender.output(Self::Output::Toast {
-                        title: tr!("config-update-error"),
+                        title: i18n!("config-update-error"),
                         description: Some(err.to_string())
                     })
                 };

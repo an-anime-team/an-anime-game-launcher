@@ -1,16 +1,36 @@
-use relm4::prelude::*;
+// SPDX-License-Identifier: GPL-3.0-or-later
+//
+// an-anime-game-launcher
+// Copyright (C) 2021 - 2026  Nikita Podvirnyi <krypt0nn@dawn.wine>
+// Copyright (C) 2025 - 2026  @JohnTheCoolingFan <ivan8215145640@gmail.com>
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+use std::sync::LazyLock;
+
 use anime_launcher_sdk::VERSION as SDK_VERSION;
 use anime_launcher_sdk::anime_game_core::VERSION as CORE_VERSION;
 
 use crate::*;
 
-lazy_static::lazy_static! {
-    pub static ref APP_VERSION: String = if crate::APP_DEBUG && !crate::APP_VERSION.contains('-') {
+pub static APP_VERSION_STRING: LazyLock<String> = LazyLock::new(|| {
+    if crate::APP_DEBUG && !crate::APP_VERSION.contains('-') {
         format!("{}-dev", crate::APP_VERSION)
     } else {
         crate::APP_VERSION.to_string()
-    };
-}
+    }
+});
 
 #[derive(Debug, Clone, Copy)]
 pub struct AboutDialog;
@@ -30,7 +50,7 @@ impl SimpleComponent for AboutDialog {
             set_issue_url: "https://github.com/an-anime-team/an-anime-game-launcher/issues",
 
             set_license_type: gtk::License::Gpl30Only,
-            set_version: &APP_VERSION,
+            set_version: &APP_VERSION_STRING,
 
             set_developers: &[
                 "Nikita Podvirnyi https://github.com/krypt0nn",
@@ -87,9 +107,8 @@ impl SimpleComponent for AboutDialog {
                 format!("cairo: {}", gtk::cairo::version_string())
             ].join("\n"),
 
-            set_release_notes_version: &APP_VERSION,
-            set_release_notes: &[
-                r#"
+            set_release_notes_version: &APP_VERSION_STRING,
+            set_release_notes: r#"
                 <p>Added</p>
 
                 <ul>
@@ -109,8 +128,7 @@ impl SimpleComponent for AboutDialog {
                     <li>Improved readability of progress bar text</li>
                     <li>Updated french locale</li>
                 </ul>
-                "#
-            ].join("\n")
+            "#
         }
     }
 

@@ -1,4 +1,22 @@
-use relm4::prelude::*;
+// SPDX-License-Identifier: GPL-3.0-or-later
+//
+// an-anime-game-launcher
+// Copyright (C) 2021 - 2026  Nikita Podvirnyi <krypt0nn@dawn.wine>
+// Copyright (C) 2025 - 2026  @JohnTheCoolingFan <ivan8215145640@gmail.com>
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 use adw::prelude::*;
 
 use anime_launcher_sdk::sessions::SessionsExt;
@@ -39,7 +57,7 @@ impl AsyncFactoryComponent for GameSession {
                 set_icon_name: "view-refresh-symbolic",
                 add_css_class: "flat",
 
-                set_tooltip_text: Some(&tr!("update-session")),
+                set_tooltip_text: Some(&i18n!("update-session")),
 
                 set_valign: gtk::Align::Center,
 
@@ -53,7 +71,7 @@ impl AsyncFactoryComponent for GameSession {
                 set_icon_name: "user-trash-symbolic",
                 add_css_class: "flat",
 
-                set_tooltip_text: Some(&tr!("delete-session")),
+                set_tooltip_text: Some(&i18n!("delete-session")),
 
                 set_valign: gtk::Align::Center,
 
@@ -107,20 +125,20 @@ impl SimpleAsyncComponent for GamePage {
                 adw::HeaderBar {
                     #[wrap(Some)]
                     set_title_widget = &adw::WindowTitle {
-                        set_title: &tr!("game")
+                        set_title: &i18n!("game")
                     }
                 },
 
                 adw::PreferencesPage {
-                    set_title: &tr!("game"),
+                    set_title: &i18n!("game"),
                     set_icon_name: Some("applications-games-symbolic"),
 
                     add = &adw::PreferencesGroup {
-                        set_title: &tr!("game-sessions"),
+                        set_title: &i18n!("game-sessions"),
 
                         #[local_ref]
                         session_name_entry -> adw::EntryRow {
-                            set_title: &tr!("name"),
+                            set_title: &i18n!("name"),
 
                             add_suffix = &gtk::Button {
                                 set_icon_name: "list-add-symbolic",
@@ -184,57 +202,54 @@ impl SimpleAsyncComponent for GamePage {
             GamePageMsg::AddSession => {
                 let name = self.session_name_entry.text().trim().to_string();
 
-                if !name.is_empty() {
-                    if let Ok(config) = Config::get() {
-                        self.session_name_entry.set_text("");
+                if !name.is_empty() && let Ok(config) = Config::get() {
+                    self.session_name_entry.set_text("");
 
-                        match Sessions::update(name.clone(), config.game.wine.prefix) {
-                            Ok(()) => {
-                                let check_button = gtk::CheckButton::new();
+                    match Sessions::update(name.clone(), config.game.wine.prefix) {
+                        Ok(()) => {
+                            let check_button = gtk::CheckButton::new();
 
-                                check_button.set_group(Some(&self.sessions_root_widget));
+                            check_button.set_group(Some(&self.sessions_root_widget));
 
-                                self.sessions.guard().push_back(GameSession {
-                                    name,
-                                    description: None,
-                                    check_button
-                                });
-                            }
+                            self.sessions.guard().push_back(GameSession {
+                                name,
+                                description: None,
+                                check_button
+                            });
+                        }
 
-                            Err(err) => {
-                                sender.output(EnhancementsAppMsg::Toast {
-                                    title: tr!("game-session-add-failed"),
-                                    description: Some(err.to_string())
-                                }).unwrap();
-                            }
+                        Err(err) => {
+                            let _ = sender.output(EnhancementsAppMsg::Toast {
+                                title: i18n!("game-session-add-failed"),
+                                description: Some(err.to_string())
+                            });
                         }
                     }
                 }
             }
 
             GamePageMsg::UpdateSession(index) => {
-                if let Some(session) = self.sessions.guard().get(index) {
-                    if let Ok(config) = Config::get() {
-                        if let Err(err) = Sessions::update(session.name.clone(), config.game.wine.prefix) {
-                            sender.output(EnhancementsAppMsg::Toast {
-                                title: tr!("game-session-update-failed"),
-                                description: Some(err.to_string())
-                            }).unwrap();
-                        }
-                    }
+                if let Some(session) = self.sessions.guard().get(index)
+                    && let Ok(config) = Config::get()
+                    && let Err(err) = Sessions::update(session.name.clone(), config.game.wine.prefix)
+                {
+                    let _ = sender.output(EnhancementsAppMsg::Toast {
+                        title: i18n!("game-session-update-failed"),
+                        description: Some(err.to_string())
+                    });
                 }
             }
 
             GamePageMsg::RemoveSession(index) => {
-                if let Some(session) = self.sessions.guard().get(index) {
-                    if let Err(err) = Sessions::remove(&session.name) {
-                        sender.output(EnhancementsAppMsg::Toast {
-                            title: tr!("game-session-remove-failed"),
-                            description: Some(err.to_string())
-                        }).unwrap();
+                if let Some(session) = self.sessions.guard().get(index)
+                    && let Err(err) = Sessions::remove(&session.name)
+                {
+                    let _ = sender.output(EnhancementsAppMsg::Toast {
+                        title: i18n!("game-session-remove-failed"),
+                        description: Some(err.to_string())
+                    });
 
-                        return;
-                    }
+                    return;
                 }
 
                 self.sessions.guard().remove(index);
@@ -245,30 +260,30 @@ impl SimpleAsyncComponent for GamePage {
             }
 
             GamePageMsg::SetCurrent(index) => {
-                if let Some(session) = self.sessions.guard().get(index) {
-                    if let Ok(config) = Config::get() {
-                        if let Err(err) = Sessions::set_current(session.name.clone()) {
-                            sender.output(EnhancementsAppMsg::Toast {
-                                title: tr!("game-session-set-current-failed"),
-                                description: Some(err.to_string())
-                            }).unwrap();
+                if let Some(session) = self.sessions.guard().get(index)
+                    && let Ok(config) = Config::get()
+                {
+                    if let Err(err) = Sessions::set_current(session.name.clone()) {
+                        let _ = sender.output(EnhancementsAppMsg::Toast {
+                            title: i18n!("game-session-set-current-failed"),
+                            description: Some(err.to_string())
+                        });
 
-                            // Prevent session applying
-                            return;
-                        }
-
-                        if let Err(err) = Sessions::apply(session.name.clone(), config.game.wine.prefix) {
-                            sender.output(EnhancementsAppMsg::Toast {
-                                title: tr!("game-session-apply-failed"),
-                                description: Some(err.to_string())
-                            }).unwrap();
-
-                            // Prevent session activation
-                            return;
-                        }
-
-                        session.check_button.set_active(true);
+                        // Prevent session applying
+                        return;
                     }
+
+                    if let Err(err) = Sessions::apply(session.name.clone(), config.game.wine.prefix) {
+                        let _ = sender.output(EnhancementsAppMsg::Toast {
+                            title: i18n!("game-session-apply-failed"),
+                            description: Some(err.to_string())
+                        });
+
+                        // Prevent session activation
+                        return;
+                    }
+
+                    session.check_button.set_active(true);
                 }
             }
         }

@@ -1,4 +1,22 @@
-use relm4::prelude::*;
+// SPDX-License-Identifier: GPL-3.0-or-later
+//
+// an-anime-game-launcher
+// Copyright (C) 2021 - 2026  Nikita Podvirnyi <krypt0nn@dawn.wine>
+// Copyright (C) 2025 - 2026  @JohnTheCoolingFan <ivan8215145640@gmail.com>
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 use adw::prelude::*;
 
 use crate::*;
@@ -77,17 +95,17 @@ impl SimpleAsyncComponent for EnvironmentPage {
                 adw::HeaderBar {
                     #[wrap(Some)]
                     set_title_widget = &adw::WindowTitle {
-                        set_title: &tr!("environment")
+                        set_title: &i18n!("environment")
                     }
                 },
 
                 adw::PreferencesPage {
-                    set_title: &tr!("environment"),
+                    set_title: &i18n!("environment"),
                     set_icon_name: Some("document-properties-symbolic"),
 
                     add = &adw::PreferencesGroup {
-                        set_title: &tr!("game-command"),
-                        set_description: Some(&tr!("game-command-description")),
+                        set_title: &i18n!("game-command"),
+                        set_description: Some(&i18n!("game-command-description")),
 
                         adw::EntryRow {
                             set_title: "%command%",
@@ -110,7 +128,7 @@ impl SimpleAsyncComponent for EnvironmentPage {
                     },
 
                     add = &adw::PreferencesGroup {
-                        set_title: &tr!("new-variable"),
+                        set_title: &i18n!("new-variable"),
 
                         #[wrap(Some)]
                         set_header_suffix = &gtk::Button {
@@ -120,7 +138,7 @@ impl SimpleAsyncComponent for EnvironmentPage {
 
                             adw::ButtonContent {
                                 set_icon_name: "list-add-symbolic",
-                                set_label: &tr!("add")
+                                set_label: &i18n!("add")
                             },
 
                             connect_clicked => EnvironmentPageMsg::Add
@@ -128,12 +146,12 @@ impl SimpleAsyncComponent for EnvironmentPage {
 
                         #[local_ref]
                         name_entry -> adw::EntryRow {
-                            set_title: &tr!("name")
+                            set_title: &i18n!("name")
                         },
 
                         #[local_ref]
                         value_entry -> adw::EntryRow {
-                            set_title: &tr!("value")
+                            set_title: &i18n!("value")
                         }
                     },
 
@@ -176,17 +194,18 @@ impl SimpleAsyncComponent for EnvironmentPage {
                 let name = self.name_entry.text().trim().to_string();
                 let value = self.value_entry.text().trim().to_string();
 
-                if !name.is_empty() && !value.is_empty() {
-                    if let Ok(mut config) = Config::get() {
-                        self.name_entry.set_text("");
-                        self.value_entry.set_text("");
+                if !name.is_empty()
+                    && !value.is_empty()
+                    && let Ok(mut config) = Config::get()
+                {
+                    self.name_entry.set_text("");
+                    self.value_entry.set_text("");
 
-                        config.game.environment.insert(name.clone(), value.clone());
+                    config.game.environment.insert(name.clone(), value.clone());
 
-                        Config::update(config);
+                    Config::update(config);
 
-                        self.variables.guard().push_back((name, value));
-                    }
+                    self.variables.guard().push_back((name, value));
                 }
             }
 

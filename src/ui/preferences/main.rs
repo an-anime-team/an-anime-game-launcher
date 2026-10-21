@@ -1,11 +1,32 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+//
+// an-anime-game-launcher
+// Copyright (C) 2021 - 2026  Nikita Podvirnyi <krypt0nn@dawn.wine>
+// Copyright (C) 2025 - 2026  @JohnTheCoolingFan <ivan8215145640@gmail.com>
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 use relm4::prelude::*;
 use adw::prelude::*;
+
 use anime_launcher_sdk::anime_game_core::genshin::prelude::*;
 use anime_launcher_sdk::config::ConfigExt;
 use anime_launcher_sdk::genshin::config::Config;
 use anime_launcher_sdk::genshin::config::schema::launcher::LauncherStyle;
 
-use crate::tr;
+use crate::i18n;
+
 use super::general::*;
 use super::enhancements::*;
 
@@ -46,7 +67,7 @@ impl SimpleAsyncComponent for PreferencesApp {
 
     view! {
         preferences_window = adw::PreferencesWindow {
-            set_title: Some(&tr!("preferences")),
+            set_title: Some(&i18n!("preferences")),
             set_default_size: (700, 560),
 
             set_hide_on_close: true,
@@ -59,7 +80,7 @@ impl SimpleAsyncComponent for PreferencesApp {
             connect_close_request[sender] => move |_| {
                 if let Err(err) = Config::flush() {
                     sender.input(PreferencesAppMsg::Toast {
-                        title: tr!("config-update-error"),
+                        title: i18n!("config-update-error"),
                         description: Some(err.to_string())
                     });
                 }
@@ -162,7 +183,7 @@ impl SimpleAsyncComponent for PreferencesApp {
                 toast.set_timeout(4);
 
                 if let Some(description) = description {
-                    toast.set_button_label(Some(&tr!("details")));
+                    toast.set_button_label(Some(&i18n!("details")));
 
                     let dialog = adw::MessageDialog::new(
                         PREFERENCES_WINDOW.as_ref(),
@@ -170,8 +191,8 @@ impl SimpleAsyncComponent for PreferencesApp {
                         Some(&description)
                     );
 
-                    dialog.add_response("close", &tr!("close", { "form" = "noun" }));
-                    dialog.add_response("save", &tr!("save"));
+                    dialog.add_response("close", &i18n!("close"));
+                    dialog.add_response("save", &i18n!("save"));
 
                     dialog.set_response_appearance("save", adw::ResponseAppearance::Suggested);
 

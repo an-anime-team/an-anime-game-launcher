@@ -1,4 +1,21 @@
-use relm4::prelude::*;
+// SPDX-License-Identifier: GPL-3.0-or-later
+//
+// an-anime-game-launcher
+// Copyright (C) 2021 - 2026  Nikita Podvirnyi <krypt0nn@dawn.wine>
+// Copyright (C) 2025 - 2026  @JohnTheCoolingFan <ivan8215145640@gmail.com>
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 use gtk::prelude::*;
 use adw::prelude::*;
@@ -72,7 +89,7 @@ impl SimpleComponent for FirstRunApp {
                     },
 
                     adw::StatusPage {
-                        set_title: &tr!("loading-data"),
+                        set_title: &i18n!("loading-data"),
                         set_icon_name: Some(APP_ID),
                         set_vexpand: true,
 
@@ -150,7 +167,7 @@ impl SimpleComponent for FirstRunApp {
             carousel,
 
             loading: None,
-            title: tr!("welcome")
+            title: i18n!("welcome")
         };
 
         let toast_overlay = &model.toast_overlay;
@@ -178,26 +195,26 @@ impl SimpleComponent for FirstRunApp {
             }
 
             FirstRunAppMsg::ScrollToDependencies => {
-                self.title = tr!("dependencies");
+                self.title = i18n!("dependencies");
 
                 self.carousel.scroll_to(self.dependencies.widget(), true);
             }
 
             FirstRunAppMsg::ScrollToDefaultPaths => {
-                self.title = tr!("default-paths");
+                self.title = i18n!("default-paths");
 
                 self.carousel.scroll_to(self.default_paths.widget(), true);
             }
 
             FirstRunAppMsg::ScrollToSelectVoiceovers => {
-                self.title = tr!("select-voice-packages");
+                self.title = i18n!("select-voice-packages");
 
                 self.carousel.scroll_to(self.select_voiceovers.widget(), true);
             }
 
             FirstRunAppMsg::ScrollToDownloadComponents => {
                 // Update components index
-                sender.input(FirstRunAppMsg::SetLoadingStatus(Some(Some(tr!("updating-components-index")))));
+                sender.input(FirstRunAppMsg::SetLoadingStatus(Some(Some(i18n!("updating-components-index")))));
 
                 let config = Config::get().unwrap_or_else(|_| CONFIG.clone());
 
@@ -218,7 +235,7 @@ impl SimpleComponent for FirstRunApp {
                                         tracing::error!("Failed to sync components index");
 
                                         sender.input(FirstRunAppMsg::Toast {
-                                            title: tr!("components-index-sync-failed"),
+                                            title: i18n!("components-index-sync-failed"),
                                             description: Some(err.to_string())
                                         });
                                     }
@@ -230,7 +247,7 @@ impl SimpleComponent for FirstRunApp {
                             tracing::error!("Failed to verify that components index synced");
 
                             sender.input(FirstRunAppMsg::Toast {
-                                title: tr!("components-index-verify-failed"),
+                                title: i18n!("components-index-verify-failed"),
                                 description: Some(err.to_string())
                             });
                         }
@@ -245,13 +262,13 @@ impl SimpleComponent for FirstRunApp {
 
                 // Scroll to download components page
                 // This will happen in background behind StatusPage
-                self.title = tr!("download-components");
+                self.title = i18n!("download-components");
 
                 self.carousel.scroll_to(self.download_components.widget(), true);
             }
 
             FirstRunAppMsg::ScrollToFinish => {
-                self.title = tr!("finish");
+                self.title = i18n!("finish");
 
                 self.carousel.scroll_to(self.finish.widget(), true);
             }
@@ -263,12 +280,12 @@ impl SimpleComponent for FirstRunApp {
 
                 #[allow(static_mut_refs)]
                 if let Some(description) = description {
-                    toast.set_button_label(Some(&tr!("details")));
+                    toast.set_button_label(Some(&i18n!("details")));
 
                     let dialog = adw::MessageDialog::new(MAIN_WINDOW.as_ref(), Some(&title), Some(&description));
 
-                    dialog.add_response("close", &tr!("close", { "form" = "noun" }));
-                    dialog.add_response("save", &tr!("save"));
+                    dialog.add_response("close", &i18n!("close"));
+                    dialog.add_response("save", &i18n!("save"));
 
                     dialog.set_response_appearance("save", adw::ResponseAppearance::Suggested);
 

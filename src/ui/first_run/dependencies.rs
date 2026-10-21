@@ -1,5 +1,24 @@
-use relm4::prelude::*;
+// SPDX-License-Identifier: GPL-3.0-or-later
+//
+// an-anime-game-launcher
+// Copyright (C) 2021 - 2026  Nikita Podvirnyi <krypt0nn@dawn.wine>
+// Copyright (C) 2025 - 2026  @JohnTheCoolingFan <ivan8215145640@gmail.com>
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 use adw::prelude::*;
+
 use anime_launcher_sdk::is_available;
 
 use crate::*;
@@ -18,7 +37,7 @@ pub enum DependenciesAppMsg {
     Exit
 }
 
-#[relm4::component(async, pub)]
+#[relm4::component(pub, async)]
 impl SimpleAsyncComponent for DependenciesApp {
     type Init = ();
     type Input = DependenciesAppMsg;
@@ -33,12 +52,12 @@ impl SimpleAsyncComponent for DependenciesApp {
                 set_vexpand: true,
 
                 gtk::Label {
-                    set_label: &tr!("missing-dependencies-title"),
+                    set_label: &i18n!("missing-dependencies-title"),
                     add_css_class: "title-1"
                 },
 
                 gtk::Label {
-                    set_label: &tr!("missing-dependencies-message"),
+                    set_label: &i18n!("missing-dependencies-message"),
 
                     set_justify: gtk::Justification::Center,
                     set_wrap: true,
@@ -135,14 +154,14 @@ impl SimpleAsyncComponent for DependenciesApp {
                     set_spacing: 8,
 
                     gtk::Button {
-                        set_label: &tr!("check"),
+                        set_label: &i18n!("check"),
                         set_css_classes: &["suggested-action", "pill"],
 
                         connect_clicked => DependenciesAppMsg::Continue
                     },
 
                     gtk::Button {
-                        set_label: &tr!("exit"),
+                        set_label: &i18n!("exit"),
                         add_css_class: "pill",
 
                         connect_clicked => DependenciesAppMsg::Exit
@@ -197,7 +216,7 @@ impl SimpleAsyncComponent for DependenciesApp {
                 for package in packages {
                     if !is_available(package) {
                         sender.output(Self::Output::Toast {
-                            title: tr!("package-not-available", { "package" = package }),
+                            title: i18n!("package-not-available", { "package" => package }),
                             description: None
                         });
 
@@ -208,7 +227,7 @@ impl SimpleAsyncComponent for DependenciesApp {
                 // 7z sometimes has different binaries
                 if !is_available("7z") && !is_available("7za") {
                     sender.output(Self::Output::Toast {
-                        title: tr!("package-not-available", { "package" = "7z" }),
+                        title: i18n!("package-not-available", { "package" => "7z" }),
                         description: None
                     });
 

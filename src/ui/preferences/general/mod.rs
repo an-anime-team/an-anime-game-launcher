@@ -1,7 +1,29 @@
-use relm4::prelude::*;
-use relm4::factory::{AsyncFactoryComponent, AsyncFactorySender, AsyncFactoryVecDeque};
+// SPDX-License-Identifier: GPL-3.0-or-later
+//
+// an-anime-game-launcher
+// Copyright (C) 2021 - 2026  Nikita Podvirnyi <krypt0nn@dawn.wine>
+// Copyright (C) 2025 - 2026  @JohnTheCoolingFan <ivan8215145640@gmail.com>
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+use relm4::factory::{
+    AsyncFactoryComponent, AsyncFactorySender, AsyncFactoryVecDeque
+};
+
 use gtk::prelude::*;
 use adw::prelude::*;
+
 use anime_launcher_sdk::wincompatlib::prelude::*;
 use anime_launcher_sdk::config::ConfigExt;
 use anime_launcher_sdk::genshin::config::Config;
@@ -13,8 +35,10 @@ pub mod components;
 
 use components::*;
 
-use crate::i18n::*;
 use crate::*;
+
+use crate::i18n::*;
+
 use super::main::PreferencesAppMsg;
 
 /// Game environment options exposed in the general settings
@@ -88,7 +112,7 @@ impl AsyncFactoryComponent for VoicePackageComponent {
 
     view! {
         root = adw::ActionRow {
-            set_title: &tr!(&self.locale.to_name().to_ascii_lowercase()),
+            set_title: &i18n!(&self.locale.to_name().to_ascii_lowercase()),
 
             add_suffix = &gtk::Button {
                 #[watch]
@@ -216,13 +240,13 @@ impl GeneralApp {
     /// Get Bilibili plugin settings row subtitle
     fn bilibili_plugin_status(&self) -> String {
         if !self.bilibili_plugin_installable() {
-            return tr!("bilibili-plugin-china-only");
+            return i18n!("bilibili-plugin-china-only");
         }
 
         match self.bilibili_plugin {
-            BilibiliPluginState::Installed => tr!("bilibili-plugin-installed"),
-            BilibiliPluginState::Downloading { .. } => tr!("downloading"),
-            BilibiliPluginState::NotInstalled => tr!("bilibili-plugin-description")
+            BilibiliPluginState::Installed => i18n!("bilibili-plugin-installed"),
+            BilibiliPluginState::Downloading { .. } => i18n!("downloading"),
+            BilibiliPluginState::NotInstalled => i18n!("bilibili-plugin-description")
         }
     }
 
@@ -282,7 +306,7 @@ impl GeneralApp {
             let result = anime_launcher_sdk::genshin::env_emulation::install_bilibili_plugin(
                 game_path,
                 move |downloaded, total| {
-                    let _ = progress_sender.input(
+                    progress_sender.input(
                         GeneralAppMsg::BilibiliPluginProgress(downloaded, total)
                     );
                 }
@@ -297,7 +321,7 @@ impl GeneralApp {
                     sender.input(GeneralAppMsg::BilibiliPluginNotInstalled);
 
                     sender.input(GeneralAppMsg::Toast {
-                        title: tr!("downloading-failed"),
+                        title: i18n!("downloading-failed").to_string(),
                         description: Some(err.to_string())
                     });
                 }
@@ -306,7 +330,7 @@ impl GeneralApp {
     }
 }
 
-#[relm4::component(async, pub)]
+#[relm4::component(pub, async)]
 impl SimpleAsyncComponent for GeneralApp {
     type Init = ();
     type Input = GeneralAppMsg;
@@ -315,11 +339,11 @@ impl SimpleAsyncComponent for GeneralApp {
     view! {
         #[root]
         adw::PreferencesPage {
-            set_title: &tr!("general"),
+            set_title: &i18n!("general"),
             set_icon_name: Some("applications-system-symbolic"),
 
             add = &adw::PreferencesGroup {
-                set_title: &tr!("appearance"),
+                set_title: &i18n!("appearance"),
 
                 gtk::Box {
                     set_orientation: gtk::Orientation::Horizontal,
@@ -348,7 +372,7 @@ impl SimpleAsyncComponent for GeneralApp {
                         },
 
                         gtk::Label {
-                            set_text: &tr!("modern"),
+                            set_text: &i18n!("modern"),
 
                             set_margin_top: 16
                         }
@@ -375,7 +399,7 @@ impl SimpleAsyncComponent for GeneralApp {
                         },
 
                         gtk::Label {
-                            set_text: &tr!("classic"),
+                            set_text: &i18n!("classic"),
 
                             set_margin_top: 16
                         }
@@ -388,8 +412,8 @@ impl SimpleAsyncComponent for GeneralApp {
                 set_visible: model.style == LauncherStyle::Classic,
 
                 adw::ActionRow {
-                    set_title: &tr!("update-background"),
-                    set_subtitle: &tr!("update-background-description"),
+                    set_title: &i18n!("update-background"),
+                    set_subtitle: &i18n!("update-background-description"),
 
                     add_suffix = &gtk::Switch {
                         set_valign: gtk::Align::Center,
@@ -407,8 +431,8 @@ impl SimpleAsyncComponent for GeneralApp {
                 },
 
                 adw::ActionRow {
-                    set_title: &tr!("video-background"),
-                    set_subtitle: &tr!("video-background-description"),
+                    set_title: &i18n!("video-background"),
+                    set_subtitle: &i18n!("video-background-description"),
 
                     add_suffix = &gtk::Switch {
                         set_valign: gtk::Align::Center,
@@ -422,11 +446,11 @@ impl SimpleAsyncComponent for GeneralApp {
             },
 
             add = &adw::PreferencesGroup {
-                set_title: &tr!("general"),
+                set_title: &i18n!("general"),
 
                 adw::ComboRow {
-                    set_title: &tr!("launcher-language"),
-                    set_subtitle: &tr!("launcher-language-description"),
+                    set_title: &i18n!("launcher-language"),
+                    set_subtitle: &i18n!("launcher-language-description"),
 
                     set_model: Some(&gtk::StringList::new(&model.languages.iter().map(|lang| lang.as_str()).collect::<Vec<&str>>())),
 
@@ -439,24 +463,22 @@ impl SimpleAsyncComponent for GeneralApp {
                     },
 
                     connect_selected_notify => |row| {
-                        if is_ready() {
-                            if let Ok(mut config) = Config::get() {
-                                config.launcher.language = crate::i18n::format_lang(SUPPORTED_LANGUAGES
-                                    .get(row.selected() as usize)
-                                    .unwrap_or(&SUPPORTED_LANGUAGES[0]));
+                        if is_ready() && let Ok(mut config) = Config::get() {
+                            config.launcher.language = crate::i18n::format_lang(SUPPORTED_LANGUAGES
+                                .get(row.selected() as usize)
+                                .unwrap_or(&SUPPORTED_LANGUAGES[0]));
 
-                                Config::update(config);
-                            }
+                            Config::update(config);
                         }
                     }
                 },
 
                 adw::ComboRow {
-                    set_title: &tr!("game-edition"),
+                    set_title: &i18n!("game-edition"),
 
                     set_model: Some(&gtk::StringList::new(&[
-                        &tr!("global"),
-                        &tr!("china")
+                        &i18n!("global"),
+                        &i18n!("china")
                     ])),
 
                     set_selected: GameEdition::list().iter()
@@ -481,8 +503,8 @@ impl SimpleAsyncComponent for GeneralApp {
                 },
 
                 adw::ComboRow {
-                    set_title: &tr!("game-environment"),
-                    set_subtitle: &tr!("game-environment-description"),
+                    set_title: &i18n!("game-environment"),
+                    set_subtitle: &i18n!("game-environment-description"),
 
                     set_model: Some(&gtk::StringList::new(ENVIRONMENT_LABELS)),
 
@@ -491,18 +513,16 @@ impl SimpleAsyncComponent for GeneralApp {
                         .unwrap_or(0) as u32,
 
                     connect_selected_notify[sender] => move |row| {
-                        if is_ready() {
-                            if let Some(environment) = ENVIRONMENTS.get(row.selected() as usize) {
-                                sender.input(GeneralAppMsg::SetEnvironment(*environment));
-                            }
+                        if is_ready() && let Some(environment) = ENVIRONMENTS.get(row.selected() as usize) {
+                            sender.input(GeneralAppMsg::SetEnvironment(*environment));
                         }
                     }
                 },
 
                 #[local_ref]
                 voice_packages -> adw::ExpanderRow {
-                    set_title: &tr!("game-voiceovers"),
-                    set_subtitle: &tr!("game-voiceovers-description")
+                    set_title: &i18n!("game-voiceovers"),
+                    set_subtitle: &i18n!("game-voiceovers-description")
                 },
 
                 gtk::Box {
@@ -511,13 +531,13 @@ impl SimpleAsyncComponent for GeneralApp {
                     set_margin_top: 16,
 
                     gtk::Button {
-                        set_label: &tr!("repair-game"),
+                        set_label: &i18n!("repair-game"),
 
                         connect_clicked => GeneralAppMsg::RepairGame
                     },
 
                     gtk::Button {
-                        set_label: &tr!("remake-prefix"),
+                        set_label: &i18n!("remake-prefix"),
 
                         add_css_class: "destructive-action",
 
@@ -531,7 +551,7 @@ impl SimpleAsyncComponent for GeneralApp {
                 set_visible: model.environment == Environment::Bilibili,
 
                 adw::ActionRow {
-                    set_title: &tr!("bilibili-plugin"),
+                    set_title: &i18n!("bilibili-plugin"),
 
                     #[watch]
                     set_subtitle: &model.bilibili_plugin_status(),
@@ -543,7 +563,7 @@ impl SimpleAsyncComponent for GeneralApp {
                         #[watch]
                         set_sensitive: model.bilibili_plugin_installable(),
 
-                        set_label: &tr!("download"),
+                        set_label: &i18n!("download"),
                         set_valign: gtk::Align::Center,
 
                         connect_clicked => GeneralAppMsg::InstallBilibiliPlugin
@@ -563,10 +583,10 @@ impl SimpleAsyncComponent for GeneralApp {
             },
 
             add = &adw::PreferencesGroup {
-                set_title: &tr!("status"),
+                set_title: &i18n!("status"),
 
                 adw::ActionRow {
-                    set_title: &tr!("game-version"),
+                    set_title: &i18n!("game-version"),
 
                     add_suffix = &gtk::Label {
                         #[watch]
@@ -577,7 +597,7 @@ impl SimpleAsyncComponent for GeneralApp {
                                 VersionDiff::Diff { current, .. } |
                                 VersionDiff::Outdated { current, .. } => current.to_string(),
 
-                                VersionDiff::NotInstalled { .. } => tr!("game-not-installed")
+                                VersionDiff::NotInstalled { .. } => i18n!("game-not-installed")
                             }
 
                             None => String::from("?")
@@ -599,23 +619,22 @@ impl SimpleAsyncComponent for GeneralApp {
                         #[watch]
                         set_tooltip_text: Some(&match model.game_diff.as_ref() {
                             Some(diff) => match **diff {
-                                VersionDiff::Latest { .. } => String::new(),
+                                VersionDiff::Latest { .. } |
+                                VersionDiff::NotInstalled { .. } => String::new(),
 
-                                VersionDiff::Predownload { current, latest, .. } => tr!("game-predownload-available", {
-                                    "old" = current.to_string(),
-                                    "new" = latest.to_string()
+                                VersionDiff::Predownload { current, latest, .. } => i18n!("game-predownload-available", {
+                                    "old" => current.to_string(),
+                                    "new" => latest.to_string()
                                 }),
 
-                                VersionDiff::Diff { current, latest, .. } => tr!("game-update-available", {
-                                    "old" = current.to_string(),
-                                    "new" = latest.to_string()
+                                VersionDiff::Diff { current, latest, .. } => i18n!("game-update-available", {
+                                    "old" => current.to_string(),
+                                    "new" => latest.to_string()
                                 }),
 
-                                VersionDiff::Outdated { latest, ..} => tr!("game-outdated", {
-                                    "latest" = latest.to_string()
-                                }),
-
-                                VersionDiff::NotInstalled { .. } => String::new()
+                                VersionDiff::Outdated { latest, ..} => i18n!("game-outdated", {
+                                    "latest" => latest.to_string()
+                                })
                             }
 
                             None => String::new()
@@ -625,16 +644,16 @@ impl SimpleAsyncComponent for GeneralApp {
             },
 
             add = &adw::PreferencesGroup {
-                set_title: &tr!("options"),
+                set_title: &i18n!("options"),
 
                 adw::ComboRow {
-                    set_title: &tr!("launcher-behavior"),
-                    set_subtitle: &tr!("launcher-behavior-description"),
+                    set_title: &i18n!("launcher-behavior"),
+                    set_subtitle: &i18n!("launcher-behavior-description"),
 
                     set_model: Some(&gtk::StringList::new(&[
-                        &tr!("nothing"),
-                        &tr!("hide", { "form" = "verb" }),
-                        &tr!("close", { "form" = "verb" }),
+                        &i18n!("nothing"),
+                        &i18n!("hide-verb"),
+                        &i18n!("close-verb"),
                     ])),
 
                     set_selected: match CONFIG.launcher.behavior {
@@ -644,16 +663,14 @@ impl SimpleAsyncComponent for GeneralApp {
                     },
 
                     connect_selected_notify => |row| {
-                        if is_ready() {
-                            if let Ok(mut config) = Config::get() {
-                                config.launcher.behavior = [
-                                    LauncherBehavior::Nothing,
-                                    LauncherBehavior::Hide,
-                                    LauncherBehavior::Close
-                                ][row.selected() as usize];
+                        if is_ready() && let Ok(mut config) = Config::get() {
+                            config.launcher.behavior = [
+                                LauncherBehavior::Nothing,
+                                LauncherBehavior::Hide,
+                                LauncherBehavior::Close
+                            ][row.selected() as usize];
 
-                                Config::update(config);
-                            }
+                            Config::update(config);
                         }
                     }
                 }
@@ -661,8 +678,8 @@ impl SimpleAsyncComponent for GeneralApp {
 
             add = &adw::PreferencesGroup {
                 adw::ActionRow {
-                    set_title: &tr!("components"),
-                    set_subtitle: &tr!("components-description"),
+                    set_title: &i18n!("components"),
+                    set_subtitle: &i18n!("components-description"),
 
                     add_suffix = &gtk::Image {
                         set_icon_name: Some("go-next-symbolic")
@@ -674,10 +691,10 @@ impl SimpleAsyncComponent for GeneralApp {
                 },
 
                 adw::ExpanderRow {
-                    set_title: &tr!("wine-tools"),
+                    set_title: &i18n!("wine-tools"),
 
                     add_row = &adw::ActionRow {
-                        set_title: &tr!("command-line"),
+                        set_title: &i18n!("command-line"),
                         set_subtitle: "wineconsole",
 
                         set_activatable: true,
@@ -686,7 +703,7 @@ impl SimpleAsyncComponent for GeneralApp {
                     },
 
                     add_row = &adw::ActionRow {
-                        set_title: &tr!("registry-editor"),
+                        set_title: &i18n!("registry-editor"),
                         set_subtitle: "regedit",
 
                         set_activatable: true,
@@ -695,7 +712,7 @@ impl SimpleAsyncComponent for GeneralApp {
                     },
 
                     add_row = &adw::ActionRow {
-                        set_title: &tr!("explorer"),
+                        set_title: &i18n!("explorer"),
                         set_subtitle: "explorer",
 
                         set_activatable: true,
@@ -704,7 +721,7 @@ impl SimpleAsyncComponent for GeneralApp {
                     },
 
                     add_row = &adw::ActionRow {
-                        set_title: &tr!("task-manager"),
+                        set_title: &i18n!("task-manager"),
                         set_subtitle: "taskmgr",
 
                         set_activatable: true,
@@ -713,7 +730,7 @@ impl SimpleAsyncComponent for GeneralApp {
                     },
 
                     add_row = &adw::ActionRow {
-                        set_title: &tr!("configuration"),
+                        set_title: &i18n!("configuration"),
                         set_subtitle: "winecfg",
 
                         set_activatable: true,
@@ -722,7 +739,7 @@ impl SimpleAsyncComponent for GeneralApp {
                     },
 
                     add_row = &adw::ActionRow {
-                        set_title: &tr!("debugger"),
+                        set_title: &i18n!("debugger"),
                         set_subtitle: "start winedbg",
 
                         set_activatable: true,
@@ -761,7 +778,7 @@ impl SimpleAsyncComponent for GeneralApp {
             background_index: CONFIG.launcher.background_index,
             languages: SUPPORTED_LANGUAGES
                 .iter()
-                .map(|lang| tr!(format_lang(lang).as_str()))
+                .map(|lang| i18n!(format_lang(lang).as_str()))
                 .collect()
         };
 
@@ -797,72 +814,61 @@ impl SimpleAsyncComponent for GeneralApp {
                 self.game_diff = diff;
             }
 
-            #[allow(unused_must_use)]
             GeneralAppMsg::AddVoicePackage(index) => {
-                if let Some(package) = self.voice_packages.get(index.current_index()) {
-                    if let Ok(mut config) = Config::get() {
-                        if !config
-                            .game
-                            .voices
-                            .iter()
-                            .any(|voice| VoiceLocale::from_str(voice) == Some(package.locale))
-                        {
-                            config
-                                .game
-                                .voices
-                                .push(package.locale.to_code().to_string());
+                if let Some(package) = self.voice_packages.get(index.current_index())
+                    && let Ok(mut config) = Config::get()
+                    && !config.game.voices.iter()
+                        .any(|voice| VoiceLocale::from_str(voice) == Some(package.locale))
+                {
+                    config.game.voices.push(
+                        package.locale.to_code().to_string()
+                    );
 
-                            Config::update(config);
+                    Config::update(config);
 
-                            sender.output(PreferencesAppMsg::UpdateLauncherState);
-                        }
-                    }
+                    let _ = sender.output(PreferencesAppMsg::UpdateLauncherState);
                 }
             }
 
-            #[allow(unused_must_use)]
             GeneralAppMsg::RemoveVoicePackage(index) => {
-                if let Some(package) = self.voice_packages.guard().get_mut(index.current_index()) {
-                    if let Ok(mut config) = Config::get() {
-                        package.sensitive = false;
+                if let Some(package) = self.voice_packages.guard().get_mut(index.current_index())
+                    && let Ok(mut config) = Config::get()
+                {
+                    package.sensitive = false;
 
-                        config
-                            .game
-                            .voices
-                            .retain(|voice| VoiceLocale::from_str(voice) != Some(package.locale));
+                    config.game.voices.retain(|voice| {
+                        VoiceLocale::from_str(voice) != Some(package.locale)
+                    });
 
-                        Config::update(config.clone());
+                    Config::update(config.clone());
 
-                        let package =
-                            VoicePackage::with_locale(package.locale, config.launcher.edition)
-                                .unwrap();
-                        let game_path = config
-                            .game
-                            .path
-                            .for_edition(config.launcher.edition)
-                            .to_path_buf();
+                    let Ok(package) = VoicePackage::with_locale(package.locale, config.launcher.edition) else {
+                        return;
+                    };
 
-                        if package.is_installed_in(&game_path) {
-                            std::thread::spawn(move || {
-                                if let Err(err) = package.delete_in(game_path) {
-                                    tracing::error!(
-                                        "Failed to delete voice package: {:?}",
-                                        package.locale()
-                                    );
+                    let game_path = config.game.path.for_edition(config.launcher.edition)
+                        .to_path_buf();
 
-                                    sender.input(GeneralAppMsg::Toast {
-                                        title: tr!("voice-package-deletion-error"),
-                                        description: Some(err.to_string())
-                                    });
-                                }
+                    if package.is_installed_in(&game_path) {
+                        std::thread::spawn(move || {
+                            if let Err(err) = package.delete_in(game_path) {
+                                tracing::error!(
+                                    "Failed to delete voice package: {:?}",
+                                    package.locale()
+                                );
 
-                                sender
-                                    .input(GeneralAppMsg::SetVoicePackageSensitivity(index, true));
-                                sender.output(PreferencesAppMsg::UpdateLauncherState);
-                            });
-                        } else {
+                                sender.input(GeneralAppMsg::Toast {
+                                    title: i18n!("voice-package-deletion-error"),
+                                    description: Some(err.to_string())
+                                });
+                            }
+
                             sender.input(GeneralAppMsg::SetVoicePackageSensitivity(index, true));
-                        }
+
+                            let _ = sender.output(PreferencesAppMsg::UpdateLauncherState);
+                        });
+                    } else {
+                        sender.input(GeneralAppMsg::SetVoicePackageSensitivity(index, true));
                     }
                 }
             }
@@ -916,20 +922,21 @@ impl SimpleAsyncComponent for GeneralApp {
             },
 
             GeneralAppMsg::UpdateLauncherStyle(style) => {
-                if style == LauncherStyle::Classic && !KEEP_BACKGROUND_FILE.exists() {
-                    if let Err(err) = crate::background::download_background(
+                if style == LauncherStyle::Classic
+                    && !KEEP_BACKGROUND_FILE.exists()
+                    && let Err(err) = crate::background::download_background(
                         self.use_video_background,
                         self.background_index
-                    ) {
-                        tracing::error!("Failed to download background picture/video");
+                    )
+                {
+                    tracing::error!("Failed to download background picture/video");
 
-                        sender.input(GeneralAppMsg::Toast {
-                            title: tr!("background-downloading-failed"),
-                            description: Some(err.to_string())
-                        });
+                    sender.input(GeneralAppMsg::Toast {
+                        title: i18n!("background-downloading-failed"),
+                        description: Some(err.to_string())
+                    });
 
-                        return;
-                    }
+                    return;
                 }
 
                 if let Ok(mut config) = Config::get() {
@@ -947,20 +954,19 @@ impl SimpleAsyncComponent for GeneralApp {
                 if self.style == LauncherStyle::Classic
                     && !KEEP_BACKGROUND_FILE.exists()
                     && use_video
-                {
-                    if let Err(err) = crate::background::download_background(
+                    && let Err(err) = crate::background::download_background(
                         self.use_video_background,
                         self.background_index
-                    ) {
-                        tracing::error!("Failed to download background picture/video");
+                    )
+                {
+                    tracing::error!("Failed to download background picture/video");
 
-                        sender.input(GeneralAppMsg::Toast {
-                            title: tr!("background-downloading-failed"),
-                            description: Some(err.to_string())
-                        });
+                    sender.input(GeneralAppMsg::Toast {
+                        title: i18n!("background-downloading-failed"),
+                        description: Some(err.to_string())
+                    });
 
-                        return;
-                    }
+                    return;
                 }
 
                 if let Ok(mut config) = Config::get() {
@@ -1033,7 +1039,7 @@ impl SimpleAsyncComponent for GeneralApp {
 
                     if let Err(err) = result {
                         sender.input(GeneralAppMsg::Toast {
-                            title: tr!("wine-run-error", { "executable" = executable.join(" ") }),
+                            title: i18n!("wine-run-error", { "executable" => executable.join(" ") }).to_string(),
                             description: Some(err.to_string())
                         });
 

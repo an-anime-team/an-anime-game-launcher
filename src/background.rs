@@ -1,11 +1,33 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+//
+// an-anime-game-launcher
+// Copyright (C) 2021 - 2026  Nikita Podvirnyi <krypt0nn@dawn.wine>
+// Copyright (C) 2025 - 2026  @JohnTheCoolingFan <ivan8215145640@gmail.com>
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 use std::path::Path;
 use std::process::Command;
 
 use anime_launcher_sdk::anime_game_core::installer::downloader::Downloader;
 use anime_launcher_sdk::is_available;
 use anime_launcher_sdk::anime_game_core::minreq;
+
 use anyhow::{Context, anyhow};
 use md5::{Digest, Md5};
+
+use crate::STARTUP_LANG;
 
 pub fn download_background(with_video: bool, _index: u8) -> anyhow::Result<()> {
     tracing::debug!("Downloading background picture");
@@ -51,7 +73,7 @@ pub fn download_background(with_video: bool, _index: u8) -> anyhow::Result<()> {
     Ok(())
 }
 
-#[cached::proc_macro::cached(result)]
+#[cached::proc_macro::cached]
 pub fn get_background_info_multiple() -> anyhow::Result<Vec<BackgroundSpec>> {
     let json = serde_json::from_slice::<serde_json::Value>(
         minreq::get(get_uri()).with_timeout(15).send()?.as_bytes()
@@ -60,7 +82,7 @@ pub fn get_background_info_multiple() -> anyhow::Result<Vec<BackgroundSpec>> {
     BackgroundSpec::from_json_all(&json)
 }
 
-#[cached::proc_macro::cached(result)]
+#[cached::proc_macro::cached]
 pub fn get_background_info(index: u8) -> anyhow::Result<BackgroundSpec> {
     let json = serde_json::from_slice::<serde_json::Value>(
         minreq::get(get_uri()).with_timeout(15).send()?.as_bytes()
@@ -70,9 +92,7 @@ pub fn get_background_info(index: u8) -> anyhow::Result<BackgroundSpec> {
 }
 
 pub fn get_uri() -> String {
-    let lang = crate::i18n::get_lang();
-
-    if lang.language == unic_langid::langid!("zh-cn").language {
+    if STARTUP_LANG.language == "zh" {
         concat!(
             "https://hyp-api.",
             "mi",
@@ -90,7 +110,7 @@ pub fn get_uri() -> String {
             ".com/hyp/hyp-connect/api/getAllGameBasicInfo?launcher_id=VYTpXlbWo8&language="
         );
 
-        uri.to_owned() + &crate::i18n::format_lang(lang)
+        uri.to_owned() + &crate::i18n::format_lang(&STARTUP_LANG)
     }
 }
 
@@ -282,7 +302,11 @@ impl Background {
 /// Returns true if image exists and is correct
 fn check_img_file(path: &Path, expected_hash: &str) -> anyhow::Result<bool> {
     if path.exists() {
-        let hash = Md5::digest(std::fs::read(path)?);
+        let mut hash = [0; 16];
+
+        hash.copy_from_slice(&Md5::digest(std::fs::read(path)?));
+
+        let hash = u128::from_le_bytes(hash);
 
         if format!("{hash:x}").eq_ignore_ascii_case(expected_hash) {
             tracing::debug!("Background picture {path:?} already downloaded. Skipping");

@@ -3,14 +3,15 @@ name = "anime-game-launcher"
 version = "3.19.8"
 description = "Anime Game launcher"
 authors = [
-    "Nikita Podvirnyi <krypt0nn@vk.com>",
-    "@JohnTheCoolingFan <https://github.com/JohnTheCoolingFan>"
+    "Nikita Podvirnyi <krypt0nn@dawn.wine>",
+    "@JohnTheCoolingFan <ivan8215145640@gmail.com>"
 ]
 homepage = "https://github.com/an-anime-team/an-anime-game-launcher"
 repository = "https://github.com/an-anime-team/an-anime-game-launcher"
-license = "GPL-3.0"
-edition = "2021"
+license = "GPL-3.0-or-later"
+edition = "2024"
 build = "build.rs"
+publish = false
 
 [profile.release]
 strip = true
@@ -18,7 +19,7 @@ lto = true
 opt-level = "s"
 
 [build-dependencies]
-glib-build-tools = "0.20"
+glib-build-tools = "0.22.8"
 
 [dependencies.anime-launcher-sdk]
 git = "https://github.com/an-anime-team/anime-launcher-sdk"
@@ -28,25 +29,23 @@ features = ["all", "genshin"]
 # path = "../anime-launcher-sdk" # ! for dev purposes only
 
 [dependencies]
-relm4 = { version = "0.9.1", features = ["macros", "libadwaita"] }
-gtk = { package = "gtk4", version = "0.9.6", features = ["v4_16"] }
-adw = { package = "libadwaita", version = "0.7.2", features = ["v1_5"] }
+agl-locale = { git = "https://github.com/an-anime-team/anime-games-launcher" }
 
-rfd = { version = "0.15.3", features = ["xdg-portal", "tokio"], default-features = false }
-open = "5.3.2"
+relm4 = { version = "0.11", features = ["macros", "libadwaita"] }
+gtk = { package = "gtk4", version = "0.11", features = ["v4_16"] }
+adw = { package = "libadwaita", version = "0.9", features = ["v1_5"] }
+
+rfd = "0.17"
+open = "5.4"
 whatadistro = "0.1.0"
 
 serde_json = "1.0"
 anyhow = "1.0"
-lazy_static = "1.5.0"
-cached = { version = "0.55", features = ["proc_macro"] }
-md-5 = { version = "0.10", features = ["asm"] }
-enum-ordinalize = "4.3"
+cached = { version = "4.0", features = ["proc_macro"] }
+md-5 = "0.11"
+enum-ordinalize = "4.4"
 
 tracing = "0.1"
 tracing-subscriber = "0.3"
-
-fluent-templates = "0.13"
-unic-langid = "0.9"
 
 human-panic = "2.0.2"

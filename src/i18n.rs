@@ -1,130 +1,142 @@
-use std::sync::OnceLock;
-use unic_langid::{langid, LanguageIdentifier};
+// SPDX-License-Identifier: GPL-3.0-or-later
+//
+// an-anime-game-launcher
+// Copyright (C) 2021 - 2026  Nikita Podvirnyi <krypt0nn@dawn.wine>
+// Copyright (C) 2025 - 2026  @JohnTheCoolingFan <ivan8215145640@gmail.com>
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-fluent_templates::static_loader! {
-    pub static LOCALES = {
-        locales: "./assets/locales",
-        core_locales: "./assets/locales/common.ftl",
-        fallback_language: "en"
-    };
-}
+use std::collections::HashMap;
 
-/// Map of supported languages
-pub const SUPPORTED_LANGUAGES: &[LanguageIdentifier] = &[
-    langid!("en-us"),
-    langid!("ru-ru"),
-    langid!("de-de"),
-    langid!("fr-fr"),
-    langid!("es-es"),
-    langid!("tr-tr"),
-    langid!("it-it"),
-    langid!("id-id"),
-    langid!("zh-cn"),
-    langid!("ja-jp"),
-    langid!("ko-kr"),
-    langid!("hu-hu"),
-    langid!("sv-se"),
-    langid!("pt-br"),
-    langid!("pl-pl"),
-    langid!("vi-vn"),
-    langid!("nl-nl"),
-    langid!("uk-ua"),
-    langid!("th-th"),
-    langid!("cs-cz")
-];
+use std::sync::LazyLock;
 
-/// Fallback used if the system language is not supported
-static FALLBACK: LanguageIdentifier = langid!("en-us");
+use agl_locale::unic_langid::LanguageIdentifier;
 
-pub static LANG: OnceLock<LanguageIdentifier> = OnceLock::new();
+use crate::STARTUP_LANG;
 
-/// Set launcher language
-pub fn set_lang(lang: LanguageIdentifier) -> anyhow::Result<()> {
-    if SUPPORTED_LANGUAGES.iter().any(|item| item.language == lang.language) {
-        LANG.set(lang).expect("Can't overwrite language!");
+/// Languages the launcher ships translations for. The order defines the
+/// order of the entries in the language picker.
+pub static SUPPORTED_LANGUAGES: LazyLock<Vec<LanguageIdentifier>> = LazyLock::new(|| {
+    [
+        "en-us",
+        "ru-ru",
+        "de-de",
+        "fr-fr",
+        "es-es",
+        "pt-br",
+        "it-it",
+        "pl-pl",
+        "tr-tr",
+        "uk-ua",
+        "zh-cn",
+        "zh-tw",
+        "ja-jp",
+        "ko-kr",
+        "vi-vn",
+        "id-id",
+        "th-th",
+        "cs-cz",
+        "hu-hu",
+        "nl-nl",
+        "sv-se"
+    ]
+    .into_iter()
+    .map(|lang| lang.parse().expect("invalid supported language identifier"))
+    .collect()
+});
 
-        Ok(())
-    }
-
-    else {
-        anyhow::bail!("Language '{lang}' is not supported")
-    }
-}
-
-/// Get launcher language
-pub fn get_lang() -> &'static LanguageIdentifier {
-    LANG.get().expect("Language hasn't been initialized!")
-}
-
-/// Get system language or default language if system one is not supported
+/// Load launcher's translations into the `agl-locale` bundle.
 ///
-/// Checks env variables in following order:
-/// - `LC_ALL`
-/// - `LC_MESSAGES`
-/// - `LANG`
-pub fn get_default_lang() -> &'static LanguageIdentifier {
-    let current = std::env::var("LC_ALL")
-        .unwrap_or_else(|_| std::env::var("LC_MESSAGES")
-        .unwrap_or_else(|_| std::env::var("LANG")
-        .unwrap_or_else(|_| String::from("en_us"))))
-        .to_ascii_lowercase();
-
-    for lang in SUPPORTED_LANGUAGES {
-        if current.starts_with(lang.language.as_str()) {
-            return lang;
-        }
-    }
-
-    &FALLBACK
+/// Must be called before any `i18n!` call.
+pub fn init() {
+    agl_locale::include_i18n!(
+        "../assets/locales/components.toml",
+        "../assets/locales/enhancements.toml",
+        "../assets/locales/environment.toml",
+        "../assets/locales/errors.toml",
+        "../assets/locales/first_run.toml",
+        "../assets/locales/game.toml",
+        "../assets/locales/gamescope.toml",
+        "../assets/locales/general.toml",
+        "../assets/locales/main.toml",
+        "../assets/locales/sandbox.toml"
+    );
 }
 
+/// Get launcher's language identifier.
+pub fn get_lang() -> LanguageIdentifier {
+    (*STARTUP_LANG).clone()
+}
+
+/// Convert a language identifier to its `ll[-cc]` code, e.g. `zh-cn`.
 pub fn format_lang(lang: &LanguageIdentifier) -> String {
-    format!("{}-{}", lang.language, match lang.region {
-        Some(region) => region.to_string().to_ascii_lowercase(),
+    match lang.region {
+        Some(region) => format!("{}-{}", lang.language, region.to_string().to_ascii_lowercase()),
         None => lang.language.to_string()
-    })
+    }
 }
 
-#[macro_export]
-/// Get translated message by key, with optional translation parameters
-///
-/// # Examples:
-///
-/// Without parameters:
-///
-/// ```no_run
-/// println!("Translated message: {}", tr!("launch"));
-/// ```
-///
-/// With parameters:
-///
-/// ```no_run
-/// println!("Translated message: {}", tr!("game-outdated", {
-///     "latest" = "3.3.0"
-/// }));
-/// ```
-macro_rules! tr {
-    ($id:expr) => {
-        {
-            use fluent_templates::Loader;
+/// Get translation of a string in the launcher's language.
+pub fn translate(key: impl AsRef<str>) -> String {
+    let key = key.as_ref();
 
-            $crate::i18n::LOCALES.lookup($crate::i18n::get_lang(), $id)
-        }
+    let bundle = agl_locale::DEFAULT_BUNDLE.read()
+        .expect("failed to lock default translations bundle");
+
+    bundle.get_translation(key, &*STARTUP_LANG)
+        .map(String::from)
+        .unwrap_or_else(|| key.to_string())
+}
+
+/// Get translation of a string in the launcher's language, substituting
+/// `{arg}` placeholders.
+pub fn translate_with_args<K, V>(
+    key: impl AsRef<str>,
+    args: impl IntoIterator<Item = (K, V)>
+) -> String
+where
+    K: AsRef<str>,
+    V: AsRef<str>
+{
+    let key = key.as_ref();
+    let args = args.into_iter()
+        .map(|(k, v)| (k.as_ref().to_string(), v.as_ref().to_string()))
+        .collect::<HashMap<_, _>>();
+
+    agl_locale::DEFAULT_BUNDLE.read()
+        .expect("failed to lock default translations bundle")
+        .get_translation_with_args(key, &*STARTUP_LANG, args)
+        .unwrap_or_else(|| key.to_string())
+}
+
+/// Custom `i18n` macro based on the `agl-locale`'s one which respects
+/// launcher's config file.
+///
+/// - `i18n("string_key") -> String`
+/// - `i18n("string_key", { "arg" => "value", ... }) -> String`
+#[macro_export]
+macro_rules! i18n {
+    ($key:expr) => {
+        $crate::i18n::translate($key)
     };
 
-    ($id:expr, { $($key:literal = $value:expr),* }) => {
-        {
-            use std::collections::HashMap;
-            use fluent_templates::Loader;
-            use fluent_templates::fluent_bundle::FluentValue;
-
-            let mut args = HashMap::new();
-
-            $(
-                args.insert($key.into(), FluentValue::from($value));
-            )*
-
-            $crate::i18n::LOCALES.lookup_complete($crate::i18n::get_lang(), $id, Some(&args))
-        }
+    ($key:expr, {$( $arg_key:expr => $arg_value:expr $(,)* )+}) => {
+        $crate::i18n::translate_with_args($key, [
+            $( (
+                stringify!($arg_key).trim_matches('"'),
+                $arg_value.to_string()
+            ) ),+
+        ])
     };
 }
